@@ -260,6 +260,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			}
 			if (rowSchema != null) {
 
+
 				JSONObject target = new JSONObject(dataRow);
 				JSONObject finalRecord = deepMerge(source, target);
 				String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
@@ -269,6 +270,11 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 				String fileLocation = basePath + finalRecord.get("audioFilename");
 
 				if (isFileAvailable(fileLocation)) {
+
+					if (finalRecord.has("imageFilename")){
+						String imageFileLocation = basePath + finalRecord.get("imageFilename");
+						finalRecord.put("imageFileLocation",imageFileLocation);
+					}
 
 					// log.info("File Available :: " + fileLocation);
 					successCount++;
