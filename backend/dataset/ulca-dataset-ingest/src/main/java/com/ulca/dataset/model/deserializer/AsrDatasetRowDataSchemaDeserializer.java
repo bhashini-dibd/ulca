@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import io.swagger.model.*;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -16,19 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.ulca.dataset.util.DateUtil;
 
-import io.swagger.model.AsrRowSchema;
-import io.swagger.model.AudioBitsPerSample;
-import io.swagger.model.AudioChannel;
-import io.swagger.model.AudioQualityEvaluation;
 import io.swagger.model.AudioQualityEvaluation.MethodTypeEnum;
-import io.swagger.model.CollectionDetailsAudioAutoAligned;
-import io.swagger.model.CollectionDetailsMachineGeneratedTranscript;
-import io.swagger.model.CollectionDetailsManualTranscribed;
-import io.swagger.model.CollectionMethodAudio;
-import io.swagger.model.Gender;
-import io.swagger.model.Source;
-import io.swagger.model.TranscriptionEvaluationMethod1;
-import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -98,6 +87,93 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 		}
 		
 		// optional params
+		if (!node.has("state")) {
+			errorList.add("state field should be present");
+		} else if (!node.get("state").isTextual()) {
+			errorList.add("state field should be String");
+		} else {
+
+			String state = node.get("state").asText();
+			asrRowSchema.setState(state);
+
+		}
+
+
+		if (!node.has("district")) {
+			errorList.add("district field should be present");
+		} else if (!node.get("district").isTextual()) {
+			errorList.add("district field should be String");
+		} else {
+
+			String district = node.get("district").asText();
+			asrRowSchema.setDistrict(district);
+
+		}
+
+		if (!node.has("education")) {
+			errorList.add("education field should be present");
+		} else if (!node.get("education").isTextual()) {
+			errorList.add("education field should be String");
+		} else {
+
+			String education = node.get("education").asText();
+			asrRowSchema.setEducation(education);
+
+		}
+
+		if (!node.has("socioEconomic")) {
+			errorList.add("socioEconomic field should be present");
+		} else if (!node.get("socioEconomic").isTextual()) {
+			errorList.add("socioEconomic field should be String");
+		} else {
+
+			String socioEconomic = node.get("socioEconomic").asText();
+			asrRowSchema.setSocioEconomic(socioEconomic);
+
+		}
+
+		if (!node.has("imageFilename")) {
+			errorList.add("imageFilename field should be present");
+		} else if (!node.get("imageFilename").isTextual()) {
+			errorList.add("imageFilename field should be String");
+		} else {
+
+			String imageFilename = node.get("imageFilename").asText();
+			asrRowSchema.setImageFilename(imageFilename);
+
+		}
+		if (!node.has("assertLanguage")) {
+			errorList.add("assertLanguage field should be present");
+		} else if (!node.get("assertLanguage").isTextual()) {
+			errorList.add("assertLanguage field should be String");
+		} else {
+
+			String assertLanguage = node.get("assertLanguage").asText();
+			asrRowSchema.setAssertLanguage(assertLanguage);
+
+		}
+
+		if (!node.has("languagesSpoken")) {
+			errorList.add("languagesSpoken field should be present");
+		} else if (!node.get("languagesSpoken").isArray()) {
+			errorList.add("languagesSpoken field should be String array");
+		} else {
+			try {
+				AsrlanguagesSpoken languagesSpoken = mapper.readValue(node.get("languagesSpoken").toPrettyString(),AsrlanguagesSpoken.class);
+                if(languagesSpoken.size() < 0){
+					errorList.add("languagesSpoken array size should be > 0 ");
+				} else {
+					asrRowSchema.setLanguagesSpoken(languagesSpoken);
+				}
+			} catch (Exception e) {
+				errorList.add("languagesSpoken field value not proper.");
+				e.printStackTrace();
+			}
+		}
+
+
+
+
 		
 		if (node.has("duration")) {
 			if (!node.get("duration").isNumber()) {
@@ -109,6 +185,43 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 			}
 
 		}
+
+		if (node.has("pinCode")) {
+			if (!node.get("pinCode").isNumber()) {
+				errorList.add("pinCode field should be Number");
+			} else {
+				BigDecimal pinCode = node.get("pinCode").decimalValue();
+				asrRowSchema.setPinCode(pinCode);
+
+			}
+
+		}
+
+		if (node.has("stayYears")) {
+			if (!node.get("stayYears").isNumber()) {
+				errorList.add("stayYears field should be Number");
+			} else {
+				BigDecimal stayYears = node.get("stayYears").decimalValue();
+				asrRowSchema.setStayYears(stayYears);
+
+			}
+
+		}
+
+
+
+
+		if (node.has("exactAge")) {
+			if (!node.get("exactAge").isNumber()) {
+				errorList.add("exactAge field should be Number");
+			} else {
+				BigDecimal exactAge = node.get("exactAge").decimalValue();
+				asrRowSchema.setExactAge(exactAge);
+
+			}
+
+		}
+
 		if (node.has("speaker")) {
 			if (!node.get("speaker").isTextual()) {
 				errorList.add("speaker field should be String");
@@ -237,6 +350,8 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				}
 			}
 		}
+
+
 		if (node.has("dialect")) {
 			if (!node.get("dialect").isTextual()) {
 				errorList.add("dialect field should be String");

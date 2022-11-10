@@ -8,18 +8,26 @@ public enum AsrRowDataSchemaKeys {
 		
 		
 		//optional
+		imageFilename,
 		endTime,
 		channel,
 		samplingRate,
 		bitsPerSample,
 		gender,
 		age,
+	    exactAge,
 		dialect,
 		snr,
 		startTime,
 		collectionMethod,
 		speaker,
 		duration,
-		collectionSource
-	
+		collectionSource,
+	    assertLanguage,
+	    languagesSpoken,
+	    state,
+	    district,
+	    education,
+	    pinCode,
+	    stayYears
 }
