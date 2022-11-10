@@ -25,7 +25,7 @@ class AggregateDatasetModel(object):
             datatype=   "datasetType"  
             duration=   "durationInSeconds"
             t_dtype = "transliteration-corpus"
-            sub_name = "submitter.name"
+            sub_name = "PrimarySubmitterName"
             aib = "AI4Bharat"
 
             dtype = request_object["type"]
@@ -38,10 +38,9 @@ class AggregateDatasetModel(object):
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]   #grouping fields
             
-            aib_sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{t_dtype}\') AND ({sub_name} = {aib})) GROUP BY {delete}'
+            aib_sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{t_dtype}\') AND ({sub_name} = {aib})) GROUP BY {datatype}{delete}'
             aib_results = utils.query_runner(aib_sumtotal_query)
             log.info(f'aib_results at 43 {aib_results}')
-
 
 
             #ASR charts are displayed in hours; initial chart
@@ -68,7 +67,6 @@ class AggregateDatasetModel(object):
                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
                 else:
                     query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
-                    log.info('logging query at line number 79 {}')
                 params = match_params[0]
                 value = params["value"]
 
@@ -84,6 +82,7 @@ class AggregateDatasetModel(object):
                 qry_for_lang_pair  = query+sub_query
                 result_parsed = utils.query_runner(qry_for_lang_pair)
                 chart_data =  utils.result_formater_for_lang_pairs(result_parsed,dtype,value)
+                log.info(f'sumtotal of 1st level drill down {sumtotal}')
                 return chart_data,sumtotal
 
             #aggregate query for language groupby ; 1st level drill down for the chart
