@@ -141,17 +141,19 @@ const TTSLiveInference = (props) => {
   const emitOnSpace = (request) => {
     socket.emit("infer", request, (x) => {
       setAudio(null);
-      if (x["status"] == "SUCCESS") {
-        console.log('inside ifffffff')
-        let arrayBuffer = x["output"]["audio"];
-        console.log('inside arrayBuffer', arrayBuffer)
-        const blob = new Blob([arrayBuffer], { type: "audio/wav" });
-        console.log('inside blob', blob)
-        const url = window.URL.createObjectURL(blob);
-        setAudio(url);
-      } else {
-        console.log("error");
-      }
+      // if (x["status"] == "SUCCESS") {
+        let { audioContent } = x["audio"][0];
+        console.log('inside arrayBuffer', `data:audio/wav;base64,${audioContent}`)
+        // const blob = new Blob(audioContent, { type: "audio/wav" });
+        // console.log('inside blob', blob)
+        // const url = window.URL.createObjectURL(blob);
+        console.log(`data:audio/wav;base64,${audioContent}`)
+        // const snd = new Audio("data:audio/wav;base64," + audioContent);
+        // console.log(url)`
+        setAudio(`data:audio/wav;base64,${audioContent}`);
+      // } else {
+      //   console.log("error");
+      // }
     });
   };
 
@@ -244,10 +246,14 @@ const TTSLiveInference = (props) => {
 
   const stopLiveTTS = () =>{
     let request = {
-      language: source,
-      text:sourceText,
-      speaker: gender.toLowerCase(),
-    };
+      input:[{source:sourceText}],
+      config: {
+        gender: gender.toLowerCase(),
+        language: {
+          sourceLanguage: source
+        }
+      }
+    }
     emitOnSpace(request);
   };
 
