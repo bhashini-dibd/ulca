@@ -95,7 +95,15 @@ class ASRService:
     def get_enriched_asr_data(self, data, metadata):
         try:
             hashes = [data["audioHash"], data["textHash"]]
-            record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
+            imageHashExists = False
+            #Check if the image hash exists already in mongo
+            #record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
+            record = self.get_asr_dataset_internal({"$or": [{"tags": data["imageHash"]},
+	                                                        {"$or": [{"tags":data["audioHash"]},
+		                                                          {"tags":data["textHash"]}]
+	                                                        }]
+                                                   })           
+            #If image hash exists, set imageHashExists to True
             if record:
                 if isinstance(record, list):
                     record = record[0]
@@ -123,6 +131,14 @@ class ASRService:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
                 insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                if 'imageFileLocation' in data.keys() and imageHashExists == False:
+                    epoch = eval(str(time.time()).replace('.', '')[0:13])
+                    imageFileName = data['imageFileLocation'].split('/')[-1]
+                    s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
+                    img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
+                if not img_object_store_path:
+                    return "FAILED", insert_data, insert_data
+                insert_data["refImgStorePath"] = img_object_store_path
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
