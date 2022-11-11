@@ -109,7 +109,6 @@ class ASRService:
                 #If image hash exists in records, copy image url and store it in data.
                 #If image hash exists, set imageHashExists to True
                 log.info(f"Data {data}")
-                #Remove upon checking
                 for each_record in record:
                     if data['imageHash'] in each_record['tags']:
                         log.info(f"Each Record {each_record}")
@@ -138,8 +137,7 @@ class ASRService:
             if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
                 s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["audioFilename"]}'
-                #object_store_path = utils.upload_file(data["fileLocation"], asr_prefix, s3_file_name)
-                object_store_path = "OBJ STORE PATH"
+                object_store_path = utils.upload_file(data["fileLocation"], asr_prefix, s3_file_name)
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
@@ -148,8 +146,7 @@ class ASRService:
                     epoch = eval(str(time.time()).replace('.', '')[0:13])
                     imageFileName = data['imageFilename']
                     s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
-                    #img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
-                    img_object_store_path = "OBJ STORE PATH"
+                    img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
                     if not img_object_store_path:
                         return "FAILED", insert_data, insert_data
                     else:
