@@ -1,5 +1,5 @@
 {
-    "name": "AI4Bharat Indic-TTS : Marathi",
+    "name": "AI4Bharat Indic-TTS Streaming: Rajasthani",
     "version": "v1.0",
     "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both the genders: 'male' and 'female' voices.",
     "refUrl": "https://github.com/AI4Bharat/Indic-TTS",
@@ -8,7 +8,7 @@
     },
     "languages": [
         {
-            "sourceLanguage": "mr"
+            "sourceLanguage": "raj"
         }
     ],
     "license": "mit",
@@ -42,18 +42,18 @@
         "schema": {
             "taskType": "tts",
             "modelProcessingType": {
-                "type": "batch"
+                "type": "streaming"
             },
             "request": {
                 "input": [
                     {
-                        "source": "भारत माझा देश आहे."
+                        "source": "भारत"
                     }
                 ],
                 "config": {
                     "gender": "male",
                     "language": {
-                        "sourceLanguage": "mr"
+                        "sourceLanguage": "raj"
                     }
                 }
             }
