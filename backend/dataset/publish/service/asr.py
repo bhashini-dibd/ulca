@@ -148,10 +148,10 @@ class ASRService:
                     imageFileName = data['imageFilename']
                     s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
                     img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
-                if not img_object_store_path:
-                    return "FAILED", insert_data, insert_data
-                else:
-                    insert_data["refImgStorePath"] = img_object_store_path
+                    if not img_object_store_path:
+                        return "FAILED", insert_data, insert_data
+                    else:
+                        insert_data["refImgStorePath"] = img_object_store_path
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
