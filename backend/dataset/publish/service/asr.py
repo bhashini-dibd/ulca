@@ -103,18 +103,26 @@ class ASRService:
 		                                                          {"tags":data["textHash"]}]
 	                                                        }]
                                                    })           
-            #If image hash exists, set imageHashExists to True
+            log.info(f"Test55 Records {record}")
             if record:
-                if isinstance(record, list):
-                    record = record[0]
-                dup_data = service.enrich_duplicate_data(data, record, metadata, asr_immutable_keys, asr_updatable_keys, asr_non_tag_keys)
-                if dup_data:
-                    if metadata["userMode"] != user_mode_pseudo:
-                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                        repo.update(dup_data)
-                    return "UPDATE", dup_data, record
-                else:
-                    return "DUPLICATE", data, record
+                #If image hash exists in records, copy image url and store it in data.
+                #If image hash exists, set imageHashExists to True
+                for each_record in record:
+                    if data['imageHash'] in each_record['tags']:
+                        imageHashExists = True
+                        data['refImgStorePath'] = each_record['refImgStorePath']
+                    #Check if audio and text hash are same of any record and data
+                    if data['audioHash'] in each_record['tags'] and data['textHash'] in each_record['tags']:
+                        if isinstance(each_record, list):
+                            each_record = each_record[0]
+                        dup_data = service.enrich_duplicate_data(data, each_record, metadata, asr_immutable_keys, asr_updatable_keys, asr_non_tag_keys)
+                        if dup_data:
+                            if metadata["userMode"] != user_mode_pseudo:
+                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                                repo.update(dup_data)
+                            return "UPDATE", dup_data, each_record
+                        else:
+                            return "DUPLICATE", data, each_record
             insert_data = data
             for key in insert_data.keys():
                 if key not in asr_immutable_keys and key not in asr_updatable_keys:
@@ -138,7 +146,8 @@ class ASRService:
                     img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
                 if not img_object_store_path:
                     return "FAILED", insert_data, insert_data
-                insert_data["refImgStorePath"] = img_object_store_path
+                else:
+                    insert_data["refImgStorePath"] = img_object_store_path
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
@@ -151,10 +160,13 @@ class ASRService:
     def get_asr_dataset_internal(self, query):
         try:
             data = repo.search(query, None, None, None)
+            #data is a tuple
             if data:
+                log.info(f"Test55: Data within Repo Search {data}")
                 asr_data = data[0]
+                #asr_data is a list of dictionaries, each dictionary is one record / document
                 if asr_data:
-                    return asr_data[0]
+                   return asr_data
                 else:
                     return None
             else:
