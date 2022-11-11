@@ -34,7 +34,7 @@ class ASRService:
     '''
     def load_asr_dataset(self, request):
         try:
-            log.info(f"TEST52: request: {request}")
+            #log.info(f"TEST52: request: {request}")
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
@@ -104,13 +104,16 @@ class ASRService:
 		                                                          {"tags":data["textHash"]}]
 	                                                        }]
                                                    })           
-            log.info("Test55 load_asr_dataset {record}")
+            #log.info("Test55 load_asr_dataset {record}")
             if record:
                 #If image hash exists in records, copy image url and store it in data.
                 #If image hash exists, set imageHashExists to True
+                log.info(f"Data {data}")
                 for each_record in record:
                     if data['imageHash'] in each_record['tags']:
+                        log.info(f"Each Record {each_record}")
                         imageHashExists = True
+                        log.info()
                         data['refImgStorePath'] = each_record['refImgStorePath']
                     #Check if audio and text hash are same of any record and data
                     if data['audioHash'] in each_record['tags'] and data['textHash'] in each_record['tags']:
