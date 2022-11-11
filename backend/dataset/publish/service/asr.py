@@ -39,7 +39,7 @@ class ASRService:
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
             if record:
-                log.info("Test55 load_asr_dataset {record}")
+                log.info(f"Test55 load_asr_dataset {record}")
                 result = self.get_enriched_asr_data(record, metadata)
                 if result:
                     if result[0] == "INSERT":
