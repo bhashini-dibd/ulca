@@ -51,11 +51,11 @@ if isinstance(zip_chunk_size, str):
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
-                      "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName"]
+                      "fileLocation", "imageFileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName"]
 asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                     "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
 asr_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "audioHash", "textHash",
-                          "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId","imageHash"]
+                          "fileLocation", "imageFileLocation","lastModifiedOn", "createdOn", "version", "datasetId","imageHash"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 tts_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
