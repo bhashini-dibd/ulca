@@ -55,7 +55,7 @@ def consume():
                         if check_relay(data):
                             log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
                             break
-
+                        log.info(f"Validate Input JSON Data: {data}")
                         srn = data["serviceRequestNumber"]
                         log.info(f'data received from ingest -- SRN {srn}')
 
