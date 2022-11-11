@@ -108,10 +108,9 @@ class ASRService:
             if record:
                 #If image hash exists in records, copy image url and store it in data.
                 #If image hash exists, set imageHashExists to True
-                log.info(f"Data {data}")
+                log.info(f"Data within Publish: {data}")
                 for each_record in record:
                     if data['imageHash'] in each_record['tags']:
-                        log.info(f"Each Record {each_record}")
                         imageHashExists = True
                         data['refImgStorePath'] = each_record['refImgStorePath']
                     #Check if audio and text hash are same of any record and data
@@ -144,7 +143,7 @@ class ASRService:
                 insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
                 if 'imageFileLocation' in data.keys() and imageHashExists == False:
                     epoch = eval(str(time.time()).replace('.', '')[0:13])
-                    imageFileName = data['imageFilename']
+                    imageFileName = data['imageFilename'].split('/')[-1]
                     s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
                     img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
                     if not img_object_store_path:
