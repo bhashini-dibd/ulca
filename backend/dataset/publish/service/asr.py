@@ -145,7 +145,7 @@ class ASRService:
                 insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
                 if 'imageFileLocation' in data.keys() and imageHashExists == False:
                     epoch = eval(str(time.time()).replace('.', '')[0:13])
-                    imageFileName = data['imageFileLocation'].split('/')[-1]
+                    imageFileName = data['imageFilename']
                     s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
                     img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
                 if not img_object_store_path:
