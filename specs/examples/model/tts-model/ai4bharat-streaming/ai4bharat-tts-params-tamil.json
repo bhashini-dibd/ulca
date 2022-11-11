@@ -1,5 +1,5 @@
 {
-    "name": "AI4Bharat Indic-TTS Streaming: Telugu",
+    "name": "AI4Bharat Indic-TTS Streaming: Tamil",
     "version": "v1.0",
     "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both the genders: 'male' and 'female' voices.",
     "refUrl": "https://github.com/AI4Bharat/Indic-TTS",
@@ -8,7 +8,7 @@
     },
     "languages": [
         {
-            "sourceLanguage": "te"
+            "sourceLanguage": "ta"
         }
     ],
     "license": "mit",
@@ -47,13 +47,13 @@
             "request": {
                 "input": [
                     {
-                        "source": "భారతదేశం నా దేశం."
+                        "source": "இந்தியா"
                     }
                 ],
                 "config": {
                     "gender": "male",
                     "language": {
-                        "sourceLanguage": "te"
+                        "sourceLanguage": "ta"
                     }
                 }
             }
