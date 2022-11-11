@@ -47,12 +47,12 @@ class HashDedup(BaseValidator):
                     request['record']['audioHash'] = hash_str
                 else:
                     return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
-                # if 'imageFilename' in request['record'].keys():
-                #     hash_str = self.hash_file(request['record']['imageFilename'])
-                #     if hash_str:
-                #         request['record']['imageHash'] = hash_str
-                #     else:
-                #         return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
+                if 'imageFileLocation' in request['record'].keys():
+                    hash_str = self.hash_file(request['record']['imageFileLocation'])
+                    if hash_str:
+                        request['record']['imageHash'] = hash_str
+                    else:
+                        return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
                 request['record']['textHash'] = self.create_hash(request['record']['text'], request['record']['sourceLanguage'])
 
             if request["datasetType"] == dataset_type_ocr:
@@ -75,12 +75,12 @@ class HashDedup(BaseValidator):
                     request['record']['audioHash'] = hash_str
                 else:
                     return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
-                # if 'imageFilename' in request['record'].keys():
-                #     hash_str = self.hash_file(request['record']['imageFilename'])
-                #     if hash_str:
-                #         request['record']['imageHash'] = hash_str
-                #     else:
-                #         return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
+                if 'imageFileLocation' in request['record'].keys():
+                    hash_str = self.hash_file(request['record']['imageFileLocation'])
+                    if hash_str:
+                        request['record']['imageHash'] = hash_str
+                    else:
+                        return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
                 
 
             if request["datasetType"] == dataset_type_tts:
