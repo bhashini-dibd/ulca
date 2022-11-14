@@ -35,6 +35,7 @@ class ASRUnlabeledService:
     '''
     def load_asr_unlabeled_dataset(self, request):
         try:
+            log.info(f"Test50: Start {request}")
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
@@ -97,7 +98,7 @@ class ASRUnlabeledService:
             imageHashExists = False
             log.info(f"Test55 {data}")
             if 'imageHash' in data.keys():
-                record = self.get_asr_dataset_internal({"$or": [{"tags": data["imageHash"]},
+                record = self.get_asr_unlabeled_dataset_internal({"$or": [{"tags": data["imageHash"]},
                                                                 {"tags": data["audioHash"]}]
                                                         })           
             else: 
@@ -108,7 +109,7 @@ class ASRUnlabeledService:
                     if data['imageHash'] in each_record['tags']:
                         imageHashExists = True
                         data['refImgStorePath'] = each_record['refImgStorePath']
-                    if data['audioHash'] in each_record['tags'] and data['textHash'] in each_record['tags']:
+                    if data['audioHash'] in each_record['tags']:
                         if isinstance(each_record, list):
                             each_record = each_record[0]
                         dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
@@ -128,8 +129,9 @@ class ASRUnlabeledService:
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
             insert_data["tags"] = service.get_tags(insert_data, asr_unlabeled_non_tag_keys)
-            log.info(f"Test56 {insert_data}")
             if metadata["userMode"] != user_mode_pseudo:
+                #insert_data["objStorePath"] = "Something"
+                #insert_data["refImgStorePath"] = "Else"
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
                 s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["audioFilename"]}'
                 object_store_path = utils.upload_file(data["fileLocation"], asr_unlabeled_prefix, s3_file_name)
