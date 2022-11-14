@@ -26,7 +26,7 @@ class AggregateDatasetModel(object):
             duration=   "durationInSeconds"
             t_dtype = "transliteration-corpus"
             sub_name = "primarySubmitterName"
-            aib = "AI4Bharat"
+            aib = ["AI4Bharat","Samanantar"]
 
             dtype = request_object["type"]
             log.info(f'dtype {dtype}')
@@ -38,9 +38,17 @@ class AggregateDatasetModel(object):
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]   #grouping fields
             
-            aib_sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{t_dtype}\') AND ({sub_name} = \'{aib}\')) GROUP BY {datatype}, {delete}'
-            aib_results = utils.query_runner(aib_sumtotal_query)
-            log.info(f'aib_results at 43 {aib_results}')
+            #aib_sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{t_dtype}\') AND ({sub_name} = \'{aib}\')) GROUP BY {datatype}, {delete}'
+            #aib_results = utils.query_runner(aib_sumtotal_query)
+            #log.info(f'aib_results at 43 {aib_results}')
+
+            #ai4b
+            for some in aib:
+                aibquery = f'SELECT SUM(\"{count}\") as {total}, {src},{tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\" WHERE (({datatype} = \'{t_dtype}\') AND ({sub_name} = \'{some}\') AND ({src != tgt})) GROUP BY {src}, {tgt}, {delete}'
+                que_res = utils.query_runner(aibquery)
+                log.info(f'que_res at line number 48 {que_res}')
+
+
 
 
             #ASR charts are displayed in hours; initial chart
