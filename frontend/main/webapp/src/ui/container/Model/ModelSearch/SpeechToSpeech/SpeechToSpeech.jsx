@@ -76,7 +76,8 @@ const SpeechToSpeech = () => {
       const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
       const translationVal = translation.filter(a => a.sourceLanguage === filter.src.value && a.targetLanguage === filter.tgt.value);
       const indictransTranslation = translationVal.filter(asr => asr.label.toLowerCase().includes('indictrans'));
-      const ttsVal = tts.filter(a => a.sourceLanguage === filter.tgt.value);
+     // const ttsVal = tts.filter(a => a.sourceLanguage === filter.tgt.value);
+     const ttsVal = tts.filter(a => a.sourceLanguage === filter.tgt.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch');
       const vakyanshTts = ttsVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
       if (vakyanshAsr.length) {
         setFilter((prev) => ({ ...prev, asr: vakyanshAsr[0] }))
