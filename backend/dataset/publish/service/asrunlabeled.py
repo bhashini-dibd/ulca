@@ -41,7 +41,7 @@ class ASRUnlabeledService:
             count, updates, batch = 0, 0, ds_batch_size
             if record:
                 result = self.get_enriched_asr_unlabeled_data(record, metadata)
-                log.info(f"Test60 Result: {result}")
+                #log.info(f"Test60 Result: {result}")
                 if result:
                     if result[0] == "INSERT":
                         if metadata["userMode"] != user_mode_pseudo:
@@ -106,17 +106,17 @@ class ASRUnlabeledService:
                 record = self.get_asr_unlabeled_dataset_internal({"tags": {"$all": [data["audioHash"]]}})
             if record:
                 for each_record in record:
-                    log.info(f"Test58 {each_record}")
+                    #log.info(f"Test58 {each_record}")
                     if data['imageHash'] in each_record['tags']:
                         imageHashExists = True
                         data['refImgStorePath'] = each_record['refImgStorePath']
                     if data['audioHash'] in each_record['tags']:
                         if isinstance(each_record, list):
                             each_record = each_record[0]
-                        log.info(f"Test60 {each_record}")
-                        dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
+                        #log.info(f"Test60 {each_record}")
+                        dup_data = service.enrich_duplicate_data(data, each_record, metadata, asr_unlabeled_immutable_keys,
                                                                 asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
-                        log.info(f"Test60 {dup_data}")                        
+                        #log.info(f"Test60 {dup_data}")                        
                         if dup_data:
                             if metadata["userMode"] != user_mode_pseudo:
                                 dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
