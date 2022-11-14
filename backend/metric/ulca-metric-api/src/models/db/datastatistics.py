@@ -43,11 +43,22 @@ class AggregateDatasetModel(object):
             #log.info(f'aib_results at 43 {aib_results}')
 
             #ai4b
+            emp_list = []
+            aibdict = {}
             for some in aib:
                 aibquery = f'SELECT SUM(\"{count}\") as {total}, {src},{tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\" WHERE (({datatype} = \'{t_dtype}\') AND ({sub_name} = \'{some}\') AND ({src != tgt})) GROUP BY {src}, {tgt}, {delete}'
                 que_res = utils.query_runner(aibquery)
+                
                 log.info(f'que_res at line number 48 {que_res}')
-
+                for que_in,que in enumerate(que_res):
+                    if que_in +1 == len(que_res):
+                        break
+                    elif que_res[que_in]["sourceLanguage"] == que_res[que_in + 1]["sourceLanguage"] and que_res[que_in]["targetLanguage"] == que_res[que_in + 1]["targetLanguage"]:
+                        aibdict["count"] = que_res[que_in]["count"] - que_res[que_in + 1]["count"]
+                        aibdict["sourceLanguage"] = que_res[que_in]["sourceLanguage"]
+                        aibdict["targetLanguage"] = que_res[que_in]["targetLanguage"]
+                        emp_list.append(aibdict.copy())
+            log.info(f'result of ai4bharat datasets at 61 {emp_list}')
 
 
 
