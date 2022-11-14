@@ -41,6 +41,7 @@ class ASRUnlabeledService:
             count, updates, batch = 0, 0, ds_batch_size
             if record:
                 result = self.get_enriched_asr_unlabeled_data(record, metadata)
+                log.info(f"Test60 Result: {result}")
                 if result:
                     if result[0] == "INSERT":
                         if metadata["userMode"] != user_mode_pseudo:
