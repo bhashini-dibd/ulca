@@ -69,7 +69,7 @@ tts_updatable_keys = ["durationInSeconds", "duration", "version"]
 asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage",
                                 "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
 asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
-                              "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
+                              "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken"]
 asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "audioHash",
                                     "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId","imageHash", "imageFileLocation"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
