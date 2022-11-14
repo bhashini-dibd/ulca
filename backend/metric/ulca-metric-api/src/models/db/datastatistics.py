@@ -38,7 +38,7 @@ class AggregateDatasetModel(object):
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]   #grouping fields
             
-            aib_sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{t_dtype}\') AND ({sub_name} = {aib})) GROUP BY {datatype}{delete}'
+            aib_sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{t_dtype}\') AND ({sub_name} = \'{aib}\')) GROUP BY {datatype}{delete}'
             aib_results = utils.query_runner(aib_sumtotal_query)
             log.info(f'aib_results at 43 {aib_results}')
 
