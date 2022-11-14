@@ -107,9 +107,10 @@ class ASRUnlabeledService:
             if record:
                 for each_record in record:
                     #log.info(f"Test58 {each_record}")
-                    if data['imageHash'] in each_record['tags']:
-                        imageHashExists = True
-                        data['refImgStorePath'] = each_record['refImgStorePath']
+                    if 'imageHash' in data.keys():
+                        if data['imageHash'] in each_record['tags']:
+                            imageHashExists = True
+                            data['refImgStorePath'] = each_record['refImgStorePath']
                     if data['audioHash'] in each_record['tags']:
                         if isinstance(each_record, list):
                             each_record = each_record[0]

@@ -113,9 +113,10 @@ class ASRService:
                 #If image hash exists, set imageHashExists to True
                 log.info(f"Data within Publish: {data}")
                 for each_record in record:
-                    if data['imageHash'] in each_record['tags']:
-                        imageHashExists = True
-                        data['refImgStorePath'] = each_record['refImgStorePath']
+                    if 'imageHash' in data.keys():
+                        if data['imageHash'] in each_record['tags']:
+                            imageHashExists = True
+                            data['refImgStorePath'] = each_record['refImgStorePath']
                     #Check if audio and text hash are same of any record and data
                     if data['audioHash'] in each_record['tags'] and data['textHash'] in each_record['tags']:
                         if isinstance(each_record, list):
