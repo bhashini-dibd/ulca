@@ -112,8 +112,10 @@ class ASRUnlabeledService:
                     if data['audioHash'] in each_record['tags']:
                         if isinstance(each_record, list):
                             each_record = each_record[0]
+                        log.info(f"Test60 {each_record}")
                         dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
                                                                 asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
+                        log.info(f"Test60 {dup_data}")                        
                         if dup_data:
                             if metadata["userMode"] != user_mode_pseudo:
                                 dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
