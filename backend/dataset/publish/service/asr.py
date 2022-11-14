@@ -99,11 +99,14 @@ class ASRService:
             imageHashExists = False
             #Check if the image hash exists already in mongo
             #record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
-            record = self.get_asr_dataset_internal({"$or": [{"tags": data["imageHash"]},
-	                                                        {"$or": [{"tags":data["audioHash"]},
+            if 'imageHash' in data.keys():
+                record = self.get_asr_dataset_internal({"$or": [{"tags": data["imageHash"]},
+	                                                        {"$and": [{"tags":data["audioHash"]},
 		                                                          {"tags":data["textHash"]}]
 	                                                        }]
                                                    })           
+            else:
+                record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
             #log.info("Test55 load_asr_dataset {record}")
             if record:
                 #If image hash exists in records, copy image url and store it in data.

@@ -94,17 +94,30 @@ class ASRUnlabeledService:
     '''
     def get_enriched_asr_unlabeled_data(self, data, metadata):
         try:
-            record = self.get_asr_unlabeled_dataset_internal({"tags": {"$all": [data["audioHash"]]}})
+            imageHashExists = False
+            if 'imageHash' in data.keys():
+                record = self.get_asr_dataset_internal({"$or": [{"tags": data["imageHash"]},
+                                                                {"tags": data["audioHash"]}]
+                                                        })           
+            else: 
+                record = self.get_asr_unlabeled_dataset_internal({"tags": {"$all": [data["audioHash"]]}})
             if record:
-                dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
-                                                         asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
-                if dup_data:
-                    if metadata["userMode"] != user_mode_pseudo:
-                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                        repo.update(dup_data)
-                    return "UPDATE", dup_data, record
-                else:
-                    return "DUPLICATE", data, record
+                for each_record in record:
+                    if data['imageHash'] in each_record['tags']:
+                        imageHashExists = True
+                        data['refImgStorePath'] = each_record['refImgStorePath']
+                    if data['audioHash'] in each_record['tags'] and data['textHash'] in each_record['tags']:
+                        if isinstance(each_record, list):
+                            each_record = each_record[0]
+                        dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
+                                                                asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
+                        if dup_data:
+                            if metadata["userMode"] != user_mode_pseudo:
+                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                                repo.update(dup_data)
+                            return "UPDATE", dup_data, record
+                        else:
+                            return "DUPLICATE", data, record
             insert_data = data
             for key in insert_data.keys():
                 if key not in asr_unlabeled_immutable_keys and key not in asr_unlabeled_updatable_keys:
@@ -121,6 +134,17 @@ class ASRUnlabeledService:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
                 insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                if 'imageFileLocation' in data.keys() and imageHashExists == False:
+                    epoch = eval(str(time.time()).replace('.', '')[0:13])
+                    if isinstance(data['imageFilename'],list):
+                        data['imageFilename'] = data['imageFilename'][0]
+                    imageFileName = data['imageFilename'].split('/')[-1]
+                    s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
+                    img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_unlabeled_prefix, s3_img_file_name)
+                    if not img_object_store_path:
+                        return "FAILED", insert_data, insert_data
+                    else:
+                        insert_data["refImgStorePath"] = img_object_store_path
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
@@ -136,7 +160,7 @@ class ASRUnlabeledService:
             if data:
                 asr_data = data[0]
                 if asr_data:
-                    return asr_data[0]
+                    return asr_data
                 else:
                     return None
             else:
