@@ -95,6 +95,7 @@ class ASRUnlabeledService:
     def get_enriched_asr_unlabeled_data(self, data, metadata):
         try:
             imageHashExists = False
+            log.info(f"Test55 {data}")
             if 'imageHash' in data.keys():
                 record = self.get_asr_dataset_internal({"$or": [{"tags": data["imageHash"]},
                                                                 {"tags": data["audioHash"]}]
@@ -103,6 +104,7 @@ class ASRUnlabeledService:
                 record = self.get_asr_unlabeled_dataset_internal({"tags": {"$all": [data["audioHash"]]}})
             if record:
                 for each_record in record:
+                    log.info(f"Test58 {each_record}")
                     if data['imageHash'] in each_record['tags']:
                         imageHashExists = True
                         data['refImgStorePath'] = each_record['refImgStorePath']
@@ -126,6 +128,7 @@ class ASRUnlabeledService:
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
             insert_data["tags"] = service.get_tags(insert_data, asr_unlabeled_non_tag_keys)
+            log.info(f"Test56 {insert_data}")
             if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
                 s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["audioFilename"]}'
@@ -141,6 +144,7 @@ class ASRUnlabeledService:
                     imageFileName = data['imageFilename'].split('/')[-1]
                     s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
                     img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_unlabeled_prefix, s3_img_file_name)
+                    log.info(f"Test57 {img_object_store_path}")
                     if not img_object_store_path:
                         return "FAILED", insert_data, insert_data
                     else:
