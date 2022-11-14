@@ -54,7 +54,7 @@ class AggregateDatasetModel(object):
                     if que_in +1 == len(que_res):
                         break
                     elif que_res[que_in]["sourceLanguage"] == que_res[que_in + 1]["sourceLanguage"] and que_res[que_in]["targetLanguage"] == que_res[que_in + 1]["targetLanguage"]:
-                        aibdict["count"] = que_res[que_in]["count"] - que_res[que_in + 1]["count"]
+                        aibdict["total_count"] = que_res[que_in]["total"] - que_res[que_in + 1]["total"]
                         aibdict["sourceLanguage"] = que_res[que_in]["sourceLanguage"]
                         aibdict["targetLanguage"] = que_res[que_in]["targetLanguage"]
                         emp_list.append(aibdict.copy())
