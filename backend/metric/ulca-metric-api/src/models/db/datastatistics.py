@@ -25,7 +25,7 @@ class AggregateDatasetModel(object):
             datatype=   "datasetType"  
             duration=   "durationInSeconds"
             t_dtype = "transliteration-corpus"
-            sub_name = "PrimarySubmitterName"
+            sub_name = "primarySubmitterName"
             aib = "AI4Bharat"
 
             dtype = request_object["type"]
