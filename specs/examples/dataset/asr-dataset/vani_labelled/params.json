@@ -4,17 +4,17 @@
         "sourceLanguage": "hi"
     },
     "collectionSource": [
-        "studio-recorded"
+        "vaani"
     ],
     "domain": [
         "general"
     ],
     "license": "cc-by-4.0",
     "submitter": {
-        "name": "IISC",
-        "aboutMe": "Vani dataset created with support from Google",
+        "name": "IISc",
+        "aboutMe": "Part of the Vani project, funded by Google",
         "oauthId": {
-            "oauthId": "anirudh.gupta@google.com",
+            "oauthId": "prasantg@iisc.ac.in",
             "provider": "google"
         },
         "team": [
@@ -38,8 +38,8 @@
         ],
         "collectionDetails": {
             "contributor": {
-                "name": "Harveen",
-                "aboutMe": "Member of IISC research team"
+                "name": "Gopal Verma",
+                "aboutMe": "Member of Vani team"
             }
         }
     }
