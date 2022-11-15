@@ -110,7 +110,8 @@ const SpeechToSpeechFilter = (props) => {
         {renderSingleAutoComplete(
           filter.tts,
           "tts",
-          tts.filter((a) => a.sourceLanguage === filter.tgt.value),
+          tts.filter((a) => a.sourceLanguage === filter.tgt.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch'),
+         // tts.filter((a) => a.sourceLanguage === filter.tgt.value),
           "TTS Model",
           filter.tgt.value ? false : true
         )}
