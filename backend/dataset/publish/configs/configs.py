@@ -53,8 +53,8 @@ shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
                       "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
 asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
-                    "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age","exactAge"]
-asr_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "audioHash", "textHash",
+                    "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
+asr_search_ignore_keys = ["_id", "id", "tags", "license", "datasetType", "audioHash", "textHash",
                           "fileLocation", "imageFileLocation","lastModifiedOn", "createdOn", "version", "datasetId","imageHash"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
@@ -70,7 +70,7 @@ asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "data
                                 "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
 asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                               "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
-asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "audioHash",
+asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "license", "datasetType", "audioHash",
                                     "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId","imageHash", "imageFileLocation"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
