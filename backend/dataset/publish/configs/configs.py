@@ -124,7 +124,7 @@ if isinstance(govt_data_whitelist_enabled, str):
         govt_data_whitelist_enabled = True
     else:
         govt_data_whitelist_enabled = False
-govt_cs = ["ac.in", "gov.in", "nic.in", "org", "edu.in", "org.in"]
+govt_cs = ["ac.in", "gov.in", "nic.in", "org", "edu.in", "org.in", "studio-recorded"]
 
 publish_error_code = "3000_XXX"
 threads_threshold = 100
