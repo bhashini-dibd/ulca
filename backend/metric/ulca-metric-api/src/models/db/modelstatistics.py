@@ -23,6 +23,9 @@ class AggregateModelData(object):
             grpby_params = None
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]  #grouping fields
+            
+            ai4b_query = repo.find({"submitter.name":"AI4Bharat","task.type":"TRANSLATION"})
+            log.info(f'ai4bharat models at line number 28 {ai4b_query}')
 
             #aggregating the model types; initial chart
             if (match_params ==  None and grpby_params == None):
