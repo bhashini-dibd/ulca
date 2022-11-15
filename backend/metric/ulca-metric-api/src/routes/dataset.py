@@ -4,6 +4,7 @@ from flask_restful import Api
 from src.resources.dataset import DatasetAggregateResource
 from src.resources.dataset_tabular_report import DatasetTabularResource
 from src.resources.ai4b_dataset import AI4BharatDatasetAggregateResource
+from src.resources.ai4bmodels import Ai4BharatModelAggregateResource
 
 CORPUS_BLUEPRINT = Blueprint("corpus", __name__)
 
@@ -21,4 +22,8 @@ Api(CORPUS_BLUEPRINT).add_resource(
 
 Api(CORPUS_BLUEPRINT).add_resource(
     AI4BharatDatasetAggregateResource,"/v0/store/ai4b"
+)
+
+Api(CORPUS_BLUEPRINT).add_resource(
+    Ai4BharatModelAggregateResource,"/v0/store/ai4bmodels"
 )

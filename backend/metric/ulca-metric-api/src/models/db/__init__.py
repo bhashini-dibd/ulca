@@ -4,3 +4,4 @@ from .modelstatistics import AggregateModelData
 from .benchmarkstatistics import AggregateBenchmarkData
 from .tabulardata import AggregateTabularDataModel
 from .ai4b_Datasets import AggregateAI4BDatasetModel
+from .ai4b_models import AggregateAi4bModelData
