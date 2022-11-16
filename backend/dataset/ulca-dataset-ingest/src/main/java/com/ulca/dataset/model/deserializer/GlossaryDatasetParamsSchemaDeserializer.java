@@ -296,6 +296,8 @@ public class GlossaryDatasetParamsSchemaDeserializer extends StdDeserializer<Glo
 						list.add(collectionDescriptionEnum);
 						glossaryDatasetCollectionMethod.setCollectionDescription(list);
 
+						glossaryParamsSchema.setCollectionMethod(glossaryDatasetCollectionMethod);
+
 						/*
 						 * collectionDetails is non mandatory
 						 */

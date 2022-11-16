@@ -1,0 +1,64 @@
+[
+    {
+        "audioFilename": "audios/chunk_01.wav",
+        "imageFilename": "images/img_01.jpg",
+        "speaker": "goog_001",
+        "gender": "male",
+        "exactAge": 60,
+        "assertLanguage": "hindi",
+        "languagesSpoken": [
+            "hindi",
+            "english",
+            "marathi"
+        ],
+        "state": "Haryana",
+        "district": "Gurgaon",
+        "pinCode": 133001,
+        "stayYears": 20,
+        "education": "post-graduate",
+        "socioEconomic": "middle-class"
+    },
+    {
+        "audioFilename": "audios/chunk_02.wav",
+        "speaker": "goog_002",
+        "gender": "male",
+        "exactAge": 35,
+        "assertLanguage": "hindi",
+        "languagesSpoken": [
+            "hindi",
+            "english",
+            "tamil"
+        ],
+        "state": "Haryana",
+        "district": "Gurgaon",
+        "pinCode": 133001,
+        "stayYears": 20,
+        "education": "graduate",
+        "socioEconomic": "upper-middle-class"
+    },
+    {
+        "audioFilename": "audios/chunk_03.wav",
+        "speaker": "goog_002",
+        "gender": "male",
+        "exactAge": 35
+    },
+    {
+        "audioFilename": "audios/chunk_04.wav",
+        "imageFilename": "images/img_04.jpg",
+        "speaker": "goog_001",
+        "gender": "male",
+        "exactAge": 60,
+        "assertLanguage": "hindi",
+        "languagesSpoken": [
+            "hindi",
+            "english",
+            "marathi"
+        ],
+        "state": "Haryana",
+        "district": "Gurgaon",
+        "pinCode": 133001,
+        "stayYears": 20,
+        "education": "graduate",
+        "socioEconomic": "middle-class"
+    }
+]

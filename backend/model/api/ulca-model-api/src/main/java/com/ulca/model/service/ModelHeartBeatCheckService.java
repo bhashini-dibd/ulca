@@ -38,7 +38,7 @@ public class ModelHeartBeatCheckService {
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
 
-	@Scheduled(cron = "0 0 */6 * * ?")
+
 	public void notifyFailedModelHeartbeatCheck() {
 
 		log.info("*******  start ModelHeartBeatCheckService ::notifyFailedModelHeartbeatCheck ****** ");
@@ -88,7 +88,7 @@ public class ModelHeartBeatCheckService {
 		log.info("*******  end ModelHeartBeatCheckService ::notifyFailedModelHeartbeatCheck ****** ");
 	}
 
-	@Scheduled(cron = "0 0 */1 * * ?")
+
 	public void modelHeathStatusCheck() {
 
 		log.info("*******  start ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");

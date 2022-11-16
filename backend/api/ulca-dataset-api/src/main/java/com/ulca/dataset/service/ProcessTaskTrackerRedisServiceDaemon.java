@@ -51,8 +51,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	
 	@Autowired
 	NotificationService notificationService;
-	
-	@Scheduled(cron = "*/10 * * * * *")
+
+
 	public void updateTaskTracker() {
 		
 		

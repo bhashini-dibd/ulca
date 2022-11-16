@@ -301,11 +301,14 @@ components:
     ASRInference:
       required:
         - taskType
+        - modelProcessingType
         - request
       type: object
       properties:
         taskType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        modelProcessingType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/ASRRequest'
         response:
@@ -313,11 +316,14 @@ components:
     ASRAsyncInference:
       required:
         - taskType
+        - modelProcessingType
         - request
       type: object
       properties:
         taskType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        modelProcessingType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/ASRRequest'
         response:
@@ -325,11 +331,14 @@ components:
     ASRAsyncPollingInference:
       required:
         - taskType
+        - modelProcessingType
         - request
       type: object
       properties:
         taskType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        modelProcessingType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/PollingRequest'
         response:
@@ -357,11 +366,14 @@ components:
     TTSInference:
       required:
         - taskType
+        - modelProcessingType
         - request
       type: object
       properties:
         taskType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        modelProcessingType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/TTSRequest'
         response:
@@ -369,11 +381,14 @@ components:
     TTSAsyncInference:
       required:
         - taskType
+        - modelProcessingType
         - request
       type: object
       properties:
         taskType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        modelProcessingType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/TTSRequest'
         response:
@@ -381,11 +396,14 @@ components:
     TTSAsyncPollingInference:
       required:
         - taskType
+        - modelProcessingType
         - request
       type: object
       properties:
         taskType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        modelProcessingType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/PollingRequest'
         response:

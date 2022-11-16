@@ -261,7 +261,8 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 		}
 		
 		if(node.has("collectionMethod")) {
-		if (node.get("collectionMethod").has("collectionDescription")) {
+
+			if (node.get("collectionMethod").has("collectionDescription")) {
 			if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
 				errorList.add("collectionDescription field should be String Array");
 			} else {
@@ -276,6 +277,7 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 					List<TransliterationDatasetCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<TransliterationDatasetCollectionMethod.CollectionDescriptionEnum>();
 					list.add(collectionDescriptionEnum);
 					transliterationDatasetCollectionMethod.setCollectionDescription(list);
+					transliterationParamsSchema.setCollectionMethod(transliterationDatasetCollectionMethod);
 
 					/*
 					 * collectionDetails is non mandatory

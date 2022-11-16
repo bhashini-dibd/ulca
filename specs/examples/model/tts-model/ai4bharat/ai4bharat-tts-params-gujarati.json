@@ -1,0 +1,65 @@
+{
+    "name": "AI4Bharat Indic-TTS : Gujarati",
+    "version": "v1.0",
+    "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both the genders: 'male' and 'female' voices.",
+    "refUrl": "https://github.com/AI4Bharat/Indic-TTS",
+    "task": {
+        "type": "tts"
+    },
+    "languages": [
+        {
+            "sourceLanguage": "gu"
+        }
+    ],
+    "license": "mit",
+    "domain": [
+        "general"
+    ],
+    "submitter": {
+        "name": "AI4Bharat",
+        "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+        "team": [
+            {
+                "name": "Praveen SV",
+                "aboutMe": "IIT-Madras, AI4Bharat"
+            },
+            {
+                "name": "Gokul Karthik K",
+                "aboutMe": "Microsoft Research Intern, AI4Bharat"
+            },
+            {
+                "name": "Pratyush Kumar",
+                "aboutMe": "Microsoft Research, AI4Bharat"
+            },
+            {
+                "name": "Mitesh Khapra",
+                "aboutMe": "IIT-Madras, AI4Bharat"
+            }
+        ]
+    },
+    "inferenceEndPoint": {
+        "callbackUrl": "https://tts-api.ai4bharat.org/",
+        "schema": {
+            "taskType": "tts",
+            "modelProcessingType": {
+                "type": "batch"
+            },
+            "request": {
+                "input": [
+                    {
+                        "source": "ભારત મારો દેશ છે."
+                    }
+                ],
+                "config": {
+                    "gender": "male",
+                    "language": {
+                        "sourceLanguage": "gu"
+                    }
+                }
+            }
+        }
+    },
+    "trainingDataset": {
+        "description": "NLTM-R&D IIT Madras, Chennai."
+    }
+}
