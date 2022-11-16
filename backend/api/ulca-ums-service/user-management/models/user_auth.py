@@ -81,7 +81,7 @@ class UserAuthenticationModel(object):
             user = collections.find({"email":email,"isVerified":True,"isActive":True},{"password":0,"_id":0})
             if user.count() == 0:
                 log.info("No user records found in db matching email: {}".format(email))
-                return post_error("Invalid data", "Data received on request is not valid", None)
+                return post_error("Invalid data", "Your key is not valid", None)
             for record in user:
                 record["privateKey"] = result["privateKey"]
                 return normalize_bson_to_json(record)
@@ -138,7 +138,7 @@ class UserAuthenticationModel(object):
             #searching for valid record matching given user_id
             record = collections.find({"userID": user_id})
             if record.count() != 0:
-                log.info("Record found matching the userID {}".format(user_id), MODULE_CONTEXT)
+                log.info("Record found matching the userID {}".format(user_id))
                 for user in record:
                     #fetching the user roles
                     roles=user["roles"] 
@@ -157,7 +157,7 @@ class UserAuthenticationModel(object):
                     key_collection.remove({"email":user_email})
                     return True
             else:
-                log.info("No record found matching the userID {}".format(user_id), MODULE_CONTEXT)
+                log.info("No record found matching the userID {}".format(user_id))
                 return post_error("Data Not valid","Invalid user details",None)              
         except Exception as e:
             log.exception("Database  exception ",  MODULE_CONTEXT, e)
