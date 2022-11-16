@@ -341,7 +341,7 @@
       "uri": "/ulca/data-metric/v0/store/ai4b",
       "module": "ULCA-METRICS",
       "active": true,
-      "whiteList": false,
+      "whiteList": true,
       "description": "API to fetch AI4Bharat and Samanantar datasets"
     },
     {
@@ -349,7 +349,7 @@
       "uri": "/ulca/data-metric/v0/store/ai4bmodels",
       "module": "ULCA-METRICS",
       "active": true,
-      "whiteList": false,
+      "whiteList": true,
       "description": "API to fetch AI4Bharat Models"
     }
   ]
