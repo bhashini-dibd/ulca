@@ -24,9 +24,6 @@ class AggregateModelData(object):
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]  #grouping fields
             
-            ai4b_query = repo.aggregate([{"$match":{"status":"published","submitter.name":"AI4Bharat"}},{ "$group": {"_id": {"model":"$task.type","model_name":"$name"},"count": { "$sum": 1 }}}])
-            log.info(f'ai4bharat models at line number 28 {ai4b_query}')
-
             #aggregating the model types; initial chart
             if (match_params ==  None and grpby_params == None):
                 query   =   [{"$match":{"status":"published"}},{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
@@ -56,21 +53,21 @@ class AggregateModelData(object):
                 chart_data = []
                 for record in result:
                     rec = {}
-                    if match_params[0]["value"] == "TRANSLATION":
-                        rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]  # label :language pairs seperated by '-'
+                    if match_params[0]["value"] == "TRANSLATION" or match_params[0]["value"] == "TRANSLITERATION" :
+                        rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
                         try:
                             rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())["label"]+"-"+self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
                         except:
                             log.info(f'Language code not found on MDMS : {record["_id"]["lang1"], record["_id"]["lang2"]}')
                             rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
                     
-                    elif match_params[0]["value"] == "TRANSLITERATION":
-                        rec["_id"]    =    record["_id"]["lang2"]
-                        try:
-                            rec["label"]  =   self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
-                        except:
-                            log.info(f'Language code not found on MDMS : {record["_id"]["lang1"]}')
-                            rec["label"]    =   str(record["_id"]["lang1"]).title()
+                   # elif match_params[0]["value"] == "TRANSLITERATION":
+                    #    rec["_id"]    =    record["_id"]["lang2"]+"-"+record["_id"]["lang2"]
+                     #   try:
+                     #       rec["label"]  =   self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]+"-"+self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
+                     #   except:
+                     #       log.info(f'Language code not found on MDMS : {record["_id"]["lang1"], record["_id"]["lang2"]}')
+                     #       rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
 
                     else:
                         rec["_id"]      =   record["_id"]["lang1"] # label :language 
