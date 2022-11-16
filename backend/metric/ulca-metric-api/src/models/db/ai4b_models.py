@@ -27,8 +27,9 @@ class AggregateAi4bModelData(object):
             #aggregating the model types; initial chart
             if (match_params ==  None and grpby_params == None):
                 #query   =   [{"$match":{"status":"published","submitter.name":"AI4Bharat"}},{ "$group": {"_id": {"model":"$task.type","model_name":"$name"},"count": { "$sum": 1 }}}]
-                result = repo.aggregate([{"$match":{"status":"published","submitter.name":"AI4Bharat"}},{ "$group": {"_id": {"model":"$task.type","model_name":"$name"},"count": { "$sum": 1 }}}])
+                result = repo.aggregate([{"$match":{"status":"published","submitter.name":"AI4Bharat"}},{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}])
                 new_result = [rc for rc in result if rc["_id"]["model"] != None]
+
                 chart_data = []
                 for record in new_result:
                     #log.info(record)
