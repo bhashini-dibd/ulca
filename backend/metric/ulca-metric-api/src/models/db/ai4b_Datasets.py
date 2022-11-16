@@ -6,8 +6,6 @@ log = logging.getLogger('file')
 
 utils = QueryUtils()
 
-
-
 class AggregateAI4BDatasetModel(object):
     """
     Processing dataset aggregation
@@ -26,34 +24,122 @@ class AggregateAI4BDatasetModel(object):
             delete  =   "isDelete"
             datatype=   "datasetType"  
             duration=   "durationInSeconds"
-            t_dtype = "transliteration-corpus"
             sub_name = "primarySubmitterName"
-            aib = ["AI4Bharat","Samanantar"]
+            
+            dtype = request_object["type"]
+            stype = request_object["stype"]
+            log.info(f'dtype {dtype}')
+            log.info(f'request_object ==> {request_object}')
+            match_params = None 
+            if "criterions" in request_object:
+                match_params = request_object["criterions"]  # where conditions
+            grpby_params = None
+            if "groupby" in request_object:
+                grpby_params = request_object["groupby"]   #grouping fields
             
 
-            dtype = request_object["type"]
-            emp_list = []
-            aibdict = {}
-            for some in aib:
-                aibquery = f'SELECT SUM(\"{count}\") as {total}, {src},{tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\" WHERE (({datatype} = \'{dtype}\') AND ({sub_name} = \'{some}\') AND ({src != tgt})) GROUP BY {src}, {tgt}, {delete}'
-                que_res = utils.query_runner(aibquery)
+            #ASR charts are displayed in hours; initial chart
+            if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
+                sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\')) GROUP BY {delete}'
+            else:
+                #Charts except ASR are displayed in record counts; initial chart
+                sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\')) GROUP BY {delete}'
+            sumtotal_result = utils.query_runner(sumtotal_query)
+            true_count = 0
+            false_count = 0
+            for val in sumtotal_result:
+                if val[delete] == "false":
+                    true_count = val[total]
+                else:
+                    false_count = val[total]
+            sumtotal = true_count - false_count
+            if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
+                sumtotal = sumtotal/TIME_CONVERSION_VAL
+
+            #aggregate query for language pairs; 1st level drill down for the chart
+            if grpby_params == None and len(match_params) ==1:
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
+                    query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
+                else:
+                    query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
+                params = match_params[0]
+                value = params["value"]
+
+                #parallel corpus src and tgt are interchangable ; eg : one 'en-hi' record is considered as 'hi-en' as well and is also counted while checking for 'hi' pairs
+
+                if dtype == "parallel-corpus" or dtype == "transliteration-corpus" or dtype == "glossary-corpus":
+                    sub_query = f'WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\')) AND ({src} != {tgt}) AND ({src} = \'{value}\' OR {tgt} = \'{value}\')) \
+                                    GROUP BY {src}, {tgt},{delete}'
+                    log.info(sub_query)
+
+                elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus","document-layout-corpus","tts-corpus"]:
+                    sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({sub_name}=\'{stype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
+                qry_for_lang_pair  = query+sub_query
+                result_parsed = utils.query_runner(qry_for_lang_pair)
+                chart_data =  utils.result_formater_for_lang_pairs(result_parsed,dtype,value)
+                log.info(f'sumtotal of 1st level drill down {sumtotal}')
+                return chart_data,sumtotal
+
+            #aggregate query for language groupby ; 1st level drill down for the chart
+            if grpby_params != None and len(match_params) ==2:
+                params = grpby_params[0]
+                grp_field  = params["field"]
+                src_val = next((item["value"] for item in match_params if item["field"] == "sourceLanguage"), False)
+                tgt_val = next((item["value"] for item in match_params if item["field"] == "targetLanguage"), False)
+
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
+                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                            WHERE (({datatype} = \'{dtype}\')AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+
+                elif dtype == "transliteration-corpus":
+                    query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                            WHERE (({datatype} = \'{dtype}\')AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\')))\
+                            GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+                else:
+                    query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+
+                result_parsed = utils.query_runner(query)
+                chart_data = utils.result_formater(result_parsed,grp_field,dtype)
+                return chart_data,sumtotal
+
+            #aggregate query for groupby & matching together; 2nd level drill down
+            if grpby_params != None and len(match_params) ==3:
+                params = grpby_params[0]
+                grp_field  = params["field"]
+                sub_field  = match_params[2]["field"]
+                src_val = next((item["value"] for item in match_params if item["field"] == "sourceLanguage"), None)
+                tgt_val = next((item["value"] for item in match_params if item["field"] == "targetLanguage"), None)
+                sub_val = next((item["value"] for item in match_params  if item["field"] not in ["sourceLanguage","targetLanguage"]))
                 
-                log.info(f'que_res at line number 48 {que_res}')
-                for que_in,que in enumerate(que_res):
-                    if que_in +1 == len(que_res):
-                        break
-                    elif que_res[que_in]["sourceLanguage"] == que_res[que_in + 1]["sourceLanguage"] and que_res[que_in]["targetLanguage"] == que_res[que_in + 1]["targetLanguage"]:
-                        aibdict["total_count"] = que_res[que_in]["total"] - que_res[que_in + 1]["total"]
-                        if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
-                            aibdict["total_count"] = aibdict["total_count"] / TIME_CONVERSION_VAL
-                        aibdict["sourceLanguage"] = que_res[que_in]["sourceLanguage"]
-                        aibdict["targetLanguage"] = que_res[que_in]["targetLanguage"]
-                        aibdict["datasetType"] = dtype
-                        emp_list.append(aibdict.copy())
-            log.info(f'result of ai4bharat datasets at 61 {emp_list}')
-            return emp_list
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
+                    query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+
+                elif dtype == "transliteration-corpus":
+                    query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\')))\
+                            AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+
+                else:
+                    query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+                
+                result_parsed = utils.query_runner(query)
+                chart_data = utils.result_formater(result_parsed,grp_field,dtype)
+                return chart_data,sumtotal
         except Exception as e:
-            log.info("Exception on query aggregation : {}".format(str(e)))
+            log.exception("Exception on query aggregation : {}".format(str(e)))
+            return [],0
+
+    
+
+   
+
 
 # Log config
 dictConfig({
