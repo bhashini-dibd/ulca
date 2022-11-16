@@ -98,15 +98,16 @@ class ASRUnlabeledService:
         try:
             imageHashExists = False
             #check if age is missing but exactAge is present, autofill it
-            if 'exactAge' in data.keys() and 'age' not in data.keys():
-                if data['exactAge'] in range(1,11):
-                    data["age"] = "1-10"
-                elif data['exactAge'] in range(1,21):
-                    data["age"] = "11-20"
-                elif data['exactAge'] in range(21,61):
-                    data["age"] = "21-60"
-                elif data['exactAge'] in range(61,101):
-                    data["age"] = "61-100"
+            if 'exactAge' in data.keys():
+                if 'age' not in data.keys() or data['age'] is None:
+                    if data['exactAge'] in range(1,11):
+                        data["age"] = "1-10"
+                    elif data['exactAge'] in range(1,21):
+                        data["age"] = "11-20"
+                    elif data['exactAge'] in range(21,61):
+                        data["age"] = "21-60"
+                    elif data['exactAge'] in range(61,101):
+                        data["age"] = "61-100"
                     
             log.info(f"Test55 {data}")
             if 'imageHash' in data.keys():
