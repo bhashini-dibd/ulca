@@ -60,15 +60,7 @@ class AggregateModelData(object):
                         except:
                             log.info(f'Language code not found on MDMS : {record["_id"]["lang1"], record["_id"]["lang2"]}')
                             rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
-                    
-                   # elif match_params[0]["value"] == "TRANSLITERATION":
-                    #    rec["_id"]    =    record["_id"]["lang2"]+"-"+record["_id"]["lang2"]
-                     #   try:
-                     #       rec["label"]  =   self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]+"-"+self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
-                     #   except:
-                     #       log.info(f'Language code not found on MDMS : {record["_id"]["lang1"], record["_id"]["lang2"]}')
-                     #       rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
-
+            
                     else:
                         rec["_id"]      =   record["_id"]["lang1"] # label :language 
                         try:

@@ -25,9 +25,10 @@ class AggregateAI4BDatasetModel(object):
             datatype=   "datasetType"  
             duration=   "durationInSeconds"
             sub_name = "primarySubmitterName"
+            ai4b    =  "AI4Bharat"
+            smntr   =  "Samanantar"
             
             dtype = request_object["type"]
-            stype = request_object["stype"]
             log.info(f'dtype {dtype}')
             log.info(f'request_object ==> {request_object}')
             match_params = None 
@@ -40,10 +41,10 @@ class AggregateAI4BDatasetModel(object):
 
             #ASR charts are displayed in hours; initial chart
             if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
-                sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\')) GROUP BY {delete}'
+                sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{dtype}\') AND ({sub_name} IN (\'{ai4b}\', \'{smntr}\'))) GROUP BY {delete}'
             else:
                 #Charts except ASR are displayed in record counts; initial chart
-                sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\')) GROUP BY {delete}'
+                sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{dtype}\') AND ({sub_name}IN (\'{ai4b}\', \'{smntr}\'))) GROUP BY {delete}'
             sumtotal_result = utils.query_runner(sumtotal_query)
             true_count = 0
             false_count = 0
@@ -68,12 +69,12 @@ class AggregateAI4BDatasetModel(object):
                 #parallel corpus src and tgt are interchangable ; eg : one 'en-hi' record is considered as 'hi-en' as well and is also counted while checking for 'hi' pairs
 
                 if dtype == "parallel-corpus" or dtype == "transliteration-corpus" or dtype == "glossary-corpus":
-                    sub_query = f'WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\') AND ({src} != {tgt}) AND ({src} = \'{value}\' OR {tgt} = \'{value}\')) \
+                    sub_query = f'WHERE (({datatype} = \'{dtype}\') AND ({sub_name}IN (\'{ai4b}\', \'{smntr}\')) AND ({src} != {tgt}) AND ({src} = \'{value}\' OR {tgt} = \'{value}\')) \
                                     GROUP BY {src}, {tgt},{delete}'
                     log.info(sub_query)
 
                 elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus","document-layout-corpus","tts-corpus"]:
-                    sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({sub_name}=\'{stype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
+                    sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({sub_name}IN (\'{ai4b}\', \'{smntr}\')) AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
                 qry_for_lang_pair  = query+sub_query
                 result_parsed = utils.query_runner(qry_for_lang_pair)
                 chart_data =  utils.result_formater_for_lang_pairs(result_parsed,dtype,value)
@@ -89,16 +90,16 @@ class AggregateAI4BDatasetModel(object):
 
                 if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                      query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
-                            WHERE (({datatype} = \'{dtype}\')AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            WHERE (({datatype} = \'{dtype}\')AND ({sub_name}IN (\'{ai4b}\', \'{smntr}\')) AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
                             GROUP BY {src}, {tgt}, {delete}, {grp_field}'
 
                 elif dtype == "transliteration-corpus":
                     query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
-                            WHERE (({datatype} = \'{dtype}\')AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\')))\
+                            WHERE (({datatype} = \'{dtype}\')AND ({sub_name}IN (\'{ai4b}\', \'{smntr}\')) AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\')))\
                             GROUP BY {src}, {tgt}, {delete}, {grp_field}'
                 else:
                     query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
-                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}IN (\'{ai4b}\', \'{smntr}\')) AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
                             GROUP BY {src}, {tgt}, {delete}, {grp_field}'
 
                 result_parsed = utils.query_runner(query)
@@ -116,17 +117,17 @@ class AggregateAI4BDatasetModel(object):
                 
                 if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
-                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}IN (\'{ai4b}\', \'{smntr}\')) AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
                             AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'
 
                 elif dtype == "transliteration-corpus":
                     query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
-                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\')))\
+                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}IN (\'{ai4b}\', \'{smntr}\')) AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\')))\
                             AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'
 
                 else:
                     query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
-                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}=\'{stype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            WHERE (({datatype} = \'{dtype}\') AND ({sub_name}IN (\'{ai4b}\', \'{smntr}\')) AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
                             AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'
                 
                 result_parsed = utils.query_runner(query)
