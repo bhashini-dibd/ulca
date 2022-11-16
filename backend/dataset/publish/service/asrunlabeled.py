@@ -5,7 +5,7 @@ from logging.config import dictConfig
 from configs.configs import ds_batch_size, \
     sample_size, offset, limit, asr_unlabeled_immutable_keys, asr_unlabeled_non_tag_keys, dataset_type_asr, \
     user_mode_pseudo, \
-    asr_unlabeled_search_ignore_keys, asr_unlabeled_updatable_keys, dataset_type_asr_unlabeled, asr_unlabeled_prefix
+    asr_unlabeled_search_ignore_keys, asr_unlabeled_updatable_keys, dataset_type_asr_unlabeled, asr_unlabeled_prefix, submiter_name_whitelist_enabled, submitter_names_to_whitelist
 from repository.asrunlabeled import ASRUnlabeledRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -257,6 +257,28 @@ class ASRUnlabeledService:
             exclude = {"_id": False}
             for key in asr_unlabeled_search_ignore_keys:
                 exclude[key] = False
+
+            log.info(f"old Db query: {db_query}")
+            #logic to whitelist few data based on submitername
+            if submiter_name_whitelist_enabled:
+                if 'collectionSource' in db_query.keys():
+                  del db_query["collectionSource"]
+                if 'submitter' in db_query.keys():
+                  del db_query["submitter"]
+                coll_source_to_whitelist = [re.compile(cs, re.IGNORECASE)
+                               for cs in query["collectionSource"]]
+                             
+                names_to_whitelist = [re.compile(wsn, re.IGNORECASE)
+                                       for wsn in submitter_names_to_whitelist]
+                new_db_query = {
+                    "$and": [
+                        {"$or": [{"collectionSource": {"$in": coll_source_to_whitelist}}, {
+                            "submitter": {"$elemMatch": {"name": {"$in": names_to_whitelist}}}}]},db_query
+                    ]
+                }
+                log.info(f"new Db query: {new_db_query}")
+                db_query = new_db_query
+
             result, hours = repo.search(db_query, exclude, off, lim)
             count = len(result)
             log.info(f'Result --- Count: {count}, Query: {query}')

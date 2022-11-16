@@ -52,6 +52,8 @@ def search_dataset():
         data = o_service.get_ocr_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_asr:
         data = a_service.get_asr_dataset(req_criteria)
+    if req_criteria["datasetType"] == dataset_type_asr_unlabeled:
+        data = au_service.get_asr_unlabeled_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_monolingual:
         data = m_service.get_monolingual_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_tts:
