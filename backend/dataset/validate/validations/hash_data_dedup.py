@@ -74,13 +74,13 @@ class HashDedup(BaseValidator):
                 if hash_str:
                     request['record']['audioHash'] = hash_str
                 else:
-                    return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
+                    return {"message": f"Exception while hashing the file  {request['record']['fileLocation']}", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
                 if 'imageFileLocation' in request['record'].keys():
                     hash_str = self.hash_file(request['record']['imageFileLocation'])
                     if hash_str:
                         request['record']['imageHash'] = hash_str
                     else:
-                        return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
+                        return {"message": f"Exception while hashing the file {request['record']['imageFileLocation']}", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
                 
 
             if request["datasetType"] == dataset_type_tts:
