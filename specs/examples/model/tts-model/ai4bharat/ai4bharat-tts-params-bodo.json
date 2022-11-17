@@ -41,6 +41,9 @@
         "callbackUrl": "https://tts-api.ai4bharat.org/",
         "schema": {
             "taskType": "tts",
+            "modelProcessingType": {
+                "type": "batch"
+            },
             "request": {
                 "input": [
                     {

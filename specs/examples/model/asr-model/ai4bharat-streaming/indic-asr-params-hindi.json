@@ -1,19 +1,19 @@
 {
-    "name": "AI4Bharat IndicWav2Vec ASR - Hindi",
+    "name": "AI4Bharat IndicWav2Vec ASR Streaming - Hindi",
     "version": "v3.0",
     "description": "IndicWav2Vec is a multilingual speech model pretrained on 40 Indian langauges. This model represents the largest diversity of Indian languages in the pool of multilingual speech models. We fine-tune this model for downstream ASR for 9 languages and obtain state-of-the-art results on 3 public benchmarks, namely MUCS, MSR and OpenSLR. This model is based on Wav2Vec2.0 large architecture",
     "refUrl": "https://github.com/AI4Bharat/IndicWav2Vec",
     "task": {
-       "type" : "asr"
+        "type": "asr"
     },
     "languages": [
-       {
-          "sourceLanguage": "hi"
-       }
+        {
+            "sourceLanguage": "hi"
+        }
     ],
     "license": "mit",
     "domain": [
-       "general"
+        "general"
     ],
     "submitter": {
         "name": "AI4Bharat",
@@ -81,26 +81,31 @@
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "https://ai4b-dev-asr.ulcacontrib.org/asr/v1/recognize/hi",
-       "schema": {
-          "taskType": "asr",
-          "request": {
-             "audio": [{
-                "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_hindi.wav"
-             }],
-             "config": {
-                "audioFormat": "wav",
-                "transcriptionFormat": {
-                   "value" : "transcript"
-                },
-                "language": {
-                   "sourceLanguage": "hi"
+        "callbackUrl": "wss://ai4b-dev-asr.ulcacontrib.org",
+        "schema": {
+            "taskType": "asr",
+            "modelProcessingType": {
+                "type": "streaming"
+            },
+            "request": {
+                "audio": [
+                    {
+                        "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_hindi.wav"
+                    }
+                ],
+                "config": {
+                    "audioFormat": "wav",
+                    "transcriptionFormat": {
+                        "value": "transcript"
+                    },
+                    "language": {
+                        "sourceLanguage": "hi"
+                    }
                 }
-             }
-          }
-       }
+            }
+        }
     },
     "trainingDataset": {
-       "description": "Trained on benchmark datasets"
+        "description": "Trained on benchmark datasets"
     }
- }
+}

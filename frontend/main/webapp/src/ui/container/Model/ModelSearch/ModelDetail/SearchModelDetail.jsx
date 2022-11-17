@@ -156,6 +156,7 @@ const SearchModelDetail = (props) => {
               source={source}
               inferenceEndPoint={inferenceEndPoint}
               modelId={params.srno}
+              submitter={submitter}
             />
           );
         case "transliteration":

@@ -194,6 +194,7 @@ const HostedInferASR = (props) => {
             streaming={props.streaming}
             getchildData={childData}
             feedback={{ setTarget, setTargetAudio, setData }}
+            inferenceEndPoint={inferenceEndPoint}
           />
         </Grid>
         <Grid
