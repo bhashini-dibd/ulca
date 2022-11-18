@@ -274,7 +274,17 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 					if (finalRecord.has("imageFilename")){
 						String imageFileLocation = basePath + finalRecord.get("imageFilename");
-						finalRecord.put("imageFileLocation",imageFileLocation);
+						if (isFileAvailable(imageFileLocation)){
+							finalRecord.put("imageFileLocation",imageFileLocation);
+						} else {
+							failedCount++;
+							taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+							datasetErrorPublishService.publishDatasetError("dataset-training",
+									"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename") + " Not available ",
+									serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
+
+						}
+
 					}
 
 					// log.info("File Available :: " + fileLocation);
@@ -405,7 +415,17 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 					if (isFileAvailable(fileLocation)) {
 						if (finalRecord.has("imageFilename")){
 							String imageFileLocation = basePath + finalRecord.get("imageFilename");
-							finalRecord.put("imageFileLocation",imageFileLocation);
+							if (isFileAvailable(imageFileLocation)){
+								finalRecord.put("imageFileLocation",imageFileLocation);
+							} else {
+								failedCount++;
+								taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+								datasetErrorPublishService.publishDatasetError("dataset-training",
+										"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename") + " Not available ",
+										serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
+
+							}
+
 						}
 
 						successCount++;
