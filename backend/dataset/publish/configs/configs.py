@@ -53,9 +53,9 @@ shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
                       "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
 asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
-                    "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
+                    "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
 asr_search_ignore_keys = ["_id", "id", "tags", "license", "datasetType", "audioHash", "textHash",
-                          "fileLocation", "imageFileLocation","lastModifiedOn", "createdOn", "version", "datasetId","imageHash"]
+                          "fileLocation", "imageFileLocation","lastModifiedOn", "createdOn", "version", "datasetId","imageHash","imageFilename"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 tts_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
@@ -71,7 +71,7 @@ asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "data
 asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                               "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
 asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "license", "datasetType", "audioHash",
-                                    "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId","imageHash", "imageFileLocation"]
+                                    "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId","imageHash", "imageFileLocation","imageFilename"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 parallel_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
