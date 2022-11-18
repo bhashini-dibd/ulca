@@ -4,7 +4,7 @@ import time
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, asr_prefix, \
     sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, \
-    asr_search_ignore_keys, asr_updatable_keys
+    asr_search_ignore_keys, asr_updatable_keys, submiter_name_whitelist_enabled, submitter_names_to_whitelist
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -34,10 +34,12 @@ class ASRService:
     '''
     def load_asr_dataset(self, request):
         try:
+            #log.info(f"TEST52: request: {request}")
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
             if record:
+                # log.info(f"Test55 load_asr_dataset {record}")
                 result = self.get_enriched_asr_data(record, metadata)
                 if result:
                     if result[0] == "INSERT":
@@ -94,18 +96,51 @@ class ASRService:
     def get_enriched_asr_data(self, data, metadata):
         try:
             hashes = [data["audioHash"], data["textHash"]]
-            record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
+            imageHashExists = False
+            #check if age is missing but exactAge is present, autofill it
+            if 'exactAge' in data.keys():
+                if 'age' not in data.keys() or data['age'] is None:
+                    if data['exactAge'] in range(1,11):
+                        data["age"] = "1-10"
+                    elif data['exactAge'] in range(1,21):
+                        data["age"] = "11-20"
+                    elif data['exactAge'] in range(21,61):
+                        data["age"] = "21-60"
+                    elif data['exactAge'] in range(61,101):
+                        data["age"] = "61-100"
+                    
+            #Check if the image hash exists already in mongo
+            #record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
+            if 'imageHash' in data.keys():
+                record = self.get_asr_dataset_internal({"$or": [{"tags": data["imageHash"]},
+	                                                        {"$and": [{"tags":data["audioHash"]},
+		                                                          {"tags":data["textHash"]}]
+	                                                        }]
+                                                   })           
+            else:
+                record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
+            #log.info("Test55 load_asr_dataset {record}")
             if record:
-                if isinstance(record, list):
-                    record = record[0]
-                dup_data = service.enrich_duplicate_data(data, record, metadata, asr_immutable_keys, asr_updatable_keys, asr_non_tag_keys)
-                if dup_data:
-                    if metadata["userMode"] != user_mode_pseudo:
-                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                        repo.update(dup_data)
-                    return "UPDATE", dup_data, record
-                else:
-                    return "DUPLICATE", data, record
+                #If image hash exists in records, copy image url and store it in data.
+                #If image hash exists, set imageHashExists to True
+                log.info(f"Data within Publish: {data}")
+                for each_record in record:
+                    if 'imageHash' in data.keys():
+                        if data['imageHash'] in each_record['tags']:
+                            imageHashExists = True
+                            data['refImgStorePath'] = each_record['refImgStorePath']
+                    #Check if audio and text hash are same of any record and data
+                    if data['audioHash'] in each_record['tags'] and data['textHash'] in each_record['tags']:
+                        if isinstance(each_record, list):
+                            each_record = each_record[0]
+                        dup_data = service.enrich_duplicate_data(data, each_record, metadata, asr_immutable_keys, asr_updatable_keys, asr_non_tag_keys)
+                        if dup_data:
+                            if metadata["userMode"] != user_mode_pseudo:
+                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                                repo.update(dup_data)
+                            return "UPDATE", dup_data, each_record
+                        else:
+                            return "DUPLICATE", data, each_record
             insert_data = data
             for key in insert_data.keys():
                 if key not in asr_immutable_keys and key not in asr_updatable_keys:
@@ -122,6 +157,17 @@ class ASRService:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
                 insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                if 'imageFileLocation' in data.keys() and imageHashExists == False:
+                    epoch = eval(str(time.time()).replace('.', '')[0:13])
+                    if isinstance(data['imageFilename'],list):
+                        data['imageFilename'] = data['imageFilename'][0]
+                    imageFileName = data['imageFilename'].split('/')[-1]
+                    s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
+                    img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
+                    if not img_object_store_path:
+                        return "FAILED", insert_data, insert_data
+                    else:
+                        insert_data["refImgStorePath"] = img_object_store_path
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
@@ -134,10 +180,13 @@ class ASRService:
     def get_asr_dataset_internal(self, query):
         try:
             data = repo.search(query, None, None, None)
+            #data is a tuple
             if data:
+                # log.info(f"Test55: Data within Repo Search {data}")
                 asr_data = data[0]
+                #asr_data is a list of dictionaries, each dictionary is one record / document
                 if asr_data:
-                    return asr_data[0]
+                   return asr_data
                 else:
                     return None
             else:
@@ -211,6 +260,28 @@ class ASRService:
             exclude = {"_id": False}
             for key in asr_search_ignore_keys:
                 exclude[key] = False
+
+            log.info(f"old Db query: {db_query}")
+            #logic to whitelist few data based on submitername
+            if submiter_name_whitelist_enabled:
+                if 'collectionSource' in db_query.keys():
+                  del db_query["collectionSource"]
+                if 'submitter' in db_query.keys():
+                  del db_query["submitter"]
+                coll_source_to_whitelist = [re.compile(cs, re.IGNORECASE)
+                               for cs in query["collectionSource"]]
+                             
+                names_to_whitelist = [re.compile(wsn, re.IGNORECASE)
+                                       for wsn in submitter_names_to_whitelist]
+                new_db_query = {
+                    "$and": [
+                        {"$or": [{"collectionSource": {"$in": coll_source_to_whitelist}}, {
+                            "submitter": {"$elemMatch": {"name": {"$in": names_to_whitelist}}}}]},db_query
+                    ]
+                }
+                log.info(f"new Db query: {new_db_query}")
+                db_query = new_db_query
+
             result, hours = repo.search(db_query, exclude, off, lim)
             count = len(result)
             log.info(f'Result --- Count: {count}, Query: {query}')
