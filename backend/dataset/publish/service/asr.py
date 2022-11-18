@@ -39,7 +39,7 @@ class ASRService:
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
             if record:
-                log.info(f"Test55 load_asr_dataset {record}")
+                # log.info(f"Test55 load_asr_dataset {record}")
                 result = self.get_enriched_asr_data(record, metadata)
                 if result:
                     if result[0] == "INSERT":
@@ -182,7 +182,7 @@ class ASRService:
             data = repo.search(query, None, None, None)
             #data is a tuple
             if data:
-                log.info(f"Test55: Data within Repo Search {data}")
+                # log.info(f"Test55: Data within Repo Search {data}")
                 asr_data = data[0]
                 #asr_data is a list of dictionaries, each dictionary is one record / document
                 if asr_data:
@@ -261,26 +261,26 @@ class ASRService:
             for key in asr_search_ignore_keys:
                 exclude[key] = False
 
-            log.info(f"old Db query: {db_query}")
-            #logic to whitelist few data based on submitername
-            if submiter_name_whitelist_enabled:
-                if 'collectionSource' in db_query.keys():
-                  del db_query["collectionSource"]
-                if 'submitter' in db_query.keys():
-                  del db_query["submitter"]
-                coll_source_to_whitelist = [re.compile(cs, re.IGNORECASE)
-                               for cs in query["collectionSource"]]
+            # log.info(f"old Db query: {db_query}")
+            # #logic to whitelist few data based on submitername
+            # if submiter_name_whitelist_enabled:
+            #     if 'collectionSource' in db_query.keys():
+            #       del db_query["collectionSource"]
+            #     if 'submitter' in db_query.keys():
+            #       del db_query["submitter"]
+            #     coll_source_to_whitelist = [re.compile(cs, re.IGNORECASE)
+            #                    for cs in query["collectionSource"]]
                              
-                names_to_whitelist = [re.compile(wsn, re.IGNORECASE)
-                                       for wsn in submitter_names_to_whitelist]
-                new_db_query = {
-                    "$and": [
-                        {"$or": [{"collectionSource": {"$in": coll_source_to_whitelist}}, {
-                            "submitter": {"$elemMatch": {"name": {"$in": names_to_whitelist}}}}]},db_query
-                    ]
-                }
-                log.info(f"new Db query: {new_db_query}")
-                db_query = new_db_query
+            #     names_to_whitelist = [re.compile(wsn, re.IGNORECASE)
+            #                            for wsn in submitter_names_to_whitelist]
+            #     new_db_query = {
+            #         "$and": [
+            #             {"$or": [{"collectionSource": {"$in": coll_source_to_whitelist}}, {
+            #                 "submitter": {"$elemMatch": {"name": {"$in": names_to_whitelist}}}}]},db_query
+            #         ]
+            #     }
+            #     log.info(f"new Db query: {new_db_query}")
+            #     db_query = new_db_query
 
             result, hours = repo.search(db_query, exclude, off, lim)
             count = len(result)

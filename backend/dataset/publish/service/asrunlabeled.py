@@ -35,7 +35,7 @@ class ASRUnlabeledService:
     '''
     def load_asr_unlabeled_dataset(self, request):
         try:
-            log.info(f"Test50: Start {request}")
+            # log.info(f"Test50: Start {request}")
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
@@ -109,7 +109,7 @@ class ASRUnlabeledService:
                     elif data['exactAge'] in range(61,101):
                         data["age"] = "61-100"
                     
-            log.info(f"Test55 {data}")
+            # log.info(f"Test55 {data}")
             if 'imageHash' in data.keys():
                 record = self.get_asr_unlabeled_dataset_internal({"$or": [{"tags": data["imageHash"]},
                                                                 {"tags": data["audioHash"]}]
@@ -165,7 +165,7 @@ class ASRUnlabeledService:
                     imageFileName = data['imageFilename'].split('/')[-1]
                     s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
                     img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_unlabeled_prefix, s3_img_file_name)
-                    log.info(f"Test57 {img_object_store_path}")
+                    # log.info(f"Test57 {img_object_store_path}")
                     if not img_object_store_path:
                         return "FAILED", insert_data, insert_data
                     else:
