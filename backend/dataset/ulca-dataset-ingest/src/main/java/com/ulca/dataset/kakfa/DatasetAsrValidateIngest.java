@@ -260,6 +260,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			}
 			if (rowSchema != null) {
 
+
 				JSONObject target = new JSONObject(dataRow);
 				JSONObject finalRecord = deepMerge(source, target);
 				String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
@@ -267,8 +268,24 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 				finalRecord.put("sourceLanguage", sourceLanguage);
 
 				String fileLocation = basePath + finalRecord.get("audioFilename");
+				log.info(fileLocation);
 
 				if (isFileAvailable(fileLocation)) {
+
+					if (finalRecord.has("imageFilename")){
+						String imageFileLocation = basePath + finalRecord.get("imageFilename");
+						if (isFileAvailable(imageFileLocation)){
+							finalRecord.put("imageFileLocation",imageFileLocation);
+						} else {
+							failedCount++;
+							taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+							datasetErrorPublishService.publishDatasetError("dataset-training",
+									"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename") + " Not available ",
+									serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
+
+						}
+
+					}
 
 					// log.info("File Available :: " + fileLocation);
 					successCount++;
@@ -279,6 +296,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 					vModel.put("record", finalRecord);
 					vModel.put("currentRecordIndex", numberOfRecords);
 					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+
 				} else {
 					// log.info("File Not Available :: " + fileLocation);
 					failedCount++;
@@ -298,6 +316,8 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
 				+ numberOfRecords + " success record :: " + successCount);
+
+		log.info(vModel.toString());
 
 	}
 
@@ -393,6 +413,20 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 					String fileLocation = basePath + finalRecord.get("audioFilename");
 
 					if (isFileAvailable(fileLocation)) {
+						if (finalRecord.has("imageFilename")){
+							String imageFileLocation = basePath + finalRecord.get("imageFilename");
+							if (isFileAvailable(imageFileLocation)){
+								finalRecord.put("imageFileLocation",imageFileLocation);
+							} else {
+								failedCount++;
+								taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+								datasetErrorPublishService.publishDatasetError("dataset-training",
+										"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename") + " Not available ",
+										serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
+
+							}
+
+						}
 
 						successCount++;
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
@@ -402,6 +436,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 						vModel.put("record", finalRecord);
 						vModel.put("currentRecordIndex", pseudoNumberOfRecords);
 						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+						log.info(vModel.toString());
 					} else {
 						failedCount++;
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
