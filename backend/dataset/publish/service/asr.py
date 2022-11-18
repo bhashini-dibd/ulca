@@ -4,7 +4,7 @@ import time
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, asr_prefix, \
     sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, \
-    asr_search_ignore_keys, asr_updatable_keys
+    asr_search_ignore_keys, asr_updatable_keys, submiter_name_whitelist_enabled, submitter_names_to_whitelist
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -98,15 +98,16 @@ class ASRService:
             hashes = [data["audioHash"], data["textHash"]]
             imageHashExists = False
             #check if age is missing but exactAge is present, autofill it
-            if 'exactAge' in data.keys() and 'age' not in data.keys():
-                if data['exactAge'] in range(1,11):
-                    data["age"] = "1-10"
-                elif data['exactAge'] in range(1,21):
-                    data["age"] = "11-20"
-                elif data['exactAge'] in range(21,61):
-                    data["age"] = "21-60"
-                elif data['exactAge'] in range(61,101):
-                    data["age"] = "61-100"
+            if 'exactAge' in data.keys():
+                if 'age' not in data.keys() or data['age'] is None:
+                    if data['exactAge'] in range(1,11):
+                        data["age"] = "1-10"
+                    elif data['exactAge'] in range(1,21):
+                        data["age"] = "11-20"
+                    elif data['exactAge'] in range(21,61):
+                        data["age"] = "21-60"
+                    elif data['exactAge'] in range(61,101):
+                        data["age"] = "61-100"
                     
             #Check if the image hash exists already in mongo
             #record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
@@ -259,6 +260,28 @@ class ASRService:
             exclude = {"_id": False}
             for key in asr_search_ignore_keys:
                 exclude[key] = False
+
+            # log.info(f"old Db query: {db_query}")
+            # #logic to whitelist few data based on submitername
+            # if submiter_name_whitelist_enabled:
+            #     if 'collectionSource' in db_query.keys():
+            #       del db_query["collectionSource"]
+            #     if 'submitter' in db_query.keys():
+            #       del db_query["submitter"]
+            #     coll_source_to_whitelist = [re.compile(cs, re.IGNORECASE)
+            #                    for cs in query["collectionSource"]]
+                             
+            #     names_to_whitelist = [re.compile(wsn, re.IGNORECASE)
+            #                            for wsn in submitter_names_to_whitelist]
+            #     new_db_query = {
+            #         "$and": [
+            #             {"$or": [{"collectionSource": {"$in": coll_source_to_whitelist}}, {
+            #                 "submitter": {"$elemMatch": {"name": {"$in": names_to_whitelist}}}}]},db_query
+            #         ]
+            #     }
+            #     log.info(f"new Db query: {new_db_query}")
+            #     db_query = new_db_query
+
             result, hours = repo.search(db_query, exclude, off, lim)
             count = len(result)
             log.info(f'Result --- Count: {count}, Query: {query}')
