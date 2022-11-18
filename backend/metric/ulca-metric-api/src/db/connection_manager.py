@@ -48,6 +48,17 @@ class ModelRepo:
             log.exception(f'Exception in repo search: {e}', e)
             return []
 
+    def find(self,query):
+        try:
+            col = self.get_mongo_instance()
+            res = col.find(query)
+            result = []
+            for r in res:
+                result.append(r)
+            return result
+        except Exception as e:
+            log.exception(f'Exception in searching repo: {e}',e)
+
     def count(self, query):
         try:
             col = self.get_mongo_instance()
