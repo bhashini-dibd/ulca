@@ -19,8 +19,8 @@ MAIL_SETTINGS               =   {
 MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
 
 receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"siddanth.shaiva@tarento.com")
-ulca_email_group            =   os.environ.get('ULCA_EMAIL_GROUP','siddanth.shaiva@tarento.com')
-
+#ulca_email_group            =   os.environ.get('ULCA_EMAIL_GROUP','siddanth.shaiva@tarento.com')
+ulca_email_group            =   'siddanth.shaiva@tarento.com'
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
 process_connection_url      =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb://localhost:27017')
 data_db_schema              =   os.environ.get('DATA_PARALLEL', 'ulca')

@@ -20,7 +20,7 @@ TIME_CONVERSION_VAL     =   os.environ.get('ASR_DATA_CONERSION_VAL',3600)
 if isinstance(TIME_CONVERSION_VAL, str):
     TIME_CONVERSION_VAL  =  eval(TIME_CONVERSION_VAL)
 
-metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',864000)#
+metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',180)#
 if isinstance(metric_cron_interval_sec, str):
     metric_cron_interval_sec  =  eval(metric_cron_interval_sec)
 
