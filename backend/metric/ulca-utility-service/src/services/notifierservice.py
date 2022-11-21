@@ -23,7 +23,7 @@ class NotifierService(Thread):
         while not self.stopped.wait(metric_cron_interval_sec):
             try:
 
-                self.notify_user
+                self.notify_user()
                 run+=1
             except Exception as e:
                 log.info(f"error {e}")
