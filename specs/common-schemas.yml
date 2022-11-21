@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.6.3
+  version: 0.6.4
 servers:
   - url: /
 paths: {}
@@ -406,4 +406,11 @@ components:
             - awa
             - hne
             - mag
+            - mixed
             - unknown
+
+    MixedDatasource:
+      type: string
+      description: This attribute defines the  datasources with mixed languages in it.
+      enum:
+            - vaani

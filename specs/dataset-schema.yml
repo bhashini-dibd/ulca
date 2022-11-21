@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.6
+  version: 0.10.7
 servers:
   - url: /ulca
 paths: {}
@@ -228,6 +228,8 @@ components:
         - type: object
       type: object
       properties:
+        mixedDatasource:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/MixedDatasource
         format:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         channel:
@@ -273,7 +275,6 @@ components:
         text:
           type: string
           description: textual output of the audio
-        
     TtsParamsSchema:
       allOf:
         - $ref: '#/components/schemas/AsrParamsSchema'
@@ -282,7 +283,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/AsrRowSchema'
         - type: object
-      
     AsrUnlabeledParamsSchema:
       allOf:
         - $ref: '#/components/schemas/AsrParamsSchema'
@@ -295,8 +295,6 @@ components:
         - type: object
       type: object
       description: the schema defines the column name present in physical file that is being pointed by dataFilename key.
-        
-
     OcrDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -1088,17 +1086,15 @@ components:
           type: string
           description: corresponsing word in the sentence
           minItems: 1
-    
     AsrlanguagesSpoken:
-          type: array
-          description: list of various languages the speaker is good enough to speak
-          example:
-            - english
-          items:
-            maxItems: 10
-            minItems: 1
-            type: string
-            
+      type: array
+      description: list of various languages the speaker is good enough to speak
+      example:
+        - english
+      items:
+        maxItems: 10
+        minItems: 1
+        type: string
     AsrCommonSchema:
       properties:
         audioFilename:
@@ -1124,10 +1120,9 @@ components:
             - 21-60
             - 61-100
         assertLanguage:
-          type: string
-          description: language in which the speaker claims to speak the particular audio
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
         languagesSpoken:
-          $ref:  '#/components/schemas/AsrlanguagesSpoken'
+          $ref: '#/components/schemas/AsrlanguagesSpoken'
         state:
           type: string
           description: state in which the speaker belongs to
@@ -1157,7 +1152,6 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
-        
         dialect:
           type: string
           description: valid dialact of the submitted language.
@@ -1176,9 +1170,3 @@ components:
           description: 'Time of the audio where the processing end. Format : hh:mm:ss'
         collectionMethod:
           $ref: '#/components/schemas/CollectionMethodAudio'
-      
-      
-      
-    
-            
-    
