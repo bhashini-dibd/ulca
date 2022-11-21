@@ -13,10 +13,13 @@ MAIL_SETTINGS               =   {
                                 "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT','465')),
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
-                                "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxxx')
+                                #"MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','notifer.tester@gmail.com'),
+                                "MAIL_USERNAME" : 'notifer.tester@gmail.com',
+                                "MAIL_PASSWORD" : 'Welcome@123'
+                                #"MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','Welcome@123')
                                 }
-MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
+#MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
+MAIL_SENDER                 = 'ulca@tarento.com'
 
 #receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"siddanth.shaiva@tarento.com")
 receiver_email_ids          =   "notifier.tester12@gmail.com"
