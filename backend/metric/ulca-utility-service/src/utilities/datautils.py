@@ -1,6 +1,6 @@
 import requests
 from config import data_filter_set_file_path,shared_storage_path,filter_file_name, file_store_host, file_store_upload_endpoint
-from config import data_metric_host,data_metric_endpoint,shared_storage_path, receiver_email_ids, MAIL_SENDER, ulca_email_group
+from config import data_metric_host,data_metric_endpoint,shared_storage_path, receiver_email_ids, MAIL_SENDER, ulca_email_group,MAIL_SETTINGS
 import json
 import logging
 from logging.config import dictConfig
@@ -13,7 +13,11 @@ from flask import render_template
 from app import mail
 IST = pytz.timezone('Asia/Kolkata')
 import os
+from flask import Flask
 
+app  = Flask(__name__)
+
+app.config.update(MAIL_SETTINGS)
 
 class DataUtils:
     def __init__(self):
@@ -122,10 +126,11 @@ class DataUtils:
                 msg         = Message(subject=f" ULCA - Statistics {tdy_date}",
                                 sender=MAIL_SENDER,
                                 recipients=users)
-                msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
-                # with open (file,'rb') as fp:
-                #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
-                mail.send(msg)
+                with app.app_context():
+                    msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
+                    # with open (file,'rb') as fp:
+                    #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
+                    mail.send(msg)
                 log.info(f"Generated email notifications")
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
