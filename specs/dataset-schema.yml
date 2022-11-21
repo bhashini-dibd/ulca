@@ -228,7 +228,7 @@ components:
         - type: object
       type: object
       properties:
-        mixedDatasource:
+        mixedDataSource:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/MixedDatasource
         format:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat

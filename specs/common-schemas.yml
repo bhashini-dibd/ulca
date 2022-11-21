@@ -409,7 +409,7 @@ components:
             - mixed
             - unknown
 
-    MixedDatasource:
+    mixedDataSource:
       type: string
       description: This attribute defines the  datasources with mixed languages in it.
       enum:
