@@ -15,7 +15,7 @@ IST = pytz.timezone('Asia/Kolkata')
 import os
 from flask import Flask
 
-app  = Flask(__name__)
+app  = Flask(__name__, template_folder='templates')
 
 app.config.update(MAIL_SETTINGS)
 
