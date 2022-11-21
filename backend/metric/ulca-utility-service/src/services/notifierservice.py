@@ -4,12 +4,31 @@ import logging
 from logging.config import dictConfig
 from repositories import NotifierRepo
 log         =   logging.getLogger('file')
+from threading import Thread
+from config import metric_cron_interval_sec
+
+
 
 repo    =   NotifierRepo()
 
-class NotifierService:
+class NotifierService(Thread):
 
     # Cron JOB to update filter set params
+    def __init__(self, event):
+        Thread.__init__(self)
+        self.stopped = event
+
+    def run(self):
+        run = 0
+        while not self.stopped.wait(metric_cron_interval_sec):
+            try:
+
+                self.notify_user
+                run+=1
+            except Exception as e:
+                log.info(f"error {e}")
+
+
     def notify_user(self,emails=None):
         try:
             parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()

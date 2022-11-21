@@ -6,6 +6,8 @@ import config
 import logging
 from flask_mail import Mail
 from services.status_updater_cron import StatusCronProcessor
+from services.notifierservice import NotifierService
+
 import config
 log = logging.getLogger('file')
 from logging.config import dictConfig
@@ -23,7 +25,10 @@ def start_cron():
     with app.test_request_context():
         statcron    =    StatusCronProcessor(threading.Event())
         statcron.start()
+        notify      =    NotifierService(threading.Event())
+        notify.start()
 
+       
 for blueprint in vars(routes).values():
     if isinstance(blueprint, Blueprint):
         app.register_blueprint(blueprint, url_prefix=config.API_URL_PREFIX)
@@ -31,6 +36,7 @@ for blueprint in vars(routes).values():
 
 if __name__ == "__main__":
     start_cron()
+    
     app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
     
 # Log config

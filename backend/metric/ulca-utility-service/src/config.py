@@ -35,7 +35,7 @@ process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracke
 process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes')
 tasks_col                   =   os.environ.get('TASKS_COL','ulca-pt-tasks')
 
-
+metric_cron_interval_sec     =  180
 filter_cron_interval_sec     =   os.environ.get('FILTER_CRON_INTERVAL_SEC',300)#14400
 if isinstance(filter_cron_interval_sec, str):
     filter_cron_interval_sec =  eval(filter_cron_interval_sec)
