@@ -39,11 +39,11 @@
     },
     "inferenceEndPoint": {
         "callbackUrl": "https://tts-api.ai4bharat.org/",
-        "modelProcessingType": {
-            "type": "streaming"
-        },
         "schema": {
             "taskType": "tts",
+            "modelProcessingType": {
+                "type": "streaming"
+            },
             "request": {
                 "input": [
                     {
