@@ -179,16 +179,6 @@
       "code": "unknown",
       "label": "Unknown Language",
       "active": true
-    },
-    {
-      "code":"mixed",
-      "label": "Mixed Language",
-      "active":true,
-      "values": {
-        "master": "/mixedDatasrc.json",
-        "jsonPath": "$.mixedDatasrc"
-      }
     }
-  ],
-  "relatedMaster": true
+  ]
 }
