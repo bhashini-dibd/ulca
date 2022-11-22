@@ -1,0 +1,14 @@
+{
+    "mixedDatasrc": [
+      {
+        "code" : "vaani",
+        "label" : "Vaani",
+        "active" : true,
+        "values": {
+            "master": "/assertLngVaani.json",
+            "jsonPath": "$.assertLngVaani"
+          }
+      }
+    ],
+    "relatedMaster": true
+}

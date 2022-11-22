@@ -179,6 +179,16 @@
       "code": "unk",
       "label": "Unknown Language",
       "active": true
+    },
+    {
+      "code":"mixed",
+      "label": "Other Data Source",
+      "active":true,
+      "values": {
+        "master": "/mixedDatasrc.json",
+        "jsonPath": "$.mixedDatasrc"
+      }
     }
-  ]
+  ],
+  "relatedMaster": true
 }
