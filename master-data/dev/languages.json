@@ -176,13 +176,13 @@
       "active": true
     },
     {
-      "code": "unk",
+      "code": "unknown",
       "label": "Unknown Language",
       "active": true
     },
     {
       "code":"mixed",
-      "label": "Other Data Source",
+      "label": "Mixed Language",
       "active":true,
       "values": {
         "master": "/mixedDatasrc.json",
