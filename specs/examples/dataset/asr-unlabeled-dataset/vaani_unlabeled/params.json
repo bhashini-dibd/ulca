@@ -4,24 +4,25 @@
         "sourceLanguage": "hi"
     },
     "collectionSource": [
-        "vani"
+        "vaani"
     ],
+    "mixedDataSource" : "vaani",
     "domain": [
         "general"
     ],
     "license": "cc-by-4.0",
     "submitter": {
         "name": "IISc",
-        "aboutMe": "Part of the Vani project, funded by Google",
+        "aboutMe": "Part of the Vaani project, funded by Google",
         "oauthId": {
             "oauthId": "prasantg@iisc.ac.in",
             "provider": "google"
         },
         "team": [
             {
-                "name": "Aswin",
+                "name": "Prasanta Kumar Ghosh",
                 "oauthId": {
-                    "oauthId": "aswin.pradeep@google.com",
+                    "oauthId": "prasantg@iisc.ac.in",
                     "provider": "google"
                 }
             }
@@ -38,7 +39,7 @@
         ],
         "collectionDetails": {
             "contributor": {
-                "name": "Gopal Verma",
+                "name": "Prasanta Kumar Ghosh",
                 "aboutMe": "Member of Vani team"
             }
         }
