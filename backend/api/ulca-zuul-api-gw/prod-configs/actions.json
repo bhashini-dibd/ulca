@@ -335,6 +335,22 @@
       "active": true,
       "whiteList": false,
       "description": "API to get datasets by datasetID"
+    },
+    {
+      "id": "4ff88bd8-659a-11ed-abd1-60a5e2472759",
+      "uri": "/ulca/data-metric/v0/store/ai4b",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch AI4Bharat and Samanantar datasets"
+    },
+    {
+      "id": "6f408f06-659b-11ed-bddf-60a5e2472759",
+      "uri": "/ulca/data-metric/v0/store/ai4bmodels",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch AI4Bharat Models"
     }
   ]
 }
