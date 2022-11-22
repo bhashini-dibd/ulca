@@ -1,13 +1,17 @@
 from utilities import datautils
 import config
 import logging
+from config import MAIL_SETTINGS
 from logging.config import dictConfig
 from repositories import NotifierRepo
 log         =   logging.getLogger('file')
 from threading import Thread
 from config import metric_cron_interval_sec
+from flask import Flask
 
+app  = Flask(__name__, template_folder='templat')
 
+app.config.update(MAIL_SETTINGS)
 
 repo    =   NotifierRepo()
 
@@ -22,7 +26,7 @@ class NotifierService(Thread):
         run = 0
         while not self.stopped.wait(metric_cron_interval_sec):
             try:
-
+                log.info(f'cron run for ds count notify')
                 self.notify_user()
                 run+=1
             except Exception as e:

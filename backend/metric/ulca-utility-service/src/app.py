@@ -12,7 +12,7 @@ import config
 log = logging.getLogger('file')
 from logging.config import dictConfig
 import threading
-app  = Flask(__name__)
+app  = Flask(__name__,template_folder='templat' )
 
 app.config.update(config.MAIL_SETTINGS)
 #creating an instance of Mail class
