@@ -3,7 +3,7 @@ from flask_restful import Api
 from resources import NotifierResource, MismatchNotifierResource
 
 # end-point for independent service
-NOTIFIER_BLUEPRINT = Blueprint("notifier-service", __name__)
+NOTIFIER_BLUEPRINT = Blueprint("notifier-service", __name__,template_folder = 'templat')
 api = Api(NOTIFIER_BLUEPRINT)
 
 api.add_resource(NotifierResource, "/v1/send/mail")
