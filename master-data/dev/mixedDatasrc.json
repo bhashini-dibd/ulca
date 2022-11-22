@@ -3,8 +3,13 @@
       {
         "code" : "vaani",
         "label" : "Vaani",
-        "active" : true
+        "active" : true,
+        "values": {
+          "master": "/languages.json",
+          "jsonPath": "$.languages"
+        }
 }
-]
+],
+"relatedMaster": true
 }
    

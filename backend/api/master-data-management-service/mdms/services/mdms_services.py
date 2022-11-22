@@ -37,6 +37,7 @@ class MasterDataServices():
             git_file_location   =   f"{config.git_folder_prefix}/{master}.json"
             if not jsonpath:
                 master_data     =   utils.read_from_git(git_file_location)
+                log.info(f'master data == > {master_data}')
                 if not master_data:
                     return post_error("Exception occurred",None) 
                 if "relatedMaster" not in master_data.keys():
