@@ -83,14 +83,14 @@ class NotifierService(Thread):
                     else:
                         false_count = val[total]
                 
-                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
+                if d in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                     sumtotal = sumtotal/TIME_CONVERSION_VAL
-                    output_dict[dtype] = sumtotal
+                    output_dict[d] = sumtotal
                     output_list.append(output_dict.copy())
                 
                 else:
                     sumtotal = true_count - false_count
-                    output_dict[dtype] = sumtotal
+                    output_dict[d] = sumtotal
                     output_list.append(output_dict.copy())
             log.info(f'logging list of dict values {output_list}')
             new_var = output_list[-1]
