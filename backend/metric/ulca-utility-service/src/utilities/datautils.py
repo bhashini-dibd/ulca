@@ -1,6 +1,6 @@
 import requests
 from config import data_filter_set_file_path,shared_storage_path,filter_file_name, file_store_host, file_store_upload_endpoint
-from config import data_metric_host,data_metric_endpoint,shared_storage_path, receiver_email_ids, MAIL_SENDER, ulca_email_group,MAIL_SETTINGS
+from config import data_metric_host,data_metric_endpoint,shared_storage_path, receiver_email_ids, MAIL_SENDER, ulca_email_group,MAIL_SETTINGS,DRUID_CONNECTION_URL
 import json
 import logging
 from logging.config import dictConfig
@@ -13,11 +13,15 @@ from flask import render_template
 from app import mail
 IST = pytz.timezone('Asia/Kolkata')
 import os
-from flask import Flask
+from flask import Flask, render_template
+import sqlalchemy as db, text
 
-app  = Flask(__name__, template_folder='templat')
+
+app  = Flask(__name__, template_folder='templates')
 
 app.config.update(MAIL_SETTINGS)
+mail = Mail(app)
+
 
 class DataUtils:
     def __init__(self):
@@ -127,7 +131,7 @@ class DataUtils:
                                 sender=MAIL_SENDER,
                                 recipients=users)
                 with app.app_context():
-                    msg.html    = render_template('/templat/count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
+                    msg.html    = render_template('count_maill.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"])#,mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
                     # with open (file,'rb') as fp:
                     #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
                     mail.send(msg)
@@ -135,6 +139,28 @@ class DataUtils:
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
+    
+    def query_runner(self,query):
+        """
+        Executing Druid query
+        """
+        try:
+            collection      =   self.get_data_store()
+            log.info("Query executed : {}".format(query))
+            result          =   collection.execute(text(query)).fetchall()
+            result_parsed   =   ([{**row} for row in result])
+            collection.close()
+            return result_parsed
+        except Exception as e:
+            log.exception("Exception on query execution : {}".format(str(e)))
+            return []
+    
+    def get_data_store(self):
+        log.info("Establishing connection with druid")
+        engine      = db.create_engine(DRUID_CONNECTION_URL)  
+        connection  = engine.connect()
+        return connection
+
 
 
 

@@ -1,17 +1,19 @@
 from utilities import datautils
 import config
 import logging
-from config import MAIL_SETTINGS
+from config import MAIL_SETTINGS,TIME_CONVERSION_VAL, DRUID_DB_SCHEMA,DRUID_CONNECTION_URL
 from logging.config import dictConfig
 from repositories import NotifierRepo
 log         =   logging.getLogger('file')
 from threading import Thread
 from config import metric_cron_interval_sec
 from flask import Flask
+import sqlalchemy as db
+from sqlalchemy import text
 
-app  = Flask(__name__, template_folder='templat')
+#app  = Flask(__name__, template_folder='templat')
 
-app.config.update(MAIL_SETTINGS)
+#app.config.update(MAIL_SETTINGS)
 
 repo    =   NotifierRepo()
 
@@ -36,6 +38,7 @@ class NotifierService(Thread):
     def notify_user(self,emails=None):
         try:
             parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
+            #parallel_count,ocr_count = self.calculate_counts()
             utility     =   datautils.DataUtils()
             utility.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":round(asr_count,4),"asr_unlabeled_count":round(asr_unlabeled_count,4),"tts_count":round(tts_count,4),"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
                 
@@ -55,35 +58,116 @@ class NotifierService(Thread):
 
     def calculate_counts(self):
         log.info('Calculating counts!')
+        dtype = ["parallel-corpus", "asr-corpus","asr-unlabeled-corpus","ocr-corpus","tts-corpus","transliteration-corpus","glossary-corpus","monolingual-corpus"]
+        count = "count"
+        duration = "durationInSeconds"
+        total = "total"
+        delete = "isDelete"
+        datatype = "datasetType"
+        output_dict = {}
+        output_list = []
         try:
-            parallel_count = repo.count_data_col({},config.data_db_schema,config.data_parallel)
-            log.info(parallel_count)
-            ocr_count = repo.count_data_col({},config.data_db_schema,config.data_ocr)
-            log.info(ocr_count)
-            mono_count = repo.count_data_col({},config.data_db_schema,config.data_mono)
-            log.info(mono_count)
-            asr_labeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
-            asr_count = (asr_labeled[0]["total"])/3600
-            log.info(asr_count)
-            asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
-            asr_unlabeled_count = (asr_unlabeled[0]["total"])/3600
-            log.info(asr_unlabeled_count)
-            tts = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_tts)
-            tts_count = (tts[0]["total"])/3600
-            log.info(tts_count)
+            for d in dtype:
+                if d in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
+                    sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{d}\') GROUP BY {delete}'
+                   
+                else:
+                    #Charts except ASR are displayed in record counts; initial chart
+                    sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{d}\') GROUP BY {delete}'
+                sumtotal_result = self.query_runner(sumtotal_query)
+                true_count = 0
+                false_count = 0
+                for val in sumtotal_result:
+                    if val[delete] == "false":
+                        true_count = val[total]
+                    else:
+                        false_count = val[total]
+                
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
+                    sumtotal = sumtotal/TIME_CONVERSION_VAL
+                    output_dict[dtype] = sumtotal
+                    output_list.append(output_dict.copy())
+                
+                else:
+                    sumtotal = true_count - false_count
+                    output_dict[dtype] = sumtotal
+                    output_list.append(output_dict.copy())
+            log.info(f'logging list of dict values {output_list}')
+            new_var = output_list[-1]
+            log.info(f'new_var at line 97 {new_var}')
+            
+            parallel_count = new_var["parallel-corpus"]
+            ocr_count     = new_var["ocr-corpus"]
+            mono_count   = new_var["monolingual-corpus"]
+            asr_count   =  new_var["asr-corpus"]
+            asr_unlabeled_count = new_var["asr-unlabeled-corpus"]
+            tts_count = new_var["tts-corpus"]
+            
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                         ]
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
             pending_jobs,inprogress_jobs,jobfile = self.process_aggregation_output(aggresult)
-            log.info(f"Pending :{pending_jobs}")
-            log.info(f"In-Progress:{inprogress_jobs}")
-            log.info(f"file:{jobfile}")
+                
+
             
             return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,jobfile
         except Exception as e:
             log.exception(f'{e}')
 
+    def process_aggregation_output(self,aggdata):
+        try:
+            
+            inprogress = 0
+            pending = 0
+            jobs=[]
+            stages = ["download","ingest","validate","publish"]
+            for agg in aggdata:
+                if agg["serviceRequestAction"] == "search":
+                    continue
+                status={}
+                status["serviceRequestNumber"] = agg["serviceRequestNumber"]
+                for task in agg["tasks"]:
+                    status[task["tool"]] = task["status"]
+                jobs.append(status)
+            
+            for job in jobs:
+                for stage in stages:
+                    if job.get(stage) == None:
+                        job[stage] = "Pending"
+                        
+            for job in jobs:
+                if "Pending" in job.values():
+                    pending = pending +1
+                else:
+                    inprogress = inprogress+1
+            # csvfile_created = DataUtils.write_to_csv(jobs)
+            csvfile_created = None
+            return pending,inprogress,csvfile_created
+
+        except Exception as e:
+            log.exception(f"Exception:{e}") 
+
+    def query_runner(self,query):
+        """
+        Executing Druid query
+        """
+        try:
+            collection      =   self.get_data_store()
+            log.info("Query executed : {}".format(query))
+            result          =   collection.execute(text(query)).fetchall()
+            result_parsed   =   ([{**row} for row in result])
+            collection.close()
+            return result_parsed
+        except Exception as e:
+            log.exception("Exception on query execution : {}".format(str(e)))
+            return []
+    
+    def get_data_store():
+        log.info("Establishing connection with druid")
+        engine      = db.create_engine(DRUID_CONNECTION_URL)  
+        connection  = engine.connect()
+        return connection
     
     def process_aggregation_output(self,aggdata):
         try:

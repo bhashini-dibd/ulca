@@ -4,7 +4,11 @@ DEBUG = False
 API_URL_PREFIX = "/ulca/apis/"
 HOST = '0.0.0.0'
 PORT = 5001
-
+DRUID_DB_SCHEMA         =   os.environ.get('MATRIC_DRUID_DB_SCHEMA', 'dataset-training-v9')
+TIME_CONVERSION_VAL     =   os.environ.get('ASR_DATA_CONERSION_VAL',3600)
+if isinstance(TIME_CONVERSION_VAL, str):
+    TIME_CONVERSION_VAL  =  eval(TIME_CONVERSION_VAL)
+DRUID_CONNECTION_URL      = os.environ.get('DRUID_CLUSTER_URL', 'druid://localhost:8082/druid/v2/sql/')
 ENABLE_CORS = False
 
 #gmail server configs
@@ -14,8 +18,8 @@ MAIL_SETTINGS               =   {
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
                                 #"MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','notifer.tester@gmail.com'),
-                                "MAIL_USERNAME" : 'notifer.tester@gmail.com',
-                                "MAIL_PASSWORD" : 'Welcome@123'
+                                "MAIL_USERNAME" : 'siddanth.shaiva@tarento.com',
+                                "MAIL_PASSWORD" : 'ohiyyifscpenieci'
                                 #"MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','Welcome@123')
                                 }
 #MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
@@ -39,7 +43,7 @@ process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracke
 process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes')
 tasks_col                   =   os.environ.get('TASKS_COL','ulca-pt-tasks')
 
-metric_cron_interval_sec     =  180
+metric_cron_interval_sec     =  60
 filter_cron_interval_sec     =   os.environ.get('FILTER_CRON_INTERVAL_SEC',300)#14400
 if isinstance(filter_cron_interval_sec, str):
     filter_cron_interval_sec =  eval(filter_cron_interval_sec)
