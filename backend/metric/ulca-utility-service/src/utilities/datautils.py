@@ -14,7 +14,9 @@ from app import mail
 IST = pytz.timezone('Asia/Kolkata')
 import os
 from flask import Flask, render_template
-import sqlalchemy as db, text
+import sqlalchemy as db
+from sqlalchemy import text
+
 
 
 app  = Flask(__name__, template_folder='templates')
@@ -140,27 +142,6 @@ class DataUtils:
             log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
     
-    def query_runner(self,query):
-        """
-        Executing Druid query
-        """
-        try:
-            collection      =   self.get_data_store()
-            log.info("Query executed : {}".format(query))
-            result          =   collection.execute(text(query)).fetchall()
-            result_parsed   =   ([{**row} for row in result])
-            collection.close()
-            return result_parsed
-        except Exception as e:
-            log.exception("Exception on query execution : {}".format(str(e)))
-            return []
-    
-    def get_data_store(self):
-        log.info("Establishing connection with druid")
-        engine      = db.create_engine(DRUID_CONNECTION_URL)  
-        connection  = engine.connect()
-        return connection
-
 
 
 

@@ -95,7 +95,7 @@ class NotifierService(Thread):
             log.info(f'logging list of dict values {output_list}')
             new_var = output_list[-1]
             log.info(f'new_var at line 97 {new_var}')
-            
+
             parallel_count = new_var["parallel-corpus"]
             ocr_count     = new_var["ocr-corpus"]
             mono_count   = new_var["monolingual-corpus"]
@@ -163,7 +163,7 @@ class NotifierService(Thread):
             log.exception("Exception on query execution : {}".format(str(e)))
             return []
     
-    def get_data_store():
+    def get_data_store(self):
         log.info("Establishing connection with druid")
         engine      = db.create_engine(DRUID_CONNECTION_URL)  
         connection  = engine.connect()
