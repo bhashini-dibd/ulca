@@ -6,11 +6,11 @@ Few examples to show how a submitter can publish an OCR model to ULCA. The submi
 **Sample Request:**
 ```json
 {
-    "image": [
-        {
-            "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/anuvaad_ocr_hindi.jpg"
-        }
-    ],
+    "image" : [
+               { 
+                  "imageUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/anuvaad_ocr_hindi.jpg"
+               }
+            ],
     "config": {
         "language": {
                "sourceLanguage" : "hi"
