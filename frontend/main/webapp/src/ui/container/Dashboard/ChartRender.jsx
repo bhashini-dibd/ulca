@@ -86,7 +86,10 @@ const ChartRender = (props) => {
   const fetchParams = (event) => {
     var source = "";
     let targetLanguage = "";
-    if (selectedOption.value === "parallel-corpus") {
+    if (
+      selectedOption.value === "transliteration-corpus" ||
+      selectedOption.value === "parallel-corpus"
+    ) {
       source = sourceLanguage.value;
       targetLanguage = selectedLanguage
         ? selectedLanguage
@@ -108,15 +111,15 @@ const ChartRender = (props) => {
         : event && event.hasOwnProperty("label") && event.label
     );
 
-    if (selectedOption.value === "parallel-corpus") {
+    if (
+      selectedOption.value === "transliteration-corpus" ||
+      selectedOption.value === "parallel-corpus"
+    ) {
       return [
         { field: "sourceLanguage", value: source },
         { field: "targetLanguage", value: targetLanguage },
       ];
-    } else if (
-      selectedOption.value === "transliteration-corpus" ||
-      selectedOption.value === "glossary-corpus"
-    ) {
+    } else if (selectedOption.value === "glossary-corpus") {
       return [
         { field: "sourceLanguage", value: "en" },
         { field: "targetLanguage", value: source },
@@ -135,7 +138,10 @@ const ChartRender = (props) => {
     let val = eventValue && eventValue.hasOwnProperty("_id") && eventValue._id;
     let event = { field: filterValue, value: val ? val : dataValue };
     val && setDataValue(val);
-    if (selectedOption.value === "parallel-corpus") {
+    if (
+      selectedOption.value === "transliteration-corpus" ||
+      selectedOption.value === "parallel-corpus"
+    ) {
       source = sourceLanguage.value;
       targetLanguage = selectedLanguage;
     } else {
@@ -153,16 +159,16 @@ const ChartRender = (props) => {
         : event && event.hasOwnProperty("label") && event.label
     );
 
-    if (selectedOption.value === "parallel-corpus") {
+    if (
+      selectedOption.value === "transliteration-corpus" ||
+      selectedOption.value === "parallel-corpus"
+    ) {
       return [
         { field: "sourceLanguage", value: source },
         { field: "targetLanguage", value: targetLanguage },
         event,
       ];
-    } else if (
-      selectedOption.value === "transliteration-corpus" ||
-      selectedOption.value === "glossary-corpus"
-    ) {
+    } else if (selectedOption.value === "glossary-corpus") {
       return [
         { field: "sourceLanguage", value: "en" },
         { field: "targetLanguage", value: source },
@@ -801,10 +807,10 @@ const ChartRender = (props) => {
               { field: "sourceLanguage", value: "en" },
             ]);
           setAxisValue({ xAxis: "Languages", yAxis: "Count" });
-          setTitle("Number of records");
+          setTitle("Number of records per language with ");
         } else if (page === 1) {
           setTitle(
-            `Number of records in ${
+            `Number of records in ${sourceLanguage.label}-${
               selectedLanguageName
                 ? selectedLanguageName
                 : event && event.hasOwnProperty("label") && event.label
@@ -835,7 +841,9 @@ const ChartRender = (props) => {
           });
         } else if (page === 2) {
           setTitle(
-            `Number of audio hours in ${selectedLanguageName} ${
+            `Number of records in ${
+              sourceLanguage.label
+            }-${selectedLanguageName} ${
               filterValue === "primarySubmitterName" ? "by" : "of"
             } ${event.label ? event.label : dataValue}  - Grouped by ${
               filter === "domains"
@@ -961,7 +969,9 @@ const ChartRender = (props) => {
                 Reset
               </Button>
             </>
-            {selectedOption.value === "parallel-corpus" && page === 0 ? (
+            {selectedOption.value === "parallel-corpus" ||
+            (selectedOption.value === "transliteration-corpus" &&
+              page === 0) ? (
               <div className={classes.titleStyle}>
                 <Typography className={classes.titleText} value="" variant="h6">
                   {" "}
