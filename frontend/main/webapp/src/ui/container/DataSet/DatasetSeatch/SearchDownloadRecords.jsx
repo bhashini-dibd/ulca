@@ -709,8 +709,13 @@ const SearchAndDownloadRecords = (props) => {
   };
 
   const handleDataSourceChange = (value) => {
-    setSelectedDataSource(value);
-    setShowAssertLanguage(true);
+    if(value) {
+      setSelectedDataSource(value);
+      setShowAssertLanguage(true);
+    } else {
+      setSelectedDataSource();
+      setShowAssertLanguage(false);
+    }
   };
 
   const renderMixedDataSourceDropdown = () => {
@@ -810,7 +815,7 @@ const SearchAndDownloadRecords = (props) => {
                 </>
               )}
 
-              {showAssertLanguage && (
+              {(showDataSource && showAssertLanguage) && (
                 <>
                   <Typography className={classes.subHeader} variant="body1">
                     Select Assert Language
