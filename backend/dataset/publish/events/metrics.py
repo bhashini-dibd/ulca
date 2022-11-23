@@ -19,6 +19,8 @@ class MetricEvent:
             return
         if is_upd:
             previous_record, new_record = records[1], records[0]
+            if isinstance(previous_record,list):
+                previous_record = previous_record[0]
             previous_record["serviceRequestNumber"], previous_record["userId"] = metadata["serviceRequestNumber"], metadata["userId"]
             previous_record["datasetType"], previous_record["isUpdate"] = metadata["datasetType"], True
             self.create_metric_event(previous_record)

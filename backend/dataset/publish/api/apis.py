@@ -10,7 +10,7 @@ from service.tts import TTSService
 from service.ocr import OCRService
 from service.asrunlabeled import ASRUnlabeledService
 from service.transliteration import TransliterationService
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration
+from configs.configs import dataset_type_parallel, dataset_type_asr_unlabeled, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration
 ulca_dataset_publish = Flask(__name__)
 
 
@@ -28,11 +28,13 @@ def insert_dataset():
         data = o_service.load_ocr_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_asr:
         data = a_service.load_asr_dataset(req_criteria)
+    if req_criteria["datasetType"] == dataset_type_asr_unlabeled:
+        data = au_service.load_asr_unlabeled_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_monolingual:
         data = m_service.load_monolingual_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_tts:
         data = tts_service.load_tts_dataset(req_criteria)
-    if data["datasetType"] == dataset_type_transliteration:
+    if req_criteria["datasetType"] == dataset_type_transliteration:
         data = trans_service.load_transliteration_dataset(data)
     return jsonify(data), 200
 
@@ -50,6 +52,8 @@ def search_dataset():
         data = o_service.get_ocr_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_asr:
         data = a_service.get_asr_dataset(req_criteria)
+    if req_criteria["datasetType"] == dataset_type_asr_unlabeled:
+        data = au_service.get_asr_unlabeled_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_monolingual:
         data = m_service.get_monolingual_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_tts:

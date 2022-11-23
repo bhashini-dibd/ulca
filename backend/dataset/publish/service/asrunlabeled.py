@@ -5,7 +5,7 @@ from logging.config import dictConfig
 from configs.configs import ds_batch_size, \
     sample_size, offset, limit, asr_unlabeled_immutable_keys, asr_unlabeled_non_tag_keys, dataset_type_asr, \
     user_mode_pseudo, \
-    asr_unlabeled_search_ignore_keys, asr_unlabeled_updatable_keys, dataset_type_asr_unlabeled, asr_unlabeled_prefix
+    asr_unlabeled_search_ignore_keys, asr_unlabeled_updatable_keys, dataset_type_asr_unlabeled, asr_unlabeled_prefix, submiter_name_whitelist_enabled, submitter_names_to_whitelist
 from repository.asrunlabeled import ASRUnlabeledRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -35,11 +35,13 @@ class ASRUnlabeledService:
     '''
     def load_asr_unlabeled_dataset(self, request):
         try:
+            # log.info(f"Test50: Start {request}")
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
             if record:
                 result = self.get_enriched_asr_unlabeled_data(record, metadata)
+                #log.info(f"Test60 Result: {result}")
                 if result:
                     if result[0] == "INSERT":
                         if metadata["userMode"] != user_mode_pseudo:
@@ -94,17 +96,49 @@ class ASRUnlabeledService:
     '''
     def get_enriched_asr_unlabeled_data(self, data, metadata):
         try:
-            record = self.get_asr_unlabeled_dataset_internal({"tags": {"$all": [data["audioHash"]]}})
+            imageHashExists = False
+            #check if age is missing but exactAge is present, autofill it
+            if 'exactAge' in data.keys():
+                if 'age' not in data.keys() or data['age'] is None:
+                    if data['exactAge'] in range(1,11):
+                        data["age"] = "1-10"
+                    elif data['exactAge'] in range(1,21):
+                        data["age"] = "11-20"
+                    elif data['exactAge'] in range(21,61):
+                        data["age"] = "21-60"
+                    elif data['exactAge'] in range(61,101):
+                        data["age"] = "61-100"
+                    
+            # log.info(f"Test55 {data}")
+            if 'imageHash' in data.keys():
+                record = self.get_asr_unlabeled_dataset_internal({"$or": [{"tags": data["imageHash"]},
+                                                                {"tags": data["audioHash"]}]
+                                                        })           
+            else: 
+                record = self.get_asr_unlabeled_dataset_internal({"tags": {"$all": [data["audioHash"]]}})
+            #if 'exactAge' in data.keys():
+            #    data['age'] = service.get_age(data['exactAge'])
             if record:
-                dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
-                                                         asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
-                if dup_data:
-                    if metadata["userMode"] != user_mode_pseudo:
-                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                        repo.update(dup_data)
-                    return "UPDATE", dup_data, record
-                else:
-                    return "DUPLICATE", data, record
+                for each_record in record:
+                    #log.info(f"Test58 {each_record}")
+                    if 'imageHash' in data.keys():
+                        if data['imageHash'] in each_record['tags']:
+                            imageHashExists = True
+                            data['refImgStorePath'] = each_record['refImgStorePath']
+                    if data['audioHash'] in each_record['tags']:
+                        if isinstance(each_record, list):
+                            each_record = each_record[0]
+                        #log.info(f"Test60 {each_record}")
+                        dup_data = service.enrich_duplicate_data(data, each_record, metadata, asr_unlabeled_immutable_keys,
+                                                                asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
+                        #log.info(f"Test60 {dup_data}")                        
+                        if dup_data:
+                            if metadata["userMode"] != user_mode_pseudo:
+                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                                repo.update(dup_data)
+                            return "UPDATE", dup_data, record
+                        else:
+                            return "DUPLICATE", data, record
             insert_data = data
             for key in insert_data.keys():
                 if key not in asr_unlabeled_immutable_keys and key not in asr_unlabeled_updatable_keys:
@@ -114,13 +148,28 @@ class ASRUnlabeledService:
             insert_data["datasetId"] = [metadata["datasetId"]]
             insert_data["tags"] = service.get_tags(insert_data, asr_unlabeled_non_tag_keys)
             if metadata["userMode"] != user_mode_pseudo:
+                #insert_data["objStorePath"] = "Something"
+                #insert_data["refImgStorePath"] = "Else"
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
+                #data['audioFilename'] = data['audioFilename'].split('/')[-1]
                 s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["audioFilename"]}'
                 object_store_path = utils.upload_file(data["fileLocation"], asr_unlabeled_prefix, s3_file_name)
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
                 insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                if 'imageFileLocation' in data.keys() and imageHashExists == False:
+                    epoch = eval(str(time.time()).replace('.', '')[0:13])
+                    if isinstance(data['imageFilename'],list):
+                        data['imageFilename'] = data['imageFilename'][0]
+                    imageFileName = data['imageFilename'].split('/')[-1]
+                    s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
+                    img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_unlabeled_prefix, s3_img_file_name)
+                    # log.info(f"Test57 {img_object_store_path}")
+                    if not img_object_store_path:
+                        return "FAILED", insert_data, insert_data
+                    else:
+                        insert_data["refImgStorePath"] = img_object_store_path
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
@@ -136,7 +185,7 @@ class ASRUnlabeledService:
             if data:
                 asr_data = data[0]
                 if asr_data:
-                    return asr_data[0]
+                    return asr_data
                 else:
                     return None
             else:
@@ -210,6 +259,28 @@ class ASRUnlabeledService:
             exclude = {"_id": False}
             for key in asr_unlabeled_search_ignore_keys:
                 exclude[key] = False
+
+            log.info(f"old Db query: {db_query}")
+            #logic to whitelist few data based on submitername
+            if submiter_name_whitelist_enabled:
+                if 'collectionSource' in db_query.keys():
+                  del db_query["collectionSource"]
+                if 'submitter' in db_query.keys():
+                  del db_query["submitter"]
+                coll_source_to_whitelist = [re.compile(cs, re.IGNORECASE)
+                               for cs in query["collectionSource"]]
+                             
+                names_to_whitelist = [re.compile(wsn, re.IGNORECASE)
+                                       for wsn in submitter_names_to_whitelist]
+                new_db_query = {
+                    "$and": [
+                        {"$or": [{"collectionSource": {"$in": coll_source_to_whitelist}}, {
+                            "submitter": {"$elemMatch": {"name": {"$in": names_to_whitelist}}}}]},db_query
+                    ]
+                }
+                log.info(f"new Db query: {new_db_query}")
+                db_query = new_db_query
+
             result, hours = repo.search(db_query, exclude, off, lim)
             count = len(result)
             log.info(f'Result --- Count: {count}, Query: {query}')
