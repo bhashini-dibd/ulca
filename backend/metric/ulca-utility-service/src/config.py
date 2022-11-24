@@ -19,8 +19,8 @@ MAIL_SETTINGS               =   {
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
                                 #"MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','notifer.tester@gmail.com'),
-                                "MAIL_USERNAME" : 'siddanth.shaiva@tarento.com',
-                                "MAIL_PASSWORD" : 'ohiyyifscpenieci'
+                                "MAIL_USERNAME" : 'notifier.tester12@gmail.com',
+                                "MAIL_PASSWORD" : 'qpmpdjdidbgecewa'
                                 #"MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','Welcome@123')
                                 }
 #MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
