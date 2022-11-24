@@ -750,7 +750,7 @@ const SearchAndDownloadRecords = (props) => {
           handleOnChange={handleAssertLanguageSelect}
           id={"assertLanguage"}
           value={assertLanguage.label}
-          label="Select Data Source"
+          label="Select Assert Language"
         />
       </div>
     );
