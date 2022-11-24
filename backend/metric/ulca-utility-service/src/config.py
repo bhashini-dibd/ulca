@@ -1,9 +1,9 @@
 import os
 
-DEBUG = False
+DEBUG = True
 API_URL_PREFIX = "/ulca/apis/"
 HOST = '0.0.0.0'
-PORT = 5001
+PORT = 5009
 #DRUID_DB_SCHEMA         =   os.environ.get('MATRIC_DRUID_DB_SCHEMA', 'dataset-training-v9')
 DRUID_DB_SCHEMA     = 'dataset-training-v9'
 TIME_CONVERSION_VAL     =   os.environ.get('ASR_DATA_CONERSION_VAL',3600)
@@ -15,7 +15,7 @@ ENABLE_CORS = False
 #gmail server configs
 MAIL_SETTINGS               =   {
                                 "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),
-                                "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT','465')),
+                                "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT','587')),
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
                                 #"MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','notifer.tester@gmail.com'),
