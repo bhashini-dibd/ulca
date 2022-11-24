@@ -424,7 +424,7 @@ const SearchAndDownloadRecords = (props) => {
       // groupBy: false,
       multipleContributors: state.checkedA,
       originalSourceSentence: state.checkedC,
-      mixedDatasource: selectedDataSource.code,
+      mixedDataSource: selectedDataSource.code,
       assertLanguage: getArrayValue(assertLanguage),
     };
     if (datasetType["parallel-corpus"]) {
