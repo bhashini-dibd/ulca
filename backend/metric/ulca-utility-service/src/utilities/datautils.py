@@ -133,7 +133,7 @@ class DataUtils:
                                 sender=MAIL_SENDER,
                                 recipients=users)
                 with app.app_context():
-                    msg.html    = render_template('count_maill.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"])#,mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
+                    msg.html    = render_template('count_maill.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
                     # with open (file,'rb') as fp:
                     #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
                     mail.send(msg)

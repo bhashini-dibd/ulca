@@ -4,7 +4,8 @@ DEBUG = False
 API_URL_PREFIX = "/ulca/apis/"
 HOST = '0.0.0.0'
 PORT = 5001
-DRUID_DB_SCHEMA         =   os.environ.get('MATRIC_DRUID_DB_SCHEMA', 'dataset-training-v9')
+#DRUID_DB_SCHEMA         =   os.environ.get('MATRIC_DRUID_DB_SCHEMA', 'dataset-training-v9')
+DRUID_DB_SCHEMA     = 'dataset-training-v9'
 TIME_CONVERSION_VAL     =   os.environ.get('ASR_DATA_CONERSION_VAL',3600)
 if isinstance(TIME_CONVERSION_VAL, str):
     TIME_CONVERSION_VAL  =  eval(TIME_CONVERSION_VAL)

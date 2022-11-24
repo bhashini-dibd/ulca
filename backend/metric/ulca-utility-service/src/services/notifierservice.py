@@ -8,8 +8,8 @@ log         =   logging.getLogger('file')
 from threading import Thread
 from config import metric_cron_interval_sec
 from flask import Flask
-import sqlalchemy as db
 from sqlalchemy import text
+import sqlalchemy as db
 
 #app  = Flask(__name__, template_folder='templat')
 
