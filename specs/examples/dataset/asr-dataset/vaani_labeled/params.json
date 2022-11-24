@@ -4,7 +4,7 @@
         "sourceLanguage": "mixed"
     },
     "collectionSource": [
-        "vaani"
+        "vaani","iisc.ac.in"
     ],
     "mixedDataSource" : "vaani",
     "domain": [
@@ -39,8 +39,8 @@
         ],
         "collectionDetails": {
             "contributor": {
-                "name": "Prasanta Kumar Ghosh",
-                "aboutMe": "Member of Vaani team"
+                "name": "Palakkad, Thrissur voice team",
+                "aboutMe": "Members of Vaani team from the Palakkad & Trisshur districts"
             }
         }
     }
