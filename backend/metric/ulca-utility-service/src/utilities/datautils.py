@@ -138,7 +138,7 @@ class DataUtils:
             message["To"] = receiver_email
             message["Subject"] = subject
             html_ = open(filename).read()
-            html_ = html_.replace('{{parallel}}',data['parallel_count']).replace('{{mono}}',data['mono_count']).replace('{{asr}}',data['asr_count']).replace('{{asrun}}',data['asr_unlabeled_count']).replace('{{tts_count}}',data['tts']).replace('{{ocr}}',data['ocr']).replace('{{inprogress}}',data['inprogress']).replace('{{pending}}',data['pending'])
+            html_ = html_.replace('{{parallel}}',data['parallel_count']).replace('{{mono}}',data['mono_count']).replace('{{asr}}',data['asr_count']).replace('{{asrun}}',data['asr_unlabeled_count']).replace('{{tts}}',data['tts_count']).replace('{{ocr}}',data['ocr_count']).replace('{{inprogress}}',data['inprogress']).replace('{{pending}}',data['pending'])
 
             message.add_alternative(html_,subtype = 'html')
             # No point in using Bcc if the recipient is already in To:
