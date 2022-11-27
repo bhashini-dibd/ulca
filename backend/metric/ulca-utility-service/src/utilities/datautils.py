@@ -15,7 +15,6 @@ import os
 from config import filename
 import email, smtplib, ssl
 
-message = EmailMessage()
 
 
 class DataUtils:
@@ -105,7 +104,7 @@ class DataUtils:
     def generate_email_notification(self,data):
 
         try:
-
+            message = EmailMessage()
             message["From"] = sender_email
             message["To"] = receiver_email
             message["Subject"] = dscountsubject
@@ -118,7 +117,10 @@ class DataUtils:
                 server.login(sender_email, password)
                     # Prefer the modern send_message method
                 server.send_message(message)
-        
+                server.quit()
+                del message["From"]
+                del message["To"]
+
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
