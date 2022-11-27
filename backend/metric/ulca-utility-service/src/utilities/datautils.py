@@ -130,7 +130,7 @@ class DataUtils:
             password = 'ohiyyifscpenieci'
             message = EmailMessage()
             subject = "hi "
-            filename = "templates/count_mail.html"
+            filename = "count_mail.html"
 
 
             receiver_email = "notifier.tester12@gmail.com"
