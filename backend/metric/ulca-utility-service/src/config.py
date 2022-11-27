@@ -12,6 +12,15 @@ if isinstance(TIME_CONVERSION_VAL, str):
 DRUID_CONNECTION_URL      = os.environ.get('DRUID_CLUSTER_URL', 'druid://localhost:8082/druid/v2/sql/')
 ENABLE_CORS = False
 filename = r'utilities/count_mail.html'
+SEARCHURL = "https://dev-auth.ulcacontrib.org/ulca/data-metric/v0/store/search"
+
+smtp_server = "smtp.gmail.com"
+sender_email = 'siddanth.shaiva@tarento.com'
+password = 'ohiyyifscpenieci'
+dscountsubject = "Hi, Dataset counts are as follows : "
+receiver_email = "siddanth.shaiva@gmail.com"
+
+
 #gmail server configs
 MAIL_SETTINGS               =   {
                                 "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),

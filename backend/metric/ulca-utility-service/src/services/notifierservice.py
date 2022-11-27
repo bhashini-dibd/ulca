@@ -6,10 +6,11 @@ from logging.config import dictConfig
 from repositories import NotifierRepo
 log         =   logging.getLogger('file')
 from threading import Thread
-from config import metric_cron_interval_sec
+from config import metric_cron_interval_sec, SEARCHURL
 from flask import Flask
 from sqlalchemy import text
 import sqlalchemy as db
+import requests
 
 #app  = Flask(__name__, template_folder='templat')
 
@@ -37,10 +38,10 @@ class NotifierService(Thread):
 
     def notify_user(self,emails=None):
         try:
-            parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
+            parallel_count,mono_count,ocr_count,asr_count,asr_unlabeled_count,tts_count,transliteration_count, glossary_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
             #parallel_count,ocr_count = self.calculate_counts()
             utility     =   datautils.DataUtils()
-            utility.generate_email_notification({"parallel_count":str(parallel_count),"ocr_count":str(ocr_count),"mono_count":str(mono_count),"asr_count":str(round(asr_count,4)),"asr_unlabeled_count":str(round(asr_unlabeled_count,4)),"tts_count":str(round(tts_count,4)),"pending":str(pending_jobs),"inprogress":str(inprogress_jobs),"file":file})
+            utility.generate_email_notification({"parallel_count":str(parallel_count),"ocr_count":str(ocr_count),"mono_count":str(mono_count),"asr_count":str(round(asr_count,4)),"asr_unlabeled_count":str(round(asr_unlabeled_count,4)),"tts_count":str(round(tts_count,4)),"transliteration_count":str(transliteration_count,4),"glossary_count":str(glossary_count,4),"pending":str(pending_jobs),"inprogress":str(inprogress_jobs),"file":file})
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
@@ -59,50 +60,25 @@ class NotifierService(Thread):
     def calculate_counts(self):
         log.info('Calculating counts!')
         dtype = ["parallel-corpus", "asr-corpus","asr-unlabeled-corpus","ocr-corpus","tts-corpus","transliteration-corpus","glossary-corpus","monolingual-corpus"]
-        count = "count"
-        duration = "durationInSeconds"
-        total = "total"
-        delete = "isDelete"
-        datatype = "datasetType"
         output_dict = {}
-        output_list = []
         try:
             for d in dtype:
-                if d in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
-                    sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{d}\') GROUP BY {delete}'
-                   
-                else:
-                    #Charts except ASR are displayed in record counts; initial chart
-                    sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{d}\') GROUP BY {delete}'
-                sumtotal_result = self.query_runner(sumtotal_query)
-                true_count = 0
-                false_count = 0
-                for val in sumtotal_result:
-                    if val[delete] == "false":
-                        true_count = val[total]
-                    else:
-                        false_count = val[total]
-                
-                if d in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
-                    sumtotal = sumtotal/TIME_CONVERSION_VAL
-                    output_dict[d] = sumtotal
-                    output_list.append(output_dict.copy())
-                
-                else:
-                    sumtotal = true_count - false_count
-                    output_dict[d] = sumtotal
-                    output_list.append(output_dict.copy())
-            log.info(f'logging list of dict values {output_list}')
-            new_var = output_list[-1]
-            log.info(f'new_var at line 97 {new_var}')
 
-            parallel_count = new_var["parallel-corpus"]
-            ocr_count     = new_var["ocr-corpus"]
-            mono_count   = new_var["monolingual-corpus"]
-            asr_count   =  new_var["asr-corpus"]
-            asr_unlabeled_count = new_var["asr-unlabeled-corpus"]
-            tts_count = new_var["tts-corpus"]
-            
+                PARAMS = {"type":d,"criterions":[{"field":None,"value":None}],"groupby":None}
+                search_req = requests.post(url = SEARCHURL, json = PARAMS, headers={'Content-Type':'application/json'})
+                search_data = search_req.json()
+                if d in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
+
+                    output_dict[d] = round(search_data["count"],3)
+                    #l.append(d.copy())
+                    output_dict.update(output_dict)
+                else:
+                    output_dict[d] = search_data["count"]
+                    #l.append(d.copy())
+
+                    output_dict.update(output_dict)
+
+
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                         ]
@@ -111,7 +87,7 @@ class NotifierService(Thread):
                 
 
             
-            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,jobfile
+            return output["parallel-corpus"],output["monolingual-corpus"],output["ocr-corpus"],output["asr-corpus"],output["asr-unlabeled-corpus"],output["tts-corpus"],output["transliteration-corpus"],output["glossary-corpus"],pending_jobs,inprogress_jobs,jobfile
         except Exception as e:
             log.exception(f'{e}')
 
