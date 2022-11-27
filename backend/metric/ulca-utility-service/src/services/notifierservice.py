@@ -41,7 +41,7 @@ class NotifierService(Thread):
             parallel_count,mono_count,ocr_count,asr_count,asr_unlabeled_count,tts_count,transliteration_count, glossary_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
             #parallel_count,ocr_count = self.calculate_counts()
             utility     =   datautils.DataUtils()
-            utility.generate_email_notification({"parallel_count":str(parallel_count),"ocr_count":str(ocr_count),"mono_count":str(mono_count),"asr_count":str(round(asr_count,4)),"asr_unlabeled_count":str(round(asr_unlabeled_count,4)),"tts_count":str(round(tts_count,4)),"transliteration_count":str(transliteration_count,4),"glossary_count":str(glossary_count,4),"pending":str(pending_jobs),"inprogress":str(inprogress_jobs),"file":file})
+            utility.generate_email_notification({"parallel_count":str(parallel_count),"ocr_count":str(ocr_count),"mono_count":str(mono_count),"asr_count":str(round(asr_count,4)),"asr_unlabeled_count":str(round(asr_unlabeled_count,4)),"tts_count":str(round(tts_count,4)),"transliteration_count":str(transliteration_count),"glossary_count":str(glossary_count),"pending":str(pending_jobs),"inprogress":str(inprogress_jobs),"file":file})
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
