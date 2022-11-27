@@ -1,6 +1,6 @@
 import os
 
-DEBUG = True
+DEBUG = False
 API_URL_PREFIX = "/ulca/apis/"
 HOST = '0.0.0.0'
 PORT = 5001
@@ -11,7 +11,7 @@ if isinstance(TIME_CONVERSION_VAL, str):
     TIME_CONVERSION_VAL  =  eval(TIME_CONVERSION_VAL)
 DRUID_CONNECTION_URL      = os.environ.get('DRUID_CLUSTER_URL', 'druid://localhost:8082/druid/v2/sql/')
 ENABLE_CORS = False
-
+filename = r'utilities/count_mail.html'
 #gmail server configs
 MAIL_SETTINGS               =   {
                                 "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),

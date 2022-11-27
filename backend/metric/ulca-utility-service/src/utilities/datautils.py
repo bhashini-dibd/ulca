@@ -23,7 +23,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from config import filename
 
 
 app  = Flask(__name__)
@@ -130,7 +130,7 @@ class DataUtils:
             password = 'ohiyyifscpenieci'
             message = EmailMessage()
             subject = "hi "
-            filename = "count_mail.html"
+            #filename = "count_mail.html"
 
 
             receiver_email = "notifier.tester12@gmail.com"
