@@ -40,7 +40,7 @@ class NotifierService(Thread):
             parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
             #parallel_count,ocr_count = self.calculate_counts()
             utility     =   datautils.DataUtils()
-            utility.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":round(asr_count,4),"asr_unlabeled_count":round(asr_unlabeled_count,4),"tts_count":round(tts_count,4),"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
+            utility.generate_email_notification({"parallel_count":str(parallel_count),"ocr_count":str(ocr_count),"mono_count":str(mono_count),"asr_count":str(round(asr_count,4)),"asr_unlabeled_count":str(round(asr_unlabeled_count,4)),"tts_count":str(round(tts_count,4)),"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
@@ -96,12 +96,12 @@ class NotifierService(Thread):
             new_var = output_list[-1]
             log.info(f'new_var at line 97 {new_var}')
 
-            parallel_count = str(new_var["parallel-corpus"])
-            ocr_count     = str(new_var["ocr-corpus"])
-            mono_count   = str(new_var["monolingual-corpus"])
-            asr_count   =  str(new_var["asr-corpus"])
-            asr_unlabeled_count = str(new_var["asr-unlabeled-corpus"])
-            tts_count = str(new_var["tts-corpus"])
+            parallel_count = new_var["parallel-corpus"]
+            ocr_count     = new_var["ocr-corpus"]
+            mono_count   = new_var["monolingual-corpus"]
+            asr_count   =  new_var["asr-corpus"]
+            asr_unlabeled_count = new_var["asr-unlabeled-corpus"]
+            tts_count = new_var["tts-corpus"]
             
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
