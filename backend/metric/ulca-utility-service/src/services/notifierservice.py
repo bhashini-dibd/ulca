@@ -96,12 +96,12 @@ class NotifierService(Thread):
             new_var = output_list[-1]
             log.info(f'new_var at line 97 {new_var}')
 
-            parallel_count = new_var["parallel-corpus"]
-            ocr_count     = new_var["ocr-corpus"]
-            mono_count   = new_var["monolingual-corpus"]
-            asr_count   =  new_var["asr-corpus"]
-            asr_unlabeled_count = new_var["asr-unlabeled-corpus"]
-            tts_count = new_var["tts-corpus"]
+            parallel_count = str(new_var["parallel-corpus"])
+            ocr_count     = str(new_var["ocr-corpus"])
+            mono_count   = str(new_var["monolingual-corpus"])
+            asr_count   =  str(new_var["asr-corpus"])
+            asr_unlabeled_count = str(new_var["asr-unlabeled-corpus"])
+            tts_count = str(new_var["tts-corpus"])
             
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
