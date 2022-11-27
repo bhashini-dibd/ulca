@@ -16,6 +16,13 @@ import os
 from flask import Flask, render_template
 import sqlalchemy as db
 from sqlalchemy import text
+from email.message import EmailMessage
+import email, smtplib, ssl
+import os
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 
@@ -112,6 +119,45 @@ class DataUtils:
     def generate_email_notification(self,data):
 
         try:
+            
+            
+            
+
+            smtp_server = "smtp.gmail.com"
+
+
+            sender_email = 'siddanth.shaiva@tarento.com'
+            password = 'ohiyyifscpenieci'
+            message = EmailMessage()
+            subject = "hi "
+            filename = "templates/count_mail.html"
+
+
+            receiver_email = "notifier.tester12@gmail.com"
+            message["From"] = sender_email
+            message["To"] = receiver_email
+            message["Subject"] = subject
+            html_ = open(filename).read()
+            html_ = html_.replace('{{parallel}}',data['parallel']).replace('{{mono}}',data['mono']).replace('{{asr}}',data['asr']).replace('{{asrun}}',data['asrun']).replace('{{tts}}',data['tts']).replace('{{ocr}}',data['ocr']).replace('{{inprogress}}',data['inprogress']).replace('{{pending}}',data['pending'])
+
+            message.add_alternative(html_,subtype = 'html')
+            # No point in using Bcc if the recipient is already in To:
+            #with app.app_context():
+            #    msg.html    = render_template("count_mail.html",date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
+            with smtplib.SMTP_SSL(smtp_server, 465) as server:
+                server.login(sender_email, password)
+                    # Prefer the modern send_message method
+                server.send_message(message)
+            #with open(filename) as fp:
+             #   message.set_content(fp.read(), 'html')
+
+            # no need for a context if you are just using the default SSL
+            with smtplib.SMTP_SSL(smtp_server, 465) as server:
+                server.login(sender_email, password)
+                # Prefer the modern send_message method
+                server.send_message(message)
+                
+             """    
             if isinstance(data,list):
                 log.info("Generating email notification for data count mismatch !!!!")
                 users = ulca_email_group.split(',')
@@ -121,6 +167,7 @@ class DataUtils:
                 for i in data:
                     line = f"Dataset Type : {i['Data Type']}\t\tMongoDB Count : {i['Mongo Count']}\t\tDruid Count : {i['Druid Count']}"
                     message = f"{message}\n{line}"
+                
                 msg.body    =   f"There is a mismatch found on ulca data stores.\n\nDetails of the unequal types:\n{message}"
                 mail.send(msg)
                 log.info(f"Generated alert email ")
@@ -138,6 +185,7 @@ class DataUtils:
                     #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
                     mail.send(msg)
                 log.info(f"Generated email notifications")
+                """
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
