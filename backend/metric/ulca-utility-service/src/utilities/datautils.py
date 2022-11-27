@@ -157,7 +157,7 @@ class DataUtils:
                 # Prefer the modern send_message method
                 server.send_message(message)
                 
-             """    
+            """    
             if isinstance(data,list):
                 log.info("Generating email notification for data count mismatch !!!!")
                 users = ulca_email_group.split(',')
@@ -185,7 +185,7 @@ class DataUtils:
                     #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
                     mail.send(msg)
                 log.info(f"Generated email notifications")
-                """
+            """
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
