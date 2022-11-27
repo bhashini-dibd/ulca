@@ -87,7 +87,7 @@ class NotifierService(Thread):
                 
 
             
-            return output["parallel-corpus"],output["monolingual-corpus"],output["ocr-corpus"],output["asr-corpus"],output["asr-unlabeled-corpus"],output["tts-corpus"],output["transliteration-corpus"],output["glossary-corpus"],pending_jobs,inprogress_jobs,jobfile
+            return output_dict["parallel-corpus"],output_dict["monolingual-corpus"],output_dict["ocr-corpus"],output_dict["asr-corpus"],output_dict["asr-unlabeled-corpus"],output_dict["tts-corpus"],output_dict["transliteration-corpus"],output_dict["glossary-corpus"],pending_jobs,inprogress_jobs,jobfile
         except Exception as e:
             log.exception(f'{e}')
 
