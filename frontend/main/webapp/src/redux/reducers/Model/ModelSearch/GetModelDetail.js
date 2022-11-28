@@ -22,7 +22,6 @@ const getModelDetails = (payload) => {
     case 'asr':
         var {modelProcessingType:{type}} = schema;
        return [
-        { title: "Source URL", para: payload["refUrl"] },
         { title: "Task", para: payload["task"]["type"] },
         {
           title: "Languages",
@@ -30,20 +29,20 @@ const getModelDetails = (payload) => {
             ? `${getLanguageName(source)}-${getLanguageName(target)}`
             : `${getLanguageName(source)}`,
         },
+        { title: "Model Id", para: payload["modelId"] },
+        { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
         { title: "Submitter", para: payload["submitter"]["name"] },
         { title: "Published On", para: payload["publishedOn"] },
+        { title: "Source URL", para: payload["refUrl"] },
         {
           title: "Type",
           para: type,
         },
-        { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
-        { title: "Model Id", para: payload["modelId"] },
       ];
 
     case 'tts':
       var {modelProcessingType:{type}} = schema;
       return [
-        { title: "Source URL", para: payload["refUrl"] },
         { title: "Task", para: payload["task"]["type"] },
         {
           title: "Languages",
@@ -51,18 +50,18 @@ const getModelDetails = (payload) => {
             ? `${getLanguageName(source)}-${getLanguageName(target)}`
             : `${getLanguageName(source)}`,
         },
+        { title: "Model Id", para: payload["modelId"] },
+        { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
         { title: "Submitter", para: payload["submitter"]["name"] },
         { title: "Published On", para: payload["publishedOn"] },
+        { title: "Source URL", para: payload["refUrl"] },
         {
           title: "Type",
           para: type,
         },
-        { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
-        { title: "Model Id", para: payload["modelId"] },
       ];
     default:
       return [
-        { title: "Source URL", para: payload["refUrl"] },
         { title: "Task", para: payload["task"]["type"] },
         {
           title: "Languages",
@@ -70,14 +69,15 @@ const getModelDetails = (payload) => {
             ? `${getLanguageName(source)}-${getLanguageName(target)}`
             : `${getLanguageName(source)}`,
         },
+        { title: "Model Id", para: payload["modelId"] },
+        { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
         { title: "Submitter", para: payload["submitter"]["name"] },
         { title: "Published On", para: payload["publishedOn"] },
+        { title: "Source URL", para: payload["refUrl"] },
         // {
         //   title: "Training Dataset",
         //   para: payload["trainingDataset"]["description"],
         // },
-        { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
-        { title: "Model Id", para: payload["modelId"] },
       ];
   }
 };
