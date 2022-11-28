@@ -17,9 +17,10 @@ const initialState = {
 const getModelDetails = (payload) => {
   const target = payload["languages"] && payload["languages"][0]?.["targetLanguage"];
   const source = payload["languages"] && payload["languages"][0]?.["sourceLanguage"];
-  const {inferenceEndPoint:{schema:{modelProcessingType:{type}}}} = payload;
-  switch(payload["task"]["type"]){
+  const {inferenceEndPoint:{schema}} = payload;
+  switch(payload['task']['type']){
     case 'asr':
+        var {modelProcessingType:{type}} = schema;
        return [
         { title: "Source URL", para: payload["refUrl"] },
         { title: "Task", para: payload["task"]["type"] },
@@ -40,6 +41,7 @@ const getModelDetails = (payload) => {
       ];
 
     case 'tts':
+      var {modelProcessingType:{type}} = schema;
       return [
         { title: "Source URL", para: payload["refUrl"] },
         { title: "Task", para: payload["task"]["type"] },
