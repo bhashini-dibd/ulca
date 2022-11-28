@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfAudioQualityEvaluationMethodDetails
 */
+/*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
   @JsonSubTypes.Type(value = WadaSnr.class, name = "WadaSnr")
 })
+*/
 public interface OneOfAudioQualityEvaluationMethodDetails {
 
 }
