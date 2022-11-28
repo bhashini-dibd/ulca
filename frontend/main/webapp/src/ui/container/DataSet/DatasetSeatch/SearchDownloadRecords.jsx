@@ -424,7 +424,7 @@ const SearchAndDownloadRecords = (props) => {
       // groupBy: false,
       multipleContributors: state.checkedA,
       originalSourceSentence: state.checkedC,
-      mixedDatasource: selectedDataSource.code,
+      mixedDataSource: selectedDataSource.code,
       assertLanguage: getArrayValue(assertLanguage),
     };
     if (datasetType["parallel-corpus"]) {
@@ -709,8 +709,13 @@ const SearchAndDownloadRecords = (props) => {
   };
 
   const handleDataSourceChange = (value) => {
-    setSelectedDataSource(value);
-    setShowAssertLanguage(true);
+    if(value) {
+      setSelectedDataSource(value);
+      setShowAssertLanguage(true);
+    } else {
+      setSelectedDataSource();
+      setShowAssertLanguage(false);
+    }
   };
 
   const renderMixedDataSourceDropdown = () => {
@@ -745,7 +750,7 @@ const SearchAndDownloadRecords = (props) => {
           handleOnChange={handleAssertLanguageSelect}
           id={"assertLanguage"}
           value={assertLanguage.label}
-          label="Select Data Source"
+          label="Select Assert Language"
         />
       </div>
     );
@@ -810,7 +815,7 @@ const SearchAndDownloadRecords = (props) => {
                 </>
               )}
 
-              {showAssertLanguage && (
+              {(showDataSource && showAssertLanguage) && (
                 <>
                   <Typography className={classes.subHeader} variant="body1">
                     Select Assert Language

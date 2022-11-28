@@ -17,24 +17,69 @@ const initialState = {
 const getModelDetails = (payload) => {
   const target = payload["languages"] && payload["languages"][0]?.["targetLanguage"];
   const source = payload["languages"] && payload["languages"][0]?.["sourceLanguage"];
-  return [
-    { title: "Source URL", para: payload["refUrl"] },
-    { title: "Task", para: payload["task"]["type"] },
-    {
-      title: "Languages",
-      para: target
-        ? `${getLanguageName(source)}-${getLanguageName(target)}`
-        : `${getLanguageName(source)}`,
-    },
-    { title: "Submitter", para: payload["submitter"]["name"] },
-    { title: "Published On", para: payload["publishedOn"] },
-    {
-      title: "Training Dataset",
-      para: payload["trainingDataset"]["description"],
-    },
-    { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
-    { title: "Model Id", para: payload["modelId"] },
-  ];
+  const {inferenceEndPoint:{schema}} = payload;
+  switch(payload['task']['type']){
+    case 'asr':
+        var {modelProcessingType:{type}} = schema;
+       return [
+        { title: "Source URL", para: payload["refUrl"] },
+        { title: "Task", para: payload["task"]["type"] },
+        {
+          title: "Languages",
+          para: target
+            ? `${getLanguageName(source)}-${getLanguageName(target)}`
+            : `${getLanguageName(source)}`,
+        },
+        { title: "Submitter", para: payload["submitter"]["name"] },
+        { title: "Published On", para: payload["publishedOn"] },
+        {
+          title: "Type",
+          para: type,
+        },
+        { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
+        { title: "Model Id", para: payload["modelId"] },
+      ];
+
+    case 'tts':
+      var {modelProcessingType:{type}} = schema;
+      return [
+        { title: "Source URL", para: payload["refUrl"] },
+        { title: "Task", para: payload["task"]["type"] },
+        {
+          title: "Languages",
+          para: target
+            ? `${getLanguageName(source)}-${getLanguageName(target)}`
+            : `${getLanguageName(source)}`,
+        },
+        { title: "Submitter", para: payload["submitter"]["name"] },
+        { title: "Published On", para: payload["publishedOn"] },
+        {
+          title: "Type",
+          para: type,
+        },
+        { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
+        { title: "Model Id", para: payload["modelId"] },
+      ];
+    default:
+      return [
+        { title: "Source URL", para: payload["refUrl"] },
+        { title: "Task", para: payload["task"]["type"] },
+        {
+          title: "Languages",
+          para: target
+            ? `${getLanguageName(source)}-${getLanguageName(target)}`
+            : `${getLanguageName(source)}`,
+        },
+        { title: "Submitter", para: payload["submitter"]["name"] },
+        { title: "Published On", para: payload["publishedOn"] },
+        // {
+        //   title: "Training Dataset",
+        //   para: payload["trainingDataset"]["description"],
+        // },
+        { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
+        { title: "Model Id", para: payload["modelId"] },
+      ];
+  }
 };
 
 const reducer = (state = initialState, action) => {
