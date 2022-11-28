@@ -26,7 +26,7 @@ import { useEffect, useState } from "react";
 import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
-import LightTooltip from "../../../../components/common/LightTooltip";
+// import LightTooltip from "../../../../components/common/LightTooltip";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import Modal from '../../../../components/common/Modal';
@@ -36,6 +36,7 @@ import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
 import { Switch } from "@material-ui/core";
+import TTSLiveInference from "./TTSLiveInference";
 import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
 import { Language } from "../../../../../configs/DatasetItems";
 
@@ -62,7 +63,7 @@ const StyledMenu = withStyles({})((props) => (
 ))
 
 const HostedInference = (props) => {
-  const { classes, title, para, modelId, task, source } = props;
+  const { classes, title, para, modelId, task, source, submitter, inferenceEndPoint } = props;
   const [gender, setGender] = useState("Female");
   const [audio, setAudio] = useState(null);
   const history = useHistory();
@@ -284,7 +285,10 @@ const HostedInference = (props) => {
   }
 
   return (
-    <Grid
+    <>
+    {inferenceEndPoint.schema.modelProcessingType.type === 'streaming'?
+      <TTSLiveInference source={source} /> :
+      <Grid
       className={classes.gridCompute}
       item
       xl={12}
@@ -470,7 +474,8 @@ const HostedInference = (props) => {
           handleSubmit={handleFeedbackSubmit}
         />
       </Modal>
-    </Grid>
+    </Grid>}
+    </>
   );
 };
 export default withStyles(DatasetStyle)(HostedInference);

@@ -23,7 +23,7 @@ class AggregateModelData(object):
             grpby_params = None
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]  #grouping fields
-
+            
             #aggregating the model types; initial chart
             if (match_params ==  None and grpby_params == None):
                 query   =   [{"$match":{"status":"published"}},{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
@@ -53,22 +53,14 @@ class AggregateModelData(object):
                 chart_data = []
                 for record in result:
                     rec = {}
-                    if match_params[0]["value"] == "TRANSLATION":
-                        rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]  # label :language pairs seperated by '-'
+                    if match_params[0]["value"] == "TRANSLATION" or match_params[0]["value"] == "TRANSLITERATION" :
+                        rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
                         try:
                             rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())["label"]+"-"+self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
                         except:
                             log.info(f'Language code not found on MDMS : {record["_id"]["lang1"], record["_id"]["lang2"]}')
                             rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
-                    
-                    elif match_params[0]["value"] == "TRANSLITERATION":
-                        rec["_id"]    =    record["_id"]["lang2"]
-                        try:
-                            rec["label"]  =   self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
-                        except:
-                            log.info(f'Language code not found on MDMS : {record["_id"]["lang1"]}')
-                            rec["label"]    =   str(record["_id"]["lang1"]).title()
-
+            
                     else:
                         rec["_id"]      =   record["_id"]["lang1"] # label :language 
                         try:

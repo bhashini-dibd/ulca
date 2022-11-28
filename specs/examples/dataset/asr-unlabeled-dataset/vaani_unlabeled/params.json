@@ -1,0 +1,47 @@
+{
+    "datasetType": "asr-unlabeled-corpus",
+    "languages": {
+        "sourceLanguage": "hi"
+    },
+    "collectionSource": [
+        "vaani","iisc.ac.in"
+    ],
+    "mixedDataSource" : "vaani",
+    "domain": [
+        "general"
+    ],
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "IISc",
+        "aboutMe": "Part of the Vaani project, funded by Google",
+        "oauthId": {
+            "oauthId": "prasantg@iisc.ac.in",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Prasanta Kumar Ghosh",
+                "oauthId": {
+                    "oauthId": "prasantg@iisc.ac.in",
+                    "provider": "google"
+                }
+            }
+        ]
+    },
+    "format": "wav",
+    "channel": "mono",
+    "samplingRate": 44.1,
+    "bitsPerSample": "sixteen",
+    "numberOfSpeakers": 1,
+    "collectionMethod": {
+        "collectionDescription": [
+            "manual-transcribed"
+        ],
+        "collectionDetails": {
+            "contributor": {
+                "name": "Palakkad, Thrissur voice team",
+                "aboutMe": "Members of Vaani team from the Palakkad & Trisshur districts"
+            }
+        }
+    }
+}

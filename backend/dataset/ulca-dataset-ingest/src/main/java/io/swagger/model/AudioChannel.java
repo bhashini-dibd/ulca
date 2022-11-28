@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * number of channel in the audio
  */
 public enum AudioChannel {
-	MONO("mono"),
+  MONO("mono"),
     STEREO("stereo");
 
   private String value;

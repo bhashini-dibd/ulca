@@ -87,7 +87,8 @@ const SpeechToSpeechFilter = (props) => {
         {renderSingleAutoComplete(
           filter.asr,
           "asr",
-          asr.filter((a) => a.sourceLanguage === filter.src.value),
+          // asr.filter((a) => a.sourceLanguage === filter.src.value),
+          asr.filter(a => a.sourceLanguage === filter.src.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch'),
           "ASR Model",
           filter.tgt.value ? false : true
         )}
@@ -109,7 +110,8 @@ const SpeechToSpeechFilter = (props) => {
         {renderSingleAutoComplete(
           filter.tts,
           "tts",
-          tts.filter((a) => a.sourceLanguage === filter.tgt.value),
+          tts.filter((a) => a.sourceLanguage === filter.tgt.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch'),
+         // tts.filter((a) => a.sourceLanguage === filter.tgt.value),
           "TTS Model",
           filter.tgt.value ? false : true
         )}

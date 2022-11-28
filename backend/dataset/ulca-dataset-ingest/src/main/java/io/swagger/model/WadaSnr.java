@@ -2,7 +2,6 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
@@ -15,9 +14,9 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "evaluation strategy as proposed by example researcher.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
-@JsonDeserialize(as = WadaSnr.class)
+
 public class WadaSnr  implements OneOfAudioQualityEvaluationMethodDetails {
   @JsonProperty("snr")
   private BigDecimal snr = null;

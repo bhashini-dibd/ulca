@@ -38,7 +38,7 @@ class Producer:
                 else:
                     partition_push = partition_in
                 producer.send(topic, value=object_in, partition=partition_push)
-                log.info(f'Pushing to topic: {topic}')
+                log.info(f'Pushing to topic from validate: {topic} message: {object_in}')
             producer.flush()
         except Exception as e:
             log.exception(f'Exception in dataset validate while producing: {str(e)}', e)
