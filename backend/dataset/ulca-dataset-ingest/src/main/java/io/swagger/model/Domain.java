@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "This attribute defines that `relevant business area`")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
 
 public class Domain extends ArrayList<String>  {

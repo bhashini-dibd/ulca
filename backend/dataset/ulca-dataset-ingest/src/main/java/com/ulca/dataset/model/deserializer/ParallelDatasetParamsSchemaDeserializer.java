@@ -28,6 +28,7 @@ import io.swagger.model.ParallelDatasetCollectionMethod;
 import io.swagger.model.ParallelDatasetParamsSchema;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
+import io.swagger.model.SupportedLanguages;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -103,8 +104,8 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 				
 				if(node.get("languages").has("sourceLanguage")) {
 					String sourceLanguage =  	node.get("languages").get("sourceLanguage").asText();
-					if(LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage) != null) {
-						lp.setSourceLanguage(LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage));
+					if(SupportedLanguages.fromValue(sourceLanguage) != null) {
+						lp.setSourceLanguage(SupportedLanguages.fromValue(sourceLanguage));
 					}else {
 						errorList.add("sourceLanguage is not one of defined language pair");
 					}
@@ -119,8 +120,8 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 				if(node.get("languages").has("targetLanguage")) {
 					String targetLanguage =  	node.get("languages").get("targetLanguage").asText();
 					
-					if(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage) != null) {
-						lp.setTargetLanguage(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage));
+					if(SupportedLanguages.fromValue(targetLanguage) != null) {
+						lp.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
 					}else {
 						errorList.add("targetLanguage is not one of defined language pair");
 					}

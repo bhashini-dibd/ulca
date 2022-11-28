@@ -33,6 +33,7 @@ import io.swagger.model.Gender;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
+import io.swagger.model.SupportedLanguages;
 import io.swagger.model.TranscriptionEvaluationMethod1;
 import io.swagger.model.TtsParamsSchema;
 import io.swagger.model.WadaSnr;
@@ -107,8 +108,8 @@ public class TtsParamsSchemaDeserializer extends StdDeserializer<TtsParamsSchema
 
 				if (node.get("languages").has("sourceLanguage")) {
 					String sourceLanguage = node.get("languages").get("sourceLanguage").asText();
-					if (LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage) != null) {
-						lp.setSourceLanguage(LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage));
+					if(SupportedLanguages.fromValue(sourceLanguage) != null) {
+						lp.setSourceLanguage(SupportedLanguages.fromValue(sourceLanguage));
 					} else {
 						errorList.add("sourceLanguage is not one of defined language pair");
 					}
@@ -123,8 +124,8 @@ public class TtsParamsSchemaDeserializer extends StdDeserializer<TtsParamsSchema
 				if (node.get("languages").has("targetLanguage")) {
 					String targetLanguage = node.get("languages").get("targetLanguage").asText();
 
-					if (LanguagePair.TargetLanguageEnum.fromValue(targetLanguage) != null) {
-						lp.setTargetLanguage(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage));
+					if(SupportedLanguages.fromValue(targetLanguage) != null) {
+						lp.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
 					}
 
 				}

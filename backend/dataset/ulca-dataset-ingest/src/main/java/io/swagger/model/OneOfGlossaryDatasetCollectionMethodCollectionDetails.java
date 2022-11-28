@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfGlossaryDatasetCollectionMethodCollectionDetails
 */
-/*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
@@ -17,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = CollectionDetailsMachineGenerated.class, name = "CollectionDetailsMachineGenerated"),
   @JsonSubTypes.Type(value = CollectionDetailsMachineGeneratedPostEdited.class, name = "CollectionDetailsMachineGeneratedPostEdited")
 })
-*/
 public interface OneOfGlossaryDatasetCollectionMethodCollectionDetails {
 
 }

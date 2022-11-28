@@ -16,7 +16,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "specifies how the dataset is curated.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-07-06T11:30:23.888Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
 
 public class GlossaryDatasetCollectionMethod   {

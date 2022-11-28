@@ -8,6 +8,7 @@ import io.swagger.model.AudioFormat;
 import io.swagger.model.AudioQualityEvaluation;
 import io.swagger.model.CollectionMethodAudio;
 import io.swagger.model.Gender;
+import io.swagger.model.MixedDataSource;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -17,7 +18,7 @@ import javax.validation.constraints.*;
  * AsrUnlabeledParamsSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-29T12:28:52.849Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
 
 public class AsrUnlabeledParamsSchema extends AsrParamsSchema implements OneOfDatasetParamsSchemaParams {
