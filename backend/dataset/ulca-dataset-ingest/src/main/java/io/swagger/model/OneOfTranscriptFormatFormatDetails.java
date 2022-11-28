@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfTranscriptFormatFormatDetails
 */
+/*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
   @JsonSubTypes.Type(value = TranscriptTextFormatType1.class, name = "TranscriptTextFormatType1")
 })
+*/
 public interface OneOfTranscriptFormatFormatDetails {
 
 }

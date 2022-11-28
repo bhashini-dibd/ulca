@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfTransliterationDatasetCollectionMethodCollectionDetails
 */
+/*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = CollectionDetailsMachineTransliteratedPostEdited.class, name = "CollectionDetailsMachineTransliteratedPostEdited"),
   @JsonSubTypes.Type(value = CollectionDetailsManualTransliterated.class, name = "CollectionDetailsManualTransliterated")
 })
+*/
 public interface OneOfTransliterationDatasetCollectionMethodCollectionDetails {
 
 }

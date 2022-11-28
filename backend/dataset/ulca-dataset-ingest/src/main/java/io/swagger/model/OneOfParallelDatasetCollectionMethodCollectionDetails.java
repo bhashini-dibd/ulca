@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfParallelDatasetCollectionMethodCollectionDetails
 */
+/*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = CollectionDetailsMachineTranslatedPostEdited.class, name = "CollectionDetailsMachineTranslatedPostEdited"),
   @JsonSubTypes.Type(value = CollectionDetailsManualTranslated.class, name = "CollectionDetailsManualTranslated")
 })
+*/
 public interface OneOfParallelDatasetCollectionMethodCollectionDetails {
 
 }

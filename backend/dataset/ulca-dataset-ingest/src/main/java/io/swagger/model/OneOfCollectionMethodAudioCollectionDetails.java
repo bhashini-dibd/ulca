@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfCollectionMethodAudioCollectionDetails
 */
+/*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = CollectionDetailsMachineGeneratedTranscript.class, name = "CollectionDetailsMachineGeneratedTranscript"),
   @JsonSubTypes.Type(value = CollectionDetailsManualTranscribed.class, name = "CollectionDetailsManualTranscribed")
 })
+*/
 public interface OneOfCollectionMethodAudioCollectionDetails {
 
 }

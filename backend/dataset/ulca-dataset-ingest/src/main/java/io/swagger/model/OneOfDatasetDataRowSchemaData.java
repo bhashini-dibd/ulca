@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfDatasetDataRowSchemaData
 */
+/*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = GlossaryDatasetRowSchema.class, name = "GlossaryDatasetRowSchema"),
   @JsonSubTypes.Type(value = NerDatasetRowSchema.class, name = "NerDatasetRowSchema")
 })
+*/
 public interface OneOfDatasetDataRowSchemaData {
 
 }
