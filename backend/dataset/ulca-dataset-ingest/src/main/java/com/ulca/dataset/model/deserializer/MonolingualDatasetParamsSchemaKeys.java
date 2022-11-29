@@ -10,4 +10,8 @@ public enum MonolingualDatasetParamsSchemaKeys {
 	license,
 	submitter,
 	
+	//optional
+	version,
+	licenseUrl
+	
 }
