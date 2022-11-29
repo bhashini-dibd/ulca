@@ -209,7 +209,7 @@ class ASRUnlabeledService:
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
             if 'mixedDataSource' in query.keys():
                 db_query["mixedDataSource"] = query["mixedDataSource"]
-                if 'assertLanguage' in query.keys() and len(query["assertLanguage"]> 0 :
+                if 'assertLanguage' in query.keys() and len(query["assertLanguage"])> 0 :
                     db_query["assertLanguage"] = {"$in": query["assertLanguage"]}
             if 'collectionMethod' in query.keys():
                 tags.extend(query["collectionMethod"])
