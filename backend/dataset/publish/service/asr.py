@@ -210,8 +210,8 @@ class ASRService:
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
             if 'mixedDataSource' in query.keys():
                 db_query["mixedDataSource"] = query["mixedDataSource"]
-            if 'assertLanguage' in query.keys():
-                db_query["assertLanguage"] = {"$in": query["assertLanguage"]}
+                if 'assertLanguage' in query.keys():
+                    db_query["assertLanguage"] = {"$in": query["assertLanguage"]}
             if 'collectionMethod' in query.keys():
                 tags.extend(query["collectionMethod"])
             if 'license' in query.keys():
