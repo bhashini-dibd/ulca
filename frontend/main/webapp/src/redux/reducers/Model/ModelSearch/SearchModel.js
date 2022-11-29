@@ -106,7 +106,8 @@ const getContributionList = (state, payload) => {
   let languageFilter = [];
   let submitterFilter = [];
   let domainFilter = [];
-  let filter = { language: [], domainFilter: [], submitter: [] };
+  let typeFilter = [];
+  let filter = { language: [], domainFilter: [], submitter: [] ,typeFilter:[]};
   payload.forEach((element) => {
     let sLanguage =
       element.languages?.length > 0 &&
@@ -142,6 +143,7 @@ const getContributionList = (state, payload) => {
         element.languages[0].targetLanguage,
       licence: element.license,
       submitter: element.submitter.name,
+      type:element.inferenceEndPoint.schema.modelProcessingType.type,
       trainingDataset: element.trainingDataset,
       color:
         element.status === "Completed"
@@ -162,11 +164,15 @@ const getContributionList = (state, payload) => {
     !submitterFilter.includes(element.submitter.name) &&
       element.submitter.name &&
       submitterFilter.push(element.submitter.name);
+     !typeFilter.includes(element.inferenceEndPoint.schema.modelProcessingType.type ) &&
+      element.inferenceEndPoint.schema.modelProcessingType.type  &&
+      typeFilter.push(element.inferenceEndPoint.schema.modelProcessingType.type );
   });
 
   filter.language = [...new Set(languageFilter)];
   filter.domainFilter = [...new Set(domainFilter)];
   filter.submitter = [...new Set(submitterFilter)];
+  filter.typeFilter = [...new Set(typeFilter)];
 
   responseData = responseData.reverse();
   let filteredData = getFilterValue(
@@ -187,6 +193,7 @@ const getSearchedList = (state, searchValue) => {
     "submitter",
     "sLanguage",
     "tLanguage",
+    "type",
   ];
   for (var i = 0; i < state.responseData.length; i++) {
     Object.keys(state.responseData[i]).forEach((key) => {
