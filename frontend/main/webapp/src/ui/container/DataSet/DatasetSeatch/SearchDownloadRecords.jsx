@@ -411,7 +411,7 @@ const SearchAndDownloadRecords = (props) => {
 
   const handleSubmitBtn = () => {
     const obj = { ...basicFilterState, ...advFilterState };
-    const criteria = {
+    let criteria = {
       sourceLanguage: getArrayValue(
         datasetType["parallel-corpus"]
           ? [languagePair.source]
@@ -425,8 +425,15 @@ const SearchAndDownloadRecords = (props) => {
       multipleContributors: state.checkedA,
       originalSourceSentence: state.checkedC,
       mixedDataSource: selectedDataSource?.code,
-      assertLanguage: getArrayValue(assertLanguage),
     };
+
+    if(assertLanguage.length) {
+      criteria = {
+        ...criteria,
+        assertLanguage: getArrayValue(assertLanguage)
+      }
+    }
+
     if (datasetType["parallel-corpus"]) {
       if (languagePair.source && languagePair.target.length) {
         makeSubmitAPICall(datasetType, criteria);
@@ -709,7 +716,7 @@ const SearchAndDownloadRecords = (props) => {
   };
 
   const handleDataSourceChange = (value) => {
-    if(value) {
+    if (value) {
       setSelectedDataSource(value);
       setShowAssertLanguage(true);
     } else {
@@ -815,7 +822,7 @@ const SearchAndDownloadRecords = (props) => {
                 </>
               )}
 
-              {(showDataSource && showAssertLanguage) && (
+              {showDataSource && showAssertLanguage && (
                 <>
                   <Typography className={classes.subHeader} variant="body1">
                     Select Assert Language
