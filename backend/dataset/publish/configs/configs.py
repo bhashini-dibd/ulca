@@ -51,11 +51,11 @@ if isinstance(zip_chunk_size, str):
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
-                      "fileLocation", "lastModifiedOn", "createdOn"]
+                      "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
 asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
-                    "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
-asr_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "audioHash", "textHash",
-                          "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
+                    "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
+asr_search_ignore_keys = ["_id", "id", "tags", "license", "datasetType", "audioHash", "textHash",
+                          "fileLocation", "imageFileLocation","lastModifiedOn", "createdOn", "version", "datasetId","imageHash","imageFilename"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 tts_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
@@ -67,11 +67,11 @@ tts_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType
 tts_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage",
-                                "fileLocation", "lastModifiedOn", "createdOn"]
+                                "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
 asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
-                              "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
-asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "audioHash",
-                                    "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
+                              "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
+asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "license", "datasetType", "audioHash",
+                                    "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId","imageHash", "imageFileLocation","imageFilename"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 parallel_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
@@ -125,6 +125,15 @@ if isinstance(govt_data_whitelist_enabled, str):
     else:
         govt_data_whitelist_enabled = False
 govt_cs = ["ac.in", "gov.in", "nic.in", "org", "edu.in", "org.in"]
+
+#whitelist data based on submitername 
+submiter_name_whitelist_enabled = os.environ.get('ULCA_PUBLISH_SUBMITTER_NAME_WHITELIST_ENABLED', True)
+if isinstance(submiter_name_whitelist_enabled, str):
+    if submiter_name_whitelist_enabled == "TRUE":
+        submiter_name_whitelist_enabled = True
+    else:
+        submiter_name_whitelist_enabled = False
+submitter_names_to_whitelist = ["IISc"]
 
 publish_error_code = "3000_XXX"
 threads_threshold = 100

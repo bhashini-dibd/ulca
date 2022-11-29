@@ -6,20 +6,28 @@ public enum AsrRowDataSchemaKeys {
 		audioFilename,
 		text,
 		
-		
 		//optional
-		endTime,
+		imageFilename,
+		speaker,
+		gender,
+		exactAge,
+		age,
+		assertLanguage,
+		languagesSpoken,
+		state,
+		district,
+		pinCode,
+		stayYears,
+		education,
+		socioEconomic,
+		duration,
+		collectionSource,
 		channel,
 		samplingRate,
 		bitsPerSample,
-		gender,
-		age,
 		dialect,
 		snr,
 		startTime,
-		collectionMethod,
-		speaker,
-		duration,
-		collectionSource
-	
+		endTime,
+		collectionMethod
 }
