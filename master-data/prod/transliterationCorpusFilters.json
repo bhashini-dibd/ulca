@@ -6,7 +6,7 @@
         "active": true,
         "values": {
           "master": "/transliterationSrcLanguages.json",
-          "jsonPath": "$.transliterationSrcLanguages"
+          "jsonPath": "$.transliterationSrcLanguages.json"
         }
       },
       {

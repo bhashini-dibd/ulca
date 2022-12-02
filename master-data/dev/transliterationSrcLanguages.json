@@ -1,9 +1,9 @@
 {
-  "transliterationSrcLanguages": [
-    {
-      "code": "en",
-      "label": "English",
-      "active": true
-    }
-  ]
-}
+    "transliterationSrcLanguages": [
+      {
+        "code": "en",
+        "label": "English",
+        "active": true
+      }
+    ]
+  }
