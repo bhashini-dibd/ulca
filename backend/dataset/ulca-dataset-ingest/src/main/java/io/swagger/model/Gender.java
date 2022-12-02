@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * gender description
  */
 public enum Gender {
-	MALE("male"),
+  MALE("male"),
     FEMALE("female"),
     TRANSGENDER("transgender"),
     NON_SPECIFIED("non-specified"),

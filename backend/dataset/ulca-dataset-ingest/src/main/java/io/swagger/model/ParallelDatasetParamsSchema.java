@@ -12,9 +12,6 @@ import io.swagger.model.ParallelDatasetCollectionMethod;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
-
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -23,17 +20,17 @@ import javax.validation.constraints.*;
  * ParallelDatasetParamsSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
-@Getter
-@Setter
+
 public class ParallelDatasetParamsSchema extends DatasetCommonParamsSchema implements OneOfDatasetParamsSchemaParams {
   @JsonProperty("collectionMethod")
   private ParallelDatasetCollectionMethod collectionMethod = null;
-  
-  
 
-
+  public ParallelDatasetParamsSchema collectionMethod(ParallelDatasetCollectionMethod collectionMethod) {
+    this.collectionMethod = collectionMethod;
+    return this;
+  }
 
   /**
    * Get collectionMethod

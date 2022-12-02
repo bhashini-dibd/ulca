@@ -12,6 +12,7 @@ import io.swagger.model.AudioQualityEvaluation;
 import io.swagger.model.CollectionMethodAudio;
 import io.swagger.model.Gender;
 import io.swagger.model.Source;
+import io.swagger.model.SupportedLanguages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +24,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the schema defines the column name present in physical file that is being pointed by dataFilename key.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-09T11:49:54.138Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
 
 public class AsrRowSchema extends AsrCommonSchema implements OneOfDatasetDataRowSchemaData {
@@ -40,9 +41,9 @@ public class AsrRowSchema extends AsrCommonSchema implements OneOfDatasetDataRow
    * @return text
    **/
   @Schema(required = true, description = "textual output of the audio")
-  @NotNull
+      @NotNull
 
-  public String getText() {
+    public String getText() {
     return text;
   }
 
@@ -61,7 +62,7 @@ public class AsrRowSchema extends AsrCommonSchema implements OneOfDatasetDataRow
     }
     AsrRowSchema asrRowSchema = (AsrRowSchema) o;
     return Objects.equals(this.text, asrRowSchema.text) &&
-            super.equals(o);
+        super.equals(o);
   }
 
   @Override

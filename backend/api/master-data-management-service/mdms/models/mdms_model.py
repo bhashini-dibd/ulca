@@ -54,6 +54,7 @@ class StoreModel:
             result = {}
             for key in key_list:
                 val = client.get(key)
+                log.info(f'result of redis output {val}')
                 if val:
                     result[key]=json.loads(val)
             return result
