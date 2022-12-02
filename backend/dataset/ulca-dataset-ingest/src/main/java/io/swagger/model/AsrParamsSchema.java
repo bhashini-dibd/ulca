@@ -15,6 +15,7 @@ import io.swagger.model.Domain;
 import io.swagger.model.Gender;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.License;
+import io.swagger.model.MixedDataSource;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,10 +28,13 @@ import javax.validation.constraints.*;
  * AsrParamsSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-29T11:44:46.135Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
 
 public class AsrParamsSchema extends DatasetCommonParamsSchema implements OneOfDatasetParamsSchemaParams {
+  @JsonProperty("mixedDataSource")
+  private MixedDataSource mixedDataSource = null;
+
   @JsonProperty("format")
   private AudioFormat format = null;
 
@@ -53,13 +57,13 @@ public class AsrParamsSchema extends DatasetCommonParamsSchema implements OneOfD
    * age range
    */
   public enum AgeEnum {
-    _0_9("0-9"),
+    _1_10("1-10"),
     
-    _10_19("10-19"),
+    _11_20("11-20"),
     
-    _20_29("20-29"),
+    _21_60("21-60"),
     
-    _30_39("30-39");
+    _61_100("61-100");
 
     private String value;
 
@@ -127,6 +131,26 @@ public class AsrParamsSchema extends DatasetCommonParamsSchema implements OneOfD
   @JsonProperty("collectionMethod")
   private CollectionMethodAudio collectionMethod = null;
 
+  public AsrParamsSchema mixedDataSource(MixedDataSource mixedDataSource) {
+    this.mixedDataSource = mixedDataSource;
+    return this;
+  }
+
+  /**
+   * Get mixedDataSource
+   * @return mixedDataSource
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public MixedDataSource getMixedDataSource() {
+    return mixedDataSource;
+  }
+
+  public void setMixedDataSource(MixedDataSource mixedDataSource) {
+    this.mixedDataSource = mixedDataSource;
+  }
+
   public AsrParamsSchema format(AudioFormat format) {
     this.format = format;
     return this;
@@ -173,10 +197,10 @@ public class AsrParamsSchema extends DatasetCommonParamsSchema implements OneOfD
   }
 
   /**
-   * Get samplingRate
+   * sample rate of the audio file in kHz
    * @return samplingRate
    **/
-  @Schema(description = "")
+  @Schema(example = "44", description = "sample rate of the audio file in kHz")
   
     @Valid
     public BigDecimal getSamplingRate() {
@@ -213,13 +237,14 @@ public class AsrParamsSchema extends DatasetCommonParamsSchema implements OneOfD
   }
 
   /**
-   * Get numberOfSpeakers
+   * number of speakers in the recorded audio file
+   * minimum: 1
    * @return numberOfSpeakers
    **/
-  @Schema(description = "")
+  @Schema(example = "3", description = "number of speakers in the recorded audio file")
   
     @Valid
-    public BigDecimal getNumberOfSpeakers() {
+  @DecimalMin("1")  public BigDecimal getNumberOfSpeakers() {
     return numberOfSpeakers;
   }
 
@@ -335,7 +360,8 @@ public class AsrParamsSchema extends DatasetCommonParamsSchema implements OneOfD
       return false;
     }
     AsrParamsSchema asrParamsSchema = (AsrParamsSchema) o;
-    return Objects.equals(this.format, asrParamsSchema.format) &&
+    return Objects.equals(this.mixedDataSource, asrParamsSchema.mixedDataSource) &&
+        Objects.equals(this.format, asrParamsSchema.format) &&
         Objects.equals(this.channel, asrParamsSchema.channel) &&
         Objects.equals(this.samplingRate, asrParamsSchema.samplingRate) &&
         Objects.equals(this.bitsPerSample, asrParamsSchema.bitsPerSample) &&
@@ -350,7 +376,7 @@ public class AsrParamsSchema extends DatasetCommonParamsSchema implements OneOfD
 
   @Override
   public int hashCode() {
-    return Objects.hash(format, channel, samplingRate, bitsPerSample, numberOfSpeakers, gender, age, dialect, snr, collectionMethod, super.hashCode());
+    return Objects.hash(mixedDataSource, format, channel, samplingRate, bitsPerSample, numberOfSpeakers, gender, age, dialect, snr, collectionMethod, super.hashCode());
   }
 
   @Override
@@ -358,6 +384,7 @@ public class AsrParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     StringBuilder sb = new StringBuilder();
     sb.append("class AsrParamsSchema {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
+    sb.append("    mixedDataSource: ").append(toIndentedString(mixedDataSource)).append("\n");
     sb.append("    format: ").append(toIndentedString(format)).append("\n");
     sb.append("    channel: ").append(toIndentedString(channel)).append("\n");
     sb.append("    samplingRate: ").append(toIndentedString(samplingRate)).append("\n");

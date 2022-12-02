@@ -62,4 +62,6 @@ public class SearchCriteria {
 	private Boolean originalSourceSentence;
 	private Boolean groupBy;
 	
+	private List<String> assertLanguage;
+	private String mixedDataSource;
 }
