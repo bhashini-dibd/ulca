@@ -179,6 +179,11 @@
       "code": "unknown",
       "label": "Unknown Language",
       "active": true
+    },
+    {
+      "code": "mixed",
+      "label": "Mixed Language",
+      "active": true
     }
   ]
 }
