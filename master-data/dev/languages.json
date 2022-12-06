@@ -177,12 +177,12 @@
     },
     {
       "code": "unknown",
-      "label": "Unknown Language",
+      "label": "Unknown",
       "active": true
     },
     {
       "code": "mixed",
-      "label": "Mixed Language",
+      "label": "Mixed",
       "active": true
     }
   ]
