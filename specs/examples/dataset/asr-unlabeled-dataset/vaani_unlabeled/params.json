@@ -30,7 +30,7 @@
     },
     "format": "wav",
     "channel": "mono",
-    "samplingRate": 44.1,
+    "samplingRate": 16,
     "bitsPerSample": "sixteen",
     "numberOfSpeakers": 1,
     "collectionMethod": {
