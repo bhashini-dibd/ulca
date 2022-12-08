@@ -17,6 +17,7 @@ class StoreModel:
     # Initialises and fetches redis client
     def redis_instantiate(self):
         redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=redis_server_db, password=redis_server_password)
+        log.info(f'redis connection {redis_client}')
         return redis_client
 
     #geting the redis clent object
@@ -30,6 +31,7 @@ class StoreModel:
     def upsert(self, key, value, expiry_seconds):
         try:
             client = self.get_redis_instance()
+            log.info(f'Redis Client {client}')
             client.set(key, json.dumps(value),ex=expiry_seconds)
             return 1
         except Exception as e:
