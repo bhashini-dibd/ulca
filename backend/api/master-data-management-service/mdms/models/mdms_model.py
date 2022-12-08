@@ -30,9 +30,9 @@ class StoreModel:
     #storing records against keys
     def upsert(self, key, value, expiry_seconds):
         try:
-            client = self.get_redis_instance()
-            log.info(f'Redis Client {client}')
+            client = self.get_redis_instance()     
             client.set(key, json.dumps(value),ex=expiry_seconds)
+            log.info(f'Redis Client {client}')
             return 1
         except Exception as e:
             log.exception("Exception in REPO: upsert | Cause: " + str(e))
