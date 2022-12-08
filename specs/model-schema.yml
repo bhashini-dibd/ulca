@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.3.3
+  version: 0.4.0
 servers:
   - url: /ulca
 paths: {}
@@ -181,6 +181,12 @@ components:
           $ref: '#/components/schemas/TranslationRequest'
         response:
           $ref: '#/components/schemas/TranslationResponse'
+        subtitleSupport:
+          type: string
+          description: types of subtitles supported by the model
+          default: webvtt
+          enum:
+            - webvtt
     TransliterationInference:
       required:
         - taskType
@@ -193,6 +199,12 @@ components:
           $ref: '#/components/schemas/TransliterationRequest'
         response:
           $ref: '#/components/schemas/TransliterationResponse'
+        subtitleSupport:
+          type: string
+          description: types of subtitles supported by the model
+          default: webvtt
+          enum:
+            - webvtt
     TxtLangDetectionInference:
       required:
         - taskType
@@ -309,6 +321,12 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         modelProcessingType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+        subtitleSupport:
+          type: string
+          description: types of subtitles supported by the model
+          default: webvtt
+          enum:
+            - webvtt
         request:
           $ref: '#/components/schemas/ASRRequest'
         response:
@@ -389,6 +407,12 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         modelProcessingType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+        subtitleSupport:
+          type: string
+          description: types of subtitles supported by the model
+          default: webvtt
+          enum:
+            - webvtt
         request:
           $ref: '#/components/schemas/TTSRequest'
         response:
@@ -508,6 +532,10 @@ components:
           minLength: 1
           type: string
           description: to be used along with translation model. expected translated sentence, for reference
+        webvtt:
+          minLength: 1
+          type: string
+          description: subtitle rawtext in webvtt format. more details on format here `https://www.w3.org/TR/webvtt1/`
     SentencesList:
       type: array
       description: list of
@@ -572,6 +600,8 @@ components:
           example: 103
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        transcriptionFormat:
+          $ref: '#/components/schemas/TranscriptionFormat'
     TransliterationConfig:
       required:
         - language
@@ -701,6 +731,7 @@ components:
             - srt
             - transcript
             - alternatives
+            - webvtt
     ImageFiles:
       type: array
       description: list of
@@ -742,13 +773,9 @@ components:
       properties:
         value:
           type: string
-          description: status of ASR response
+          description: types of subtitles supported
           enum:
-            - success
-            - no-match
-            - initial-silence-timeout
-            - babble-timeout
-            - error
+            - webvtt
     ASRRecognitionDetails:
       type: object
       properties:
@@ -767,6 +794,29 @@ components:
         bitsPerSample:
           type: integer
           description: bitsPerSample rate of audio
+    SubtitleFormat:
+        type: array
+        description: list of
+        items:
+          $ref: '#/components/schemas/Subtitle'
+    Subtitle:
+      required:
+        - audioContent | audioUri
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: starting timeframe of particular audio chunk
+          example: 00:01:00.000
+        endTime:
+          type: string
+          description: ending timeframe for particular audio chunk
+          example: 00:02:00.000
+        text:
+          type: string
+          description: transcription text for particular audio chunk
+          example: this is the transcript between 1 min and 2 min
+  
   securitySchemes:
     authToken:
       type: apiKey
