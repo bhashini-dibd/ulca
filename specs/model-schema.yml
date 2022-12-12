@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.3.3
+  version: 0.3.4
 servers:
   - url: /ulca
 paths: {}
@@ -50,7 +50,21 @@ components:
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
         task:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - translation
+                - transliteration
+                - tts
+                - asr
+                - document-layout
+                - ocr
+                - glossary
+                - ner
+                - txt-lang-detection
+          description: the category of model under which it has been released or trained
         languages:
           nullable: true
           allOf:
