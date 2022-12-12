@@ -17,7 +17,6 @@ class MdUtils:
             file            =   requests.get(git_path, allow_redirects=True)
             log.info(f'file content {file.content}')
             parsed          =   json.loads(file.content)
-            log.info(f'{parsed}')
             return parsed
         except Exception as exe:
             log.exception(f"Exception while reading from git:{exe} " )
