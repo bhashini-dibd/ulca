@@ -71,7 +71,7 @@ asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "data
 asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                               "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
 asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash",
-                                    "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId","imageHash", "imageFileLocation","imageFilename"]
+                                    "fileLocation", "lastModifiedOn", "createdOn", "datasetId","imageHash", "imageFileLocation","imageFilename"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 parallel_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
