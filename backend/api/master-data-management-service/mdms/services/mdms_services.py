@@ -70,13 +70,15 @@ class MasterDataServices():
 
     #replacing master data files on redis store with new ones
     def bust_cache(self,masters):
+        log.info(f"Test97 masters {masters}")
         if not masters:
             log.info("Getting master filenames from git")
             master_data_files       =   utils.read_from_git(config.git_master_data_api)
             if master_data_files:
                 masters             =   [master["name"].replace(".json","") for master in master_data_files]
-                log.info(f"master list: {masters}")
+                log.info(f"https://api.github.com/repos/ULCA-IN/ulca/contents/master-data/dev {masters}")
         master_data     =       self.get_from_remote_source(masters,None)
+        log.info(f"Test97 master_data {master_data}")
         for master in master_data:
             log.info(f"Upserting {master} to redis store")
             model.upsert(master,master_data[master],None)

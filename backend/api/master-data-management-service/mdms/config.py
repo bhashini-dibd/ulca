@@ -15,6 +15,6 @@ git_master_data_api         =   os.environ.get('ULCA_MASTER_DATA_GIT_API','https
 shared_storage_folder       =   os.environ.get('ULCA_SHARED_STORAGE_PATH','/opt/') 
 #redis configs 
 redis_server_host           =   os.environ.get('REDIS_URL', 'localhost')
-redis_server_db             =   os.environ.get('REDIS_MDMS_DB',6)
+redis_server_db             =   os.environ.get('REDIS_MDMS_DB',8)
 redis_server_port           =   os.environ.get('REDIS_PORT', 6379)
 redis_server_password       =   os.environ.get('REDIS_PASS', None)
