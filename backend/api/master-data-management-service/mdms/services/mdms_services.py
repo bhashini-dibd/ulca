@@ -19,7 +19,6 @@ class MasterDataServices():
             not_on_store_list = [x for x in master_list if x not in master_data.keys()]
         if not_on_store_list:
             from_git = self.get_from_remote_source(not_on_store_list,None)
-            log.info(f'if not_on_store_list {from_git}')
             if from_git:
                 master_data.update(from_git)
                 for master in from_git:
@@ -59,26 +58,20 @@ class MasterDataServices():
         git_file_location   =   f'{config.git_folder_prefix}{branch}'
         log.info(f"Git FIle Location {git_file_location}")
         data                =   utils.read_from_git(git_file_location)
-        log.info(f'data {data}, type {type(data)}')
-        log.info(f'expression {expression}, type {type(expression)}')
         sub_master_data     =   utils.jsonpath_parsing(data,expression)
         for sub in sub_master_data:
             if "values" in sub.keys() and isinstance(sub["values"],dict) and sub["values"]:
-                log.info(f'denormalizing {sub["values"]}')
                 sub["values"] = self.get_sub_master(sub["values"]) 
         return sub_master_data
 
     #replacing master data files on redis store with new ones
     def bust_cache(self,masters):
-        log.info(f"Test97 masters {masters}")
         if not masters:
             log.info("Getting master filenames from git")
             master_data_files       =   utils.read_from_git(config.git_master_data_api)
             if master_data_files:
                 masters             =   [master["name"].replace(".json","") for master in master_data_files]
-                log.info(f"https://api.github.com/repos/ULCA-IN/ulca/contents/master-data/dev {masters}")
         master_data     =       self.get_from_remote_source(masters,None)
-        log.info(f"Test97 master_data {master_data}")
         for master in master_data:
             log.info(f"Upserting {master} to redis store")
             model.upsert(master,master_data[master],None)

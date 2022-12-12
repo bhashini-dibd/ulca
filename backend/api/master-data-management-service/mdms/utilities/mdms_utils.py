@@ -12,7 +12,6 @@ from .response import post_error
 class MdUtils:
     #reading file from git 
     def read_from_git(self,git_path):
-        log.info(f"reading from git: {git_path}")   
         try:
             file            =   requests.get(git_path, allow_redirects=True)
             log.info(f'file content {file.content}')
