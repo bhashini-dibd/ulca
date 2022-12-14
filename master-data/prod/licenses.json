@@ -1,6 +1,11 @@
 {
     "licenses": [
       {
+        "code": "cc0",
+        "label": "CC0",
+        "active": true
+      },
+      {
         "code": "cc-by-4.0",
         "label": "CC-BY-4.0",
         "active": true

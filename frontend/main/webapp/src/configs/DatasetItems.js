@@ -62,6 +62,8 @@ export const Language = [
   { value: "awa", label: "Awadhi" },
   { value: "hne", label: "Chhattisgarhi" },
   { value: "mag", label: "Magahi" },
+  { value: "mixed", label: "Mixed" },
+  { value: "unknown", label: "Unknown Language" },
 ];
 
 export const FilterBy = {

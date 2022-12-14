@@ -1133,7 +1133,7 @@ components:
           type: number
           description: 6 digit pincode of the recording location
         stayYears:
-          type: number
+          type: string
           description: number of years the speaker claims to live in the district
         education:
           type: string
