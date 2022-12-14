@@ -12,7 +12,7 @@ model       =   StoreModel()
 class MasterDataServices():
 
     def get_attributes_data(self,master_list):
-        log.info("Searching for master in redis store")
+        log.info(f"Searching for master in redis store{master_list}")
         master_data         =   model.search(master_list)
         not_on_store_list   =   master_list
         if master_data:
@@ -56,13 +56,11 @@ class MasterDataServices():
         branch              =   sub_master_obj["master"]
         expression          =   sub_master_obj["jsonPath"]
         git_file_location   =   f'{config.git_folder_prefix}{branch}'
+        log.info(f"Git FIle Location {git_file_location}")
         data                =   utils.read_from_git(git_file_location)
-        log.info(f'data {data}, type {type(data)}')
-        log.info(f'expression {expression}, type {type(expression)}')
         sub_master_data     =   utils.jsonpath_parsing(data,expression)
         for sub in sub_master_data:
             if "values" in sub.keys() and isinstance(sub["values"],dict) and sub["values"]:
-                log.info(f'denormalizing {sub["values"]}')
                 sub["values"] = self.get_sub_master(sub["values"]) 
         return sub_master_data
 
@@ -73,8 +71,6 @@ class MasterDataServices():
             master_data_files       =   utils.read_from_git(config.git_master_data_api)
             if master_data_files:
                 masters             =   [master["name"].replace(".json","") for master in master_data_files]
-                log.info(f"master list: {masters}")
-        
         master_data     =       self.get_from_remote_source(masters,None)
         for master in master_data:
             log.info(f"Upserting {master} to redis store")

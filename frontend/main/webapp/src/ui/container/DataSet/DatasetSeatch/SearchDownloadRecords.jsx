@@ -411,7 +411,7 @@ const SearchAndDownloadRecords = (props) => {
 
   const handleSubmitBtn = () => {
     const obj = { ...basicFilterState, ...advFilterState };
-    const criteria = {
+    let criteria = {
       sourceLanguage: getArrayValue(
         datasetType["parallel-corpus"]
           ? [languagePair.source]
@@ -424,9 +424,16 @@ const SearchAndDownloadRecords = (props) => {
       // groupBy: false,
       multipleContributors: state.checkedA,
       originalSourceSentence: state.checkedC,
-      mixedDatasource: selectedDataSource.code,
-      assertLanguage: getArrayValue(assertLanguage),
+      mixedDataSource: selectedDataSource?.code,
     };
+
+    if(assertLanguage.length) {
+      criteria = {
+        ...criteria,
+        assertLanguage: getArrayValue(assertLanguage)
+      }
+    }
+
     if (datasetType["parallel-corpus"]) {
       if (languagePair.source && languagePair.target.length) {
         makeSubmitAPICall(datasetType, criteria);
@@ -709,8 +716,13 @@ const SearchAndDownloadRecords = (props) => {
   };
 
   const handleDataSourceChange = (value) => {
-    setSelectedDataSource(value);
-    setShowAssertLanguage(true);
+    if (value) {
+      setSelectedDataSource(value);
+      setShowAssertLanguage(true);
+    } else {
+      setSelectedDataSource();
+      setShowAssertLanguage(false);
+    }
   };
 
   const renderMixedDataSourceDropdown = () => {
@@ -745,7 +757,7 @@ const SearchAndDownloadRecords = (props) => {
           handleOnChange={handleAssertLanguageSelect}
           id={"assertLanguage"}
           value={assertLanguage.label}
-          label="Select Data Source"
+          label="Select Assert Language"
         />
       </div>
     );
@@ -810,7 +822,7 @@ const SearchAndDownloadRecords = (props) => {
                 </>
               )}
 
-              {showAssertLanguage && (
+              {showDataSource && showAssertLanguage && (
                 <>
                   <Typography className={classes.subHeader} variant="body1">
                     Select Assert Language
