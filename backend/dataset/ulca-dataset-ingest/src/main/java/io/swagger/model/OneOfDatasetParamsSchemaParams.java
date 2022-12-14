@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfDatasetParamsSchemaParams
 */
+
+// commented as we are deserializing manually to have better control on deserializer
 /*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
@@ -24,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = NerDatasetParamsSchema.class, name = "NerDatasetParamsSchema")
 })
 */
+
 public interface OneOfDatasetParamsSchemaParams {
 
 }

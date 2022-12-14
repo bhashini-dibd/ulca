@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfDatasetDataRowSchemaData
 */
+//commented as we are deserializing manually to have better control on deserializer
 /*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,

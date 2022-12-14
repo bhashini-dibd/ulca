@@ -22,7 +22,7 @@ import javax.validation.constraints.*;
  * AsrCommonSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-14T06:10:52.110Z[GMT]")
 
 
 public class AsrCommonSchema   {
@@ -94,7 +94,7 @@ public class AsrCommonSchema   {
   private BigDecimal pinCode = null;
 
   @JsonProperty("stayYears")
-  private BigDecimal stayYears = null;
+  private String stayYears = null;
 
   @JsonProperty("education")
   private String education = null;
@@ -378,7 +378,7 @@ public class AsrCommonSchema   {
     this.pinCode = pinCode;
   }
 
-  public AsrCommonSchema stayYears(BigDecimal stayYears) {
+  public AsrCommonSchema stayYears(String stayYears) {
     this.stayYears = stayYears;
     return this;
   }
@@ -389,12 +389,11 @@ public class AsrCommonSchema   {
    **/
   @Schema(description = "number of years the speaker claims to live in the district")
   
-    @Valid
-    public BigDecimal getStayYears() {
+    public String getStayYears() {
     return stayYears;
   }
 
-  public void setStayYears(BigDecimal stayYears) {
+  public void setStayYears(String stayYears) {
     this.stayYears = stayYears;
   }
 
