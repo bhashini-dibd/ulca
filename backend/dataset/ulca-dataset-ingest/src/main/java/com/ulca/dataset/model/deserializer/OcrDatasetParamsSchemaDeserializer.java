@@ -56,25 +56,24 @@ public class OcrDatasetParamsSchemaDeserializer extends StdDeserializer<OcrDatas
 		OcrDatasetParamsSchema ocrParamsSchema = new OcrDatasetParamsSchema();
 		JsonNode node = p.readValueAsTree();
 
-
 		ArrayList<String> errorList = new ArrayList<String>();
-		
+
 		JSONObject obj = new JSONObject(node.toPrettyString());
-		
+
 		Set<String> keys = obj.keySet();
-		
-		for(String k : keys) {
+
+		for (String k : keys) {
 			try {
-				OcrDatasetParamsSchemaKeys key = OcrDatasetParamsSchemaKeys.valueOf(k) ;
-			}catch (Exception ex) {
+				OcrDatasetParamsSchemaKeys key = OcrDatasetParamsSchemaKeys.valueOf(k);
+			} catch (Exception ex) {
 				log.info(k + " unknown property ");
 				errorList.add(k + " unknown property ");
 			}
-			
+
 		}
-		
-		//required
-		
+
+		// required
+
 		if (!node.has("datasetType")) {
 			errorList.add("datasetType field should be present");
 		} else if (!node.get("datasetType").isTextual()) {
@@ -95,36 +94,35 @@ public class OcrDatasetParamsSchemaDeserializer extends StdDeserializer<OcrDatas
 		} else {
 			try {
 				LanguagePair lp = new LanguagePair();
-				
-				if(node.get("languages").has("sourceLanguage")) {
-					String sourceLanguage =  	node.get("languages").get("sourceLanguage").asText();
-					if(SupportedLanguages.fromValue(sourceLanguage) != null) {
+
+				if (node.get("languages").has("sourceLanguage")) {
+					String sourceLanguage = node.get("languages").get("sourceLanguage").asText();
+					if (SupportedLanguages.fromValue(sourceLanguage) != null) {
 						lp.setSourceLanguage(SupportedLanguages.fromValue(sourceLanguage));
-					}else {
+					} else {
 						errorList.add("sourceLanguage is not one of defined language pair");
 					}
-					
-				}else {
+
+				} else {
 					errorList.add("sourceLanguage should be present");
 				}
-				if(node.get("languages").has("sourceLanguageName")) {
-					String sourceLanguageName =  	node.get("languages").get("sourceLanguageName").asText();
+				if (node.get("languages").has("sourceLanguageName")) {
+					String sourceLanguageName = node.get("languages").get("sourceLanguageName").asText();
 					lp.setSourceLanguageName(sourceLanguageName);
 				}
-				if(node.get("languages").has("targetLanguage")) {
+				if (node.get("languages").has("targetLanguage")) {
 					String targetLanguage = node.get("languages").get("targetLanguage").asText();
-					
-					if(SupportedLanguages.fromValue(targetLanguage) != null) {
+
+					if (SupportedLanguages.fromValue(targetLanguage) != null) {
 						lp.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
 					}
-					
+
 				}
-				if(node.get("languages").has("targetLanguageName")) {
+				if (node.get("languages").has("targetLanguageName")) {
 					String targetLanguageName = node.get("languages").get("targetLanguageName").asText();
 					lp.setSourceLanguageName(targetLanguageName);
 				}
-				
-				
+
 				ocrParamsSchema.setLanguages(lp);
 			} catch (Exception e) {
 				errorList.add("languages field value not proper.");
@@ -141,13 +139,12 @@ public class OcrDatasetParamsSchemaDeserializer extends StdDeserializer<OcrDatas
 
 			try {
 				Source collectionSource = mapper.readValue(node.get("collectionSource").toPrettyString(), Source.class);
-				if(collectionSource.size() > 10 || collectionSource.size() < 0) {
+				if (collectionSource.size() > 10 || collectionSource.size() < 0) {
 					errorList.add("collectionSource array size should be > 0 and <= 10");
-				}else {
+				} else {
 					ocrParamsSchema.setCollectionSource(collectionSource);
 				}
-					
-				
+
 			} catch (Exception e) {
 				errorList.add("collectionSource field value not proper.");
 				e.printStackTrace();
@@ -163,19 +160,19 @@ public class OcrDatasetParamsSchemaDeserializer extends StdDeserializer<OcrDatas
 			try {
 				Domain domain = new Domain();
 				int size = node.get("domain").size();
-				
-				for(int i=0; i < size; i++) {
-					
+
+				for (int i = 0; i < size; i++) {
+
 					String enumValue = node.get("domain").get(i).asText();
-					
+
 					DomainEnum dEnum = DomainEnum.fromValue(enumValue);
-					if(dEnum == null) {
+					if (dEnum == null) {
 						errorList.add("domain value not part of defined domains");
-					}else {
+					} else {
 						domain.add(enumValue);
 					}
 				}
-				
+
 				ocrParamsSchema.setDomain(domain);
 			} catch (Exception e) {
 				errorList.add("domain field value not proper.");
@@ -190,30 +187,29 @@ public class OcrDatasetParamsSchemaDeserializer extends StdDeserializer<OcrDatas
 			errorList.add("license field should be String");
 		} else {
 			try {
-				
+
 				String licenseText = node.get("license").asText();
-				
+
 				io.swagger.model.License license = io.swagger.model.License.fromValue(licenseText);
-				if(license != null) {
+				if (license != null) {
 					ocrParamsSchema.setLicense(license);
-					if(license == io.swagger.model.License.CUSTOM_LICENSE) {
+					if (license == io.swagger.model.License.CUSTOM_LICENSE) {
 						String licenseUrl = node.get("licenseUrl").asText();
-						if(licenseUrl.isBlank()) {
+						if (licenseUrl.isBlank()) {
 							errorList.add("custom licenseUrl field value should be present");
 						}
 					}
-				}else {
+				} else {
 					errorList.add("license field value should be present in license list");
 				}
 
-				
 			} catch (Exception e) {
 				errorList.add("license field value not proper.");
 				e.printStackTrace();
 			}
 
 		}
-		
+
 		if (node.get("submitter").isEmpty()) {
 			errorList.add("submitter field should be present");
 		} else if (!node.get("submitter").isObject()) {
@@ -229,133 +225,155 @@ public class OcrDatasetParamsSchemaDeserializer extends StdDeserializer<OcrDatas
 
 		}
 
-				      
-		//optional params
-		
-		      if (node.has("format")) {
-		    	  if(!node.get("format").isTextual()) {
-		    		  errorList.add("format field should be String");
-		    	  }else {
-		    		  String format = node.get("format").asText();
-		    		   
-		    		  ImageFormat imageFormat  = ImageFormat.fromValue(format);
-						if(imageFormat != null) {
-							ocrParamsSchema.setFormat(imageFormat);
-						}else {
-							errorList.add("format not among one of specified");
-						}
-						
-		    	  }
-					
-				} 
-		      
-				if (node.has("dpi")) {
-			    	  if(!node.get("dpi").isTextual()) {
-			    		  errorList.add("dpi field should be String");
-			    	  }else {
-			    		  String format = node.get("dpi").asText();
-			    		   
-			    		  ImageDPI imageDPI  = ImageDPI.fromValue(format);
-							if(imageDPI != null) {
-								ocrParamsSchema.setDpi(imageDPI);
-							}else {
-								errorList.add("format not among one of specified");
-							}
-							
-			    	  }
-						
-					} 
-				
-				if (node.has("imageTextType")) {
-			    	  if(!node.get("imageTextType").isTextual()) {
-			    		  errorList.add("imageTextType field should be String");
-			    	  }else {
-			    		  String imageTextTypeValue = node.get("imageTextType").asText();
-			    		   
-			    		  ImageTextType imageTextType  = ImageTextType.fromValue(imageTextTypeValue);
-							if(imageTextType != null) {
-								ocrParamsSchema.setImageTextType(imageTextType);
-							}else {
-								errorList.add("imageTextType not among one of specified");
-							}
-							
-			    	  }
-						
-					} 
-		      
-		     
-	if(node.has("collectionMethod")) {
-		if (node.get("collectionMethod").has("collectionDescription")) {
-			if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
-				errorList.add("collectionDescription field should be String Array");
+		// optional params DatasetCommonSchema
+
+		if (node.has("version")) {
+			if (!node.get("version").isTextual()) {
+				errorList.add("version field should be String");
 			} else {
-				int size = node.get("collectionMethod").get("collectionDescription").size();
-				if(size > 10 || size < 1) {
-					errorList.add("collectionDescription field Array should contain atleast 1");
-				}else {
-					try {
-						String collectionDescription = node.get("collectionMethod").get("collectionDescription").get(0)
-								.asText();
-						
-						
-						OcrCollectionMethod.CollectionDescriptionEnum collectionDescriptionEnum = OcrCollectionMethod.CollectionDescriptionEnum
-								.fromValue(collectionDescription);
-
-						OcrCollectionMethod ocrCollectionMethod = new OcrCollectionMethod();
-						
-						List<OcrCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<OcrCollectionMethod.CollectionDescriptionEnum>();
-						list.add(collectionDescriptionEnum);
-						ocrCollectionMethod.setCollectionDescription(list);
-
-						ocrParamsSchema.setCollectionMethod(ocrCollectionMethod);
-
-
-						/*
-						 * collectionDetails is non mandatory
-						 */
-						if (node.get("collectionMethod").has("collectionDetails")) { 
-						
-						if(!node.get("collectionMethod").get("collectionDetails").has("ocrTool")){
-							errorList.add("collectionDetails should contain ocrTool");
-						}else if(!node.get("collectionMethod").get("collectionDetails").get("ocrTool").isTextual()) {
-							errorList.add("ocrTool should be String");
-						}else {
-							String ocrTool = node.get("collectionMethod").get("collectionDetails").get("ocrTool").asText();
-							CollectionDetailsOcr.OcrToolEnum ocrToolEnum = CollectionDetailsOcr.OcrToolEnum.fromValue(ocrTool);
-							if(ocrToolEnum != null) {
-								CollectionDetailsOcr collectionDetailsOcr = new CollectionDetailsOcr();
-								collectionDetailsOcr.setOcrTool(ocrToolEnum);
-								if(node.get("collectionMethod").get("collectionDetails").has("ocrToolVersion")) {
-									String ocrToolVersion = node.get("collectionMethod").get("collectionDetails").get("ocrToolVersion").asText();
-									collectionDetailsOcr.setOcrToolVersion(ocrToolVersion);
-								}
-								ocrCollectionMethod.setCollectionDetails(collectionDetailsOcr);
-								
-								ocrParamsSchema.setCollectionMethod(ocrCollectionMethod);
-								
-							}else {
-								errorList.add("ocrToolEnum should be one of specified values");
-							}
-						}
-						}
-
-					} catch (Exception e) {
-						log.info("collection method not proper");
-						errorList.add("collectionMethod field value not proper.");
-						log.info("tracing the error");
-						
-						e.printStackTrace();
-					}
-				}
-
+				String version = node.get("version").asText();
+				ocrParamsSchema.setVersion(version);
 			}
-		}else {
-			errorList.add("if collectionMethod then collectionDescription should be present inside collectionMethod");
-		}
-	}
 
-	if(!errorList.isEmpty())
-		throw new IOException(errorList.toString());
+		}
+		if (node.has("licenseUrl")) {
+			if (!node.get("licenseUrl").isTextual()) {
+				errorList.add("licenseUrl field should be String");
+			} else {
+				String licenseUrl = node.get("licenseUrl").asText();
+				ocrParamsSchema.setLicenseUrl(licenseUrl);
+			}
+
+		}
+
+		// ocr params required
+
+		if (!node.has("format")) {
+			errorList.add("format field should be present");
+		} else if (!node.get("format").isTextual()) {
+
+			errorList.add("format field should be String");
+		} else {
+			String format = node.get("format").asText();
+
+			ImageFormat imageFormat = ImageFormat.fromValue(format);
+			if (imageFormat != null) {
+				ocrParamsSchema.setFormat(imageFormat);
+			} else {
+				errorList.add("format not among one of specified");
+			}
+
+		}
+
+		if (!node.has("dpi")) {
+			errorList.add("dpi field should be present");
+		} else if (!node.get("dpi").isTextual()) {
+			errorList.add("dpi field should be String");
+		} else {
+			String format = node.get("dpi").asText();
+
+			ImageDPI imageDPI = ImageDPI.fromValue(format);
+			if (imageDPI != null) {
+				ocrParamsSchema.setDpi(imageDPI);
+			} else {
+				errorList.add("format not among one of specified");
+			}
+
+		}
+
+		if (!node.has("imageTextType")) {
+			errorList.add("imageTextType field should be present");
+		} else if (!node.get("imageTextType").isTextual()) {
+			errorList.add("imageTextType field should be String");
+		} else {
+			String imageTextTypeValue = node.get("imageTextType").asText();
+
+			ImageTextType imageTextType = ImageTextType.fromValue(imageTextTypeValue);
+			if (imageTextType != null) {
+				ocrParamsSchema.setImageTextType(imageTextType);
+			} else {
+				errorList.add("imageTextType not among one of specified");
+			}
+
+		}
+
+		// optional
+		if (node.has("collectionMethod")) {
+			if (node.get("collectionMethod").has("collectionDescription")) {
+				if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
+					errorList.add("collectionDescription field should be String Array");
+				} else {
+					int size = node.get("collectionMethod").get("collectionDescription").size();
+					if (size > 10 || size < 1) {
+						errorList.add("collectionDescription field Array should contain atleast 1");
+					} else {
+						try {
+							String collectionDescription = node.get("collectionMethod").get("collectionDescription")
+									.get(0).asText();
+
+							OcrCollectionMethod.CollectionDescriptionEnum collectionDescriptionEnum = OcrCollectionMethod.CollectionDescriptionEnum
+									.fromValue(collectionDescription);
+
+							OcrCollectionMethod ocrCollectionMethod = new OcrCollectionMethod();
+
+							List<OcrCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<OcrCollectionMethod.CollectionDescriptionEnum>();
+							list.add(collectionDescriptionEnum);
+							ocrCollectionMethod.setCollectionDescription(list);
+
+							ocrParamsSchema.setCollectionMethod(ocrCollectionMethod);
+
+							/*
+							 * collectionDetails is non mandatory
+							 */
+							if (node.get("collectionMethod").has("collectionDetails")) {
+
+								if (!node.get("collectionMethod").get("collectionDetails").has("ocrTool")) {
+									errorList.add("collectionDetails should contain ocrTool");
+								} else if (!node.get("collectionMethod").get("collectionDetails").get("ocrTool")
+										.isTextual()) {
+									errorList.add("ocrTool should be String");
+								} else {
+									String ocrTool = node.get("collectionMethod").get("collectionDetails")
+											.get("ocrTool").asText();
+									CollectionDetailsOcr.OcrToolEnum ocrToolEnum = CollectionDetailsOcr.OcrToolEnum
+											.fromValue(ocrTool);
+									if (ocrToolEnum != null) {
+										CollectionDetailsOcr collectionDetailsOcr = new CollectionDetailsOcr();
+										collectionDetailsOcr.setOcrTool(ocrToolEnum);
+										if (node.get("collectionMethod").get("collectionDetails")
+												.has("ocrToolVersion")) {
+											String ocrToolVersion = node.get("collectionMethod")
+													.get("collectionDetails").get("ocrToolVersion").asText();
+											collectionDetailsOcr.setOcrToolVersion(ocrToolVersion);
+										}
+										ocrCollectionMethod.setCollectionDetails(collectionDetailsOcr);
+
+										ocrParamsSchema.setCollectionMethod(ocrCollectionMethod);
+
+									} else {
+										errorList.add("ocrToolEnum should be one of specified values");
+									}
+								}
+							}
+
+						} catch (Exception e) {
+							log.info("collection method not proper");
+							errorList.add("collectionMethod field value not proper.");
+							log.info("tracing the error");
+
+							e.printStackTrace();
+						}
+					}
+
+				}
+			} else {
+				errorList.add(
+						"if collectionMethod then collectionDescription should be present inside collectionMethod");
+			}
+		}
+
+		if (!errorList.isEmpty())
+			throw new IOException(errorList.toString());
 
 		log.info("******** Exiting deserializer ********");
 		return ocrParamsSchema;

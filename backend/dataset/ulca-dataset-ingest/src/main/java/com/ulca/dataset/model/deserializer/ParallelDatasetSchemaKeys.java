@@ -10,6 +10,8 @@ public enum ParallelDatasetSchemaKeys {
 	license,
 	submitter,
 	//optional
+	version,
+	licenseUrl,
 	collectionMethod
 	
 }

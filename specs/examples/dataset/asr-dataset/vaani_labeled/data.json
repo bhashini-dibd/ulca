@@ -6,7 +6,7 @@
         "speaker": "goog_001",
         "gender": "male",
         "exactAge": 60,
-        "assertLanguage": "hindi",
+        "assertLanguage": "hi",
         "languagesSpoken": [
             "hindi",
             "english",
@@ -15,7 +15,7 @@
         "state": "Haryana",
         "district": "Gurgaon",
         "pinCode": 133001,
-        "stayYears": 20,
+        "stayYears": "20",
         "education": "post-graduate",
         "socioEconomic": "middle-class"
     },
@@ -25,7 +25,7 @@
         "speaker": "goog_002",
         "gender": "male",
         "exactAge": 35,
-        "assertLanguage": "hindi",
+        "assertLanguage": "hi",
         "languagesSpoken": [
             "hindi",
             "english",
@@ -34,7 +34,7 @@
         "state": "Haryana",
         "district": "Gurgaon",
         "pinCode": 133001,
-        "stayYears": 20,
+        "stayYears": "20",
         "education": "graduate",
         "socioEconomic": "upper-middle-class"
     },
@@ -52,7 +52,7 @@
         "speaker": "goog_001",
         "gender": "male",
         "exactAge": 60,
-        "assertLanguage": "hindi",
+        "assertLanguage": "hi",
         "languagesSpoken": [
             "hindi",
             "english",
@@ -61,7 +61,7 @@
         "state": "Haryana",
         "district": "Gurgaon",
         "pinCode": 133001,
-        "stayYears": 20,
+        "stayYears": "20",
         "education": "graduate",
         "socioEconomic": "middle-class"
     }

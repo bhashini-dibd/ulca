@@ -176,8 +176,13 @@
       "active": true
     },
     {
-      "code": "unk",
-      "label": "Unknown Language",
+      "code": "unknown",
+      "label": "Unknown",
+      "active": true
+    },
+    {
+      "code": "mixed",
+      "label": "Mixed",
       "active": true
     }
   ]

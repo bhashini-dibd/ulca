@@ -8,7 +8,6 @@ import {
 } from "../../../utils/getLabel";
 import React from "react";
 import { getCamelCase } from "../../../utils/util";
-
 const CardComponent = (props) => {
   const { classes, data, index } = props;
   const renderPublishedOn = (data) => {
@@ -136,8 +135,7 @@ const CardComponent = (props) => {
             Type
           </Typography>
           <Typography variant="body2" style={{ color: "#ffffff" }}>
-          {/* {getCamelCase(type)} */}
-            {type}
+          {getCamelCase(type)}
           </Typography>
         </Grid>
       );

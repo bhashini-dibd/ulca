@@ -31,6 +31,7 @@ import io.swagger.model.Domain;
 import io.swagger.model.DomainEnum;
 import io.swagger.model.Gender;
 import io.swagger.model.LanguagePair;
+import io.swagger.model.MixedDataSource;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
 import io.swagger.model.SupportedLanguages;
@@ -84,7 +85,6 @@ public class TtsParamsSchemaDeserializer extends StdDeserializer<TtsParamsSchema
 		}
 
 		// required
-
 		if (!node.has("datasetType")) {
 			errorList.add("datasetType field should be present");
 		} else if (!node.get("datasetType").isTextual()) {
@@ -232,8 +232,42 @@ public class TtsParamsSchemaDeserializer extends StdDeserializer<TtsParamsSchema
 				e.printStackTrace();
 			}
 		}
-
+		
 		// optional params
+		
+				if (node.has("version")) {
+					if (!node.get("version").isTextual()) {
+						errorList.add("version field should be String");
+					} else {
+						String version = node.get("version").asText();
+						ttsParamsSchema.setVersion(version);
+					}
+
+				}
+				if (node.has("licenseUrl")) {
+					if (!node.get("licenseUrl").isTextual()) {
+						errorList.add("licenseUrl field should be String");
+					} else {
+						String licenseUrl = node.get("licenseUrl").asText();
+						ttsParamsSchema.setLicenseUrl(licenseUrl);
+					}
+
+				}
+
+				if (node.has("mixedDataSource")) {
+					if (!node.get("mixedDataSource").isTextual()) {
+						errorList.add("mixedDataSource field should be String");
+					} else {
+						String mixedDataSource = node.get("mixedDataSource").asText();
+						MixedDataSource mixedDataSr = MixedDataSource.fromValue(mixedDataSource);
+						if(mixedDataSr != null) {
+							ttsParamsSchema.setMixedDataSource(mixedDataSr);
+						}else {
+							errorList.add("mixedDataSource not among one of specified values");
+						}
+					}
+				}
+				
 
 		if (node.has("format")) {
 			if (!node.get("format").isTextual()) {
