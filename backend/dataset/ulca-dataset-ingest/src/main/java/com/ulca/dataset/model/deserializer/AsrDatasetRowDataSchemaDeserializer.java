@@ -220,7 +220,7 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 			if (!node.get("stayYears").isNumber()) {
 				errorList.add("stayYears field should be Number");
 			} else {
-				BigDecimal stayYears = node.get("stayYears").decimalValue();
+				String stayYears = node.get("stayYears").asText();
 				asrRowSchema.setStayYears(stayYears);
 
 			}
