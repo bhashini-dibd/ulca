@@ -114,6 +114,7 @@ public class ParallelDatasetRowSchemaDeserializer extends StdDeserializer<Parall
 						List<ParallelDatasetCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<ParallelDatasetCollectionMethod.CollectionDescriptionEnum>();
 						list.add(collectionDescriptionEnum);
 						parallelDatasetCollectionMethod.setCollectionDescription(list);
+						parallelRowSchema.setCollectionMethod(parallelDatasetCollectionMethod);
 
 						switch (collectionDescriptionEnum) {
 						case AUTO_ALIGNED:

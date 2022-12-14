@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.3
+  version: 0.10.7
 servers:
   - url: /ulca
 paths: {}
@@ -157,7 +157,6 @@ components:
           $ref: '#/components/schemas/GlossaryDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
-      
     NerDatasetParamsSchema:
       required:
         - tagsFormat
@@ -173,8 +172,6 @@ components:
             - CoNLL-2003
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
-        
-            
     NerDatasetRowSchema:
       required:
         - nerData
@@ -231,6 +228,8 @@ components:
         - type: object
       type: object
       properties:
+        mixedDataSource:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/MixedDataSource
         format:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         channel:
@@ -267,57 +266,15 @@ components:
       required:
         - audioFilename
         - text
+      allOf:
+        - $ref: '#/components/schemas/AsrCommonSchema'
+        - type: object
       type: object
       description: the schema defines the column name present in physical file that is being pointed by dataFilename key.
       properties:
-        audioFilename:
-          type: string
-          description: filename of the audio file
         text:
           type: string
           description: textual output of the audio
-        speaker:
-          type: string
-          description: speaker name or id for the audio utterance
-        duration:
-          type: number
-          description: audio duration in seconds
-        collectionSource:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
-        channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
-        samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
-        bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
-        gender:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
-        age:
-          type: string
-          description: age range
-          enum:
-            - 1-10
-            - 11-20
-            - 21-60
-            - 61-100
-        dialect:
-          type: string
-          description: valid dialact of the submitted language.
-          example: langaugeCode-<location or dialect name>
-          enum:
-            - hi-thethi
-            - hi-magahi
-            - ta-madurai
-        snr:
-          $ref: '#/components/schemas/AudioQualityEvaluation'
-        startTime:
-          type: string
-          description: 'Time of the audio from where the processing starts. Format : hh:mm:ss'
-        endTime:
-          type: string
-          description: 'Time of the audio where the processing end. Format : hh:mm:ss'
-        collectionMethod:
-          $ref: '#/components/schemas/CollectionMethodAudio'
     TtsParamsSchema:
       allOf:
         - $ref: '#/components/schemas/AsrParamsSchema'
@@ -333,52 +290,11 @@ components:
     AsrUnlabeledRowSchema:
       required:
         - audioFilename
+      allOf:
+        - $ref: '#/components/schemas/AsrCommonSchema'
+        - type: object
       type: object
       description: the schema defines the column name present in physical file that is being pointed by dataFilename key.
-      properties:
-        audioFilename:
-          type: string
-          description: filename of the audio file
-        channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
-        samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
-        speaker:
-          type: string
-          description: speaker name or id for the audio utterance
-        duration:
-          type: number
-          description: audio duration in seconds
-        collectionSource:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
-        bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
-        gender:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
-        age:
-          type: string
-          description: age range
-          enum:
-            - 0-9
-            - 10-20
-            - 21-60
-            - 60-100
-        dialect:
-          type: string
-          description: valid dialact of the submitted language.
-          example: langaugeCode-<location or dialect name>
-          enum:
-            - hi-thethi
-            - hi-magahi
-            - ta-madurai
-        snr:
-          $ref: '#/components/schemas/AudioQualityEvaluation'
-        startTime:
-          type: string
-          description: 'Time of the audio from where the processing starts. Format : hh:mm:ss'
-        endTime:
-          type: string
-          description: 'Time of the audio where the processing end. Format : hh:mm:ss'
     OcrDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -1128,13 +1044,12 @@ components:
     NerData:
       type: object
       description: Ner dataset sentencewise metadata
-      required :
+      required:
         - tag
       anyOf:
-          - $ref: '#/components/schemas/NerWordIndex'
-          - $ref: '#/components/schemas/NerWord'
+        - $ref: '#/components/schemas/NerWordIndex'
+        - $ref: '#/components/schemas/NerWord'
       properties:
-       
         position:
           type: string
           description: position of the word in phrase. B- Beginning, I- Intermediate
@@ -1150,26 +1065,108 @@ components:
             - PER
             - ORG
             - LOC
-      
     NerWordIndex:
       type: object
       description: Ner dataset sentencewise metadata
-      required :
+      required:
         - wordIndex
       properties:
         wordIndex:
           type: number
           description: index number of word
           example: 1
-          minItems : 1
+          minItems: 1
     NerWord:
       type: object
       description: Ner dataset sentencewise metadata
-      required :
+      required:
         - word
       properties:
         word:
           type: string
           description: corresponsing word in the sentence
-          minItems : 1
-        
+          minItems: 1
+    AsrlanguagesSpoken:
+      type: array
+      description: list of various languages the speaker is good enough to speak
+      example:
+        - english
+      items:
+        maxItems: 10
+        minItems: 1
+        type: string
+    AsrCommonSchema:
+      properties:
+        audioFilename:
+          type: string
+          description: filename of the audio file
+        imageFilename:
+          type: string
+          description: filename of the image file described in audio
+        speaker:
+          type: string
+          description: speaker name or id for the audio utterance
+        gender:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+        exactAge:
+          type: number
+          description: exact age of the speaker
+        age:
+          type: string
+          description: age range
+          enum:
+            - 1-10
+            - 11-20
+            - 21-60
+            - 61-100
+        assertLanguage:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        languagesSpoken:
+          $ref: '#/components/schemas/AsrlanguagesSpoken'
+        state:
+          type: string
+          description: state in which the speaker belongs to
+        district:
+          type: string
+          description: district where the recording of the audio was done
+        pinCode:
+          type: number
+          description: 6 digit pincode of the recording location
+        stayYears:
+          type: string
+          description: number of years the speaker claims to live in the district
+        education:
+          type: string
+          description: level of eduction of the speaker
+        socioEconomic:
+          type: string
+          description: Economic condition of the speaker
+        duration:
+          type: number
+          description: audio duration in seconds
+        collectionSource:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
+        channel:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        bitsPerSample:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+        dialect:
+          type: string
+          description: valid dialact of the submitted language.
+          example: langaugeCode-<location or dialect name>
+          enum:
+            - hi-thethi
+            - hi-magahi
+            - ta-madurai
+        snr:
+          $ref: '#/components/schemas/AudioQualityEvaluation'
+        startTime:
+          type: string
+          description: 'Time of the audio from where the processing starts. Format : hh:mm:ss'
+        endTime:
+          type: string
+          description: 'Time of the audio where the processing end. Format : hh:mm:ss'
+        collectionMethod:
+          $ref: '#/components/schemas/CollectionMethodAudio'

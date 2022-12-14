@@ -170,7 +170,6 @@ const HostedInferASR = (props) => {
     setSuggestEditValues(e.target.value)
   }
 
-
   return (
     <>
       <Grid container>
@@ -195,6 +194,7 @@ const HostedInferASR = (props) => {
             streaming={props.streaming}
             getchildData={childData}
             feedback={{ setTarget, setTargetAudio, setData }}
+            inferenceEndPoint={inferenceEndPoint}
           />
         </Grid>
         <Grid

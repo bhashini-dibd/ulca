@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the schema of data file uploaded should adhere to this specified structure.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-05-16T02:11:13.718Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
 
 public class TransliterationDatasetRowSchema  implements OneOfDatasetDataRowSchemaData {

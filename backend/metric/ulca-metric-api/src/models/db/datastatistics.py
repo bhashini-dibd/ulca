@@ -27,20 +27,21 @@ class AggregateDatasetModel(object):
 
             dtype = request_object["type"]
             log.info(f'dtype {dtype}')
+            log.info(f'request_object ==> {request_object}')
             match_params = None 
             if "criterions" in request_object:
                 match_params = request_object["criterions"]  # where conditions
             grpby_params = None
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]   #grouping fields
-
+            
+            
             #ASR charts are displayed in hours; initial chart
             if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                 sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
             else:
                 #Charts except ASR are displayed in record counts; initial chart
                 sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
-            log.info(f'sumtotal_query {sumtotal_query}')
             sumtotal_result = utils.query_runner(sumtotal_query)
             true_count = 0
             false_count = 0
@@ -72,9 +73,9 @@ class AggregateDatasetModel(object):
                 elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus","document-layout-corpus","tts-corpus"]:
                     sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
                 qry_for_lang_pair  = query+sub_query
-
                 result_parsed = utils.query_runner(qry_for_lang_pair)
                 chart_data =  utils.result_formater_for_lang_pairs(result_parsed,dtype,value)
+                log.info(f'sumtotal of 1st level drill down {sumtotal}')
                 return chart_data,sumtotal
 
             #aggregate query for language groupby ; 1st level drill down for the chart

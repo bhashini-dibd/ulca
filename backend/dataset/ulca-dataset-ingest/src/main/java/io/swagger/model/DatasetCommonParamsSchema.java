@@ -19,7 +19,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "common parameters or attributes of dataset that is primarily same across the supported dataset.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-02-17T09:27:38.837Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
 
 public class DatasetCommonParamsSchema   {

@@ -36,7 +36,8 @@ class ASRComputeResource(Resource):
             result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
             if result.get("status") == "SUCCESS":
                 res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
-                log.info("response successfully generated.")
+                log.info(f"response successfully generated. res ==> {res}")
+                log.info(f"response type ===> {res.getres}")
                 return res.getres()
             else:
                 return post_error("Request Failed",result["status_text"]), 400

@@ -97,7 +97,7 @@ const ChartRender = (props) => {
 	const fetchParams = (event) => {
 		var source = ""
 		let targetLanguage = ""
-		if (selectedOption.value === "parallel-corpus") {
+		if (selectedOption.value === "transliteration-corpus" || selectedOption.value === "parallel-corpus") {
 			source =sourceLanguage.value ;
 			targetLanguage =   (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id) 
 		}
@@ -108,12 +108,12 @@ const ChartRender = (props) => {
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		if (selectedOption.value === "parallel-corpus") {
+		if (selectedOption.value === "transliteration-corpus" || selectedOption.value === "parallel-corpus") {
 			return [
 			  { field: "sourceLanguage", value: source },
 			  { field: "targetLanguage", value: targetLanguage },
 			];
-		  } else if (selectedOption.value === "transliteration-corpus" || selectedOption.value === "glossary-corpus") {
+		  } else if (selectedOption.value === "glossary-corpus") {
 			return [
 			  { field: "sourceLanguage", value: "en" },
 			  { field: "targetLanguage", value: source },
@@ -132,7 +132,7 @@ const ChartRender = (props) => {
 		let val = eventValue && eventValue.hasOwnProperty("_id") && eventValue._id
 		let event = { "field": filterValue, "value": val ? val : dataValue }
 		val && setDataValue(val)
-		if (selectedOption.value === "parallel-corpus") {
+		if (selectedOption.value === "transliteration-corpus" || selectedOption.value === "parallel-corpus") {
 			source = sourceLanguage.value
 			targetLanguage =  selectedLanguage 
 
@@ -144,13 +144,13 @@ const ChartRender = (props) => {
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		if (selectedOption.value === "parallel-corpus") {
+		if (selectedOption.value === "transliteration-corpus" || selectedOption.value === "parallel-corpus") {
 			return [
 			  { field: "sourceLanguage", value: source },
 			  { field: "targetLanguage", value: targetLanguage },
 			  event
 			];
-		  } else if (selectedOption.value === "transliteration-corpus" || selectedOption.value === "glossary-corpus") {
+		  } else if (selectedOption.value === "glossary-corpus") {
 			return [
 			  { field: "sourceLanguage", value: "en" },
 			  { field: "targetLanguage", value: source },
@@ -347,13 +347,13 @@ const ChartRender = (props) => {
 					if (page === 0) {
 						selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
 						setAxisValue({xAxis:"Languages",yAxis:"Count"})
-						setTitle("Number of records")
+						setTitle("Number of records per language with ");
 					} else if (page === 1) {
-						setTitle(`Number of records in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" :filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
+						setTitle(`Number of records in ${sourceLanguage.label}-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" :filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
 						setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
 						
 					} else if (page === 2) {
-						setTitle(`Number of records in ${selectedLanguageName} ${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
+						setTitle(`Number of records in ${sourceLanguage.label}-${selectedLanguageName} ${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
 						setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter":"Domain"})
 						
 					}
@@ -473,7 +473,7 @@ const ChartRender = (props) => {
 			</ TitleBar>
 			<div className={classes.iconStyle}>
 					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} onClick={() => handleCardNavigation()}>Reset</Button></>
-						 {(selectedOption.value ==="parallel-corpus" && page===0 )? 
+						 {(selectedOption.value ==="parallel-corpus" || selectedOption.value ==="transliteration-corpus" && page===0 )? 
 						<div className= {classes.titleStyle}>
 						
 						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>

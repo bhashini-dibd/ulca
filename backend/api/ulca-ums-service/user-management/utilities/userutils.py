@@ -442,6 +442,12 @@ class UserUtils:
                 return post_error("Data not valid", "Phone number given is not valid", None)
             log.info("Phone number  validated")
         
+        if user.get("password")!=None:
+            password_validity = UserUtils.validate_password(user["password"])
+            if password_validity is not None:
+                log.info("Password validation failed")
+                return password_validity
+            log.info("Password validated")
         
         # if user.get("orgID") != None:
         #     org_validity =OrgUtils.validate_org(str(user["orgID"]).upper())
