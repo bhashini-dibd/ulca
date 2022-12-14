@@ -221,8 +221,10 @@ const SearchAndDownloadRecords = (props) => {
   const handleLanguagePairChange = (value, property) => {
     setLanguagePair({ ...languagePair, [property]: value });
 
-    setShowDataSource(value.some((element) => element.code === "mixed"));
-    setDataSource(value.filter((element) => element.code === "mixed"));
+    if(Array.isArray(value)) {
+      setShowDataSource(value?.some((element) => element.code === "mixed"));
+      setDataSource(value?.filter((element) => element.code === "mixed"));
+    }
 
     if (property === "source") setSrcError(false);
     else setTgtError(false);
@@ -411,13 +413,14 @@ const SearchAndDownloadRecords = (props) => {
 
   const handleSubmitBtn = () => {
     const obj = { ...basicFilterState, ...advFilterState };
+
     let criteria = {
       sourceLanguage: getArrayValue(
-        datasetType["parallel-corpus"]
+        (datasetType["parallel-corpus"] || datasetType["transliteration-corpus"])
           ? [languagePair.source]
           : languagePair.target
       ),
-      targetLanguage: datasetType["parallel-corpus"]
+      targetLanguage: (datasetType["parallel-corpus"] || datasetType["transliteration-corpus"])
         ? getArrayValue(languagePair.target)
         : null,
       ...getObjectValue(obj),
