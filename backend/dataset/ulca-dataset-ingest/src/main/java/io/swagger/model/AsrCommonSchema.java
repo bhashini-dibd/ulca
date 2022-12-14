@@ -1,24 +1,31 @@
 package io.swagger.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.AsrlanguagesSpoken;
+import io.swagger.model.AudioBitsPerSample;
+import io.swagger.model.AudioChannel;
+import io.swagger.model.AudioQualityEvaluation;
+import io.swagger.model.CollectionMethodAudio;
+import io.swagger.model.Gender;
+import io.swagger.model.Source;
+import io.swagger.model.SupportedLanguages;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.Objects;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * AsrCommonSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-09T11:49:54.138Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
 
 
-public class AsrCommonSchema {
+public class AsrCommonSchema   {
   @JsonProperty("audioFilename")
   private String audioFilename = null;
 
@@ -72,7 +79,7 @@ public class AsrCommonSchema {
   private AgeEnum age = null;
 
   @JsonProperty("assertLanguage")
-  private String assertLanguage = null;
+  private SupportedLanguages assertLanguage = null;
 
   @JsonProperty("languagesSpoken")
   private AsrlanguagesSpoken languagesSpoken = null;
@@ -273,22 +280,23 @@ public class AsrCommonSchema {
     this.age = age;
   }
 
-  public AsrCommonSchema assertLanguage(String assertLanguage) {
+  public AsrCommonSchema assertLanguage(SupportedLanguages assertLanguage) {
     this.assertLanguage = assertLanguage;
     return this;
   }
 
   /**
-   * language in which the speaker claims to speak the particular audio
+   * Get assertLanguage
    * @return assertLanguage
    **/
-  @Schema(description = "language in which the speaker claims to speak the particular audio")
+  @Schema(description = "")
   
-    public String getAssertLanguage() {
+    @Valid
+    public SupportedLanguages getAssertLanguage() {
     return assertLanguage;
   }
 
-  public void setAssertLanguage(String assertLanguage) {
+  public void setAssertLanguage(SupportedLanguages assertLanguage) {
     this.assertLanguage = assertLanguage;
   }
 
@@ -627,7 +635,7 @@ public class AsrCommonSchema {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -703,7 +711,7 @@ public class AsrCommonSchema {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

@@ -1,11 +1,12 @@
 {
     "datasetType": "asr-corpus",
     "languages": {
-        "sourceLanguage": "hi"
+        "sourceLanguage": "mixed"
     },
     "collectionSource": [
-        "vani"
+        "vaani","iisc.ac.in"
     ],
+    "mixedDataSource" : "vaani",
     "domain": [
         "general"
     ],
@@ -19,9 +20,9 @@
         },
         "team": [
             {
-                "name": "Aswin",
+                "name": "Prasanta Kumar Ghosh",
                 "oauthId": {
-                    "oauthId": "aswin.pradeep@google.com",
+                    "oauthId": "prasantg@iisc.ac.in",
                     "provider": "google"
                 }
             }
@@ -38,8 +39,8 @@
         ],
         "collectionDetails": {
             "contributor": {
-                "name": "Gopal Verma",
-                "aboutMe": "Member of Vani team"
+                "name": "Palakkad, Thrissur voice team",
+                "aboutMe": "Members of Vaani team from the Palakkad & Trisshur districts"
             }
         }
     }

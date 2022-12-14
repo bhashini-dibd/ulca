@@ -1,27 +1,28 @@
 {
     "datasetType": "asr-unlabeled-corpus",
     "languages": {
-        "sourceLanguage": "hi"
+        "sourceLanguage": "mixed"
     },
     "collectionSource": [
-        "vani"
+        "vaani","iisc.ac.in"
     ],
+    "mixedDataSource" : "vaani",
     "domain": [
         "general"
     ],
     "license": "cc-by-4.0",
     "submitter": {
         "name": "IISc",
-        "aboutMe": "Part of the Vani project, funded by Google",
+        "aboutMe": "Part of the Vaani project, funded by Google",
         "oauthId": {
             "oauthId": "prasantg@iisc.ac.in",
             "provider": "google"
         },
         "team": [
             {
-                "name": "Aswin",
+                "name": "Prasanta Kumar Ghosh",
                 "oauthId": {
-                    "oauthId": "aswin.pradeep@google.com",
+                    "oauthId": "prasantg@iisc.ac.in",
                     "provider": "google"
                 }
             }
@@ -29,7 +30,7 @@
     },
     "format": "wav",
     "channel": "mono",
-    "samplingRate": 44.1,
+    "samplingRate": 16,
     "bitsPerSample": "sixteen",
     "numberOfSpeakers": 1,
     "collectionMethod": {
@@ -38,8 +39,8 @@
         ],
         "collectionDetails": {
             "contributor": {
-                "name": "Gopal Verma",
-                "aboutMe": "Member of Vani team"
+                "name": "Palakkad, Thrissur voice team",
+                "aboutMe": "Members of Vaani team from the Palakkad & Trisshur districts"
             }
         }
     }
