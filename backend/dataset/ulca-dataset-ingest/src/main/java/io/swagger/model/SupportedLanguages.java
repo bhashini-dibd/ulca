@@ -46,8 +46,16 @@ public enum SupportedLanguages {
     BHO("bho"),
     GOM("gom"),
     AWA("awa"),
-    HNE("hne"),
+    MWR("mwr"),
     MAG("mag"),
+    SJP("sjp"),
+    GBM("gbm"),
+    HNE("hne"),
+    TCY("tcy"),
+    HLB("hlb"),
+    BIH("bih"),
+    ANP("anp"),
+    BNS("bns"),
     MIXED("mixed"),
     UNKNOWN("unknown");
 

@@ -231,6 +231,17 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 
 			}
 		}
+		
+		if (node.has("recordingLanguage")) {
+			if (!node.get("recordingLanguage").isTextual()) {
+				errorList.add("recordingLanguage field should be String");
+			} else {
+
+				String education = node.get("education").asText();
+				asrRowSchema.setEducation(education);
+
+			}
+		}
 
 		if (node.has("socioEconomic")) {
 			if (!node.get("socioEconomic").isTextual()) {
