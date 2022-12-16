@@ -974,6 +974,18 @@ components:
       properties:
         contributor:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+    CollectionDetailsStudioRecorded:
+      type: object
+      description: studio recorded collection details
+      properties:
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+    CollectionDetailsImagePromptedRecording:
+      type: object
+      description: image prompted recording collection details
+      properties:
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
     CollectionMethodAudio:
       type: object
       description: specifies how the audio dataset has been curated.
@@ -998,6 +1010,8 @@ components:
             - $ref: '#/components/schemas/CollectionDetailsAudioAutoAligned'
             - $ref: '#/components/schemas/CollectionDetailsMachineGeneratedTranscript'
             - $ref: '#/components/schemas/CollectionDetailsManualTranscribed'
+            - $ref: '#/components/schemas/CollectionDetailsStudioRecorded'
+            - $ref: '#/components/schemas/CollectionDetailsImagePromptedRecording'
     AudioQualityEvaluation:
       type: object
       description: describes the audio quality evaluation method
