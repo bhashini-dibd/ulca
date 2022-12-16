@@ -402,6 +402,17 @@ components:
         - awa
         - hne
         - mag
+        - mwr
+        - mag
+        - sjp
+        - anp
+        - gbm
+        - hne
+        - tcy
+        - hlb
+        - bih
+        - anp
+        - bns 
         - mixed
         - unknown
     MixedDataSource:

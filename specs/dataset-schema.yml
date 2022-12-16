@@ -992,6 +992,7 @@ components:
               - machine-generated-transcript
               - manual-transcribed
               - studio-recorded
+              - image-prompted-recording
         collectionDetails:
           oneOf:
             - $ref: '#/components/schemas/CollectionDetailsAudioAutoAligned'
@@ -1138,6 +1139,9 @@ components:
         education:
           type: string
           description: level of eduction of the speaker
+        recordingLanguage:
+          type: string
+          description: language in which voice is recorded
         socioEconomic:
           type: string
           description: Economic condition of the speaker
