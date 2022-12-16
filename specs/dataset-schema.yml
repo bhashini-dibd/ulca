@@ -992,6 +992,7 @@ components:
               - machine-generated-transcript
               - manual-transcribed
               - studio-recorded
+              - image-prompted-recording
         collectionDetails:
           oneOf:
             - $ref: '#/components/schemas/CollectionDetailsAudioAutoAligned'
