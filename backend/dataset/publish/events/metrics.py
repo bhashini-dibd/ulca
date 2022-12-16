@@ -112,12 +112,15 @@ class MetricEvent:
                 event["durationInSeconds"] = data["durationInSeconds"]
             if 'isDelete' in data.keys():
                 event["isDelete"] = True
+                log.info(f"Data sent to kafka topic org-ulca-bievent-dataset-v3 is {event}")
                 prod.produce(event, metric_event_input_topic, None)
             elif 'isUpdate' in data.keys():
                 event["isDelete"] = data["isUpdate"]
+                log.info(f"Data sent to kafka topic org-ulca-bievent-dataset-v3 is {event}")
                 prod.produce(event, metric_event_input_topic, None)
             else:
                 event["isDelete"] = False
+                log.info(f"Data sent to kafka topic org-ulca-bievent-dataset-v3 is {event}")
                 prod.produce(event, metric_event_input_topic, None)
         except Exception as e:
             log.exception(data, e)
