@@ -98,20 +98,20 @@ const SearchAndDownloadRecords = (props) => {
   });
 
   useEffect(() => {
-    if(datasetType["asr-corpus"] || datasetType["asr-unlabeled-corpus"]) {
+    if (datasetType["asr-corpus"] || datasetType["asr-unlabeled-corpus"]) {
       setShowDataSource(true);
     }
-  }, [datasetType])
+  }, [datasetType]);
 
   useEffect(() => {
     const datasourceItems = filters[0]?.values?.filter((element) => {
-      if(element.code === "mixed") {
-        return element.values
+      if (element.code === "mixed") {
+        return element.values;
       }
-    })
+    });
 
     setDataSource(datasourceItems);
-  }, [filters])
+  }, [filters]);
 
   useEffect(() => {
     const dataset = Object.keys(datasetType)[0];
@@ -427,13 +427,14 @@ const SearchAndDownloadRecords = (props) => {
 
     let criteria = {
       sourceLanguage: getArrayValue(
-        (datasetType["parallel-corpus"] || datasetType["transliteration-corpus"])
+        datasetType["parallel-corpus"] || datasetType["transliteration-corpus"]
           ? [languagePair.source]
           : languagePair.target
       ),
-      targetLanguage: (datasetType["parallel-corpus"] || datasetType["transliteration-corpus"])
-        ? getArrayValue(languagePair.target)
-        : null,
+      targetLanguage:
+        datasetType["parallel-corpus"] || datasetType["transliteration-corpus"]
+          ? getArrayValue(languagePair.target)
+          : null,
       ...getObjectValue(obj),
       // groupBy: false,
       multipleContributors: state.checkedA,
@@ -441,11 +442,11 @@ const SearchAndDownloadRecords = (props) => {
       mixedDataSource: selectedDataSource?.code,
     };
 
-    if(assertLanguage.length) {
+    if (assertLanguage.length) {
       criteria = {
         ...criteria,
-        assertLanguage: getArrayValue(assertLanguage)
-      }
+        assertLanguage: getArrayValue(assertLanguage),
+      };
     }
 
     if (datasetType["parallel-corpus"]) {
@@ -608,7 +609,12 @@ const SearchAndDownloadRecords = (props) => {
             </Grid>
             <Grid item xs={6}>
               <Button
-                disabled={!languagePair.target.length}
+                disabled={
+                  datasetType["asr-corpus"] ||
+                  datasetType["asr-unlabeled-corpus"]
+                    ? !!!selectedDataSource
+                    : !languagePair.target.length
+                }
                 fullWidth
                 size="large"
                 variant="contained"
