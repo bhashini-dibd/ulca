@@ -211,10 +211,10 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 		}
 
 		if (node.has("stayYears")) {
-			if (!node.get("stayYears").isNumber()) {
-				errorList.add("stayYears field should be Number");
+			if (!node.get("stayYears").isTextual()) {
+				errorList.add("stayYears field should be String");
 			} else {
-				BigDecimal stayYears = node.get("stayYears").decimalValue();
+				String stayYears = node.get("stayYears").asText();
 				asrRowSchema.setStayYears(stayYears);
 
 			}
@@ -228,6 +228,17 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 
 				String education = node.get("education").asText();
 				asrRowSchema.setEducation(education);
+
+			}
+		}
+		
+		if (node.has("recordingLanguage")) {
+			if (!node.get("recordingLanguage").isTextual()) {
+				errorList.add("recordingLanguage field should be String");
+			} else {
+
+				String recordingLanguage = node.get("recordingLanguage").asText();
+				asrRowSchema.setRecordingLanguage(recordingLanguage);
 
 			}
 		}
