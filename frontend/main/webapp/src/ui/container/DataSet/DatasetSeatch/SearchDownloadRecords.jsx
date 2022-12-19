@@ -457,6 +457,14 @@ const SearchAndDownloadRecords = (props) => {
         setTgtError(true);
       } else if (!languagePair.source) setSrcError(true);
       else if (!languagePair.target.length) setTgtError(true);
+    } else if (
+      datasetType["asr-corpus"] ||
+      datasetType["asr-unlabeled-corpus"]
+    ) {
+      if(!criteria.sourceLanguage.length) {
+        criteria.sourceLanguage = ["mixed"];
+      }
+      makeSubmitAPICall(datasetType, criteria);
     } else {
       if (!languagePair.target.length) setTgtError(true);
       else {
