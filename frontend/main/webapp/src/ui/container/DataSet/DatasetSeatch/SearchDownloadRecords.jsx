@@ -612,7 +612,7 @@ const SearchAndDownloadRecords = (props) => {
                 disabled={
                   datasetType["asr-corpus"] ||
                   datasetType["asr-unlabeled-corpus"]
-                    ? !!!selectedDataSource
+                    ? false
                     : !languagePair.target.length
                 }
                 fullWidth
