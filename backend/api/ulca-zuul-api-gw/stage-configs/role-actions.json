@@ -334,6 +334,21 @@
       "role": "ADMIN",
       "actionID": "4bfad84c-9a9e-4875-8d79-3e686ea4d72d",
       "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "fb876483-130d-4674-8371-00ed262c9be3",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "fb876483-130d-4674-8371-00ed262c9be3",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "fb876483-130d-4674-8371-00ed262c9be3",
+      "active": true
     }
   ]
 }
