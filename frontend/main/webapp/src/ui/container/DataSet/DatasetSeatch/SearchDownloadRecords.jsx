@@ -461,8 +461,11 @@ const SearchAndDownloadRecords = (props) => {
       datasetType["asr-corpus"] ||
       datasetType["asr-unlabeled-corpus"]
     ) {
-      if(!criteria.sourceLanguage.length) {
+      console.log(selectedDataSource,'selectedDataSource');
+      if(selectedDataSource && !criteria.sourceLanguage.length) {
         criteria.sourceLanguage = ["mixed"];
+      } else if(selectedDataSource && criteria.sourceLanguage.length  && !criteria.sourceLanguage.includes("mixed")) {
+        criteria.sourceLanguage = [...criteria.sourceLanguage,  "mixed"];
       }
       makeSubmitAPICall(datasetType, criteria);
     } else {
