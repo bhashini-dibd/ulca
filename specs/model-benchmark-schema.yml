@@ -47,13 +47,11 @@ components:
           maxLength: 200
           example: Speech recognition model for classroom lecture
         task:
-          type: object
-          description: what kind of task model achieves
-          $ref: '#/components/schemas/ModelTask'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         languages:
-          nullable : true
+          nullable: true
           description: what all languages it supports
-          allOf : 
+          allOf:
             - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
         license:
           type: object
@@ -521,20 +519,7 @@ components:
           items:
             $ref: '#/components/schemas/ASRBenchmarkMetric'
             minItems: 1
-    ModelTask:
-      type: object
-      description: the category of model under which it has been released or trained
-      properties:
-        type:
-          type: string
-          enum:
-            - translation
-            - transliteration
-            - tts
-            - asr
-            - document-layout
-            - ocr
-            - txt-lang-detection
+
     TrainingDataset:
       type: object
       description: training dataset metadata used to train the model
