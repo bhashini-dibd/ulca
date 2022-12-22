@@ -53,9 +53,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	NotificationService notificationService;
 
 
+	//@Scheduled(cron = "*/10 * * * * *")
 	public void updateTaskTracker() {
-		
-		
 
 		Map<String, Map<String, String>> map = taskTrackerRedisDao.findAll();
 
