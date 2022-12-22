@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the schema of data file uploaded should adhere to this specified structure.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class Submitter   {

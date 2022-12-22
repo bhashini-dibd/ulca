@@ -3,8 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.OCRConfig;
 import io.swagger.model.Sentences;
-import io.swagger.model.TranslationConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class OCRResponse   {
@@ -23,7 +23,7 @@ public class OCRResponse   {
   private Sentences output = null;
 
   @JsonProperty("config")
-  private TranslationConfig config = null;
+  private OCRConfig config = null;
 
   public OCRResponse output(Sentences output) {
     this.output = output;
@@ -46,7 +46,7 @@ public class OCRResponse   {
     this.output = output;
   }
 
-  public OCRResponse config(TranslationConfig config) {
+  public OCRResponse config(OCRConfig config) {
     this.config = config;
     return this;
   }
@@ -58,11 +58,11 @@ public class OCRResponse   {
   @Schema(description = "")
   
     @Valid
-    public TranslationConfig getConfig() {
+    public OCRConfig getConfig() {
     return config;
   }
 
-  public void setConfig(TranslationConfig config) {
+  public void setConfig(OCRConfig config) {
     this.config = config;
   }
 
