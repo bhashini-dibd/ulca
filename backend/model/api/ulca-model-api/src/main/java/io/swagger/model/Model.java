@@ -37,8 +37,9 @@ public class Model   {
   @JsonProperty("task")
   private ModelTask task = null;
 
+  // this has been manually modified to support list of LanguagePair
   @JsonProperty("languages")
-  private AllOfModelLanguages languages = null;
+  private LanguagePairs languages = null;
 
   @JsonProperty("license")
   private License license = null;
@@ -158,7 +159,7 @@ public class Model   {
     this.task = task;
   }
 
-  public Model languages(AllOfModelLanguages languages) {
+  public Model languages(LanguagePairs languages) {
     this.languages = languages;
     return this;
   }
@@ -170,11 +171,11 @@ public class Model   {
   @Schema(required = true, description = "")
       @NotNull
 
-    public AllOfModelLanguages getLanguages() {
+    public LanguagePairs getLanguages() {
     return languages;
   }
 
-  public void setLanguages(AllOfModelLanguages languages) {
+  public void setLanguages(LanguagePairs languages) {
     this.languages = languages;
   }
 

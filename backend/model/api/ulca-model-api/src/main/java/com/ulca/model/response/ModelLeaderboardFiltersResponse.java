@@ -1,9 +1,7 @@
 package com.ulca.model.response;
 
-import java.util.List;
-
-import io.swagger.model.LanguagePair;
-import io.swagger.model.ModelTask;
+import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedTasks;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -18,10 +16,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ModelLeaderboardFiltersResponse {
 
-	ModelTask.TypeEnum[] task;
-	LanguagePair.SourceLanguageEnum[] sourceLanguage;
+	SupportedTasks[] task;
+	SupportedLanguages[] sourceLanguage;
 	
-	LanguagePair.TargetLanguageEnum[] targetLanguage;
+	SupportedLanguages[] targetLanguage;
 	
 	ModelLeaderboardFiltersMetricResponse metric;
 	
