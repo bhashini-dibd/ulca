@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
  * TtsParamsSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class TtsParamsSchema extends AsrParamsSchema implements OneOfDatasetParamsSchemaParams {
