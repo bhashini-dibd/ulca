@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.6.5
+  version: 0.6.6
 servers:
   - url: /
 paths: {}
@@ -342,18 +342,12 @@ components:
             - $ref: '#/components/schemas/Source'
             - $ref: '#/components/schemas/CollectionMethod'
     ModelTask:
-          type: string
-          enum:
-            - translation
-            - transliteration
-            - tts
-            - asr
-            - document-layout
-            - ocr
-            - glossary
-            - ner
-            - txt-lang-detection
-          description: the category of model under which it has been released or trained
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/SupportedTasks'
+      description: the category of model under which it has been released or trained
+      
     ModelProcessingType:
       type: object
       properties:
@@ -409,9 +403,24 @@ components:
         - hlb
         - bih
         - anp
-        - bns 
+        - bns
         - mixed
         - unknown
+        
+    SupportedTasks:
+      type: string
+      enum:
+        - translation
+        - transliteration
+        - tts
+        - asr
+        - document-layout
+        - ocr
+        - glossary
+        - ner
+        - txt-lang-detection
+      description: the category of model under which it has been released or trained
+    
     MixedDataSource:
       type: string
       description: This attribute defines the  datasources with mixed languages in it.
