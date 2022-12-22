@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  * TxtLangDetectionPrediction
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-04T16:26:09.493Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class TxtLangDetectionPrediction   {

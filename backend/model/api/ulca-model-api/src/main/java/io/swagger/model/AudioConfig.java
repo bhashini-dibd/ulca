@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
 import io.swagger.model.AudioFormat;
+import io.swagger.model.AudioPostProcessors;
 import io.swagger.model.Domain;
 import io.swagger.model.Encoding;
 import io.swagger.model.LanguagePair;
@@ -21,7 +22,7 @@ import javax.validation.constraints.*;
  * AudioConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-01-20T07:00:55.103Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class AudioConfig   {
@@ -46,8 +47,8 @@ public class AudioConfig   {
   @JsonProperty("transcriptionFormat")
   private TranscriptionFormat transcriptionFormat = null;
 
-  @JsonProperty("profanityFilter")
-  private Boolean profanityFilter = null;
+  @JsonProperty("postProcessors")
+  private AudioPostProcessors postProcessors = null;
 
   @JsonProperty("domain")
   private Domain domain = null;
@@ -239,23 +240,24 @@ public class AudioConfig   {
     this.transcriptionFormat = transcriptionFormat;
   }
 
-  public AudioConfig profanityFilter(Boolean profanityFilter) {
-    this.profanityFilter = profanityFilter;
+  public AudioConfig postProcessors(AudioPostProcessors postProcessors) {
+    this.postProcessors = postProcessors;
     return this;
   }
 
   /**
-   * Get profanityFilter
-   * @return profanityFilter
+   * Get postProcessors
+   * @return postProcessors
    **/
-  @Schema(example = "true", description = "")
+  @Schema(description = "")
   
-    public Boolean isProfanityFilter() {
-    return profanityFilter;
+    @Valid
+    public AudioPostProcessors getPostProcessors() {
+    return postProcessors;
   }
 
-  public void setProfanityFilter(Boolean profanityFilter) {
-    this.profanityFilter = profanityFilter;
+  public void setPostProcessors(AudioPostProcessors postProcessors) {
+    this.postProcessors = postProcessors;
   }
 
   public AudioConfig domain(Domain domain) {
@@ -372,7 +374,7 @@ public class AudioConfig   {
         Objects.equals(this.samplingRate, audioConfig.samplingRate) &&
         Objects.equals(this.bitsPerSample, audioConfig.bitsPerSample) &&
         Objects.equals(this.transcriptionFormat, audioConfig.transcriptionFormat) &&
-        Objects.equals(this.profanityFilter, audioConfig.profanityFilter) &&
+        Objects.equals(this.postProcessors, audioConfig.postProcessors) &&
         Objects.equals(this.domain, audioConfig.domain) &&
         Objects.equals(this.detailed, audioConfig.detailed) &&
         Objects.equals(this.punctuation, audioConfig.punctuation) &&
@@ -382,7 +384,7 @@ public class AudioConfig   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, profanityFilter, domain, detailed, punctuation, model, encoding);
+    return Objects.hash(modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, postProcessors, domain, detailed, punctuation, model, encoding);
   }
 
   @Override
@@ -397,7 +399,7 @@ public class AudioConfig   {
     sb.append("    samplingRate: ").append(toIndentedString(samplingRate)).append("\n");
     sb.append("    bitsPerSample: ").append(toIndentedString(bitsPerSample)).append("\n");
     sb.append("    transcriptionFormat: ").append(toIndentedString(transcriptionFormat)).append("\n");
-    sb.append("    profanityFilter: ").append(toIndentedString(profanityFilter)).append("\n");
+    sb.append("    postProcessors: ").append(toIndentedString(postProcessors)).append("\n");
     sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
     sb.append("    detailed: ").append(toIndentedString(detailed)).append("\n");
     sb.append("    punctuation: ").append(toIndentedString(punctuation)).append("\n");

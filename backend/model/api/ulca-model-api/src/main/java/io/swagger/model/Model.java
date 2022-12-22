@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Domain;
 import io.swagger.model.InferenceAPIEndPoint;
-import io.swagger.model.LanguagePairs;
 import io.swagger.model.License;
 import io.swagger.model.ModelTask;
 import io.swagger.model.Submitter;
@@ -19,12 +18,15 @@ import javax.validation.constraints.*;
  * Model
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-02-17T09:52:14.491Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class Model   {
   @JsonProperty("name")
   private String name = null;
+
+  @JsonProperty("version")
+  private String version = null;
 
   @JsonProperty("description")
   private String description = null;
@@ -36,7 +38,7 @@ public class Model   {
   private ModelTask task = null;
 
   @JsonProperty("languages")
-  private LanguagePairs languages = null;
+  private AllOfModelLanguages languages = null;
 
   @JsonProperty("license")
   private License license = null;
@@ -76,6 +78,25 @@ public class Model   {
     this.name = name;
   }
 
+  public Model version(String version) {
+    this.version = version;
+    return this;
+  }
+
+  /**
+   * version for the model
+   * @return version
+   **/
+  @Schema(example = "v1", required = true, description = "version for the model")
+      @NotNull
+
+  @Size(min=1,max=20)   public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
+  }
 
   public Model description(String description) {
     this.description = description;
@@ -137,7 +158,7 @@ public class Model   {
     this.task = task;
   }
 
-  public Model languages(LanguagePairs languages) {
+  public Model languages(AllOfModelLanguages languages) {
     this.languages = languages;
     return this;
   }
@@ -149,12 +170,11 @@ public class Model   {
   @Schema(required = true, description = "")
       @NotNull
 
-    @Valid
-    public LanguagePairs getLanguages() {
+    public AllOfModelLanguages getLanguages() {
     return languages;
   }
 
-  public void setLanguages(LanguagePairs languages) {
+  public void setLanguages(AllOfModelLanguages languages) {
     this.languages = languages;
   }
 
@@ -293,6 +313,7 @@ public class Model   {
     }
     Model model = (Model) o;
     return Objects.equals(this.name, model.name) &&
+        Objects.equals(this.version, model.version) &&
         Objects.equals(this.description, model.description) &&
         Objects.equals(this.refUrl, model.refUrl) &&
         Objects.equals(this.task, model.task) &&
@@ -307,7 +328,7 @@ public class Model   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description, refUrl, task, languages, license, licenseUrl, domain, submitter, inferenceEndPoint, trainingDataset);
+    return Objects.hash(name, version, description, refUrl, task, languages, license, licenseUrl, domain, submitter, inferenceEndPoint, trainingDataset);
   }
 
   @Override
@@ -316,6 +337,7 @@ public class Model   {
     sb.append("class Model {\n");
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    version: ").append(toIndentedString(version)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    refUrl: ").append(toIndentedString(refUrl)).append("\n");
     sb.append("    task: ").append(toIndentedString(task)).append("\n");
