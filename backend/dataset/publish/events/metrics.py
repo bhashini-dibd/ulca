@@ -70,7 +70,7 @@ class MetricEvent:
                             primary_submitter_ids.append(submitter["id"])
                         if 'name' in submitter.keys():
                             primary_submitter_names.append(submitter["name"])
-                        if 'team' in submitter.keys():
+                        if 'team' in submitter.keys() and submitter['team'] is not None:
                             for team in submitter["team"]:
                                 secondary_submitters.append(team["name"])
                 if primary_submitter_ids:
@@ -112,12 +112,15 @@ class MetricEvent:
                 event["durationInSeconds"] = data["durationInSeconds"]
             if 'isDelete' in data.keys():
                 event["isDelete"] = True
+                log.info(f"Data sent to kafka topic org-ulca-bievent-dataset-v3 is {event}")
                 prod.produce(event, metric_event_input_topic, None)
             elif 'isUpdate' in data.keys():
                 event["isDelete"] = data["isUpdate"]
+                log.info(f"Data sent to kafka topic org-ulca-bievent-dataset-v3 is {event}")
                 prod.produce(event, metric_event_input_topic, None)
             else:
                 event["isDelete"] = False
+                log.info(f"Data sent to kafka topic org-ulca-bievent-dataset-v3 is {event}")
                 prod.produce(event, metric_event_input_topic, None)
         except Exception as e:
             log.exception(data, e)
