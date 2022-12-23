@@ -12,13 +12,28 @@ if isinstance(TIME_CONVERSION_VAL, str):
 DRUID_CONNECTION_URL      = os.environ.get('DRUID_CLUSTER_URL', 'druid://localhost:8082/druid/v2/sql/')
 ENABLE_CORS = False
 filename = r'utilities/count_mail.html'
+sts_html = r'utilities/template.html'
+asr_audioContent = r'utilities/en_audio.txt'
+
+
 SEARCHURL = "https://dev-auth.ulcacontrib.org/ulca/data-metric/v0/store/search"
 
 smtp_server = "smtp.gmail.com"
-sender_email = 'siddanth.shaiva@tarento.com'
-password = 'ohiyyifscpenieci'
+sender_email = 'ulca.users@gmail.com'
+password = 'balpgskmqsidgrwx'
 dscountsubject = "Hi, Dataset counts are as follows : "
-receiver_email = "siddanth.shaiva@gmail.com"
+receiver_email = "ulca-dev@tarento.com"
+sts_subject = "Status of STS APIs : SUCCESS"
+
+
+
+
+#sts 
+sts_headers = {"Content-Type": "application/json"}
+sts_url = "https://dev-auth.ulcacontrib.org/ulca/apis/v0/model/getModelHealthStatus"
+sts_userid = "6a73afa4fc774dcdb28d5fff944511f6"
+asr_compute_url = 'https://dev-auth.ulcacontrib.org/ulca/apis/asr/v1/model/compute'
+translation_compute_url = 'https://dev-auth.ulcacontrib.org/ulca/apis/v0/model/compute'
 
 
 #gmail server configs
@@ -53,7 +68,7 @@ process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracke
 process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes')
 tasks_col                   =   os.environ.get('TASKS_COL','ulca-pt-tasks')
 
-metric_cron_interval_sec     =  21600
+metric_cron_interval_sec     =  43200
 filter_cron_interval_sec     =   os.environ.get('FILTER_CRON_INTERVAL_SEC',300)#14400
 if isinstance(filter_cron_interval_sec, str):
     filter_cron_interval_sec =  eval(filter_cron_interval_sec)

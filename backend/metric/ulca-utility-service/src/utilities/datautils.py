@@ -1,6 +1,6 @@
 import requests
 from config import data_filter_set_file_path,shared_storage_path,filter_file_name, file_store_host, file_store_upload_endpoint,smtp_server,sender_email, password,dscountsubject,receiver_email
-from config import data_metric_host,data_metric_endpoint,shared_storage_path
+from config import data_metric_host,data_metric_endpoint,shared_storage_path,sts_subject,sts_html
 import json
 import logging
 from logging.config import dictConfig
@@ -104,22 +104,41 @@ class DataUtils:
     def generate_email_notification(self,data):
 
         try:
-            message = EmailMessage()
-            message["From"] = sender_email
-            message["To"] = receiver_email
-            message["Subject"] = dscountsubject
-            html_ = open(filename).read()
-            html_ = html_.replace('{{parallel}}',data['parallel_count']).replace('{{mono}}',data['mono_count']).replace('{{asr}}',data['asr_count']).replace('{{asrun}}',data['asr_unlabeled_count']).replace('{{tts}}',data['tts_count']).replace('{{ocr}}',data['ocr_count']).replace('{{transliteration}}',data['transliteration_count']).replace('{{glossary}}',data['glossary_count']).replace('{{inprogress}}',data['inprogress']).replace('{{pending}}',data['pending'])
+            if "parallel_count" in data.keys():
+                message = EmailMessage()
+                message["From"] = sender_email
+                message["To"] = receiver_email
+                message["Subject"] = dscountsubject
+                html_ = open(filename).read()
+                html_ = html_.replace('{{parallel}}',data['parallel_count']).replace('{{mono}}',data['mono_count']).replace('{{asr}}',data['asr_count']).replace('{{asrun}}',data['asr_unlabeled_count']).replace('{{tts}}',data['tts_count']).replace('{{ocr}}',data['ocr_count']).replace('{{transliteration}}',data['transliteration_count']).replace('{{glossary}}',data['glossary_count']).replace('{{inprogress}}',data['inprogress']).replace('{{pending}}',data['pending'])
 
-            message.add_alternative(html_,subtype = 'html')
+                message.add_alternative(html_,subtype = 'html')
+                
+                with smtplib.SMTP_SSL(smtp_server, 465) as server:
+                    server.login(sender_email, password)
+                        # Prefer the modern send_message method
+                    server.send_message(message)
+                    server.quit()
+                    del message["From"]
+                    del message["To"]
             
-            with smtplib.SMTP_SSL(smtp_server, 465) as server:
-                server.login(sender_email, password)
-                    # Prefer the modern send_message method
-                server.send_message(message)
-                server.quit()
-                del message["From"]
-                del message["To"]
+            else:
+                message = EmailMessage()
+                message["From"] = sender_email
+                message["To"] = receiver_email
+                message["Subject"] = sts_subject
+                html_ = open(sts_html).read()
+                html_ = html_.replace('{{asr_model_name}}',data['asr-model']).replace('{{asr_model_id}}',data['asr-modelid']).replace('{{asr_status}}',data['speech_1']).replace('{{nmt_model_name}}',data['nmt-modelname']).replace('{{nmt_model_id}}',data['nmt-modelid']).replace('{{nmt_model_status}}',data['Translation']).replace('{{tts_model_name}}',data['tts-modelname']).replace('{{tts_model_id}}',data['tts-modelid']).replace('{{tts_model_status}}',data['speech_2'])
+
+                message.add_alternative(html_,subtype = 'html')
+                
+                with smtplib.SMTP_SSL(smtp_server, 465) as server:
+                    server.login(sender_email, password)
+                        # Prefer the modern send_message method
+                    server.send_message(message)
+                    server.quit()
+                    del message["From"]
+                    del message["To"]
 
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +

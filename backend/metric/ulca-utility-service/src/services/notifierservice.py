@@ -1,7 +1,7 @@
 from utilities import datautils
 import config
 import logging
-from config import MAIL_SETTINGS,TIME_CONVERSION_VAL, DRUID_DB_SCHEMA,DRUID_CONNECTION_URL
+from config import MAIL_SETTINGS,TIME_CONVERSION_VAL, DRUID_DB_SCHEMA,DRUID_CONNECTION_URL,sts_headers,sts_url,sts_userid,asr_compute_url,translation_compute_url,asr_audioContent
 from logging.config import dictConfig
 from repositories import NotifierRepo
 log         =   logging.getLogger('file')
@@ -30,7 +30,9 @@ class NotifierService(Thread):
         while not self.stopped.wait(metric_cron_interval_sec):
             try:
                 log.info(f'cron run for ds count notify')
-                self.notify_user()
+                #self.notify_user()
+                self.stsModelHealthCheck()
+                #log.info(var)
                 run+=1
             except Exception as e:
                 log.info(f"error {e}")
@@ -45,6 +47,101 @@ class NotifierService(Thread):
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
+
+
+    def stsModelHealthCheck(self):
+        alldict = {}
+        try:
+            request=requests.get(sts_url,headers=sts_headers)
+            output=request.json()
+            #log.info(f"inside stsModelHealthCheck {output}")
+            
+            for modelHealthStatusList in output['modelHealthStatusList']:
+                if modelHealthStatusList['taskType']=="asr" and modelHealthStatusList['status']=="available" and ' English' in modelHealthStatusList['modelName']:
+                    alldict["asr-model"] = modelHealthStatusList['modelName']
+                    alldict["asr-modelid"] = modelHealthStatusList['modelId']
+                    alldict["asr-tasktype"] = modelHealthStatusList['taskType'] 
+
+
+                if modelHealthStatusList['taskType']=="translation" and modelHealthStatusList['status']=="available" and ' English-Hindi' in modelHealthStatusList['modelName']:
+                        alldict["nmt-modelname"] = modelHealthStatusList['modelName']
+                        alldict["nmt-tasktype"] = modelHealthStatusList['taskType']
+                        alldict["nmt-modelid"] = modelHealthStatusList['modelId']
+                if modelHealthStatusList['taskType']=="tts" and modelHealthStatusList['status']=="available" and ' Hindi' in modelHealthStatusList['modelName']:
+                        alldict["tts-modelname"] = modelHealthStatusList['modelName']
+                        alldict["tts-tasktype"] = modelHealthStatusList['taskType']
+                        alldict["tts-modelid"] = modelHealthStatusList['modelId']
+            log.info(alldict)
+            self.asr_compute(alldict)
+            #self.translation_compute(alldict)
+            #self.tts_compute(alldict)
+            return alldict
+        except Exception as e:
+            return {"Exception":str(e)}
+
+
+
+    def asr_compute(self,alldict):
+
+        try:
+            file = open(asr_audioContent,"r")
+            audio_file=file.read()
+            #alldict=self.stsModelHealthCheck()
+            param = {
+                "modelId":alldict["asr-modelid"],
+                "task":alldict["asr-tasktype"],
+                "audioContent":audio_file,
+                "source":"en",
+                "userId":sts_userid
+                }
+            result = requests.post(asr_compute_url, json=param, headers=sts_headers)
+            res=result.json()
+            if result.status_code== 200:
+                outputasr=res['data']['source']
+                alldict['speech_1'] = "asr successfull"
+                self.translation_compute(alldict,outputasr)
+                return outputasr
+            else:
+                return {"msg": "ASR Failed"}
+        except Exception as e:
+            return {"Exception":str(e)}
+
+
+    def translation_compute(self,alldict,outputasr):
+        try:
+            param = {"modelId":alldict["nmt-modelid"],"task":alldict["nmt-tasktype"],"input":[{"source":outputasr}],"userId":sts_userid}
+            result = requests.post(translation_compute_url, json=param,headers=sts_headers)
+            if result.status_code == 200:
+                alldict['Translation'] = "NMT successfull"
+                res=(result.json())
+                # print(len(res['output']))
+                outputnmt=res['output'][0]['target']
+                self.tts_compute(alldict,outputnmt)
+                return outputnmt
+            else:
+                return {"msg": "Translation Failed"}
+        except Exception as e:
+            return {"Exception":str(e)}
+
+
+    def tts_compute(self,alldict,outputnmt):
+        try:
+            param={"modelId":alldict["tts-modelid"],"task":alldict["tts-tasktype"],"input":[{"source":outputnmt}],"gender":"female","userId":sts_userid}
+            result = requests.post(translation_compute_url, json=param, headers=sts_headers)
+            if result.status_code==200:
+                alldict['speech_2'] = "TTS Successfull"
+                alldict['code'] = 200
+
+            utility     =   datautils.DataUtils()
+            utility.generate_email_notification(alldict)
+
+        except Exception as e:
+            alldict["exception"] = str(e)
+            return alldict["exception"]
+
+
+
+
 
     def notify_mismatch(self):
         log.info("Checking for data mismatch.......")

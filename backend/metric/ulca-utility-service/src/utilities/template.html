@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+
+<head>
+    <style>
+        .mailTable {
+            max-width: 600px;
+            width: 100%;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .userReference {
+            font-size: 16px;
+            color: #0c0f0f;
+            margin-bottom: 20px;
+        }
+
+        .stsStatus {
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #0c0f0f;
+            font-weight: 400;
+        }
+
+        .dataText {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #0c0f0f;
+            font-weight: 400;
+            padding-top: 20px;
+        }
+
+        .thanksText {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #0c0f0f;
+            font-weight: 400;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <p>&nbsp;</p>
+    <table class="mailTable" cellspacing="0" cellpadding="0" align="center" bgcolor="#ffffff">
+        <tbody>
+            <tr>
+                <td>
+                    <table style="padding: 40px 0 40px 0;" border="0" width="85%" cellspacing="0" cellpadding="0"
+                        align="center">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h4
+                                        style="margin: 0; margin-bottom: 40px; padding: 0; font-size: 21px; font-weight: bold; color: #0c0f0f;">
+                                        Status of STS APIs : SUCCESS</h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color: #ececf1; padding: 30px;">
+                                    <p><a class="userReference">Dear User,</a></p>
+                                    <p class="stsStatus">Here are the details of STS Models</p>
+                                    <!-- <p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 20px;"> <br /><strong>{{model_name1}}</strong></p> -->
+                                    <p class="dataText">ASR Model Name <br /><strong>{{asr_model_name}}</strong></p>
+                                    <p class="dataText">ASR Model ID <br /><strong>{{asr_model_id}}</strong></p>
+                                    <p class="dataText">NMT Model Name <br /><strong>{{nmt_model_name}}</strong></p>
+                                    <p class="dataText">NMT Model ID <br /><strong>{{nmt_model_id}}</strong></p>
+                                    <p class="dataText">TTS Model Name <br /><strong>{{tts_model_name}}</strong></p>
+                                    <p class="dataText">TTS Model ID <br /><strong>{{tts_model_id}}</strong></p>
+                                    <p class="dataText">
+                                        ---------------------------------------------------------------------</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p class="thanksText">Thanks,<br /><strong>ULCA Team</strong></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
