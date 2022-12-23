@@ -70,7 +70,7 @@ class MetricEvent:
                             primary_submitter_ids.append(submitter["id"])
                         if 'name' in submitter.keys():
                             primary_submitter_names.append(submitter["name"])
-                        if 'team' in submitter.keys():
+                        if 'team' in submitter.keys() and submitter['team'] is not None:
                             for team in submitter["team"]:
                                 secondary_submitters.append(team["name"])
                 if primary_submitter_ids:
