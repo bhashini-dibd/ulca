@@ -47,7 +47,7 @@ class DatasetUtils:
             res_path = self.zip_result(result, service_req_no)
             res_path_sample = f'{shared_storage_path}{service_req_no}-sample.json'
             with open(res_path_sample, 'w') as f:
-                json.dump(result[:size], f, indent=1)
+                json.dump(result[:size], f)
             log.info(f'Publishing results and sample to Object Store......')
             res_path_os = self.upload_file(res_path, dataset_prefix, f'{service_req_no}.zip')
             res_path_sample_os = self.upload_file(res_path_sample, dataset_prefix, f'{service_req_no}-sample.json')
