@@ -19,6 +19,7 @@ public enum AsrRowDataSchemaKeys {
 		pinCode,
 		stayYears,
 		education,
+		recordingLanguage,
 		socioEconomic,
 		duration,
 		collectionSource,

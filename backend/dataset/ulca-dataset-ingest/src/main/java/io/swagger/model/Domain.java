@@ -13,10 +13,10 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "This attribute defines that `relevant business area`")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:21:00.339Z[GMT]")
 
 
-public class Domain extends ArrayList<String>  {
+public class Domain extends ArrayList<String> implements OneOfSearchParamsParams {
 
   @Override
   public boolean equals(java.lang.Object o) {

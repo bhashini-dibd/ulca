@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
 import io.swagger.model.ModelProcessingType;
-import io.swagger.model.ModelTask;
+import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -16,12 +16,12 @@ import javax.validation.constraints.*;
  * ASRInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-10-21T11:20:10.991Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("taskType")
-  private String taskType = null;
+  private SupportedTasks taskType = null;
 
   @JsonProperty("modelProcessingType")
   private ModelProcessingType modelProcessingType = null;
@@ -32,7 +32,7 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("response")
   private ASRResponse response = null;
 
-  public ASRInference taskType(String taskType) {
+  public ASRInference taskType(SupportedTasks taskType) {
     this.taskType = taskType;
     return this;
   }
@@ -42,14 +42,14 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
    * @return taskType
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public String getTaskType() {
+    @Valid
+    public SupportedTasks getTaskType() {
     return taskType;
   }
 
-  public void setTaskType(String taskType) {
+  public void setTaskType(SupportedTasks taskType) {
     this.taskType = taskType;
   }
 
@@ -63,10 +63,10 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
    * @return modelProcessingType
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public ModelProcessingType getModelProcessingType() {
+    @Valid
+    public ModelProcessingType getModelProcessingType() {
     return modelProcessingType;
   }
 
@@ -84,10 +84,10 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
    * @return request
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public ASRRequest getRequest() {
+    @Valid
+    public ASRRequest getRequest() {
     return request;
   }
 
@@ -105,9 +105,9 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
    * @return response
    **/
   @Schema(description = "")
-
-  @Valid
-  public ASRResponse getResponse() {
+  
+    @Valid
+    public ASRResponse getResponse() {
     return response;
   }
 
@@ -126,9 +126,9 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
     }
     ASRInference asRInference = (ASRInference) o;
     return Objects.equals(this.taskType, asRInference.taskType) &&
-            Objects.equals(this.modelProcessingType, asRInference.modelProcessingType) &&
-            Objects.equals(this.request, asRInference.request) &&
-            Objects.equals(this.response, asRInference.response);
+        Objects.equals(this.modelProcessingType, asRInference.modelProcessingType) &&
+        Objects.equals(this.request, asRInference.request) &&
+        Objects.equals(this.response, asRInference.response);
   }
 
   @Override
@@ -140,7 +140,7 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ASRInference {\n");
-
+    
     sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");

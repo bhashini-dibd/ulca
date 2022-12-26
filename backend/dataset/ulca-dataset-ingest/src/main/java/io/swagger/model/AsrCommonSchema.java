@@ -22,7 +22,7 @@ import javax.validation.constraints.*;
  * AsrCommonSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-14T06:10:52.110Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class AsrCommonSchema   {
@@ -98,6 +98,9 @@ public class AsrCommonSchema   {
 
   @JsonProperty("education")
   private String education = null;
+
+  @JsonProperty("recordingLanguage")
+  private String recordingLanguage = null;
 
   @JsonProperty("socioEconomic")
   private String socioEconomic = null;
@@ -416,6 +419,25 @@ public class AsrCommonSchema   {
     this.education = education;
   }
 
+  public AsrCommonSchema recordingLanguage(String recordingLanguage) {
+    this.recordingLanguage = recordingLanguage;
+    return this;
+  }
+
+  /**
+   * language in which voice is recorded
+   * @return recordingLanguage
+   **/
+  @Schema(description = "language in which voice is recorded")
+  
+    public String getRecordingLanguage() {
+    return recordingLanguage;
+  }
+
+  public void setRecordingLanguage(String recordingLanguage) {
+    this.recordingLanguage = recordingLanguage;
+  }
+
   public AsrCommonSchema socioEconomic(String socioEconomic) {
     this.socioEconomic = socioEconomic;
     return this;
@@ -655,6 +677,7 @@ public class AsrCommonSchema   {
         Objects.equals(this.pinCode, asrCommonSchema.pinCode) &&
         Objects.equals(this.stayYears, asrCommonSchema.stayYears) &&
         Objects.equals(this.education, asrCommonSchema.education) &&
+        Objects.equals(this.recordingLanguage, asrCommonSchema.recordingLanguage) &&
         Objects.equals(this.socioEconomic, asrCommonSchema.socioEconomic) &&
         Objects.equals(this.duration, asrCommonSchema.duration) &&
         Objects.equals(this.collectionSource, asrCommonSchema.collectionSource) &&
@@ -670,7 +693,7 @@ public class AsrCommonSchema   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(audioFilename, imageFilename, speaker, gender, exactAge, age, assertLanguage, languagesSpoken, state, district, pinCode, stayYears, education, socioEconomic, duration, collectionSource, channel, samplingRate, bitsPerSample, dialect, snr, startTime, endTime, collectionMethod);
+    return Objects.hash(audioFilename, imageFilename, speaker, gender, exactAge, age, assertLanguage, languagesSpoken, state, district, pinCode, stayYears, education, recordingLanguage, socioEconomic, duration, collectionSource, channel, samplingRate, bitsPerSample, dialect, snr, startTime, endTime, collectionMethod);
   }
 
   @Override
@@ -691,6 +714,7 @@ public class AsrCommonSchema   {
     sb.append("    pinCode: ").append(toIndentedString(pinCode)).append("\n");
     sb.append("    stayYears: ").append(toIndentedString(stayYears)).append("\n");
     sb.append("    education: ").append(toIndentedString(education)).append("\n");
+    sb.append("    recordingLanguage: ").append(toIndentedString(recordingLanguage)).append("\n");
     sb.append("    socioEconomic: ").append(toIndentedString(socioEconomic)).append("\n");
     sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
     sb.append("    collectionSource: ").append(toIndentedString(collectionSource)).append("\n");
