@@ -618,10 +618,7 @@ const SearchAndDownloadRecords = (props) => {
             <Grid item xs={6}>
               <Button
                 disabled={
-                  datasetType["asr-corpus"] ||
-                  datasetType["asr-unlabeled-corpus"]
-                    ? !languagePair.target.length && !selectedDataSource
-                    : !languagePair.target.length
+                  !languagePair.target.length
                 }
                 fullWidth
                 size="large"
