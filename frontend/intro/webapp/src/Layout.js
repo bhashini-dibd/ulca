@@ -4,9 +4,11 @@ import Model from "./components/ModelChart";
 import Benchmark from "./components/BenchmarkChart";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Footer from "./components/Footer";
+import ProjectVaani from "./components/ProjectVaani";
 
 function App(props) {
   const componentObj = [
+    { component: <ProjectVaani />},
     { component: <Dataset /> },
     { component: <Model /> },
     { component: <Benchmark /> },

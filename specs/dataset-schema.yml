@@ -974,6 +974,18 @@ components:
       properties:
         contributor:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+    CollectionDetailsStudioRecorded:
+      type: object
+      description: studio recorded collection details
+      properties:
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+    CollectionDetailsImagePromptedRecording:
+      type: object
+      description: image prompted recording collection details
+      properties:
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
     CollectionMethodAudio:
       type: object
       description: specifies how the audio dataset has been curated.
@@ -992,11 +1004,14 @@ components:
               - machine-generated-transcript
               - manual-transcribed
               - studio-recorded
+              - image-prompted-recording
         collectionDetails:
           oneOf:
             - $ref: '#/components/schemas/CollectionDetailsAudioAutoAligned'
             - $ref: '#/components/schemas/CollectionDetailsMachineGeneratedTranscript'
             - $ref: '#/components/schemas/CollectionDetailsManualTranscribed'
+            - $ref: '#/components/schemas/CollectionDetailsStudioRecorded'
+            - $ref: '#/components/schemas/CollectionDetailsImagePromptedRecording'
     AudioQualityEvaluation:
       type: object
       description: describes the audio quality evaluation method
@@ -1138,6 +1153,9 @@ components:
         education:
           type: string
           description: level of eduction of the speaker
+        recordingLanguage:
+          type: string
+          description: language in which voice is recorded
         socioEconomic:
           type: string
           description: Economic condition of the speaker

@@ -16,7 +16,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "The object defines the physical structure of the uploaded dataset file. The dataset data and its respective parameters has to be present in an individual directory/folder. The dataset data should have name 'data.json' or 'data.csv', similarly the associated parameters should have name 'params.json' or 'params.csv'. Dataset data file should adhere to 'dataSchema' described in the properties, similarly the parameter of the dataset should adhere to 'paramSchema'. Non compliant will result in rejection of the submission.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class DatasetDirectory   {
