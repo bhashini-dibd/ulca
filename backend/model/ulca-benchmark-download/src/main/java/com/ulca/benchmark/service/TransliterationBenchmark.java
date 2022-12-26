@@ -128,10 +128,13 @@ public class TransliterationBenchmark {
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
 			JSONObject inputJson =  new JSONObject(dataRow);
-			String input = inputJson.getString("sourceText");
-			String targetText = inputJson.getString("targetText");
-			ip.add(input);
-			tgtList.add(targetText);
+			if(inputJson.getString("sourceText") != null && !inputJson.getString("sourceText").isBlank()) {
+
+				String input = inputJson.getString("sourceText");
+				String targetText = inputJson.getString("targetText");
+				ip.add(input);
+				tgtList.add(targetText);
+			}
 
 		}
 		reader.endArray();

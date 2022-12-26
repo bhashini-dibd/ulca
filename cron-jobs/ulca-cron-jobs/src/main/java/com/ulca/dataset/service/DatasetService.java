@@ -1,6 +1,8 @@
 package com.ulca.dataset.service;
 
-import com.ulca.dataset.dao.*;
+import com.ulca.dataset.dao.DatasetDao;
+import com.ulca.dataset.dao.FileIdentifierDao;
+import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.model.Dataset;
 import com.ulca.dataset.model.Fileidentifier;
 import com.ulca.dataset.model.ProcessTracker;
@@ -27,7 +29,7 @@ public class DatasetService {
 		
 		ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
 		Dataset dataset = datasetDao.findByDatasetId(processTracker.getDatasetId());
-		dataset.getDatasetFileIdentifier().setFileUlcaUrl(localUrl);
+		//dataset.getDatasetFileIdentifier().setFileUlcaUrl(localUrl);
 		
 		Fileidentifier fileidentifier = dataset.getDatasetFileIdentifier();
 		fileidentifier.setFileUlcaUrl(localUrl);

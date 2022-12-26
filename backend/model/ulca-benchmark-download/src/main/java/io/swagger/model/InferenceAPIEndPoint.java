@@ -2,11 +2,7 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +14,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "hosted location defines the end point of the model inference. specify a taskType along with Inference type")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-02-23T11:24:57.354Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class InferenceAPIEndPoint   {
@@ -26,13 +22,10 @@ public class InferenceAPIEndPoint   {
   private String callbackUrl = null;
 
   @JsonProperty("schema")
-  //@JsonInclude(content = Include.NON_NULL)
-  //@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL) 
-  @JsonInclude(JsonInclude.Include.NON_NULL)
   private OneOfInferenceAPIEndPointSchema schema = null;
 
   @JsonProperty("isSyncApi")
-  private Boolean isSyncApi = true;
+  private Boolean isSyncApi = null;
 
   @JsonProperty("asyncApiDetails")
   private AsyncApiDetails asyncApiDetails = null;

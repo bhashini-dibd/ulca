@@ -217,8 +217,8 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 		}
 
 		if (node.has("stayYears")) {
-			if (!node.get("stayYears").isNumber()) {
-				errorList.add("stayYears field should be Number");
+			if (!node.get("stayYears").isTextual()) {
+				errorList.add("stayYears field should be String");
 			} else {
 				String stayYears = node.get("stayYears").asText();
 				asrRowSchema.setStayYears(stayYears);
@@ -237,7 +237,18 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 
 			}
 		}
+		
+		if (node.has("recordingLanguage")) {
+			if (!node.get("recordingLanguage").isTextual()) {
+				errorList.add("recordingLanguage field should be String");
+			} else {
 
+				String recordingLanguage = node.get("recordingLanguage").asText();
+				asrRowSchema.setRecordingLanguage(recordingLanguage);
+
+			}
+		}
+		
 		if (node.has("socioEconomic")) {
 			if (!node.get("socioEconomic").isTextual()) {
 				errorList.add("socioEconomic field should be String");

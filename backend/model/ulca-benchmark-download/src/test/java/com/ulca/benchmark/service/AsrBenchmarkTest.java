@@ -56,7 +56,7 @@ class AsrBenchmarkTest {
         ASRRequest asrRequest = new ASRRequest();
         AudioConfig audioConfig = new AudioConfig();
         LanguagePair languagePair = new LanguagePair();
-        languagePair.setSourceLanguage(LanguagePair.SourceLanguageEnum.EN);
+        languagePair.setSourceLanguage(SupportedLanguages.EN);
         audioConfig.setLanguage(languagePair);
         asrRequest.setConfig(audioConfig);
 
@@ -69,7 +69,7 @@ class AsrBenchmarkTest {
         model.setInferenceEndPoint(inferenceAPIEndPoint);
 
         ModelTask modelTask = new ModelTask();
-        modelTask.setType(ModelTask.TypeEnum.ASR);
+        modelTask.setType(SupportedTasks.ASR);
 
         model.setTask(modelTask);
 

@@ -26,5 +26,4 @@ public class DatasetKafkaTransactionErrorLog {
 	private String createdOn;
 	private String lastModifiedOn;
 	
-	
 }

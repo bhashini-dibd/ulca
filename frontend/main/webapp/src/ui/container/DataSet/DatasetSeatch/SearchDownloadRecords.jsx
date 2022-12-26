@@ -98,6 +98,22 @@ const SearchAndDownloadRecords = (props) => {
   });
 
   useEffect(() => {
+    if (datasetType["asr-corpus"] || datasetType["asr-unlabeled-corpus"]) {
+      setShowDataSource(true);
+    }
+  }, [datasetType]);
+
+  useEffect(() => {
+    const datasourceItems = filters[0]?.values?.filter((element) => {
+      if (element.code === "mixed") {
+        return element.values;
+      }
+    });
+
+    setDataSource(datasourceItems);
+  }, [filters]);
+
+  useEffect(() => {
     const dataset = Object.keys(datasetType)[0];
     const apiData = new SearchAndDownloadAPI(dataset);
     dispatch(APITransport(apiData));
@@ -220,9 +236,6 @@ const SearchAndDownloadRecords = (props) => {
   };
   const handleLanguagePairChange = (value, property) => {
     setLanguagePair({ ...languagePair, [property]: value });
-
-    setShowDataSource(value.some((element) => element.code === "mixed"));
-    setDataSource(value.filter((element) => element.code === "mixed"));
 
     if (property === "source") setSrcError(false);
     else setTgtError(false);
@@ -411,15 +424,17 @@ const SearchAndDownloadRecords = (props) => {
 
   const handleSubmitBtn = () => {
     const obj = { ...basicFilterState, ...advFilterState };
+
     let criteria = {
       sourceLanguage: getArrayValue(
-        datasetType["parallel-corpus"]
+        datasetType["parallel-corpus"] || datasetType["transliteration-corpus"]
           ? [languagePair.source]
           : languagePair.target
       ),
-      targetLanguage: datasetType["parallel-corpus"]
-        ? getArrayValue(languagePair.target)
-        : null,
+      targetLanguage:
+        datasetType["parallel-corpus"] || datasetType["transliteration-corpus"]
+          ? getArrayValue(languagePair.target)
+          : null,
       ...getObjectValue(obj),
       // groupBy: false,
       multipleContributors: state.checkedA,
@@ -427,11 +442,11 @@ const SearchAndDownloadRecords = (props) => {
       mixedDataSource: selectedDataSource?.code,
     };
 
-    if(assertLanguage.length) {
+    if (assertLanguage.length) {
       criteria = {
         ...criteria,
-        assertLanguage: getArrayValue(assertLanguage)
-      }
+        assertLanguage: getArrayValue(assertLanguage),
+      };
     }
 
     if (datasetType["parallel-corpus"]) {
@@ -594,7 +609,12 @@ const SearchAndDownloadRecords = (props) => {
             </Grid>
             <Grid item xs={6}>
               <Button
-                disabled={!languagePair.target.length}
+                disabled={
+                  datasetType["asr-corpus"] ||
+                  datasetType["asr-unlabeled-corpus"]
+                    ? !!!selectedDataSource
+                    : !languagePair.target.length
+                }
                 fullWidth
                 size="large"
                 variant="contained"
@@ -728,7 +748,7 @@ const SearchAndDownloadRecords = (props) => {
   const renderMixedDataSourceDropdown = () => {
     return (
       <>
-        {dataSource.map((val) => {
+        {dataSource?.map((val) => {
           return (
             <div className={classes.subHeader}>
               <SingleAutoComplete

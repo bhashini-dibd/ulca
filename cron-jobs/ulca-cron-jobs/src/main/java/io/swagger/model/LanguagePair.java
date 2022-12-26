@@ -1,230 +1,34 @@
 package io.swagger.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.SupportedLanguages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-
-import javax.validation.constraints.NotNull;
-import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * language pair, make targetLanguage null to reuse the object to indicate single language
  */
 @Schema(description = "language pair, make targetLanguage null to reuse the object to indicate single language")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-07-18T10:57:45.372Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
-public class LanguagePair {
+public class LanguagePair   {
   @JsonProperty("sourceLanguageName")
   private String sourceLanguageName = null;
 
-  /**
-   * Indic language code, iso-639-1, iso 639-2
-   */
-  public enum SourceLanguageEnum {
-    EN("en"),
-    
-    HI("hi"),
-    
-    MR("mr"),
-    
-    TA("ta"),
-    
-    TE("te"),
-    
-    KN("kn"),
-    
-    GU("gu"),
-    
-    PA("pa"),
-    
-    BN("bn"),
-    
-    ML("ml"),
-    
-    AS("as"),
-    
-    BRX("brx"),
-    
-    DOI("doi"),
-    
-    KS("ks"),
-    
-    KOK("kok"),
-    
-    MAI("mai"),
-    
-    MNI("mni"),
-    
-    NE("ne"),
-    
-    OR("or"),
-    
-    SD("sd"),
-    
-    SI("si"),
-    
-    UR("ur"),
-    
-    SAT("sat"),
-    
-    LUS("lus"),
-    
-    NJZ("njz"),
-    
-    PNR("pnr"),
-    
-    KHA("kha"),
-    
-    GRT("grt"),
-    
-    SA("sa"),
-    
-    RAJ("raj"),
-    
-    BHO("bho"),
-    
-    GOM("gom"),
-    
-    AWA("awa"),
-    
-    HNE("hne"),
-    
-    MAG("mag"),
-    
-    MULTI("multi");
-
-    private String value;
-
-    SourceLanguageEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static SourceLanguageEnum fromValue(String text) {
-      for (SourceLanguageEnum b : SourceLanguageEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("sourceLanguage")
-  private SourceLanguageEnum sourceLanguage = null;
+  private SupportedLanguages sourceLanguage = null;
 
   @JsonProperty("targetLanguageName")
   private String targetLanguageName = null;
 
-  /**
-   * Indic language code, iso-639-1, iso 639-2
-   */
-  public enum TargetLanguageEnum {
-    EN("en"),
-    
-    HI("hi"),
-    
-    MR("mr"),
-    
-    TA("ta"),
-    
-    TE("te"),
-    
-    KN("kn"),
-    
-    GU("gu"),
-    
-    PA("pa"),
-    
-    BN("bn"),
-    
-    ML("ml"),
-    
-    AS("as"),
-    
-    BRX("brx"),
-    
-    DOI("doi"),
-    
-    KS("ks"),
-    
-    KOK("kok"),
-    
-    MAI("mai"),
-    
-    MNI("mni"),
-    
-    NE("ne"),
-    
-    OR("or"),
-    
-    SD("sd"),
-    
-    SI("si"),
-    
-    UR("ur"),
-    
-    SAT("sat"),
-    
-    LUS("lus"),
-    
-    NJZ("njz"),
-    
-    PNR("pnr"),
-    
-    KHA("kha"),
-    
-    GRT("grt"),
-    
-    SA("sa"),
-    
-    RAJ("raj"),
-    
-    BHO("bho"),
-    
-    GOM("gom"),
-    
-    AWA("awa"),
-    
-    HNE("hne"),
-    
-    MAG("mag"),
-    
-    MULTI("multi");
-
-    private String value;
-
-    TargetLanguageEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TargetLanguageEnum fromValue(String text) {
-      for (TargetLanguageEnum b : TargetLanguageEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("targetLanguage")
-  private TargetLanguageEnum targetLanguage = null;
+  private SupportedLanguages targetLanguage = null;
 
   public LanguagePair sourceLanguageName(String sourceLanguageName) {
     this.sourceLanguageName = sourceLanguageName;
@@ -245,23 +49,24 @@ public class LanguagePair {
     this.sourceLanguageName = sourceLanguageName;
   }
 
-  public LanguagePair sourceLanguage(SourceLanguageEnum sourceLanguage) {
+  public LanguagePair sourceLanguage(SupportedLanguages sourceLanguage) {
     this.sourceLanguage = sourceLanguage;
     return this;
   }
 
   /**
-   * Indic language code, iso-639-1, iso 639-2
+   * Get sourceLanguage
    * @return sourceLanguage
    **/
-  @Schema(required = true, description = "Indic language code, iso-639-1, iso 639-2")
+  @Schema(required = true, description = "")
       @NotNull
 
-    public SourceLanguageEnum getSourceLanguage() {
+    @Valid
+    public SupportedLanguages getSourceLanguage() {
     return sourceLanguage;
   }
 
-  public void setSourceLanguage(SourceLanguageEnum sourceLanguage) {
+  public void setSourceLanguage(SupportedLanguages sourceLanguage) {
     this.sourceLanguage = sourceLanguage;
   }
 
@@ -284,28 +89,29 @@ public class LanguagePair {
     this.targetLanguageName = targetLanguageName;
   }
 
-  public LanguagePair targetLanguage(TargetLanguageEnum targetLanguage) {
+  public LanguagePair targetLanguage(SupportedLanguages targetLanguage) {
     this.targetLanguage = targetLanguage;
     return this;
   }
 
   /**
-   * Indic language code, iso-639-1, iso 639-2
+   * Get targetLanguage
    * @return targetLanguage
    **/
-  @Schema(description = "Indic language code, iso-639-1, iso 639-2")
+  @Schema(description = "")
   
-    public TargetLanguageEnum getTargetLanguage() {
+    @Valid
+    public SupportedLanguages getTargetLanguage() {
     return targetLanguage;
   }
 
-  public void setTargetLanguage(TargetLanguageEnum targetLanguage) {
+  public void setTargetLanguage(SupportedLanguages targetLanguage) {
     this.targetLanguage = targetLanguage;
   }
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -341,7 +147,7 @@ public class LanguagePair {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

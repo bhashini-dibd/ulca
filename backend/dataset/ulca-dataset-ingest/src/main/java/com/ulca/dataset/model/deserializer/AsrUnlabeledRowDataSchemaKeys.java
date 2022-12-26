@@ -18,6 +18,7 @@ public enum AsrUnlabeledRowDataSchemaKeys {
 	  		pinCode,
 	  		stayYears,
 	  		education,
+	  		recordingLanguage,
 	  		socioEconomic,
 	  		duration,
 	  		collectionSource,
