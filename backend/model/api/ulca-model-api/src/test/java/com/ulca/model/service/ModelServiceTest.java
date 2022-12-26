@@ -254,6 +254,7 @@ class ModelServiceTest {
         return Stream.of(Arguments.of(filePart,"test",response));
     }
 
+    /*
     @ParameterizedTest
     @MethodSource("uploadModelParam")
     void uploadModel(MultipartFile multipartFile,String userId,UploadModelResponse response) throws Exception {
@@ -261,7 +262,7 @@ class ModelServiceTest {
 
         assertEquals(modelService.uploadModel(multipartFile,userId),response);
     }
-
+*/
     private static Stream<Arguments> searchModelParam(){
         ModelSearchRequest request = new ModelSearchRequest();
         request.setTask("translation");
