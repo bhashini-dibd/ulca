@@ -73,10 +73,12 @@ def search_consume():
                         if data["datasetType"] == dataset_type_ocr:
                             o_service.get_ocr_dataset(data)
                         if data["datasetType"] == dataset_type_asr:
+                            log.info(f"Asr Query Data {data}")
                             a_service.get_asr_dataset(data)
                         if data["datasetType"] == dataset_type_monolingual:
                             m_service.get_monolingual_dataset(data)
                         if data["datasetType"] == dataset_type_asr_unlabeled:
+                            log.info(f"Query Data {data}")
                             au_service.get_asr_unlabeled_dataset(data)
                         if data["datasetType"] == dataset_type_tts:
                             tts_service.get_tts_dataset(data)

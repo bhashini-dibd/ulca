@@ -58,7 +58,7 @@ class OcrBenchmarkTest {
         inferenceAPIEndPoint.setSchema(ocrInference);
         model.setInferenceEndPoint(inferenceAPIEndPoint);
         ModelTask modelTask = new ModelTask();
-        modelTask.setType(ModelTask.TypeEnum.OCR);
+        modelTask.setType(SupportedTasks.OCR);
         model.setTask(modelTask);
 
         Benchmark benchmark = new Benchmark();

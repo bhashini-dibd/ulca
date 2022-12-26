@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.6.2
+  version: 0.6.6
 servers:
   - url: /
 paths: {}
@@ -79,6 +79,7 @@ components:
         - cc-by-nc-3.0
         - cc-by-nc-4.0
         - cc-by-nc-sa-4.0
+        - cc0
         - mit
         - gpl-3.0
         - bsd-3-clause
@@ -344,19 +345,9 @@ components:
       type: object
       properties:
         type:
-          type: string
-          enum:
-            - translation
-            - transliteration
-            - tts
-            - asr
-            - document-layout
-            - ocr
-            - glossary
-            - ner
-            - txt-lang-detection
+          $ref: '#/components/schemas/SupportedTasks'
       description: the category of model under which it has been released or trained
-
+      
     ModelProcessingType:
       type: object
       properties:
@@ -366,43 +357,72 @@ components:
             - batch
             - streaming
       description: the type of inference for the given model
-
     SupportedLanguages:
       type: string
       description: This attribute defines the  language codes(iso-639-1, iso 639-2) supported under ULCA
       enum:
-            - en
-            - hi
-            - mr
-            - ta
-            - te
-            - kn
-            - gu
-            - pa
-            - bn
-            - ml
-            - as
-            - brx
-            - doi
-            - ks
-            - kok
-            - mai
-            - mni
-            - ne
-            - or
-            - sd
-            - si
-            - ur
-            - sat
-            - lus
-            - njz
-            - pnr
-            - kha
-            - grt
-            - sa
-            - raj
-            - bho
-            - gom
-            - awa
-            - hne
-            - mag
+        - en
+        - hi
+        - mr
+        - ta
+        - te
+        - kn
+        - gu
+        - pa
+        - bn
+        - ml
+        - as
+        - brx
+        - doi
+        - ks
+        - kok
+        - mai
+        - mni
+        - ne
+        - or
+        - sd
+        - si
+        - ur
+        - sat
+        - lus
+        - njz
+        - pnr
+        - kha
+        - grt
+        - sa
+        - raj
+        - bho
+        - gom
+        - awa
+        - hne
+        - mag
+        - mwr
+        - sjp
+        - gbm
+        - tcy
+        - hlb
+        - bih
+        - anp
+        - bns
+        - mixed
+        - unknown
+        
+    SupportedTasks:
+      type: string
+      enum:
+        - translation
+        - transliteration
+        - tts
+        - asr
+        - document-layout
+        - ocr
+        - glossary
+        - ner
+        - txt-lang-detection
+      description: the category of model under which it has been released or trained
+    
+    MixedDataSource:
+      type: string
+      description: This attribute defines the  datasources with mixed languages in it.
+      enum:
+        - vaani

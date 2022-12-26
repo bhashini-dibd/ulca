@@ -1,19 +1,19 @@
 {
     "name": "Anuvaad OCR - Malayalam",
     "version": "v1.0",
-    "description": "Anuvaad OCR aims to host tools for image to text conversion with the goal to enable automation of digitization of scanned documents belonging to Indian languages. We have built upon the open-source OCR engine Tesseract 4.0.  We have done custom training for Hindi and  Tamil and have significantly reduced the errors for these language models as compared to the ones available in the Tesseract repository. Work for other Indian languages is in progress but the service can still be used for English, Bengali, Telugu, Kannada and Malayalam with Tesseract base models.", 
+    "description": "Anuvaad OCR aims to host tools for image to text conversion with the goal to enable automation of digitization of scanned documents belonging to Indian languages. We have built upon the open-source OCR engine Tesseract 4.0.  We have done custom training for Hindi and  Tamil and have significantly reduced the errors for these language models as compared to the ones available in the Tesseract repository. Work for other Indian languages is in progress but the service can still be used for English, Bengali, Telugu, Kannada and Malayalam with Tesseract base models.",
     "refUrl": "https://github.com/project-anuvaad/anuvaad/tree/develop/anuvaad-etl/anuvaad-extractor/document-processor/ocr/tesseract_ulca",
     "task": {
-       "type" : "ocr"
+        "type": "ocr"
     },
     "languages": [
-       {
-          "sourceLanguage": "ml"
-       }
+        {
+            "sourceLanguage": "ml"
+        }
     ],
     "license": "mit",
     "domain": [
-       "general"
+        "general"
     ],
     "submitter": {
         "name": "Anuvaad",
@@ -54,28 +54,27 @@
                     "provider": "google"
                 }
             }
-            
-           
-            
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "https://users-auth.anuvaad.org/anuvaad/ocr/v0/ulca-ocr",
-       "schema": {
-          "taskType": "ocr",
-          "request": {
-             "imageUri": [
-                "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/anuvaad_ocr_malayalam.jpg"
-             ],
-             "config": {
-                "language": {
-                   "sourceLanguage": "ml"
+        "callbackUrl": "https://users-auth.anuvaad.org/anuvaad/ocr/v0/ulca-ocr",
+        "schema": {
+            "taskType": "ocr",
+            "request": {
+                "image": [
+                    {
+                        "imageUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/anuvaad_ocr_malayalam.jpg"
+                    }
+                ],
+                "config": {
+                    "language": {
+                        "sourceLanguage": "ml"
+                    }
                 }
-             }
-          }
-       }
+            }
+        }
     },
     "trainingDataset": {
-       "description": "Ncert books and Judgement(HCs+SC)+synthetic data(11 fonts), 47972 manually verified lines for Tamil and 28600 manually verified lines Hindi  "
+        "description": "Ncert books and Judgement(HCs+SC)+synthetic data(11 fonts), 47972 manually verified lines for Tamil and 28600 manually verified lines Hindi  "
     }
 }

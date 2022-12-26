@@ -16,7 +16,7 @@ Few examples to show how a submitter can publish a transliteration model to ULCA
     ],
     "config": {
         "isSentence": "True",
-        "numSuggestions" : 1
+        "numSuggestions" : 1,
         "language": {
                "sourceLanguage" : "en",
                "targetLanguage": "hi"

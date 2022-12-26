@@ -88,9 +88,12 @@
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "https://meity-dev-asr.ulcacontrib.org/asr/v1/recognize/en",
+       "callbackUrl": "wss://meity-dev-asr.ulcacontrib.org",
        "schema": {
           "taskType": "asr",
+          "modelProcessingType": {
+                "type": "streaming"
+          },
           "request": {
              "audio": [{
                 "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_english.wav"

@@ -59,7 +59,7 @@ class TransliterationBenchmarkTest {
         model.setInferenceEndPoint(inferenceAPIEndPoint);
 
         ModelTask modelTask = new ModelTask();
-        modelTask.setType(ModelTask.TypeEnum.TRANSLITERATION);
+        modelTask.setType(SupportedTasks.TRANSLITERATION);
 
         model.setTask(modelTask);
 

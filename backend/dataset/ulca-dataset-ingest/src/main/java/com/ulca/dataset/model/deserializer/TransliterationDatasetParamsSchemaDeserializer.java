@@ -24,6 +24,7 @@ import io.swagger.model.DomainEnum;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
+import io.swagger.model.SupportedLanguages;
 import io.swagger.model.TransliterationDatasetCollectionMethod;
 import io.swagger.model.TransliterationDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
@@ -102,8 +103,8 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 				
 				if(node.get("languages").has("sourceLanguage")) {
 					String sourceLanguage =  	node.get("languages").get("sourceLanguage").asText();
-					if(LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage) != null) {
-						lp.setSourceLanguage(LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage));
+					if(SupportedLanguages.fromValue(sourceLanguage) != null) {
+						lp.setSourceLanguage(SupportedLanguages.fromValue(sourceLanguage));
 					}else {
 						errorList.add("sourceLanguage is not one of defined language pair");
 					}
@@ -118,8 +119,8 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 				if(node.get("languages").has("targetLanguage")) {
 					String targetLanguage =  	node.get("languages").get("targetLanguage").asText();
 					
-					if(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage) != null) {
-						lp.setTargetLanguage(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage));
+					if(SupportedLanguages.fromValue(targetLanguage) != null) {
+						lp.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
 					}else {
 						errorList.add("targetLanguage is not one of defined language pair");
 					}
@@ -261,7 +262,8 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 		}
 		
 		if(node.has("collectionMethod")) {
-		if (node.get("collectionMethod").has("collectionDescription")) {
+
+			if (node.get("collectionMethod").has("collectionDescription")) {
 			if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
 				errorList.add("collectionDescription field should be String Array");
 			} else {
@@ -276,6 +278,7 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 					List<TransliterationDatasetCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<TransliterationDatasetCollectionMethod.CollectionDescriptionEnum>();
 					list.add(collectionDescriptionEnum);
 					transliterationDatasetCollectionMethod.setCollectionDescription(list);
+					transliterationParamsSchema.setCollectionMethod(transliterationDatasetCollectionMethod);
 
 					/*
 					 * collectionDetails is non mandatory

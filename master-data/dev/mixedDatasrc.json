@@ -1,0 +1,15 @@
+{
+    "mixedDatasrc": [
+      {
+        "code" : "vaani",
+        "label" : "Vaani",
+        "active" : true,
+        "values": {
+          "master": "/languages.json",
+          "jsonPath": "$.languages"
+        }
+}
+],
+"relatedMaster": true
+}
+   

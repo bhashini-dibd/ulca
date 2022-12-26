@@ -80,7 +80,7 @@ class TranslationBenchmarkTest {
         model.setInferenceEndPoint(inferenceAPIEndPoint);
 
         ModelTask modelTask = new ModelTask();
-        modelTask.setType(ModelTask.TypeEnum.TRANSLATION);
+        modelTask.setType(SupportedTasks.TRANSLATION);
 
         model.setTask(modelTask);
 

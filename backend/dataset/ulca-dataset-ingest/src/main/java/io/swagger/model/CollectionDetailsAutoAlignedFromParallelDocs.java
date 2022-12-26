@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "auto-aligned-from-parallel-docs collection details")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-28T14:32:05.368Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class CollectionDetailsAutoAlignedFromParallelDocs  implements OneOfParallelDatasetCollectionMethodCollectionDetails {

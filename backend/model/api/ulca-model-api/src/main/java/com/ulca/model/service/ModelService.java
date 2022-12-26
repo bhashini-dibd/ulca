@@ -10,13 +10,15 @@ import java.nio.file.StandardCopyOption;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.ulca.model.dao.*;
-import com.ulca.model.response.*;
-import io.swagger.model.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,12 @@ import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.util.ModelConstants;
+import com.ulca.model.dao.ModelDao;
+import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelFeedback;
+import com.ulca.model.dao.ModelFeedbackDao;
+import com.ulca.model.dao.ModelHealthStatus;
+import com.ulca.model.dao.ModelHealthStatusDao;
 import com.ulca.model.exception.FileExtensionNotSupportedException;
 import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.exception.ModelStatusChangeException;
@@ -47,10 +55,31 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
+import com.ulca.model.response.GetModelFeedbackListResponse;
+import com.ulca.model.response.GetTransliterationModelIdResponse;
+import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelFeedbackSubmitResponse;
+import com.ulca.model.response.ModelHealthStatusResponse;
+import com.ulca.model.response.ModelListByUserIdResponse;
+import com.ulca.model.response.ModelListResponseDto;
+import com.ulca.model.response.ModelSearchResponse;
+import com.ulca.model.response.ModelStatusChangeResponse;
+import com.ulca.model.response.UploadModelResponse;
 
-import io.swagger.model.LanguagePair.SourceLanguageEnum;
-import io.swagger.model.LanguagePair.TargetLanguageEnum;
-import io.swagger.model.ModelTask.TypeEnum;
+import io.swagger.model.ASRInference;
+import io.swagger.model.AsyncApiDetails;
+import io.swagger.model.ImageFormat;
+import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.LanguagePair;
+import io.swagger.model.LanguagePairs;
+import io.swagger.model.License;
+import io.swagger.model.ModelProcessingType;
+import io.swagger.model.ModelTask;
+import io.swagger.model.OneOfInferenceAPIEndPointSchema;
+import io.swagger.model.Submitter;
+import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedTasks;
+import io.swagger.model.TTSInference;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -260,9 +289,9 @@ public class ModelService {
 		}
 
 		ModelTask taskType = modelObj.getTask();
-		if (taskType.getType().equals(ModelTask.TypeEnum.TXT_LANG_DETECTION)) {
+		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
 			LanguagePair lp = new LanguagePair();
-			lp.setSourceLanguage(SourceLanguageEnum.MULTI);
+			lp.setSourceLanguage(SupportedLanguages.MIXED);
 			LanguagePairs lps = new LanguagePairs();
 			lps.add(lp);
 			modelObj.setLanguages(lps);
@@ -343,7 +372,7 @@ public class ModelService {
 		
 		if(model.getLanguages() == null) {
 			ModelTask taskType = model.getTask();
-			if(!taskType.getType().equals(ModelTask.TypeEnum.TXT_LANG_DETECTION)) {
+			if(!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
 				throw new ModelValidationException("languages is required field");
 			}
 		}
@@ -390,7 +419,7 @@ public class ModelService {
 
 		if (request.getTask() != null && !request.getTask().isBlank()) {
 			ModelTask modelTask = new ModelTask();
-			TypeEnum modelTaskType = TypeEnum.fromValue(request.getTask());
+			SupportedTasks modelTaskType = SupportedTasks.fromValue(request.getTask());
 			if(modelTaskType == null) {
 				throw new RequestParamValidationException("task type is not valid");
 			}
@@ -403,10 +432,10 @@ public class ModelService {
 		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
 			LanguagePairs lprs = new LanguagePairs();
 			LanguagePair lp = new LanguagePair();
-			lp.setSourceLanguage(SourceLanguageEnum.fromValue(request.getSourceLanguage()));
+			lp.setSourceLanguage(SupportedLanguages.fromValue(request.getSourceLanguage()));
 
 			if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
-				lp.setTargetLanguage(TargetLanguageEnum.fromValue(request.getTargetLanguage()));
+				lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
 			}
 			lprs.add(lp);
 			model.setLanguages(lprs);
@@ -571,15 +600,15 @@ public class ModelService {
 		ModelExtended model = new ModelExtended();
 		
 		ModelTask modelTask = new ModelTask();
-		modelTask.setType(TypeEnum.TRANSLITERATION);
+		modelTask.setType(SupportedTasks.TRANSLITERATION);
 		model.setTask(modelTask);
 
 		
 		LanguagePairs lprs = new LanguagePairs();
 		LanguagePair lp = new LanguagePair();
-		lp.setSourceLanguage(SourceLanguageEnum.fromValue(sourceLanguage));
+		lp.setSourceLanguage(SupportedLanguages.fromValue(sourceLanguage));
 		if (targetLanguage != null && !targetLanguage.isBlank()) {
-			lp.setTargetLanguage(TargetLanguageEnum.fromValue(targetLanguage));
+			lp.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
 		}
 		lprs.add(lp);
 		model.setLanguages(lprs);
