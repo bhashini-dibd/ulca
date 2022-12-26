@@ -7,7 +7,7 @@ import {
   FilterByDomain,
 } from "../../../utils/getLabel";
 import React from "react";
-
+import { getCamelCase } from "../../../utils/util";
 const CardComponent = (props) => {
   const { classes, data, index } = props;
   const renderPublishedOn = (data) => {
@@ -79,7 +79,7 @@ const CardComponent = (props) => {
   };
 
   const renderSourceLanguage = (data) => {
-    if(data.source){
+    if (data.source) {
       return (
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
           <Typography
@@ -98,7 +98,7 @@ const CardComponent = (props) => {
   };
 
   const renderTargetLanguage = (data) => {
-    if (data.task === "translation" || data.task === 'transliteration')
+    if (data.task === "translation" || data.task === "transliteration")
       return (
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
           <Typography
@@ -116,11 +116,39 @@ const CardComponent = (props) => {
     return <></>;
   };
 
+  const renderProcessingType = (data) => {
+    if (data.task === "asr" || data.task === "tts") {
+      const {
+        inferenceEndPoint: {
+          schema: {
+            modelProcessingType: { type },
+          },
+        },
+      } = data;
+      return (
+        <Grid Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+          <Typography
+            variant="caption"
+            style={{ color: "#ffffff", opacity: "0.6" }}
+            gutterBottom
+          >
+            Type
+          </Typography>
+          <Typography variant="body2" style={{ color: "#ffffff" }}>
+          {getCamelCase(type)}
+          </Typography>
+        </Grid>
+      );
+    }
+    return <></>;
+  };
+
   const renderLanguage = (data) => {
     return (
       <Grid className={classes.cardGrid} container>
         {renderSourceLanguage(data)}
         {renderTargetLanguage(data)}
+        {renderProcessingType(data)}
       </Grid>
     );
   };

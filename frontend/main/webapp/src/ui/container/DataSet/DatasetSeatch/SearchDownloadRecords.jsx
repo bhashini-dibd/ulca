@@ -84,12 +84,34 @@ const SearchAndDownloadRecords = (props) => {
     downloadAll: "",
   });
 
+  const [showDataSource, setShowDataSource] = useState(false);
+  const [dataSource, setDataSource] = useState();
+  const [selectedDataSource, setSelectedDataSource] = useState();
+  const [showAssertLanguage, setShowAssertLanguage] = useState(false);
+  const [assertLanguage, setAssertLanguage] = useState([]);
+
   const previousUrl = useRef();
 
   const detailedReport = useSelector((state) => state.mySearchReport);
   let data = detailedReport.responseData.filter((val) => {
     return val.sr_no === srno;
   });
+
+  useEffect(() => {
+    if (datasetType["asr-corpus"] || datasetType["asr-unlabeled-corpus"]) {
+      setShowDataSource(true);
+    }
+  }, [datasetType]);
+
+  useEffect(() => {
+    const datasourceItems = filters[0]?.values?.filter((element) => {
+      if (element.code === "mixed") {
+        return element.values;
+      }
+    });
+
+    setDataSource(datasourceItems);
+  }, [filters]);
 
   useEffect(() => {
     const dataset = Object.keys(datasetType)[0];
@@ -309,6 +331,11 @@ const SearchAndDownloadRecords = (props) => {
       checkedB: false,
       checkedC: false,
     });
+    setShowDataSource(false);
+    setDataSource();
+    setSelectedDataSource();
+    setShowAssertLanguage(false);
+    setAssertLanguage([]);
   };
 
   const makeSubmitAPICall = (type, criteria) => {
@@ -397,14 +424,31 @@ const SearchAndDownloadRecords = (props) => {
 
   const handleSubmitBtn = () => {
     const obj = { ...basicFilterState, ...advFilterState };
-    const criteria = {
-      sourceLanguage: getArrayValue(datasetType["parallel-corpus"] ? [languagePair.source] : languagePair.target),
-      targetLanguage: datasetType["parallel-corpus"] ? getArrayValue(languagePair.target) : null,
+
+    let criteria = {
+      sourceLanguage: getArrayValue(
+        datasetType["parallel-corpus"] || datasetType["transliteration-corpus"]
+          ? [languagePair.source]
+          : languagePair.target
+      ),
+      targetLanguage:
+        datasetType["parallel-corpus"] || datasetType["transliteration-corpus"]
+          ? getArrayValue(languagePair.target)
+          : null,
       ...getObjectValue(obj),
       // groupBy: false,
       multipleContributors: state.checkedA,
       originalSourceSentence: state.checkedC,
+      mixedDataSource: selectedDataSource?.code,
     };
+
+    if (assertLanguage.length) {
+      criteria = {
+        ...criteria,
+        assertLanguage: getArrayValue(assertLanguage),
+      };
+    }
+
     if (datasetType["parallel-corpus"]) {
       if (languagePair.source && languagePair.target.length) {
         makeSubmitAPICall(datasetType, criteria);
@@ -565,7 +609,12 @@ const SearchAndDownloadRecords = (props) => {
             </Grid>
             <Grid item xs={6}>
               <Button
-                disabled={!languagePair.target.length}
+                disabled={
+                  datasetType["asr-corpus"] ||
+                  datasetType["asr-unlabeled-corpus"]
+                    ? !!!selectedDataSource
+                    : !languagePair.target.length
+                }
                 fullWidth
                 size="large"
                 variant="contained"
@@ -674,14 +723,63 @@ const SearchAndDownloadRecords = (props) => {
                 error={tgtError}
                 helperText="This field is mandatory"
                 disabled={
-                  !languagePair.source && datasetType["parallel-corpus"] && datasetType["transliteration-corpus"]
+                  !languagePair.source &&
+                  datasetType["parallel-corpus"] &&
+                  datasetType["transliteration-corpus"]
                 }
-               
               />
             </div>
           );
         })}
       </>
+    );
+  };
+
+  const handleDataSourceChange = (value) => {
+    if (value) {
+      setSelectedDataSource(value);
+      setShowAssertLanguage(true);
+    } else {
+      setSelectedDataSource();
+      setShowAssertLanguage(false);
+    }
+  };
+
+  const renderMixedDataSourceDropdown = () => {
+    return (
+      <>
+        {dataSource?.map((val) => {
+          return (
+            <div className={classes.subHeader}>
+              <SingleAutoComplete
+                handleChange={handleDataSourceChange}
+                id={"dataSource"}
+                value={selectedDataSource}
+                labels={val.values}
+                placeholder="Select Data Source"
+              />
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
+  const handleAssertLanguageSelect = (value) => {
+    setAssertLanguage(value);
+  };
+
+  const renderAssertLanguageDropdown = () => {
+    return (
+      <div className={classes.subHeader}>
+        <MultiAutocomplete
+          options={selectedDataSource.values}
+          handleOnChange={handleAssertLanguageSelect}
+          id={"assertLanguage"}
+          value={assertLanguage.label}
+          label="Select Assert Language"
+        />
+      </div>
     );
   };
 
@@ -734,6 +832,25 @@ const SearchAndDownloadRecords = (props) => {
                   }
                 />
               </div> */}
+
+              {showDataSource && (
+                <>
+                  <Typography className={classes.subHeader} variant="body1">
+                    Select Data Source
+                  </Typography>
+                  {renderMixedDataSourceDropdown()}
+                </>
+              )}
+
+              {showDataSource && showAssertLanguage && (
+                <>
+                  <Typography className={classes.subHeader} variant="body1">
+                    Select Assert Language
+                  </Typography>
+                  {renderAssertLanguageDropdown()}
+                </>
+              )}
+
               <Typography className={classes.subHeader} variant="body1">
                 Filter by
               </Typography>

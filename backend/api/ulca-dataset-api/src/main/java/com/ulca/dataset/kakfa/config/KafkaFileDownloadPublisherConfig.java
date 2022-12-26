@@ -14,7 +14,6 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import com.ulca.dataset.kakfa.model.FileDownload;
-import com.ulca.dataset.request.SearchCriteria;
 
 @Configuration
 public class KafkaFileDownloadPublisherConfig {

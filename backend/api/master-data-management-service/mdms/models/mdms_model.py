@@ -17,6 +17,7 @@ class StoreModel:
     # Initialises and fetches redis client
     def redis_instantiate(self):
         redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=redis_server_db, password=redis_server_password)
+        log.info(f'redis connection {redis_client}')
         return redis_client
 
     #geting the redis clent object
@@ -29,8 +30,9 @@ class StoreModel:
     #storing records against keys
     def upsert(self, key, value, expiry_seconds):
         try:
-            client = self.get_redis_instance()
+            client = self.get_redis_instance()     
             client.set(key, json.dumps(value),ex=expiry_seconds)
+            log.info(f'Redis Client {client}')
             return 1
         except Exception as e:
             log.exception("Exception in REPO: upsert | Cause: " + str(e))
@@ -54,6 +56,7 @@ class StoreModel:
             result = {}
             for key in key_list:
                 val = client.get(key)
+                log.info(f'result of redis output {val}')
                 if val:
                     result[key]=json.loads(val)
             return result

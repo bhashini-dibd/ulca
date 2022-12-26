@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "evaluation strategy as proposed by https://www.researchgate.net/publication/273475626_Adequacy-Fluency_Metrics_Evaluating_MT_in_the_Continuous_Space_Model_Framework")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-05-16T02:11:13.718Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class MTAutomaticEvaluationMethod  implements OneOfCollectionDetailsMachineTranslatedEvaluationMethod, OneOfCollectionDetailsMachineTransliteratedEvaluationMethod {
