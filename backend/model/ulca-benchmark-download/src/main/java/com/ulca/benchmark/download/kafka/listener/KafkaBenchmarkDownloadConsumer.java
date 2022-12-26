@@ -38,6 +38,7 @@ import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.Benchmark;
 import io.swagger.model.ModelTask;
+import io.swagger.model.SupportedTasks;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -159,25 +160,25 @@ public class KafkaBenchmarkDownloadConsumer {
 				bmProcessTrackerService.createTaskTracker(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.inprogress);
 				bmProcessTrackerService.createTaskTracker(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.benchmark, BenchmarkTaskTracker.StatusEnum.inprogress);
 				
-				ModelTask.TypeEnum type = model.getTask().getType();
+				SupportedTasks type = model.getTask().getType();
 
 				switch (type) {
 					case TRANSLATION:
-						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLATION.toString());
+						log.info("modelTaskType :: " + SupportedTasks.TRANSLATION.toString());
 
 						translationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap,benchmarkProcessIdsMap);
 								
 
 						break;
 					case ASR:
-						log.info("modelTaskType :: " + ModelTask.TypeEnum.ASR.toString());
+						log.info("modelTaskType :: " + SupportedTasks.ASR.toString());
 
 						asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap,benchmarkProcessIdsMap);
 						break;
 
 					case OCR:
 
-						log.info("modelTaskType :: " + ModelTask.TypeEnum.OCR.toString());
+						log.info("modelTaskType :: " + SupportedTasks.OCR.toString());
 
 						ocrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, benchmarkProcessIdsMap);
 								
@@ -185,7 +186,7 @@ public class KafkaBenchmarkDownloadConsumer {
 
 					case TRANSLITERATION:
 
-						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLITERATION.toString());
+						log.info("modelTaskType :: " + SupportedTasks.TRANSLITERATION.toString());
 
 						transliterationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, benchmarkProcessIdsMap);
 						break;

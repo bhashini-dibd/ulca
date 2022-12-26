@@ -14,10 +14,10 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "language pair, make targetLanguage null to reuse the object to indicate single language")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-25T09:44:34.039Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:21:00.339Z[GMT]")
 
 
-public class LanguagePair   {
+public class LanguagePair  implements OneOfSearchParamsParams {
   @JsonProperty("sourceLanguageName")
   private String sourceLanguageName = null;
 

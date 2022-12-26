@@ -39,7 +39,7 @@
         ]
     },
     "inferenceEndPoint": {
-        "callbackUrl": "http://216.48.183.5:4991/recognize/en_v2",
+        "callbackUrl": "https://asr-api.ai4bharat.org/openai/recognize/en_v2",
         "schema": {
             "taskType": "asr",
             "modelProcessingType": {

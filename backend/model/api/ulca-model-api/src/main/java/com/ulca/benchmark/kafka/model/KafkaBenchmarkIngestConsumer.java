@@ -37,6 +37,7 @@ import io.swagger.model.ModelTask;
 import io.swagger.model.OcrBenchmarkDatasetParamsSchema;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
+import io.swagger.model.SupportedTasks;
 import io.swagger.model.TranslationBenchmarkDatasetParamsSchema;
 import io.swagger.model.TransliterationBenchmarkDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
@@ -217,7 +218,7 @@ public class KafkaBenchmarkIngestConsumer {
 		
 		if(params.has("taskType")) {
 			
-			ModelTask.TypeEnum type = ModelTask.TypeEnum.fromValue(params.getJSONObject("taskType").getString("type"));
+			SupportedTasks type = SupportedTasks.fromValue(params.getJSONObject("taskType").getString("type"));
 			ModelTask task = new ModelTask();
 			task.setType(type);
 			benchmark.setTask(task);
@@ -236,16 +237,16 @@ public class KafkaBenchmarkIngestConsumer {
 			benchmark.setCollectionSource(collectionSource);			
 		}
 		
-		if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.TRANSLATION)) {
+		if(benchmark.getTask().getType().equals(SupportedTasks.TRANSLATION)) {
 			TranslationBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, TranslationBenchmarkDatasetParamsSchema.class);
 			benchmark.setParamSchema(paramSchema);
-		}else if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.ASR)) {
+		}else if(benchmark.getTask().getType().equals(SupportedTasks.ASR)) {
 			AsrBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, AsrBenchmarkDatasetParamsSchema.class);
 			benchmark.setParamSchema(paramSchema);
-		}else if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.OCR)) {
+		}else if(benchmark.getTask().getType().equals(SupportedTasks.OCR)) {
 			OcrBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, OcrBenchmarkDatasetParamsSchema.class);
 			benchmark.setParamSchema(paramSchema);
-		}else if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.TRANSLITERATION)) {
+		}else if(benchmark.getTask().getType().equals(SupportedTasks.TRANSLITERATION)) {
 			TransliterationBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, TransliterationBenchmarkDatasetParamsSchema.class);
 			benchmark.setParamSchema(paramSchema);
 		}

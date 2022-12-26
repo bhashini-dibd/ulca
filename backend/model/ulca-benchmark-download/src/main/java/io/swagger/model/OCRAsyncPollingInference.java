@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.OCRResponse;
 import io.swagger.model.PollingRequest;
+import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -14,15 +15,39 @@ import javax.validation.constraints.*;
  * OCRAsyncPollingInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-02-23T11:24:57.354Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class OCRAsyncPollingInference  implements OneOfAsyncApiDetailsAsyncApiPollingSchema {
+  @JsonProperty("taskType")
+  private SupportedTasks taskType = null;
+
   @JsonProperty("request")
   private PollingRequest request = null;
 
   @JsonProperty("response")
   private OCRResponse response = null;
+
+  public OCRAsyncPollingInference taskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+    return this;
+  }
+
+  /**
+   * Get taskType
+   * @return taskType
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    @Valid
+    public SupportedTasks getTaskType() {
+    return taskType;
+  }
+
+  public void setTaskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+  }
 
   public OCRAsyncPollingInference request(PollingRequest request) {
     this.request = request;
@@ -75,13 +100,14 @@ public class OCRAsyncPollingInference  implements OneOfAsyncApiDetailsAsyncApiPo
       return false;
     }
     OCRAsyncPollingInference ocRAsyncPollingInference = (OCRAsyncPollingInference) o;
-    return Objects.equals(this.request, ocRAsyncPollingInference.request) &&
+    return Objects.equals(this.taskType, ocRAsyncPollingInference.taskType) &&
+        Objects.equals(this.request, ocRAsyncPollingInference.request) &&
         Objects.equals(this.response, ocRAsyncPollingInference.response);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(request, response);
+    return Objects.hash(taskType, request, response);
   }
 
   @Override
@@ -89,6 +115,7 @@ public class OCRAsyncPollingInference  implements OneOfAsyncApiDetailsAsyncApiPo
     StringBuilder sb = new StringBuilder();
     sb.append("class OCRAsyncPollingInference {\n");
     
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("}");

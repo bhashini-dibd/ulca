@@ -95,9 +95,12 @@
     ]
   },
   "inferenceEndPoint": {
-    "callbackUrl": "https://inference.vakyansh.in/tts/infer",
+    "callbackUrl": "https://meity-dev-tts.ulcacontrib.org/tts/v1/gu",
     "schema": {
       "taskType": "tts",
+      "modelProcessingType": {
+        "type": "batch"
+      },
       "request": {
         "input": [
           {
