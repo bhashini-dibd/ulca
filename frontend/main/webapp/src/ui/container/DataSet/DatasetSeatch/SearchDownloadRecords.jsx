@@ -457,17 +457,6 @@ const SearchAndDownloadRecords = (props) => {
         setTgtError(true);
       } else if (!languagePair.source) setSrcError(true);
       else if (!languagePair.target.length) setTgtError(true);
-    } else if (
-      datasetType["asr-corpus"] ||
-      datasetType["asr-unlabeled-corpus"]
-    ) {
-      console.log(selectedDataSource,'selectedDataSource');
-      if(selectedDataSource && !criteria.sourceLanguage.length) {
-        criteria.sourceLanguage = ["mixed"];
-      } else if(selectedDataSource && criteria.sourceLanguage.length  && !criteria.sourceLanguage.includes("mixed")) {
-        criteria.sourceLanguage = [...criteria.sourceLanguage,  "mixed"];
-      }
-      makeSubmitAPICall(datasetType, criteria);
     } else {
       if (!languagePair.target.length) setTgtError(true);
       else {
@@ -623,7 +612,7 @@ const SearchAndDownloadRecords = (props) => {
                 disabled={
                   datasetType["asr-corpus"] ||
                   datasetType["asr-unlabeled-corpus"]
-                    ? false
+                    ? !languagePair.target.length && !selectedDataSource
                     : !languagePair.target.length
                 }
                 fullWidth
@@ -705,6 +694,7 @@ const SearchAndDownloadRecords = (props) => {
   };
 
   const renderLanguage = () => {
+    console.log(languagePair, "languagePair");
     return (
       <>
         {" "}
@@ -747,7 +737,16 @@ const SearchAndDownloadRecords = (props) => {
   };
 
   const handleDataSourceChange = (value) => {
-    if (value) {
+    const temp = languagePair.target.some((item) => item.code === "mixed");
+
+    if (value && !temp) {
+      setLanguagePair({
+        ...languagePair,
+        target: [
+          ...languagePair.target,
+          { code: "mixed", label: "Mixed", active: true },
+        ],
+      });
       setSelectedDataSource(value);
       setShowAssertLanguage(true);
     } else {
