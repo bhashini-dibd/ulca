@@ -1,4 +1,4 @@
-package com.ulca.dataset.service;
+package com.ulca.dataset.cronjobs;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

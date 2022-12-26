@@ -1,18 +1,20 @@
 package io.swagger.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.ImageFiles;
+import io.swagger.model.OCRConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * OCRRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-28T22:14:05.003Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class OCRRequest   {
@@ -32,10 +34,10 @@ public class OCRRequest   {
    * @return image
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public ImageFiles getImage() {
+    @Valid
+    public ImageFiles getImage() {
     return image;
   }
 
@@ -53,10 +55,10 @@ public class OCRRequest   {
    * @return config
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public OCRConfig getConfig() {
+    @Valid
+    public OCRConfig getConfig() {
     return config;
   }
 
@@ -66,7 +68,7 @@ public class OCRRequest   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -75,7 +77,7 @@ public class OCRRequest   {
     }
     OCRRequest ocRRequest = (OCRRequest) o;
     return Objects.equals(this.image, ocRRequest.image) &&
-            Objects.equals(this.config, ocRRequest.config);
+        Objects.equals(this.config, ocRRequest.config);
   }
 
   @Override
@@ -87,7 +89,7 @@ public class OCRRequest   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OCRRequest {\n");
-
+    
     sb.append("    image: ").append(toIndentedString(image)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
     sb.append("}");
@@ -98,7 +100,7 @@ public class OCRRequest   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

@@ -1,7 +1,13 @@
 package io.swagger.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
+import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
  * license under which information is published.
@@ -14,6 +20,7 @@ public enum License {
     CC_BY_NC_3_0("cc-by-nc-3.0"),
     CC_BY_NC_4_0("cc-by-nc-4.0"),
     CC_BY_NC_SA_4_0("cc-by-nc-sa-4.0"),
+    CC0("cc0"),
     MIT("mit"),
     GPL_3_0("gpl-3.0"),
     BSD_3_CLAUSE("bsd-3-clause"),

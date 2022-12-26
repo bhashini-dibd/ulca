@@ -1,20 +1,20 @@
 package io.swagger.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.model.LanguagePair;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * OCRConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-28T22:14:05.003Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class OCRConfig   {
@@ -26,11 +26,11 @@ public class OCRConfig   {
    */
   public enum DetectionLevelEnum {
     WORD("word"),
-
+    
     LINE("line"),
-
+    
     PARAGRAPH("paragraph"),
-
+    
     PAGE("page");
 
     private String value;
@@ -63,9 +63,9 @@ public class OCRConfig   {
    */
   public enum ModalityEnum {
     PRINT("print"),
-
+    
     HANDWRITTEN("handwritten"),
-
+    
     SCENETEXT("scenetext");
 
     private String value;
@@ -106,8 +106,8 @@ public class OCRConfig   {
    * @return modelId
    **/
   @Schema(example = "103", description = "Unique identifier of model")
-
-  public String getModelId() {
+  
+    public String getModelId() {
     return modelId;
   }
 
@@ -125,8 +125,8 @@ public class OCRConfig   {
    * @return detectionLevel
    **/
   @Schema(description = "on what level of text does the model works best")
-
-  public DetectionLevelEnum getDetectionLevel() {
+  
+    public DetectionLevelEnum getDetectionLevel() {
     return detectionLevel;
   }
 
@@ -144,8 +144,8 @@ public class OCRConfig   {
    * @return modality
    **/
   @Schema(description = "on what type of image does the model works best")
-
-  public ModalityEnum getModality() {
+  
+    public ModalityEnum getModality() {
     return modality;
   }
 
@@ -163,10 +163,10 @@ public class OCRConfig   {
    * @return language
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public LanguagePair getLanguage() {
+    @Valid
+    public LanguagePair getLanguage() {
     return language;
   }
 
@@ -176,7 +176,7 @@ public class OCRConfig   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -185,9 +185,9 @@ public class OCRConfig   {
     }
     OCRConfig ocRConfig = (OCRConfig) o;
     return Objects.equals(this.modelId, ocRConfig.modelId) &&
-            Objects.equals(this.detectionLevel, ocRConfig.detectionLevel) &&
-            Objects.equals(this.modality, ocRConfig.modality) &&
-            Objects.equals(this.language, ocRConfig.language);
+        Objects.equals(this.detectionLevel, ocRConfig.detectionLevel) &&
+        Objects.equals(this.modality, ocRConfig.modality) &&
+        Objects.equals(this.language, ocRConfig.language);
   }
 
   @Override
@@ -199,7 +199,7 @@ public class OCRConfig   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OCRConfig {\n");
-
+    
     sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    detectionLevel: ").append(toIndentedString(detectionLevel)).append("\n");
     sb.append("    modality: ").append(toIndentedString(modality)).append("\n");
@@ -212,7 +212,7 @@ public class OCRConfig   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

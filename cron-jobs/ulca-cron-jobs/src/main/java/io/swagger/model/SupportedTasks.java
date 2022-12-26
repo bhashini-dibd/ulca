@@ -10,15 +10,22 @@ import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
- * number of channel in the audio
+ * the category of model under which it has been released or trained
  */
-public enum AudioChannel {
-  MONO("mono"),
-    STEREO("stereo");
+public enum SupportedTasks {
+  TRANSLATION("translation"),
+    TRANSLITERATION("transliteration"),
+    TTS("tts"),
+    ASR("asr"),
+    DOCUMENT_LAYOUT("document-layout"),
+    OCR("ocr"),
+    GLOSSARY("glossary"),
+    NER("ner"),
+    TXT_LANG_DETECTION("txt-lang-detection");
 
   private String value;
 
-  AudioChannel(String value) {
+  SupportedTasks(String value) {
     this.value = value;
   }
 
@@ -29,8 +36,8 @@ public enum AudioChannel {
   }
 
   @JsonCreator
-  public static AudioChannel fromValue(String text) {
-    for (AudioChannel b : AudioChannel.values()) {
+  public static SupportedTasks fromValue(String text) {
+    for (SupportedTasks b : SupportedTasks.values()) {
       if (String.valueOf(b.value).equals(text)) {
         return b;
       }

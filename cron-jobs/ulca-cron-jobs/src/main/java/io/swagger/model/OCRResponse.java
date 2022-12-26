@@ -1,19 +1,21 @@
 package io.swagger.model;
 
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.OCRConfig;
+import io.swagger.model.Sentences;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * the response for translation.  Standard http status codes to be used.
  */
 @Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-28T22:14:05.003Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class OCRResponse   {
@@ -33,10 +35,10 @@ public class OCRResponse   {
    * @return output
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public Sentences getOutput() {
+    @Valid
+    public Sentences getOutput() {
     return output;
   }
 
@@ -54,9 +56,9 @@ public class OCRResponse   {
    * @return config
    **/
   @Schema(description = "")
-
-  @Valid
-  public OCRConfig getConfig() {
+  
+    @Valid
+    public OCRConfig getConfig() {
     return config;
   }
 
@@ -66,7 +68,7 @@ public class OCRResponse   {
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -75,7 +77,7 @@ public class OCRResponse   {
     }
     OCRResponse ocRResponse = (OCRResponse) o;
     return Objects.equals(this.output, ocRResponse.output) &&
-            Objects.equals(this.config, ocRResponse.config);
+        Objects.equals(this.config, ocRResponse.config);
   }
 
   @Override
@@ -87,7 +89,7 @@ public class OCRResponse   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OCRResponse {\n");
-
+    
     sb.append("    output: ").append(toIndentedString(output)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
     sb.append("}");
@@ -98,7 +100,7 @@ public class OCRResponse   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

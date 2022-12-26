@@ -1,10 +1,13 @@
-package com.ulca.model.service;
+package com.ulca.model.cronjobs;
 
 
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelHealthStatus;
 import com.ulca.model.dao.ModelHealthStatusDao;
+import com.ulca.model.service.ModelInferenceEndPointService;
+import com.ulca.model.service.ModelNotificationService;
+
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.InferenceAPIEndPoint;
 import lombok.extern.slf4j.Slf4j;

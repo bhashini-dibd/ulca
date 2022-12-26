@@ -1,70 +1,27 @@
 package io.swagger.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-
-import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * the category of model under which it has been released or trained
  */
 @Schema(description = "the category of model under which it has been released or trained")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-04T16:26:50.061Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class ModelTask   {
-  /**
-   * Gets or Sets type
-   */
-  public enum TypeEnum {
-    TRANSLATION("translation"),
-    
-    TRANSLITERATION("transliteration"),
-    
-    TTS("tts"),
-    
-    ASR("asr"),
-    
-    DOCUMENT_LAYOUT("document-layout"),
-    
-    OCR("ocr"),
-    
-    GLOSSARY("glossary"),
-    
-    NER("ner"),
-    
-    TXT_LANG_DETECTION("txt-lang-detection");
-
-    private String value;
-
-    TypeEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TypeEnum fromValue(String text) {
-      for (TypeEnum b : TypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("type")
-  private TypeEnum type = null;
+  private SupportedTasks type = null;
 
-  public ModelTask type(TypeEnum type) {
+  public ModelTask type(SupportedTasks type) {
     this.type = type;
     return this;
   }
@@ -75,17 +32,18 @@ public class ModelTask   {
    **/
   @Schema(description = "")
   
-    public TypeEnum getType() {
+    @Valid
+    public SupportedTasks getType() {
     return type;
   }
 
-  public void setType(TypeEnum type) {
+  public void setType(SupportedTasks type) {
     this.type = type;
   }
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -115,7 +73,7 @@ public class ModelTask   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }
