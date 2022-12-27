@@ -277,10 +277,11 @@ public class ModelInferenceEndPointService {
             throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException,
             InterruptedException {
 
-        if (inferenceAPIEndPoint.isIsSyncApi()) {
-            inferenceAPIEndPoint = validateSyncCallBackUrl(inferenceAPIEndPoint);
+        if (inferenceAPIEndPoint.isIsSyncApi()!= null && !inferenceAPIEndPoint.isIsSyncApi()) {
+        	inferenceAPIEndPoint = validateAsyncUrl(inferenceAPIEndPoint);
+            
         } else {
-            inferenceAPIEndPoint = validateAsyncUrl(inferenceAPIEndPoint);
+        	inferenceAPIEndPoint = validateSyncCallBackUrl(inferenceAPIEndPoint);
         }
 
         return inferenceAPIEndPoint;
