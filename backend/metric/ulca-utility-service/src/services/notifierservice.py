@@ -30,7 +30,7 @@ class NotifierService(Thread):
         while not self.stopped.wait(metric_cron_interval_sec):
             try:
                 log.info(f'cron run for ds count notify')
-                #self.notify_user()
+                self.notify_user()
                 self.stsModelHealthCheck()
                 #log.info(var)
                 run+=1
@@ -42,15 +42,18 @@ class NotifierService(Thread):
         try:
             parallel_count,mono_count,ocr_count,asr_count,asr_unlabeled_count,tts_count,transliteration_count, glossary_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
             #parallel_count,ocr_count = self.calculate_counts()
-            utility     =   datautils.DataUtils()
-            utility.generate_email_notification({"parallel_count":str(parallel_count),"ocr_count":str(ocr_count),"mono_count":str(mono_count),"asr_count":str(round(asr_count,4)),"asr_unlabeled_count":str(round(asr_unlabeled_count,4)),"tts_count":str(round(tts_count,4)),"transliteration_count":str(transliteration_count),"glossary_count":str(glossary_count),"pending":str(pending_jobs),"inprogress":str(inprogress_jobs),"file":file})
-                
+            if parallel_count != 0 and mono_count != 0 and ocr_count != 0 and asr_count != 0 and asr_unlabeled_count != 0 and tts_count != 0 and transliteration_count != 0 and glossary_count != 0:
+                utility     =   datautils.DataUtils()
+                utility.generate_email_notification({"parallel_count":str(parallel_count),"ocr_count":str(ocr_count),"mono_count":str(mono_count),"asr_count":str(round(asr_count,4)),"asr_unlabeled_count":str(round(asr_unlabeled_count,4)),"tts_count":str(round(tts_count,4)),"transliteration_count":str(transliteration_count),"glossary_count":str(glossary_count),"pending":str(pending_jobs),"inprogress":str(inprogress_jobs),"file":file})
+            else: 
+                log.info(f"Druid Query returned Zero dataset counts")
         except Exception as e:
             log.exception(f'Exception : {e}')
 
 
     def stsModelHealthCheck(self):
         alldict = {}
+        log.info("stsModelhealth")
         try:
             request=requests.get(sts_url,headers=sts_headers)
             output=request.json()
@@ -71,7 +74,6 @@ class NotifierService(Thread):
                         alldict["tts-modelname"] = modelHealthStatusList['modelName']
                         alldict["tts-tasktype"] = modelHealthStatusList['taskType']
                         alldict["tts-modelid"] = modelHealthStatusList['modelId']
-            log.info(alldict)
             self.asr_compute(alldict)
             #self.translation_compute(alldict)
             #self.tts_compute(alldict)
@@ -84,6 +86,7 @@ class NotifierService(Thread):
     def asr_compute(self,alldict):
 
         try:
+            log.info(f"asr compute")
             file = open(asr_audioContent,"r")
             audio_file=file.read()
             #alldict=self.stsModelHealthCheck()
@@ -102,6 +105,7 @@ class NotifierService(Thread):
                 self.translation_compute(alldict,outputasr)
                 return outputasr
             else:
+                log.info("msg ASR Failed")
                 return {"msg": "ASR Failed"}
         except Exception as e:
             return {"Exception":str(e)}
@@ -109,8 +113,10 @@ class NotifierService(Thread):
 
     def translation_compute(self,alldict,outputasr):
         try:
+            log.info("translation compute")
             param = {"modelId":alldict["nmt-modelid"],"task":alldict["nmt-tasktype"],"input":[{"source":outputasr}],"userId":sts_userid}
             result = requests.post(translation_compute_url, json=param,headers=sts_headers)
+            log.info(f"result of translation compute {result}")
             if result.status_code == 200:
                 alldict['Translation'] = "NMT successfull"
                 res=(result.json())
@@ -119,6 +125,7 @@ class NotifierService(Thread):
                 self.tts_compute(alldict,outputnmt)
                 return outputnmt
             else:
+                log.info(f"translation compute failed")
                 return {"msg": "Translation Failed"}
         except Exception as e:
             return {"Exception":str(e)}
@@ -126,6 +133,7 @@ class NotifierService(Thread):
 
     def tts_compute(self,alldict,outputnmt):
         try:
+            log.info("tts compute")
             param={"modelId":alldict["tts-modelid"],"task":alldict["tts-tasktype"],"input":[{"source":outputnmt}],"gender":"female","userId":sts_userid}
             result = requests.post(translation_compute_url, json=param, headers=sts_headers)
             if result.status_code==200:
@@ -164,6 +172,11 @@ class NotifierService(Thread):
                 PARAMS = {"type":d,"criterions":[{"field":None,"value":None}],"groupby":None}
                 search_req = requests.post(url = SEARCHURL, json = PARAMS, headers={'Content-Type':'application/json'})
                 search_data = search_req.json()
+                #log.info(f"search data {search_data}")
+                #if 0 in search_data.values():
+                    #return None
+
+
                 if d in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
 
                     output_dict[d] = round(search_data["count"],3)
@@ -182,9 +195,10 @@ class NotifierService(Thread):
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
             pending_jobs,inprogress_jobs,jobfile = self.process_aggregation_output(aggresult)
                 
-
             
             return output_dict["parallel-corpus"],output_dict["monolingual-corpus"],output_dict["ocr-corpus"],output_dict["asr-corpus"],output_dict["asr-unlabeled-corpus"],output_dict["tts-corpus"],output_dict["transliteration-corpus"],output_dict["glossary-corpus"],pending_jobs,inprogress_jobs,jobfile
+        
+           
         except Exception as e:
             log.exception(f'{e}')
 

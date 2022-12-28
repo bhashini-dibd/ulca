@@ -118,6 +118,7 @@ class DataUtils:
                     server.login(sender_email, password)
                         # Prefer the modern send_message method
                     server.send_message(message)
+                    log.info(f"Email successfully generated for dataset counts")
                     server.quit()
                     del message["From"]
                     del message["To"]
@@ -136,6 +137,7 @@ class DataUtils:
                     server.login(sender_email, password)
                         # Prefer the modern send_message method
                     server.send_message(message)
+                    log.info(f"Email successfully generated for STS")
                     server.quit()
                     del message["From"]
                     del message["To"]
