@@ -1,7 +1,7 @@
 {
     "name": "AI4Bharat Indic-TTS : Hindi",
     "version": "v1.0",
-    "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both the genders: 'male' and 'female' voices.",
+    "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both 'female' and 'male' voices. All the models were trained using the IndicTTS dataset from SMT Lab, IITM.",
     "refUrl": "https://github.com/AI4Bharat/Indic-TTS",
     "task": {
         "type": "tts"
