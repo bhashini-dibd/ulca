@@ -420,6 +420,12 @@ components:
         - ner
         - txt-lang-detection
       description: the category of model under which it has been released or trained
+
+    SupportedTagsFormat:
+      type: string
+      enum:
+        - CoNLL-2003
+      description: Accepted standards for tags.
     
     MixedDataSource:
       type: string
