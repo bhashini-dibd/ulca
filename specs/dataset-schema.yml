@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.7
+  version: 0.10.8
 servers:
   - url: /ulca
 paths: {}
@@ -166,14 +166,12 @@ components:
       type: object
       properties:
         tagsFormat:
-          type: string
-          description: The accepted standard based on which NER tags are labelled in the dataset.
-          enum:
-            - CoNLL-2003
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
     NerDatasetRowSchema:
       required:
+        - sourceText
         - nerData
       properties:
         sourceText:
@@ -1062,10 +1060,10 @@ components:
       required:
         - tag
       anyOf:
-        - $ref: '#/components/schemas/NerWordIndex'
-        - $ref: '#/components/schemas/NerWord'
+        - $ref: '#/components/schemas/NerTokenIndex'
+        - $ref: '#/components/schemas/NerToken'
       properties:
-        position:
+        tagPosition:
           type: string
           description: position of the word in phrase. B- Beginning, I- Intermediate
           enum:
@@ -1080,24 +1078,24 @@ components:
             - PER
             - ORG
             - LOC
-    NerWordIndex:
+    NerTokenIndex:
       type: object
       description: Ner dataset sentencewise metadata
       required:
-        - wordIndex
+        - tokenIndex
       properties:
-        wordIndex:
+        tokenIndex:
           type: number
-          description: index number of word
+          description: index number of token
           example: 1
           minItems: 1
-    NerWord:
+    NerToken:
       type: object
       description: Ner dataset sentencewise metadata
       required:
-        - word
+        - token
       properties:
-        word:
+        token:
           type: string
           description: corresponsing word in the sentence
           minItems: 1
