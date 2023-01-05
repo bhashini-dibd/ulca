@@ -424,7 +424,7 @@ components:
     SupportedTagsFormat:
       type: string
       enum:
-        - CoNLL-2003
+        - conll2003
       description: Accepted standards for tags.
     
     MixedDataSource:

@@ -37,6 +37,7 @@
        "callbackUrl": "https://developers.ulca.org/aai4b-ner-inference/v0/ner",
        "schema": {
           "taskType": "ner",
+          "tagsFormat" : "conll2003",
           "request": {
             "input": [
                 {
