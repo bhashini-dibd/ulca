@@ -10,6 +10,8 @@ import com.ulca.model.service.ModelNotificationService;
 
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.ModelProcessingType;
+import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -109,6 +111,7 @@ public class ModelHeartBeatCheckService {
 				if (model.getName().contains("Google") || model.getName().contains("Bing"))
 					continue;
 
+				
 				modelHealthStatus.setModelId(model.getModelId());
 				modelHealthStatus.setModelName(model.getName());
 				modelHealthStatus.setTaskType(model.getTask().getType().toString());
@@ -116,6 +119,25 @@ public class ModelHeartBeatCheckService {
 				modelHealthStatus.setNextStatusUpdateTiming(Instant.now().toEpochMilli() + 3600000);
 
 				InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
+				
+				if(inferenceAPIEndPoint != null && inferenceAPIEndPoint.getSchema() != null) {
+					OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
+
+			        if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+			        	 io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
+			        	 if(asrInference.getModelProcessingType().getType().equals(ModelProcessingType.TypeEnum.STREAMING)) {
+			        		 continue;
+			        	 }
+			        }else if(schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
+			        	 io.swagger.model.TTSInference ttsInference = (io.swagger.model.TTSInference) schema;
+			        	 if(ttsInference.getModelProcessingType().getType().equals(ModelProcessingType.TypeEnum.STREAMING)) {
+			        		 continue;
+			        	 }
+			        }
+				}
+				
+				
+		            
 
 				if (inferenceAPIEndPoint != null && inferenceAPIEndPoint.getCallbackUrl() != null) {
 
@@ -124,7 +146,7 @@ public class ModelHeartBeatCheckService {
 						modelHealthStatus.setCallbackUrl(callBackUrl);
 						modelHealthStatus.setIsSyncApi(inferenceAPIEndPoint.isIsSyncApi());
 
-						if (!inferenceAPIEndPoint.isIsSyncApi()) {
+						if (inferenceAPIEndPoint.isIsSyncApi()!= null && !inferenceAPIEndPoint.isIsSyncApi()) {
 
 							if (inferenceAPIEndPoint.getAsyncApiDetails() != null) {
 								AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
