@@ -620,12 +620,12 @@ components:
         tag:
           type: string
           description: Ner tag associated with selected word
-        tagPosition:
-          type: string
-          description: Ner tag associated with selected word
         score:
           type: number
           description: the measure of accuracy of language prediction
+        tokenIndex:
+          type: number
+          description: the index number of particular token in sentence
         tokenStartIndex:
           type: number
           description: the starting index of word in sentence

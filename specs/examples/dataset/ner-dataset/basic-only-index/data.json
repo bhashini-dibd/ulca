@@ -4,12 +4,10 @@
         "sentenceMetadata" : [
             {
                 "tokenIndex": 13,
-                "position":"B",
                 "tag": "ORG"
             },
             {
                 "tokenIndex": 14,
-                "position":"I",
                 "tag": "ORG"
             }
         ]
@@ -19,12 +17,10 @@
         "sentenceMetadata" : [
             {
                 "tokenIndex": 1,
-                "position":"B",
                 "tag": "LOC"
             },
             {
                 "tokenIndex": 5,
-                "position":"B",
                 "tag": "ORG"
             }
         ]

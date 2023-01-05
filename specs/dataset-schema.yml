@@ -1063,21 +1063,10 @@ components:
         - $ref: '#/components/schemas/NerTokenIndex'
         - $ref: '#/components/schemas/NerToken'
       properties:
-        tagPosition:
-          type: string
-          description: position of the word in phrase. B- Beginning, I- Intermediate
-          enum:
-            - B
-            - I
         tag:
           type: string
           description: NER tag for corresponsing word/index. This should be inline with the corresponding tagsFormat specified in params.json.
           example: PER
-          enum:
-            - O
-            - PER
-            - ORG
-            - LOC
     NerTokenIndex:
       type: object
       description: Ner dataset sentencewise metadata

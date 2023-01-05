@@ -5,13 +5,11 @@
             {
                 "tokenIndex": 13,
                 "token": "सिंध",
-                "position": "B",
                 "tag": "ORG"
             },
             {
                 "tokenIndex": 14,
                 "token": "प्रांत",
-                "position": "I",
                 "tag": "ORG"
             }
         ]
@@ -22,13 +20,11 @@
             {
                 "tokenIndex": 1,
                 "token": "आस्ट्रेलिया",
-                "position": "B",
                 "tag": "LOC"
             },
             {
                 "tokenIndex": 5,
                 "token": "टीम",
-                "position": "B",
                 "tag": "ORG"
             }
         ]

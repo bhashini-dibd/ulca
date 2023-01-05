@@ -425,6 +425,7 @@ components:
       type: string
       enum:
         - conll2003
+        - custom
       description: Accepted standards for tags.
     
     MixedDataSource:

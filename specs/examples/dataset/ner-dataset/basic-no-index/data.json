@@ -4,12 +4,10 @@
         "sentenceMetadata": [
             {
                 "token": "सिंध",
-                "position": "B",
                 "tag": "ORG"
             },
             {
                 "token": "प्रांत",
-                "position": "I",
                 "tag": "ORG"
             }
         ]
@@ -19,12 +17,10 @@
         "sentenceMetadata": [
             {
                 "token": "आस्ट्रेलिया",
-                "position": "B",
                 "tag": "LOC"
             },
             {
                 "token": "टीम",
-                "position": "B",
                 "tag": "ORG"
             }
         ]
