@@ -42,9 +42,12 @@ class TextLanguageCheck(BaseValidator):
 
                 try:
                     detector = Detector(text)
+                    log.info(f"Text Language Detection: Text {text}")
                     # The language detection model does not support these languages,
                     # So check for closest possible language to rule out non-Indic languages
                     # TODO: Temporary implementation for now, need better solution
+                    log.info(f"Detector Language Code: Text {detector.language.code}")
+                    log.info(f"Detector Language Confidence: Text {detector.language.confidence}")
                     if lang in ['doi', 'kok', 'mai']:
                         if detector.language.code not in ['hi', 'mr', 'bh', 'ne', 'sa'] or detector.language.confidence<50:
                             return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
