@@ -161,7 +161,7 @@ class ASRService:
                     epoch = eval(str(time.time()).replace('.', '')[0:13])
                     if isinstance(data['imageFilename'],list):
                         data['imageFilename'] = data['imageFilename'][0]
-                    imageFileName = data['imageFilename'].split('/')[-1]
+                    imageFileName = data['imageFilename']#.split('/')[-1]
                     s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
                     img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
                     if not img_object_store_path:

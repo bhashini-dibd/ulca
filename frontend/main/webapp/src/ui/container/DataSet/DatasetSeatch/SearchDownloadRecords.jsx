@@ -86,7 +86,7 @@ const SearchAndDownloadRecords = (props) => {
 
   const [showDataSource, setShowDataSource] = useState(false);
   const [dataSource, setDataSource] = useState();
-  const [selectedDataSource, setSelectedDataSource] = useState();
+  const [selectedDataSource, setSelectedDataSource] = useState({});
   const [showAssertLanguage, setShowAssertLanguage] = useState(false);
   const [assertLanguage, setAssertLanguage] = useState([]);
 
@@ -237,6 +237,14 @@ const SearchAndDownloadRecords = (props) => {
   const handleLanguagePairChange = (value, property) => {
     setLanguagePair({ ...languagePair, [property]: value });
 
+    if(property === "target") {
+      const temp = value.some((item) => item.code === "mixed");
+
+      if(!temp) {
+        handleDataSourceChange();
+      }
+    }
+
     if (property === "source") setSrcError(false);
     else setTgtError(false);
   };
@@ -333,7 +341,7 @@ const SearchAndDownloadRecords = (props) => {
     });
     setShowDataSource(false);
     setDataSource();
-    setSelectedDataSource();
+    setSelectedDataSource({});
     setShowAssertLanguage(false);
     setAssertLanguage([]);
   };
@@ -610,10 +618,7 @@ const SearchAndDownloadRecords = (props) => {
             <Grid item xs={6}>
               <Button
                 disabled={
-                  datasetType["asr-corpus"] ||
-                  datasetType["asr-unlabeled-corpus"]
-                    ? !!!selectedDataSource
-                    : !languagePair.target.length
+                  !languagePair.target.length
                 }
                 fullWidth
                 size="large"
@@ -736,11 +741,23 @@ const SearchAndDownloadRecords = (props) => {
   };
 
   const handleDataSourceChange = (value) => {
+    const temp = languagePair.target.some((item) => item.code === "mixed");
+
     if (value) {
       setSelectedDataSource(value);
       setShowAssertLanguage(true);
+      
+      if(!temp) {
+        setLanguagePair({
+          ...languagePair,
+          target: [
+            ...languagePair.target,
+            { code: "mixed", label: "Mixed", active: true },
+          ],
+        });
+      }
     } else {
-      setSelectedDataSource();
+      setSelectedDataSource({});
       setShowAssertLanguage(false);
     }
   };
@@ -748,19 +765,25 @@ const SearchAndDownloadRecords = (props) => {
   const renderMixedDataSourceDropdown = () => {
     return (
       <>
-        {dataSource?.map((val) => {
-          return (
-            <div className={classes.subHeader}>
-              <SingleAutoComplete
-                handleChange={handleDataSourceChange}
-                id={"dataSource"}
-                value={selectedDataSource}
-                labels={val.values}
-                placeholder="Select Data Source"
-              />
-            </div>
-          );
-        })}
+        {dataSource && (
+          <div className={classes.subHeader}>
+            <Autocomplete
+              value={selectedDataSource}
+              id={"dataSource"}
+              options={dataSource[0].values}
+              getOptionLabel={(option) => (option.label ? option.label : "")}
+              onChange={(event, data) => handleDataSourceChange(data)}
+              renderInput={(params) => (
+                <TextField
+                  fullWidth
+                  {...params}
+                  label="Select Data Source"
+                  variant="standard"
+                />
+              )}
+            />
+          </div>
+          )}
       </>
     );
   };

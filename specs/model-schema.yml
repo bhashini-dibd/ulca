@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.3.5
+  version: 0.4.0
 servers:
   - url: /ulca
 paths: {}
@@ -86,6 +86,7 @@ components:
             - $ref: '#/components/schemas/TTSInference'
             - $ref: '#/components/schemas/OCRInference'
             - $ref: '#/components/schemas/TxtLangDetectionInference'
+            - $ref: '#/components/schemas/NerInference'
           discriminator:
             propertyName: taskType
             mapping:
@@ -95,6 +96,7 @@ components:
               tts: '#/components/schemas/TTSInference'
               ocr: '#/components/schemas/OCRInference'
               txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
+              ner: '#/components/schemas/NerInference'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
@@ -205,6 +207,21 @@ components:
           $ref: '#/components/schemas/TxtLangDetectionRequest'
         response:
           $ref: '#/components/schemas/TxtLangDetectionResponse'
+    NerInference:
+      required:
+        - taskType
+        - request
+        - tagsFormat
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        tagsFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
+        request:
+          $ref: '#/components/schemas/TranslationRequest'
+        response:
+          $ref: '#/components/schemas/NerResponse'
     TranslationAsyncInference:
       required:
         - taskType
@@ -298,6 +315,16 @@ components:
           $ref: '#/components/schemas/TxtLanguagesList'
         config:
           $ref: '#/components/schemas/TxtLangDetectionConfig'
+    NerResponse:
+      description: the response for NER.  Standard http status codes to be used.
+      required:
+        - output
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/NerList'
+        config:
+          $ref: '#/components/schemas/TranslationConfig'
     ASRInference:
       required:
         - taskType
@@ -561,6 +588,51 @@ components:
         langScore:
           type: number
           description: the measure of accuracy of language prediction
+          
+    NerList:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/NerOutputList'
+    NerOutputList:
+      required:
+        - source
+      type: object
+      properties:
+        source:
+          minLength: 1
+          type: string
+          description: input sentence for the model
+        nerPrediction:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/NerPrediction'
+    NerPrediction:
+      type: object
+      required:
+        - token
+        - tag
+      properties:
+        token:
+          type: string
+          description: corresponding word in the sentence which is tagged
+        tag:
+          type: string
+          description: Ner tag associated with selected word
+        score:
+          type: number
+          description: the measure of accuracy of language prediction
+        tokenIndex:
+          type: number
+          description: the index number of particular token in sentence
+        tokenStartIndex:
+          type: number
+          description: the starting index of word in sentence
+        tokenEndIndex:
+          type: number
+          description: the ending index of word in sentence
+    
     TranslationConfig:
       required:
         - language
