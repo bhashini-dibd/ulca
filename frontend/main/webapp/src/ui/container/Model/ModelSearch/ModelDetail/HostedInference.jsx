@@ -10,7 +10,6 @@ import { getLanguageName } from "../../../../../utils/getLabel";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import Modal from '../../../../components/common/Modal';
-import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
 import { Language } from "../../../../../configs/DatasetItems";
 import {
   Grid,
@@ -30,7 +29,7 @@ import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
 import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
-import { ReactTransliterate } from 'react-transliterate';
+import { IndicTransliterate } from 'react-transliterate';
 import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
@@ -258,8 +257,8 @@ const HostedInference = (props) => {
           /> */}
           {showTransliteration && transliterationModelId ? <IndicTransliterate
             lang={lang}
-            apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
-            modelId={transliterationModelId}
+            customApiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
+            transliterationModelId={transliterationModelId}
             value={sourceText}
             onChangeText={(text) => {
               setSourceText(text);

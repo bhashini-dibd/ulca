@@ -4,7 +4,6 @@
     "private": true,
     "homepage": "/ulca",
     "dependencies": {
-        "@ai4bharat/indic-transliterate": "^1.2.11",
         "@material-ui/core": "^4.11.4",
         "@material-ui/data-grid": "^4.0.0-alpha.37",
         "@material-ui/icons": "^4.11.2",
@@ -44,7 +43,7 @@
         "react-select": "^4.3.1",
         "react-social-login": "^3.4.13",
         "react-spinners": "^0.11.0",
-        "react-transliterate": "file:react-transliterate-2.0.0.tgz",
+        "react-transliterate": "file:react-transliterate-2.2.9.tgz",
         "react-voice-recorder": "^2.1.0",
         "reactjs-popup": "^2.0.4",
         "reactjs-social-login": "^1.0.5",

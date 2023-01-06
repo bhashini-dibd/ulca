@@ -31,14 +31,13 @@ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import Modal from '../../../../components/common/Modal';
 import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
-import { ReactTransliterate } from 'react-transliterate';
 import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
 import { Switch } from "@material-ui/core";
 import TTSLiveInference from "./TTSLiveInference";
-import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
 import { Language } from "../../../../../configs/DatasetItems";
+import { IndicTransliterate } from "react-transliterate";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -368,8 +367,8 @@ const HostedInference = (props) => {
           /> */}
           {showTransliteration && transliterationModelId ? <IndicTransliterate
             lang={lang}
-            apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
-            modelId={transliterationModelId}
+            customApiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
+            transliterationModelId={transliterationModelId}
             value={sourceText}
             onChangeText={(text) => {
               setSourceText(text);
