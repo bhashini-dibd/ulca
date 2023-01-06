@@ -428,18 +428,29 @@ public class ModelService {
 		}else {
 			throw new RequestParamValidationException("task is required field");
 		}
-
+		
+		LanguagePairs lprs = new LanguagePairs();
+		LanguagePair lp = null;
 		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
-			LanguagePairs lprs = new LanguagePairs();
-			LanguagePair lp = new LanguagePair();
+			 lp = new LanguagePair();
 			lp.setSourceLanguage(SupportedLanguages.fromValue(request.getSourceLanguage()));
-
-			if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
-				lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
+			
+		}
+		
+		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
+			if(lp==null) {
+				lp = new LanguagePair();
+				
 			}
+			 
+			lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
+		}
+		if(lp!=null) {
+			
 			lprs.add(lp);
 			model.setLanguages(lprs);
 		}
+	
 		/*
 		 * seach only published model
 		 */
