@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfAsyncApiDetailsAsyncApiPollingSchema
 */
+// commented since manually converting to java pojo
+/*
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
@@ -16,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = TTSAsyncPollingInference.class, name = "TTSAsyncPollingInference"),
   @JsonSubTypes.Type(value = OCRAsyncPollingInference.class, name = "OCRAsyncPollingInference")
 })
+*/
 public interface OneOfAsyncApiDetailsAsyncApiPollingSchema {
 
 }

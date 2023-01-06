@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,11 +54,10 @@ import com.ulca.model.response.BmProcessListByProcessIdResponse;
 
 import io.swagger.model.Benchmark;
 import io.swagger.model.LanguagePair;
-import io.swagger.model.LanguagePair.SourceLanguageEnum;
-import io.swagger.model.LanguagePair.TargetLanguageEnum;
 import io.swagger.model.LanguagePairs;
 import io.swagger.model.ModelTask;
-import io.swagger.model.ModelTask.TypeEnum;
+import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedTasks;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -345,16 +343,16 @@ public class BenchmarkService {
 
 		if (request.getTask() != null && !request.getTask().isBlank()) {
 			modelTask = new ModelTask();
-			modelTask.setType(TypeEnum.fromValue(request.getTask()));
+			modelTask.setType(SupportedTasks.fromValue(request.getTask()));
 
 		}
 
 		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
 			lp = new LanguagePair();
-			lp.setSourceLanguage(SourceLanguageEnum.fromValue(request.getSourceLanguage()));
+			lp.setSourceLanguage(SupportedLanguages.fromValue(request.getSourceLanguage()));
 
 			if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
-				lp.setTargetLanguage(TargetLanguageEnum.fromValue(request.getTargetLanguage()));
+				lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
 			}
 
 		}
@@ -454,7 +452,7 @@ public class BenchmarkService {
 			/*
 			 * for traslation, higher the score better the model
 			 */
-			if (bmDto.getTask().getType() == ModelTask.TypeEnum.TRANSLATION) {
+			if (bmDto.getTask().getType() == SupportedTasks.TRANSLATION) {
 				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess::getScore).reversed());
 
 				// bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore).reversed()).collect(Collectors.toList());
@@ -462,7 +460,7 @@ public class BenchmarkService {
 			/*
 			 * for asr, lower the score better the model
 			 */
-			if (bmDto.getTask().getType() == ModelTask.TypeEnum.ASR) {
+			if (bmDto.getTask().getType() == SupportedTasks.ASR) {
 				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess::getScore));
 				// bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
 			}
@@ -470,7 +468,7 @@ public class BenchmarkService {
 			/*
 			 * for ocr, lower the score better the model
 			 */
-			if (bmDto.getTask().getType() == ModelTask.TypeEnum.OCR) {
+			if (bmDto.getTask().getType() == SupportedTasks.OCR) {
 				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess::getScore));
 			}
 			bmDto.setBenchmarkPerformance(bmProcessPublished);

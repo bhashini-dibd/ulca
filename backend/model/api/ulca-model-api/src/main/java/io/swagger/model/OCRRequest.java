@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * OCRRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-28T22:14:05.003Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class OCRRequest   {
@@ -34,10 +34,10 @@ public class OCRRequest   {
    * @return image
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public ImageFiles getImage() {
+    @Valid
+    public ImageFiles getImage() {
     return image;
   }
 
@@ -55,10 +55,10 @@ public class OCRRequest   {
    * @return config
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public OCRConfig getConfig() {
+    @Valid
+    public OCRConfig getConfig() {
     return config;
   }
 
@@ -77,7 +77,7 @@ public class OCRRequest   {
     }
     OCRRequest ocRRequest = (OCRRequest) o;
     return Objects.equals(this.image, ocRRequest.image) &&
-            Objects.equals(this.config, ocRRequest.config);
+        Objects.equals(this.config, ocRRequest.config);
   }
 
   @Override
@@ -89,7 +89,7 @@ public class OCRRequest   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OCRRequest {\n");
-
+    
     sb.append("    image: ").append(toIndentedString(image)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
     sb.append("}");
