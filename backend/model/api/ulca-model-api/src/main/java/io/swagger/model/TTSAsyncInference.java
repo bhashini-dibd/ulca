@@ -3,7 +3,9 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.ModelProcessingType;
 import io.swagger.model.PollingRequest;
+import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -14,15 +16,63 @@ import javax.validation.constraints.*;
  * TTSAsyncInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-02-23T11:24:57.354Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class TTSAsyncInference  implements OneOfAsyncApiDetailsAsyncApiSchema {
+  @JsonProperty("taskType")
+  private SupportedTasks taskType = null;
+
+  @JsonProperty("modelProcessingType")
+  private ModelProcessingType modelProcessingType = null;
+
   @JsonProperty("request")
   private TTSRequest request = null;
 
   @JsonProperty("response")
   private PollingRequest response = null;
+
+  public TTSAsyncInference taskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+    return this;
+  }
+
+  /**
+   * Get taskType
+   * @return taskType
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    @Valid
+    public SupportedTasks getTaskType() {
+    return taskType;
+  }
+
+  public void setTaskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+  }
+
+  public TTSAsyncInference modelProcessingType(ModelProcessingType modelProcessingType) {
+    this.modelProcessingType = modelProcessingType;
+    return this;
+  }
+
+  /**
+   * Get modelProcessingType
+   * @return modelProcessingType
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    @Valid
+    public ModelProcessingType getModelProcessingType() {
+    return modelProcessingType;
+  }
+
+  public void setModelProcessingType(ModelProcessingType modelProcessingType) {
+    this.modelProcessingType = modelProcessingType;
+  }
 
   public TTSAsyncInference request(TTSRequest request) {
     this.request = request;
@@ -75,13 +125,15 @@ public class TTSAsyncInference  implements OneOfAsyncApiDetailsAsyncApiSchema {
       return false;
     }
     TTSAsyncInference ttSAsyncInference = (TTSAsyncInference) o;
-    return Objects.equals(this.request, ttSAsyncInference.request) &&
+    return Objects.equals(this.taskType, ttSAsyncInference.taskType) &&
+        Objects.equals(this.modelProcessingType, ttSAsyncInference.modelProcessingType) &&
+        Objects.equals(this.request, ttSAsyncInference.request) &&
         Objects.equals(this.response, ttSAsyncInference.response);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(request, response);
+    return Objects.hash(taskType, modelProcessingType, request, response);
   }
 
   @Override
@@ -89,6 +141,8 @@ public class TTSAsyncInference  implements OneOfAsyncApiDetailsAsyncApiSchema {
     StringBuilder sb = new StringBuilder();
     sb.append("class TTSAsyncInference {\n");
     
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+    sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("}");

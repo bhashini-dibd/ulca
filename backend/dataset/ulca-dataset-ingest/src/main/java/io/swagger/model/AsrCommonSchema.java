@@ -22,7 +22,7 @@ import javax.validation.constraints.*;
  * AsrCommonSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-16T11:18:57.021Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class AsrCommonSchema   {
