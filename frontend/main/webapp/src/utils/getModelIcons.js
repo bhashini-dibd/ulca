@@ -6,6 +6,7 @@ import EventOutlinedIcon from '@material-ui/icons/EventOutlined';
 import StorageOutlinedIcon from '@material-ui/icons/StorageOutlined';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import CardTravelIcon from '@material-ui/icons/CardTravel';
+import WbIncandescentIcon from '@material-ui/icons/WbIncandescent';
 
 const imageArray = [
     { imageUrl: <CheckCircleOutlineIcon />, color: "rgba(20, 115, 252, 0.05)", iconColor: "#1473fc" },
@@ -15,6 +16,7 @@ const imageArray = [
     { imageUrl: <PersonOutlinedIcon/>, color: "rgba(253, 127, 35, 0.05)", iconColor: "#1db5d8" },
     { imageUrl: <EventOutlinedIcon/>, color: "rgba(29, 181, 216, 0.05)", iconColor: "#443fb1" },
     { imageUrl: <PublicIcon/>, color: "rgba(6, 190, 108, 0.05)", iconColor: "#0fd17b" },
-    { imageUrl: <FolderOpenIcon/>, color: "rgba(126, 211, 40, 0.05)", iconColor: "#fd7f23" },];
+    { imageUrl: <FolderOpenIcon/>, color: "rgba(126, 211, 40, 0.05)", iconColor: "#fd7f23" },
+    { imageUrl: <WbIncandescentIcon/>, color: "rgba(253, 127, 35, 0.05)", iconColor: "#1db5d8" },];
 
 export default imageArray;

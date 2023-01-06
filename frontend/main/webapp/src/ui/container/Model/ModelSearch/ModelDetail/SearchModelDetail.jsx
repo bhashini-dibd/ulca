@@ -309,15 +309,27 @@ const SearchModelDetail = (props) => {
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Grid container spacing={2}>
-                  {description?.map((des, i) => (
-                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                      <ModelDescription
-                        title={des.title}
-                        para={des.para}
-                        index={i}
-                      />
-                    </Grid>
-                  ))}
+                  {description?.map((des, i) => {
+                    if(des.title === "Type" && (task === "asr" || task === "tts")){
+                        return <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                          <ModelDescription
+                            title={des.title}
+                            para={des.para}
+                            index={i}
+                          />
+                        </Grid>
+                    } else if (des.title === "Type" && (task !== "asr" || task !== "tts")){
+                        return null
+                    } else {
+                      return <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                          <ModelDescription
+                            title={des.title}
+                            para={des.para}
+                            index={i}
+                          />
+                        </Grid>
+                    }
+                  })}
                 </Grid>
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
