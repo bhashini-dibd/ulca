@@ -29,6 +29,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -114,6 +117,9 @@ public class ModelService {
 	
 	@Autowired
 	ModelConstants modelConstants;
+	
+	@Autowired
+	MongoTemplate mongoTemplate;
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -413,43 +419,99 @@ public class ModelService {
 		return true;
 	}
 
+//	public ModelSearchResponse searchModel(ModelSearchRequest request) {
+//
+//		ModelExtended model = new ModelExtended();
+//
+//		if (request.getTask() != null && !request.getTask().isBlank()) {
+//			ModelTask modelTask = new ModelTask();
+//			SupportedTasks modelTaskType = SupportedTasks.fromValue(request.getTask());
+//			if(modelTaskType == null) {
+//				throw new RequestParamValidationException("task type is not valid");
+//			}
+//			modelTask.setType(modelTaskType);
+//			model.setTask(modelTask);
+//		}else {
+//			throw new RequestParamValidationException("task is required field");
+//		}
+//		
+//		LanguagePairs lprs = new LanguagePairs();
+//		LanguagePair lp = null;
+//		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
+//			 lp = new LanguagePair();
+//			lp.setSourceLanguage(SupportedLanguages.fromValue(request.getSourceLanguage()));
+//			
+//		}
+//		
+//		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
+//			if(lp==null) {
+//				lp = new LanguagePair();
+//				
+//			}
+//			 
+//			lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
+//		}
+//		
+//		if(lp!=null) {
+//			
+//			lprs.add(lp);
+//			model.setLanguages(lprs);
+//		}
+//		
+//	
+//		/*
+//		 * seach only published model
+//		 */
+//		model.setStatus("published");
+//
+//		Example<ModelExtended> example = Example.of(model);
+//		List<ModelExtended> list = modelDao.findAll(example);
+//		
+//		if(list != null) {
+//			Collections.shuffle(list); // randomize the search
+//			return new ModelSearchResponse("Model Search Result", list, list.size());
+//		}
+//		return new ModelSearchResponse("Model Search Result", list, 0);
+//		
+//		
+//
+//	}
+	
 	public ModelSearchResponse searchModel(ModelSearchRequest request) {
 
-		ModelExtended model = new ModelExtended();
-
+		Query dynamicQuery = new Query();
+		
 		if (request.getTask() != null && !request.getTask().isBlank()) {
-			ModelTask modelTask = new ModelTask();
 			SupportedTasks modelTaskType = SupportedTasks.fromValue(request.getTask());
 			if(modelTaskType == null) {
 				throw new RequestParamValidationException("task type is not valid");
 			}
-			modelTask.setType(modelTaskType);
-			model.setTask(modelTask);
+			Criteria nameCriteria = Criteria.where("task.type").is(modelTaskType.name());
+			dynamicQuery.addCriteria(nameCriteria);
 		}else {
 			throw new RequestParamValidationException("task is required field");
 		}
-
-		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
-			LanguagePairs lprs = new LanguagePairs();
-			LanguagePair lp = new LanguagePair();
-			lp.setSourceLanguage(SupportedLanguages.fromValue(request.getSourceLanguage()));
-
-			if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
-				lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
-			}
-			lprs.add(lp);
-			model.setLanguages(lprs);
-		}
-		/*
-		 * seach only published model
-		 */
-		model.setStatus("published");
-
-		Example<ModelExtended> example = Example.of(model);
-		List<ModelExtended> list = modelDao.findAll(example);
 		
-		Collections.shuffle(list); // randomize the search
-		return new ModelSearchResponse("Model Search Result", list, list.size());
+		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
+			Criteria nameCriteria = Criteria.where("languages.0.sourceLanguage").is(SupportedLanguages.fromValue(request.getSourceLanguage()).name());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
+			Criteria nameCriteria = Criteria.where("languages.0.targetLanguage").is(SupportedLanguages.fromValue(request.getTargetLanguage()).name());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		Criteria nameCriteria = Criteria.where("status").is("published");
+		dynamicQuery.addCriteria(nameCriteria);
+	
+		List<ModelExtended> list = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+
+		if(list != null) {
+			Collections.shuffle(list); // randomize the search
+			return new ModelSearchResponse("Model Search Result", list, list.size());
+		}
+		return new ModelSearchResponse("Model Search Result", list, 0);
 
 	}
 	
