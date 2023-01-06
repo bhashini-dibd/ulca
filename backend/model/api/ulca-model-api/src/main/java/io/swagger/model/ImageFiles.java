@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "list of")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-28T22:14:05.003Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class ImageFiles extends ArrayList<ImageFile>  {

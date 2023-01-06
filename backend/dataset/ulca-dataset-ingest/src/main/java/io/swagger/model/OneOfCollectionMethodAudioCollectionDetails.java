@@ -15,7 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
   @JsonSubTypes.Type(value = CollectionDetailsAudioAutoAligned.class, name = "CollectionDetailsAudioAutoAligned"),
   @JsonSubTypes.Type(value = CollectionDetailsMachineGeneratedTranscript.class, name = "CollectionDetailsMachineGeneratedTranscript"),
-  @JsonSubTypes.Type(value = CollectionDetailsManualTranscribed.class, name = "CollectionDetailsManualTranscribed")
+  @JsonSubTypes.Type(value = CollectionDetailsManualTranscribed.class, name = "CollectionDetailsManualTranscribed"),
+  @JsonSubTypes.Type(value = CollectionDetailsStudioRecorded.class, name = "CollectionDetailsStudioRecorded"),
+  @JsonSubTypes.Type(value = CollectionDetailsImagePromptedRecording.class, name = "CollectionDetailsImagePromptedRecording")
 })
 */
 public interface OneOfCollectionMethodAudioCollectionDetails {

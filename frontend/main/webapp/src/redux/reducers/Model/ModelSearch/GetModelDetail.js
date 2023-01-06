@@ -38,6 +38,10 @@ const getModelDetails = (payload) => {
           title: "Type",
           para: type,
         },
+        { 
+          title: "Training Dataset",
+          para: payload["trainingDataset"]["description"]
+        }
       ];
 
     case 'tts':
@@ -59,6 +63,10 @@ const getModelDetails = (payload) => {
           title: "Type",
           para: type,
         },
+        { 
+          title: "Training Dataset",
+          para: payload["trainingDataset"]["description"]
+        }
       ];
     default:
       return [
@@ -74,10 +82,14 @@ const getModelDetails = (payload) => {
         { title: "Submitter", para: payload["submitter"]["name"] },
         { title: "Published On", para: payload["publishedOn"] },
         { title: "Source URL", para: payload["refUrl"] },
-        // {
-        //   title: "Training Dataset",
-        //   para: payload["trainingDataset"]["description"],
-        // },
+        {
+          title: "Type",
+          para: type,
+        },
+        { 
+          title: "Training Dataset",
+          para: payload["trainingDataset"]["description"],
+        },
       ];
   }
 };

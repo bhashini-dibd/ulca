@@ -20,10 +20,6 @@ public class ModelExtended extends Model {
 	@JsonProperty("modelId")
 	private String modelId;
 	
-	//@Indexed(unique=true)
-	@JsonProperty("version")
-	private String version;
-
 	@JsonProperty("userId")
 	private String userId;
 	
@@ -52,13 +48,6 @@ public class ModelExtended extends Model {
 		this.modelId = modelId;
 	}
 	
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
 
 	public ModelExtended userId(String userId) {
 		this.userId = userId;
