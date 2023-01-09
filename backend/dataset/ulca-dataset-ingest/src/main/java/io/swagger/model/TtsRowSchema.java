@@ -2,13 +2,6 @@ package io.swagger.model;
 
 import java.util.Objects;
 import io.swagger.model.AsrRowSchema;
-import io.swagger.model.AudioBitsPerSample;
-import io.swagger.model.AudioChannel;
-import io.swagger.model.AudioQualityEvaluation;
-import io.swagger.model.CollectionMethodAudio;
-import io.swagger.model.Gender;
-import io.swagger.model.Source;
-import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -17,7 +10,7 @@ import javax.validation.constraints.*;
  * TtsRowSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-12-29T16:41:19.402Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class TtsRowSchema extends AsrRowSchema implements OneOfDatasetDataRowSchemaData {

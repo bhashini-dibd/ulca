@@ -9,6 +9,7 @@ import io.swagger.model.AudioQualityEvaluation;
 import io.swagger.model.CollectionMethodAudio;
 import io.swagger.model.Gender;
 import io.swagger.model.Source;
+import io.swagger.model.SupportedLanguages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +21,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the schema defines the column name present in physical file that is being pointed by dataFilename key.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-11-09T11:49:54.138Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class AsrUnlabeledRowSchema extends AsrCommonSchema implements OneOfDatasetDataRowSchemaData {

@@ -10,13 +10,15 @@ import java.nio.file.StandardCopyOption;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.ulca.model.dao.*;
-import com.ulca.model.response.*;
-import io.swagger.model.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -38,6 +43,12 @@ import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.util.ModelConstants;
+import com.ulca.model.dao.ModelDao;
+import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelFeedback;
+import com.ulca.model.dao.ModelFeedbackDao;
+import com.ulca.model.dao.ModelHealthStatus;
+import com.ulca.model.dao.ModelHealthStatusDao;
 import com.ulca.model.exception.FileExtensionNotSupportedException;
 import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.exception.ModelStatusChangeException;
@@ -47,10 +58,31 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
+import com.ulca.model.response.GetModelFeedbackListResponse;
+import com.ulca.model.response.GetTransliterationModelIdResponse;
+import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelFeedbackSubmitResponse;
+import com.ulca.model.response.ModelHealthStatusResponse;
+import com.ulca.model.response.ModelListByUserIdResponse;
+import com.ulca.model.response.ModelListResponseDto;
+import com.ulca.model.response.ModelSearchResponse;
+import com.ulca.model.response.ModelStatusChangeResponse;
+import com.ulca.model.response.UploadModelResponse;
 
-import io.swagger.model.LanguagePair.SourceLanguageEnum;
-import io.swagger.model.LanguagePair.TargetLanguageEnum;
-import io.swagger.model.ModelTask.TypeEnum;
+import io.swagger.model.ASRInference;
+import io.swagger.model.AsyncApiDetails;
+import io.swagger.model.ImageFormat;
+import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.LanguagePair;
+import io.swagger.model.LanguagePairs;
+import io.swagger.model.License;
+import io.swagger.model.ModelProcessingType;
+import io.swagger.model.ModelTask;
+import io.swagger.model.OneOfInferenceAPIEndPointSchema;
+import io.swagger.model.Submitter;
+import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedTasks;
+import io.swagger.model.TTSInference;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -85,6 +117,9 @@ public class ModelService {
 	
 	@Autowired
 	ModelConstants modelConstants;
+	
+	@Autowired
+	MongoTemplate mongoTemplate;
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -260,9 +295,9 @@ public class ModelService {
 		}
 
 		ModelTask taskType = modelObj.getTask();
-		if (taskType.getType().equals(ModelTask.TypeEnum.TXT_LANG_DETECTION)) {
+		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
 			LanguagePair lp = new LanguagePair();
-			lp.setSourceLanguage(SourceLanguageEnum.MULTI);
+			lp.setSourceLanguage(SupportedLanguages.MIXED);
 			LanguagePairs lps = new LanguagePairs();
 			lps.add(lp);
 			modelObj.setLanguages(lps);
@@ -343,7 +378,7 @@ public class ModelService {
 		
 		if(model.getLanguages() == null) {
 			ModelTask taskType = model.getTask();
-			if(!taskType.getType().equals(ModelTask.TypeEnum.TXT_LANG_DETECTION)) {
+			if(!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
 				throw new ModelValidationException("languages is required field");
 			}
 		}
@@ -384,43 +419,99 @@ public class ModelService {
 		return true;
 	}
 
+//	public ModelSearchResponse searchModel(ModelSearchRequest request) {
+//
+//		ModelExtended model = new ModelExtended();
+//
+//		if (request.getTask() != null && !request.getTask().isBlank()) {
+//			ModelTask modelTask = new ModelTask();
+//			SupportedTasks modelTaskType = SupportedTasks.fromValue(request.getTask());
+//			if(modelTaskType == null) {
+//				throw new RequestParamValidationException("task type is not valid");
+//			}
+//			modelTask.setType(modelTaskType);
+//			model.setTask(modelTask);
+//		}else {
+//			throw new RequestParamValidationException("task is required field");
+//		}
+//		
+//		LanguagePairs lprs = new LanguagePairs();
+//		LanguagePair lp = null;
+//		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
+//			 lp = new LanguagePair();
+//			lp.setSourceLanguage(SupportedLanguages.fromValue(request.getSourceLanguage()));
+//			
+//		}
+//		
+//		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
+//			if(lp==null) {
+//				lp = new LanguagePair();
+//				
+//			}
+//			 
+//			lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
+//		}
+//		
+//		if(lp!=null) {
+//			
+//			lprs.add(lp);
+//			model.setLanguages(lprs);
+//		}
+//		
+//	
+//		/*
+//		 * seach only published model
+//		 */
+//		model.setStatus("published");
+//
+//		Example<ModelExtended> example = Example.of(model);
+//		List<ModelExtended> list = modelDao.findAll(example);
+//		
+//		if(list != null) {
+//			Collections.shuffle(list); // randomize the search
+//			return new ModelSearchResponse("Model Search Result", list, list.size());
+//		}
+//		return new ModelSearchResponse("Model Search Result", list, 0);
+//		
+//		
+//
+//	}
+	
 	public ModelSearchResponse searchModel(ModelSearchRequest request) {
 
-		ModelExtended model = new ModelExtended();
-
+		Query dynamicQuery = new Query();
+		
 		if (request.getTask() != null && !request.getTask().isBlank()) {
-			ModelTask modelTask = new ModelTask();
-			TypeEnum modelTaskType = TypeEnum.fromValue(request.getTask());
+			SupportedTasks modelTaskType = SupportedTasks.fromValue(request.getTask());
 			if(modelTaskType == null) {
 				throw new RequestParamValidationException("task type is not valid");
 			}
-			modelTask.setType(modelTaskType);
-			model.setTask(modelTask);
+			Criteria nameCriteria = Criteria.where("task.type").is(modelTaskType.name());
+			dynamicQuery.addCriteria(nameCriteria);
 		}else {
 			throw new RequestParamValidationException("task is required field");
 		}
-
-		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
-			LanguagePairs lprs = new LanguagePairs();
-			LanguagePair lp = new LanguagePair();
-			lp.setSourceLanguage(SourceLanguageEnum.fromValue(request.getSourceLanguage()));
-
-			if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
-				lp.setTargetLanguage(TargetLanguageEnum.fromValue(request.getTargetLanguage()));
-			}
-			lprs.add(lp);
-			model.setLanguages(lprs);
-		}
-		/*
-		 * seach only published model
-		 */
-		model.setStatus("published");
-
-		Example<ModelExtended> example = Example.of(model);
-		List<ModelExtended> list = modelDao.findAll(example);
 		
-		Collections.shuffle(list); // randomize the search
-		return new ModelSearchResponse("Model Search Result", list, list.size());
+		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
+			Criteria nameCriteria = Criteria.where("languages.0.sourceLanguage").is(SupportedLanguages.fromValue(request.getSourceLanguage()).name());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
+			Criteria nameCriteria = Criteria.where("languages.0.targetLanguage").is(SupportedLanguages.fromValue(request.getTargetLanguage()).name());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		Criteria nameCriteria = Criteria.where("status").is("published");
+		dynamicQuery.addCriteria(nameCriteria);
+	
+		List<ModelExtended> list = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+
+		if(list != null) {
+			Collections.shuffle(list); // randomize the search
+			return new ModelSearchResponse("Model Search Result", list, list.size());
+		}
+		return new ModelSearchResponse("Model Search Result", list, 0);
 
 	}
 	
@@ -571,15 +662,15 @@ public class ModelService {
 		ModelExtended model = new ModelExtended();
 		
 		ModelTask modelTask = new ModelTask();
-		modelTask.setType(TypeEnum.TRANSLITERATION);
+		modelTask.setType(SupportedTasks.TRANSLITERATION);
 		model.setTask(modelTask);
 
 		
 		LanguagePairs lprs = new LanguagePairs();
 		LanguagePair lp = new LanguagePair();
-		lp.setSourceLanguage(SourceLanguageEnum.fromValue(sourceLanguage));
+		lp.setSourceLanguage(SupportedLanguages.fromValue(sourceLanguage));
 		if (targetLanguage != null && !targetLanguage.isBlank()) {
-			lp.setTargetLanguage(TargetLanguageEnum.fromValue(targetLanguage));
+			lp.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
 		}
 		lprs.add(lp);
 		model.setLanguages(lprs);

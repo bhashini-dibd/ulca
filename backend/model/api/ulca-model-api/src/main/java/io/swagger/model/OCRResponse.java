@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-28T22:14:05.003Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class OCRResponse   {
@@ -35,10 +35,10 @@ public class OCRResponse   {
    * @return output
    **/
   @Schema(required = true, description = "")
-  @NotNull
+      @NotNull
 
-  @Valid
-  public Sentences getOutput() {
+    @Valid
+    public Sentences getOutput() {
     return output;
   }
 
@@ -56,9 +56,9 @@ public class OCRResponse   {
    * @return config
    **/
   @Schema(description = "")
-
-  @Valid
-  public OCRConfig getConfig() {
+  
+    @Valid
+    public OCRConfig getConfig() {
     return config;
   }
 
@@ -77,7 +77,7 @@ public class OCRResponse   {
     }
     OCRResponse ocRResponse = (OCRResponse) o;
     return Objects.equals(this.output, ocRResponse.output) &&
-            Objects.equals(this.config, ocRResponse.config);
+        Objects.equals(this.config, ocRResponse.config);
   }
 
   @Override
@@ -89,7 +89,7 @@ public class OCRResponse   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OCRResponse {\n");
-
+    
     sb.append("    output: ").append(toIndentedString(output)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
     sb.append("}");

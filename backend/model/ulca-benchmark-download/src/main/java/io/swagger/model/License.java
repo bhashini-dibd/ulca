@@ -20,6 +20,7 @@ public enum License {
     CC_BY_NC_3_0("cc-by-nc-3.0"),
     CC_BY_NC_4_0("cc-by-nc-4.0"),
     CC_BY_NC_SA_4_0("cc-by-nc-sa-4.0"),
+    CC0("cc0"),
     MIT("mit"),
     GPL_3_0("gpl-3.0"),
     BSD_3_CLAUSE("bsd-3-clause"),

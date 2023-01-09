@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the schema of data file uploaded should adhere to this specified structure.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class ParallelDatasetRowSchema  implements OneOfDatasetDataRowSchemaData {

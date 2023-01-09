@@ -44,7 +44,6 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 	public AsrUnlabeledRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-
 		ObjectMapper mapper = new ObjectMapper();
 		AsrUnlabeledRowSchema asrRowSchema = new AsrUnlabeledRowSchema();
 		JsonNode node = p.readValueAsTree();
@@ -57,9 +56,9 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 
 		for (String k : keys) {
 			try {
-				AsrRowDataSchemaKeys key = AsrRowDataSchemaKeys.valueOf(k);
+				AsrUnlabeledRowDataSchemaKeys key = AsrUnlabeledRowDataSchemaKeys.valueOf(k);
 			} catch (Exception ex) {
-				log.info("AsrRowDataSchemaKeys not valid ");
+				log.info("AsrUnlabeledRowDataSchemaKeys not valid ");
 				errorList.add(k + " unknown property ");
 			}
 
@@ -79,138 +78,42 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 
 		// optional params
 
-		if (node.has("socioEconomic")) {
-			if (!node.get("socioEconomic").isTextual()) {
-				errorList.add("socioEconomic field should be String");
-			} else {
-
-				String socioEconomic = node.get("socioEconomic").asText();
-				asrRowSchema.setSocioEconomic(socioEconomic);
-
-			}
-		}
-
-
-		if (node.has("state")) {
-			if (!node.get("state").isTextual()) {
-				errorList.add("state field should be String");
-			} else {
-
-				String state = node.get("state").asText();
-				asrRowSchema.setState(state);
-
-			}
-		}
-
-
-		if (node.has("district")) {
-			if (!node.get("district").isTextual()) {
-				errorList.add("district field should be String");
-			} else {
-
-				String district = node.get("district").asText();
-				asrRowSchema.setDistrict(district);
-
-			}
-		}
-
-		if (node.has("education")) {
-			if (!node.get("education").isTextual()) {
-				errorList.add("education field should be String");
-			} else {
-
-				String education = node.get("education").asText();
-				asrRowSchema.setEducation(education);
-
-			}
-		}
-
-		if (node.has("socioEconomic")) {
-			if (!node.get("socioEconomic").isTextual()) {
-				errorList.add("socioEconomic field should be String");
-			} else {
-
-				String socioEconomic = node.get("socioEconomic").asText();
-				asrRowSchema.setSocioEconomic(socioEconomic);
-
-			}
-		}
-
 		if (node.has("imageFilename")) {
-		 if (!node.get("imageFilename").isTextual()) {
-			errorList.add("imageFilename field should be String");
-		} else {
-
-			String imageFilename = node.get("imageFilename").asText();
-			asrRowSchema.setImageFilename(imageFilename);
-
-		}
-	}
-
-		if (node.has("assertLanguage")) {
-			if (!node.get("assertLanguage").isTextual()) {
-				errorList.add("assertLanguage field should be String");
+			if (!node.get("imageFilename").isTextual()) {
+				errorList.add("imageFilename field should be String");
 			} else {
 
-				String assertLanguage = node.get("assertLanguage").asText();
-				asrRowSchema.setAssertLanguage(assertLanguage);
+				String imageFilename = node.get("imageFilename").asText();
+				asrRowSchema.setImageFilename(imageFilename);
 
 			}
 		}
 
-		if (node.has("languagesSpoken")) {
-			if (!node.get("languagesSpoken").isArray()) {
-				errorList.add("languagesSpoken field should be String array");
+		if (node.has("speaker")) {
+			if (!node.get("speaker").isTextual()) {
+				errorList.add("speaker field should be String");
 			} else {
-				try {
-					AsrlanguagesSpoken languagesSpoken = mapper.readValue(node.get("languagesSpoken").toPrettyString(), AsrlanguagesSpoken.class);
-					if (languagesSpoken.size() < 0) {
-						errorList.add("languagesSpoken array size should be > 0 ");
-					} else {
-						asrRowSchema.setLanguagesSpoken(languagesSpoken);
-					}
-				} catch (Exception e) {
-					errorList.add("languagesSpoken field value not proper.");
-					e.printStackTrace();
+				String speaker = node.get("speaker").asText();
+				asrRowSchema.setSpeaker(speaker);
+			}
+		}
+
+		if (node.has("gender")) {
+			if (!node.get("gender").isTextual()) {
+				errorList.add("gender field should be String");
+			} else {
+				String gender = node.get("gender").asText();
+
+				Gender genderenum = Gender.fromValue(gender);
+
+				if (genderenum != null) {
+					asrRowSchema.setGender(genderenum);
+
+				} else {
+					errorList.add("gender not among one of specified values");
 				}
 			}
 		}
-
-
-		if (node.has("duration")) {
-			if (!node.get("duration").isNumber()) {
-				errorList.add("duration field should be Number");
-			} else {
-				BigDecimal duration = node.get("duration").decimalValue();
-				asrRowSchema.setDuration(duration);
-
-			}
-
-		}
-		if (node.has("pinCode")) {
-			if (!node.get("pinCode").isNumber()) {
-				errorList.add("pinCode field should be Number");
-			} else {
-				BigDecimal pinCode = node.get("pinCode").decimalValue();
-				asrRowSchema.setPinCode(pinCode);
-
-			}
-
-		}
-
-		if (node.has("stayYears")) {
-			if (!node.get("stayYears").isNumber()) {
-				errorList.add("stayYears field should be Number");
-			} else {
-				BigDecimal stayYears = node.get("stayYears").decimalValue();
-				asrRowSchema.setStayYears(stayYears);
-
-			}
-
-		}
-
-
-
 
 		if (node.has("exactAge")) {
 			if (!node.get("exactAge").isNumber()) {
@@ -223,65 +126,166 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 
 		}
 
-		if (node.has("speaker")) {
-			if (!node.get("speaker").isTextual()) {
-				errorList.add("speaker field should be String");
+		if (node.has("age")) {
+			if (!node.get("age").isTextual()) {
+				errorList.add("age field should be String");
 			} else {
-				String speaker = node.get("speaker").asText();
-				asrRowSchema.setSpeaker(speaker);
+				String age = node.get("age").asText();
+
+				AsrUnlabeledRowSchema.AgeEnum ageEnum = AsrUnlabeledRowSchema.AgeEnum.fromValue(age);
+
+				if (ageEnum != null) {
+					asrRowSchema.setAge(ageEnum);
+
+				} else {
+					errorList.add("age not among one of specified values");
+				}
 			}
-		} 
+		}
+
+		if (node.has("assertLanguage")) {
+			if (!node.get("assertLanguage").isTextual()) {
+				errorList.add("assertLanguage field should be String");
+			} else {
+
+				String assertLanguage = node.get("assertLanguage").asText();
+				if (SupportedLanguages.fromValue(assertLanguage) != null) {
+					asrRowSchema.setAssertLanguage(SupportedLanguages.fromValue(assertLanguage));
+				} else {
+					errorList.add("assertLanguage is not one of supported Language");
+				}
+
+			}
+		}
+
+		if (node.has("languagesSpoken")) {
+			if (!node.get("languagesSpoken").isArray()) {
+				errorList.add("languagesSpoken field should be String array");
+			} else {
+				try {
+					AsrlanguagesSpoken languagesSpoken = mapper.readValue(node.get("languagesSpoken").toPrettyString(),
+							AsrlanguagesSpoken.class);
+					if (languagesSpoken.size() < 0) {
+						errorList.add("languagesSpoken array size should be > 0 ");
+					} else {
+						asrRowSchema.setLanguagesSpoken(languagesSpoken);
+					}
+				} catch (Exception e) {
+					errorList.add("languagesSpoken field value not proper.");
+					e.printStackTrace();
+				}
+			}
+		}
+
+		if (node.has("state")) {
+			if (!node.get("state").isTextual()) {
+				errorList.add("state field should be String");
+			} else {
+
+				String state = node.get("state").asText();
+				asrRowSchema.setState(state);
+
+			}
+		}
+
+		if (node.has("district")) {
+			if (!node.get("district").isTextual()) {
+				errorList.add("district field should be String");
+			} else {
+
+				String district = node.get("district").asText();
+				asrRowSchema.setDistrict(district);
+
+			}
+		}
+
+		if (node.has("pinCode")) {
+			if (!node.get("pinCode").isNumber()) {
+				errorList.add("pinCode field should be Number");
+			} else {
+				BigDecimal pinCode = node.get("pinCode").decimalValue();
+				asrRowSchema.setPinCode(pinCode);
+
+			}
+
+		}
+
+		if (node.has("stayYears")) {
+			if (!node.get("stayYears").isTextual()) {
+				errorList.add("stayYears field should be String");
+			} else {
+				String stayYears = node.get("stayYears").asText();
+				asrRowSchema.setStayYears(stayYears);
+
+			}
+
+		}
+
+		if (node.has("education")) {
+			if (!node.get("education").isTextual()) {
+				errorList.add("education field should be String");
+			} else {
+
+				String education = node.get("education").asText();
+				asrRowSchema.setEducation(education);
+
+			}
+		}
 		
-		if(node.has("collectionSource")) {
-			
+		if (node.has("recordingLanguage")) {
+			if (!node.get("recordingLanguage").isTextual()) {
+				errorList.add("recordingLanguage field should be String");
+			} else {
+
+				String recordingLanguage = node.get("recordingLanguage").asText();
+				asrRowSchema.setRecordingLanguage(recordingLanguage);
+
+			}
+		}
+
+		if (node.has("socioEconomic")) {
+			if (!node.get("socioEconomic").isTextual()) {
+				errorList.add("socioEconomic field should be String");
+			} else {
+
+				String socioEconomic = node.get("socioEconomic").asText();
+				asrRowSchema.setSocioEconomic(socioEconomic);
+
+			}
+		}
+
+		if (node.has("duration")) {
+			if (!node.get("duration").isNumber()) {
+				errorList.add("duration field should be Number");
+			} else {
+				BigDecimal duration = node.get("duration").decimalValue();
+				asrRowSchema.setDuration(duration);
+
+			}
+
+		}
+
+		if (node.has("collectionSource")) {
+
 			if (!node.get("collectionSource").isArray()) {
 				errorList.add("collectionSource field should be String array");
 			} else {
 
 				try {
-					Source collectionSource = mapper.readValue(node.get("collectionSource").toPrettyString(), Source.class);
-					if(collectionSource.size() > 10 || collectionSource.size() < 0) {
+					Source collectionSource = mapper.readValue(node.get("collectionSource").toPrettyString(),
+							Source.class);
+					if (collectionSource.size() > 10 || collectionSource.size() < 0) {
 						errorList.add("collectionSource array size should be > 0 and <= 10");
-					}else {
+					} else {
 						asrRowSchema.setCollectionSource(collectionSource);
 					}
-					
+
 				} catch (Exception e) {
 					errorList.add("collectionSource field value not proper.");
 					e.printStackTrace();
 				}
 			}
-			
-		}
 
-		if (node.has("endTime")) {
-			if (!node.get("endTime").isTextual()) {
-				errorList.add("endTime field should be String");
-			} else {
-				String endTime = node.get("endTime").asText();
-				if(DateUtil.timeInHhMmSsFormat(endTime)) {
-					asrRowSchema.setEndTime(endTime);
-				}else {
-					errorList.add("endTime should be in hh:mm:ss format");
-				}
-			}
-		} 
-
-		
-
-		if (node.has("startTime")) {
-			if (!node.get("startTime").isTextual()) {
-				errorList.add("startTime field should be String");
-			} else {
-
-				String startTime = node.get("startTime").asText();
-				if(DateUtil.timeInHhMmSsFormat(startTime)) {
-					asrRowSchema.setStartTime(startTime);
-				}else {
-					errorList.add("startTime should be in hh:mm:ss format");
-				}
-
-			}
 		}
 
 		if (node.has("channel")) {
@@ -327,39 +331,6 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 			}
 		}
 
-		if (node.has("gender")) {
-			if (!node.get("gender").isTextual()) {
-				errorList.add("gender field should be String");
-			} else {
-				String gender = node.get("gender").asText();
-
-				Gender genderenum = Gender.fromValue(gender);
-
-				if (genderenum != null) {
-					asrRowSchema.setGender(genderenum);
-
-				} else {
-					errorList.add("gender not among one of specified values");
-				}
-			}
-		}
-
-		if (node.has("age")) {
-			if (!node.get("age").isTextual()) {
-				errorList.add("age field should be String");
-			} else {
-				String age = node.get("age").asText();
-
-				AsrUnlabeledRowSchema.AgeEnum ageEnum = AsrUnlabeledRowSchema.AgeEnum.fromValue(age);
-
-				if (ageEnum != null) {
-					asrRowSchema.setAge(ageEnum);
-
-				} else {
-					errorList.add("age not among one of specified values");
-				}
-			}
-		}
 		if (node.has("dialect")) {
 			if (!node.get("dialect").isTextual()) {
 				errorList.add("dialect field should be String");
@@ -397,6 +368,34 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 
 			}
 
+		}
+
+		if (node.has("startTime")) {
+			if (!node.get("startTime").isTextual()) {
+				errorList.add("startTime field should be String");
+			} else {
+
+				String startTime = node.get("startTime").asText();
+				if (DateUtil.timeInHhMmSsFormat(startTime)) {
+					asrRowSchema.setStartTime(startTime);
+				} else {
+					errorList.add("startTime should be in hh:mm:ss format");
+				}
+
+			}
+		}
+
+		if (node.has("endTime")) {
+			if (!node.get("endTime").isTextual()) {
+				errorList.add("endTime field should be String");
+			} else {
+				String endTime = node.get("endTime").asText();
+				if (DateUtil.timeInHhMmSsFormat(endTime)) {
+					asrRowSchema.setEndTime(endTime);
+				} else {
+					errorList.add("endTime should be in hh:mm:ss format");
+				}
+			}
 		}
 
 		if (node.has("collectionMethod")) {

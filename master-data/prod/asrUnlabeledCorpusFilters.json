@@ -5,8 +5,8 @@
       "label": "Source Language",
       "active": true,
       "values": {
-        "master": "/languages.json",
-        "jsonPath": "$.languages"
+        "master": "/vmdslanguages.json",
+        "jsonPath": "$.vmdslanguages"
       }
     },
     {

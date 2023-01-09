@@ -161,7 +161,7 @@ class ASRService:
                     epoch = eval(str(time.time()).replace('.', '')[0:13])
                     if isinstance(data['imageFilename'],list):
                         data['imageFilename'] = data['imageFilename'][0]
-                    imageFileName = data['imageFilename'].split('/')[-1]
+                    imageFileName = data['imageFilename']#.split('/')[-1]
                     s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
                     img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
                     if not img_object_store_path:
@@ -208,6 +208,10 @@ class ASRService:
             db_query, tags = {}, []
             if 'sourceLanguage' in query.keys():
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
+            if 'mixedDataSource' in query.keys():
+                db_query["mixedDataSource"] = query["mixedDataSource"]
+                if 'assertLanguage' in query.keys() and len(query["assertLanguage"])> 0 :
+                    db_query["assertLanguage"] = {"$in": query["assertLanguage"]}
             if 'collectionMethod' in query.keys():
                 tags.extend(query["collectionMethod"])
             if 'license' in query.keys():

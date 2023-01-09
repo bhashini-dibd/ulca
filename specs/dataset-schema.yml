@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.7
+  version: 0.10.8
 servers:
   - url: /ulca
 paths: {}
@@ -166,14 +166,12 @@ components:
       type: object
       properties:
         tagsFormat:
-          type: string
-          description: The accepted standard based on which NER tags are labelled in the dataset.
-          enum:
-            - CoNLL-2003
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
     NerDatasetRowSchema:
       required:
+        - sourceText
         - nerData
       properties:
         sourceText:
@@ -974,6 +972,18 @@ components:
       properties:
         contributor:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+    CollectionDetailsStudioRecorded:
+      type: object
+      description: studio recorded collection details
+      properties:
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+    CollectionDetailsImagePromptedRecording:
+      type: object
+      description: image prompted recording collection details
+      properties:
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
     CollectionMethodAudio:
       type: object
       description: specifies how the audio dataset has been curated.
@@ -992,11 +1002,14 @@ components:
               - machine-generated-transcript
               - manual-transcribed
               - studio-recorded
+              - image-prompted-recording
         collectionDetails:
           oneOf:
             - $ref: '#/components/schemas/CollectionDetailsAudioAutoAligned'
             - $ref: '#/components/schemas/CollectionDetailsMachineGeneratedTranscript'
             - $ref: '#/components/schemas/CollectionDetailsManualTranscribed'
+            - $ref: '#/components/schemas/CollectionDetailsStudioRecorded'
+            - $ref: '#/components/schemas/CollectionDetailsImagePromptedRecording'
     AudioQualityEvaluation:
       type: object
       description: describes the audio quality evaluation method
@@ -1047,42 +1060,31 @@ components:
       required:
         - tag
       anyOf:
-        - $ref: '#/components/schemas/NerWordIndex'
-        - $ref: '#/components/schemas/NerWord'
+        - $ref: '#/components/schemas/NerTokenIndex'
+        - $ref: '#/components/schemas/NerToken'
       properties:
-        position:
-          type: string
-          description: position of the word in phrase. B- Beginning, I- Intermediate
-          enum:
-            - B
-            - I
         tag:
           type: string
           description: NER tag for corresponsing word/index. This should be inline with the corresponding tagsFormat specified in params.json.
           example: PER
-          enum:
-            - O
-            - PER
-            - ORG
-            - LOC
-    NerWordIndex:
+    NerTokenIndex:
       type: object
       description: Ner dataset sentencewise metadata
       required:
-        - wordIndex
+        - tokenIndex
       properties:
-        wordIndex:
+        tokenIndex:
           type: number
-          description: index number of word
+          description: index number of token
           example: 1
           minItems: 1
-    NerWord:
+    NerToken:
       type: object
       description: Ner dataset sentencewise metadata
       required:
-        - word
+        - token
       properties:
-        word:
+        token:
           type: string
           description: corresponsing word in the sentence
           minItems: 1
@@ -1133,11 +1135,14 @@ components:
           type: number
           description: 6 digit pincode of the recording location
         stayYears:
-          type: number
+          type: string
           description: number of years the speaker claims to live in the district
         education:
           type: string
           description: level of eduction of the speaker
+        recordingLanguage:
+          type: string
+          description: language in which voice is recorded
         socioEconomic:
           type: string
           description: Economic condition of the speaker

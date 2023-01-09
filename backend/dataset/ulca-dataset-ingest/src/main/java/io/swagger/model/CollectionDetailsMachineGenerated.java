@@ -13,10 +13,10 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "machine generat6ed collection details")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-07-06T11:30:23.888Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
-public class CollectionDetailsMachineGenerated  implements OneOfGlossaryDatasetCollectionMethodCollectionDetails {
+public class CollectionDetailsMachineGenerated  implements OneOfGlossaryDatasetCollectionMethodCollectionDetails, OneOfNerDatasetCollectionMethodCollectionDetails {
   @JsonProperty("model")
   private String model = null;
 

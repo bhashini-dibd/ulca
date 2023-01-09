@@ -289,6 +289,7 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 
 				} else {
+					log.info("file location not present :: " + fileLocation);
 					failedCount++;
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					datasetErrorPublishService.publishDatasetError("dataset-training",
@@ -305,7 +306,7 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
 
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
-				+ numberOfRecords + " success record :: " + successCount);
+				+ numberOfRecords + " success record :: " + successCount + " failed record :: " + failedCount);
 
 	}
 

@@ -2,7 +2,6 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Contributor;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,9 +14,9 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "manual translated collection details")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
-@JsonDeserialize(as = CollectionDetailsManualTranscribed.class)
+
 public class CollectionDetailsManualTranscribed  implements OneOfCollectionMethodAudioCollectionDetails {
   @JsonProperty("contributor")
   private Contributor contributor = null;

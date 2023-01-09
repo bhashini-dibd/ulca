@@ -9,7 +9,7 @@ import Spinner from "../../../../components/common/Spinner";
 import { Switch } from "@material-ui/core";
 import { translate } from "../../../../../assets/localisation";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
-import { ReactTransliterate } from "react-transliterate";
+import { IndicTransliterate } from "react-transliterate";
 import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
@@ -19,7 +19,6 @@ import Modal from "../../../../components/common/Modal";
 import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
-import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
 
 import {
   Grid,
@@ -332,8 +331,8 @@ const TTSLiveInference = (props) => {
           {showTransliteration ? (
             <IndicTransliterate
               lang={source}
-              apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
-              modelId={transliterationModelId}
+              customApiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
+              transliterationModelId={transliterationModelId}
               value={sourceText}
               onChangeText={(text) => {
                 console.log("text", text);

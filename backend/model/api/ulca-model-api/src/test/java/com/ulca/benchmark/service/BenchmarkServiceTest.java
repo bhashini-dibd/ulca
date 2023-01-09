@@ -15,6 +15,9 @@ import io.swagger.model.Benchmark;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePairs;
 import io.swagger.model.ModelTask;
+import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedTasks;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -126,7 +129,7 @@ class BenchmarkServiceTest {
         benchmark.setBenchmarkId("test");
 
         ModelTask modelTask = new ModelTask();
-        modelTask.setType(ModelTask.TypeEnum.TRANSLATION);
+        modelTask.setType(SupportedTasks.TRANSLATION);
         benchmark.setTask(modelTask);
 
         ModelConstants modelConstants = new ModelConstants();
@@ -160,8 +163,8 @@ class BenchmarkServiceTest {
         ModelExtended modelExtended = new ModelExtended();
         LanguagePairs languagePairs = new LanguagePairs();
         LanguagePair languagePair = new LanguagePair();
-        languagePair.setSourceLanguage(LanguagePair.SourceLanguageEnum.EN);
-        languagePair.setTargetLanguage(LanguagePair.TargetLanguageEnum.HI);
+        languagePair.setSourceLanguage(SupportedLanguages.EN);
+        languagePair.setTargetLanguage(SupportedLanguages.HI);
         languagePairs.add(languagePair);
         modelExtended.setLanguages(languagePairs);
 
@@ -169,7 +172,7 @@ class BenchmarkServiceTest {
         benchmark.setBenchmarkId("test");
 
         ModelTask modelTask = new ModelTask();
-        modelTask.setType(ModelTask.TypeEnum.TRANSLATION);
+        modelTask.setType(SupportedTasks.TRANSLATION);
         benchmark.setTask(modelTask);
 
         BenchmarkProcess benchmarkProcess = new BenchmarkProcess();
@@ -209,16 +212,16 @@ class BenchmarkServiceTest {
 
         if (request.getTask() != null && !request.getTask().isBlank()) {
             modelTask = new ModelTask();
-            modelTask.setType(ModelTask.TypeEnum.fromValue(request.getTask()));
+            modelTask.setType(SupportedTasks.fromValue(request.getTask()));
 
         }
 
         if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
             lp = new LanguagePair();
-            lp.setSourceLanguage(LanguagePair.SourceLanguageEnum.fromValue(request.getSourceLanguage()));
+            lp.setSourceLanguage(SupportedLanguages.fromValue(request.getSourceLanguage()));
 
             if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
-                lp.setTargetLanguage(LanguagePair.TargetLanguageEnum.fromValue(request.getTargetLanguage()));
+                lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
             }
 
         }
@@ -251,7 +254,7 @@ class BenchmarkServiceTest {
 
         Benchmark benchmark = new Benchmark();
         ModelTask modelTask = new ModelTask();
-        modelTask.setType(ModelTask.TypeEnum.TRANSLATION);
+        modelTask.setType(SupportedTasks.TRANSLATION);
         benchmark.setTask(modelTask);
 
 

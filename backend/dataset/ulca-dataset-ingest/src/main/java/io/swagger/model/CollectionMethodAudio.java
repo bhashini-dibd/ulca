@@ -16,7 +16,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "specifies how the audio dataset has been curated.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
 
 public class CollectionMethodAudio   {
@@ -28,7 +28,11 @@ public class CollectionMethodAudio   {
     
     MACHINE_GENERATED_TRANSCRIPT("machine-generated-transcript"),
     
-    MANUAL_TRANSCRIBED("manual-transcribed");
+    MANUAL_TRANSCRIBED("manual-transcribed"),
+    
+    STUDIO_RECORDED("studio-recorded"),
+    
+    IMAGE_PROMPTED_RECORDING("image-prompted-recording");
 
     private String value;
 

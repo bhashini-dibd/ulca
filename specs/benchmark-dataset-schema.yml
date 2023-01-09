@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.3.0
+  version: 0.4.0
 servers:
   - url: /ulca
 paths: {}
@@ -46,6 +46,7 @@ components:
             - $ref: '#/components/schemas/AsrBenchmarkDatasetParamsSchema'
             - $ref: '#/components/schemas/OcrBenchmarkDatasetParamsSchema'
             - $ref: '#/components/schemas/TxtLangDetectionBenchmarkDatasetParamsSchema'
+            - $ref: '#/components/schemas/NerBenchmarkDatasetParamsSchema'
     DatasetDataRowSchema:
       type: object
       description: the benchmark dataset data.json file should follow this schema
@@ -58,6 +59,7 @@ components:
             - $ref: '#/components/schemas/AsrBenchmarkDatasetRowSchema'
             - $ref: '#/components/schemas/OcrBenchmarkDatasetRowSchema'
             - $ref: '#/components/schemas/TxtLangDetectionBenchmarkDatasetRowSchema'
+            - $ref: '#/components/schemas/NerBenchmarkDatasetRowSchema'
     BenchmarkDatasetCommonParamsSchema:
       type: object
       description: common parameters or attributes of dataset that is primarily same across the supported dataset.
@@ -83,8 +85,8 @@ components:
           type: string
           description: description of the benchmark dataset type
         languages:
-          nullable : true
-          allOf : 
+          nullable: true
+          allOf:
             - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         collectionSource:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
@@ -148,6 +150,20 @@ components:
           description: Indic language code, iso-639-1, iso 639-2
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
+    NerBenchmarkDatasetParamsSchema:
+      required:
+        - tagsFormat
+      allOf:
+        - $ref: '#/components/schemas/BenchmarkDatasetCommonParamsSchema'
+        - type: object
+      type: object
+      properties:
+        tagsFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
+    NerBenchmarkDatasetRowSchema:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/NerDatasetRowSchema
+        - type: object
     AsrBenchmarkDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/BenchmarkDatasetCommonParamsSchema'
