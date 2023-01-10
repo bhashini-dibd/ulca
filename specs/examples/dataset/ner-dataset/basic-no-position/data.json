@@ -1,7 +1,7 @@
-nerData[
+[
     {
         "sourceText": "सूत्रों के अनुसार , जांच आयोग ने 17 पेज की अपनी रिपोर्ट सिंध प्रांत के गृह विभाग के पास भेज दी है । ",
-        "sentenceMetadata": [
+        "nerData": [
             {
                 "tokenIndex": 13,
                 "token": "सिंध",
@@ -16,7 +16,7 @@ nerData[
     },
     {
         "sourceText": "आस्ट्रेलिया के खिलाफ वनडे टीम की कमान मिताली को ",
-        "sentenceMetadata": [
+        "nerData": [
             {
                 "tokenIndex": 1,
                 "token": "आस्ट्रेलिया",
