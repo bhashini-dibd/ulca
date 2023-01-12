@@ -332,8 +332,8 @@ const SpeechToSpeech = () => {
     }).then(async (ttsResp) => {
       let rsp_data = await ttsResp.json();
       if (ttsResp.ok) {
-        const blob = b64toBlob(rsp_data.outputText, "audio/wav");
-        setOutputBase64(rsp_data.outputText);
+        const blob = b64toBlob(rsp_data?.audio[0]?.audioContent, "audio/wav");
+        setOutputBase64(rsp_data?.audio[0]?.audioContent);
         const urlBlob = window.URL.createObjectURL(blob);
         setAudio(urlBlob);
         setSnackbarInfo({ ...snackbar, open: false, message: "" });
