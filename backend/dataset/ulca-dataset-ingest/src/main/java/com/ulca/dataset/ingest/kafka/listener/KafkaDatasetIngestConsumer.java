@@ -14,6 +14,7 @@ import com.ulca.dataset.kakfa.DatasetAsrValidateIngest;
 import com.ulca.dataset.kakfa.DatasetDocumentLayoutValidateIngest;
 import com.ulca.dataset.kakfa.DatasetGlossaryCorpusValidateIngest;
 import com.ulca.dataset.kakfa.DatasetMonolingualValidateIngest;
+import com.ulca.dataset.kakfa.DatasetNerCorpusValidateIngest;
 import com.ulca.dataset.kakfa.DatasetOcrValidateIngest;
 import com.ulca.dataset.kakfa.DatasetParallelCorpusValidateIngest;
 import com.ulca.dataset.kakfa.DatasetTransliterationValidateIngest;
@@ -54,6 +55,9 @@ public class KafkaDatasetIngestConsumer {
 	
 	@Autowired
 	DatasetGlossaryCorpusValidateIngest datasetGlossaryCorpusValidateIngest;
+	
+	@Autowired
+	DatasetNerCorpusValidateIngest datasetNerCorpusValidateIngest;
 
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
@@ -127,6 +131,11 @@ public class KafkaDatasetIngestConsumer {
 				log.info("calling the glossary-corpus validate service");
 				datasetGlossaryCorpusValidateIngest.validateIngest(datasetIngest);
 				break;
+				
+			case NER_CORPUS:
+				log.info("calling the ner-corpus validate service");
+				datasetNerCorpusValidateIngest.validateIngest(datasetIngest);
+				break;	
 				
 			default:
 				log.info("datasetType for serviceRequestNumber not one of defined datasetType");
