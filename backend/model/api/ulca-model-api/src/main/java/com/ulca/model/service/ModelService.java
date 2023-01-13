@@ -497,7 +497,7 @@ public class ModelService {
 			dynamicQuery.addCriteria(nameCriteria);
 		}
 		
-		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()&& !request.getTargetLanguage().equalsIgnoreCase("All") ) {
+		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank() && !request.getTargetLanguage().equalsIgnoreCase("All") ) {
 			Criteria nameCriteria = Criteria.where("languages.0.targetLanguage").is(SupportedLanguages.fromValue(request.getTargetLanguage()).name());
 			dynamicQuery.addCriteria(nameCriteria);
 		}
@@ -505,7 +505,7 @@ public class ModelService {
 		//domain
 		
 		if (request.getDomain() != null && !request.getDomain().isBlank() && !request.getDomain().equalsIgnoreCase("All")) {
-			Criteria nameCriteria = Criteria.where("domain.0").is(SupportedLanguages.fromValue(request.getTargetLanguage()).name());
+			Criteria nameCriteria = Criteria.where("domain.0").is(request.getDomain());
 			dynamicQuery.addCriteria(nameCriteria);
 		}
 		
@@ -513,7 +513,7 @@ public class ModelService {
 		
 		// submitter
 		if (request.getSubmitter()!= null && !request.getSubmitter().isBlank() && !request.getSubmitter().equalsIgnoreCase("All")) {
-			Criteria nameCriteria = Criteria.where("submitter.name").is(SupportedLanguages.fromValue(request.getTargetLanguage()).name());
+			Criteria nameCriteria = Criteria.where("submitter.name").is(request.getSubmitter());
 			dynamicQuery.addCriteria(nameCriteria);
 		}
 		
@@ -521,7 +521,7 @@ public class ModelService {
 		// userId
 		
 		if (request.getUserId()!= null && !request.getUserId().isBlank() && !request.getUserId().equalsIgnoreCase("All")) {
-			Criteria nameCriteria = Criteria.where("userId").is(SupportedLanguages.fromValue(request.getTargetLanguage()).name());
+			Criteria nameCriteria = Criteria.where("userId").is(request.getUserId());
 			dynamicQuery.addCriteria(nameCriteria);
 		}
 
