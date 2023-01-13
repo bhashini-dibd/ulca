@@ -492,15 +492,41 @@ public class ModelService {
 			throw new RequestParamValidationException("task is required field");
 		}
 		
-		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
+		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank() && !request.getSourceLanguage().equalsIgnoreCase("All")) {
 			Criteria nameCriteria = Criteria.where("languages.0.sourceLanguage").is(SupportedLanguages.fromValue(request.getSourceLanguage()).name());
 			dynamicQuery.addCriteria(nameCriteria);
 		}
 		
-		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
+		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank() && !request.getTargetLanguage().equalsIgnoreCase("All") ) {
 			Criteria nameCriteria = Criteria.where("languages.0.targetLanguage").is(SupportedLanguages.fromValue(request.getTargetLanguage()).name());
 			dynamicQuery.addCriteria(nameCriteria);
 		}
+		
+		//domain
+		
+		if (request.getDomain() != null && !request.getDomain().isBlank() && !request.getDomain().equalsIgnoreCase("All")) {
+			Criteria nameCriteria = Criteria.where("domain.0").is(request.getDomain());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		
+		
+		// submitter
+		if (request.getSubmitter()!= null && !request.getSubmitter().isBlank() && !request.getSubmitter().equalsIgnoreCase("All")) {
+			Criteria nameCriteria = Criteria.where("submitter.name").is(request.getSubmitter());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		
+		// userId
+		
+		if (request.getUserId()!= null && !request.getUserId().isBlank() && !request.getUserId().equalsIgnoreCase("All")) {
+			Criteria nameCriteria = Criteria.where("userId").is(request.getUserId());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+
+		
+		
 		
 		Criteria nameCriteria = Criteria.where("status").is("published");
 		dynamicQuery.addCriteria(nameCriteria);

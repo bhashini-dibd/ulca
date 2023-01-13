@@ -22,5 +22,12 @@ public class ModelSearchRequest {
 	private String sourceLanguage;
 	
 	private String targetLanguage;
+	
+	private String domain;
+	
+	private String submitter;
+	
+	private String userId;
+	
 	  
 }
