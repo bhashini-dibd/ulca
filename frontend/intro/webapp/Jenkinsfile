@@ -10,7 +10,7 @@ try {
       checkout scm
    }
 stage('compress build folder')
-withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials', passwordVariable: 'dockerhub_pass', usernameVariable: 'dockerhub_user')])
+withCredentials([usernamePassword(credentialsId: 'samit905787', passwordVariable: 'samit905749@', usernameVariable: 'samit905787')])
 {
 sh '''
 cd frontend/intro/webapp
