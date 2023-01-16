@@ -75,13 +75,13 @@ const SpeechToSpeech = () => {
       const asrVal = asr.filter(a => a.sourceLanguage === filter.src.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch')
       // const asrVal = asr.filter(a => a.sourceLanguage === filter.src.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch' && a.label.includes('AI4Bharat') )
       //const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
-      const vakyanshAsr = asrVal.filter(asr => asr.label.includes('AI4Bharat'));
+      const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('ai4bharat'));
       // const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
       const translationVal = translation.filter(a => a.sourceLanguage === filter.src.value && a.targetLanguage === filter.tgt.value);
       const indictransTranslation = translationVal.filter(asr => asr.label.toLowerCase().includes('indictrans'));
      // const ttsVal = tts.filter(a => a.sourceLanguage === filter.tgt.value);
      const ttsVal = tts.filter(a => a.sourceLanguage === filter.tgt.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch');
-      const vakyanshTts = ttsVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
+      const vakyanshTts = ttsVal.filter(asr => asr.label.toLowerCase().includes('ai4bharat'));
       if (vakyanshAsr.length) {
         setFilter((prev) => ({ ...prev, asr: vakyanshAsr[0] }))
       } else {
