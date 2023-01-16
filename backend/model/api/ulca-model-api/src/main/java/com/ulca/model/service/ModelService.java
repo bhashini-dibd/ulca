@@ -402,7 +402,8 @@ public class ModelService {
 			throw new ModelValidationException("inferenceEndPoint is required field");
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
-		if(!inferenceAPIEndPoint.isIsSyncApi()) {
+		
+		if(inferenceAPIEndPoint.isIsSyncApi()!=null && !inferenceAPIEndPoint.isIsSyncApi()) {
 			AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
 			if(asyncApiDetails.getPollingUrl().isBlank()) {
 				throw new ModelValidationException("PollingUrl is required field for async model");
