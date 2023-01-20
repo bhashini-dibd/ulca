@@ -237,10 +237,10 @@ const SearchAndDownloadRecords = (props) => {
   const handleLanguagePairChange = (value, property) => {
     setLanguagePair({ ...languagePair, [property]: value });
 
-    if(property === "target") {
+    if (property === "target") {
       const temp = value.some((item) => item.code === "mixed");
 
-      if(!temp) {
+      if (!temp) {
         handleDataSourceChange();
       }
     }
@@ -321,7 +321,12 @@ const SearchAndDownloadRecords = (props) => {
   // };
 
   const getTitle = () => {
-    if (datasetType["parallel-corpus"]) return "Select Language Pair";
+    if (
+      datasetType["parallel-corpus"] ||
+      datasetType["transliteration-corpus"] ||
+      datasetType["glossary-corpus"]
+    )
+      return "Select Language Pair";
     // else if (datasetType['ocr-corpus'])
     //     return "Select Script"
     else return "Select Language";
@@ -435,12 +440,16 @@ const SearchAndDownloadRecords = (props) => {
 
     let criteria = {
       sourceLanguage: getArrayValue(
-        datasetType["parallel-corpus"] || datasetType["transliteration-corpus"]
+        datasetType["parallel-corpus"] ||
+          datasetType["transliteration-corpus"] ||
+          datasetType["glossary-corpus"]
           ? [languagePair.source]
           : languagePair.target
       ),
       targetLanguage:
-        datasetType["parallel-corpus"] || datasetType["transliteration-corpus"]
+        datasetType["parallel-corpus"] ||
+        datasetType["transliteration-corpus"] ||
+        datasetType["glossary-corpus"]
           ? getArrayValue(languagePair.target)
           : null,
       ...getObjectValue(obj),
@@ -617,9 +626,7 @@ const SearchAndDownloadRecords = (props) => {
             </Grid>
             <Grid item xs={6}>
               <Button
-                disabled={
-                  !languagePair.target.length
-                }
+                disabled={!languagePair.target.length}
                 fullWidth
                 size="large"
                 variant="contained"
@@ -746,8 +753,8 @@ const SearchAndDownloadRecords = (props) => {
     if (value) {
       setSelectedDataSource(value);
       setShowAssertLanguage(true);
-      
-      if(!temp) {
+
+      if (!temp) {
         setLanguagePair({
           ...languagePair,
           target: [
@@ -783,7 +790,7 @@ const SearchAndDownloadRecords = (props) => {
               )}
             />
           </div>
-          )}
+        )}
       </>
     );
   };
