@@ -56,12 +56,27 @@ class StoreModel:
             result = {}
             for key in key_list:
                 val = client.get(key)
-                log.info(f'result of redis output {val}')
+                #log.info(f'result of redis output {val}')
                 if val:
                     result[key]=json.loads(val)
-            if result["languages"]:
-                result["languages"] = sorted(result['languages'], key=lambda d: d['code'])
-                result["languages"] = sorted(result['languages'], key=lambda d: d['label'])
+            log.info(f'result of redis ou {type(result.keys())}')
+            if "datasetFilterParams" in result.keys():
+                for res in result["datasetFilterParams"]:
+                    for re in res['values']:
+                        #print("fffffffffffffffffffffffffffffffffffff")
+                        if re['code'] == "targetLanguage" or re["code"] == "sourceLanguage":
+                    #       print("ff")
+                            re["values"] = sorted(re['values'], key=lambda d: d['code'])
+                            re["values"] = sorted(re['values'], key=lambda d: d['label'])
+            
+            elif "languages" in result.keys() and "feedbackQns" in result.keys():
+                if result["languages"]:
+                    result["languages"] = sorted(result['languages'], key=lambda d: d['code'])
+                    result["languages"] = sorted(result['languages'], key=lambda d: d['label'])
+                #print("kmkmkmkmmkkm")
+            #if result["languages"]:
+             #   result["languages"] = sorted(result['languages'], key=lambda d: d['code'])
+              #  result["languages"] = sorted(result['languages'], key=lambda d: d['label'])
             return result
         except Exception as e:
             log.exception("Exception in REPO: search | Cause: " + str(e))

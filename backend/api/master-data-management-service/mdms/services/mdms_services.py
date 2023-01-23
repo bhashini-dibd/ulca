@@ -78,23 +78,12 @@ class MasterDataServices():
     
     def format_result(self,result):
         try:
-
-            if "datasetFilterParams" in result.keys():
-                for master in result["datasetFilterParams"]:
-                    for value in master["values"]:
-                        if value['code'] == "sourceLanguage" or value["code"] == "targetLanguage":
-                            value["values"] = sorted(value['values'], key=lambda d: d['code'])
-                            value["values"] = sorted(value['values'], key=lambda d: d['label'])
-                    #sort = sorted(master['values'][0]['values'], key=lambda d: d['code'])
-                    #sort =  sorted(master['values'][0]['values'], key=lambda d: d['label'])
-                    #master['values'][0]['values'] = sort
-
-            # for master, values in result.items():
-            #     if master == "datasetFilterParams":
-            #         for submaster in values: #parallel-corpus, mono etcc.. level
-            #             for attrib in submaster["values"]: # filetrs specific to dtype
-            #                 if attrib["code"] == "collectionMethod": 
-            #                   attrib["values"] = [x for x in attrib["values"] if submaster["datasetType"] in x.get("datasetType",[]) ]
+            for master, values in result.items():
+                if master == "datasetFilterParams":
+                    for submaster in values: #parallel-corpus, mono etcc.. level
+                        for attrib in submaster["values"]: # filetrs specific to dtype
+                            if attrib["code"] == "collectionMethod": 
+                              attrib["values"] = [x for x in attrib["values"] if submaster["datasetType"] in x.get("datasetType",[]) ]
             return result
             
         except Exception as e:
