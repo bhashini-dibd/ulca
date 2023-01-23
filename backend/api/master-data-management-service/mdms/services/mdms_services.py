@@ -81,9 +81,13 @@ class MasterDataServices():
 
             if "datasetFilterParams" in result.keys():
                 for master in result["datasetFilterParams"]:
-                    sort = sorted(master['values'][0]['values'], key=lambda d: d['code'])
-                    sort =  sorted(master['values'][0]['values'], key=lambda d: d['label'])
-                    master['values'][0]['values'] = sort
+                    for value in master:
+                        if value['code'] == "sourceLanguage" or value["code"] == "targetLanguage":
+                            value["values"] = sorted(value['values'], key=lambda d: d['code'])
+                            value["values"] = sorted(value['values'], key=lambda d: d['label'])
+                    #sort = sorted(master['values'][0]['values'], key=lambda d: d['code'])
+                    #sort =  sorted(master['values'][0]['values'], key=lambda d: d['label'])
+                    #master['values'][0]['values'] = sort
 
             # for master, values in result.items():
             #     if master == "datasetFilterParams":
