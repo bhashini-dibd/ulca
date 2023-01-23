@@ -1,60 +1,63 @@
 {
-    "name": "Ai4Bharat Named Entity Recognition",
-    "version": "v1.0",
-    "description": "Ai4Bharat model to detect named entities from provided text",
-    "refUrl": "https://github.com/AI4Bharat/",
-    "task": {
-       "type" : "ner"
-    },
-    "languages": null,
-    "license": "mit",
-    "domain": [
-       "general"
-    ],
-    "submitter": {
-        "name": "AI4Bharat",
-        "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
-        "team": [
-           {
-              "name": "Pratyush Kumar",
-              "aboutMe": "RBCDSAI, AI4Bharat, IITM"
-           },
-           {
-              "name": "Mitesh Shantadevi Khapra",
-              "aboutMe": "RBCDSAI, AI4Bharat, IITM"
-           },
-           {
-              "name": "Anoop Kunchukuttan",
-              "aboutMe": "Microsoft, AI4Bharat"
-           },
-           {
-              "name": "Vivek Raghavan",
-              "aboutMe": "EkStep"
-           }
-        ]
-     },
-    "inferenceEndPoint": {
-       "callbackUrl": "https://developers.ulca.org/aai4b-ner-inference/v0/ner",
-       "schema": {
-          "taskType": "ner",
-          "tagsFormat" : "conll2003",
-          "request": {
+   "name": "Ai4Bharat Named Entity Recognition",
+   "version": "v1.0",
+   "description": "Ai4Bharat model to detect named entities from provided text",
+   "refUrl": "https://github.com/AI4Bharat/",
+   "task": {
+      "type": "ner"
+   },
+   "languages": [
+      {
+         "sourceLanguage": "en"
+      }
+   ],
+   "license": "mit",
+   "domain": [
+      "general"
+   ],
+   "submitter": {
+      "name": "AI4Bharat",
+      "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+      "team": [
+         {
+            "name": "Pratyush Kumar",
+            "aboutMe": "RBCDSAI, AI4Bharat, IITM"
+         },
+         {
+            "name": "Mitesh Shantadevi Khapra",
+            "aboutMe": "RBCDSAI, AI4Bharat, IITM"
+         },
+         {
+            "name": "Anoop Kunchukuttan",
+            "aboutMe": "Microsoft, AI4Bharat"
+         },
+         {
+            "name": "Vivek Raghavan",
+            "aboutMe": "EkStep"
+         }
+      ]
+   },
+   "inferenceEndPoint": {
+      "callbackUrl": "https://developers.ulca.org/aai4b-ner-inference/v0/ner",
+      "schema": {
+         "taskType": "ner",
+         "tagsFormat": "conll2003",
+         "request": {
             "input": [
-                {
-                    "source": "my name is ram and i live in chennai"
-                }
+               {
+                  "source": "my name is ram and i live in chennai"
+               }
             ],
             "config": {
-                "language": {
-                       "sourceLanguage" : "en"
-                }
+               "language": {
+                  "sourceLanguage": "en"
+               }
             }
-        }
-       }
-    },
-    "trainingDataset": {
-       "datasetId": "2398749282",
-       "description": "trained on the general datasets from ULCA"
-    }
- }
- 
+         }
+      }
+   },
+   "trainingDataset": {
+      "datasetId": "2398749282",
+      "description": "trained on the general datasets from ULCA"
+   }
+}
