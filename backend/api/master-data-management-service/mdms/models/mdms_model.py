@@ -59,6 +59,9 @@ class StoreModel:
                 log.info(f'result of redis output {val}')
                 if val:
                     result[key]=json.loads(val)
+                if result["languages"]:
+                    result["languages"] = sorted(result['languages'], key=lambda d: d['code'])
+                    result["languages"] = sorted(result['languages'], key=lambda d: d['label'])
             return result
         except Exception as e:
             log.exception("Exception in REPO: search | Cause: " + str(e))
