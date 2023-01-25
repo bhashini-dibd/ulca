@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.9
+  version: 0.10.10
 servers:
   - url: /ulca
 paths: {}
@@ -167,18 +167,25 @@ components:
       properties:
         tagsFormat:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
+        isStopwordsRemoved:
+          type: boolean
+          description: Expects if provided ner list contains stopwords or not
+          default: false
+          example: false
+        formatDescription:
+          type: string
+          description: any description about the particular format of dataset. or about the tags used in it.
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
     NerDatasetRowSchema:
       required:
-        - sourceText
         - nerData
       properties:
+        nerData:
+          $ref: '#/components/schemas/NerDataArray'
         sourceText:
           type: string
           description: textual data in source language
-        nerData:
-          $ref: '#/components/schemas/NerDataArray'
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
       type: object
@@ -1057,29 +1064,6 @@ components:
     NerData:
       type: object
       description: Ner dataset sentencewise metadata
-      anyOf:
-        - $ref: '#/components/schemas/NerTokenIndex'
-        - $ref: '#/components/schemas/NerToken'
-
-    NerTokenIndex:
-      type: object
-      description: Ner dataset sentencewise metadata
-      required:
-        - tokenIndex
-        - tag
-      properties:
-        tokenIndex:
-          type: number
-          description: index number of token
-          example: 1
-          minItems: 1
-        tag:
-          type: string
-          description: NER tag for corresponsing word/index. This should be inline with the corresponding tagsFormat specified in params.json.
-          example: PER
-    NerToken:
-      type: object
-      description: Ner dataset sentencewise metadata
       required:
         - token
         - tag
@@ -1092,6 +1076,17 @@ components:
           type: string
           description: NER tag for corresponsing word/index. This should be inline with the corresponding tagsFormat specified in params.json.
           example: PER
+        tokenIndex:
+          type: number
+          description: index number of token
+          example: 1
+          minItems: 1
+        tokenStartIndex:
+          type: number
+          description: the starting index of word in sentence
+        tokenEndIndex:
+          type: number
+          description: the ending index of word in sentence
     AsrlanguagesSpoken:
       type: array
       description: list of various languages the speaker is good enough to speak
