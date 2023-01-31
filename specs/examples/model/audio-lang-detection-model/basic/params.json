@@ -1,0 +1,49 @@
+{
+    "name": "Ai4Bharat textual language detection",
+    "version": "v1.0",
+    "description": "Ai4Bharat model to detect language from provided audio",
+    "refUrl": "https://github.com/AI4Bharat/indicTrans",
+    "task": {
+        "type": "txt-lang-detection"
+    },
+    "languages": null,
+    "license": "mit",
+    "domain": [
+        "general"
+    ],
+    "submitter": {
+        "name": "AI4Bharat",
+        "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+        "team": [
+            {
+                "name": "Pratyush Kumar",
+                "aboutMe": "RBCDSAI, AI4Bharat, IITM"
+            },
+            {
+                "name": "Mitesh Shantadevi Khapra",
+                "aboutMe": "RBCDSAI, AI4Bharat, IITM"
+            },
+            {
+                "name": "Anoop Kunchukuttan",
+                "aboutMe": "Microsoft, AI4Bharat"
+            }
+        ]
+    },
+    "inferenceEndPoint": {
+        "callbackUrl": "https://developers.ulca.org/aai4b-nmt-inference/v0/audio-detection-dummy",
+        "schema": {
+            "taskType": "audio-lang-detection",
+            "request": {
+                "audio": [
+                    {
+                        "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_english.wav"
+                    }
+                ]
+            }
+        }
+    },
+    "trainingDataset": {
+        "datasetId": "2398749282",
+        "description": "trained on the general datasets from ULCA"
+    }
+}
