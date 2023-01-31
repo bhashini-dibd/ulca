@@ -1,10 +1,10 @@
 {
-    "name": "Ai4Bharat textual language detection",
+    "name": "Ai4Bharat audio language detection",
     "version": "v1.0",
     "description": "Ai4Bharat model to detect language from provided audio",
     "refUrl": "https://github.com/AI4Bharat/indicTrans",
     "task": {
-        "type": "txt-lang-detection"
+        "type": "audio-lang-detection"
     },
     "languages": null,
     "license": "mit",
