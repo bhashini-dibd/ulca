@@ -1,0 +1,32 @@
+{
+    "name" : "ULCA Internal : ASR English Evaluation Benchmark",
+    "taskType": {
+        "type" : "audio-lang-detetcion"
+    },
+    "description" : "This is the Indian English ASR benchmark dataset.",
+    "languages": null,
+    "collectionSource": [
+        "ULCA Internal"
+    ],
+    "domain": [
+        "education"
+    ],
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "ekstep",
+        "oauthId": {
+            "oauthId": "ulca-dev@tarento.com",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "ekstep",
+                "oauthId": {
+                    "oauthId": "aravinth.bheemaraj@tarento.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    },
+    "format": "wav"
+}
