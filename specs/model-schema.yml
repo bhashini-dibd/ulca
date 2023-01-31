@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.4.0
+  version: 0.5.0
 servers:
   - url: /ulca
 paths: {}
@@ -207,6 +207,18 @@ components:
           $ref: '#/components/schemas/TxtLangDetectionRequest'
         response:
           $ref: '#/components/schemas/TxtLangDetectionResponse'
+    AudioLangDetectionInference:
+      required:
+        - taskType
+        - request
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        request:
+          $ref: '#/components/schemas/AudioLangDetectionRequest'
+        response:
+          $ref: '#/components/schemas/AudioLangDetectionResponse'
     NerInference:
       required:
         - taskType
@@ -304,7 +316,7 @@ components:
         input:
           $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/TxtLangDetectionConfig'
+          $ref: '#/components/schemas/LangDetectionConfig'
     TxtLangDetectionResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
@@ -314,7 +326,27 @@ components:
         output:
           $ref: '#/components/schemas/TxtLanguagesList'
         config:
-          $ref: '#/components/schemas/TxtLangDetectionConfig'
+          $ref: '#/components/schemas/LangDetectionConfig'
+    AudioLangDetectionRequest:
+      required:
+        - audio
+        - config
+      type: object
+      properties:
+        audio:
+          $ref: '#/components/schemas/AudioFiles'
+        config:
+          $ref: '#/components/schemas/LangDetectionConfig'
+    AudioLangDetectionResponse:
+      description: the response for translation.  Standard http status codes to be used.
+      required:
+        - output
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/AudioLanguagesList'
+        config:
+          $ref: '#/components/schemas/LangDetectionConfig'
     NerResponse:
       description: the response for NER.  Standard http status codes to be used.
       required:
@@ -573,8 +605,23 @@ components:
           type: array
           description: list of
           items:
-            $ref: '#/components/schemas/TxtLangDetectionPrediction'
-    TxtLangDetectionPrediction:
+            $ref: '#/components/schemas/LangDetectionPrediction'
+    AudioLanguagesList:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/AudioLangDetectionList'
+    AudioLangDetectionList:
+      required:
+        - langPrediction
+      type: object
+      properties:
+        langPrediction:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/LangDetectionPrediction'
+    LangDetectionPrediction:
       type: object
       required:
         - langCode
@@ -588,7 +635,6 @@ components:
         langScore:
           type: number
           description: the measure of accuracy of language prediction
-          
     NerList:
       type: array
       description: list of
@@ -632,7 +678,6 @@ components:
         tokenEndIndex:
           type: number
           description: the ending index of word in sentence
-    
     TranslationConfig:
       required:
         - language
@@ -664,7 +709,7 @@ components:
           example: false
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
-    TxtLangDetectionConfig:
+    LangDetectionConfig:
       type: object
       properties:
         modelId:
