@@ -1,4 +1,4 @@
-from configs.configs import parallel_corpus_config_path, asr_config_path, ocr_config_path, monolingual_config_path, asr_unlabeled_config_path, tts_config_path, transliteration_config_path, glossary_config_path
+from configs.configs import parallel_corpus_config_path, asr_config_path, ocr_config_path, monolingual_config_path, asr_unlabeled_config_path, tts_config_path, transliteration_config_path, glossary_config_path, ner_config_path
 import json
 import validations as validator_package
 from validations.basic_schema_check import BasicSchemaCheck
@@ -85,6 +85,14 @@ class ValidationPipeline:
     def glossary_pipeline(self, value):
         self._glossary_pipeline = value
 
+    @property
+    def ner_pipeline(self):
+        return self._ner_pipeline
+
+    @ner_pipeline.setter
+    def ner_pipeline(self, value):
+        self._ner_pipeline = value
+
     def getValidators(self, filepath):
         with open(filepath) as v_file:
             v_list = json.loads(v_file.read())
@@ -151,6 +159,12 @@ class ValidationPipeline:
         p_filepath = os.path.abspath(os.path.join(os.curdir, glossary_config_path))
         self.initiate_validators(p_filepath, validation_p)
 
+        # load validation pipeline for ner
+        self.ner_pipeline = BasicSchemaCheck()
+        validation_p = self.ner_pipeline
+        p_filepath = os.path.abspath(os.path.join(os.curdir, ner_config_path))
+        self.initiate_validators(p_filepath, validation_p)
+
     def runParallelValidators(self, record):
         return self.parallel_pipeline.execute(record)
 
@@ -174,3 +188,6 @@ class ValidationPipeline:
 
     def runGlossaryValidators(self, record):
         return self.glossary_pipeline.execute(record)
+
+    def runNerValidators(self, record):
+        return self.ner_pipeline.execute(record)

@@ -39,6 +39,15 @@ class HashDedup(BaseValidator):
             if request["datasetType"] in [dataset_type_parallel, dataset_type_transliteration, dataset_type_glossary]:
                 request['record']['sourceTextHash'] = self.create_hash(request['record']['sourceText'], request['record']['sourceLanguage'])
                 request['record']['targetTextHash'] = self.create_hash(request['record']['targetText'], request['record']['targetLanguage'])
+            
+            if request["datasetType"] in [dataset_type_ner]:
+                if 'sourceText' in request['record'].keys():
+                    request['record']['sourceTextHash'] = self.create_hash(request['record']['sourceText'], request['record']['sourceLanguage'])
+                #if 'nerData' in request['record'].keys():
+                token_tag_concat = ''
+                for dic in request['record']['nerData']:
+                    token_tag_concat = token_tag_concat +  dic['token'] + dic['tag']
+                request['record']['nerDataHash'] = self.create_hash(token_tag_concat, request['record']['sourceLanguage'])
 
             if request["datasetType"] == dataset_type_asr:
                 audio_file = request['record']['fileLocation']
