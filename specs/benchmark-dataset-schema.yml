@@ -47,6 +47,7 @@ components:
             - $ref: '#/components/schemas/OcrBenchmarkDatasetParamsSchema'
             - $ref: '#/components/schemas/TxtLangDetectionBenchmarkDatasetParamsSchema'
             - $ref: '#/components/schemas/NerBenchmarkDatasetParamsSchema'
+            - $ref: '#/components/schemas/AudioLangDetectionBenchmarkDatasetParamsSchema'
     DatasetDataRowSchema:
       type: object
       description: the benchmark dataset data.json file should follow this schema
@@ -60,6 +61,7 @@ components:
             - $ref: '#/components/schemas/OcrBenchmarkDatasetRowSchema'
             - $ref: '#/components/schemas/TxtLangDetectionBenchmarkDatasetRowSchema'
             - $ref: '#/components/schemas/NerBenchmarkDatasetRowSchema'
+            - $ref: '#/components/schemas/AudioLangDetectionBenchmarkDatasetRowSchema'
     BenchmarkDatasetCommonParamsSchema:
       type: object
       description: common parameters or attributes of dataset that is primarily same across the supported dataset.
