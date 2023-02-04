@@ -90,7 +90,7 @@ public class ModelInferenceEndPointService {
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
-            log.info("logging asr inference point response" + objectMapper.writeValueAsString(response));
+            //log.info("logging asr inference point response" + objectMapper.writeValueAsString(response));
             asrInference.setResponse(response);
             schema = asrInference;
 
@@ -141,8 +141,8 @@ public class ModelInferenceEndPointService {
             TTSResponse response = objectMapper.readValue(responseJsonStr, TTSResponse.class);
             ttsInference.setResponse(response);
             schema = ttsInference;
-
-            log.info("logging tts inference point response" + responseJsonStr);
+            
+            //log.info("logging tts inference point response" + responseJsonStr);
 
         } else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
             io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
