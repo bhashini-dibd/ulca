@@ -87,6 +87,7 @@ components:
             - $ref: '#/components/schemas/OCRInference'
             - $ref: '#/components/schemas/TxtLangDetectionInference'
             - $ref: '#/components/schemas/NerInference'
+             - $ref: '#/components/schemas/AudioLangDetectionInference'
           discriminator:
             propertyName: taskType
             mapping:
@@ -97,6 +98,7 @@ components:
               ocr: '#/components/schemas/OCRInference'
               txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
               ner: '#/components/schemas/NerInference'
+              audio-lang-detection: '#/components/schemas/AudioLangDetectionInference'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties

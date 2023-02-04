@@ -4,23 +4,23 @@
         "sourceLanguage": "mixed"
     },
     "collectionSource": [
-        "vaani","iisc.ac.in"
+        "iisc"
     ],
-    "mixedDataSource" : "vaani",
+    "mixedDataSource": "vaani",
     "domain": [
         "general"
     ],
     "license": "cc-by-4.0",
     "submitter": {
-        "name": "IISc",
-        "aboutMe": "Part of the Vaani project, funded by Google",
+        "name": "PIB",
+        "aboutMe": "Part of the Vani project, funded by Google",
         "oauthId": {
             "oauthId": "prasantg@iisc.ac.in",
             "provider": "google"
         },
         "team": [
             {
-                "name": "Prasanta Kumar Ghosh",
+                "name": "Prasanta",
                 "oauthId": {
                     "oauthId": "prasantg@iisc.ac.in",
                     "provider": "google"
@@ -39,8 +39,8 @@
         ],
         "collectionDetails": {
             "contributor": {
-                "name": "Palakkad, Thrissur voice team",
-                "aboutMe": "Members of Vaani team from the Palakkad & Trisshur districts"
+                "name": "Prasanta Kumar Ghosh",
+                "aboutMe": "Member of Vaani team"
             }
         }
     }
