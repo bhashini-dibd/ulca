@@ -1,0 +1,116 @@
+{
+   "name": "AI4Bharat Odia NER",
+   "version": "v1.0",
+   "description": "Multilingual Indic-NER model by AI4Bharat to recognize named-entities from provided text. For more details, check our research paper: https://arxiv.org/abs/2212.10168",
+   "refUrl": "https://huggingface.co/ai4bharat/IndicNER",
+   "task": {
+      "type": "ner"
+   },
+   "languages": [
+      {
+         "sourceLanguage": "or"
+      }
+   ],
+   "license": "mit",
+   "domain": [
+      "general"
+   ],
+   "submitter": {
+      "name": "AI4Bharat",
+      "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+      "team": [
+         {
+            "name": "Arnav Mhaske",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Harshit Kedia",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Sumanth Doddapaneni",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Mitesh Khapra",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Pratyush Kumar",
+            "aboutMe": "Microsoft Research India"
+         },
+         {
+            "name": "Rudra Murthy",
+            "aboutMe": "IBM Research India"
+         },
+         {
+            "name": "Anoop Kunchukuttan",
+            "aboutMe": "Microsoft Research India"
+         }
+      ]
+   },
+   "inferenceEndPoint": {
+      "callbackUrl": "https://ner-api.ai4bharat.org/inference",
+      "schema": {
+         "taskType": "ner",
+         "tagsFormat": "IOB2",
+         "request": {
+            "input": [
+               {
+                  "source": "ଗୁଗୁଲ ନାମକ ଆମେରିକାରୁ ଏକ କମ୍ପାନୀରେ ସୁନ୍ଦର କାମ କରନ୍ତି।"
+               }
+            ],
+            "config": {
+               "language": {
+                  "sourceLanguage": "or"
+               }
+            }
+         },
+         "response": {
+            "output": [
+               {
+                  "source": "ଗୁଗୁଲ ନାମକ ଆମେରିକାରୁ ଏକ କମ୍ପାନୀରେ ସୁନ୍ଦର କାମ କରନ୍ତି।",
+                  "nerPrediction": [
+                     {
+                        "token": "ଗୁଗୁଲ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ନାମକ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ଆମେରିକାରୁ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ଏକ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "କମ୍ପାନୀରେ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ସୁନ୍ଦର",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "କାମ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "କରନ୍ତି।",
+                        "tag": "O"
+                     }
+                  ]
+               }
+            ]
+         }
+      }
+   },
+   "trainingDataset": {
+      "datasetId": "",
+      "description": "Trained on Naamapadam dataset, the largest publicly available Named Entity Annotated dataset for 11 Indic languages. More info: https://huggingface.co/datasets/ai4bharat/naamapadam"
+   }
+}
