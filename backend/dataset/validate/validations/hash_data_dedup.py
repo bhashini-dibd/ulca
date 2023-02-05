@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, dataset_type_tts, dataset_type_transliteration, dataset_type_glossary, shared_storage_path
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, dataset_type_tts, dataset_type_transliteration, dataset_type_glossary, dataset_type_ner,shared_storage_path
 import hashlib
 import logging
 from logging.config import dictConfig
