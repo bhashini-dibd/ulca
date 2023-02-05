@@ -87,7 +87,7 @@ components:
             - $ref: '#/components/schemas/OCRInference'
             - $ref: '#/components/schemas/TxtLangDetectionInference'
             - $ref: '#/components/schemas/NerInference'
-             - $ref: '#/components/schemas/AudioLangDetectionInference'
+            - $ref: '#/components/schemas/AudioLangDetectionInference'
           discriminator:
             propertyName: taskType
             mapping:
