@@ -12,7 +12,7 @@ from service.asr_unlabeled import ASRUnlabeledValidate
 from service.tts import TTSValidate
 from service.transliteration import TransliterationValidate
 from service.glossary import GlossaryValidate
-
+from service.ner import NerValidate
 
 from configs.configs import kafka_bootstrap_server_host, validate_input_topic, validate_consumer_grp, validate_output_topic, user_mode_real
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, dataset_type_tts, dataset_type_transliteration, dataset_type_glossary, dataset_type_ner
