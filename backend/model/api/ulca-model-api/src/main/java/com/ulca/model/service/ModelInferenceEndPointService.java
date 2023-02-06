@@ -29,6 +29,7 @@ import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelComputeResponseNer;
 import com.ulca.model.response.ModelComputeResponseOCR;
 import com.ulca.model.response.ModelComputeResponseTTS;
 import com.ulca.model.response.ModelComputeResponseTranslation;
@@ -229,6 +230,30 @@ public class ModelInferenceEndPointService {
 			schema = txtLangDetectionInference;
 
 			log.info("logging TransliterationInference point response" + responseJsonStr);
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.NerInference")) {
+			io.swagger.model.NerInference nerInference = (io.swagger.model.NerInference) schema;
+			TranslationRequest request = nerInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+			Response httpResponse = client.newCall(httpRequest).execute();
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+
+			NerResponse response = objectMapper.readValue(responseJsonStr, NerResponse.class);
+			nerInference.setResponse(response);
+			schema = nerInference;
+			
+			log.info("logging NerInference point response" + responseJsonStr);
+
 		}
 
 		inferenceAPIEndPoint.setSchema(schema);
@@ -709,7 +734,60 @@ public class ModelInferenceEndPointService {
 
 			}
 		}
+		
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.NerInference")) {
+			io.swagger.model.NerInference nerInference = (io.swagger.model.NerInference) schema;
+			TranslationRequest request = nerInference.getRequest();
 
+			List<Input> input = compute.getInput();
+			Sentences sentences = new Sentences();
+			for (Input ip : input) {
+				Sentence sentense = new Sentence();
+				sentense.setSource(ip.getSource());
+				sentences.add(sentense);
+			}
+			request.setInput(sentences);
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+			Response httpResponse = client.newCall(httpRequest).execute();
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Ner Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+
+			NerResponse translation = objectMapper.readValue(responseJsonStr, NerResponse.class);
+
+			if (translation.getOutput() == null || translation.getOutput().size() <= 0) {
+				throw new ModelComputeException(httpResponse.message(), "Ner Model Compute Response is Empty",
+						HttpStatus.BAD_REQUEST);
+
+			}
+		
+
+			ModelComputeResponseNer resp = new ModelComputeResponseNer();
+			BeanUtils.copyProperties(translation, resp);
+			
+			response = resp;
+			return response;
+			
+		}
+
+		
+		
+           
 		return response;
 	}
 

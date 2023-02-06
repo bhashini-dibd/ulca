@@ -3,7 +3,6 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.DatasetCommonParamsSchema;
 import io.swagger.model.DatasetType;
 import io.swagger.model.Domain;
@@ -12,6 +11,7 @@ import io.swagger.model.License;
 import io.swagger.model.NerDatasetCollectionMethod;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
+import io.swagger.model.SupportedTagsFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -21,61 +21,34 @@ import javax.validation.constraints.*;
  * NerDatasetParamsSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-01-11T10:36:03.040Z[GMT]")
 
 
 public class NerDatasetParamsSchema extends DatasetCommonParamsSchema implements OneOfDatasetParamsSchemaParams {
-  /**
-   * The accepted standard based on which NER tags are labelled in the dataset.
-   */
-  public enum TagsFormatEnum {
-    CONLL_2003("CoNLL-2003");
-
-    private String value;
-
-    TagsFormatEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TagsFormatEnum fromValue(String text) {
-      for (TagsFormatEnum b : TagsFormatEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("tagsFormat")
-  private TagsFormatEnum tagsFormat = null;
+  private SupportedTagsFormat tagsFormat = null;
 
   @JsonProperty("collectionMethod")
   private NerDatasetCollectionMethod collectionMethod = null;
 
-  public NerDatasetParamsSchema tagsFormat(TagsFormatEnum tagsFormat) {
+  public NerDatasetParamsSchema tagsFormat(SupportedTagsFormat tagsFormat) {
     this.tagsFormat = tagsFormat;
     return this;
   }
 
   /**
-   * The accepted standard based on which NER tags are labelled in the dataset.
+   * Get tagsFormat
    * @return tagsFormat
    **/
-  @Schema(required = true, description = "The accepted standard based on which NER tags are labelled in the dataset.")
+  @Schema(required = true, description = "")
       @NotNull
 
-    public TagsFormatEnum getTagsFormat() {
+    @Valid
+    public SupportedTagsFormat getTagsFormat() {
     return tagsFormat;
   }
 
-  public void setTagsFormat(TagsFormatEnum tagsFormat) {
+  public void setTagsFormat(SupportedTagsFormat tagsFormat) {
     this.tagsFormat = tagsFormat;
   }
 
