@@ -45,6 +45,7 @@ import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.ImageFile;
 import io.swagger.model.ImageFiles;
 import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.NerResponse;
 import io.swagger.model.OCRRequest;
 import io.swagger.model.OCRResponse;
 import io.swagger.model.OneOfAsyncApiDetailsAsyncApiPollingSchema;
