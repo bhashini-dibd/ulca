@@ -5,6 +5,7 @@ export const ModelTask = [
   { value: "asr", label: "ASR" },
   { value: "tts", label: "TTS" },
   { value: "ocr", label: "OCR" },
+  { value: "ner", label: "NER" },
   { value: "transliteration", label: "Transliteration" },
   { value: "txt-lang-detection", label: "Language Detection" },
 ];

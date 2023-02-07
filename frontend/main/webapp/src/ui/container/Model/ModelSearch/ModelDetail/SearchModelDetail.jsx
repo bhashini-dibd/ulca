@@ -34,6 +34,7 @@ import PropTypes from "prop-types";
 import HostedInferTransliteration from "./HostedInferTransliteration";
 import LanugageDetection from "../LanugageDetection";
 import metricInfo from "../../../../../utils/getMetricInfo.";
+import HostedinferenceNER from "./HostedinferenceNER";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -159,6 +160,16 @@ const SearchModelDetail = (props) => {
               submitter={submitter}
             />
           );
+        case "ner":
+          return (
+            <HostedinferenceNER
+              task={task}
+              source={source}
+              inferenceEndPoint={inferenceEndPoint}
+              modelId={params.srno}
+              submitter={submitter}
+            />
+          );
         case "transliteration":
           return (
             <HostedInferTransliteration
@@ -262,7 +273,7 @@ const SearchModelDetail = (props) => {
                 lg={4}
                 xl={4}
                 className={classes.rightSection}
-                // style={{ paddingLeft: "24px" }}
+              // style={{ paddingLeft: "24px" }}
               >
                 <Grid container spacing={2} style={{ marginTop: "2%" }}>
                   {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -310,24 +321,24 @@ const SearchModelDetail = (props) => {
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Grid container spacing={2}>
                   {description?.map((des, i) => {
-                    if(des.title === "Type" && (task === "asr" || task === "tts")){
-                        return <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                          <ModelDescription
-                            title={des.title}
-                            para={des.para}
-                            index={i}
-                          />
-                        </Grid>
-                    } else if (des.title === "Type" && (task !== "asr" || task !== "tts")){
-                        return null
+                    if (des.title === "Type" && (task === "asr" || task === "tts")) {
+                      return <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                        <ModelDescription
+                          title={des.title}
+                          para={des.para}
+                          index={i}
+                        />
+                      </Grid>
+                    } else if (des.title === "Type" && (task !== "asr" || task !== "tts")) {
+                      return null
                     } else {
                       return <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                          <ModelDescription
-                            title={des.title}
-                            para={des.para}
-                            index={i}
-                          />
-                        </Grid>
+                        <ModelDescription
+                          title={des.title}
+                          para={des.para}
+                          index={i}
+                        />
+                      </Grid>
                     }
                   })}
                 </Grid>

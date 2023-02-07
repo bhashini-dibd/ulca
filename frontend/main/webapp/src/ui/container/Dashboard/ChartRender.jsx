@@ -875,7 +875,7 @@ const ChartRender = (props) => {
               { field: "sourceLanguage", value: "en" },
             ]);
           setAxisValue({ xAxis: "Languages", yAxis: "Count" });
-          setTitle("Number of records");
+          setTitle("Number of parallel sentences per language with");
         } else if (page === 1) {
           setTitle(
             `Number of records in ${
@@ -970,7 +970,9 @@ const ChartRender = (props) => {
               </Button>
             </>
             {selectedOption.value === "parallel-corpus" ||
-            (selectedOption.value === "transliteration-corpus" &&
+            (selectedOption.value === "transliteration-corpus" ||
+            selectedOption.value === "glossary-corpus"
+             &&
               page === 0) ? (
               <div className={classes.titleStyle}>
                 <Typography className={classes.titleText} value="" variant="h6">
