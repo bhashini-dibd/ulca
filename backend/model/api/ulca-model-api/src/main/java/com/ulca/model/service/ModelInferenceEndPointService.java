@@ -16,7 +16,6 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import io.swagger.model.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +41,30 @@ import com.ulca.model.response.ModelComputeResponseTxtLangDetection;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import io.swagger.model.ASRRequest;
+import io.swagger.model.ASRResponse;
+import io.swagger.model.AsyncApiDetails;
+import io.swagger.model.ImageFile;
+import io.swagger.model.ImageFiles;
+import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.NerResponse;
+import io.swagger.model.OCRRequest;
+import io.swagger.model.OCRResponse;
+import io.swagger.model.OneOfAsyncApiDetailsAsyncApiPollingSchema;
+import io.swagger.model.OneOfAsyncApiDetailsAsyncApiSchema;
+import io.swagger.model.OneOfInferenceAPIEndPointSchema;
+import io.swagger.model.PollingRequest;
+import io.swagger.model.Sentence;
+import io.swagger.model.Sentences;
+import io.swagger.model.TTSConfig;
+import io.swagger.model.TTSRequest;
+import io.swagger.model.TTSResponse;
+import io.swagger.model.TranslationRequest;
+import io.swagger.model.TranslationResponse;
+import io.swagger.model.TransliterationRequest;
+import io.swagger.model.TransliterationResponse;
+import io.swagger.model.TxtLangDetectionRequest;
+import io.swagger.model.TxtLangDetectionResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -81,8 +104,11 @@ public class ModelInferenceEndPointService {
 			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -105,9 +131,48 @@ public class ModelInferenceEndPointService {
 
 				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
 
-				response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
-						.uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
-						.bodyToMono(ASRResponse.class).block();
+				
+				/*
+				 * response = builder.clientConnector(new
+				 * ReactorClientHttpConnector(httpClient)).build().post()
+				 * .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
+				 * .bodyToMono(ASRResponse.class).block();
+				 */
+			
+				
+				
+				if(inferenceAPIEndPoint.getInferenceApiKeyValue()!=null) {
+					if(inferenceAPIEndPoint.getInferenceApiKeyName()!=null) {
+						String inferenceApiKeyName = inferenceAPIEndPoint.getInferenceApiKeyName();
+						String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
+						response = builder.clientConnector(new
+								  ReactorClientHttpConnector(httpClient)).build().post()
+								  .uri(callBackUrl).header("inferenceApiKeyName", inferenceApiKeyName).header("inferenceApiKeyValue", inferenceApiKeyValue).
+								  body(Mono.just(request), ASRRequest.class).retrieve()
+								  .bodyToMono(ASRResponse.class).block();					}else {
+						String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
+
+						response = builder.clientConnector(new
+								  ReactorClientHttpConnector(httpClient)).build().post()
+								  .uri(callBackUrl).header("inferenceApiKeyValue", inferenceApiKeyValue).
+								  body(Mono.just(request), ASRRequest.class).retrieve()
+								  .bodyToMono(ASRResponse.class).block();
+					}
+					
+				}else {
+					response = builder.clientConnector(new
+							  ReactorClientHttpConnector(httpClient)).build().post()
+							  .uri(callBackUrl).
+							  body(Mono.just(request), ASRRequest.class).retrieve()
+							  .bodyToMono(ASRResponse.class).block();
+					
+				}
+				
+				
+				
+				
+				
+				
 
 			} catch (SSLException e) {
 				e.printStackTrace();
@@ -131,8 +196,15 @@ public class ModelInferenceEndPointService {
 			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+              
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 
+			
+			
+			
+			
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -153,8 +225,14 @@ public class ModelInferenceEndPointService {
 
 			// OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			
+			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
@@ -178,12 +256,20 @@ public class ModelInferenceEndPointService {
 
 			// OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+			
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 
+			
+			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
-
+               
+			
+			
+			
 			// Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -203,8 +289,13 @@ public class ModelInferenceEndPointService {
 
 			
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+		//	Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+              
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
@@ -226,8 +317,12 @@ public class ModelInferenceEndPointService {
 			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -263,8 +358,10 @@ public class ModelInferenceEndPointService {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
+			
+			//Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
+			Response httpResponse = okHttpClientPostCallInference(requestJson, callBackUrl,inferenceAPIEndPoint);
 
-			Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
 			String responseJsonStr = httpResponse.body().string();
@@ -324,6 +421,30 @@ public class ModelInferenceEndPointService {
 
 		return httpResponse;
 	}
+	
+	
+	public Response okHttpClientPostCallInference(String requestJson, String url,InferenceAPIEndPoint inferenceAPIEndPoint)
+			throws IOException, KeyManagementException, NoSuchAlgorithmException {
+
+		// OkHttpClient client = new OkHttpClient();
+
+		/*
+		 * OkHttpClient client = new OkHttpClient.Builder() .readTimeout(60,
+		 * TimeUnit.SECONDS) .build();
+		 */
+
+		RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+		//Request httpRequest = new Request.Builder().url(url).post(body).build();
+        
+        Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+
+		OkHttpClient newClient = getTrustAllCertsClient();
+		Response httpResponse = newClient.newCall(httpRequest).execute();
+
+		return httpResponse;
+	}
+	
+	
 
 	public InferenceAPIEndPoint validateCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
 			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException,
@@ -371,8 +492,9 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-			Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
-			
+			//Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
+			Response httpResponse = okHttpClientPostCallInference(requestJson, callBackUrl,inferenceAPIEndPoint);
+
 			String responseJsonStr = httpResponse.body().string();
 
 			log.info("********* callBackUrl responseJson ****** :: " + responseJsonStr);
@@ -460,8 +582,10 @@ public class ModelInferenceEndPointService {
 
 			OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
@@ -510,8 +634,14 @@ public class ModelInferenceEndPointService {
 
 			OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+
+			
+			
+			
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
@@ -562,8 +692,9 @@ public class ModelInferenceEndPointService {
 
 			// OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+		//	Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	   
 			OkHttpClient newClient = getTrustAllCertsClient();
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 
@@ -643,8 +774,13 @@ public class ModelInferenceEndPointService {
 
 			OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
@@ -689,8 +825,14 @@ public class ModelInferenceEndPointService {
 
 			
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 
+			
+			
+			
+			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
@@ -725,8 +867,13 @@ public class ModelInferenceEndPointService {
 
 			OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+              
+             Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+			
+			
+			
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
@@ -765,10 +912,10 @@ public class ModelInferenceEndPointService {
 	/*
 	 * compute for OCR model
 	 */
-	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema, String imagePath) {
+	public ModelComputeResponse compute(InferenceAPIEndPoint inferenceAPIEndPoint, OneOfInferenceAPIEndPointSchema schema, String imagePath) {
 
 		try {
-			
+			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 			ModelComputeResponse response = new ModelComputeResponseOCR();
 
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
@@ -789,8 +936,11 @@ public class ModelInferenceEndPointService {
 
 			OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			String responseJsonStr = httpResponse.body().string();
 
@@ -850,5 +1000,39 @@ public class ModelInferenceEndPointService {
 		newBuilder.hostnameVerifier((hostname, session) -> true);
 		return newBuilder.readTimeout(60, TimeUnit.SECONDS).build();
 	}
+	
+	   public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
+		   Request httpRequest =null;
+			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+            log.info("callBackUrl : "+callBackUrl);
+			if(inferenceAPIEndPoint.getInferenceApiKeyValue()!=null) {
+				if(inferenceAPIEndPoint.getInferenceApiKeyName()!=null) {
+					String inferenceApiKeyName = inferenceAPIEndPoint.getInferenceApiKeyName();
+					String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
+					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
+					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
+				 httpRequest= new Request.Builder().url(callBackUrl).addHeader("inferenceApiKeyName", inferenceApiKeyName).addHeader("inferenceApiKeyValue", inferenceApiKeyValue).post(body).build();
+				    log.info("httpRequest : "+httpRequest.toString());
+				}else {
+					String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
+                     log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
+					 httpRequest= new Request.Builder().url(callBackUrl).addHeader("inferenceApiKeyValue", inferenceApiKeyValue).post(body).build();
+					    log.info("httpRequest : "+httpRequest.toString());
+
+
+				}
+				
+			}else {
+				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+				    log.info("httpRequest : "+httpRequest.toString());
+
+
+				
+			}	
+			
+		   
+		   return httpRequest;
+	   }
+	
 
 }

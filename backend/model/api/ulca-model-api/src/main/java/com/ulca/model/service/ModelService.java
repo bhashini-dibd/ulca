@@ -531,10 +531,10 @@ public class ModelService {
 		
 		ModelExtended modelObj = modelDao.findById(modelId).get();
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		//String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 		
-		ModelComputeResponse response = modelInferenceEndPointService.compute(callBackUrl, schema, imageFilePath);
+		ModelComputeResponse response = modelInferenceEndPointService.compute(inferenceAPIEndPoint, schema, imageFilePath);
 		
 		return response;
 	}
