@@ -145,18 +145,22 @@ public class ModelInferenceEndPointService {
 					
 						String inferenceApiKeyName = inferenceAPIEndPoint.getInferenceApiKeyName();
 						String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
+						log.info("inferenceApiKeyName : "+inferenceApiKeyName);
+						log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
 						response = builder.clientConnector(new
 								  ReactorClientHttpConnector(httpClient)).build().post()
 								  .uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue).
 								  body(Mono.just(request), ASRRequest.class).retrieve()
 								  .bodyToMono(ASRResponse.class).block();					
-					
+					    log.info("response : "+response);
 				}else {
 					response = builder.clientConnector(new
 							  ReactorClientHttpConnector(httpClient)).build().post()
 							  .uri(callBackUrl).
 							  body(Mono.just(request), ASRRequest.class).retrieve()
 							  .bodyToMono(ASRResponse.class).block();
+				    log.info("response : "+response);
+
 					
 				}
 				
