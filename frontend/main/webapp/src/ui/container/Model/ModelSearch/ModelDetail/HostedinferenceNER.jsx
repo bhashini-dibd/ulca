@@ -197,17 +197,20 @@ const HostedInference = (props) => {
                                 }
                             })
                         })
+
+                        let splittedSourceTextArr = nerSource.split(" ");
+
                         newText = <Typography>
                             {
-                                nerSource.split(" ").map((source, srcIndex) => {
-                                    return predictions.map((el, index) => {
-                                        if (source == el.token && srcIndex == el.tokenIndex) {
-                                            return <span><span style={{ backgroundColor: el?.color?.light }}>
-                                                {source} <span style={{ backgroundColor: el?.color?.dark, color: "#FFFFFF" }}>{el.tag}</span></span> </span>
-                                        } else {
-                                            return <span>{source} </span>
-                                        }
-                                    })
+                                splittedSourceTextArr.map((source, srcIndex) => {
+                                    let foundPredictionEle = predictions.find(predictionsObj => predictionsObj.token == source && predictionsObj.tokenIndex == srcIndex);
+                                    if(foundPredictionEle){
+                                        console.log("foundPredictionEle ------- ", foundPredictionEle);
+                                         return <span><span style={{ backgroundColor: foundPredictionEle?.color?.light }}>
+                                                {source} <span style={{ backgroundColor: foundPredictionEle?.color?.dark, color: "#FFFFFF" }}>{foundPredictionEle.tag}</span></span> </span>
+                                    }else {
+                                        return <span>{source} </span>
+                                    }
                                 })
                             }
                         </Typography>
@@ -220,7 +223,8 @@ const HostedInference = (props) => {
             })
             .catch(error => {
                 setLoading(false);
-                console.log('error', error)
+                console.log('error', error);
+                setSnackbarInfo({ open: true, message: error.message ? error.message : "Something went wrong", variant: 'error' })
             })
     }
     const [anchorEl, openEl] = useState(null);
@@ -419,6 +423,7 @@ const HostedInference = (props) => {
                             display: "flex",
                             // justifyContent: "center",
                             height: "15vh",
+                            overflowY: "auto"
                         }}
                     >
                         {outputText}
