@@ -200,14 +200,36 @@ const HostedInference = (props) => {
 
                         let splittedSourceTextArr = nerSource.split(" ");
 
-                        newText = <Typography>
+                        const getStartEnd = (sub) => [nerSource.indexOf(sub), nerSource.indexOf(sub) + sub.length]
+
+
+                        let tagStyle = (tagType, bgColor)=> {
+                            return{
+                                backgroundColor: tagType == "outer" ? bgColor?.light : bgColor?.dark,
+                                fontSize: tagType == "inner" ? "15px" : "inherit",
+                                paddingLeft: tagType == "inner" ? 5 : 3,
+                                paddingRight: tagType == "inner" ? 5 : 3,
+                                paddingTop: tagType == "inner" ? 0 : 4,
+                                paddingBottom: tagType == "inner" ? 0 : 4,
+                                borderRadius: tagType == "inner" ? 8 : 3,
+                                color: tagType == "outer" ? "inherit" : "#FFFFFF",
+                                textAlign: "center",
+                                cursor: tagType == "inner" ? "context-menu" : "inherit",
+                            }
+                        }
+
+                        newText = <Typography style={{lineHeight: "35px"}}>
                             {
                                 splittedSourceTextArr.map((source, srcIndex) => {
-                                    let foundPredictionEle = predictions.find(predictionsObj => predictionsObj.token == source && predictionsObj.tokenIndex == srcIndex);
+                                    let startIndexOfWord = getStartEnd(source)[0];
+                                    let endIndexOfWord = getStartEnd(source)[1];
+                                    let foundPredictionEle = predictions.find(predictionsObj => 
+                                        predictionsObj.token == source && startIndexOfWord == predictionsObj?.tokenStartIndex && endIndexOfWord == predictionsObj?.tokenEndIndex
+                                    );
                                     if(foundPredictionEle){
-                                        console.log("foundPredictionEle ------- ", foundPredictionEle);
-                                         return <span><span style={{ backgroundColor: foundPredictionEle?.color?.light }}>
-                                                {source} <span style={{ backgroundColor: foundPredictionEle?.color?.dark, color: "#FFFFFF" }}>{foundPredictionEle.tag}</span></span> </span>
+                                        // console.log("foundPredictionEle ------- ", foundPredictionEle);
+                                         return <span><span style={tagStyle("outer", foundPredictionEle?.color)}>
+                                                {source} <span style={tagStyle("inner", foundPredictionEle?.color)}>{foundPredictionEle?.tag}</span></span> </span>
                                     }else {
                                         return <span>{source} </span>
                                     }
@@ -215,7 +237,7 @@ const HostedInference = (props) => {
                             }
                         </Typography>
                     } else {
-                        newText = <Typography>{nerSource}</Typography>
+                        newText = <Typography >{nerSource}</Typography>
                     }
                     setLoading(false);
                     setOutputText(newText)
