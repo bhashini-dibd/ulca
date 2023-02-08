@@ -6,9 +6,7 @@ import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -33,8 +31,8 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelComputeResponseNer;
 import com.ulca.model.response.ModelComputeResponseOCR;
-import com.ulca.model.response.ModelComputeResponseTranslation;
 import com.ulca.model.response.ModelComputeResponseTTS;
+import com.ulca.model.response.ModelComputeResponseTranslation;
 import com.ulca.model.response.ModelComputeResponseTransliteration;
 import com.ulca.model.response.ModelComputeResponseTxtLangDetection;
 
@@ -118,9 +116,8 @@ public class ModelInferenceEndPointService {
 			translationInference.setResponse(response);
 			schema = translationInference;
 
-		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 
-		
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
 			ASRRequest request = asrInference.getRequest();
 
@@ -179,8 +176,6 @@ public class ModelInferenceEndPointService {
 			asrInference.setResponse(response);
 			schema = asrInference;
 
-		
-
 		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 			OCRRequest request = ocrInference.getRequest();
@@ -210,7 +205,6 @@ public class ModelInferenceEndPointService {
 			schema = ocrInference;
 
 			log.info("logging ocr inference point response" + responseJsonStr);
-		
 
 		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			io.swagger.model.TTSInference ttsInference = (io.swagger.model.TTSInference) schema;
@@ -242,7 +236,7 @@ public class ModelInferenceEndPointService {
 			schema = ttsInference;
 
 			log.info("logging tts inference point response" + responseJsonStr);
-		
+
 		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
 			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
 			TransliterationRequest request = transliterationInference.getRequest();
@@ -275,7 +269,7 @@ public class ModelInferenceEndPointService {
 			schema = transliterationInference;
 
 			log.info("logging TransliterationInference point response" + responseJsonStr);
-		
+
 		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
 			io.swagger.model.TxtLangDetectionInference txtLangDetectionInference = (io.swagger.model.TxtLangDetectionInference) schema;
 			TxtLangDetectionRequest request = txtLangDetectionInference.getRequest();
@@ -283,7 +277,6 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-			
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 		//	Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
               
@@ -472,7 +465,6 @@ public class ModelInferenceEndPointService {
 		log.info("pollingUrl :: " + pollingUrl);
 
 		OneOfAsyncApiDetailsAsyncApiSchema asyncApiSchema = asyncApiDetails.getAsyncApiSchema();
-		
 
 		if (asyncApiSchema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationAsyncInference")) {
 			io.swagger.model.TranslationAsyncInference translationAsyncInference = (io.swagger.model.TranslationAsyncInference) asyncApiSchema;
@@ -492,6 +484,7 @@ public class ModelInferenceEndPointService {
 
 			//Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
 			Response httpResponse = okHttpClientPostCallInference(requestJson, callBackUrl,inferenceAPIEndPoint);
+
 
 			String responseJsonStr = httpResponse.body().string();
 
@@ -518,19 +511,18 @@ public class ModelInferenceEndPointService {
 						throw new ModelComputeException("Translation Model Compute Response Empty",
 								"Translation Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
 					}
-					List<String>  outputTextList = new ArrayList<>();
-					for (Sentence sentence :translationResponse.getOutput()){
+					List<String> outputTextList = new ArrayList<>();
+					for (Sentence sentence : translationResponse.getOutput()) {
 						outputTextList.add(sentence.getTarget());
 					}
-
-					//response.setOutputTextList(outputTextList);
 					response = (ModelComputeResponse) translationResponse;
 
 					break;
 
 				} else {
 					log.info("compute model failed");
-					log.info("Inference end point respose received ::  " + objectMapper.writeValueAsString(pollHttpResponse));					
+					log.info("Inference end point respose received ::  "
+							+ objectMapper.writeValueAsString(pollHttpResponse));
 					throw new ModelComputeException("Translation Model Compute Failed",
 							"Translation Model Compute Failed", HttpStatus.valueOf(pollHttpResponse.code()));
 				}
@@ -546,7 +538,7 @@ public class ModelInferenceEndPointService {
 
 		if (inferenceAPIEndPoint.isIsSyncApi() != null && !inferenceAPIEndPoint.isIsSyncApi()) {
 			return computeAsyncModel(inferenceAPIEndPoint, computeRequest);
-			
+
 		} else {
 			return computeSyncModel(inferenceAPIEndPoint, computeRequest);
 		}
@@ -592,28 +584,38 @@ public class ModelInferenceEndPointService {
 				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Failed",
 						HttpStatus.valueOf(httpResponse.code()));
 			}
-			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			// false);
+
 			String responseJsonStr = httpResponse.body().string();
 
-			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
+			try {
+				TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 
-			if (translation.getOutput() == null || translation.getOutput().size() <= 0) {
-				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Response is Empty",
-						HttpStatus.BAD_REQUEST);
+				if (translation.getOutput() == null || translation.getOutput().size() <= 0) {
+					throw new ModelComputeException(httpResponse.message(),
+							"Translation Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
+
+				}
+				List<String> outputTextList = new ArrayList<>();
+				for (Sentence sentence : translation.getOutput()) {
+					outputTextList.add(sentence.getTarget());
+				}
+
+				ModelComputeResponseTranslation resp = new ModelComputeResponseTranslation();
+				BeanUtils.copyProperties(translation, resp);
+
+				response = resp;
+				return response;
+
+			} catch (Exception e) {
+
+				log.info("response from Translation model inference point not proper : callback url :  " + callBackUrl
+						+ " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(),
+						"Translation Model Compute Response is not proper", HttpStatus.BAD_REQUEST);
 
 			}
-			List<String>  outputTextList = new ArrayList<>();
-			for (Sentence sentence :translation.getOutput()){
-				outputTextList.add(sentence.getTarget());
-			}
 
-			ModelComputeResponseTranslation resp = new ModelComputeResponseTranslation();
-			BeanUtils.copyProperties(translation, resp);
-			
-			response = resp;
-			return response;
-			
 		}
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
@@ -649,22 +651,31 @@ public class ModelInferenceEndPointService {
 						HttpStatus.valueOf(httpResponse.code()));
 			}
 
-			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			// false);
-			OCRResponse ocrResponse = objectMapper.readValue(httpResponse.body().string(), OCRResponse.class);
+			String responseJsonStr = httpResponse.body().string();
+			try {
+				OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
 
-			if (ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <= 0
-					|| ocrResponse.getOutput().get(0).getSource().isBlank()) {
-				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is Empty",
+				if (ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <= 0
+						|| ocrResponse.getOutput().get(0).getSource().isBlank()) {
+					throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is Empty",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+				ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
+				BeanUtils.copyProperties(ocrResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from OCR model inference end not proper : callback url :  " + callBackUrl
+						+ " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is not proper",
 						HttpStatus.BAD_REQUEST);
 
 			}
-
-			ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
-			BeanUtils.copyProperties(ocrResponse, resp);
-			
-			response = resp;
-			return response;
 
 		}
 
@@ -688,7 +699,6 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-			// OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 		//	Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
             Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
@@ -696,7 +706,6 @@ public class ModelInferenceEndPointService {
 			OkHttpClient newClient = getTrustAllCertsClient();
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 
-			// Response httpResponse = client.newCall(httpRequest).execute();
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
 				log.info(httpResponse.toString());
@@ -707,53 +716,32 @@ public class ModelInferenceEndPointService {
 
 			String ttsResponseStr = httpResponse.body().string();
 
-			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			// false);
-			TTSResponse ttsResponse = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
+			try {
+				TTSResponse ttsResponse = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
 
-			if (ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <= 0) {
-				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
-						HttpStatus.BAD_REQUEST);
-
-			}
-			
-			ModelComputeResponseTTS resp = new ModelComputeResponseTTS();
-			BeanUtils.copyProperties(ttsResponse, resp);
-			
-			response = resp;
-			return response;
-			
-			
-			/*
-			if (ttsResponse.getAudio().get(0).getAudioContent() != null) {
-				String encodedString = Base64.getEncoder()
-						.encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
-				response.setOutputText(encodedString);
-			} else if (!ttsResponse.getAudio().get(0).getAudioUri().isBlank()) {
-				String audioUrl = ttsResponse.getAudio().get(0).getAudioUri();
-				try {
-					String fileName = UUID.randomUUID().toString();
-					String uploadFolder = modelUploadFolder + "/model";
-					String filePath = fileUtility.downloadUsingNIO(audioUrl, uploadFolder, fileName);
-					byte[] bytes = FileUtils.readFileToByteArray(new File(filePath));
-					String encodedString = Base64.getEncoder().encodeToString(bytes);
-					response.setOutputText(encodedString);
-
-					// delete the downloaded file
-					FileUtils.delete(new File(filePath));
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					throw new ModelComputeException(ex.getMessage(), "TTS Output file not available",
+				if (ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <= 0) {
+					throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
 							HttpStatus.BAD_REQUEST);
+
 				}
 
-			} else {
-				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
+				ModelComputeResponseTTS resp = new ModelComputeResponseTTS();
+				BeanUtils.copyProperties(ttsResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from TTS model inference end not proper : callback url :  " + callBackUrl
+						+ " response :: " + ttsResponseStr);
+
+				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is not proper",
 						HttpStatus.BAD_REQUEST);
+
 			}
-			*/
+
 		}
-		
+
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
 			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
 			TransliterationRequest request = transliterationInference.getRequest();
@@ -787,23 +775,34 @@ public class ModelInferenceEndPointService {
 				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Failed",
 						HttpStatus.valueOf(httpResponse.code()));
 			}
-			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			// false);
+
 			String responseJsonStr = httpResponse.body().string();
 
-			TransliterationResponse transliterationResponse = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
+			try {
+				TransliterationResponse transliterationResponse = objectMapper.readValue(responseJsonStr,
+						TransliterationResponse.class);
 
-			if (transliterationResponse.getOutput() == null || transliterationResponse.getOutput().size() <= 0 ) {
-					
-				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Response is Empty",
-						HttpStatus.BAD_REQUEST);
+				if (transliterationResponse.getOutput() == null || transliterationResponse.getOutput().size() <= 0) {
+
+					throw new ModelComputeException(httpResponse.message(),
+							"Transliteration Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
+
+				}
+				ModelComputeResponseTransliteration resp = new ModelComputeResponseTransliteration();
+				BeanUtils.copyProperties(transliterationResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from Transliteration model not proper : callback url :  " + callBackUrl
+						+ " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(),
+						"Transliteration Model Compute Response is not proper", HttpStatus.BAD_REQUEST);
 
 			}
-			ModelComputeResponseTransliteration resp = new ModelComputeResponseTransliteration();
-			BeanUtils.copyProperties(transliterationResponse, resp);
-			
-			response = resp;
-			return response;
+
 		}
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
 			io.swagger.model.TxtLangDetectionInference txtLangDetectionInference = (io.swagger.model.TxtLangDetectionInference) schema;
@@ -817,11 +816,10 @@ public class ModelInferenceEndPointService {
 				sentences.add(sentense);
 			}
 			request.setInput(sentences);
-			
+
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-			
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
              
@@ -836,14 +834,25 @@ public class ModelInferenceEndPointService {
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 
 			String responseJsonStr = httpResponse.body().string();
-			TxtLangDetectionResponse txtLangDetectionResponse = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
-			
-			ModelComputeResponseTxtLangDetection resp = new ModelComputeResponseTxtLangDetection();
-			BeanUtils.copyProperties(txtLangDetectionResponse, resp);
-			
-			response = resp;
-			return response;
-			
+
+			try {
+				TxtLangDetectionResponse txtLangDetectionResponse = objectMapper.readValue(responseJsonStr,
+						TxtLangDetectionResponse.class);
+
+				ModelComputeResponseTxtLangDetection resp = new ModelComputeResponseTxtLangDetection();
+				BeanUtils.copyProperties(txtLangDetectionResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from TxtLangDetection model inference end point not proper : callback url :  "
+						+ callBackUrl + " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(),
+						"TxtLangDetection Model Compute Response is not proper", HttpStatus.BAD_REQUEST);
+
+			}
 		}
 		
 		
@@ -943,28 +952,31 @@ public class ModelInferenceEndPointService {
 			String responseJsonStr = httpResponse.body().string();
 
 			OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
-			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0 && !ocrResponse.getOutput().get(0).getSource().isBlank()) {
-				
+			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0
+					&& !ocrResponse.getOutput().get(0).getSource().isBlank()) {
+
 				ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
 				BeanUtils.copyProperties(ocrResponse, resp);
 				response = resp;
-				
+
 			} else {
 				log.info("Ocr try me response is null or not proper");
 				log.info("callBackUrl :: " + callBackUrl);
 				log.info("Request Json :: " + requestJson);
 				log.info("ResponseJson :: " + responseJsonStr);
 				FileUtils.delete(new File(imagePath));
-				throw new ModelComputeException("Model unable to infer the image", "Model unable to infer the image", HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new ModelComputeException("Model unable to infer the image", "Model unable to infer the image",
+						HttpStatus.INTERNAL_SERVER_ERROR);
 
 			}
 			return response;
-			
-		}catch(Exception ex) {
-			
-			throw new ModelComputeException(ex.getMessage(), "Model unable to infer the image", HttpStatus.INTERNAL_SERVER_ERROR);
-			
-		}finally {
+
+		} catch (Exception ex) {
+
+			throw new ModelComputeException(ex.getMessage(), "Model unable to infer the image",
+					HttpStatus.INTERNAL_SERVER_ERROR);
+
+		} finally {
 			try {
 				FileUtils.delete(new File(imagePath));
 			} catch (IOException e) {
