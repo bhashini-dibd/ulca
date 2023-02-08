@@ -142,22 +142,14 @@ public class ModelInferenceEndPointService {
 				
 				
 				if(inferenceAPIEndPoint.getInferenceApiKeyValue()!=null) {
-					if(inferenceAPIEndPoint.getInferenceApiKeyName()!=null) {
+					
 						String inferenceApiKeyName = inferenceAPIEndPoint.getInferenceApiKeyName();
 						String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
 						response = builder.clientConnector(new
 								  ReactorClientHttpConnector(httpClient)).build().post()
-								  .uri(callBackUrl).header("inferenceApiKeyName", inferenceApiKeyName).header("inferenceApiKeyValue", inferenceApiKeyValue).
+								  .uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue).
 								  body(Mono.just(request), ASRRequest.class).retrieve()
-								  .bodyToMono(ASRResponse.class).block();					}else {
-						String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
-
-						response = builder.clientConnector(new
-								  ReactorClientHttpConnector(httpClient)).build().post()
-								  .uri(callBackUrl).header("inferenceApiKeyValue", inferenceApiKeyValue).
-								  body(Mono.just(request), ASRRequest.class).retrieve()
-								  .bodyToMono(ASRResponse.class).block();
-					}
+								  .bodyToMono(ASRResponse.class).block();					
 					
 				}else {
 					response = builder.clientConnector(new
@@ -324,10 +316,12 @@ public class ModelInferenceEndPointService {
 			
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			log.info("httpResponse : "+httpResponse);
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
 			String responseJsonStr = httpResponse.body().string();
-
+             System.out.println("responseJsonStr : " +responseJsonStr);
 			NerResponse response = objectMapper.readValue(responseJsonStr, NerResponse.class);
 			nerInference.setResponse(response);
 			schema = nerInference;
@@ -1006,21 +1000,14 @@ public class ModelInferenceEndPointService {
 			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
             log.info("callBackUrl : "+callBackUrl);
 			if(inferenceAPIEndPoint.getInferenceApiKeyValue()!=null) {
-				if(inferenceAPIEndPoint.getInferenceApiKeyName()!=null) {
+				
 					String inferenceApiKeyName = inferenceAPIEndPoint.getInferenceApiKeyName();
 					String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
 					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
 					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
-				 httpRequest= new Request.Builder().url(callBackUrl).addHeader("inferenceApiKeyName", inferenceApiKeyName).addHeader("inferenceApiKeyValue", inferenceApiKeyValue).post(body).build();
+				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
 				    log.info("httpRequest : "+httpRequest.toString());
-				}else {
-					String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
-                     log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
-					 httpRequest= new Request.Builder().url(callBackUrl).addHeader("inferenceApiKeyValue", inferenceApiKeyValue).post(body).build();
-					    log.info("httpRequest : "+httpRequest.toString());
-
-
-				}
+				
 				
 			}else {
 				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
