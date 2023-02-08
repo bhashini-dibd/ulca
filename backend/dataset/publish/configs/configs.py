@@ -180,6 +180,7 @@ dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
 dataset_type_transliteration = os.environ.get('DS_TYPE_TRANSLITERATION', 'transliteration-corpus')
 dataset_type_glossary = os.environ.get('DS_TYPE_GLOSSARY', 'glossary-corpus')
+dataset_type_ner = os.environ.get('DS_TYPE_NER', 'ner-corpus')
 
 user_mode_pseudo = os.environ.get('USER_MODE_PSEUDO', 'precheck')
 user_mode_real = os.environ.get('USER_MODE_REAL', 'real')
