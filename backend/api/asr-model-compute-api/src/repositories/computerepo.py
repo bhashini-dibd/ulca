@@ -102,9 +102,10 @@ class ASRComputeRepo:
         """
         try:
             if apiKeyName and apiKeyValue:
-                headers =   {"Content-Type": "application/json", "inferenceApiKeyName":apiKeyName, "inferenceApiKeyValue" : apiKeyValue }
+                headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
             elif apiKeyValue and apiKeyName == None:
-                headers =   {"Content-Type": "application/json", "inferenceApiKeyName":apiKeyName}
+                apiKeyName = apiKeyValue
+                headers =   {"Content-Type": "application/json", apiKeyName:apiKeyValue}
             elif apiKeyValue == None and apiKeyName == None:
                 headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},

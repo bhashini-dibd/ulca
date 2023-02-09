@@ -32,35 +32,19 @@ class ASRComputeResource(Resource):
         if "audioUri" in body:
             audio   =   body["audioUri"]
             uri     =   True
-        #try:
-        # if "inferenceApiKeyName" in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
-        #     apiKeyName = inf_callbackurl["inferenceApiKeyName"]
-        #     apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
-        # elif  "inferenceApiKeyName" not in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
-        #     apiKeyName = None
-        #     apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
-        # else:
-        #     apiKeyName = None
-        #     apiKeyValue = None
-        # if inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
-        #     apiKeyName = inf_callbackurl["inferenceApiKeyName"]
-        #     apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
-        # elif not inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
-        #     apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
-        #     apiKeyName = None
-        # log.info(f"apiKeyValue, apiKeyName {apiKeyName}")
-        # log.info(f"apiKeyValue, apiKeyName {apiKeyValue}")
-        result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
-        log.info(f"result {result}")
-        if result.get("status") == "SUCCESS":
-            res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
-            log.info(f"response successfully generated. res ==> {res}")
-            log.info(f"response type ===> {res.getres}")
-            return res.getres()
-        else:
-            return post_error("Request Failed",result["status_text"]), 400
-        #except Exception as e:
-         #   log.info(f'Exception on ASRComputeResource {e}')
+        try:
+        
+            result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
+            log.info(f"result {result}")
+            if result.get("status") == "SUCCESS":
+                res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
+                log.info(f"response successfully generated. res ==> {res}")
+                log.info(f"response type ===> {res.getres}")
+                return res.getres()
+            else:
+                return post_error("Request Failed",result["status_text"]), 400
+        except Exception as e:
+           log.info(f'Exception on ASRComputeResource {e}')
 
 # class to navigate asr file requests
 class ComputeAudioResource(Resource):
