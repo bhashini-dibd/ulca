@@ -28,12 +28,15 @@ class ASRComputeRepo:
         #log.info(f'infrence end point',{inf_callbackurl})
         
         callbackurl =   inf_callbackurl["callbackUrl"]
-        if inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
+        if "inferenceApiKeyName" in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
             apiKeyName = inf_callbackurl["inferenceApiKeyName"]
             apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
-        elif not inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
-            apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+        elif  "inferenceApiKeyName" not in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
             apiKeyName = None
+            apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+        else:
+            apiKeyName = None
+            apiKeyValue = None
         log.info(f"apiKeyValue, apiKeyName {apiKeyName}")
         log.info(f"apiKeyValue, apiKeyName {apiKeyValue}")
         transformat =   inf_callbackurl["schema"]["request"]["config"]["transcriptionFormat"]["value"].lower()
@@ -102,6 +105,8 @@ class ASRComputeRepo:
                 headers =   {"Content-Type": "application/json", "inferenceApiKeyName":apiKeyName, "inferenceApiKeyValue" : apiKeyValue }
             elif apiKeyValue and apiKeyName == None:
                 headers =   {"Content-Type": "application/json", "inferenceApiKeyName":apiKeyName}
+            elif apiKeyValue == None and apiKeyName == None:
+                headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
                         "audio": [{"audioUri": url}]}
             log.info(f"Request body : {body}")

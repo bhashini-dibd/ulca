@@ -33,14 +33,23 @@ class ASRComputeResource(Resource):
             audio   =   body["audioUri"]
             uri     =   True
         #try:
-        if inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
-            apiKeyName = inf_callbackurl["inferenceApiKeyName"]
-            apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
-        elif not inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
-            apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
-            apiKeyName = None
-        log.info(f"apiKeyValue, apiKeyName {apiKeyName}")
-        log.info(f"apiKeyValue, apiKeyName {apiKeyValue}")
+        # if "inferenceApiKeyName" in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
+        #     apiKeyName = inf_callbackurl["inferenceApiKeyName"]
+        #     apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+        # elif  "inferenceApiKeyName" not in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
+        #     apiKeyName = None
+        #     apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+        # else:
+        #     apiKeyName = None
+        #     apiKeyValue = None
+        # if inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
+        #     apiKeyName = inf_callbackurl["inferenceApiKeyName"]
+        #     apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+        # elif not inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
+        #     apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+        #     apiKeyName = None
+        # log.info(f"apiKeyValue, apiKeyName {apiKeyName}")
+        # log.info(f"apiKeyValue, apiKeyName {apiKeyValue}")
         result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
         log.info(f"result {result}")
         if result.get("status") == "SUCCESS":
