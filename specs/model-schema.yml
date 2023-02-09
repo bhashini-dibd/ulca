@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.5.0
+  version: 0.6.0
 servers:
   - url: /ulca
 paths: {}
@@ -104,7 +104,17 @@ components:
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
         asyncApiDetails:
           $ref: '#/components/schemas/AsyncApiDetails'
+        inferenceApiKeyName:
+          type: string
+          description: expected if the callbackurl requires an API key. field denotes the key name
+          example: apiKey
+          default: apiKey
+        inferenceApiKeyValue:
+          type: string
+          description: expected if the callbackurl requires an API key so as to test it
+          example: dde19858-b354-4e24-8e92-a7a4b320c066
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
+        
     AsyncApiDetails:
       required:
         - pollingUrl
@@ -661,6 +671,8 @@ components:
       required:
         - token
         - tag
+        - tokenStartIndex
+        - tokenEndIndex
       properties:
         token:
           type: string
