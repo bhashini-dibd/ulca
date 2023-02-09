@@ -1,0 +1,41 @@
+{
+    "currentRecordIndex": 13936,
+    "serviceRequestNumber": "1158977093",
+    "userMode": "real",
+    "record": {
+        "licenseUrl": "null",
+        "submitter": {
+            "oauthId": "null",
+            "name": "OSF",
+            "team": "null",
+            "aboutMe": "Glossary datasets of various domains like healthcare, history, education, financial, legal, news, etc.."
+        },
+        "collectionMethod": {
+            "collectionDetails": "null",
+            "collectionDescription": [
+                "manual-curated"
+            ]
+        },
+        "targetLanguage": "ta",
+        "level": "p",
+        "sourceText": "zero bracket amount",
+        "version": "1",
+        "collectionSource": [
+            "OSF"
+        ],
+        "license": "cc-by-4.0",
+        "domain": [
+            "financial"
+        ],
+        "id": "9c6a265c-8363-40eb-9ad1-6b09a6b3741a",
+        "datasetType": "glossary-corpus",
+        "targetText": "வரிச்சுமையில்லா வருமானம்",
+        "sourceLanguage": "en",
+        "sourceTextHash": "025e76b44035204a3bd693e264ef33304229aa49dcb8da9316f296d448715e41",
+        "targetTextHash": "334b0b0a21d92a70d52f06c7766ef19891f564861c18e5f517d925ee56c4583c"
+    },
+    "datasetName": "ulca_glossary_en_ta_financial_osf",
+    "datasetId": "63e33765250ab2353fb9e9c4",
+    "datasetType": "glossary-corpus",
+    "userId": "6a73afa4fc774dcdb28d5fff944511f6"
+}

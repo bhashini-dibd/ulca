@@ -1,0 +1,77 @@
+{
+    "currentRecordIndex": 1,
+    "serviceRequestNumber": "1145744591",
+    "userMode": "real",
+    "record": {
+        "licenseUrl": "null",
+        "submitter": {
+            "oauthId": "null",
+            "name": "Project Anuvaad",
+            "team": [
+                {
+                    "oauthId": "null",
+                    "name": "Aswin Pradeep",
+                    "aboutMe": "NLP Data  lead at Project Anuvaad"
+                },
+                {
+                    "oauthId": "null",
+                    "name": "Vishal Mauli",
+                    "aboutMe": "Backend team lead at Project Anuvaad"
+                },
+                {
+                    "oauthId": "null",
+                    "name": "Aravinth Bheemaraj",
+                    "aboutMe": "NLP Data team lead at Project Anuvaad"
+                }
+            ],
+            "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project"
+        },
+        "collectionMethod": {
+            "collectionDetails": {
+                "contributor": {
+                    "oauthId": "null",
+                    "name": "Raghav Mohan",
+                    "aboutMe": "Freelance Hindi annotator for project Anuvaad"
+                },
+                "editingToolVersion": "v1.4",
+                "editingTool": "Microsoft Excel"
+            },
+            "collectionDescription": [
+                "manual-curated"
+            ]
+        },
+        "sourceText": "सूत्रों के अनुसार , जांच आयोग ने 17 पेज की अपनी रिपोर्ट सिंध प्रांत के गृह विभाग के पास भेज दी है । ",
+        "nerData": [
+            {
+                "tokenIndex": 13,
+                "tag": "ORG",
+                "token": "सिंध"
+            },
+            {
+                "tokenIndex": 14,
+                "tag": "ORG",
+                "token": "प्रांत"
+            }
+        ],
+        "version": "1",
+        "tagsFormat": "conll2003",
+        "collectionSource": [
+            "https: //wikipedia.org"
+        ],
+        "formatDescription": "null",
+        "license": "cc-by-4.0",
+        "domain": [
+            "general"
+        ],
+        "isStopwordsRemoved": "false",
+        "id": "x780e70ac-e92d-423a-847e-4cdfd193ae2f",
+        "datasetType": "ner-corpus",
+        "sourceLanguage": "hi",
+        "sourceTextHash": "e8d39e0b0ff6afe9ad4142b43a62901d06589c7577cff84b5dec49797d4403e9",
+        "nerDataHash": "decbf5249f4875345684b93db100b71435aec9091d45d4da1079792e022a5374"
+    },
+    "datasetName": "ner-dataset-test",
+    "datasetId": "63d3a900d4a19064490053f3",
+    "datasetType": "ner-corpus",
+    "userId": "parshant@gmail.com"
+}

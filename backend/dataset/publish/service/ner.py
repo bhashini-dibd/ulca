@@ -2,6 +2,12 @@ import logging
 import time
 from logging.config import dictConfig
 
+
+
+
+log = logging.getLogger('file')
+
+
 class NERService:
     def __init__(self):
         pass
@@ -12,9 +18,17 @@ class NERService:
     '''
 
     def load_ner_dataset(self, request):
-        pass
+        try:
+            metadata, record = request, request["record"]
+            if record:
+                result = self.get_enriched_data(record, metadata)
+        except Exception as e:
+            log.exception(e)
+            return {"message": "EXCEPTION while loading Glossary dataset!!", "status": "FAILED"}
+        return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
 
 
+    def get_enriched_data(self, data, metadata):
 
 
 
