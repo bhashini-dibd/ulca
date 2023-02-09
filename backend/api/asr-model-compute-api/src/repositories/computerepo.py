@@ -25,7 +25,7 @@ class ASRComputeRepo:
         - Encoding back to base64
         - decoding to utf-8
         """
-        log.info(f'infrence end point',inf_callbackurl)
+        log.info(f'infrence end point',{inf_callbackurl})
         
         callbackurl =   inf_callbackurl["callbackUrl"]
         if inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
@@ -34,7 +34,8 @@ class ASRComputeRepo:
         elif not inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
             apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
             apiKeyName = None
-        log.info(f"apiKeyValue, apiKeyName", apiKeyValue, apiKeyName)
+        log.info(f"apiKeyValue, apiKeyName {apiKeyName}")
+        log.info(f"apiKeyValue, apiKeyName {apiKeyValue}")
         transformat =   inf_callbackurl["schema"]["request"]["config"]["transcriptionFormat"]["value"].lower()
         audioformat =   inf_callbackurl["schema"]["request"]["config"]["audioFormat"].lower()
         log.info(f'callbackurl == {callbackurl}, transformat=={transformat}, audioformat=={audioformat}')
