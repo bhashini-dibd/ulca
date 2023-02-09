@@ -102,10 +102,14 @@ class ASRComputeRepo:
         """
         try:
             if apiKeyName and apiKeyValue:
+                log.info(f"apiKayname {apiKeyValue}")
+                log.info(f"apiKeyValue {apiKeyValue}")
+                log.info(f"apiKayname {type(apiKeyValue)}")
+                log.info(f"apiKeyValue {type(apiKeyValue)}")
                 headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
             elif apiKeyValue and apiKeyName == None:
                 apiKeyName = apiKeyValue
-                headers =   {"Content-Type": "application/json", apiKeyName:apiKeyValue}
+                headers =   {"Content-Type": "application/json", "apiKey":apiKeyValue}
             elif apiKeyValue == None and apiKeyName == None:
                 headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
@@ -113,6 +117,7 @@ class ASRComputeRepo:
             log.info(f"Request body : {body}")
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
+            log.info(f"logging headers for apiKey {headers}")
             response = requests.post(url=request_url, headers = headers, json = body,verify=False)
             content = response.content
             log.info(content)
