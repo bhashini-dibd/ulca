@@ -47,6 +47,16 @@ class ASRComputeRepo:
             return result
         else:
             try:
+                callbackurl =   inf_callbackurl["callbackUrl"]
+                if "inferenceApiKeyName" in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
+                    apiKeyName = inf_callbackurl["inferenceApiKeyName"]
+                    apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+                elif  "inferenceApiKeyName" not in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
+                    apiKeyName = None
+                    apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+                else:
+                    apiKeyName = None
+                    apiKeyValue = None
                 encode_string = audio
                 file = f'{shared_storage_path}audio-{userId}.wav'
                 with open (file, "wb") as wav_file:
@@ -63,7 +73,7 @@ class ASRComputeRepo:
                 #log.info(f'encoded data {encoded_data}')
                 os.remove(file)
                 os.remove(processed_file)
-                result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat,punctiation=True)
+                result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat,apiKeyName,apiKeyValue,punctiation=True)
                 return result
 
             except Exception as e:
@@ -131,12 +141,22 @@ class ASRComputeRepo:
             return {"status_text":"Incorrect inference endpoint or invalid response"}
 
 
-    def make_base64_audio_processor_call(self,data,lang,callbackurl,transformat,audioformat,punctiation):
+    def make_base64_audio_processor_call(self,data,lang,callbackurl,transformat,audioformat,apiKeyName,apiKeyValue,punctiation):
         """
         API call to model endpoint for audio content
         """
         try:
-            headers =   {"Content-Type": "application/json"}
+            if apiKeyName and apiKeyValue:
+                log.info(f"apiKayname {apiKeyValue}")
+                log.info(f"apiKeyValue {apiKeyValue}")
+                log.info(f"apiKayname {type(apiKeyValue)}")
+                log.info(f"apiKeyValue {type(apiKeyValue)}")
+                headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
+            elif apiKeyValue and apiKeyName == None:
+                apiKeyName = apiKeyValue
+                headers =   {"Content-Type": "application/json", "apiKey":apiKeyValue}
+            elif apiKeyValue == None and apiKeyName == None:
+                headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat,
                         "punctuation": punctiation,"enableInverseTextNormalization": False},"audio": [{"audioContent": str(data)}]}
             request_url = callbackurl
