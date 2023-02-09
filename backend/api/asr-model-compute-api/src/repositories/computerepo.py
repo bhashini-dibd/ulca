@@ -115,9 +115,9 @@ class ASRComputeRepo:
         log.info(f"Request body : {body}")
         try:
             if apiKeyName and apiKeyValue:
-                log.info(f"apiKayname {apiKeyValue}")
+                log.info(f"apiKeyname {apiKeyName}")
                 log.info(f"apiKeyValue {apiKeyValue}")
-                log.info(f"apiKayname {type(apiKeyValue)}")
+                log.info(f"apiKeyname {type(apiKeyName)}")
                 log.info(f"apiKeyValue {type(apiKeyValue)}")
                 headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
             elif apiKeyValue and apiKeyName == None:
@@ -147,9 +147,9 @@ class ASRComputeRepo:
         """
         try:
             if apiKeyName and apiKeyValue:
-                log.info(f"apiKayname {apiKeyValue}")
+                log.info(f"apiKeyname {apiKeyName}")
                 log.info(f"apiKeyValue {apiKeyValue}")
-                log.info(f"apiKayname {type(apiKeyValue)}")
+                log.info(f"apiKeyname {type(apiKeyName)}")
                 log.info(f"apiKeyValue {type(apiKeyValue)}")
                 headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
             elif apiKeyValue and apiKeyName == None:
