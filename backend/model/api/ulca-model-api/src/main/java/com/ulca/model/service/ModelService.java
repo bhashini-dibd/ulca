@@ -78,11 +78,19 @@ import io.swagger.model.LanguagePairs;
 import io.swagger.model.License;
 import io.swagger.model.ModelProcessingType;
 import io.swagger.model.ModelTask;
+import io.swagger.model.NerInference;
+import io.swagger.model.OCRInference;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.Submitter;
 import io.swagger.model.SupportedLanguages;
 import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSInference;
+import io.swagger.model.TranslationInference;
+import io.swagger.model.TranslationResponse;
+import io.swagger.model.TransliterationInference;
+import io.swagger.model.TransliterationRequest;
+import io.swagger.model.TxtLangDetectionInference;
+import io.swagger.model.TxtLangDetectionRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -192,13 +200,24 @@ public class ModelService {
 		if (!result.isEmpty()) {
 			
 			ModelExtended model = result.get();
+			
+			log.info("model : "+model.toString());
+			log.info("model TaskType : "+model.getTask().getType());
+
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(model, modelDto);
+			
+			log.info("modelDto : "+modelDto.toString());
+			log.info("modelDto TaskType : "+modelDto.getTask().getType());
+
 			List<String> metricList = modelConstants.getMetricListByModelTask(model.getTask().getType().toString());
 			modelDto.setMetric(metricList);
 			
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelIdAndStatus(model.getModelId(), "Completed");
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
+			log.info("modelDto1 : "+modelDto.toString());
+
+			
 			return modelDto;
 		}
 		return null;
@@ -287,7 +306,9 @@ public class ModelService {
 
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getUploadedModel(modelFilePath);
-
+		
+		
+		
 		if (modelObj != null) {
 			validateModel(modelObj);
 		} else {
@@ -302,16 +323,19 @@ public class ModelService {
 			lps.add(lp);
 			modelObj.setLanguages(lps);
 		}
-
+           
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(Instant.now().toEpochMilli());
 		modelObj.setPublishedOn(Instant.now().toEpochMilli());
 		modelObj.setStatus("unpublished");
 		modelObj.setUnpublishReason("Newly submitted model");
-
+        
+		
+		
+		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
-
+		
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
 				|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
@@ -354,6 +378,9 @@ public class ModelService {
 		File file = new File(modelFilePath);
 		try {
 			modelObj = objectMapper.readValue(file, ModelExtended.class);
+			OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
+			setTaskTypeToInference(schema);
+
 			return modelObj;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -531,9 +558,14 @@ public class ModelService {
 		
 		Criteria nameCriteria = Criteria.where("status").is("published");
 		dynamicQuery.addCriteria(nameCriteria);
+		
+	    	log.info("dynamicQuery : "+dynamicQuery.toString());
 	
 		List<ModelExtended> list = mongoTemplate.find(dynamicQuery, ModelExtended.class);
-
+         
+		log.info("modelList : "+list);
+		
+		
 		if(list != null) {
 			Collections.shuffle(list); // randomize the search
 			return new ModelSearchResponse("Model Search Result", list, list.size());
@@ -723,5 +755,64 @@ public class ModelService {
 		
 		return null;
 	}
+	
+	public static void setTaskTypeToInference(OneOfInferenceAPIEndPointSchema schema) {
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")){
+			
+			io.swagger.model.ASRInference asrInference=(io.swagger.model.ASRInference)schema;
+			if(asrInference.getTaskType()==null) {
+				
+				asrInference.setTaskType(SupportedTasks.ASR);
+			}
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")){
+			
+			io.swagger.model.TTSInference asrInference=(io.swagger.model.TTSInference)schema;
+			if(asrInference.getTaskType()==null) {
+				
+				asrInference.setTaskType(SupportedTasks.TTS);
+			}
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")){
+			
+			io.swagger.model.TransliterationInference asrInference=(io.swagger.model.TransliterationInference)schema;
+			if(asrInference.getTaskType()==null) {
+				
+				asrInference.setTaskType(SupportedTasks.TRANSLITERATION);
+			}
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")){
+			
+			io.swagger.model.TranslationInference asrInference=(io.swagger.model.TranslationInference)schema;
+			if(asrInference.getTaskType()==null) {
+				
+				asrInference.setTaskType(SupportedTasks.TRANSLATION);
+			}
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")){
+			
+			io.swagger.model.OCRInference asrInference=(io.swagger.model.OCRInference)schema;
+			if(asrInference.getTaskType()==null) {
+				
+				asrInference.setTaskType(SupportedTasks.OCR);
+			}
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.NerInference")){
+			
+			io.swagger.model.NerInference asrInference=(io.swagger.model.NerInference)schema;
+			if(asrInference.getTaskType()==null) {
+				
+				asrInference.setTaskType(SupportedTasks.NER);
+			}
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")){
+			
+			io.swagger.model.TxtLangDetectionInference asrInference=(io.swagger.model.TxtLangDetectionInference)schema;
+			if(asrInference.getTaskType()==null) {
+				
+				asrInference.setTaskType(SupportedTasks.TXT_LANG_DETECTION);
+			}
+		}
+
+		
+		
+	}
+	
+	
 
 }
