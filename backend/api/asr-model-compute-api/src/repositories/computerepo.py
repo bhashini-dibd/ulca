@@ -100,6 +100,9 @@ class ASRComputeRepo:
         """
         API call to model endpoint for audio urls
         """
+        body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
+                        "audio": [{"audioUri": url}]}
+        log.info(f"Request body : {body}")
         try:
             if apiKeyName and apiKeyValue:
                 log.info(f"apiKayname {apiKeyValue}")
@@ -112,13 +115,12 @@ class ASRComputeRepo:
                 headers =   {"Content-Type": "application/json", "apiKey":apiKeyValue}
             elif apiKeyValue == None and apiKeyName == None:
                 headers =   {"Content-Type": "application/json"}
-            body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
-                        "audio": [{"audioUri": url}]}
-            log.info(f"Request body : {body}")
+            
+            
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
             log.info(f"logging headers for apiKey {headers}")
-            response = requests.post(url=request_url, headers = headers, json = body,verify=False)
+            response = requests.post(url=request_url, headers = headers, json = body)
             content = response.content
             log.info(content)
             response_data = json.loads(content)
