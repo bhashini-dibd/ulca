@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.6.0
+  version: 0.7.0
 servers:
   - url: /ulca
 paths: {}
@@ -114,7 +114,6 @@ components:
           description: expected if the callbackurl requires an API key so as to test it
           example: dde19858-b354-4e24-8e92-a7a4b320c066
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
-        
     AsyncApiDetails:
       required:
         - pollingUrl
@@ -380,6 +379,18 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+        supportedInputAudioFormats:
+          type: array
+          default: [wav]
+          description: list of
+          items:
+            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        supportedOutputTextFormats:
+          type: array
+          description: list of
+          default: [transcript]
+          items:
+            $ref:  '#/components/schemas/TextFormat'
         request:
           $ref: '#/components/schemas/ASRRequest'
         response:
@@ -445,6 +456,18 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+        supportedInputTextFormats:
+          type: array
+          description: list of
+          default: [transcript]
+          items:
+            $ref:  '#/components/schemas/TextFormat'
+        supportedOutputAudioFormats:
+          type: array
+          default: [wav]
+          description: list of
+          items:
+            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         request:
           $ref: '#/components/schemas/TTSRequest'
         response:
@@ -781,6 +804,14 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         gender:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+        inputFormat:
+          type: object
+          properties:
+            value:
+              $ref: '#/components/schemas/TextFormat'
+        audioFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        
     AudioConfig:
       required:
         - language
@@ -802,7 +833,10 @@ components:
         bitsPerSample:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         transcriptionFormat:
-          $ref: '#/components/schemas/TranscriptionFormat'
+          type: object
+          properties:
+            value:
+              $ref: '#/components/schemas/TextFormat'
         postProcessors:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
         domain:
@@ -822,16 +856,7 @@ components:
             - default
         encoding:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
-    TranscriptionFormat:
-      type: object
-      properties:
-        value:
-          type: string
-          description: format of ASR output
-          enum:
-            - srt
-            - transcript
-            - alternatives
+
     ImageFiles:
       type: array
       description: list of
@@ -898,6 +923,16 @@ components:
         bitsPerSample:
           type: integer
           description: bitsPerSample rate of audio
+    
+    TextFormat:
+      type: string
+      description: supported textual formats
+      enum:
+        - srt
+        - transcript
+        - webvtt
+        - alternatives
+        
   securitySchemes:
     authToken:
       type: apiKey
