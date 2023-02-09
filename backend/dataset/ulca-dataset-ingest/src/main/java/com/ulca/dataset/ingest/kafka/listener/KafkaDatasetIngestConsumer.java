@@ -20,7 +20,6 @@ import com.ulca.dataset.kakfa.DatasetTransliterationValidateIngest;
 import com.ulca.dataset.kakfa.DatasetTtsValidateIngest;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.TaskTracker;
-
 import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -81,7 +80,6 @@ public class KafkaDatasetIngestConsumer {
 			}
 			
 			DatasetType datasetType = datasetIngest.getDatasetType();
-
 			switch (datasetType) {
 
 			case PARALLEL_CORPUS:
