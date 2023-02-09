@@ -25,7 +25,7 @@ class ASRComputeRepo:
         - Encoding back to base64
         - decoding to utf-8
         """
-        log.info(f'infrence end point',{inf_callbackurl})
+        #log.info(f'infrence end point',{inf_callbackurl})
         
         callbackurl =   inf_callbackurl["callbackUrl"]
         if inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
