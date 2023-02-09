@@ -10,22 +10,18 @@ import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
- * supported dataset type under language initiatives
+ * Accepted standards for tags.
  */
-public enum DatasetType {
-  PARALLEL_CORPUS("parallel-corpus"),
-    MONOLINGUAL_CORPUS("monolingual-corpus"),
-    TRANSLITERATION_CORPUS("transliteration-corpus"),
-    ASR_CORPUS("asr-corpus"),
-    TTS_CORPUS("tts-corpus"),
-    ASR_UNLABELED_CORPUS("asr-unlabeled-corpus"),
-    OCR_CORPUS("ocr-corpus"),
-    DOCUMENT_LAYOUT_CORPUS("document-layout-corpus"),
-    GLOSSARY_CORPUS("glossary-corpus");
+public enum SupportedTagsFormat {
+  IOB("IOB"),
+    IOB2("IOB2"),
+    BIOES("BIOES"),
+    BASIC("basic"),
+    CUSTOM("custom");
 
   private String value;
 
-  DatasetType(String value) {
+  SupportedTagsFormat(String value) {
     this.value = value;
   }
 
@@ -36,8 +32,8 @@ public enum DatasetType {
   }
 
   @JsonCreator
-  public static DatasetType fromValue(String text) {
-    for (DatasetType b : DatasetType.values()) {
+  public static SupportedTagsFormat fromValue(String text) {
+    for (SupportedTagsFormat b : SupportedTagsFormat.values()) {
       if (String.valueOf(b.value).equals(text)) {
         return b;
       }
