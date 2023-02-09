@@ -671,6 +671,8 @@ components:
       required:
         - token
         - tag
+        - tokenStartIndex
+        - tokenEndIndex
       properties:
         token:
           type: string
