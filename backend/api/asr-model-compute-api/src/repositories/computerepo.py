@@ -27,11 +27,17 @@ class ASRComputeRepo:
         """
         
         callbackurl =   inf_callbackurl["callbackUrl"]
+        if inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
+            apiKeyName = inf_callbackurl["inferenceApiKeyName"]
+            apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+        elif not inf_callbackurl["inferenceApiKeyName"] and inf_callbackurl["inferenceApiKeyValue"]:
+            apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+            apiKeyName = None
         transformat =   inf_callbackurl["schema"]["request"]["config"]["transcriptionFormat"]["value"].lower()
         audioformat =   inf_callbackurl["schema"]["request"]["config"]["audioFormat"].lower()
         log.info(f'callbackurl == {callbackurl}, transformat=={transformat}, audioformat=={audioformat}')
         if uri == True:
-            result = self.make_audiouri_call(audio,lang,callbackurl,transformat,audioformat)
+            result = self.make_audiouri_call(audio,lang,callbackurl,apiKeyName,apiKeyValue,transformat,audioformat)
             return result
         else:
             try:
@@ -84,12 +90,15 @@ class ASRComputeRepo:
 
 
     
-    def make_audiouri_call(self, url,lang,callbackurl,transformat,audioformat):
+    def make_audiouri_call(self, url,lang,callbackurl,apiKeyName, apiKeyValue,transformat,audioformat):
         """
         API call to model endpoint for audio urls
         """
         try:
-            headers =   {"Content-Type": "application/json"}
+            if apiKeyName and apiKeyValue:
+                headers =   {"Content-Type": "application/json", "inferenceApiKeyName":apiKeyName, "inferenceApiKeyValue" : apiKeyValue }
+            elif apiKeyValue and apiKeyName == None:
+                headers =   {"Content-Type": "application/json", "inferenceApiKeyName":apiKeyName}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
                         "audio": [{"audioUri": url}]}
             log.info(f"Request body : {body}")
