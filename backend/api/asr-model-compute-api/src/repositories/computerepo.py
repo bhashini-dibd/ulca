@@ -163,6 +163,7 @@ class ASRComputeRepo:
             #log.info(f'transformat == > {transformat}, audioformat==> {audioformat}, lang ==> {lang} punc ==> {punctiation}, audioContent ==> {data}')
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body,verify=False)
+            #return response instead of response_data
             content = response.content
             log.info(content)
             response_data = json.loads(content)
