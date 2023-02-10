@@ -17,119 +17,118 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
+public class OCRInference implements OneOfInferenceAPIEndPointSchema {
+	/*
+	 * @JsonProperty("taskType") private SupportedTasks taskType = null;
+	 */
 
-public class OCRInference  implements OneOfInferenceAPIEndPointSchema {
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+	@JsonProperty("request")
+	private OCRRequest request = null;
 
-  @JsonProperty("request")
-  private OCRRequest request = null;
+	@JsonProperty("response")
+	private OCRResponse response = null;
 
-  @JsonProperty("response")
-  private OCRResponse response = null;
+	/*
+	 * public OCRInference taskType(SupportedTasks taskType) { this.taskType =
+	 * taskType; return this; }
+	 * 
+	 *//**
+		 * Get taskType
+		 * 
+		 * @return taskType
+		 **//*
+			 * @Schema(required = true, description = "")
+			 * 
+			 * @NotNull
+			 * 
+			 * @Valid public SupportedTasks getTaskType() { return taskType; }
+			 * 
+			 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+			 * }
+			 */
 
-  public OCRInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	public OCRInference request(OCRRequest request) {
+		this.request = request;
+		return this;
+	}
 
-  /**
-   * Get taskType
-   * @return taskType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	/**
+	 * Get request
+	 * 
+	 * @return request
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
+	@Valid
+	public OCRRequest getRequest() {
+		return request;
+	}
 
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
+	public void setRequest(OCRRequest request) {
+		this.request = request;
+	}
 
-  public OCRInference request(OCRRequest request) {
-    this.request = request;
-    return this;
-  }
+	public OCRInference response(OCRResponse response) {
+		this.response = response;
+		return this;
+	}
 
-  /**
-   * Get request
-   * @return request
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	/**
+	 * Get response
+	 * 
+	 * @return response
+	 **/
+	@Schema(description = "")
 
-    @Valid
-    public OCRRequest getRequest() {
-    return request;
-  }
+	@Valid
+	public OCRResponse getResponse() {
+		return response;
+	}
 
-  public void setRequest(OCRRequest request) {
-    this.request = request;
-  }
+	public void setResponse(OCRResponse response) {
+		this.response = response;
+	}
 
-  public OCRInference response(OCRResponse response) {
-    this.response = response;
-    return this;
-  }
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		OCRInference ocRInference = (OCRInference) o;
+		return //Objects.equals(this.taskType, ocRInference.taskType)
+				Objects.equals(this.request, ocRInference.request)
+				&& Objects.equals(this.response, ocRInference.response);
+	}
 
-  /**
-   * Get response
-   * @return response
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public OCRResponse getResponse() {
-    return response;
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash( request, response);
+	}
 
-  public void setResponse(OCRResponse response) {
-    this.response = response;
-  }
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class OCRInference {\n");
 
+		//sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+		sb.append("    request: ").append(toIndentedString(request)).append("\n");
+		sb.append("    response: ").append(toIndentedString(response)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    OCRInference ocRInference = (OCRInference) o;
-    return Objects.equals(this.taskType, ocRInference.taskType) &&
-        Objects.equals(this.request, ocRInference.request) &&
-        Objects.equals(this.response, ocRInference.response);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(taskType, request, response);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class OCRInference {\n");
-    
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
-    sb.append("    request: ").append(toIndentedString(request)).append("\n");
-    sb.append("    response: ").append(toIndentedString(response)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 }

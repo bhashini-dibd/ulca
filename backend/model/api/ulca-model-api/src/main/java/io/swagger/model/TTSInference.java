@@ -18,145 +18,144 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
+public class TTSInference implements OneOfInferenceAPIEndPointSchema {
+	/*
+	 * @JsonProperty("taskType") private SupportedTasks taskType = null;
+	 */
 
-public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+	@JsonProperty("modelProcessingType")
+	private ModelProcessingType modelProcessingType = null;
 
-  @JsonProperty("modelProcessingType")
-  private ModelProcessingType modelProcessingType = null;
+	@JsonProperty("request")
+	private TTSRequest request = null;
 
-  @JsonProperty("request")
-  private TTSRequest request = null;
+	@JsonProperty("response")
+	private TTSResponse response = null;
 
-  @JsonProperty("response")
-  private TTSResponse response = null;
+	/*
+	 * public TTSInference taskType(SupportedTasks taskType) { this.taskType =
+	 * taskType; return this; }
+	 * 
+	 *//**
+		 * Get taskType
+		 * 
+		 * @return taskType
+		 **//*
+			 * @Schema(required = true, description = "")
+			 * 
+			 * @NotNull
+			 * 
+			 * @Valid public SupportedTasks getTaskType() { return taskType; }
+			 * 
+			 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+			 * }
+			 */
+	public TTSInference modelProcessingType(ModelProcessingType modelProcessingType) {
+		this.modelProcessingType = modelProcessingType;
+		return this;
+	}
 
-  public TTSInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	/**
+	 * Get modelProcessingType
+	 * 
+	 * @return modelProcessingType
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-  /**
-   * Get taskType
-   * @return taskType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public ModelProcessingType getModelProcessingType() {
+		return modelProcessingType;
+	}
 
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
+	public void setModelProcessingType(ModelProcessingType modelProcessingType) {
+		this.modelProcessingType = modelProcessingType;
+	}
 
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
+	public TTSInference request(TTSRequest request) {
+		this.request = request;
+		return this;
+	}
 
-  public TTSInference modelProcessingType(ModelProcessingType modelProcessingType) {
-    this.modelProcessingType = modelProcessingType;
-    return this;
-  }
+	/**
+	 * Get request
+	 * 
+	 * @return request
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-  /**
-   * Get modelProcessingType
-   * @return modelProcessingType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public TTSRequest getRequest() {
+		return request;
+	}
 
-    @Valid
-    public ModelProcessingType getModelProcessingType() {
-    return modelProcessingType;
-  }
+	public void setRequest(TTSRequest request) {
+		this.request = request;
+	}
 
-  public void setModelProcessingType(ModelProcessingType modelProcessingType) {
-    this.modelProcessingType = modelProcessingType;
-  }
+	public TTSInference response(TTSResponse response) {
+		this.response = response;
+		return this;
+	}
 
-  public TTSInference request(TTSRequest request) {
-    this.request = request;
-    return this;
-  }
+	/**
+	 * Get response
+	 * 
+	 * @return response
+	 **/
+	@Schema(description = "")
 
-  /**
-   * Get request
-   * @return request
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public TTSResponse getResponse() {
+		return response;
+	}
 
-    @Valid
-    public TTSRequest getRequest() {
-    return request;
-  }
+	public void setResponse(TTSResponse response) {
+		this.response = response;
+	}
 
-  public void setRequest(TTSRequest request) {
-    this.request = request;
-  }
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		TTSInference ttSInference = (TTSInference) o;
+		return //Objects.equals(this.taskType, ttSInference.taskType)
+				Objects.equals(this.modelProcessingType, ttSInference.modelProcessingType)
+				&& Objects.equals(this.request, ttSInference.request)
+				&& Objects.equals(this.response, ttSInference.response);
+	}
 
-  public TTSInference response(TTSResponse response) {
-    this.response = response;
-    return this;
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash( modelProcessingType, request, response);
+	}
 
-  /**
-   * Get response
-   * @return response
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public TTSResponse getResponse() {
-    return response;
-  }
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class TTSInference {\n");
 
-  public void setResponse(TTSResponse response) {
-    this.response = response;
-  }
+		//sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+		sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
+		sb.append("    request: ").append(toIndentedString(request)).append("\n");
+		sb.append("    response: ").append(toIndentedString(response)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    TTSInference ttSInference = (TTSInference) o;
-    return Objects.equals(this.taskType, ttSInference.taskType) &&
-        Objects.equals(this.modelProcessingType, ttSInference.modelProcessingType) &&
-        Objects.equals(this.request, ttSInference.request) &&
-        Objects.equals(this.response, ttSInference.response);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(taskType, modelProcessingType, request, response);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class TTSInference {\n");
-    
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
-    sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
-    sb.append("    request: ").append(toIndentedString(request)).append("\n");
-    sb.append("    response: ").append(toIndentedString(response)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 }
