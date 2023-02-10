@@ -20,8 +20,8 @@ import javax.validation.constraints.*;
 
 
 public class NerInference  implements OneOfInferenceAPIEndPointSchema {
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+ // @JsonProperty("taskType")
+  //private SupportedTasks taskType = null;
 
   @JsonProperty("tagsFormat")
   private SupportedTagsFormat tagsFormat = null;
@@ -32,10 +32,10 @@ public class NerInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("response")
   private NerResponse response = null;
 
-  public NerInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	/*
+	 * public NerInference taskType(SupportedTasks taskType) { this.taskType =
+	 * taskType; return this; }
+	 */
 
   /**
    * Get taskType
@@ -44,14 +44,14 @@ public class NerInference  implements OneOfInferenceAPIEndPointSchema {
   @Schema(required = true, description = "")
       @NotNull
 
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
+	/*
+	 * @Valid public SupportedTasks getTaskType() { return taskType; }
+	 */
 
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
+	/*
+	 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+	 * }
+	 */
 
   public NerInference tagsFormat(SupportedTagsFormat tagsFormat) {
     this.tagsFormat = tagsFormat;
@@ -125,15 +125,15 @@ public class NerInference  implements OneOfInferenceAPIEndPointSchema {
       return false;
     }
     NerInference nerInference = (NerInference) o;
-    return Objects.equals(this.taskType, nerInference.taskType) &&
+    return 
         Objects.equals(this.tagsFormat, nerInference.tagsFormat) &&
         Objects.equals(this.request, nerInference.request) &&
         Objects.equals(this.response, nerInference.response);
   }
-
+  //Objects.equals(this.taskType, nerInference.taskType) &&
   @Override
   public int hashCode() {
-    return Objects.hash(taskType, tagsFormat, request, response);
+    return Objects.hash( tagsFormat, request, response);
   }
 
   @Override
@@ -141,7 +141,7 @@ public class NerInference  implements OneOfInferenceAPIEndPointSchema {
     StringBuilder sb = new StringBuilder();
     sb.append("class NerInference {\n");
     
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+   // sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    tagsFormat: ").append(toIndentedString(tagsFormat)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
