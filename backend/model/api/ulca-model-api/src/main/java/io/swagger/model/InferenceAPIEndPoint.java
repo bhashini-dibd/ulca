@@ -29,7 +29,7 @@ public class InferenceAPIEndPoint   {
   private OneOfInferenceAPIEndPointSchema schema = null;
 
   @JsonProperty("isSyncApi")
-  private Boolean isSyncApi = null;
+  private Boolean isSyncApi = true;
 
   @JsonProperty("asyncApiDetails")
   private AsyncApiDetails asyncApiDetails = null;

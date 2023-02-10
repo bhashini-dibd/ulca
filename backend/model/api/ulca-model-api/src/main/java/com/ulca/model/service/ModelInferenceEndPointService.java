@@ -136,7 +136,7 @@ public class ModelInferenceEndPointService {
 				 * .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
 				 * .bodyToMono(ASRResponse.class).block();
 				 */
-			
+			     if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
 				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
 
 				
@@ -152,6 +152,7 @@ public class ModelInferenceEndPointService {
 								  body(Mono.just(request), ASRRequest.class).retrieve()
 								  .bodyToMono(ASRResponse.class).block();					
 					    log.info("response : "+response);
+				   }
 				}else {
 					response = builder.clientConnector(new
 							  ReactorClientHttpConnector(httpClient)).build().post()
@@ -1016,6 +1017,9 @@ public class ModelInferenceEndPointService {
 	   public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
 		   Request httpRequest =null;
 			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+			
+			if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
+			
 			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
             log.info("callBackUrl : "+callBackUrl);
 			if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
@@ -1028,6 +1032,7 @@ public class ModelInferenceEndPointService {
 				    log.info("httpRequest : "+httpRequest.toString());
 				
 				
+			       }
 			}else {
 				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 				    log.info("httpRequest : "+httpRequest.toString());
@@ -1035,7 +1040,7 @@ public class ModelInferenceEndPointService {
 
 				
 			}	
-			
+	   
 		   
 		   return httpRequest;
 	   }
