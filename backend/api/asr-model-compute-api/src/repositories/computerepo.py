@@ -73,7 +73,9 @@ class ASRComputeRepo:
                 #log.info(f'encoded data {encoded_data}')
                 os.remove(file)
                 os.remove(processed_file)
+                
                 result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat,apiKeyName,apiKeyValue,punctiation=True)
+                log.info(f"result make_base64_audio_processor_call {result}")
                 return result
 
             except Exception as e:
