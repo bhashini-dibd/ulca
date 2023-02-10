@@ -78,11 +78,19 @@ import io.swagger.model.LanguagePairs;
 import io.swagger.model.License;
 import io.swagger.model.ModelProcessingType;
 import io.swagger.model.ModelTask;
+import io.swagger.model.NerInference;
+import io.swagger.model.OCRInference;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.Submitter;
 import io.swagger.model.SupportedLanguages;
 import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSInference;
+import io.swagger.model.TranslationInference;
+import io.swagger.model.TranslationResponse;
+import io.swagger.model.TransliterationInference;
+import io.swagger.model.TransliterationRequest;
+import io.swagger.model.TxtLangDetectionInference;
+import io.swagger.model.TxtLangDetectionRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -192,6 +200,7 @@ public class ModelService {
 		if (!result.isEmpty()) {
 			
 			ModelExtended model = result.get();
+			
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(model, modelDto);
 			List<String> metricList = modelConstants.getMetricListByModelTask(model.getTask().getType().toString());
@@ -199,6 +208,9 @@ public class ModelService {
 			
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelIdAndStatus(model.getModelId(), "Completed");
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
+		
+
+			
 			return modelDto;
 		}
 		return null;
@@ -287,7 +299,9 @@ public class ModelService {
 
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getUploadedModel(modelFilePath);
-
+		
+		
+		
 		if (modelObj != null) {
 			validateModel(modelObj);
 		} else {
@@ -302,21 +316,23 @@ public class ModelService {
 			lps.add(lp);
 			modelObj.setLanguages(lps);
 		}
-
+           
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(Instant.now().toEpochMilli());
 		modelObj.setPublishedOn(Instant.now().toEpochMilli());
 		modelObj.setStatus("unpublished");
 		modelObj.setUnpublishReason("Newly submitted model");
-
+        
+		
+		
+		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
-
+		
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
 				|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 				ASRInference asrInference = (ASRInference) schema;
-				
 				if (!asrInference.getModelProcessingType().getType().equals(ModelProcessingType.TypeEnum.STREAMING)) {
 					inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 				}
@@ -354,6 +370,7 @@ public class ModelService {
 		File file = new File(modelFilePath);
 		try {
 			modelObj = objectMapper.readValue(file, ModelExtended.class);
+			OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
 			return modelObj;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -531,9 +548,14 @@ public class ModelService {
 		
 		Criteria nameCriteria = Criteria.where("status").is("published");
 		dynamicQuery.addCriteria(nameCriteria);
+		
+	    	log.info("dynamicQuery : "+dynamicQuery.toString());
 	
 		List<ModelExtended> list = mongoTemplate.find(dynamicQuery, ModelExtended.class);
-
+         
+		log.info("modelList : "+list);
+		
+		
 		if(list != null) {
 			Collections.shuffle(list); // randomize the search
 			return new ModelSearchResponse("Model Search Result", list, list.size());
