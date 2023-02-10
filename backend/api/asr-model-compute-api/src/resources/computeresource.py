@@ -36,7 +36,7 @@ class ASRComputeResource(Resource):
             result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
             log.info(f"result inside ASRComputeResource {result}")
             #if resp.status_code == 200:
-            if result.get("status") == "SUCCESS":
+            if result.get("output")[0]["source"] != "":
                 res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
                 log.info(f"response successfully generated. res ==> {res}")
                 log.info(f"response type ===> {res.getres}")
