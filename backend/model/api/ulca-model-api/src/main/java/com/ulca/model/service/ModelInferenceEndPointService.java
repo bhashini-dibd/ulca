@@ -45,6 +45,7 @@ import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.ImageFile;
 import io.swagger.model.ImageFiles;
 import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.model.NerResponse;
 import io.swagger.model.OCRRequest;
 import io.swagger.model.OCRResponse;
@@ -136,12 +137,13 @@ public class ModelInferenceEndPointService {
 				 * .bodyToMono(ASRResponse.class).block();
 				 */
 			
+				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
+
 				
-				
-				if(inferenceAPIEndPoint.getInferenceApiKeyValue()!=null) {
+				if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
 					
-						String inferenceApiKeyName = inferenceAPIEndPoint.getInferenceApiKeyName();
-						String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
+						String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+						String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
 						log.info("inferenceApiKeyName : "+inferenceApiKeyName);
 						log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
 						response = builder.clientConnector(new
@@ -1014,11 +1016,12 @@ public class ModelInferenceEndPointService {
 	   public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
 		   Request httpRequest =null;
 			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
             log.info("callBackUrl : "+callBackUrl);
-			if(inferenceAPIEndPoint.getInferenceApiKeyValue()!=null) {
+			if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
 				
-					String inferenceApiKeyName = inferenceAPIEndPoint.getInferenceApiKeyName();
-					String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
+					String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+					String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
 					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
 					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
 				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
