@@ -521,10 +521,10 @@ public class ModelService {
 		
 		// userId
 		
-		if (request.getUserId()!= null && !request.getUserId().isBlank() && !request.getUserId().equalsIgnoreCase("All")) {
+		/*if (request.getUserId()!= null && !request.getUserId().isBlank() && !request.getUserId().equalsIgnoreCase("All")) {
 			Criteria nameCriteria = Criteria.where("userId").is(request.getUserId());
 			dynamicQuery.addCriteria(nameCriteria);
-		}
+		}*/
 
 		
 		
