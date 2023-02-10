@@ -167,7 +167,7 @@ class ASRComputeRepo:
             response = requests.post(url=request_url, headers = headers, json = body,verify=False)
             #return response instead of response_data
             content = response.content
-            log.info(content)
+            log.info(content) 
             response_data = json.loads(content)
             log.info("Received response from inference end point to transcribe asr data")
             log.info(f"Response : {response_data}")
