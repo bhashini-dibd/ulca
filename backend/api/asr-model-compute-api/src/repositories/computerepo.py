@@ -46,20 +46,20 @@ class ASRComputeRepo:
         audioformat =   inf_callbackurl["schema"]["request"]["config"]["audioFormat"].lower()
         log.info(f'callbackurl == {callbackurl}, transformat=={transformat}, audioformat=={audioformat}')
         if uri == True:
-            result = self.make_audiouri_call(audio,lang,callbackurl,transformat,audioformat)
+            result = self.make_audiouri_call(audio,lang,callbackurl,transformat,audioformat,apiKeyName,apiKeyValue)
             return result
         else:
             try:
-                callbackurl =   inf_callbackurl["callbackUrl"]
-                if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
-                    apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
-                    apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
-                    apiKeyName = None
-                    apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                else:
-                    apiKeyName = None
-                    apiKeyValue = None
+                # callbackurl =   inf_callbackurl["callbackUrl"]
+                # if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+                #     apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
+                #     apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                # elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+                #     apiKeyName = None
+                #     apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                # else:
+                #     apiKeyName = None
+                #     apiKeyValue = None
                 encode_string = audio
                 file = f'{shared_storage_path}audio-{userId}.wav'
                 with open (file, "wb") as wav_file:
@@ -111,7 +111,7 @@ class ASRComputeRepo:
 
 
     
-    def make_audiouri_call(self, url,lang,callbackurl,transformat,audioformat):
+    def make_audiouri_call(self, url,lang,callbackurl,transformat,audioformat,apiKeyName,apiKeyValue):
         """
         API call to model endpoint for audio urls
         """
