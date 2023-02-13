@@ -28,12 +28,12 @@ class ASRComputeRepo:
         #log.info(f'infrence end point',{inf_callbackurl})
         
         callbackurl =   inf_callbackurl["callbackUrl"]
-        if "inferenceApiKeyName" in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
-            apiKeyName = inf_callbackurl["inferenceApiKeyName"]
-            apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
-        elif  "inferenceApiKeyName" not in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
+        if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+            apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
+            apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+        elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
             apiKeyName = None
-            apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+            apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
         else:
             apiKeyName = None
             apiKeyValue = None
@@ -48,12 +48,12 @@ class ASRComputeRepo:
         else:
             try:
                 callbackurl =   inf_callbackurl["callbackUrl"]
-                if "inferenceApiKeyName" in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
-                    apiKeyName = inf_callbackurl["inferenceApiKeyName"]
-                    apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
-                elif  "inferenceApiKeyName" not in inf_callbackurl.keys() and "inferenceApiKeyValue" in inf_callbackurl.keys():
+                if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+                    apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
+                    apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                     apiKeyName = None
-                    apiKeyValue = inf_callbackurl["inferenceApiKeyValue"]
+                    apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
                 else:
                     apiKeyName = None
                     apiKeyValue = None
