@@ -27,7 +27,8 @@ class ASRComputeRepo:
         """
         
         callbackurl =   inf_callbackurl["callbackUrl"]
-
+        infer = inf_callbackurl["inferenceApiKey"]
+        log.info(f"inferenceApiKey {infer} ")
         if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
             apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
             apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
