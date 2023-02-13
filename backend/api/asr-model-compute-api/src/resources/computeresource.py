@@ -25,7 +25,7 @@ class ASRComputeResource(Resource):
         lang    =   body["source"]
         inf = asrmongorepo.find_doc(body["modelId"])
         inf_callbackurl = inf[0]["inferenceEndPoint"]
-        log.info(f"inf_callbackurl",inf_callbackurl)
+        log.info(f"inf_callbackurl",inf)
         uri         =   False
         if "audioContent" in body:
             audio   =   body["audioContent"]
