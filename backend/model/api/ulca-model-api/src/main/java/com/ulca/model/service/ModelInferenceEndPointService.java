@@ -45,6 +45,7 @@ import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.ImageFile;
 import io.swagger.model.ImageFiles;
 import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.model.NerResponse;
 import io.swagger.model.OCRRequest;
 import io.swagger.model.OCRResponse;
@@ -135,13 +136,14 @@ public class ModelInferenceEndPointService {
 				 * .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
 				 * .bodyToMono(ASRResponse.class).block();
 				 */
-			
+			     if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
+				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
+
 				
-				
-				if(inferenceAPIEndPoint.getInferenceApiKeyValue()!=null) {
+				if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
 					
-						String inferenceApiKeyName = inferenceAPIEndPoint.getInferenceApiKeyName();
-						String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
+						String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+						String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
 						log.info("inferenceApiKeyName : "+inferenceApiKeyName);
 						log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
 						response = builder.clientConnector(new
@@ -150,6 +152,7 @@ public class ModelInferenceEndPointService {
 								  body(Mono.just(request), ASRRequest.class).retrieve()
 								  .bodyToMono(ASRResponse.class).block();					
 					    log.info("response : "+response);
+				   }
 				}else {
 					response = builder.clientConnector(new
 							  ReactorClientHttpConnector(httpClient)).build().post()
@@ -1014,17 +1017,22 @@ public class ModelInferenceEndPointService {
 	   public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
 		   Request httpRequest =null;
 			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+			
+			if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
+			
+			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
             log.info("callBackUrl : "+callBackUrl);
-			if(inferenceAPIEndPoint.getInferenceApiKeyValue()!=null) {
+			if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
 				
-					String inferenceApiKeyName = inferenceAPIEndPoint.getInferenceApiKeyName();
-					String inferenceApiKeyValue = inferenceAPIEndPoint.getInferenceApiKeyValue();
+					String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+					String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
 					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
 					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
 				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
 				    log.info("httpRequest : "+httpRequest.toString());
 				
 				
+			       }
 			}else {
 				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 				    log.info("httpRequest : "+httpRequest.toString());
@@ -1032,7 +1040,7 @@ public class ModelInferenceEndPointService {
 
 				
 			}	
-			
+	   
 		   
 		   return httpRequest;
 	   }

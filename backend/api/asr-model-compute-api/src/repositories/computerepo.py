@@ -27,6 +27,19 @@ class ASRComputeRepo:
         """
         
         callbackurl =   inf_callbackurl["callbackUrl"]
+
+        if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+            apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
+            apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+        elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+            apiKeyName = None
+            apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+        else:
+            apiKeyName = None
+            apiKeyValue = None
+        log.info(f"apiKeyValue, apiKeyName {apiKeyName}")
+        log.info(f"apiKeyValue, apiKeyName {apiKeyValue}")
+
         transformat =   inf_callbackurl["schema"]["request"]["config"]["transcriptionFormat"]["value"].lower()
         audioformat =   inf_callbackurl["schema"]["request"]["config"]["audioFormat"].lower()
         log.info(f'callbackurl == {callbackurl}, transformat=={transformat}, audioformat=={audioformat}')
@@ -35,6 +48,16 @@ class ASRComputeRepo:
             return result
         else:
             try:
+                callbackurl =   inf_callbackurl["callbackUrl"]
+                if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+                    apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
+                    apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+                    apiKeyName = None
+                    apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                else:
+                    apiKeyName = None
+                    apiKeyValue = None
                 encode_string = audio
                 file = f'{shared_storage_path}audio-{userId}.wav'
                 with open (file, "wb") as wav_file:
@@ -51,7 +74,9 @@ class ASRComputeRepo:
                 #log.info(f'encoded data {encoded_data}')
                 os.remove(file)
                 os.remove(processed_file)
-                result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat,punctiation=True)
+                
+                result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat,apiKeyName,apiKeyValue,punctiation=True)
+                log.info(f"result make_base64_audio_processor_call {result}")
                 return result
 
             except Exception as e:
@@ -88,14 +113,31 @@ class ASRComputeRepo:
         """
         API call to model endpoint for audio urls
         """
+        body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
+                        "audio": [{"audioUri": url}]}
+        log.info(f"Request body : {body}")
         try:
+            if apiKeyName and apiKeyValue:
+                log.info(f"apiKeyname {apiKeyName}")
+                log.info(f"apiKeyValue {apiKeyValue}")
+                log.info(f"apiKeyname {type(apiKeyName)}")
+                log.info(f"apiKeyValue {type(apiKeyValue)}")
+                headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
+            elif apiKeyValue and apiKeyName == None:
+                apiKeyName = apiKeyValue
+                headers =   {"Content-Type": "application/json", "apiKey":apiKeyValue}
+            elif apiKeyValue == None and apiKeyName == None:
+                headers =   {"Content-Type": "application/json"}
+            
+            
             headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
                         "audio": [{"audioUri": url}]}
             log.info(f"Request body : {body}")
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
-            response = requests.post(url=request_url, headers = headers, json = body,verify=False)
+            log.info(f"logging headers for apiKey {headers}")
+            response = requests.post(url=request_url, headers = headers, json = body)
             content = response.content
             log.info(content)
             response_data = json.loads(content)
@@ -106,20 +148,31 @@ class ASRComputeRepo:
             return {"status_text":"Incorrect inference endpoint or invalid response"}
 
 
-    def make_base64_audio_processor_call(self,data,lang,callbackurl,transformat,audioformat,punctiation):
+    def make_base64_audio_processor_call(self,data,lang,callbackurl,transformat,audioformat,apiKeyName,apiKeyValue,punctiation):
         """
         API call to model endpoint for audio content
         """
         try:
-            headers =   {"Content-Type": "application/json"}
+            if apiKeyName and apiKeyValue:
+                log.info(f"apiKeyname {apiKeyName}")
+                log.info(f"apiKeyValue {apiKeyValue}")
+                log.info(f"apiKeyname {type(apiKeyName)}")
+                log.info(f"apiKeyValue {type(apiKeyValue)}")
+                headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
+            elif apiKeyValue and apiKeyName == None:
+                apiKeyName = apiKeyValue
+                headers =   {"Content-Type": "application/json", "apiKey":apiKeyValue}
+            elif apiKeyValue == None and apiKeyName == None:
+                headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat,
                         "punctuation": punctiation,"enableInverseTextNormalization": False},"audio": [{"audioContent": str(data)}]}
             request_url = callbackurl
             #log.info(f'transformat == > {transformat}, audioformat==> {audioformat}, lang ==> {lang} punc ==> {punctiation}, audioContent ==> {data}')
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body,verify=False)
+            #return response instead of response_data
             content = response.content
-            log.info(content)
+            log.info(content) 
             response_data = json.loads(content)
             log.info("Received response from inference end point to transcribe asr data")
             log.info(f"Response : {response_data}")
