@@ -176,6 +176,46 @@
       "active": true
     },
     {
+      "code": "bns",
+      "label": "Bundeli",
+      "active": true
+    },
+    {
+      "code": "mwr",
+      "label": "Marwari",
+      "active": true
+    },
+    {
+      "code": "anp",
+      "label": "Angika",
+      "active": true
+    },
+    {
+      "code": "bih",
+      "label": "Bihari",
+      "active": true
+    },
+    {
+      "code": "hlb",
+      "label": "Halbi",
+      "active": true
+    },
+    {
+      "code": "tcy",
+      "label": "Tulu",
+      "active": true
+    },
+    {
+      "code": "gbm",
+      "label": "Garhwali",
+      "active": true
+    },
+    {
+      "code": "sjp",
+      "label": "Sarjapuri",
+      "active": true
+    },
+    {
       "code": "unknown",
       "label": "Unknown",
       "active": true

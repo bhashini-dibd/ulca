@@ -25,9 +25,9 @@ class ASRComputeRepo:
         - Encoding back to base64
         - decoding to utf-8
         """
-        #log.info(f'infrence end point',{inf_callbackurl})
         
         callbackurl =   inf_callbackurl["callbackUrl"]
+
         if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
             apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
             apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
@@ -39,11 +39,12 @@ class ASRComputeRepo:
             apiKeyValue = None
         log.info(f"apiKeyValue, apiKeyName {apiKeyName}")
         log.info(f"apiKeyValue, apiKeyName {apiKeyValue}")
+
         transformat =   inf_callbackurl["schema"]["request"]["config"]["transcriptionFormat"]["value"].lower()
         audioformat =   inf_callbackurl["schema"]["request"]["config"]["audioFormat"].lower()
         log.info(f'callbackurl == {callbackurl}, transformat=={transformat}, audioformat=={audioformat}')
         if uri == True:
-            result = self.make_audiouri_call(audio,lang,callbackurl,apiKeyName,apiKeyValue,transformat,audioformat)
+            result = self.make_audiouri_call(audio,lang,callbackurl,transformat,audioformat)
             return result
         else:
             try:
@@ -108,7 +109,7 @@ class ASRComputeRepo:
 
 
     
-    def make_audiouri_call(self, url,lang,callbackurl,apiKeyName, apiKeyValue,transformat,audioformat):
+    def make_audiouri_call(self, url,lang,callbackurl,transformat,audioformat):
         """
         API call to model endpoint for audio urls
         """
@@ -129,6 +130,10 @@ class ASRComputeRepo:
                 headers =   {"Content-Type": "application/json"}
             
             
+            headers =   {"Content-Type": "application/json"}
+            body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
+                        "audio": [{"audioUri": url}]}
+            log.info(f"Request body : {body}")
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
             log.info(f"logging headers for apiKey {headers}")

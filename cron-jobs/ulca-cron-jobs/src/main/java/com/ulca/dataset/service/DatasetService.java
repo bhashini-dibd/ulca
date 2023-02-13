@@ -6,6 +6,8 @@ import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.model.Dataset;
 import com.ulca.dataset.model.Fileidentifier;
 import com.ulca.dataset.model.ProcessTracker;
+import com.ulca.dataset.model.ProcessTrackerDto;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ public class DatasetService {
 
 	public void updateDatasetFileLocation(String serviceRequestNumber, String localUrl) {
 		
-		ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
+		ProcessTrackerDto processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
 		Dataset dataset = datasetDao.findByDatasetId(processTracker.getDatasetId());
 		//dataset.getDatasetFileIdentifier().setFileUlcaUrl(localUrl);
 		

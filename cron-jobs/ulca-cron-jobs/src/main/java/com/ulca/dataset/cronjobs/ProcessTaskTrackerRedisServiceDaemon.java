@@ -52,10 +52,10 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	@Scheduled(cron = "*/10 * * * * *")
 	public void updateTaskTracker() {
 		
-		
+		log.info("******************start dataset cron job for updateTaskTracker*****************************");
 
 		Map<String, Map<String, String>> map = taskTrackerRedisDao.findAll();
-
+				
 		for (Map.Entry<String, Map<String, String>> entry : map.entrySet()) {
 
 			try {

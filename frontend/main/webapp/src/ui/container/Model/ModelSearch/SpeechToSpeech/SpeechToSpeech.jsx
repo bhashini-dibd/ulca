@@ -73,12 +73,15 @@ const SpeechToSpeech = () => {
     if (filter.src && filter.tgt) {
      // const asrVal = asr.filter(a => a.sourceLanguage === filter.src.value);
       const asrVal = asr.filter(a => a.sourceLanguage === filter.src.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch')
-      const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
+      // const asrVal = asr.filter(a => a.sourceLanguage === filter.src.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch' && a.label.includes('AI4Bharat') )
+      //const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
+      const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('ai4bharat'));
+      // const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
       const translationVal = translation.filter(a => a.sourceLanguage === filter.src.value && a.targetLanguage === filter.tgt.value);
       const indictransTranslation = translationVal.filter(asr => asr.label.toLowerCase().includes('indictrans'));
      // const ttsVal = tts.filter(a => a.sourceLanguage === filter.tgt.value);
      const ttsVal = tts.filter(a => a.sourceLanguage === filter.tgt.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch');
-      const vakyanshTts = ttsVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
+      const vakyanshTts = ttsVal.filter(asr => asr.label.toLowerCase().includes('ai4bharat'));
       if (vakyanshAsr.length) {
         setFilter((prev) => ({ ...prev, asr: vakyanshAsr[0] }))
       } else {
@@ -268,35 +271,35 @@ const SpeechToSpeech = () => {
       if (translationResp.ok) {
         setOutput((prev) => ({
           ...prev,
-          translation: rsp_data.outputText,
+          translation: rsp_data?.output[0]?.target,
         }));
-        setSuggestEditValues((prev) => ({
+        setSuggestEditValues(async (prev) => ({
           ...prev,
-          translation: rsp_data.outputText,
+          translation: rsp_data?.output[0]?.target,
         }));
         const obj = new ComputeAPI(
           filter.tts.value,
-          rsp_data.outputText,
+          rsp_data?.output[0]?.target,
           "tts",
           "",
           "",
           filter.tts.inferenceEndPoint,
           "female"
         );
-        fetch(obj.apiEndPoint(), {
+        await fetch(obj.apiEndPoint(), {
           method: "post",
           headers: obj.getHeaders().headers,
           body: JSON.stringify(obj.getBody()),
         }).then(async (ttsResp) => {
           let rsp_data = await ttsResp.json();
           if (ttsResp.ok) {
-            const blob = b64toBlob(rsp_data.outputText, "audio/wav");
-            setOutputBase64(rsp_data.outputText);
+            const blob = b64toBlob(rsp_data?.audio[0]?.audioContent, "audio/wav");
+            setOutputBase64(rsp_data?.audio[0]?.audioContent);
             const urlBlob = window.URL.createObjectURL(blob);
             setAudio(urlBlob);
             setSnackbarInfo({ ...snackbar, open: false, message: "" });
           } else {
-            setSnackbarError(rsp_data.message);
+            setSnackbarError(rsp_data?.message);
           }
         });
       } else {
@@ -332,8 +335,8 @@ const SpeechToSpeech = () => {
     }).then(async (ttsResp) => {
       let rsp_data = await ttsResp.json();
       if (ttsResp.ok) {
-        const blob = b64toBlob(rsp_data.outputText, "audio/wav");
-        setOutputBase64(rsp_data.outputText);
+        const blob = b64toBlob(rsp_data?.audio[0]?.audioContent, "audio/wav");
+        setOutputBase64(rsp_data?.audio[0]?.audioContent);
         const urlBlob = window.URL.createObjectURL(blob);
         setAudio(urlBlob);
         setSnackbarInfo({ ...snackbar, open: false, message: "" });

@@ -81,7 +81,7 @@
         ]
     },
     "inferenceEndPoint": {
-        "callbackUrl": "wss://ai4b-dev-asr.ulcacontrib.org",
+        "callbackUrl": "wss://asr-api.ai4bharat.org",
         "schema": {
             "taskType": "asr",
             "modelProcessingType": {

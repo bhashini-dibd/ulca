@@ -20,8 +20,9 @@ import javax.validation.constraints.*;
 
 
 public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+	/*
+	 * @JsonProperty("taskType") private SupportedTasks taskType = null;
+	 */
 
   @JsonProperty("modelProcessingType")
   private ModelProcessingType modelProcessingType = null;
@@ -32,27 +33,26 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("response")
   private ASRResponse response = null;
 
-  public ASRInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	/*
+	 * public ASRInference taskType(SupportedTasks taskType) { this.taskType =
+	 * taskType; return this; }
+	 */
 
   /**
    * Get taskType
    * @return taskType
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
-
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
-
+	/*
+	 * @Schema(required = true, description = "")
+	 * 
+	 * @NotNull
+	 * 
+	 * @Valid public SupportedTasks getTaskType() { return taskType; }
+	 */
+	/*
+	 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+	 * }
+	 */
   public ASRInference modelProcessingType(ModelProcessingType modelProcessingType) {
     this.modelProcessingType = modelProcessingType;
     return this;
@@ -125,23 +125,30 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
       return false;
     }
     ASRInference asRInference = (ASRInference) o;
-    return Objects.equals(this.taskType, asRInference.taskType) &&
+    return //Objects.equals(this.taskType, asRInference.taskType) &&
         Objects.equals(this.modelProcessingType, asRInference.modelProcessingType) &&
         Objects.equals(this.request, asRInference.request) &&
         Objects.equals(this.response, asRInference.response);
   }
 
+	/*
+	 * @Override public int hashCode() { return Objects.hash(taskType,
+	 * modelProcessingType, request, response); }
+	 */
+  
+  
   @Override
   public int hashCode() {
-    return Objects.hash(taskType, modelProcessingType, request, response);
+    return Objects.hash( modelProcessingType, request, response);
   }
-
+  
+  
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ASRInference {\n");
     
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+   // sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");

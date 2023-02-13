@@ -1,0 +1,116 @@
+{
+    "name": "Vakyansh ASR Batch - Maithili",
+    "version": "v1.0",
+    "description": "Vakyansh aims to host the key essentials of Automatic Speech Recognition (ASR) technology, focusing on Indian languages. It is a resource that allows people to build applications that leverage speech recognition. These models are built using the wav2vec 2.0 architecture. We use a self supervised learning approach in which speech representations are learnt in a latent space by masking during audio pretraining. We pretrained on almost 10,000 hours of data in 23 Indic languages. The subsequent ASR models are then finetuned on labelled data.",
+    "refUrl": "https://github.com/Open-Speech-EkStep/vakyansh-models",
+    "task": {
+       "type" : "asr"
+    },
+    "languages": [
+       {
+          "sourceLanguage": "mai"
+       }
+    ],
+    "license": "mit",
+    "domain": [
+       "general"
+    ],
+    "submitter": {
+        "name": "Vakyansh",
+        "oauthId": {
+            "oauthId": "ekstep@thoughtworks.com",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Anirudh Gupta",
+                "oauthId": {
+                    "oauthId": "anirudh.gupta@thoughtworks.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Harveen Singh Chada",
+                "oauthId": {
+                    "oauthId": "harveen.chadha@thoughtworks.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Priyanshi Shah",
+                "oauthId": {
+                    "oauthId": "priyanshi.shah@thoughtworks.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Neeraj Chhimwal",
+                "oauthId": {
+                    "oauthId": "neeraj.chhimwal@thoughtworks.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Ankur Dhuriya",
+                "oauthId": {
+                    "oauthId": "ankur.dhuriya@thoughtworks.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Rishabh Gaur",
+                "oauthId": {
+                    "oauthId": "rishabh.gaur@thoughtworks.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Soujyo Sen",
+                "oauthId": {
+                    "oauthId": "soujyo.sen@thoughtworks.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Rajat Singhal",
+                "oauthId": {
+                    "oauthId": "srajat@thoughtworks.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Heera Ballabh",
+                "oauthId": {
+                    "oauthId": "heerabal@thoughtworks.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    },
+    "inferenceEndPoint": {
+       "callbackUrl": "https://meity-dev-asr.ulcacontrib.org/asr/v1/recognize/mai",
+       "schema": {
+          "taskType": "asr",
+          "modelProcessingType": {
+                "type": "batch"
+          },
+          "request": {
+             "audio": [{
+                "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_maithili.wav"
+             }],
+             "config": {
+                "audioFormat": "wav",
+                "transcriptionFormat": {
+                   "value" : "transcript"
+                },
+                "language": {
+                   "sourceLanguage": "mai"
+                }
+             }
+          }
+       }
+    },
+    "trainingDataset": {
+       "description": "Trained on the general datasets from ULCA"
+    }
+ }
