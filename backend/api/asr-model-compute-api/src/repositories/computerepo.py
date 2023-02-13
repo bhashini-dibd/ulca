@@ -27,15 +27,15 @@ class ASRComputeRepo:
         """
         
         callbackurl =   inf_callbackurl["callbackUrl"]
-        
-        if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
-            apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
-            apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-            infer = inf_callbackurl["inferenceApiKey"]
-            log.info(f"inferenceApiKey {infer} ")
-        elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
-            apiKeyName = None
-            apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+        if "inferenceApiKey" in inf_callbackurl.keys():
+            if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+                apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
+                apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                infer = inf_callbackurl["inferenceApiKey"]
+                log.info(f"inferenceApiKey {infer} ")
+            elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
+                apiKeyName = None
+                apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
         else:
             apiKeyName = None
             apiKeyValue = None
