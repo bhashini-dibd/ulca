@@ -27,11 +27,12 @@ class ASRComputeRepo:
         """
         
         callbackurl =   inf_callbackurl["callbackUrl"]
-        infer = inf_callbackurl["inferenceApiKey"]
-        log.info(f"inferenceApiKey {infer} ")
+        
         if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
             apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
             apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+            infer = inf_callbackurl["inferenceApiKey"]
+            log.info(f"inferenceApiKey {infer} ")
         elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
             apiKeyName = None
             apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
@@ -155,10 +156,6 @@ class ASRComputeRepo:
         """
         try:
             if apiKeyName and apiKeyValue:
-                log.info(f"apiKeyname {apiKeyName}")
-                log.info(f"apiKeyValue {apiKeyValue}")
-                log.info(f"apiKeyname {type(apiKeyName)}")
-                log.info(f"apiKeyValue {type(apiKeyValue)}")
                 headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
             elif apiKeyValue and apiKeyName == None:
                 apiKeyName = apiKeyValue
