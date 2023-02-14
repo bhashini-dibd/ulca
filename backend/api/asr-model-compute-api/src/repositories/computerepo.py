@@ -120,10 +120,6 @@ class ASRComputeRepo:
         log.info(f"Request body : {body}")
         try:
             if apiKeyName and apiKeyValue:
-                log.info(f"apiKeyname {apiKeyName}")
-                log.info(f"apiKeyValue {apiKeyValue}")
-                log.info(f"apiKeyname {type(apiKeyName)}")
-                log.info(f"apiKeyValue {type(apiKeyValue)}")
                 headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
             elif apiKeyValue and apiKeyName == None:
                 apiKeyName = apiKeyValue
@@ -132,7 +128,7 @@ class ASRComputeRepo:
                 headers =   {"Content-Type": "application/json"}
             
             
-            headers =   {"Content-Type": "application/json"}
+            #headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
                         "audio": [{"audioUri": url}]}
             log.info(f"Request body : {body}")
