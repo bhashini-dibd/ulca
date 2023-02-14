@@ -79,15 +79,15 @@ components:
           format: url
         inferenceApiKey:
           required:
-           - value
+            - value
           type: object
           description: if endpoint needs authorization in headers to fetch output
           properties:
             name:
               type: string
-              description: expected if the callbackurl requires an API key with a particular name. `apiKey` will be considered as default name if value is provided without a name
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
               example: apiKey
-              default: apiKey
             value:
               type: string
               description: expected if the callbackurl requires an API key so as to fetch output
