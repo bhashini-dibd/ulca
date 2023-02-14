@@ -28,6 +28,7 @@ import Logout from "../../../redux/actions/api/UserManagement/Logout"
 
 
 const Login = (props) => {
+  console.log(props,'props');
   const dispatch = useDispatch();
   const [values, setValues] = useState({
     email: "",

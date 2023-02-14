@@ -315,9 +315,9 @@ const HostedInferASR = (props) => {
             </Grid>
             {target.length > 0 && (<><CardContent><textarea
               rows={5}
-              className={classes.textareas}>
-              {target}
-            </textarea></CardContent>
+              className={classes.textareas}
+              value={target}
+              /></CardContent>
 
               {/* <SimpleDialogDemo/> */}
               <div >
