@@ -32,6 +32,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -615,16 +616,20 @@ public class ModelService {
 		return new ModelStatusChangeResponse("Model " + status +  " successfull.");
 	}
 	
-	public ModelFeedbackSubmitResponse modelFeedbackSubmit(ModelFeedbackSubmitRequest request) {
+	public ModelFeedbackSubmitResponse modelFeedbackSubmit(ModelFeedbackSubmitRequest request) throws IOException {
 		
 		String taskType = request.getTaskType();
-		if(taskType == null || (!taskType.equalsIgnoreCase("translation") && !taskType.equalsIgnoreCase("asr") && !taskType.equalsIgnoreCase("ocr") && !taskType.equalsIgnoreCase("tts") && !taskType.equalsIgnoreCase("sts"))) {
+		if(taskType == null || (!taskType.equalsIgnoreCase("translation") && !taskType.equalsIgnoreCase("asr") && !taskType.equalsIgnoreCase("ocr") && !taskType.equalsIgnoreCase("tts") && !taskType.equalsIgnoreCase("sts")&& !taskType.equalsIgnoreCase("ner"))) {
 			
-			throw new RequestParamValidationException("Model taskType should be one of { translation, asr, ocr, tts or sts }");
+			throw new RequestParamValidationException("Model taskType should be one of { translation, asr, ocr, tts , sts or ner }");
 		}
 		
 		ModelFeedback feedback = new ModelFeedback();
 		BeanUtils.copyProperties(request, feedback);
+		
+		
+		feedback =setInputOutput(request ,feedback);
+		
 		
 		feedback.setCreatedAt(new Date().toString());
 		feedback.setUpdatedAt(new Date().toString());
@@ -642,7 +647,8 @@ public class ModelService {
 				
 				ModelFeedback mfeedback = new ModelFeedback();
 				BeanUtils.copyProperties(modelFeedback, mfeedback);
-				
+				feedback =setInputOutput(modelFeedback ,mfeedback);
+
 				mfeedback.setStsFeedbackId(feedbackId);	
 				mfeedback.setUserId(userId);
 				mfeedback.setCreatedAt(new Date().toString());
@@ -745,5 +751,88 @@ public class ModelService {
 		
 		return null;
 	}
+	
+	public ModelFeedback setInputOutput(ModelFeedbackSubmitRequest request , ModelFeedback feedback) throws IOException {
+		
+		
+		MultipartFile inputFile = request.getMultipartInput();
+		MultipartFile outputFile = request.getMultipartInput();
+
+		if(request.getTaskType().equals("asr")) {
+			//perform audio save to azure
+			
+			String audioInputFileName = inputFile.getName();
+			log.info("audioInputFileName : "+audioInputFileName);
+			
+			
+			//set audio link to feedback collection in mongo
+			
+			String audioInputUrl="dummyurl";
+			feedback.setInput(audioInputUrl);
+			
+	        String audioOutputContent = new String(outputFile.getBytes());	
+			feedback.setOutput(audioOutputContent);
+			
+			
+		}else if(request.getTaskType().equals("ocr")) {
+           //perform image save to azure
+			
+			String imageFileName = inputFile.getName();
+			log.info("imageFileName : "+imageFileName);
+			
+			
+			
+			
+			
+			//set image link to feedback collection in mongo
+			String imageInputUrl="dummyUrl";
+			feedback.setInput(imageInputUrl);
+			
+	        String imageOutputContent = new String(outputFile.getBytes());	
+			feedback.setOutput(imageOutputContent);
+			
+			
+			
+		}else if(request.getTaskType().equals("tts")){
+			
+			//perform input text to save mongo
+	        String inputContent = new String(inputFile.getBytes());	
+	        feedback.setInput(inputContent);
+
+			//perform save output audio to save in azure
+			
+	        
+	        
+	        
+	        //save audio output link to mongo
+	        String audioOutputUrl="dummyUrl";
+			feedback.setOutput(audioOutputUrl);
+			
+		}
+		
+		
+		
+		else{
+			//perform txt save to mongo
+			String txtFileName = inputFile.getName();
+			log.info("txtFileName : "+txtFileName);
+			
+			//String inputText = inputFile.
+					
+	        String inputContent = new String(inputFile.getBytes());	
+	        feedback.setInput(inputContent);
+	        
+	        String outputContent = new String(outputFile.getBytes());	
+            feedback.setOutput(outputContent);
+			
+		}
+		
+		
+		return feedback;
+		
+	}
+	
+	
+	
 
 }
