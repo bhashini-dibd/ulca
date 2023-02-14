@@ -302,6 +302,10 @@ export default function App() {
             type={"admin"}
             index={0}
           />
+          <Route
+            path={"*"}
+            component={Dashboard}
+          />
 
         {/* <Route
             path={`${process.env.PUBLIC_URL}/model/leaderboard`}

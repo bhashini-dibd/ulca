@@ -47,6 +47,7 @@ components:
             - $ref: '#/components/schemas/OcrBenchmarkDatasetParamsSchema'
             - $ref: '#/components/schemas/TxtLangDetectionBenchmarkDatasetParamsSchema'
             - $ref: '#/components/schemas/NerBenchmarkDatasetParamsSchema'
+            - $ref: '#/components/schemas/AudioLangDetectionBenchmarkDatasetParamsSchema'
     DatasetDataRowSchema:
       type: object
       description: the benchmark dataset data.json file should follow this schema
@@ -60,6 +61,7 @@ components:
             - $ref: '#/components/schemas/OcrBenchmarkDatasetRowSchema'
             - $ref: '#/components/schemas/TxtLangDetectionBenchmarkDatasetRowSchema'
             - $ref: '#/components/schemas/NerBenchmarkDatasetRowSchema'
+            - $ref: '#/components/schemas/AudioLangDetectionBenchmarkDatasetRowSchema'
     BenchmarkDatasetCommonParamsSchema:
       type: object
       description: common parameters or attributes of dataset that is primarily same across the supported dataset.
@@ -150,6 +152,37 @@ components:
           description: Indic language code, iso-639-1, iso 639-2
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
+    AudioLangDetectionBenchmarkDatasetParamsSchema:
+      allOf:
+        - $ref: '#/components/schemas/AsrBenchmarkDatasetParamsSchema'
+        - type: object
+    AudioLangDetectionBenchmarkDatasetRowSchema:
+      required:
+        - audioFilename
+        - langCode
+      type: object
+      description: the schema defines the column name present in physical file that is being pointed by dataFilename key.
+      properties:
+        audioFilename:
+          type: string
+          description: filename of the audio file
+        langCode:
+          type: string
+          description: Indic language code, iso-639-1, iso 639-2
+        speaker:
+          type: string
+          description: speaker name or id for the audio utterance
+        duration:
+          type: number
+          description: audio duration in seconds
+        collectionSource:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
+        channel:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        bitsPerSample:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
     NerBenchmarkDatasetParamsSchema:
       required:
         - tagsFormat
@@ -327,6 +360,6 @@ components:
         x:
           type: number
           description: x-coordinate
-        y:
+        'y':
           type: number
           description: y-coordinate

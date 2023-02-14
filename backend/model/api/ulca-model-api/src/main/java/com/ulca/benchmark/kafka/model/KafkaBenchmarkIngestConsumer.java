@@ -233,6 +233,7 @@ public class KafkaBenchmarkIngestConsumer {
 		}
 		
 		if(params.has("collectionSource")) {
+			log.info("collectionSource ::"+params.get("collectionSource").toString());
 			Source collectionSource = objectMapper.readValue(params.get("collectionSource").toString(), Source.class);
 			benchmark.setCollectionSource(collectionSource);			
 		}
