@@ -1,4 +1,5 @@
 from logging import exception
+import traceback
 import os
 from pydub import AudioSegment
 from models.response import CustomResponse, post_error
@@ -10,7 +11,6 @@ import requests
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
-
 
 class ASRComputeRepo:
 
@@ -66,7 +66,7 @@ class ASRComputeRepo:
                     decode_string = base64.b64decode(encode_string)
                     wav_file.write(decode_string)
 
-                audio = AudioSegment.from_wav(file)
+                audio = AudioSegment.from_file(file)
                 audio = audio.set_channels(1)
                 audio = audio.set_frame_rate(16000)
                 processed_file = f'{shared_storage_path}audio-{userId}-processed.wav'
@@ -83,6 +83,7 @@ class ASRComputeRepo:
 
             except Exception as e:
                 log.info(f'Exception while processing request: {e}')
+                log.info(f'Traceback of exception: {traceback.print_exc()}')
                 return []
 
     def process_asr_from_audio_file(self,lang,audio_file_path,callback_url,transformat,audioformat,punctiation=False):
@@ -95,7 +96,7 @@ class ASRComputeRepo:
         - decoding to utf-8
         """
         try:
-            audio = AudioSegment.from_wav(audio_file_path)
+            audio = AudioSegment.from_file(audio_file_path)
             audio = audio.set_channels(1)
             audio = audio.set_frame_rate(16000)
             processed_file = f'{shared_storage_path}audio-processed.wav'
