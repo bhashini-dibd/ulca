@@ -1879,7 +1879,7 @@ components:
           type: string
           
     ModelTask:
-      $ref: $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+      $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
       example: 
         type: translation  
 
