@@ -3,11 +3,15 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.AudioFormat;
 import io.swagger.model.ModelProcessingType;
 import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSRequest;
 import io.swagger.model.TTSResponse;
+import io.swagger.model.TextFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -16,7 +20,7 @@ import javax.validation.constraints.*;
  * TTSInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-15T10:08:37.438508852Z[GMT]")
 
 
 public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
@@ -25,6 +29,14 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
 
   @JsonProperty("modelProcessingType")
   private ModelProcessingType modelProcessingType = null;
+
+  @JsonProperty("supportedInputTextFormats")
+  @Valid
+  private List<TextFormat> supportedInputTextFormats = null;
+
+  @JsonProperty("supportedOutputAudioFormats")
+  @Valid
+  private List<AudioFormat> supportedOutputAudioFormats = null;
 
   @JsonProperty("request")
   private TTSRequest request = null;
@@ -72,6 +84,60 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
 
   public void setModelProcessingType(ModelProcessingType modelProcessingType) {
     this.modelProcessingType = modelProcessingType;
+  }
+
+  public TTSInference supportedInputTextFormats(List<TextFormat> supportedInputTextFormats) {
+    this.supportedInputTextFormats = supportedInputTextFormats;
+    return this;
+  }
+
+  public TTSInference addSupportedInputTextFormatsItem(TextFormat supportedInputTextFormatsItem) {
+    if (this.supportedInputTextFormats == null) {
+      this.supportedInputTextFormats = new ArrayList<TextFormat>();
+    }
+    this.supportedInputTextFormats.add(supportedInputTextFormatsItem);
+    return this;
+  }
+
+  /**
+   * list of
+   * @return supportedInputTextFormats
+   **/
+  @Schema(description = "list of")
+      @Valid
+    public List<TextFormat> getSupportedInputTextFormats() {
+    return supportedInputTextFormats;
+  }
+
+  public void setSupportedInputTextFormats(List<TextFormat> supportedInputTextFormats) {
+    this.supportedInputTextFormats = supportedInputTextFormats;
+  }
+
+  public TTSInference supportedOutputAudioFormats(List<AudioFormat> supportedOutputAudioFormats) {
+    this.supportedOutputAudioFormats = supportedOutputAudioFormats;
+    return this;
+  }
+
+  public TTSInference addSupportedOutputAudioFormatsItem(AudioFormat supportedOutputAudioFormatsItem) {
+    if (this.supportedOutputAudioFormats == null) {
+      this.supportedOutputAudioFormats = new ArrayList<AudioFormat>();
+    }
+    this.supportedOutputAudioFormats.add(supportedOutputAudioFormatsItem);
+    return this;
+  }
+
+  /**
+   * list of
+   * @return supportedOutputAudioFormats
+   **/
+  @Schema(description = "list of")
+      @Valid
+    public List<AudioFormat> getSupportedOutputAudioFormats() {
+    return supportedOutputAudioFormats;
+  }
+
+  public void setSupportedOutputAudioFormats(List<AudioFormat> supportedOutputAudioFormats) {
+    this.supportedOutputAudioFormats = supportedOutputAudioFormats;
   }
 
   public TTSInference request(TTSRequest request) {
@@ -127,13 +193,15 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
     TTSInference ttSInference = (TTSInference) o;
     return Objects.equals(this.taskType, ttSInference.taskType) &&
         Objects.equals(this.modelProcessingType, ttSInference.modelProcessingType) &&
+        Objects.equals(this.supportedInputTextFormats, ttSInference.supportedInputTextFormats) &&
+        Objects.equals(this.supportedOutputAudioFormats, ttSInference.supportedOutputAudioFormats) &&
         Objects.equals(this.request, ttSInference.request) &&
         Objects.equals(this.response, ttSInference.response);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(taskType, modelProcessingType, request, response);
+    return Objects.hash(taskType, modelProcessingType, supportedInputTextFormats, supportedOutputAudioFormats, request, response);
   }
 
   @Override
@@ -143,6 +211,8 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
     
     sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
+    sb.append("    supportedInputTextFormats: ").append(toIndentedString(supportedInputTextFormats)).append("\n");
+    sb.append("    supportedOutputAudioFormats: ").append(toIndentedString(supportedOutputAudioFormats)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("}");
