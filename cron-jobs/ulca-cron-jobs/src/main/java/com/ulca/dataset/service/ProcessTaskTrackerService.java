@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -105,15 +106,18 @@ public void updateTaskTrackerWithDetails(String serviceRequestNumber, TaskTracke
      log.info("tool :: "+tool.name()+ " , status :: "+status.name() +" , details :: "+details.toString());
 
 	 
-	   List<TaskTrackerDto> taskTrackerDtoList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
+	  // List<TaskTrackerDto> taskTrackerDtoList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
 	
-	   List<TaskTracker> taskTrackerList = mapDtoListToTaskTracker(taskTrackerDtoList);
+	  // List<TaskTracker> taskTrackerList = mapDtoListToTaskTracker(taskTrackerDtoList);
 	   
-	 
+     TaskTrackerDto taskTrackerDto = taskTrackerDao.findByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
+       
+
 	   
-		if(!taskTrackerList.isEmpty()) {
-			
-			TaskTracker taskTracker = taskTrackerList.get(0);
+		if(taskTrackerDto !=null) {
+		       log.info("taskTrackerDto :: "+taskTrackerDto.toString());
+		      
+			TaskTracker taskTracker = mapTaskTrackerDtoToTaskTracker(taskTrackerDto);
 			taskTracker.setLastModified(Instant.now().toEpochMilli());
 			taskTracker.setDetails(details);
 			
@@ -141,13 +145,14 @@ public void updateTaskTrackerWithDetails(String serviceRequestNumber, TaskTracke
 public void updateTaskTrackerWithDetailsAndEndTime(String serviceRequestNumber, TaskTracker.ToolEnum tool, com.ulca.dataset.model.TaskTracker.StatusEnum status, String details) {
 	   log.info("**************************inside updateTaskTrackerWithDetailsAndEndTime for serviceRequestNumber : "+serviceRequestNumber);
        log.info("tool :: "+tool.name()+ " , status :: "+status.name() +" , details :: "+details.toString());
-	   List<TaskTrackerDto> taskTrackerDtoList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
-	   List<TaskTracker> taskTrackerList = mapDtoListToTaskTracker(taskTrackerDtoList);
-
-	if(!taskTrackerList.isEmpty()) {
-		TaskTracker taskTracker = taskTrackerList.get(0);
+	  // List<TaskTrackerDto> taskTrackerDtoList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
+	   //List<TaskTracker> taskTrackerList = mapDtoListToTaskTracker(taskTrackerDtoList);
+       TaskTrackerDto taskTrackerDto = taskTrackerDao.findByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
+	if(taskTrackerDto !=null) {
+        log.info("taskTrackerDto :: "+taskTrackerDto.toString());
+        
+		TaskTracker taskTracker = mapTaskTrackerDtoToTaskTracker(taskTrackerDto);
 		if(taskTracker.getEndTime() == null || taskTracker.getEndTime() == 0 ) {
-			
 			taskTracker.setEndTime(Instant.now().toEpochMilli());
 			taskTracker.setLastModified(Instant.now().toEpochMilli());
 			
@@ -160,6 +165,8 @@ public void updateTaskTrackerWithDetailsAndEndTime(String serviceRequestNumber, 
 			
 			taskTracker.setDetails(details);
 			taskTrackerDao.save(taskTracker);
+		
+			
 		}
 		
 	}else {
@@ -221,11 +228,35 @@ private static Long convetTimeToLong(Object time) {
 
 
 
-           public static List<TaskTracker> mapDtoListToTaskTracker(List<TaskTrackerDto> taskTrackerDtoList){
+/*
+ * public static List<TaskTracker> mapDtoListToTaskTracker(List<TaskTrackerDto>
+ * taskTrackerDtoList){
+ * 
+ * List<TaskTracker> taskTrackerList = new ArrayList<TaskTracker>();
+ * for(TaskTrackerDto taskTrackerDto:taskTrackerDtoList) { TaskTracker
+ * taskTracker = new TaskTracker();
+ * taskTracker.setServiceRequestNumber(taskTrackerDto.getServiceRequestNumber())
+ * ; taskTracker.setTool(taskTrackerDto.getTool());
+ * taskTracker.setDetails(taskTrackerDto.getDetails());
+ * taskTracker.setStatus(taskTrackerDto.getStatus());
+ * taskTracker.setError(taskTrackerDto.getError());
+ * taskTracker.setStartTime(convetTimeToLong(taskTrackerDto.getStartTime()));
+ * taskTracker.setEndTime(convetTimeToLong(taskTrackerDto.getEndTime()));
+ * taskTracker.setLastModified(convetTimeToLong(taskTrackerDto.getLastModified()
+ * )); taskTrackerList.add(taskTracker); }
+ * 
+ * return taskTrackerList;
+ * 
+ * }
+ */
+           
+           
+           
+          public static TaskTracker mapTaskTrackerDtoToTaskTracker(TaskTrackerDto taskTrackerDto){
         	   
-        	   List<TaskTracker> taskTrackerList = new ArrayList<TaskTracker>();
-        	   for(TaskTrackerDto taskTrackerDto:taskTrackerDtoList) {
+        	  
         		   TaskTracker taskTracker = new TaskTracker();
+        		   taskTracker.setId(taskTrackerDto.getId());
         		   taskTracker.setServiceRequestNumber(taskTrackerDto.getServiceRequestNumber());
         		   taskTracker.setTool(taskTrackerDto.getTool());
         		   taskTracker.setDetails(taskTrackerDto.getDetails());
@@ -234,12 +265,13 @@ private static Long convetTimeToLong(Object time) {
         		   taskTracker.setStartTime(convetTimeToLong(taskTrackerDto.getStartTime()));
         		   taskTracker.setEndTime(convetTimeToLong(taskTrackerDto.getEndTime()));
         		   taskTracker.setLastModified(convetTimeToLong(taskTrackerDto.getLastModified()));
-        		   taskTrackerList.add(taskTracker);
-        	   }
+        		  
         	   
-        	   return taskTrackerList;
+        	   
+        	   return taskTracker;
         	   
            }
+
 
 
 
