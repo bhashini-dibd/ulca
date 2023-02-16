@@ -42,7 +42,8 @@ public class ProcessTaskTrackerService {
 	public void updateProcessTracker(String serviceRequestNumber, StatusEnum status) {
 		
 		log.info("inside updateProcessTracker for serviceRequestNumber : "+serviceRequestNumber);
-		
+	       log.info(" status :: "+status.name());
+
 
 		ProcessTrackerDto processTrackerDto = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
 		ProcessTracker processTracker = new ProcessTracker();
@@ -101,7 +102,8 @@ public class ProcessTaskTrackerService {
 public void updateTaskTrackerWithDetails(String serviceRequestNumber, TaskTracker.ToolEnum tool, com.ulca.dataset.model.TaskTracker.StatusEnum status, String details) {
 	 log.info("**************************inside updateTaskTrackerWithDetails for serviceRequestNumber"+serviceRequestNumber);
 	      
-	 
+     log.info("tool :: "+tool.name()+ " , status :: "+status.name() +" , details :: "+details.toString());
+
 	 
 	   List<TaskTrackerDto> taskTrackerDtoList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
 	
@@ -138,7 +140,7 @@ public void updateTaskTrackerWithDetails(String serviceRequestNumber, TaskTracke
 
 public void updateTaskTrackerWithDetailsAndEndTime(String serviceRequestNumber, TaskTracker.ToolEnum tool, com.ulca.dataset.model.TaskTracker.StatusEnum status, String details) {
 	   log.info("**************************inside updateTaskTrackerWithDetailsAndEndTime for serviceRequestNumber : "+serviceRequestNumber);
-
+       log.info("tool :: "+tool.name()+ " , status :: "+status.name() +" , details :: "+details.toString());
 	   List<TaskTrackerDto> taskTrackerDtoList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
 	   List<TaskTracker> taskTrackerList = mapDtoListToTaskTracker(taskTrackerDtoList);
 
