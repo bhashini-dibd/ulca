@@ -258,6 +258,7 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 			} catch (Exception e) {
 
 				failedCount++;
+				log.info("increment in failure record :: "+failedCount);
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_ROW_DATA_VALIDATION_FAILED",
 						e.getMessage(), serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
@@ -270,6 +271,7 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 			if (rowSchema != null) {
 
 				successCount++;
+				log.info("increment in success records :: "+successCount);
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 
 				JSONObject target = new JSONObject(dataRow);
@@ -300,7 +302,7 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
 
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
-				+ numberOfRecords + " success record :: " + successCount);
+				+ numberOfRecords + " success record :: " + successCount +" total failed record :: "+failedCount);
 
 	}
 
