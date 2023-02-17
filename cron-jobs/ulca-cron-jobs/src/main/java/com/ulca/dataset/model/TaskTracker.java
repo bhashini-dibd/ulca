@@ -64,7 +64,6 @@ public class TaskTracker   {
   }
   
   @JsonProperty("tool")
-  @Indexed(unique=true)
   private String tool = null;
 
   /**
