@@ -33,21 +33,23 @@ class ASRComputeResource(Resource):
             audio   =   body["audioUri"]
             uri     =   True
 
-       # try:
-        result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
-        log.info(f"result inside ASRComputeResource {result}")
-        #if resp.status_code == 200:
-        if "output" in result.keys() and "source" in result["output"][0].keys() and result.get("output")[0]["source"] == "":
+        try:
+            result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
+            log.info(f"result inside ASRComputeResource {result}")
+            #if resp.status_code == 200:{'status': 'ERROR', 'output': [], 'statusText': 'An unknown error has occurred.Please try again.'}
+            if "status" in result.key():
+                if result['status'] != "ERROR":
+            #if "output" in result.keys() and "source" in result["output"][0].keys() and result.get("output")[0]["source"] == "":{'status': 'SUCCESS', 'output': [{'source': ''}]}
 
-            res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
-            log.info(f"response successfully generated. res ==> {res}")
-            log.info(f"response type ===> {res.getres}")
-            return res.getres()
+                    res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
+                    log.info(f"response successfully generated. res ==> {res}")
+                    log.info(f"response type ===> {res.getres}")
+                    return res.getres()
 
-        else:
-            return post_error("Request Failed","Model is not available to Infer currently, please try after some time."), 400
-        #except Exception as e:
-         #   log.info(f'Exception on ASRComputeResource {e}')
+                else:
+                    return post_error("Request Failed",result['statusText']), 400
+        except Exception as e:
+            log.info(f'Exception on ASRComputeResource {e}')
 
 # class to navigate asr file requests
 class ComputeAudioResource(Resource):
