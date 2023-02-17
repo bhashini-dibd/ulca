@@ -1005,7 +1005,7 @@ components:
       anyOf:
             - $ref: '#/components/schemas/AudioFormat'
             - $ref: '#/components/schemas/TextFormat'
-            - $ref: '#/components/schemas/TextFormat'
+            - $ref: '#/components/schemas/ImageFormat'
   securitySchemes:
     authToken:
       type: apiKey
