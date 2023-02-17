@@ -93,9 +93,7 @@ components:
             - $ref: '#/components/schemas/TextFormats'
         
         schema:
-          anyOf:
-            - $ref: '#/components/schemas/InferenceSchema'
-            - $ref: '#/components/schemas/InferenceSchemaArray'
+             $ref: '#/components/schemas/InferenceSchemaArray'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
@@ -737,6 +735,10 @@ components:
           example: 103
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+           $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+           $ref: '#/components/schemas/SupportedFormats'
     TransliterationConfig:
       required:
         - language
@@ -757,6 +759,10 @@ components:
           example: false
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+           $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+           $ref: '#/components/schemas/SupportedFormats'
     LangDetectionConfig:
       type: object
       properties:
@@ -773,6 +779,10 @@ components:
           type: integer
           description: expected number of predictions
           example: 4
+        inputFormat:
+           $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+           $ref: '#/components/schemas/SupportedFormats'
     OCRConfig:
       required:
         - language
@@ -802,15 +812,9 @@ components:
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         inputFormat:
-          anyOf:
-            - $ref: '#/components/schemas/TextFormat'
-            - $ref: '#/components/schemas/ImageFormat'
-            - $ref: '#/components/schemas/AudioFormat'
+           $ref: '#/components/schemas/SupportedFormats'
         outputFormat:
-          anyOf:
-            - $ref: '#/components/schemas/TextFormat'
-            - $ref: '#/components/schemas/ImageFormat'
-            - $ref: '#/components/schemas/AudioFormat'
+           $ref: '#/components/schemas/SupportedFormats'
     TTSConfig:
       required:
         - language
@@ -825,6 +829,12 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         gender:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        inputFormat:
+           $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+           $ref: '#/components/schemas/SupportedFormats'
     AudioConfig:
       required:
         - language
@@ -848,15 +858,9 @@ components:
         transcriptionFormat:
           $ref: '#/components/schemas/TranscriptionFormat'
         inputFormat:
-          type: object
-          properties:
-            value:
-              $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+           $ref: '#/components/schemas/SupportedFormats'
         outputFormat:
-          type: object
-          properties:
-            value:
-              $ref: '#/components/schemas/TextFormat'
+           $ref: '#/components/schemas/SupportedFormats'
         postProcessors:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
         domain:
@@ -997,6 +1001,11 @@ components:
         - mp3
         - flac
         - sph
+    SupportedFormats:
+      anyOf:
+            - $ref: '#/components/schemas/AudioFormat'
+            - $ref: '#/components/schemas/TextFormat'
+            - $ref: '#/components/schemas/TextFormat'
   securitySchemes:
     authToken:
       type: apiKey
