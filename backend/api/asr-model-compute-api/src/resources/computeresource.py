@@ -36,16 +36,12 @@ class ASRComputeResource(Resource):
         try:
             result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
             log.info(f"result inside ASRComputeResource {result}")
-            #if resp.status_code == 200:{'status': 'ERROR', 'output': [], 'statusText': 'An unknown error has occurred.Please try again.'}
-            if "status" in result.key():
+            if "status" in result.keys():
                 if result['status'] != "ERROR":
-            #if "output" in result.keys() and "source" in result["output"][0].keys() and result.get("output")[0]["source"] == "":{'status': 'SUCCESS', 'output': [{'source': ''}]}
-
                     res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
                     log.info(f"response successfully generated. res ==> {res}")
                     log.info(f"response type ===> {res.getres}")
                     return res.getres()
-
                 else:
                     return post_error("Request Failed",result['statusText']), 400
         except Exception as e:
