@@ -45,7 +45,7 @@ class ASRComputeResource(Resource):
             return res.getres()
 
         else:
-            return post_error("Request Failed",result["status_text"]), 400
+            return post_error("Request Failed","Model is not available to Infer currently, please try after some time."), 400
         #except Exception as e:
          #   log.info(f'Exception on ASRComputeResource {e}')
 
