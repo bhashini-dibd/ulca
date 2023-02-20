@@ -41,7 +41,7 @@ public class DatasetFailedStagesServiceDaemon {
 
 	
 
-	@Scheduled(cron = "*/10 * * * * *")
+	@Scheduled(cron = "*/10 * * * *")
 	public void reIngestDataset() {
 
 		
