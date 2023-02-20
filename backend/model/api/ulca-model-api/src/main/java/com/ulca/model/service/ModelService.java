@@ -74,6 +74,7 @@ import io.swagger.model.ASRInference;
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.ImageFormat;
 import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePairs;
 import io.swagger.model.License;
@@ -99,7 +100,12 @@ import lombok.extern.slf4j.Slf4j;
 public class ModelService {
 
 	private int PAGE_SIZE = 10;
-
+	//private static	String SECRET_KEY = "123456789abcdefg";
+	//private static	String SECRET_KEY = "ThisIsA16ByteKey";
+     
+	@Value("${aes.secretkey}")
+	private static String SECRET_KEY;
+	
 	@Autowired
 	ModelDao modelDao;
 
@@ -347,7 +353,22 @@ public class ModelService {
 		} else {
 			inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 		}
+		
+		
+		InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint.getInferenceApiKey();
+		if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
+		String originalName = inferenceAPIEndPointInferenceApiKey.getName();
+		String originalValue = inferenceAPIEndPointInferenceApiKey.getValue();
+		log.info("SecretKey :: "+SECRET_KEY);
+		String encryptedName = AES256Algo.encrypt(SECRET_KEY, originalName);
+		log.info("encryptedName ::"+encryptedName);
+		String encryptedValue = AES256Algo.encrypt(SECRET_KEY, originalValue);
+		log.info("encryptedValue ::"+encryptedValue);
 
+		inferenceAPIEndPointInferenceApiKey.setName(encryptedName);
+		inferenceAPIEndPointInferenceApiKey.setValue(encryptedValue);
+		inferenceAPIEndPoint.setInferenceApiKey(inferenceAPIEndPointInferenceApiKey);
+		}
 		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
 
 		if (modelObj != null) {

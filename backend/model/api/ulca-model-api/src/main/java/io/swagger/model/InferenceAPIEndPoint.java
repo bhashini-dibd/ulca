@@ -3,6 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.v3.oas.annotations.media.Schema;
