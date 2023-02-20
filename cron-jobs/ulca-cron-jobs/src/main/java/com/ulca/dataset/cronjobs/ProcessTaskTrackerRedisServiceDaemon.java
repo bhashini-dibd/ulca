@@ -49,7 +49,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	@Autowired
 	NotificationService notificationService;
 	
-	@Scheduled(cron = "*/10 * * * * *")
+	//@Scheduled(cron = "*/10 * * * * *")
+	@Scheduled(cron = "0 */1 * * * *")
 	public void updateTaskTracker() {
 		
 		log.info("******************start dataset cron job for updateTaskTracker*****************************");
