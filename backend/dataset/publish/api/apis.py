@@ -10,7 +10,7 @@ from service.tts import TTSService
 from service.ocr import OCRService
 from service.asrunlabeled import ASRUnlabeledService
 from service.transliteration import TransliterationService
-from configs.configs import dataset_type_parallel, dataset_type_asr_unlabeled, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration
+from configs.configs import dataset_type_parallel, dataset_type_asr_unlabeled, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration, dataset_type_glossary, dataset_type_ner
 ulca_dataset_publish = Flask(__name__)
 
 
@@ -18,9 +18,9 @@ ulca_dataset_publish = Flask(__name__)
 @ulca_dataset_publish.route('/ulca/publish/dataset/v0/load', methods=["POST"])
 def insert_dataset():
     req_criteria, data = request.get_json(), {}
-    p_service, m_service, a_service, o_service, au_service, tts_service, trans_service = ParallelService(), MonolingualService(), \
-                                                                                         ASRService(), OCRService(), \
-                                                                                         ASRUnlabeledService(), TTSService(), TransliterationService()
+    p_service, m_service, a_service, o_service, au_service, tts_service, trans_service, glos_service, ner_service = ParallelService(), MonolingualService(), \
+                                                                              ASRService(), OCRService(), \
+                                                                              ASRUnlabeledService(), TTSService(), TransliterationService(), GlossaryService(), NERService()
     req_criteria["record"]["id"] = str(uuid.uuid4())
     if req_criteria["datasetType"] == dataset_type_parallel:
         data = p_service.load_parallel_dataset(req_criteria)
@@ -36,6 +36,10 @@ def insert_dataset():
         data = tts_service.load_tts_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_transliteration:
         data = trans_service.load_transliteration_dataset(data)
+    if data["datasetType"] == dataset_type_glossary:
+        glos_service.load_glossary_dataset(data)
+    if data["datasetType"] == dataset_type_ner:
+        ner_service.load_ner_dataset(data)
     return jsonify(data), 200
 
 
