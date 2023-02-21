@@ -4,11 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -301,7 +297,7 @@ class ModelServiceTest {
     }
 
     @Test
-    void computeModel() throws URISyntaxException, IOException, NoSuchAlgorithmException, InterruptedException, KeyManagementException {
+    void computeModel() throws Exception {
         ModelComputeRequest request = new ModelComputeRequest();
         request.setModelId("test");
 

@@ -2,13 +2,10 @@ package com.ulca.model.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,6 +71,7 @@ import io.swagger.model.ASRInference;
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.ImageFormat;
 import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePairs;
 import io.swagger.model.License;
@@ -93,13 +91,17 @@ import io.swagger.model.TransliterationRequest;
 import io.swagger.model.TxtLangDetectionInference;
 import io.swagger.model.TxtLangDetectionRequest;
 import lombok.extern.slf4j.Slf4j;
+import com.github.mervick.aes_everywhere.Aes256;
 
 @Slf4j
 @Service
 public class ModelService {
 
 	private int PAGE_SIZE = 10;
-
+	
+	@Value(value="${aes.model.apikey.secretkey}")
+	private String SECRET_KEY;
+	
 	@Autowired
 	ModelDao modelDao;
 
@@ -347,7 +349,22 @@ public class ModelService {
 		} else {
 			inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 		}
+		
+		
+		InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint.getInferenceApiKey();
+		if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
+		String originalName = inferenceAPIEndPointInferenceApiKey.getName();
+		String originalValue = inferenceAPIEndPointInferenceApiKey.getValue();
+		log.info("SecretKey :: "+SECRET_KEY);
+		String encryptedName = Aes256.encrypt(originalName, SECRET_KEY);
+		log.info("encryptedName ::"+encryptedName);
+		String encryptedValue = Aes256.encrypt(originalValue, SECRET_KEY);
+		log.info("encryptedValue ::"+encryptedValue);
 
+		inferenceAPIEndPointInferenceApiKey.setName(encryptedName);
+		inferenceAPIEndPointInferenceApiKey.setValue(encryptedValue);
+		inferenceAPIEndPoint.setInferenceApiKey(inferenceAPIEndPointInferenceApiKey);
+		}
 		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
 
 		if (modelObj != null) {
@@ -566,7 +583,7 @@ public class ModelService {
 	}
 	
 	public ModelComputeResponse computeModel(ModelComputeRequest compute)
-			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
+			throws Exception {
 
 		String modelId = compute.getModelId();
 		ModelExtended modelObj = modelDao.findById(modelId).get();
