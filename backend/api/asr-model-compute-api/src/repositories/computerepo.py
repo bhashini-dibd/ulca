@@ -5,12 +5,14 @@ from pydub import AudioSegment
 from models.response import CustomResponse, post_error
 import base64
 import json
-from config import shared_storage_path
+from config import shared_storage_path,SecretKey
 import base64
 import requests
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
+from AesEverywhere import aes256
+
 
 class ASRComputeRepo:
 
@@ -29,13 +31,15 @@ class ASRComputeRepo:
         callbackurl =   inf_callbackurl["callbackUrl"]
         if "inferenceApiKey" in inf_callbackurl.keys():
             if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
-                apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
-                apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                infer = inf_callbackurl["inferenceApiKey"]
-                log.info(f"inferenceApiKey {infer} ")
+                #apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
+                #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                apiKeyName = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["name"], SecretKey)
+                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], SecretKey)
+                
             elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 apiKeyName = None
-                apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], SecretKey)
         else:
             apiKeyName = None
             apiKeyValue = None
