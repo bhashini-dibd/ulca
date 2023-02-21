@@ -11,7 +11,7 @@ import io.swagger.model.AudioPostProcessors;
 import io.swagger.model.Domain;
 import io.swagger.model.Encoding;
 import io.swagger.model.LanguagePair;
-import io.swagger.model.TranscriptionFormat;
+import io.swagger.model.TTSConfigInputFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +22,7 @@ import javax.validation.constraints.*;
  * AudioConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-15T10:08:37.438508852Z[GMT]")
 
 
 public class AudioConfig   {
@@ -45,7 +45,7 @@ public class AudioConfig   {
   private AudioBitsPerSample bitsPerSample = null;
 
   @JsonProperty("transcriptionFormat")
-  private TranscriptionFormat transcriptionFormat = null;
+  private TTSConfigInputFormat transcriptionFormat = null;
 
   @JsonProperty("postProcessors")
   private AudioPostProcessors postProcessors = null;
@@ -220,7 +220,7 @@ public class AudioConfig   {
     this.bitsPerSample = bitsPerSample;
   }
 
-  public AudioConfig transcriptionFormat(TranscriptionFormat transcriptionFormat) {
+  public AudioConfig transcriptionFormat(TTSConfigInputFormat transcriptionFormat) {
     this.transcriptionFormat = transcriptionFormat;
     return this;
   }
@@ -232,11 +232,11 @@ public class AudioConfig   {
   @Schema(description = "")
   
     @Valid
-    public TranscriptionFormat getTranscriptionFormat() {
+    public TTSConfigInputFormat getTranscriptionFormat() {
     return transcriptionFormat;
   }
 
-  public void setTranscriptionFormat(TranscriptionFormat transcriptionFormat) {
+  public void setTranscriptionFormat(TTSConfigInputFormat transcriptionFormat) {
     this.transcriptionFormat = transcriptionFormat;
   }
 
