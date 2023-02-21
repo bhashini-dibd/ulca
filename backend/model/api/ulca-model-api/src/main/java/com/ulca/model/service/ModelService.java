@@ -2,13 +2,10 @@ package com.ulca.model.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -94,17 +91,16 @@ import io.swagger.model.TransliterationRequest;
 import io.swagger.model.TxtLangDetectionInference;
 import io.swagger.model.TxtLangDetectionRequest;
 import lombok.extern.slf4j.Slf4j;
+import com.github.mervick.aes_everywhere.Aes256;
 
 @Slf4j
 @Service
 public class ModelService {
 
 	private int PAGE_SIZE = 10;
-	//private static	String SECRET_KEY = "123456789abcdefg";
-	//private static	String SECRET_KEY = "ThisIsA16ByteKey";
-     
-	@Value("${aes.secretkey}")
-	private static String SECRET_KEY;
+	
+	@Value(value="${aes.model.apikey.secretkey}")
+	private String SECRET_KEY;
 	
 	@Autowired
 	ModelDao modelDao;
@@ -360,9 +356,9 @@ public class ModelService {
 		String originalName = inferenceAPIEndPointInferenceApiKey.getName();
 		String originalValue = inferenceAPIEndPointInferenceApiKey.getValue();
 		log.info("SecretKey :: "+SECRET_KEY);
-		String encryptedName = AES256Algo.encrypt(SECRET_KEY, originalName);
+		String encryptedName = Aes256.encrypt(originalName, SECRET_KEY);
 		log.info("encryptedName ::"+encryptedName);
-		String encryptedValue = AES256Algo.encrypt(SECRET_KEY, originalValue);
+		String encryptedValue = Aes256.encrypt(originalValue, SECRET_KEY);
 		log.info("encryptedValue ::"+encryptedValue);
 
 		inferenceAPIEndPointInferenceApiKey.setName(encryptedName);
@@ -587,7 +583,7 @@ public class ModelService {
 	}
 	
 	public ModelComputeResponse computeModel(ModelComputeRequest compute)
-			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
+			throws Exception {
 
 		String modelId = compute.getModelId();
 		ModelExtended modelObj = modelDao.findById(modelId).get();

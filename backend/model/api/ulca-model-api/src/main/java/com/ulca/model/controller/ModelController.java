@@ -81,7 +81,7 @@ public class ModelController {
 	}
 	
 	@PostMapping("/compute")
-	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
+	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws Exception {
 
 		log.info("******** Entry ModelController:: computeModel *******");
 		return modelService.computeModel(request);
