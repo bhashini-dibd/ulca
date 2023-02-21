@@ -71,7 +71,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 			} catch (Exception e) {
 				log.info("Exception while processing the fetched Redis map data :: " + entry.toString());
-				e.printStackTrace();
+				log.info("Exception Message for the above Redis map data : "+e.getMessage());
 			}
 
 		}
