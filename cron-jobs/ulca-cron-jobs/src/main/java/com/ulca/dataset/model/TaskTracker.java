@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
 
@@ -61,6 +62,7 @@ public class TaskTracker   {
       return null;
     }
   }
+  
   @JsonProperty("tool")
   private String tool = null;
 
@@ -124,6 +126,17 @@ public class TaskTracker   {
 
   @JsonProperty("error")
   private Error error = null;
+  
+  
+  
+  public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+  
 
   public TaskTracker serviceRequestNumber(String serviceRequestNumber) {
     this.serviceRequestNumber = serviceRequestNumber;

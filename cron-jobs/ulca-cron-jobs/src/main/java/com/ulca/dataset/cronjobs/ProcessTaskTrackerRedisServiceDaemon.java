@@ -49,13 +49,14 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	@Autowired
 	NotificationService notificationService;
 	
-	@Scheduled(cron = "*/10 * * * * *")
+	//@Scheduled(cron = "*/10 * * * * *")
+	@Scheduled(cron = "0 */1 * * * *")
 	public void updateTaskTracker() {
 		
-		
+		log.info("******************start dataset cron job for updateTaskTracker*****************************");
 
 		Map<String, Map<String, String>> map = taskTrackerRedisDao.findAll();
-
+				
 		for (Map.Entry<String, Map<String, String>> entry : map.entrySet()) {
 
 			try {

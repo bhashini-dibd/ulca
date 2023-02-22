@@ -25,24 +25,29 @@ class ASRComputeResource(Resource):
         lang    =   body["source"]
         inf = asrmongorepo.find_doc(body["modelId"])
         inf_callbackurl = inf[0]["inferenceEndPoint"]
+        log.info(f"inf_callbackurl {inf}")
         uri         =   False
         if "audioContent" in body:
             audio   =   body["audioContent"]
         if "audioUri" in body:
             audio   =   body["audioUri"]
             uri     =   True
-        #log.info(f'audioContent {audio}')
-        try:
-            result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
-            if result.get("status") == "SUCCESS":
-                res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
-                log.info(f"response successfully generated. res ==> {res}")
-                log.info(f"response type ===> {res.getres}")
-                return res.getres()
-            else:
-                return post_error("Request Failed",result["status_text"]), 400
-        except Exception as e:
-            log.info(f'Exception on ASRComputeResource {e}')
+
+       # try:
+        result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
+        log.info(f"result inside ASRComputeResource {result}")
+        #if resp.status_code == 200:
+        if "output" in result.keys() and "source" in result["output"][0].keys() and result.get("output")[0]["source"] != "":
+
+            res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
+            log.info(f"response successfully generated. res ==> {res}")
+            log.info(f"response type ===> {res.getres}")
+            return res.getres()
+
+        else:
+            return post_error("Request Failed",result["status_text"]), 400
+        #except Exception as e:
+         #   log.info(f'Exception on ASRComputeResource {e}')
 
 # class to navigate asr file requests
 class ComputeAudioResource(Resource):
