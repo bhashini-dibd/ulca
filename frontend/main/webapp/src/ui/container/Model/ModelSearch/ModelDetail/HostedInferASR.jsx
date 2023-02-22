@@ -149,7 +149,7 @@ const HostedInferASR = (props) => {
   }
 
   const handleFeedbackSubmit = (feedback) => {
-    const apiObj = new SubmitFeedback('asr', "", targetAudio, feedback)
+    const apiObj = new SubmitFeedback('asr', "", targetAudio, feedback, [], modelId)
     fetch(apiObj.apiEndPoint(), {
       method: 'post',
       headers: apiObj.getHeaders().headers,

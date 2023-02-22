@@ -53,7 +53,7 @@ const StyledMenu = withStyles({})((props) => (
 ));
 
 const TTSLiveInference = (props) => {
-  const { classes, source } = props;
+  const { classes, modelId, source } = props;
   const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(false);
   const [transliterationModelId, setTransliterationModelId] = useState("");
@@ -85,7 +85,7 @@ const TTSLiveInference = (props) => {
   };
 
   const handleFeedbackSubmit = (feedback) => {
-    const apiObj = new SubmitFeedback("tts", sourceText, base, feedback);
+    const apiObj = new SubmitFeedback("tts", sourceText, base, feedback, [], modelId);
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       headers: apiObj.getHeaders().headers,

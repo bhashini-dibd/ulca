@@ -200,7 +200,7 @@ const HostedInferASR = (props) => {
   };
 
   const handleFeedbackSubmit = (feedback) => {
-    const apiObj = new SubmitFeedback('ocr', "", target, feedback)
+    const apiObj = new SubmitFeedback('ocr', "", target, feedback, [], modelId)
     fetch(apiObj.apiEndPoint(), {
       method: 'post',
       headers: apiObj.getHeaders().headers,
