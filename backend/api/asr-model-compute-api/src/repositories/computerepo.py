@@ -156,7 +156,7 @@ class ASRComputeRepo:
         API call to model endpoint for audio content
         """
         try:
-            if apiKeyName == "NONE" and apiKeyValue = "NONE":
+            if apiKeyName == "NONE" and apiKeyValue == "NONE":
                 headers =   {"Content-Type": "application/json"}
             elif apiKeyName and apiKeyValue:
                 headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
