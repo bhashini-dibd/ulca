@@ -24,8 +24,6 @@ export default class SbmitFeedback extends API {
         return `${super.toString()} email: ${this.email} token: ${this.token} expires: ${this.expires} userid: ${this.userid}, type: ${this.type}`;
     }
 
-
-
     processResponse(res) {
         super.processResponse(res);
         if (res) {

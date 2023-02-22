@@ -115,7 +115,9 @@ const LanguageDetection = (props) => {
       "translation",
       sourceText,
       target,
-      feedback
+      feedback,
+      [],
+      modelId
     );
     fetch(apiObj.apiEndPoint(), {
       method: "post",
