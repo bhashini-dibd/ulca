@@ -107,7 +107,7 @@ class ASRComputeRepo:
             audio.export(processed_file, format="wav")
             encoded_data=base64.b64encode(open(processed_file, "rb").read()) 
             os.remove(processed_file)
-            result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callback_url,transformat,audioformat,punctiation)
+            result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callback_url,transformat,audioformat,apiKeyName="NONE",apiKeyValue="NONE",punctiation=True)
             return result
 
         except Exception as e:
@@ -156,7 +156,9 @@ class ASRComputeRepo:
         API call to model endpoint for audio content
         """
         try:
-            if apiKeyName and apiKeyValue:
+            if apiKeyName == "NONE" and apiKeyValue = "NONE":
+                headers =   {"Content-Type": "application/json"}
+            elif apiKeyName and apiKeyValue:
                 headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
             elif apiKeyValue and apiKeyName == None:
                 apiKeyName = apiKeyValue
