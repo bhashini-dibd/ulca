@@ -41,8 +41,10 @@ import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.util.ModelConstants;
+import com.ulca.model.dao.InferenceAPIEndPointDto;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelExtendedDto;
 import com.ulca.model.dao.ModelFeedback;
 import com.ulca.model.dao.ModelFeedbackDao;
 import com.ulca.model.dao.ModelHealthStatus;
@@ -186,8 +188,21 @@ public class ModelService {
 
 		List<ModelListResponseDto> modelDtoList = new ArrayList<ModelListResponseDto>();
 		for (ModelExtended model : list) {
+			// changes 
+			ModelExtendedDto modelExtendedDto = new ModelExtendedDto();
+			BeanUtils.copyProperties(model, modelExtendedDto);
+			    InferenceAPIEndPoint inferenceAPIEndPoint =model.getInferenceEndPoint();
+			InferenceAPIEndPointDto inferenceAPIEndPointDto = new InferenceAPIEndPointDto();
+			
+			BeanUtils.copyProperties(inferenceAPIEndPoint, inferenceAPIEndPointDto);
+			
+			modelExtendedDto.setInferenceAPIEndPoint(inferenceAPIEndPointDto);
+
+			
+			
 			ModelListResponseDto modelDto = new ModelListResponseDto();
-			BeanUtils.copyProperties(model, modelDto);
+			//BeanUtils.copyProperties(model, modelDto);
+			BeanUtils.copyProperties(modelExtendedDto, modelDto);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
 			modelDtoList.add(modelDto);
@@ -204,8 +219,17 @@ public class ModelService {
 			
 			ModelExtended model = result.get();
 			
+			//new changes
+			ModelExtendedDto modelExtendedDto = new ModelExtendedDto();
+			
+			BeanUtils.copyProperties(model, modelExtendedDto);
+		    log.info("modelExtendedDto : "+modelExtendedDto.toString());
+			InferenceAPIEndPoint inferenceAPIEndPoint=	model.getInferenceEndPoint();
+		     InferenceAPIEndPointDto dto=	 new InferenceAPIEndPointDto();
+		    BeanUtils.copyProperties(inferenceAPIEndPoint, dto);
+              modelExtendedDto.setInferenceAPIEndPoint(dto);
 			ModelListResponseDto modelDto = new ModelListResponseDto();
-			BeanUtils.copyProperties(model, modelDto);
+			BeanUtils.copyProperties(modelExtendedDto, modelDto);
 			List<String> metricList = modelConstants.getMetricListByModelTask(model.getTask().getType().toString());
 			modelDto.setMetric(metricList);
 			
@@ -573,12 +597,35 @@ public class ModelService {
          
 		log.info("modelList : "+list);
 		
+		ArrayList<ModelExtendedDto> modelDtoList = new ArrayList<ModelExtendedDto>();
 		
-		if(list != null) {
-			Collections.shuffle(list); // randomize the search
-			return new ModelSearchResponse("Model Search Result", list, list.size());
+		for(ModelExtended model:list) {
+			
+           ModelExtendedDto modelExtendedDto = new ModelExtendedDto();
+			
+			BeanUtils.copyProperties(model, modelExtendedDto);
+		    
+			InferenceAPIEndPoint inferenceAPIEndPoint=	model.getInferenceEndPoint();
+		     InferenceAPIEndPointDto dto=	 new InferenceAPIEndPointDto();
+		    BeanUtils.copyProperties(inferenceAPIEndPoint, dto);
+              modelExtendedDto.setInferenceAPIEndPoint(dto);	
+              modelDtoList.add(modelExtendedDto);
 		}
-		return new ModelSearchResponse("Model Search Result", list, 0);
+		
+		
+		
+		
+		/*
+		 * if(list != null) { Collections.shuffle(list); // randomize the search return
+		 * new ModelSearchResponse("Model Search Result", list, list.size()); }
+		 */
+		
+		
+		if(modelDtoList != null) {
+			Collections.shuffle(modelDtoList); // randomize the search
+			return new ModelSearchResponse("Model Search Result", modelDtoList, modelDtoList.size());
+		}
+		return new ModelSearchResponse("Model Search Result", modelDtoList, 0);
 
 	}
 	
@@ -849,6 +896,39 @@ public class ModelService {
 		
 	}
 	
+	
+	
+	public static ModelExtendedDto copyModelToDto(ModelExtended model) {
+		
+		ModelExtendedDto modelExtendedDto = new ModelExtendedDto();
+		modelExtendedDto.setModelId(model.getModelId());
+		modelExtendedDto.setUserId(model.getUserId());
+		modelExtendedDto.setSubmittedOn(model.getSubmittedOn());
+		modelExtendedDto.setPublishedOn(model.getPublishedOn());
+		modelExtendedDto.setSubmittedOn(model.getSubmittedOn());
+		modelExtendedDto.setUnpublishReason(model.getUnpublishReason());
+		modelExtendedDto.setName(model.getName());
+		modelExtendedDto.setVersion(model.getVersion());
+		modelExtendedDto.setDescription(model.getDescription());
+		modelExtendedDto.setRefUrl(model.getRefUrl());
+		modelExtendedDto.setTask(model.getTask());
+		modelExtendedDto.setLanguages(model.getLanguages());
+		modelExtendedDto.setLicense(model.getLicense());
+		modelExtendedDto.setLicenseUrl(model.getLicenseUrl());
+		modelExtendedDto.setDomain(model.getDomain());
+		modelExtendedDto.setSubmitter(model.getSubmitter());
+		modelExtendedDto.setTrainingDataset(model.getTrainingDataset());
+        InferenceAPIEndPoint 	inferenceAPIEndPoint=	model.getInferenceEndPoint();
+		InferenceAPIEndPointDto    inferenceAPIEndPointDto      =   new InferenceAPIEndPointDto();
+		inferenceAPIEndPointDto.setCallbackUrl(inferenceAPIEndPoint.getCallbackUrl());
+		inferenceAPIEndPointDto.setAsyncApiDetails(inferenceAPIEndPoint.getAsyncApiDetails());
+		inferenceAPIEndPointDto.setIsSyncApi(inferenceAPIEndPoint.isIsSyncApi());
+		inferenceAPIEndPointDto.setSchema(inferenceAPIEndPoint.getSchema());
+		modelExtendedDto.setInferenceAPIEndPoint(inferenceAPIEndPointDto);
+		
+		return modelExtendedDto;
+		
+	}
 	
 	
 
