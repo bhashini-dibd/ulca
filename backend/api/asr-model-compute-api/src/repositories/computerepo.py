@@ -5,7 +5,7 @@ from pydub import AudioSegment
 from models.response import CustomResponse, post_error
 import base64
 import json
-from config import shared_storage_path,SecretKey
+from config import shared_storage_path,secret_key
 import base64
 import requests
 import logging
@@ -33,13 +33,13 @@ class ASRComputeRepo:
             if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 #apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
                 #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                apiKeyName = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["name"], SecretKey)
-                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], SecretKey)
+                apiKeyName = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["name"], secret_key)
+                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], secret_key)
                 
             elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 apiKeyName = None
                 #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], SecretKey)
+                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], secret_key)
         else:
             apiKeyName = None
             apiKeyValue = None
