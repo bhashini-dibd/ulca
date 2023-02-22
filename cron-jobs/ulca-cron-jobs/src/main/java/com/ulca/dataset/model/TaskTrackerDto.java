@@ -99,6 +99,15 @@ public class TaskTrackerDto {
 
 	
 	  private Error error = null;
+	  
+	  
+	  public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
 
 	  public TaskTrackerDto serviceRequestNumber(String serviceRequestNumber) {
 	    this.serviceRequestNumber = serviceRequestNumber;

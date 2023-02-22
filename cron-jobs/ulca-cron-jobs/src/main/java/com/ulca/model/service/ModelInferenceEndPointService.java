@@ -41,218 +41,316 @@ public class ModelInferenceEndPointService {
     WebClient.Builder builder;
 
     public InferenceAPIEndPoint validateSyncCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
-            throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
-        String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-        OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
-        if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
-            io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
-            TranslationRequest request = translationInference.getRequest();
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
+			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
+			TranslationRequest request = translationInference.getRequest();
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String requestJson = objectMapper.writeValueAsString(request);
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
 
-            // OkHttpClient client = new OkHttpClient();
-            OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			// OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
 
-            RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-            Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
 
-            Response httpResponse = client.newCall(httpRequest).execute();
-            // objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-            // false);
-            String responseJsonStr = httpResponse.body().string();
+			TranslationResponse response = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
+			translationInference.setResponse(response);
+			schema = translationInference;
 
-            TranslationResponse response = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
-            translationInference.setResponse(response);
-            schema = translationInference;
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 
-        } else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
+			ASRRequest request = asrInference.getRequest();
+
+			ASRResponse response = null;
+			SslContext sslContext;
+			try {
+				sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+
+				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+
+				
+				/*
+				 * response = builder.clientConnector(new
+				 * ReactorClientHttpConnector(httpClient)).build().post()
+				 * .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
+				 * .bodyToMono(ASRResponse.class).block();
+				 */
+			     if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
+				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
+
+				
+				if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
+					
+						String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+						String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+						log.info("inferenceApiKeyName : "+inferenceApiKeyName);
+						log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
+						response = builder.clientConnector(new
+								  ReactorClientHttpConnector(httpClient)).build().post()
+								  .uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue).
+								  body(Mono.just(request), ASRRequest.class).retrieve()
+								  .bodyToMono(ASRResponse.class).block();					
+					    log.info("response : "+response);
+				   }
+				}else {
+					response = builder.clientConnector(new
+							  ReactorClientHttpConnector(httpClient)).build().post()
+							  .uri(callBackUrl).
+							  body(Mono.just(request), ASRRequest.class).retrieve()
+							  .bodyToMono(ASRResponse.class).block();
+				    log.info("response : "+response);
+
+					
+				}
+				
+				
+				
+				
+				
+				
+
+			} catch (SSLException e) {
+				e.printStackTrace();
+			}
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			log.info("logging asr inference point response" + objectMapper.writeValueAsString(response));
+			asrInference.setResponse(response);
+			schema = asrInference;
+
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
+			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
+			OCRRequest request = ocrInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+              
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+
+			
+			
+			
+			
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+			OCRResponse response = objectMapper.readValue(responseJsonStr, OCRResponse.class);
+			ocrInference.setResponse(response);
+			schema = ocrInference;
+
+			log.info("logging ocr inference point response" + responseJsonStr);
+
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
+			io.swagger.model.TTSInference ttsInference = (io.swagger.model.TTSInference) schema;
+			TTSRequest request = ttsInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			
+			
+			OkHttpClient newClient = getTrustAllCertsClient();
+
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+
+			// Response httpResponse = client.newCall(httpRequest).execute();
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+			TTSResponse response = objectMapper.readValue(responseJsonStr, TTSResponse.class);
+			ttsInference.setResponse(response);
+			schema = ttsInference;
+
+			log.info("logging tts inference point response" + responseJsonStr);
+
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
+			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
+			TransliterationRequest request = transliterationInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+			
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+
+			
+			
+			OkHttpClient newClient = getTrustAllCertsClient();
+
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+               
+			
+			
+			
+			// Response httpResponse = client.newCall(httpRequest).execute();
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+			TransliterationResponse response = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
+			transliterationInference.setResponse(response);
+			schema = transliterationInference;
+
+			log.info("logging TransliterationInference point response" + responseJsonStr);
+
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
+			io.swagger.model.TxtLangDetectionInference txtLangDetectionInference = (io.swagger.model.TxtLangDetectionInference) schema;
+			TxtLangDetectionRequest request = txtLangDetectionInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+		//	Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+              
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			
+			OkHttpClient newClient = getTrustAllCertsClient();
+
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+
+			String responseJsonStr = httpResponse.body().string();
+			TxtLangDetectionResponse response = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
+			txtLangDetectionInference.setResponse(response);
+			schema = txtLangDetectionInference;
+
+			log.info("logging TransliterationInference point response" + responseJsonStr);
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.NerInference")) {
+			io.swagger.model.NerInference nerInference = (io.swagger.model.NerInference) schema;
+			TranslationRequest request = nerInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			log.info("httpResponse : "+httpResponse);
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+             System.out.println("responseJsonStr : " +responseJsonStr);
+			NerResponse response = objectMapper.readValue(responseJsonStr, NerResponse.class);
+			nerInference.setResponse(response);
+			schema = nerInference;
+			
+			log.info("logging NerInference point response" + responseJsonStr);
+
+		}
+
+		inferenceAPIEndPoint.setSchema(schema);
+		return inferenceAPIEndPoint;
+
+	}
 
 
-            io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
-            ASRRequest request = asrInference.getRequest();
+	public InferenceAPIEndPoint validateAsyncUrl(InferenceAPIEndPoint inferenceAPIEndPoint) throws URISyntaxException,
+			IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
 
-            ASRResponse response = null;
-            SslContext sslContext;
-            try {
-                sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
+		String pollingUrl = asyncApiDetails.getPollingUrl();
+		Integer pollInterval = asyncApiDetails.getPollInterval();
 
-                HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+		OneOfAsyncApiDetailsAsyncApiSchema asyncApiSchema = asyncApiDetails.getAsyncApiSchema();
+		OneOfAsyncApiDetailsAsyncApiPollingSchema asyncApiPollingSchema = asyncApiDetails.getAsyncApiPollingSchema();
 
-                response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
-                        .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
-                        .bodyToMono(ASRResponse.class).block();
+		if (asyncApiSchema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationAsyncInference")) {
+			io.swagger.model.TranslationAsyncInference translationAsyncInference = (io.swagger.model.TranslationAsyncInference) asyncApiSchema;
+			TranslationRequest request = translationAsyncInference.getRequest();
 
-            } catch (SSLException e) {
-                e.printStackTrace();
-            }
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			//Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
+			Response httpResponse = okHttpClientPostCallInference(requestJson, callBackUrl,inferenceAPIEndPoint);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            //log.info("logging asr inference point response" + objectMapper.writeValueAsString(response));
-            asrInference.setResponse(response);
-            schema = asrInference;
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
 
+			PollingRequest response = objectMapper.readValue(responseJsonStr, PollingRequest.class);
+			translationAsyncInference.setResponse(response);
 
-        } else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
-            io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
-            OCRRequest request = ocrInference.getRequest();
+			while (true) {
+				Thread.sleep(pollInterval);
+				String pollRequestJson = objectMapper.writeValueAsString(response);
+				Response pollHttpResponse = okHttpClientPostCall(pollRequestJson, pollingUrl);
+				if (pollHttpResponse.code() == 202) {
+					continue;
+				} else if (pollHttpResponse.code() == 200) {
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String requestJson = objectMapper.writeValueAsString(request);
+					String pollResponseJsonStr = pollHttpResponse.body().string();
+					log.info(pollResponseJsonStr);
+					TranslationResponse translationResponse = objectMapper.readValue(pollResponseJsonStr,
+							TranslationResponse.class);
+					io.swagger.model.TranslationAsyncPollingInference translationAsyncPollingInference = (io.swagger.model.TranslationAsyncPollingInference) asyncApiPollingSchema;
 
-            // OkHttpClient client = new OkHttpClient();
-            OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+					translationAsyncPollingInference.setRequest(response);
+					translationAsyncPollingInference.setResponse(translationResponse);
 
-            RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-            Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+					asyncApiDetails.setAsyncApiPollingSchema(translationAsyncPollingInference);
 
-            Response httpResponse = client.newCall(httpRequest).execute();
-            // objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-            // false);
-            String responseJsonStr = httpResponse.body().string();
-            OCRResponse response = objectMapper.readValue(responseJsonStr, OCRResponse.class);
-            ocrInference.setResponse(response);
-            schema = ocrInference;
+					break;
 
-            log.info("logging ocr inference point response" + responseJsonStr);
+				} else {
+					throw new ModelComputeException("Model Submit Failed", "Model Submit Failed",
+							HttpStatus.INTERNAL_SERVER_ERROR);
 
+				}
+			}
+			asyncApiDetails.asyncApiSchema(translationAsyncInference);
+			inferenceAPIEndPoint.setAsyncApiDetails(asyncApiDetails);
 
-        } else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
-            io.swagger.model.TTSInference ttsInference = (io.swagger.model.TTSInference) schema;
-            TTSRequest request = ttsInference.getRequest();
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String requestJson = objectMapper.writeValueAsString(request);
-
-            // OkHttpClient client = new OkHttpClient();
-            RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-            Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
-            OkHttpClient newClient = getTrustAllCertsClient();
-
-            Response httpResponse = newClient.newCall(httpRequest).execute();
-
-            // Response httpResponse = client.newCall(httpRequest).execute();
-            // objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-            // false);
-            String responseJsonStr = httpResponse.body().string();
-            TTSResponse response = objectMapper.readValue(responseJsonStr, TTSResponse.class);
-            ttsInference.setResponse(response);
-            schema = ttsInference;
-            
-            //log.info("logging tts inference point response" + responseJsonStr);
-
-        } else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
-            io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
-            TransliterationRequest request = transliterationInference.getRequest();
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String requestJson = objectMapper.writeValueAsString(request);
-
-            // OkHttpClient client = new OkHttpClient();
-            RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-            Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
-            OkHttpClient newClient = getTrustAllCertsClient();
-
-            Response httpResponse = newClient.newCall(httpRequest).execute();
-
-            String responseJsonStr = httpResponse.body().string();
-            TransliterationResponse response = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
-            transliterationInference.setResponse(response);
-            schema = transliterationInference;
-
-            log.info("logging TransliterationInference point response" + responseJsonStr);
-
-        } else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
-            io.swagger.model.TxtLangDetectionInference txtLangDetectionInference = (io.swagger.model.TxtLangDetectionInference) schema;
-            TxtLangDetectionRequest request = txtLangDetectionInference.getRequest();
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String requestJson = objectMapper.writeValueAsString(request);
-
-
-            RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-            Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
-            OkHttpClient newClient = getTrustAllCertsClient();
-
-            Response httpResponse = newClient.newCall(httpRequest).execute();
-
-            String responseJsonStr = httpResponse.body().string();
-            TxtLangDetectionResponse response = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
-            txtLangDetectionInference.setResponse(response);
-            schema = txtLangDetectionInference;
-
-            log.info("logging TransliterationInference point response" + responseJsonStr);
-        }
-
-        inferenceAPIEndPoint.setSchema(schema);
-        return inferenceAPIEndPoint;
-
-    }
-
-    public InferenceAPIEndPoint validateAsyncUrl(InferenceAPIEndPoint inferenceAPIEndPoint) throws URISyntaxException,
-            IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
-
-        String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-        AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
-        String pollingUrl = asyncApiDetails.getPollingUrl();
-        Integer pollInterval = asyncApiDetails.getPollInterval();
-
-        OneOfAsyncApiDetailsAsyncApiSchema asyncApiSchema = asyncApiDetails.getAsyncApiSchema();
-        OneOfAsyncApiDetailsAsyncApiPollingSchema asyncApiPollingSchema = asyncApiDetails.getAsyncApiPollingSchema();
-
-        if (asyncApiSchema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationAsyncInference")) {
-            io.swagger.model.TranslationAsyncInference translationAsyncInference = (io.swagger.model.TranslationAsyncInference) asyncApiSchema;
-            TranslationRequest request = translationAsyncInference.getRequest();
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            String requestJson = objectMapper.writeValueAsString(request);
-
-            Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
-            // objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-            // false);
-            String responseJsonStr = httpResponse.body().string();
-
-            PollingRequest response = objectMapper.readValue(responseJsonStr, PollingRequest.class);
-            translationAsyncInference.setResponse(response);
-
-            while (true) {
-                Thread.sleep(pollInterval);
-                String pollRequestJson = objectMapper.writeValueAsString(response);
-                Response pollHttpResponse = okHttpClientPostCall(pollRequestJson, pollingUrl);
-                if (pollHttpResponse.code() == 202) {
-                    continue;
-                } else if (pollHttpResponse.code() == 200) {
-
-                    String pollResponseJsonStr = pollHttpResponse.body().string();
-                    log.info(pollResponseJsonStr);
-                    TranslationResponse translationResponse = objectMapper.readValue(pollResponseJsonStr,
-                            TranslationResponse.class);
-                    io.swagger.model.TranslationAsyncPollingInference translationAsyncPollingInference = (io.swagger.model.TranslationAsyncPollingInference) asyncApiPollingSchema;
-
-                    translationAsyncPollingInference.setRequest(response);
-                    translationAsyncPollingInference.setResponse(translationResponse);
-
-                    asyncApiDetails.setAsyncApiPollingSchema(translationAsyncPollingInference);
-
-                    break;
-
-                } else {
-                    throw new ModelComputeException("Model Submit Failed", "Model Submit Failed",
-                            HttpStatus.INTERNAL_SERVER_ERROR);
-
-                }
-            }
-            asyncApiDetails.asyncApiSchema(translationAsyncInference);
-            inferenceAPIEndPoint.setAsyncApiDetails(asyncApiDetails);
-
-        }
-        return inferenceAPIEndPoint;
-    }
+		}
+		return inferenceAPIEndPoint;
+	}
 
     public Response okHttpClientPostCall(String requestJson, String url)
             throws IOException, KeyManagementException, NoSuchAlgorithmException {
@@ -272,7 +370,29 @@ public class ModelInferenceEndPointService {
 
         return httpResponse;
     }
+    
+    
+    public Response okHttpClientPostCallInference(String requestJson, String url,InferenceAPIEndPoint inferenceAPIEndPoint)
+			throws IOException, KeyManagementException, NoSuchAlgorithmException {
 
+		// OkHttpClient client = new OkHttpClient();
+
+		/*
+		 * OkHttpClient client = new OkHttpClient.Builder() .readTimeout(60,
+		 * TimeUnit.SECONDS) .build();
+		 */
+
+		RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+		//Request httpRequest = new Request.Builder().url(url).post(body).build();
+        
+        Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+
+		OkHttpClient newClient = getTrustAllCertsClient();
+		Response httpResponse = newClient.newCall(httpRequest).execute();
+
+		return httpResponse;
+	}
+    
     public InferenceAPIEndPoint validateCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
             throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException,
             InterruptedException {
@@ -313,5 +433,38 @@ public class ModelInferenceEndPointService {
         newBuilder.hostnameVerifier((hostname, session) -> true);
         return newBuilder.readTimeout(60, TimeUnit.SECONDS).build();
     }
+    
+    
+    
+    public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
+		   Request httpRequest =null;
+			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+			
+			if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
+			
+			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
+         log.info("callBackUrl : "+callBackUrl);
+			if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
+				
+					String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+					String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
+					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
+				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
+				    log.info("httpRequest : "+httpRequest.toString());
+				
+				
+			       }
+			}else {
+				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+				    log.info("httpRequest : "+httpRequest.toString());
+
+
+				
+			}	
+	   
+		   
+		   return httpRequest;
+	   }
 
 }

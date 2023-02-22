@@ -34,7 +34,7 @@
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "http://bhasha.iiit.ac.in/ocr/ulca/v2",
+       "callbackUrl": "https://ilocr.iiit.ac.in/ocr/ulca/v2",
        "schema": {
           "taskType": "ocr",
           "request": {
