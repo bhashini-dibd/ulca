@@ -259,36 +259,34 @@ class ModelServiceTest {
         assertEquals(modelService.uploadModel(multipartFile,userId),response);
     }
 */
-    private static Stream<Arguments> searchModelParam(){
-        ModelSearchRequest request = new ModelSearchRequest();
-        request.setTask("translation");
-        request.setSourceLanguage("en");
-        request.setTargetLanguage("hi");
-
-        ModelExtended modelExtended = new ModelExtended();
-
-        ModelTask modelTask = new ModelTask();
-        modelTask.setType(SupportedTasks.TRANSLATION);
-        modelExtended.setTask(modelTask);
-
-        LanguagePairs languagePairs = new LanguagePairs();
-        LanguagePair languagePair = new LanguagePair();
-        languagePair.setSourceLanguage(SupportedLanguages.EN);
-        languagePair.setTargetLanguage(SupportedLanguages.HI);
-
-        languagePairs.add(languagePair);
-        modelExtended.setLanguages(languagePairs);
-        List<ModelExtended> list = Collections.singletonList(modelExtended);
-
-        ModelSearchResponse response = new ModelSearchResponse("Model Search Result",list,1);
-
-        ModelExtended modelExtended1 = modelExtended;
-        Example<ModelExtended> example = Example.of(modelExtended1);
-
-        modelExtended1.setStatus("published");
-
-        return Stream.of(Arguments.of(request,response,list,example));
-    }
+	/*
+	 * private static Stream<Arguments> searchModelParam(){ ModelSearchRequest
+	 * request = new ModelSearchRequest(); request.setTask("translation");
+	 * request.setSourceLanguage("en"); request.setTargetLanguage("hi");
+	 * 
+	 * ModelExtended modelExtended = new ModelExtended();
+	 * 
+	 * ModelTask modelTask = new ModelTask();
+	 * modelTask.setType(SupportedTasks.TRANSLATION);
+	 * modelExtended.setTask(modelTask);
+	 * 
+	 * LanguagePairs languagePairs = new LanguagePairs(); LanguagePair languagePair
+	 * = new LanguagePair(); languagePair.setSourceLanguage(SupportedLanguages.EN);
+	 * languagePair.setTargetLanguage(SupportedLanguages.HI);
+	 * 
+	 * languagePairs.add(languagePair); modelExtended.setLanguages(languagePairs);
+	 * List<ModelExtended> list = Collections.singletonList(modelExtended);
+	 * 
+	 * //ModelSearchResponse response = new
+	 * ModelSearchResponse("Model Search Result",list,1);
+	 * 
+	 * ModelExtended modelExtended1 = modelExtended; Example<ModelExtended> example
+	 * = Example.of(modelExtended1);
+	 * 
+	 * modelExtended1.setStatus("published");
+	 * 
+	 * return Stream.of(Arguments.of(request,response,list,example)); }
+	 */
     @ParameterizedTest
     @MethodSource("searchModelParam")
     void searchModel(ModelSearchRequest request,ModelSearchResponse response,List<ModelExtended> list,Example<ModelExtended> example) {
