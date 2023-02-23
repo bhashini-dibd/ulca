@@ -613,10 +613,11 @@ const SpeechToSpeech = () => {
     console.log(detailedFeedback)
     const apiObj = new SubmitFeedback(
       'sts', //taskType
-      base.replace("data:audio/wav;base64,", ""), //input
+      base, //input
       outputBase64, //output
       feedback, //feedback
-      detailedFeedback //detailedFeedback
+      detailedFeedback, //detailedFeedback
+      filter?.asr?.value
     );
 
     setSnackbarInfo({ open: true, message: 'Please wait while we process your request...', variant: 'info' })

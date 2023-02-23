@@ -31,7 +31,7 @@ import { useRef } from "react";
 
 const AudioRecord = (props) => {
   const streaming = props.streaming;
-  const { classes, language, modelId, getchildData, feedback, inferenceEndPoint } = props;
+  const { classes, language, modelId, getchildData, feedback, inferenceEndPoint, setFeedbackAudioInput } = props;
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
@@ -145,6 +145,7 @@ const AudioRecord = (props) => {
     reader.onloadend = function () {
       let base64data = reader.result;
       setBase(base64data);
+      setFeedbackAudioInput(base64data);
     };
   };
   const onStop = (data) => {
