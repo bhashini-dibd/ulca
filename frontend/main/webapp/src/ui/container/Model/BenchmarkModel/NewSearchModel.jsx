@@ -111,7 +111,7 @@ const NewSearchModel = () => {
       handleChange={handleChange}
       value={value}
       tabs={BenchmarkModelTask}
-      // showFilter={ModelTask[value].value}
+      showFilter={BenchmarkModelTask[value].value}
     >
       <TabPanel value={value} index={value}>
         {searchModelResult.filteredData.length ? (
