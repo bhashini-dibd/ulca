@@ -196,7 +196,7 @@ public class ModelService {
 			
 			BeanUtils.copyProperties(inferenceAPIEndPoint, inferenceAPIEndPointDto);
 			
-			modelExtendedDto.setInferenceAPIEndPoint(inferenceAPIEndPointDto);
+			modelExtendedDto.setInferenceEndPoint(inferenceAPIEndPointDto);
 
 			
 			
@@ -223,11 +223,11 @@ public class ModelService {
 			ModelExtendedDto modelExtendedDto = new ModelExtendedDto();
 			
 			BeanUtils.copyProperties(model, modelExtendedDto);
-		    log.info("modelExtendedDto : "+modelExtendedDto.toString());
+		    
 			InferenceAPIEndPoint inferenceAPIEndPoint=	model.getInferenceEndPoint();
 		     InferenceAPIEndPointDto dto=	 new InferenceAPIEndPointDto();
 		    BeanUtils.copyProperties(inferenceAPIEndPoint, dto);
-              modelExtendedDto.setInferenceAPIEndPoint(dto);
+              modelExtendedDto.setInferenceEndPoint(dto);
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(modelExtendedDto, modelDto);
 			List<String> metricList = modelConstants.getMetricListByModelTask(model.getTask().getType().toString());
@@ -595,7 +595,7 @@ public class ModelService {
 	
 		List<ModelExtended> list = mongoTemplate.find(dynamicQuery, ModelExtended.class);
          
-		log.info("modelList : "+list);
+		
 		
 		ArrayList<ModelExtendedDto> modelDtoList = new ArrayList<ModelExtendedDto>();
 		
@@ -608,7 +608,7 @@ public class ModelService {
 			InferenceAPIEndPoint inferenceAPIEndPoint=	model.getInferenceEndPoint();
 		     InferenceAPIEndPointDto dto=	 new InferenceAPIEndPointDto();
 		    BeanUtils.copyProperties(inferenceAPIEndPoint, dto);
-              modelExtendedDto.setInferenceAPIEndPoint(dto);	
+              modelExtendedDto.setInferenceEndPoint(dto);	
               modelDtoList.add(modelExtendedDto);
 		}
 		
@@ -898,37 +898,7 @@ public class ModelService {
 	
 	
 	
-	public static ModelExtendedDto copyModelToDto(ModelExtended model) {
-		
-		ModelExtendedDto modelExtendedDto = new ModelExtendedDto();
-		modelExtendedDto.setModelId(model.getModelId());
-		modelExtendedDto.setUserId(model.getUserId());
-		modelExtendedDto.setSubmittedOn(model.getSubmittedOn());
-		modelExtendedDto.setPublishedOn(model.getPublishedOn());
-		modelExtendedDto.setSubmittedOn(model.getSubmittedOn());
-		modelExtendedDto.setUnpublishReason(model.getUnpublishReason());
-		modelExtendedDto.setName(model.getName());
-		modelExtendedDto.setVersion(model.getVersion());
-		modelExtendedDto.setDescription(model.getDescription());
-		modelExtendedDto.setRefUrl(model.getRefUrl());
-		modelExtendedDto.setTask(model.getTask());
-		modelExtendedDto.setLanguages(model.getLanguages());
-		modelExtendedDto.setLicense(model.getLicense());
-		modelExtendedDto.setLicenseUrl(model.getLicenseUrl());
-		modelExtendedDto.setDomain(model.getDomain());
-		modelExtendedDto.setSubmitter(model.getSubmitter());
-		modelExtendedDto.setTrainingDataset(model.getTrainingDataset());
-        InferenceAPIEndPoint 	inferenceAPIEndPoint=	model.getInferenceEndPoint();
-		InferenceAPIEndPointDto    inferenceAPIEndPointDto      =   new InferenceAPIEndPointDto();
-		inferenceAPIEndPointDto.setCallbackUrl(inferenceAPIEndPoint.getCallbackUrl());
-		inferenceAPIEndPointDto.setAsyncApiDetails(inferenceAPIEndPoint.getAsyncApiDetails());
-		inferenceAPIEndPointDto.setIsSyncApi(inferenceAPIEndPoint.isIsSyncApi());
-		inferenceAPIEndPointDto.setSchema(inferenceAPIEndPoint.getSchema());
-		modelExtendedDto.setInferenceAPIEndPoint(inferenceAPIEndPointDto);
-		
-		return modelExtendedDto;
-		
-	}
+	
 	
 	
 
