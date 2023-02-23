@@ -51,7 +51,7 @@ public class ModelDto {
 	  private Submitter submitter = null;
 
 	 
-	  private InferenceAPIEndPointDto inferenceAPIEndPoint;;
+	  private InferenceAPIEndPointDto inferenceEndPoint;;
 
 	
 	  private TrainingDataset trainingDataset = null;
@@ -198,8 +198,8 @@ public class ModelDto {
 	  
 	  
 
-	  public ModelDto inferenceEndPoint(InferenceAPIEndPointDto inferenceAPIEndPoint) {
-	    this.inferenceAPIEndPoint = inferenceAPIEndPoint;
+	  public ModelDto inferenceEndPoint(InferenceAPIEndPointDto inferenceEndPoint) {
+	    this.inferenceEndPoint = inferenceEndPoint;
 	    return this;
 	  }
 
@@ -207,12 +207,14 @@ public class ModelDto {
 
 	
 
-	public InferenceAPIEndPointDto getInferenceAPIEndPoint() {
-		return inferenceAPIEndPoint;
+	
+
+	public InferenceAPIEndPointDto getInferenceEndPoint() {
+		return inferenceEndPoint;
 	}
 
-	public void setInferenceAPIEndPoint(InferenceAPIEndPointDto inferenceAPIEndPoint) {
-		this.inferenceAPIEndPoint = inferenceAPIEndPoint;
+	public void setInferenceEndPoint(InferenceAPIEndPointDto inferenceEndPoint) {
+		this.inferenceEndPoint = inferenceEndPoint;
 	}
 
 	public ModelDto trainingDataset(TrainingDataset trainingDataset) {
@@ -249,13 +251,13 @@ public class ModelDto {
 	        Objects.equals(this.licenseUrl, model.licenseUrl) &&
 	        Objects.equals(this.domain, model.domain) &&
 	        Objects.equals(this.submitter, model.submitter) &&
-	        Objects.equals(this.inferenceAPIEndPoint, model.inferenceAPIEndPoint) &&
+	        Objects.equals(this.inferenceEndPoint, model.inferenceEndPoint) &&
 	        Objects.equals(this.trainingDataset, model.trainingDataset);
 	  }
 
 	  @Override
 	  public int hashCode() {
-	    return Objects.hash(name, version, description, refUrl, task, languages, license, licenseUrl, domain, submitter, inferenceAPIEndPoint, trainingDataset);
+	    return Objects.hash(name, version, description, refUrl, task, languages, license, licenseUrl, domain, submitter, inferenceEndPoint, trainingDataset);
 	  }
 
 	  @Override
@@ -273,7 +275,7 @@ public class ModelDto {
 	    sb.append("    licenseUrl: ").append(toIndentedString(licenseUrl)).append("\n");
 	    sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
 	    sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
-	    sb.append("    inferenceAPIEndPointDto: ").append(toIndentedString(inferenceAPIEndPoint)).append("\n");
+	    sb.append("    inferenceAPIEndPointDto: ").append(toIndentedString(inferenceEndPoint)).append("\n");
 	    sb.append("    trainingDataset: ").append(toIndentedString(trainingDataset)).append("\n");
 	    sb.append("}");
 	    return sb.toString();
