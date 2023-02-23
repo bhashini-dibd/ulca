@@ -70,6 +70,8 @@ public class OkHttpClientService {
     }
 
     public String asrComputeInternal(AsrComputeRequest request) {
+    	log.info("request ::"+request);
+    	
 
         AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
                 .body(Mono.just(request), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
