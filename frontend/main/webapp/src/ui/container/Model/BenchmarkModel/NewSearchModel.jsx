@@ -1,5 +1,5 @@
 import Tab from "../../../components/common/Tab";
-import { ModelTask } from "../../../../configs/DatasetItems";
+import { BenchmarkModelTask } from "../../../../configs/DatasetItems";
 import { useState } from "react";
 import Box from "@material-ui/core/Box";
 import { useEffect } from "react";
@@ -38,8 +38,8 @@ function TabPanel(props) {
 const NewSearchModel = () => {
   const filter = useSelector((state) => state.BenchmarkSearch);
 
-  const type = ModelTask.map((task) => task.value);
-  const [value, setValue] = useState(0);
+  const type = BenchmarkModelTask.map((task) => task.value);
+  const [value, setValue] = useState(type.indexOf(filter.type));
   const { searchValue } = useSelector((state) => state.BenchmarkList);
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
@@ -48,7 +48,7 @@ const NewSearchModel = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    makeModelSearchAPICall(ModelTask.filter(val => val.value !== 'sts' && val.value !== 'status-check')[newValue].value);
+    makeModelSearchAPICall(BenchmarkModelTask[newValue].value);
     dispatch(SearchList(""));
     dispatch({ type: "CLEAR_FILTER_BENCHMARK" });
   };
@@ -110,7 +110,7 @@ const NewSearchModel = () => {
       searchValue={searchValue}
       handleChange={handleChange}
       value={value}
-      tabs={ModelTask.filter(val => val.value !== 'sts' && val.value !== 'status-check')}
+      tabs={BenchmarkModelTask}
       // showFilter={ModelTask[value].value}
     >
       <TabPanel value={value} index={value}>
