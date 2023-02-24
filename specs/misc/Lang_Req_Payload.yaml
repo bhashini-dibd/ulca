@@ -18,7 +18,7 @@ components:
       type: object
       properties:
         task:
-          $ref: "#/components/schemas/TaskSequenceArray"
+          $ref: "#/components/schemas/TaskSequenceList"
         config:
           $ref: "#/components/schemas/SequenceConfig"
     SequenceConfig:
@@ -42,15 +42,13 @@ components:
           asr: "#/components/schemas/ASRInference"
           tts: "#/components/schemas/TTSInference"
 
-    TaskSequenceArray:
+    TaskSequenceList:
       type: array
       items:
         $ref: "#/components/schemas/TaskSequences"
     TranslationTask:
       required:
         - type
-        - request
-        - config
       type: object
       properties:
         type:

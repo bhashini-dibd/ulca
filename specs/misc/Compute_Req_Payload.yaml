@@ -11,16 +11,16 @@ servers:
 paths: {}
 components:
   schemas:
-    Request:
+    TaskSequenceComputeRequest:
       required:
         - taskSequence
         - inputData
       type: object
       properties:
         taskSequence:
-          $ref: "#/components/schemas/RequestArray"
+          $ref: "#/components/schemas/RequestList"
         inputData:
-          $ref: "#/components/schemas/InputArray"
+          $ref: "#/components/schemas/InputList"
 
     AnyRequests:
       anyOf:
@@ -34,12 +34,12 @@ components:
         - $ref: "#/components/schemas/ASRRequestInput"
         - $ref: "#/components/schemas/TTSRequestInput"
 
-    RequestArray:
+    RequestList:
       type: array
       items:
         $ref: "#/components/schemas/AnyRequests"
 
-    InputArray:
+    InputList:
       type: array
       items:
         $ref: "#/components/schemas/AnyInputs"

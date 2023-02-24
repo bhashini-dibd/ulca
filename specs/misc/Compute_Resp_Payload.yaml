@@ -13,17 +13,17 @@ components:
   schemas:
     ComputeResponse:
       required:
-        - responseArray
+        - ResponseList
       type: object
       properties:
         PipelineResponse:
-          $ref: "#/components/schemas/ResponseArray"
+          $ref: "#/components/schemas/ResponseList"
     Responses:
       anyOf:
         - $ref: "#/components/schemas/TranslationResponse"
         - $ref: "#/components/schemas/ASRResponse"
         - $ref: "#/components/schemas/TTSResponse"
-    ResponseArray:
+    ResponseList:
       type: array
       items:
         $ref: "#/components/schemas/Responses"

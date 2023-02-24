@@ -11,16 +11,16 @@ servers:
 paths: {}
 components:
   schemas:
-    Service:
+    TaskSequenceResponse:
       required:
         - config
         - languages
       type: object
       properties:
         languages:
-          $ref: "#/components/schemas/LanguagesArray"
+          $ref: "#/components/schemas/LanguagesList"
         config:
-          $ref: "#/components/schemas/InferenceSchemaArray"
+          $ref: "#/components/schemas/InferenceSchemaList"
     LanguageSchema:
       type: object
       properties:
@@ -45,11 +45,11 @@ components:
           asr: "#/components/schemas/ASRInference"
           tts: "#/components/schemas/TTSInference"
 
-    InferenceSchemaArray:
+    InferenceSchemaList:
       type: array
       items:
         $ref: "#/components/schemas/InferenceSchema"
-    LanguagesArray:
+    LanguagesList:
       type: array
       items:
         $ref: "#/components/schemas/LanguageSchema"
