@@ -34,7 +34,7 @@
         ]
     },
     "inferenceEndPoint": {
-        "callbackUrl": "http://bhasha.iiit.ac.in/ocr/ulca/v2/scenetext",
+        "callbackUrl": "https://ilocr.iiit.ac.in/ocr/ulca/v2/scenetext",
         "schema": {
             "taskType": "ocr",
             "request": {

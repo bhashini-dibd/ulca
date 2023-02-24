@@ -54,7 +54,7 @@
        "inferenceApiKey":
         {
             "name" : "apiKey",
-            "value" : "helloAswin"
+            "value" : "INSERT-API-KEY-HERE"
         },
        "schema": {
           "taskType": "ner",

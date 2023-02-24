@@ -55,6 +55,7 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: "#/components/schemas/TranslationConfig"
+
     ASRTask:
       required:
         - type
@@ -64,6 +65,7 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: "#/components/schemas/AudioConfig"
+
     TTSTask:
       required:
         - type
@@ -80,15 +82,19 @@ components:
       properties:
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+
     TTSConfig:
       required:
         - language
       type: object
       properties:
         language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         gender:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+
     AudioConfig:
       required:
         - language

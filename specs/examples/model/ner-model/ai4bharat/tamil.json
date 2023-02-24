@@ -1,0 +1,108 @@
+{
+   "name": "AI4Bharat Tamil NER",
+   "version": "v1.0",
+   "description": "Multilingual Indic-NER model by AI4Bharat to recognize named-entities from provided text. For more details, check our research paper: https://arxiv.org/abs/2212.10168",
+   "refUrl": "https://huggingface.co/ai4bharat/IndicNER",
+   "task": {
+      "type": "ner"
+   },
+   "languages": [
+      {
+         "sourceLanguage": "ta"
+      }
+   ],
+   "license": "mit",
+   "domain": [
+      "general"
+   ],
+   "submitter": {
+      "name": "AI4Bharat",
+      "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+      "team": [
+         {
+            "name": "Arnav Mhaske",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Harshit Kedia",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Sumanth Doddapaneni",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Mitesh Khapra",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Pratyush Kumar",
+            "aboutMe": "Microsoft Research India"
+         },
+         {
+            "name": "Rudra Murthy",
+            "aboutMe": "IBM Research India"
+         },
+         {
+            "name": "Anoop Kunchukuttan",
+            "aboutMe": "Microsoft Research India"
+         }
+      ]
+   },
+   "inferenceEndPoint": {
+      "callbackUrl": "https://ner-api.ai4bharat.org/inference",
+      "schema": {
+         "taskType": "ner",
+         "tagsFormat": "IOB2",
+         "request": {
+            "input": [
+               {
+                  "source": "சுந்தர் அமெரிக்காவை சேர்ந்த கூகுள் நிறுவனத்தில் பணிபுரிகிறார்."
+               }
+            ],
+            "config": {
+               "language": {
+                  "sourceLanguage": "ta"
+               }
+            }
+         },
+         "response": {
+            "output": [
+               {
+                  "source": "சுந்தர் அமெரிக்கா சேர்ந்த கூகுள் நிறுவனத்தில் பணிபுரிகிறார்.",
+                  "nerPrediction": [
+                     {
+                        "token": "சுந்தர்",
+                        "tag": "B-PER"
+                     },
+                     {
+                        "token": "அமெரிக்கா",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "சேர்ந்த",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "கூகுள்",
+                        "tag": "B-ORG"
+                     },
+                     {
+                        "token": "நிறுவனத்தில்",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "பணிபுரிகிறார்.",
+                        "tag": "O"
+                     }
+                  ]
+               }
+            ]
+         }
+      }
+   },
+   "trainingDataset": {
+      "datasetId": "",
+      "description": "Trained on Naamapadam dataset, the largest publicly available Named Entity Annotated dataset for 11 Indic languages. More info: https://huggingface.co/datasets/ai4bharat/naamapadam"
+   }
+}

@@ -42,7 +42,7 @@
         "inferenceApiKey":
         {
             "name" : "authorization",
-            "value" : "bbe19858-b354-4e24-8e92-a7a4b320c066"
+            "value" : "INSERT-API-KEY-HERE"
         },
         "schema": {
             "taskType": "tts",
