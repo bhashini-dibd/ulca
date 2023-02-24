@@ -1,0 +1,40 @@
+{
+  "taskSeq": [
+    {
+      "task": {
+        "type": "asr"
+      },
+      "config": {
+        "language": {
+          "sourceLanguage": "hi"
+        },
+        "samplingRate": 44100
+      }
+    },
+    {
+      "task": {
+        "type": "nmt"
+      },
+      "config": {
+        "language": {
+          "sourceLanguage": "hi",
+          "targetLanguage": "en"
+        }
+      }
+    },
+    {
+      "task": {
+        "type": "tts"
+      },
+      "config": {
+        "language": {
+          "sourceLanguage": "en"
+        },
+        "gender": "male"
+      }
+    }
+  ],
+  "config": {
+    "submitter": "ai4bharat"
+  }
+}

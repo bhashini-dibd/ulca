@@ -1,0 +1,53 @@
+//Maybe we cna include taskSeq here as well. so After results it could be taskSeq then first asr then asr output within it, then task translation, translation output within it and then tts with tts output within it
+{
+  "results": [
+    {
+      "config": {
+        "language": {
+          "sourceLanguage": "hi"
+        },
+        "audioFormat": "flac",
+        "encoding": "base64",
+        "samplingRate": 44100,
+        "postProcessors": null
+      },
+      "output": [
+        {
+          "source": "मेरा नाम महिर है और मैं भाषाावर्ष यूज कर रहा हूँ"
+        }
+      ],
+      "audio": null
+    },
+    {
+      "config": {
+        "language": {
+          "sourceLanguage": "hi",
+          "targetLanguage": "bn"
+        }
+      },
+      "output": [
+        {
+          "source": "मेरा नाम महिर है और मैं भाषाावर्ष यूज कर रहा हूँ",
+          "target": "আমার নাম মহির এবং আমি ভাষাবর্ষ ব্যবহার করছি।"
+        }
+      ],
+      "audio": null
+    },
+    {
+      "config": {
+        "language": {
+          "sourceLanguage": "bn"
+        },
+        "audioFormat": "wav",
+        "encoding": "base64",
+        "samplingRate": 22050
+      },
+      "output": null,
+      "audio": [
+        {
+          "audioContent": "UKxlxnekmockjervkjeopkeeev...."
+        }
+      ]
+    }
+  ]
+}

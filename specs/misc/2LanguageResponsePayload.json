@@ -1,0 +1,83 @@
+{
+  "languages": [
+    {
+      "sourceLanguage": "en",
+      "targetLanguage": ["hi", "as", "ml", "ta"]
+    },
+    {
+      "sourceLanguage": "hi",
+      "targetLanguage": ["en", "as", "ml", "ta", "te"]
+    },
+    {
+      "sourceLanguage": "as",
+      "targetLanguage": ["en", "te"]
+    }
+  ],
+  "config": {
+    "taskSeq": [
+      {
+        "task": "asr",
+        "config": [
+          {
+            "languages": {
+              "sourceLanguage": "en"
+            },
+            "modelID": "cdncksdcdscdsncksd"
+          },
+          {
+            "languages": {
+              "sourceLanguage": "hi"
+            },
+            "modelID": "cdncksdcdsccbhdcsdsncksd"
+          },
+          {
+            "languages": {
+              "sourceLanguage": "as"
+            },
+            "modelID": "dasllsdmckksdcdskcsdl"
+          }
+          // Similiarly all languages in the list of made from sourceLanguage keys listed in the languages key above.
+        ]
+      },
+      {
+        "task": "nmt",
+        "config": [
+          {
+            "languages": {
+              "sourceLanguage": "en",
+              "targetLanguage": "as"
+            },
+            "modelID": "cdncksdcdscdsncksd"
+          },
+          {
+            "languages": {
+              "sourceLanguage": "en",
+              "targetLanguage": "hi"
+            },
+            "modelID": "cdncksdcdsccbhdcsdsncksd"
+          }
+          //  Similarly all en-indic pairs from languages key above, then all hi-language pairs from languages key above
+        ]
+      },
+      {
+        "task": "tts",
+        "config": [
+          {
+            "languages": {
+              "sourceLanguage": "en"
+            },
+            "modelID": "cdncksdcknscsdccdscdsncksd"
+          },
+          {
+            "languages": {
+              "sourceLanguage": "en"
+            },
+            "modelID": "cdncksdcdsccbhdhcjbksdcsdsncksd"
+          }
+          // Similarly all the languages from the list created by taking all the languages in the targetLanguage list and finding unique values from it.
+          // For ex. the languages here should be for [hi, as, ml, ta, en, te] coz these are the unique values from all the targetLanguage list in the language key above.
+        ]
+      }
+    ]
+  }
+}
