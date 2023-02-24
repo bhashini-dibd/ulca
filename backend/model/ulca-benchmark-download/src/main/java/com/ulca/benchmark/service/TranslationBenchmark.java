@@ -36,6 +36,7 @@ import com.ulca.model.dao.ModelInferenceResponseDao;
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.Benchmark;
 import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.model.OneOfAsyncApiDetailsAsyncApiSchema;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.PollingRequest;
@@ -44,6 +45,8 @@ import io.swagger.model.Sentences;
 import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 @Slf4j
@@ -323,4 +326,36 @@ public class TranslationBenchmark {
 		return res;
 	}
 
+	public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
+		   Request httpRequest =null;
+			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+			
+			if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
+			
+			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
+         log.info("callBackUrl : "+callBackUrl);
+			if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
+				
+					String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+					String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
+					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
+				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
+				    log.info("httpRequest : "+httpRequest.toString());
+				
+				
+			       }
+			}else {
+				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+				    log.info("httpRequest : "+httpRequest.toString());
+
+
+				
+			}	
+	   
+		   
+		   return httpRequest;
+	   }
+	
+	
 }

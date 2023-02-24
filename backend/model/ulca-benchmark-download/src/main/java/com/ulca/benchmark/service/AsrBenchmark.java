@@ -99,14 +99,19 @@ public class AsrBenchmark {
 			byte[] bytes = Files.readAllBytes(Paths.get(audioPath));
 
 			AsrComputeRequest request = new AsrComputeRequest();
-			request.setCallbackUrl(callBackUrl);
-			request.setFilePath(audioPath);
+			request.setModelId(model.getModelId());
+			//request.setCallbackUrl(callBackUrl);
+			//request.setFilePath(audioPath);
+			request.setAudioUri(audioPath);
 
-			log.info("start time for calling the inference end point");
+			request.setUserId(model.getUserId());
+			//request.setTaskType(model.getTask());
+			request.setTask(model.getTask().getType().name());
 			log.info("dataRow :: " + dataRow);
 			ASRInference asrInference = (ASRInference) schema;
-			request.setSourceLanguage(asrInference.getRequest().getConfig().getLanguage().getSourceLanguage().toString());
-
+			//request.setSourceLanguage(asrInference.getRequest().getConfig().getLanguage().getSourceLanguage().toString());
+			
+			request.setSource(asrInference.getRequest().getConfig().getLanguage().getSourceLanguage().toString());
 			String resultText = okHttpClientService.asrComputeInternal(request);
 			log.info("result :: " + resultText);
 			log.info("end time for calling the inference end point");

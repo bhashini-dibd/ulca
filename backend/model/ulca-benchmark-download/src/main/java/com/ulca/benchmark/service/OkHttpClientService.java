@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.request.AsrComputeRequest;
 import com.ulca.benchmark.request.AsrComputeResponse;
@@ -71,10 +72,17 @@ public class OkHttpClientService {
 
     public String asrComputeInternal(AsrComputeRequest request) {
     	log.info("request ::"+request);
-    	
-
+    	String requestJson = null;
+		 ObjectMapper objectMapper = new ObjectMapper();
+         try {
+			requestJson = objectMapper.writeValueAsString(request);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+           log.info("requestJson :: "+requestJson);
         AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
-                .body(Mono.just(request), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
+                .body(Mono.just(requestJson), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
                 .block();
 
         if(response != null && response.getData() != null) {
