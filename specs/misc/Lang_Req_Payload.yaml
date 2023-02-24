@@ -18,10 +18,9 @@ components:
       type: object
       properties:
         task:
-          $ref: '#/components/schemas/TaskSequenceArray'
+          $ref: "#/components/schemas/TaskSequenceList"
         config:
-          $ref: '#/components/schemas/SequenceConfig'
-
+          $ref: "#/components/schemas/SequenceConfig"
     SequenceConfig:
       required:
         - submitter
@@ -31,40 +30,31 @@ components:
           type: string
           description: Submitter Name
           example: AI4Bharat
-
     TaskSequences:
       anyOf:
-        - $ref: '#/components/schemas/TranslationTask'
-        - $ref: '#/components/schemas/ASRTask'
-        - $ref: '#/components/schemas/TTSTask'
+        - $ref: "#/components/schemas/TranslationTask"
+        - $ref: "#/components/schemas/ASRTask"
+        - $ref: "#/components/schemas/TTSTask"
       discriminator:
         propertyName: taskType
         mapping:
-          translation: '#/components/schemas/TranslationInference'
-          transliteration: '#/components/schemas/TransliterationInference'
-          asr: '#/components/schemas/ASRInference'
-          tts: '#/components/schemas/TTSInference'
-          ocr: '#/components/schemas/OCRInference'
-          txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
-          ner: '#/components/schemas/NerInference'
-          audio-lang-detection: '#/components/schemas/AudioLangDetectionInference'
+          translation: "#/components/schemas/TranslationInference"
+          asr: "#/components/schemas/ASRInference"
+          tts: "#/components/schemas/TTSInference"
 
-    TaskSequenceArray:
+    TaskSequenceList:
       type: array
       items:
-        $ref: '#/components/schemas/TaskSequences'
+        $ref: "#/components/schemas/TaskSequences"
     TranslationTask:
       required:
         - type
-        - request
-        - config
       type: object
       properties:
         type:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
-          $ref: '#/components/schemas/TranslationConfig'
+          $ref: "#/components/schemas/TranslationConfig"
 
     ASRTask:
       required:
@@ -72,10 +62,9 @@ components:
       type: object
       properties:
         type:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
-          $ref: '#/components/schemas/AudioConfig'
+          $ref: "#/components/schemas/AudioConfig"
 
     TTSTask:
       required:
@@ -83,19 +72,16 @@ components:
       type: object
       properties:
         type:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
-          $ref: '#/components/schemas/TTSConfig'
-
+          $ref: "#/components/schemas/TTSConfig"
     TranslationConfig:
       required:
         - language
       type: object
       properties:
         language:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
 
     TTSConfig:
       required:
@@ -115,5 +101,4 @@ components:
       type: object
       properties:
         language:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
