@@ -35,8 +35,15 @@ import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 
 import io.swagger.model.ASRInference;
+import io.swagger.model.ASRRequest;
+import io.swagger.model.AudioFile;
+import io.swagger.model.AudioFiles;
 import io.swagger.model.Benchmark;
+import io.swagger.model.ImageFile;
+import io.swagger.model.ImageFiles;
 import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.OCRInference;
+import io.swagger.model.OCRRequest;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import lombok.extern.slf4j.Slf4j;
 
@@ -97,22 +104,62 @@ public class AsrBenchmark {
 			String audioPath = baseLocation + audioFilename;
 
 			byte[] bytes = Files.readAllBytes(Paths.get(audioPath));
-
-			AsrComputeRequest request = new AsrComputeRequest();
-			request.setModelId(model.getModelId());
-			//request.setCallbackUrl(callBackUrl);
-			//request.setFilePath(audioPath);
-			request.setAudioUri(audioPath);
-
-			request.setUserId(model.getUserId());
-			//request.setTaskType(model.getTask());
-			request.setTask(model.getTask().getType().name());
-			log.info("dataRow :: " + dataRow);
-			ASRInference asrInference = (ASRInference) schema;
-			//request.setSourceLanguage(asrInference.getRequest().getConfig().getLanguage().getSourceLanguage().toString());
+             
+			// new changes
 			
-			request.setSource(asrInference.getRequest().getConfig().getLanguage().getSourceLanguage().toString());
-			String resultText = okHttpClientService.asrComputeInternal(request);
+			AudioFile audioFile = new AudioFile();
+			
+			audioFile.setAudioContent(bytes);
+			
+			AudioFiles audioFiles = new AudioFiles();
+			
+			audioFiles.add(audioFile);
+			
+			
+			log.info("start time for calling the inference end point");
+			log.info("dataRow :: " + dataRow);
+			
+
+			ASRInference asrInference = (ASRInference) schema;
+
+			   ASRRequest aSrRequest=asrInference.getRequest();
+			
+			
+				String resultText = okHttpClientService.asrCompute(inferenceAPIEndPoint, aSrRequest);
+
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+				/*
+				 * 
+				 * AsrComputeRequest request = new AsrComputeRequest();
+				 * request.setModelId(model.getModelId());
+				 * //request.setCallbackUrl(callBackUrl); //request.setFilePath(audioPath);
+				 * request.setAudioUri(audioPath);
+				 * 
+				 * request.setUserId(model.getUserId()); //request.setTaskType(model.getTask());
+				 * request.setTask("asr"); log.info("dataRow :: " + dataRow); ASRInference
+				 * asrInference = (ASRInference) schema;
+				 * //request.setSourceLanguage(asrInference.getRequest().getConfig().getLanguage
+				 * ().getSourceLanguage().toString());
+				 * 
+				 * request.setSource(asrInference.getRequest().getConfig().getLanguage().
+				 * getSourceLanguage().toString()); String resultText =
+				 * okHttpClientService.asrComputeInternal(request);
+				 */
 			log.info("result :: " + resultText);
 			log.info("end time for calling the inference end point");
 
