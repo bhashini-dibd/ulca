@@ -6,3 +6,4 @@ requests==2.23.0
 pydub==0.25.1
 validators==0.18.2
 pymongo==3.10.1
+aes-everywhere==1.2.10
