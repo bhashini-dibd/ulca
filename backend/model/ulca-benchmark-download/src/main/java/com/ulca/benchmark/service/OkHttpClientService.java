@@ -48,23 +48,27 @@ public class OkHttpClientService {
 	@Autowired
 	WebClient.Builder builder;
 
-	@Value("${asrcomputeurl}")
-	private String asrcomputeurl;
+	//@Value("${asrcomputeurl}")
+	//private String asrcomputeurl;
 	
 
-	//@Value("${aes.model.apikey.secretkey}")
-	private String SECRET_KEY="";
+	@Value("${aes.model.apikey.secretkey}")
+	private String SECRET_KEY;
 
-	public String ocrCompute(String callBackUrl, OCRRequest request) throws IOException {
+	public String ocrCompute(InferenceAPIEndPoint inferenceAPIEndPoint, OCRRequest request) throws IOException {
+		
+		
+		
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestJson = objectMapper.writeValueAsString(request);
 
 		// OkHttpClient client = new OkHttpClient();
-		OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+		OkHttpClient client = new OkHttpClient.Builder().readTimeout(120, TimeUnit.SECONDS).build();
 
 		RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-		Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+		//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+		Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 
 		Response httpResponse = client.newCall(httpRequest).execute();
 		String responseJsonStr = httpResponse.body().string();
@@ -79,27 +83,22 @@ public class OkHttpClientService {
 		return null;
 	}
 
-	public String asrComputeInternal(AsrComputeRequest request) {
-		log.info("request ::" + request);
-		String requestJson = null;
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			requestJson = objectMapper.writeValueAsString(request);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		log.info("requestJson :: " + requestJson);
-		AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
-				.body(Mono.just(requestJson), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
-				.block();
-
-		if (response != null && response.getData() != null) {
-			return response.getData().getSource();
-		}
-
-		return null;
-	}
+	/*
+	 * public String asrComputeInternal(AsrComputeRequest request) {
+	 * log.info("request ::" + request); String requestJson = null; ObjectMapper
+	 * objectMapper = new ObjectMapper(); try { requestJson =
+	 * objectMapper.writeValueAsString(request); } catch (JsonProcessingException e)
+	 * { // TODO Auto-generated catch block e.printStackTrace(); }
+	 * log.info("requestJson :: " + requestJson); AsrComputeResponse response =
+	 * builder.build().post().uri(asrcomputeurl) .body(Mono.just(requestJson),
+	 * AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
+	 * .block();
+	 * 
+	 * if (response != null && response.getData() != null) { return
+	 * response.getData().getSource(); }
+	 * 
+	 * return null; }
+	 */
 
 	public Response okHttpClientAsyncPostCall(String requestJson, String url)
 			throws NoSuchAlgorithmException, KeyManagementException, IOException {
@@ -112,7 +111,7 @@ public class OkHttpClientService {
 
 	}
 
-	public String okHttpClientPostCall(String requestJson, String url)
+	public String okHttpClientPostCall(String requestJson, InferenceAPIEndPoint inferenceAPIEndPoint)
 			throws IOException, KeyManagementException, NoSuchAlgorithmException {
 
 		// OkHttpClient client = new OkHttpClient();
@@ -123,8 +122,8 @@ public class OkHttpClientService {
 		 */
 
 		RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-		Request httpRequest = new Request.Builder().url(url).post(body).build();
-
+		//Request httpRequest = new Request.Builder().url(url).post(body).build();
+		Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 		OkHttpClient newClient = getTrustAllCertsClient();
 		Response httpResponse = newClient.newCall(httpRequest).execute();
 
@@ -167,12 +166,7 @@ public class OkHttpClientService {
 
 			HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
 
-			/*
-			 * response = builder.clientConnector(new
-			 * ReactorClientHttpConnector(httpClient)).build().post()
-			 * .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
-			 * .bodyToMono(ASRResponse.class).block();
-			 */
+			
 			if (inferenceAPIEndPoint.getInferenceApiKey() != null) {
 				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint
 						.getInferenceApiKey();
@@ -183,7 +177,8 @@ public class OkHttpClientService {
 					String encryptedInferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
 					log.info("encryptedInferenceApiKeyName : " + encryptedInferenceApiKeyName);
 					log.info("encryptedInferenceApiKeyValue : " + encryptedInferenceApiKeyValue);
-					
+					log.info("SECRET_KEY ::"+SECRET_KEY);
+
 					
 					
 					
@@ -221,37 +216,10 @@ public class OkHttpClientService {
 			e.printStackTrace();
 		}
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		String requestJson =objectMapper.writeValueAsString(request);
-
-		/*
-		 * 
-		 * ObjectMapper objectMapper = new ObjectMapper(); String requestJson =
-		 * objectMapper.writeValueAsString(request);
-		 * 
-		 * OkHttpClient client = new OkHttpClient();
-		 * 
-		 * OkHttpClient client = new OkHttpClient.Builder() .readTimeout(60,
-		 * TimeUnit.SECONDS) .build();
-		 * 
-		 * 
-		 * RequestBody body = RequestBody.create(requestJson,
-		 * MediaType.parse("application/json"));
-		 * 
-		 * Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
-		 * 
-		 * Request httpRequest = new Request.Builder() .url(callBackUrl) .post(body)
-		 * .build();
-		 * 
-		 * Response httpResponse = client.newCall(httpRequest).execute();
-		 * 
-		 * log.info("httpResponse ::"+httpResponse); String responseJsonStr =
-		 * httpResponse.body().string(); log.info("logging asr inference point response"
-		 * + responseJsonStr);
-		 */
-
-		 response = objectMapper.readValue(requestJson, ASRResponse.class);
-
+	
+           
+		 log.info("asrResponse :: "+response);
+		 
 		if (response != null && response.getOutput() != null && response.getOutput().size() > 0) {
 			return response.getOutput().get(0).getSource();
 		}
@@ -259,7 +227,7 @@ public class OkHttpClientService {
 		return null;
 	}
 
-	public static Request checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint, RequestBody body) {
+	public  Request checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint, RequestBody body) {
 		Request httpRequest = null;
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 
@@ -270,12 +238,40 @@ public class OkHttpClientService {
 			log.info("callBackUrl : " + callBackUrl);
 			if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
 
-				String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
-				String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
-				log.info("inferenceApiKeyName : " + inferenceApiKeyName);
-				log.info("inferenceApiKeyValue : " + inferenceApiKeyValue);
+				String encryptedInferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+				String encryptedInferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+				log.info("encryptedInferenceApiKeyName : " + encryptedInferenceApiKeyName);
+				log.info("encryptedInferenceApiKeyValue : " + encryptedInferenceApiKeyValue);
+				log.info("SECRET_KEY ::"+SECRET_KEY);
+				
+				
+				
+				String originalInferenceApiKeyName=null ;
+
+				String originalInferenceApiKeyValue=null;
+				try {
+					originalInferenceApiKeyValue = Aes256.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+					originalInferenceApiKeyName = Aes256.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				log.info("originalInferenceApiKeyName : "+originalInferenceApiKeyName);
+				log.info("originalInferenceApiKeyValue : "+originalInferenceApiKeyValue);
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				httpRequest = new Request.Builder().url(callBackUrl)
-						.addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
+						.addHeader(originalInferenceApiKeyName, originalInferenceApiKeyValue).post(body).build();
 				log.info("httpRequest : " + httpRequest.toString());
 
 			}

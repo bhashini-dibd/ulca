@@ -57,8 +57,8 @@ public class AsrBenchmark {
 	@Value("${kafka.ulca.bm.metric.ip.topic}")
 	private String mbMetricTopic;
 
-	@Value("${asrcomputeurl}")
-	private String asrcomputeurl;
+	//@Value("${asrcomputeurl}")
+	///private String asrcomputeurl;
 
 	@Autowired
 	WebClient.Builder builder;
@@ -127,22 +127,6 @@ public class AsrBenchmark {
 			
 				String resultText = okHttpClientService.asrCompute(inferenceAPIEndPoint, aSrRequest);
 
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 				/*
 				 * 
 				 * AsrComputeRequest request = new AsrComputeRequest();

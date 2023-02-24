@@ -109,7 +109,7 @@ public class TranslationBenchmark {
 //
 //			Response httpResponse = client.newCall(httpRequest).execute();
 //			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,callBackUrl);
+			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,inferenceAPIEndPoint);
 
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 			return translation;
@@ -148,7 +148,7 @@ public class TranslationBenchmark {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,callBackUrl);
+			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,inferenceAPIEndPoint);
 
 			PollingRequest pollingRequest = objectMapper.readValue(responseJsonStr, PollingRequest.class);
 			translationAsyncInference.setResponse(pollingRequest);
