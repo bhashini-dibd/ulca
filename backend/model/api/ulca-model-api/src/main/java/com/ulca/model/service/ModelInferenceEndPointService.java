@@ -6,9 +6,7 @@ import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -16,7 +14,6 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import io.swagger.model.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +29,41 @@ import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelComputeResponseNer;
 import com.ulca.model.response.ModelComputeResponseOCR;
-import com.ulca.model.response.ModelComputeResponseTranslation;
 import com.ulca.model.response.ModelComputeResponseTTS;
+import com.ulca.model.response.ModelComputeResponseTranslation;
 import com.ulca.model.response.ModelComputeResponseTransliteration;
 import com.ulca.model.response.ModelComputeResponseTxtLangDetection;
 
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import io.swagger.model.ASRRequest;
+import io.swagger.model.ASRResponse;
+import io.swagger.model.AsyncApiDetails;
+import io.swagger.model.ImageFile;
+import io.swagger.model.ImageFiles;
+import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
+import io.swagger.model.NerResponse;
+import io.swagger.model.OCRRequest;
+import io.swagger.model.OCRResponse;
+import io.swagger.model.OneOfAsyncApiDetailsAsyncApiPollingSchema;
+import io.swagger.model.OneOfAsyncApiDetailsAsyncApiSchema;
+import io.swagger.model.OneOfInferenceAPIEndPointSchema;
+import io.swagger.model.PollingRequest;
+import io.swagger.model.Sentence;
+import io.swagger.model.Sentences;
+import io.swagger.model.TTSConfig;
+import io.swagger.model.TTSRequest;
+import io.swagger.model.TTSResponse;
+import io.swagger.model.TranslationRequest;
+import io.swagger.model.TranslationResponse;
+import io.swagger.model.TransliterationRequest;
+import io.swagger.model.TransliterationResponse;
+import io.swagger.model.TxtLangDetectionRequest;
+import io.swagger.model.TxtLangDetectionResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -80,8 +103,11 @@ public class ModelInferenceEndPointService {
 			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -91,9 +117,8 @@ public class ModelInferenceEndPointService {
 			translationInference.setResponse(response);
 			schema = translationInference;
 
-		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 
-		
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
 			ASRRequest request = asrInference.getRequest();
 
@@ -104,9 +129,46 @@ public class ModelInferenceEndPointService {
 
 				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
 
-				response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
-						.uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
-						.bodyToMono(ASRResponse.class).block();
+				
+				/*
+				 * response = builder.clientConnector(new
+				 * ReactorClientHttpConnector(httpClient)).build().post()
+				 * .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
+				 * .bodyToMono(ASRResponse.class).block();
+				 */
+			     if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
+				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
+
+				
+				if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
+					
+						String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+						String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+						log.info("inferenceApiKeyName : "+inferenceApiKeyName);
+						log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
+						response = builder.clientConnector(new
+								  ReactorClientHttpConnector(httpClient)).build().post()
+								  .uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue).
+								  body(Mono.just(request), ASRRequest.class).retrieve()
+								  .bodyToMono(ASRResponse.class).block();					
+					    log.info("response : "+response);
+				   }
+				}else {
+					response = builder.clientConnector(new
+							  ReactorClientHttpConnector(httpClient)).build().post()
+							  .uri(callBackUrl).
+							  body(Mono.just(request), ASRRequest.class).retrieve()
+							  .bodyToMono(ASRResponse.class).block();
+				    log.info("response : "+response);
+
+					
+				}
+				
+				
+				
+				
+				
+				
 
 			} catch (SSLException e) {
 				e.printStackTrace();
@@ -116,8 +178,6 @@ public class ModelInferenceEndPointService {
 			log.info("logging asr inference point response" + objectMapper.writeValueAsString(response));
 			asrInference.setResponse(response);
 			schema = asrInference;
-
-		
 
 		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
@@ -130,8 +190,15 @@ public class ModelInferenceEndPointService {
 			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+              
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 
+			
+			
+			
+			
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -141,7 +208,6 @@ public class ModelInferenceEndPointService {
 			schema = ocrInference;
 
 			log.info("logging ocr inference point response" + responseJsonStr);
-		
 
 		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			io.swagger.model.TTSInference ttsInference = (io.swagger.model.TTSInference) schema;
@@ -152,8 +218,14 @@ public class ModelInferenceEndPointService {
 
 			// OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			
+			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
@@ -167,7 +239,7 @@ public class ModelInferenceEndPointService {
 			schema = ttsInference;
 
 			log.info("logging tts inference point response" + responseJsonStr);
-		
+
 		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
 			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
 			TransliterationRequest request = transliterationInference.getRequest();
@@ -177,12 +249,20 @@ public class ModelInferenceEndPointService {
 
 			// OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+			
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 
+			
+			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
-
+               
+			
+			
+			
 			// Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -192,7 +272,7 @@ public class ModelInferenceEndPointService {
 			schema = transliterationInference;
 
 			log.info("logging TransliterationInference point response" + responseJsonStr);
-		
+
 		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
 			io.swagger.model.TxtLangDetectionInference txtLangDetectionInference = (io.swagger.model.TxtLangDetectionInference) schema;
 			TxtLangDetectionRequest request = txtLangDetectionInference.getRequest();
@@ -200,10 +280,14 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-			
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+		//	Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+              
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
@@ -214,6 +298,36 @@ public class ModelInferenceEndPointService {
 			schema = txtLangDetectionInference;
 
 			log.info("logging TransliterationInference point response" + responseJsonStr);
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.NerInference")) {
+			io.swagger.model.NerInference nerInference = (io.swagger.model.NerInference) schema;
+			TranslationRequest request = nerInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			log.info("httpResponse : "+httpResponse);
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+             System.out.println("responseJsonStr : " +responseJsonStr);
+			NerResponse response = objectMapper.readValue(responseJsonStr, NerResponse.class);
+			nerInference.setResponse(response);
+			schema = nerInference;
+			
+			log.info("logging NerInference point response" + responseJsonStr);
+
 		}
 
 		inferenceAPIEndPoint.setSchema(schema);
@@ -238,8 +352,10 @@ public class ModelInferenceEndPointService {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
+			
+			//Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
+			Response httpResponse = okHttpClientPostCallInference(requestJson, callBackUrl,inferenceAPIEndPoint);
 
-			Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
 			String responseJsonStr = httpResponse.body().string();
@@ -299,6 +415,30 @@ public class ModelInferenceEndPointService {
 
 		return httpResponse;
 	}
+	
+	
+	public Response okHttpClientPostCallInference(String requestJson, String url,InferenceAPIEndPoint inferenceAPIEndPoint)
+			throws IOException, KeyManagementException, NoSuchAlgorithmException {
+
+		// OkHttpClient client = new OkHttpClient();
+
+		/*
+		 * OkHttpClient client = new OkHttpClient.Builder() .readTimeout(60,
+		 * TimeUnit.SECONDS) .build();
+		 */
+
+		RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+		//Request httpRequest = new Request.Builder().url(url).post(body).build();
+        
+        Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+
+		OkHttpClient newClient = getTrustAllCertsClient();
+		Response httpResponse = newClient.newCall(httpRequest).execute();
+
+		return httpResponse;
+	}
+	
+	
 
 	public InferenceAPIEndPoint validateCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
 			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException,
@@ -328,7 +468,6 @@ public class ModelInferenceEndPointService {
 		log.info("pollingUrl :: " + pollingUrl);
 
 		OneOfAsyncApiDetailsAsyncApiSchema asyncApiSchema = asyncApiDetails.getAsyncApiSchema();
-		
 
 		if (asyncApiSchema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationAsyncInference")) {
 			io.swagger.model.TranslationAsyncInference translationAsyncInference = (io.swagger.model.TranslationAsyncInference) asyncApiSchema;
@@ -346,8 +485,10 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-			Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
-			
+			//Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
+			Response httpResponse = okHttpClientPostCallInference(requestJson, callBackUrl,inferenceAPIEndPoint);
+
+
 			String responseJsonStr = httpResponse.body().string();
 
 			log.info("********* callBackUrl responseJson ****** :: " + responseJsonStr);
@@ -373,19 +514,18 @@ public class ModelInferenceEndPointService {
 						throw new ModelComputeException("Translation Model Compute Response Empty",
 								"Translation Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
 					}
-					List<String>  outputTextList = new ArrayList<>();
-					for (Sentence sentence :translationResponse.getOutput()){
+					List<String> outputTextList = new ArrayList<>();
+					for (Sentence sentence : translationResponse.getOutput()) {
 						outputTextList.add(sentence.getTarget());
 					}
-
-					//response.setOutputTextList(outputTextList);
 					response = (ModelComputeResponse) translationResponse;
 
 					break;
 
 				} else {
 					log.info("compute model failed");
-					log.info("Inference end point respose received ::  " + objectMapper.writeValueAsString(pollHttpResponse));					
+					log.info("Inference end point respose received ::  "
+							+ objectMapper.writeValueAsString(pollHttpResponse));
 					throw new ModelComputeException("Translation Model Compute Failed",
 							"Translation Model Compute Failed", HttpStatus.valueOf(pollHttpResponse.code()));
 				}
@@ -399,10 +539,11 @@ public class ModelInferenceEndPointService {
 			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException,
 			InterruptedException {
 
-		if (inferenceAPIEndPoint.isIsSyncApi()) {
-			return computeSyncModel(inferenceAPIEndPoint, computeRequest);
-		} else {
+		if (inferenceAPIEndPoint.isIsSyncApi() != null && !inferenceAPIEndPoint.isIsSyncApi()) {
 			return computeAsyncModel(inferenceAPIEndPoint, computeRequest);
+
+		} else {
+			return computeSyncModel(inferenceAPIEndPoint, computeRequest);
 		}
 
 	}
@@ -434,8 +575,10 @@ public class ModelInferenceEndPointService {
 
 			OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
@@ -444,28 +587,38 @@ public class ModelInferenceEndPointService {
 				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Failed",
 						HttpStatus.valueOf(httpResponse.code()));
 			}
-			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			// false);
+
 			String responseJsonStr = httpResponse.body().string();
 
-			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
+			try {
+				TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 
-			if (translation.getOutput() == null || translation.getOutput().size() <= 0) {
-				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Response is Empty",
-						HttpStatus.BAD_REQUEST);
+				if (translation.getOutput() == null || translation.getOutput().size() <= 0) {
+					throw new ModelComputeException(httpResponse.message(),
+							"Translation Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
+
+				}
+				List<String> outputTextList = new ArrayList<>();
+				for (Sentence sentence : translation.getOutput()) {
+					outputTextList.add(sentence.getTarget());
+				}
+
+				ModelComputeResponseTranslation resp = new ModelComputeResponseTranslation();
+				BeanUtils.copyProperties(translation, resp);
+
+				response = resp;
+				return response;
+
+			} catch (Exception e) {
+
+				log.info("response from Translation model inference point not proper : callback url :  " + callBackUrl
+						+ " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(),
+						"Translation Model Compute Response is not proper", HttpStatus.BAD_REQUEST);
 
 			}
-			List<String>  outputTextList = new ArrayList<>();
-			for (Sentence sentence :translation.getOutput()){
-				outputTextList.add(sentence.getTarget());
-			}
 
-			ModelComputeResponseTranslation resp = new ModelComputeResponseTranslation();
-			BeanUtils.copyProperties(translation, resp);
-			
-			response = resp;
-			return response;
-			
 		}
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
@@ -484,8 +637,14 @@ public class ModelInferenceEndPointService {
 
 			OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+
+			
+			
+			
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
@@ -495,22 +654,31 @@ public class ModelInferenceEndPointService {
 						HttpStatus.valueOf(httpResponse.code()));
 			}
 
-			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			// false);
-			OCRResponse ocrResponse = objectMapper.readValue(httpResponse.body().string(), OCRResponse.class);
+			String responseJsonStr = httpResponse.body().string();
+			try {
+				OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
 
-			if (ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <= 0
-					|| ocrResponse.getOutput().get(0).getSource().isBlank()) {
-				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is Empty",
+				if (ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <= 0
+						|| ocrResponse.getOutput().get(0).getSource().isBlank()) {
+					throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is Empty",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+				ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
+				BeanUtils.copyProperties(ocrResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from OCR model inference end not proper : callback url :  " + callBackUrl
+						+ " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is not proper",
 						HttpStatus.BAD_REQUEST);
 
 			}
-
-			ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
-			BeanUtils.copyProperties(ocrResponse, resp);
-			
-			response = resp;
-			return response;
 
 		}
 
@@ -534,14 +702,13 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-			// OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+		//	Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	   
 			OkHttpClient newClient = getTrustAllCertsClient();
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 
-			// Response httpResponse = client.newCall(httpRequest).execute();
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
 				log.info(httpResponse.toString());
@@ -552,53 +719,32 @@ public class ModelInferenceEndPointService {
 
 			String ttsResponseStr = httpResponse.body().string();
 
-			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			// false);
-			TTSResponse ttsResponse = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
+			try {
+				TTSResponse ttsResponse = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
 
-			if (ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <= 0) {
-				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
-						HttpStatus.BAD_REQUEST);
-
-			}
-			
-			ModelComputeResponseTTS resp = new ModelComputeResponseTTS();
-			BeanUtils.copyProperties(ttsResponse, resp);
-			
-			response = resp;
-			return response;
-			
-			
-			/*
-			if (ttsResponse.getAudio().get(0).getAudioContent() != null) {
-				String encodedString = Base64.getEncoder()
-						.encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
-				response.setOutputText(encodedString);
-			} else if (!ttsResponse.getAudio().get(0).getAudioUri().isBlank()) {
-				String audioUrl = ttsResponse.getAudio().get(0).getAudioUri();
-				try {
-					String fileName = UUID.randomUUID().toString();
-					String uploadFolder = modelUploadFolder + "/model";
-					String filePath = fileUtility.downloadUsingNIO(audioUrl, uploadFolder, fileName);
-					byte[] bytes = FileUtils.readFileToByteArray(new File(filePath));
-					String encodedString = Base64.getEncoder().encodeToString(bytes);
-					response.setOutputText(encodedString);
-
-					// delete the downloaded file
-					FileUtils.delete(new File(filePath));
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					throw new ModelComputeException(ex.getMessage(), "TTS Output file not available",
+				if (ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <= 0) {
+					throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
 							HttpStatus.BAD_REQUEST);
+
 				}
 
-			} else {
-				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
+				ModelComputeResponseTTS resp = new ModelComputeResponseTTS();
+				BeanUtils.copyProperties(ttsResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from TTS model inference end not proper : callback url :  " + callBackUrl
+						+ " response :: " + ttsResponseStr);
+
+				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is not proper",
 						HttpStatus.BAD_REQUEST);
+
 			}
-			*/
+
 		}
-		
+
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
 			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
 			TransliterationRequest request = transliterationInference.getRequest();
@@ -617,8 +763,13 @@ public class ModelInferenceEndPointService {
 
 			OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
+			
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
@@ -627,23 +778,34 @@ public class ModelInferenceEndPointService {
 				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Failed",
 						HttpStatus.valueOf(httpResponse.code()));
 			}
-			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			// false);
+
 			String responseJsonStr = httpResponse.body().string();
 
-			TransliterationResponse transliterationResponse = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
+			try {
+				TransliterationResponse transliterationResponse = objectMapper.readValue(responseJsonStr,
+						TransliterationResponse.class);
 
-			if (transliterationResponse.getOutput() == null || transliterationResponse.getOutput().size() <= 0 ) {
-					
-				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Response is Empty",
-						HttpStatus.BAD_REQUEST);
+				if (transliterationResponse.getOutput() == null || transliterationResponse.getOutput().size() <= 0) {
+
+					throw new ModelComputeException(httpResponse.message(),
+							"Transliteration Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
+
+				}
+				ModelComputeResponseTransliteration resp = new ModelComputeResponseTransliteration();
+				BeanUtils.copyProperties(transliterationResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from Transliteration model not proper : callback url :  " + callBackUrl
+						+ " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(),
+						"Transliteration Model Compute Response is not proper", HttpStatus.BAD_REQUEST);
 
 			}
-			ModelComputeResponseTransliteration resp = new ModelComputeResponseTransliteration();
-			BeanUtils.copyProperties(transliterationResponse, resp);
-			
-			response = resp;
-			return response;
+
 		}
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
 			io.swagger.model.TxtLangDetectionInference txtLangDetectionInference = (io.swagger.model.TxtLangDetectionInference) schema;
@@ -657,39 +819,113 @@ public class ModelInferenceEndPointService {
 				sentences.add(sentense);
 			}
 			request.setInput(sentences);
-			
+
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-			
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+             
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 
+			
+			
+			
+			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 
 			String responseJsonStr = httpResponse.body().string();
-			TxtLangDetectionResponse txtLangDetectionResponse = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
+
+			try {
+				TxtLangDetectionResponse txtLangDetectionResponse = objectMapper.readValue(responseJsonStr,
+						TxtLangDetectionResponse.class);
+
+				ModelComputeResponseTxtLangDetection resp = new ModelComputeResponseTxtLangDetection();
+				BeanUtils.copyProperties(txtLangDetectionResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from TxtLangDetection model inference end point not proper : callback url :  "
+						+ callBackUrl + " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(),
+						"TxtLangDetection Model Compute Response is not proper", HttpStatus.BAD_REQUEST);
+
+			}
+		}
+		
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.NerInference")) {
+			io.swagger.model.NerInference nerInference = (io.swagger.model.NerInference) schema;
+			TranslationRequest request = nerInference.getRequest();
+
+			List<Input> input = compute.getInput();
+			Sentences sentences = new Sentences();
+			for (Input ip : input) {
+				Sentence sentense = new Sentence();
+				sentense.setSource(ip.getSource());
+				sentences.add(sentense);
+			}
+			request.setInput(sentences);
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+              
+             Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 			
-			ModelComputeResponseTxtLangDetection resp = new ModelComputeResponseTxtLangDetection();
-			BeanUtils.copyProperties(txtLangDetectionResponse, resp);
+			
+			
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Ner Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+
+			NerResponse translation = objectMapper.readValue(responseJsonStr, NerResponse.class);
+
+			if (translation.getOutput() == null || translation.getOutput().size() <= 0) {
+				throw new ModelComputeException(httpResponse.message(), "Ner Model Compute Response is Empty",
+						HttpStatus.BAD_REQUEST);
+
+			}
+		
+
+			ModelComputeResponseNer resp = new ModelComputeResponseNer();
+			BeanUtils.copyProperties(translation, resp);
 			
 			response = resp;
 			return response;
 			
 		}
 
+		
+		
+           
 		return response;
 	}
 
 	/*
 	 * compute for OCR model
 	 */
-	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema, String imagePath) {
+	public ModelComputeResponse compute(InferenceAPIEndPoint inferenceAPIEndPoint, OneOfInferenceAPIEndPointSchema schema, String imagePath) {
 
 		try {
-			
+			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 			ModelComputeResponse response = new ModelComputeResponseOCR();
 
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
@@ -710,34 +946,40 @@ public class ModelInferenceEndPointService {
 
 			OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			
+            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+	
+			
 			Response httpResponse = client.newCall(httpRequest).execute();
 			String responseJsonStr = httpResponse.body().string();
 
 			OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
-			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0 && !ocrResponse.getOutput().get(0).getSource().isBlank()) {
-				
+			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0
+					&& !ocrResponse.getOutput().get(0).getSource().isBlank()) {
+
 				ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
 				BeanUtils.copyProperties(ocrResponse, resp);
 				response = resp;
-				
+
 			} else {
 				log.info("Ocr try me response is null or not proper");
 				log.info("callBackUrl :: " + callBackUrl);
 				log.info("Request Json :: " + requestJson);
 				log.info("ResponseJson :: " + responseJsonStr);
 				FileUtils.delete(new File(imagePath));
-				throw new ModelComputeException("Model unable to infer the image", "Model unable to infer the image", HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new ModelComputeException("Model unable to infer the image", "Model unable to infer the image",
+						HttpStatus.INTERNAL_SERVER_ERROR);
 
 			}
 			return response;
-			
-		}catch(Exception ex) {
-			
-			throw new ModelComputeException(ex.getMessage(), "Model unable to infer the image", HttpStatus.INTERNAL_SERVER_ERROR);
-			
-		}finally {
+
+		} catch (Exception ex) {
+
+			throw new ModelComputeException(ex.getMessage(), "Model unable to infer the image",
+					HttpStatus.INTERNAL_SERVER_ERROR);
+
+		} finally {
 			try {
 				FileUtils.delete(new File(imagePath));
 			} catch (IOException e) {
@@ -771,5 +1013,37 @@ public class ModelInferenceEndPointService {
 		newBuilder.hostnameVerifier((hostname, session) -> true);
 		return newBuilder.readTimeout(60, TimeUnit.SECONDS).build();
 	}
+	
+	   public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
+		   Request httpRequest =null;
+			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+			
+			if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
+			
+			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
+            log.info("callBackUrl : "+callBackUrl);
+			if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
+				
+					String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+					String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
+					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
+				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
+				    log.info("httpRequest : "+httpRequest.toString());
+				
+				
+			       }
+			}else {
+				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+				    log.info("httpRequest : "+httpRequest.toString());
+
+
+				
+			}	
+	   
+		   
+		   return httpRequest;
+	   }
+	
 
 }

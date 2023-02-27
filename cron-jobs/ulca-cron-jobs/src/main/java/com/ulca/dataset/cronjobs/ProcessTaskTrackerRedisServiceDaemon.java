@@ -49,13 +49,14 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	@Autowired
 	NotificationService notificationService;
 	
-	@Scheduled(cron = "*/10 * * * * *")
+	//@Scheduled(cron = "*/10 * * * * *")
+	@Scheduled(cron = "0 */1 * * * *")
 	public void updateTaskTracker() {
 		
-		
+		log.info("******************start dataset cron job for updateTaskTracker*****************************");
 
 		Map<String, Map<String, String>> map = taskTrackerRedisDao.findAll();
-
+				
 		for (Map.Entry<String, Map<String, String>> entry : map.entrySet()) {
 
 			try {
@@ -255,8 +256,16 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		if (ingestComplete == 1 && (ingestSuccess + ingestError == count)) {
 			// update the end time for ingest
 			v1 = true;
+			if(ingestSuccess==0) {
 			processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.ingest,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, details.toString());
+			}else {
+				
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.ingest,
+						com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+			}
+
+			
 
 		} else {
 
@@ -316,13 +325,18 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 						com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress, details.toString());
 		}
 
-		if (v1 && v2 && v3) {
+		if ((v1 && v2 && v3)||(v1 && ingestSuccess==0 )) {
 
 			log.info("deleting redis entry for real ingest : serviceRequestNumber :: " + serviceRequestNumber);
 			log.info("serviceRequestNumber :: " + serviceRequestNumber + "ingestSuccess : "+ ingestSuccess + " ingestError : " + ingestError + " validateSuccess : " + validateSuccess + " validateError : "+ validateError + " publishSuccess : " + publishSuccess + " publishError : "+ publishError);
 			taskTrackerRedisDao.delete(serviceRequestNumber);
-			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
 			
+			if(v1 && ingestSuccess==0) {
+			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
+			}else {
+				
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
+			}
 			String datasetName = val.get("datasetName");
 			String userId = val.get("userId");
 			log.info("sending dataset submit completion notification to User. userId : " + userId + " datasetName : " + datasetName + " serviceRequestNumber : " + serviceRequestNumber);

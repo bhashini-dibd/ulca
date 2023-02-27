@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  * OCRInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-15T10:08:37.438508852Z[GMT]")
 
 
 public class OCRInference  implements OneOfInferenceAPIEndPointSchema {

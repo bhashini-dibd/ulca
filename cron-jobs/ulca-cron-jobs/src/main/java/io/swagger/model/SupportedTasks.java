@@ -21,7 +21,8 @@ public enum SupportedTasks {
     OCR("ocr"),
     GLOSSARY("glossary"),
     NER("ner"),
-    TXT_LANG_DETECTION("txt-lang-detection");
+    TXT_LANG_DETECTION("txt-lang-detection"),
+    AUDIO_LANG_DETECTION("audio-lang-detection");
 
   private String value;
 

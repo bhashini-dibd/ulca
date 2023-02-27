@@ -25,8 +25,7 @@ import LightTooltip from "../../../../components/common/LightTooltip";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { translate } from "../../../../../assets/localisation";
 import { getLanguageName } from "../../../../../utils/getLabel";
-import { ReactTransliterate } from "react-transliterate";
-import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
+import { IndicTransliterate } from "react-transliterate";
 import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import { useParams } from "react-router-dom";
@@ -301,8 +300,8 @@ function HostedInferTransliteration(props) {
         <CardContent>
           <IndicTransliterate
             lang={lang}
-            apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
-            modelId={props.modelId}
+            customApiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
+            transliterationModelId={props.modelId}
             value={transliteration}
             onChangeText={(text) => {
               setTransliteration(text);

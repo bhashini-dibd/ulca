@@ -151,8 +151,8 @@ class ASRUnlabeledService:
                 #insert_data["objStorePath"] = "Something"
                 #insert_data["refImgStorePath"] = "Else"
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
-                data['audioFilename'] = data['audioFilename'].split('/')[-1]
-                s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["audioFilename"]}'
+                audioFilename = data['audioFilename'].split('/')[-1]
+                s3_file_name = f'{metadata["datasetId"]}|{epoch}|{audioFilename}'
                 object_store_path = utils.upload_file(data["fileLocation"], asr_unlabeled_prefix, s3_file_name)
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data

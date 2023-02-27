@@ -29,6 +29,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -75,11 +78,19 @@ import io.swagger.model.LanguagePairs;
 import io.swagger.model.License;
 import io.swagger.model.ModelProcessingType;
 import io.swagger.model.ModelTask;
+import io.swagger.model.NerInference;
+import io.swagger.model.OCRInference;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.Submitter;
 import io.swagger.model.SupportedLanguages;
 import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSInference;
+import io.swagger.model.TranslationInference;
+import io.swagger.model.TranslationResponse;
+import io.swagger.model.TransliterationInference;
+import io.swagger.model.TransliterationRequest;
+import io.swagger.model.TxtLangDetectionInference;
+import io.swagger.model.TxtLangDetectionRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -114,6 +125,9 @@ public class ModelService {
 	
 	@Autowired
 	ModelConstants modelConstants;
+	
+	@Autowired
+	MongoTemplate mongoTemplate;
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -186,6 +200,7 @@ public class ModelService {
 		if (!result.isEmpty()) {
 			
 			ModelExtended model = result.get();
+			
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(model, modelDto);
 			List<String> metricList = modelConstants.getMetricListByModelTask(model.getTask().getType().toString());
@@ -193,6 +208,9 @@ public class ModelService {
 			
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelIdAndStatus(model.getModelId(), "Completed");
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
+		
+
+			
 			return modelDto;
 		}
 		return null;
@@ -281,7 +299,9 @@ public class ModelService {
 
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getUploadedModel(modelFilePath);
-
+		
+		
+		
 		if (modelObj != null) {
 			validateModel(modelObj);
 		} else {
@@ -296,21 +316,23 @@ public class ModelService {
 			lps.add(lp);
 			modelObj.setLanguages(lps);
 		}
-
+           
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(Instant.now().toEpochMilli());
 		modelObj.setPublishedOn(Instant.now().toEpochMilli());
 		modelObj.setStatus("unpublished");
 		modelObj.setUnpublishReason("Newly submitted model");
-
+        
+		
+		
+		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
-
+		
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
 				|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 				ASRInference asrInference = (ASRInference) schema;
-				
 				if (!asrInference.getModelProcessingType().getType().equals(ModelProcessingType.TypeEnum.STREAMING)) {
 					inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 				}
@@ -348,6 +370,7 @@ public class ModelService {
 		File file = new File(modelFilePath);
 		try {
 			modelObj = objectMapper.readValue(file, ModelExtended.class);
+			OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
 			return modelObj;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -396,7 +419,8 @@ public class ModelService {
 			throw new ModelValidationException("inferenceEndPoint is required field");
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
-		if(!inferenceAPIEndPoint.isIsSyncApi()) {
+		
+		if(inferenceAPIEndPoint.isIsSyncApi()!=null && !inferenceAPIEndPoint.isIsSyncApi()) {
 			AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
 			if(asyncApiDetails.getPollingUrl().isBlank()) {
 				throw new ModelValidationException("PollingUrl is required field for async model");
@@ -413,43 +437,130 @@ public class ModelService {
 		return true;
 	}
 
+//	public ModelSearchResponse searchModel(ModelSearchRequest request) {
+//
+//		ModelExtended model = new ModelExtended();
+//
+//		if (request.getTask() != null && !request.getTask().isBlank()) {
+//			ModelTask modelTask = new ModelTask();
+//			SupportedTasks modelTaskType = SupportedTasks.fromValue(request.getTask());
+//			if(modelTaskType == null) {
+//				throw new RequestParamValidationException("task type is not valid");
+//			}
+//			modelTask.setType(modelTaskType);
+//			model.setTask(modelTask);
+//		}else {
+//			throw new RequestParamValidationException("task is required field");
+//		}
+//		
+//		LanguagePairs lprs = new LanguagePairs();
+//		LanguagePair lp = null;
+//		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
+//			 lp = new LanguagePair();
+//			lp.setSourceLanguage(SupportedLanguages.fromValue(request.getSourceLanguage()));
+//			
+//		}
+//		
+//		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
+//			if(lp==null) {
+//				lp = new LanguagePair();
+//				
+//			}
+//			 
+//			lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
+//		}
+//		
+//		if(lp!=null) {
+//			
+//			lprs.add(lp);
+//			model.setLanguages(lprs);
+//		}
+//		
+//	
+//		/*
+//		 * seach only published model
+//		 */
+//		model.setStatus("published");
+//
+//		Example<ModelExtended> example = Example.of(model);
+//		List<ModelExtended> list = modelDao.findAll(example);
+//		
+//		if(list != null) {
+//			Collections.shuffle(list); // randomize the search
+//			return new ModelSearchResponse("Model Search Result", list, list.size());
+//		}
+//		return new ModelSearchResponse("Model Search Result", list, 0);
+//		
+//		
+//
+//	}
+	
 	public ModelSearchResponse searchModel(ModelSearchRequest request) {
 
-		ModelExtended model = new ModelExtended();
-
+		Query dynamicQuery = new Query();
+		
 		if (request.getTask() != null && !request.getTask().isBlank()) {
-			ModelTask modelTask = new ModelTask();
 			SupportedTasks modelTaskType = SupportedTasks.fromValue(request.getTask());
 			if(modelTaskType == null) {
 				throw new RequestParamValidationException("task type is not valid");
 			}
-			modelTask.setType(modelTaskType);
-			model.setTask(modelTask);
+			Criteria nameCriteria = Criteria.where("task.type").is(modelTaskType.name());
+			dynamicQuery.addCriteria(nameCriteria);
 		}else {
 			throw new RequestParamValidationException("task is required field");
 		}
-
-		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
-			LanguagePairs lprs = new LanguagePairs();
-			LanguagePair lp = new LanguagePair();
-			lp.setSourceLanguage(SupportedLanguages.fromValue(request.getSourceLanguage()));
-
-			if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
-				lp.setTargetLanguage(SupportedLanguages.fromValue(request.getTargetLanguage()));
-			}
-			lprs.add(lp);
-			model.setLanguages(lprs);
-		}
-		/*
-		 * seach only published model
-		 */
-		model.setStatus("published");
-
-		Example<ModelExtended> example = Example.of(model);
-		List<ModelExtended> list = modelDao.findAll(example);
 		
-		Collections.shuffle(list); // randomize the search
-		return new ModelSearchResponse("Model Search Result", list, list.size());
+		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank() && !request.getSourceLanguage().equalsIgnoreCase("All")) {
+			Criteria nameCriteria = Criteria.where("languages.0.sourceLanguage").is(SupportedLanguages.fromValue(request.getSourceLanguage()).name());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank() && !request.getTargetLanguage().equalsIgnoreCase("All") ) {
+			Criteria nameCriteria = Criteria.where("languages.0.targetLanguage").is(SupportedLanguages.fromValue(request.getTargetLanguage()).name());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		//domain
+		
+		if (request.getDomain() != null && !request.getDomain().isBlank() && !request.getDomain().equalsIgnoreCase("All")) {
+			Criteria nameCriteria = Criteria.where("domain.0").is(request.getDomain());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		
+		
+		// submitter
+		if (request.getSubmitter()!= null && !request.getSubmitter().isBlank() && !request.getSubmitter().equalsIgnoreCase("All")) {
+			Criteria nameCriteria = Criteria.where("submitter.name").is(request.getSubmitter());
+			dynamicQuery.addCriteria(nameCriteria);
+		}
+		
+		
+		// userId
+		
+		/*if (request.getUserId()!= null && !request.getUserId().isBlank() && !request.getUserId().equalsIgnoreCase("All")) {
+			Criteria nameCriteria = Criteria.where("userId").is(request.getUserId());
+			dynamicQuery.addCriteria(nameCriteria);
+		}*/
+
+		
+		
+		
+		Criteria nameCriteria = Criteria.where("status").is("published");
+		dynamicQuery.addCriteria(nameCriteria);
+		
+	    	log.info("dynamicQuery : "+dynamicQuery.toString());
+	
+		List<ModelExtended> list = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+         
+		log.info("modelList : "+list);
+		
+		
+		if(list != null) {
+			Collections.shuffle(list); // randomize the search
+			return new ModelSearchResponse("Model Search Result", list, list.size());
+		}
+		return new ModelSearchResponse("Model Search Result", list, 0);
 
 	}
 	
@@ -469,10 +580,10 @@ public class ModelService {
 		
 		ModelExtended modelObj = modelDao.findById(modelId).get();
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		//String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 		
-		ModelComputeResponse response = modelInferenceEndPointService.compute(callBackUrl, schema, imageFilePath);
+		ModelComputeResponse response = modelInferenceEndPointService.compute(inferenceAPIEndPoint, schema, imageFilePath);
 		
 		return response;
 	}

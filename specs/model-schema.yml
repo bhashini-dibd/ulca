@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.3.5
+  version: 0.7.1
 servers:
   - url: /ulca
 paths: {}
@@ -77,6 +77,21 @@ components:
         callbackUrl:
           type: string
           format: url
+        inferenceApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
         schema:
           type: object
           oneOf:
@@ -86,6 +101,8 @@ components:
             - $ref: '#/components/schemas/TTSInference'
             - $ref: '#/components/schemas/OCRInference'
             - $ref: '#/components/schemas/TxtLangDetectionInference'
+            - $ref: '#/components/schemas/NerInference'
+            - $ref: '#/components/schemas/AudioLangDetectionInference'
           discriminator:
             propertyName: taskType
             mapping:
@@ -95,11 +112,14 @@ components:
               tts: '#/components/schemas/TTSInference'
               ocr: '#/components/schemas/OCRInference'
               txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
+              ner: '#/components/schemas/NerInference'
+              audio-lang-detection: '#/components/schemas/AudioLangDetectionInference'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
         asyncApiDetails:
           $ref: '#/components/schemas/AsyncApiDetails'
+        
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
     AsyncApiDetails:
       required:
@@ -205,6 +225,33 @@ components:
           $ref: '#/components/schemas/TxtLangDetectionRequest'
         response:
           $ref: '#/components/schemas/TxtLangDetectionResponse'
+    AudioLangDetectionInference:
+      required:
+        - taskType
+        - request
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        request:
+          $ref: '#/components/schemas/AudioLangDetectionRequest'
+        response:
+          $ref: '#/components/schemas/AudioLangDetectionResponse'
+    NerInference:
+      required:
+        - taskType
+        - request
+        - tagsFormat
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        tagsFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
+        request:
+          $ref: '#/components/schemas/TranslationRequest'
+        response:
+          $ref: '#/components/schemas/NerResponse'
     TranslationAsyncInference:
       required:
         - taskType
@@ -287,7 +334,7 @@ components:
         input:
           $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/TxtLangDetectionConfig'
+          $ref: '#/components/schemas/LangDetectionConfig'
     TxtLangDetectionResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
@@ -297,7 +344,37 @@ components:
         output:
           $ref: '#/components/schemas/TxtLanguagesList'
         config:
-          $ref: '#/components/schemas/TxtLangDetectionConfig'
+          $ref: '#/components/schemas/LangDetectionConfig'
+    AudioLangDetectionRequest:
+      required:
+        - audio
+        - config
+      type: object
+      properties:
+        audio:
+          $ref: '#/components/schemas/AudioFiles'
+        config:
+          $ref: '#/components/schemas/LangDetectionConfig'
+    AudioLangDetectionResponse:
+      description: the response for translation.  Standard http status codes to be used.
+      required:
+        - output
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/AudioLanguagesList'
+        config:
+          $ref: '#/components/schemas/LangDetectionConfig'
+    NerResponse:
+      description: the response for NER.  Standard http status codes to be used.
+      required:
+        - output
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/NerList'
+        config:
+          $ref: '#/components/schemas/TranslationConfig'
     ASRInference:
       required:
         - taskType
@@ -309,6 +386,18 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+        supportedInputAudioFormats:
+          type: array
+          default: [wav]
+          description: list of
+          items:
+            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        supportedOutputTextFormats:
+          type: array
+          description: list of
+          default: [transcript]
+          items:
+            $ref:  '#/components/schemas/TextFormat'
         request:
           $ref: '#/components/schemas/ASRRequest'
         response:
@@ -374,6 +463,18 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+        supportedInputTextFormats:
+          type: array
+          description: list of
+          default: [transcript]
+          items:
+            $ref:  '#/components/schemas/TextFormat'
+        supportedOutputAudioFormats:
+          type: array
+          default: [wav]
+          description: list of
+          items:
+            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         request:
           $ref: '#/components/schemas/TTSRequest'
         response:
@@ -546,8 +647,23 @@ components:
           type: array
           description: list of
           items:
-            $ref: '#/components/schemas/TxtLangDetectionPrediction'
-    TxtLangDetectionPrediction:
+            $ref: '#/components/schemas/LangDetectionPrediction'
+    AudioLanguagesList:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/AudioLangDetectionList'
+    AudioLangDetectionList:
+      required:
+        - langPrediction
+      type: object
+      properties:
+        langPrediction:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/LangDetectionPrediction'
+    LangDetectionPrediction:
       type: object
       required:
         - langCode
@@ -561,6 +677,51 @@ components:
         langScore:
           type: number
           description: the measure of accuracy of language prediction
+    NerList:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/NerOutputList'
+    NerOutputList:
+      required:
+        - source
+      type: object
+      properties:
+        source:
+          minLength: 1
+          type: string
+          description: input sentence for the model
+        nerPrediction:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/NerPrediction'
+    NerPrediction:
+      type: object
+      required:
+        - token
+        - tag
+        - tokenStartIndex
+        - tokenEndIndex
+      properties:
+        token:
+          type: string
+          description: corresponding word in the sentence which is tagged
+        tag:
+          type: string
+          description: Ner tag associated with selected word
+        score:
+          type: number
+          description: the measure of accuracy of language prediction
+        tokenIndex:
+          type: number
+          description: the index number of particular token in sentence
+        tokenStartIndex:
+          type: number
+          description: the starting index of word in sentence
+        tokenEndIndex:
+          type: number
+          description: the ending index of word in sentence
     TranslationConfig:
       required:
         - language
@@ -592,7 +753,7 @@ components:
           example: false
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
-    TxtLangDetectionConfig:
+    LangDetectionConfig:
       type: object
       properties:
         modelId:
@@ -650,6 +811,14 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         gender:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+        inputFormat:
+          type: object
+          properties:
+            value:
+              $ref: '#/components/schemas/TextFormat'
+        audioFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        
     AudioConfig:
       required:
         - language
@@ -671,7 +840,10 @@ components:
         bitsPerSample:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         transcriptionFormat:
-          $ref: '#/components/schemas/TranscriptionFormat'
+          type: object
+          properties:
+            value:
+              $ref: '#/components/schemas/TextFormat'
         postProcessors:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
         domain:
@@ -691,16 +863,7 @@ components:
             - default
         encoding:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
-    TranscriptionFormat:
-      type: object
-      properties:
-        value:
-          type: string
-          description: format of ASR output
-          enum:
-            - srt
-            - transcript
-            - alternatives
+
     ImageFiles:
       type: array
       description: list of
@@ -767,6 +930,16 @@ components:
         bitsPerSample:
           type: integer
           description: bitsPerSample rate of audio
+    
+    TextFormat:
+      type: string
+      description: supported textual formats
+      enum:
+        - srt
+        - transcript
+        - webvtt
+        - alternatives
+        
   securitySchemes:
     authToken:
       type: apiKey

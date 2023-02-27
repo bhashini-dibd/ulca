@@ -419,7 +419,18 @@ components:
         - glossary
         - ner
         - txt-lang-detection
+        - audio-lang-detection
       description: the category of model under which it has been released or trained
+
+    SupportedTagsFormat:
+      type: string
+      enum:
+        - IOB
+        - IOB2
+        - BIOES
+        - basic
+        - custom
+      description: Accepted standards for tags.
     
     MixedDataSource:
       type: string

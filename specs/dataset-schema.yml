@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.7
+  version: 0.10.10
 servers:
   - url: /ulca
 paths: {}
@@ -166,21 +166,26 @@ components:
       type: object
       properties:
         tagsFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
+        isStopwordsRemoved:
+          type: boolean
+          description: Expects if provided ner list contains stopwords or not
+          default: false
+          example: false
+        formatDescription:
           type: string
-          description: The accepted standard based on which NER tags are labelled in the dataset.
-          enum:
-            - CoNLL-2003
+          description: any description about the particular format of dataset. or about the tags used in it.
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
     NerDatasetRowSchema:
       required:
         - nerData
       properties:
+        nerData:
+          $ref: '#/components/schemas/NerDataArray'
         sourceText:
           type: string
           description: textual data in source language
-        nerData:
-          $ref: '#/components/schemas/NerDataArray'
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
       type: object
@@ -1060,47 +1065,28 @@ components:
       type: object
       description: Ner dataset sentencewise metadata
       required:
+        - token
         - tag
-      anyOf:
-        - $ref: '#/components/schemas/NerWordIndex'
-        - $ref: '#/components/schemas/NerWord'
       properties:
-        position:
+        token:
           type: string
-          description: position of the word in phrase. B- Beginning, I- Intermediate
-          enum:
-            - B
-            - I
+          description: corresponsing word in the sentence
+          minItems: 1
         tag:
           type: string
           description: NER tag for corresponsing word/index. This should be inline with the corresponding tagsFormat specified in params.json.
           example: PER
-          enum:
-            - O
-            - PER
-            - ORG
-            - LOC
-    NerWordIndex:
-      type: object
-      description: Ner dataset sentencewise metadata
-      required:
-        - wordIndex
-      properties:
-        wordIndex:
+        tokenIndex:
           type: number
-          description: index number of word
+          description: index number of token
           example: 1
           minItems: 1
-    NerWord:
-      type: object
-      description: Ner dataset sentencewise metadata
-      required:
-        - word
-      properties:
-        word:
-          type: string
-          description: corresponsing word in the sentence
-          minItems: 1
+        tokenStartIndex:
+          type: number
+          description: the starting index of word in sentence
+        tokenEndIndex:
+          type: number
+          description: the ending index of word in sentence
     AsrlanguagesSpoken:
       type: array
       description: list of various languages the speaker is good enough to speak

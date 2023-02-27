@@ -4,6 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AsyncApiDetails;
+import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -14,18 +15,21 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "hosted location defines the end point of the model inference. specify a taskType along with Inference type")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-10T10:51:37.068454836Z[GMT]")
 
 
 public class InferenceAPIEndPoint   {
   @JsonProperty("callbackUrl")
   private String callbackUrl = null;
 
+  @JsonProperty("inferenceApiKey")
+  private InferenceAPIEndPointInferenceApiKey inferenceApiKey = null;
+
   @JsonProperty("schema")
   private OneOfInferenceAPIEndPointSchema schema = null;
 
   @JsonProperty("isSyncApi")
-  private Boolean isSyncApi = null;
+  private Boolean isSyncApi = true;
 
   @JsonProperty("asyncApiDetails")
   private AsyncApiDetails asyncApiDetails = null;
@@ -48,6 +52,26 @@ public class InferenceAPIEndPoint   {
 
   public void setCallbackUrl(String callbackUrl) {
     this.callbackUrl = callbackUrl;
+  }
+
+  public InferenceAPIEndPoint inferenceApiKey(InferenceAPIEndPointInferenceApiKey inferenceApiKey) {
+    this.inferenceApiKey = inferenceApiKey;
+    return this;
+  }
+
+  /**
+   * Get inferenceApiKey
+   * @return inferenceApiKey
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public InferenceAPIEndPointInferenceApiKey getInferenceApiKey() {
+    return inferenceApiKey;
+  }
+
+  public void setInferenceApiKey(InferenceAPIEndPointInferenceApiKey inferenceApiKey) {
+    this.inferenceApiKey = inferenceApiKey;
   }
 
   public InferenceAPIEndPoint schema(OneOfInferenceAPIEndPointSchema schema) {
@@ -120,6 +144,7 @@ public class InferenceAPIEndPoint   {
     }
     InferenceAPIEndPoint inferenceAPIEndPoint = (InferenceAPIEndPoint) o;
     return Objects.equals(this.callbackUrl, inferenceAPIEndPoint.callbackUrl) &&
+        Objects.equals(this.inferenceApiKey, inferenceAPIEndPoint.inferenceApiKey) &&
         Objects.equals(this.schema, inferenceAPIEndPoint.schema) &&
         Objects.equals(this.isSyncApi, inferenceAPIEndPoint.isSyncApi) &&
         Objects.equals(this.asyncApiDetails, inferenceAPIEndPoint.asyncApiDetails);
@@ -127,7 +152,7 @@ public class InferenceAPIEndPoint   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(callbackUrl, schema, isSyncApi, asyncApiDetails);
+    return Objects.hash(callbackUrl, inferenceApiKey, schema, isSyncApi, asyncApiDetails);
   }
 
   @Override
@@ -136,6 +161,7 @@ public class InferenceAPIEndPoint   {
     sb.append("class InferenceAPIEndPoint {\n");
     
     sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
+    sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
     sb.append("    schema: ").append(toIndentedString(schema)).append("\n");
     sb.append("    isSyncApi: ").append(toIndentedString(isSyncApi)).append("\n");
     sb.append("    asyncApiDetails: ").append(toIndentedString(asyncApiDetails)).append("\n");
