@@ -626,9 +626,10 @@ public class ModelService {
 		
 		ModelFeedback feedback = new ModelFeedback();
 		BeanUtils.copyProperties(request, feedback);
+		feedback.setInput("");
+		feedback.setOutput("");
 		
-		
-		feedback =setInputOutput(request ,feedback);
+		//feedback =setInputOutput(request ,feedback);
 		
 		
 		feedback.setCreatedAt(new Date().toString());
@@ -647,8 +648,9 @@ public class ModelService {
 				
 				ModelFeedback mfeedback = new ModelFeedback();
 				BeanUtils.copyProperties(modelFeedback, mfeedback);
-				feedback =setInputOutput(modelFeedback ,mfeedback);
-
+				//feedback =setInputOutput(modelFeedback ,mfeedback);
+				mfeedback.setInput("");
+				mfeedback.setOutput("");
 				mfeedback.setStsFeedbackId(feedbackId);	
 				mfeedback.setUserId(userId);
 				mfeedback.setCreatedAt(new Date().toString());
