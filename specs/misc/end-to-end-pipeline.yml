@@ -22,7 +22,7 @@ components:
           type: string
           format: url
         supportedPipelines:
-          $ref: "#/components/schemas/PipelineList"
+          $ref: "#/components/schemas/ListOfPipelines"
         masterApiKey:
           required:
             - value
@@ -44,12 +44,12 @@ components:
                 output
               example: dde19858-b354-4e24-8e92-a7a4b320c066
     
-    PipelineList:
+    ListOfPipelines:
       type: array
       items: 
-        $ref: "#/components/schemas/SupportedTasks"
+        $ref: "#/components/schemas/PipelineTaskSequence"
       
-    SupportedTasks:
+    PipelineTaskSequence:
         type: array
         items:
           anyOf: 
