@@ -25,10 +25,10 @@ components:
 
     PipelineComputeResponse:
       required:
-        - PipelineResponse
+        - pipelineResponse
       type: object
       properties:
-        PipelineResponse:
+        pipelineResponse:
           $ref: "#/components/schemas/ResponseList"
 
     TaskRequestConfig:

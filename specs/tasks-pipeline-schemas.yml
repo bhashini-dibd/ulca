@@ -153,8 +153,6 @@ components:
       required:
         - task
         - config
-        - callbackUrl
-        - inferenceAPIKey
       type: object
       properties:
         callbackUrl:
@@ -191,8 +189,7 @@ components:
     ASRInference:
       required:
         - task
-        - callbackUrl
-        - inferenceAPIKey
+        - config
       type: object
       properties:
         callbackUrl:
@@ -229,8 +226,7 @@ components:
     TTSInference:
       required:
         - task
-        - callbackUrl
-        - inferenceAPIKey
+        - config
       type: object
       properties:
         callbackUrl:
