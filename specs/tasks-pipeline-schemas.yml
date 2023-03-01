@@ -13,25 +13,25 @@ components:
   schemas:
     PipelineRequest:
       required:
-        - taskSequence
-        - pipelineConfig
+        - pipelineTasks
+        - pipelineRequestConfig
       type: object
       properties:
-        taskSequence:
+        pipelineTasks:
           $ref: '#/components/schemas/PipelineTasks'
-        pipelineConfig:
+        pipelineRequestConfig:
           $ref: '#/components/schemas/PipelineConfig'
     PipelineResponse:
       required:
-        - pipelineConfig
+        - pipelineResponseConfig
         - languages
         - pipelineURI
       type: object
       properties:
         languages:
           $ref: '#/components/schemas/LanguagesList'
-        pipelineConfig:
-          $ref: '#/components/schemas/InferenceSchemaList'
+        pipelineResponseConfig:
+          $ref: '#/components/schemas/TaskSchemaList'
         pipelineURI:
           type: string
           format: url
@@ -130,26 +130,26 @@ components:
           items:
             $ref: >-
               https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
-    InferenceSchema:
+    TaskSchema:
       anyOf:
-        - $ref: '#/components/schemas/TranslationInference'
-        - $ref: '#/components/schemas/ASRInference'
-        - $ref: '#/components/schemas/TTSInference'
+        - $ref: '#/components/schemas/TranslationTaskInference'
+        - $ref: '#/components/schemas/ASRTaskInference'
+        - $ref: '#/components/schemas/TTSTaskInference'
       discriminator:
         propertyName: taskType
         mapping:
-          translation: '#/components/schemas/TranslationInference'
-          asr: '#/components/schemas/ASRInference'
-          tts: '#/components/schemas/TTSInference'
-    InferenceSchemaList:
+          translation: '#/components/schemas/TranslationTaskInference'
+          asr: '#/components/schemas/TranslationTaskInference'
+          tts: '#/components/schemas/TranslationTaskInference'
+    TaskSchemaList:
       type: array
       items:
-        $ref: '#/components/schemas/InferenceSchema'
+        $ref: '#/components/schemas/TaskSchema'
     LanguagesList:
       type: array
       items:
         $ref: '#/components/schemas/LanguageSchema'
-    TranslationInference:
+    TranslationTaskInference:
       required:
         - task
         - config
@@ -186,7 +186,7 @@ components:
           description: list of
           items:
             $ref: '#/components/schemas/TranslationResponseConfig'
-    ASRInference:
+    ASRTaskInference:
       required:
         - task
         - config
@@ -223,7 +223,7 @@ components:
           description: list of
           items:
             $ref: '#/components/schemas/ASRResponseConfig'
-    TTSInference:
+    TTSTaskInference:
       required:
         - task
         - config

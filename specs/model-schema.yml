@@ -72,6 +72,7 @@ components:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
         trainingDataset:
           $ref: '#/components/schemas/TrainingDataset'
+          
     InferenceAPIEndPoint:
       required:
         - callbackUrl
@@ -111,6 +112,46 @@ components:
           $ref: '#/components/schemas/AsyncApiDetails'
         
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
+      
+    PipelineInferenceAPIEndPoint:
+      required:
+        - callbackUrl
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        masterInferenceApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        isMultilingualEnabled:
+          type: boolean
+          default: false
+          description: specify true if the same callbackUrl is capable of handling multiple languages
+        schema:
+          anyOf:
+            - $ref: '#/components/schemas/InferenceSchema'
+            - $ref: '#/components/schemas/InferenceSchemaArray'
+        isSyncApi:
+          type: boolean
+          description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
+        asyncApiDetails:
+          $ref: '#/components/schemas/AsyncApiDetails'
+        
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type      
+      
     InferenceSchema:
         oneOf:
         - $ref: '#/components/schemas/TranslationInference'
