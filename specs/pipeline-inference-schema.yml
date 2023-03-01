@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: ULCA - Pipeline Inference Endpoint Submission
+  title: Pipeline Inference Submission
   description: The documentation defines the schema in which pipeline inference endpoint details are to be submitted.
   contact:
     name: ekstep foundation
