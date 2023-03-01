@@ -14,14 +14,14 @@ components:
   
     PipelineComputeRequest:
       required:
-        - taskSequence
+        - Pipeline
         - inputData
       type: object
       properties:
-        taskSequence:
-          $ref: "#/components/schemas/RequestList"
+        Pipeline:
+          $ref: "#/components/schemas/PipelineRequestList"
         inputData:
-          $ref: "#/components/schemas/InputList"
+          $ref: "#/components/schemas/PipelineInputList"
 
     PipelineComputeResponse:
       required:
@@ -31,27 +31,27 @@ components:
         PipelineResponse:
           $ref: "#/components/schemas/ResponseList"
 
-    AnyRequests:
+    TaskRequests:
       anyOf:
         - $ref: "#/components/schemas/TranslationRequestConfig"
         - $ref: "#/components/schemas/ASRRequestConfig"
         - $ref: "#/components/schemas/TTSRequestConfig"
 
-    AnyInputs:
+    PipelineInput:
       oneOf:
         - $ref: "#/components/schemas/TranslationRequestInput"
         - $ref: "#/components/schemas/ASRRequestInput"
         - $ref: "#/components/schemas/TTSRequestInput"
 
-    RequestList:
+    PipelineRequestList:
       type: array
       items:
-        $ref: "#/components/schemas/AnyRequests"
+        $ref: "#/components/schemas/TaskRequests"
 
-    InputList:
+    PipelineInputList:
       type: array
       items:
-        $ref: "#/components/schemas/AnyInputs"
+        $ref: "#/components/schemas/PipelineInput"
 
 
     TranslationRequestInput:
@@ -125,7 +125,6 @@ components:
     TranslationConfig:
       required:
         - language
-        - modelId
       type: object
       properties:
         modelId:
@@ -142,7 +141,6 @@ components:
     TTSConfig:
       required:
         - language
-        - modelId
       type: object
       properties:
         modelId:
@@ -163,7 +161,6 @@ components:
     AudioConfig:
       required:
         - language
-        - modelId
       type: object
       properties:
         modelId:
