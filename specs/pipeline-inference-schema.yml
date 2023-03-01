@@ -21,7 +21,7 @@ components:
         submitter:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
-          $ref: '#/components/schemas/InferenceAPIEndPoint'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/InferenceAPIEndPoint'
         supportedPipelines:
           $ref: "#/components/schemas/ListOfPipelines"
     
