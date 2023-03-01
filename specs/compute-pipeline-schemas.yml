@@ -14,18 +14,18 @@ components:
   
     PipelineComputeRequest:
       required:
-        - Pipeline
+        - pipelineTasks
         - inputData
       type: object
       properties:
-        Pipeline:
+        pipelineTasks:
           $ref: "#/components/schemas/PipelineRequestList"
         inputData:
           $ref: "#/components/schemas/PipelineInputList"
 
     PipelineComputeResponse:
       required:
-        - ResponseList
+        - PipelineResponse
       type: object
       properties:
         PipelineResponse:
