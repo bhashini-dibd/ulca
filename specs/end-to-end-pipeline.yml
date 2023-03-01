@@ -11,7 +11,7 @@ servers:
 paths: {}
 components:
   schemas:
-    EndToEndPipeline:
+    PipelineInference:
       required:
         - callbackUrl
         - masterApiKey
