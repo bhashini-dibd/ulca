@@ -13,11 +13,11 @@ components:
   schemas:
     PipelineRequest:
       required:
-        - task
+        - taskSequence
         - pipelineConfig
       type: object
       properties:
-        task:
+        taskSequence:
           $ref: '#/components/schemas/PipelineTasks'
         pipelineConfig:
           $ref: '#/components/schemas/PipelineConfig'
