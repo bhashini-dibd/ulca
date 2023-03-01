@@ -13,11 +13,14 @@ components:
   schemas:
     PipelineInference:
       required:
+        - submitterName
         - callbackUrl
         - masterApiKey
         - supportedPipelines
       type: object
       properties:
+        submitterName:
+          type: string
         callbackUrl:
           type: string
           format: url
