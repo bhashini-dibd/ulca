@@ -1,15 +1,17 @@
 from logging import exception
+import traceback
 import os
 from pydub import AudioSegment
 from models.response import CustomResponse, post_error
 import base64
 import json
-from config import shared_storage_path
+from config import shared_storage_path,secret_key
 import base64
 import requests
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
+from AesEverywhere import aes256
 
 
 class ASRComputeRepo:
@@ -29,13 +31,15 @@ class ASRComputeRepo:
         callbackurl =   inf_callbackurl["callbackUrl"]
         if "inferenceApiKey" in inf_callbackurl.keys():
             if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
-                apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
-                apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                infer = inf_callbackurl["inferenceApiKey"]
-                log.info(f"inferenceApiKey {infer} ")
+                #apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
+                #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                apiKeyName = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["name"], secret_key)
+                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], secret_key)
+                
             elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 apiKeyName = None
-                apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], secret_key)
         else:
             apiKeyName = None
             apiKeyValue = None
@@ -66,7 +70,7 @@ class ASRComputeRepo:
                     decode_string = base64.b64decode(encode_string)
                     wav_file.write(decode_string)
 
-                audio = AudioSegment.from_wav(file)
+                audio = AudioSegment.from_file(file)
                 audio = audio.set_channels(1)
                 audio = audio.set_frame_rate(16000)
                 processed_file = f'{shared_storage_path}audio-{userId}-processed.wav'
@@ -83,6 +87,7 @@ class ASRComputeRepo:
 
             except Exception as e:
                 log.info(f'Exception while processing request: {e}')
+                log.info(f'Traceback of exception: {traceback.print_exc()}')
                 return []
 
     def process_asr_from_audio_file(self,lang,audio_file_path,callback_url,transformat,audioformat,punctiation=False):
@@ -95,14 +100,14 @@ class ASRComputeRepo:
         - decoding to utf-8
         """
         try:
-            audio = AudioSegment.from_wav(audio_file_path)
+            audio = AudioSegment.from_file(audio_file_path)
             audio = audio.set_channels(1)
             audio = audio.set_frame_rate(16000)
             processed_file = f'{shared_storage_path}audio-processed.wav'
             audio.export(processed_file, format="wav")
             encoded_data=base64.b64encode(open(processed_file, "rb").read()) 
             os.remove(processed_file)
-            result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callback_url,transformat,audioformat,punctiation)
+            result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callback_url,transformat,audioformat,apiKeyName="NONE",apiKeyValue="NONE",punctiation=True)
             return result
 
         except Exception as e:
@@ -151,7 +156,9 @@ class ASRComputeRepo:
         API call to model endpoint for audio content
         """
         try:
-            if apiKeyName and apiKeyValue:
+            if apiKeyName == "NONE" and apiKeyValue == "NONE":
+                headers =   {"Content-Type": "application/json"}
+            elif apiKeyName and apiKeyValue:
                 headers =   {"Content-Type": "application/json", apiKeyName: apiKeyValue }
             elif apiKeyValue and apiKeyName == None:
                 apiKeyName = apiKeyValue

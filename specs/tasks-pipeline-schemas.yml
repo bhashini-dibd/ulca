@@ -36,6 +36,7 @@ components:
           $ref: >-
             https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
             
+
     PipelineConfig:
       required:
         - submitter
