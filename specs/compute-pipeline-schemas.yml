@@ -31,7 +31,7 @@ components:
         PipelineResponse:
           $ref: "#/components/schemas/ResponseList"
 
-    TaskRequests:
+    TaskRequestConfig:
       anyOf:
         - $ref: "#/components/schemas/TranslationRequestConfig"
         - $ref: "#/components/schemas/ASRRequestConfig"
@@ -46,7 +46,7 @@ components:
     PipelineRequestList:
       type: array
       items:
-        $ref: "#/components/schemas/TaskRequests"
+        $ref: "#/components/schemas/TaskRequestConfig"
 
     PipelineInputList:
       type: array
