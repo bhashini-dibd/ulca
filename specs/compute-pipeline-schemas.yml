@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: ULCA - service schema
-  description: The documentation defines the model.
+  description: The document defines request and response schema for compute call to pipeline endpoint.
   contact:
     name: ekstep foundation
     email: contact@ekstep.org

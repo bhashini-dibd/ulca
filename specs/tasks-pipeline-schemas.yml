@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
-  title: ULCA - service schema
-  description: The documentation defines the model.
+  title: Pipeline Tasks Schema
+  description: The schema defines the request and response to identify whether an endpoint supports certain pipeline or not. It returns the pipeline endpoint details and supported model configurations.
   contact:
     name: ekstep foundation
     email: contact@ekstep.org

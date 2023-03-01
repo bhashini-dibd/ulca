@@ -97,21 +97,6 @@ components:
               type: string
               description: expected if the callbackurl requires an API key so as to fetch output
               example: dde19858-b354-4e24-8e92-a7a4b320c066
-        masterApiKey:
-          required:
-            - value
-          type: object
-          description: if endpoint needs authorization in headers to fetch output
-          properties:
-            name:
-              type: string
-              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
-              default: Authorization
-              example: apiKey
-            value:
-              type: string
-              description: expected if the callbackurl requires an API key so as to fetch output
-              example: dde19858-b354-4e24-8e92-a7a4b320c066
         isMultilingualEnabled:
           type: boolean
           default: false
@@ -133,7 +118,7 @@ components:
         - callbackUrl
       type: object
       properties:
-        pipelineCallbackUrl:
+        callbackUrl:
           type: string
           format: url
         inferenceApiKey:

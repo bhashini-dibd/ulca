@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
-  title: ULCA - service schema
-  description: The documentation defines the model.
+  title: ULCA - Pipeline Inference Endpoint Submission
+  description: The documentation defines the schema in which pipeline inference endpoint details are to be submitted.
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
@@ -13,17 +13,52 @@ components:
   schemas:
     PipelineInference:
       required:
+        - name
+        - version
+        - description
+        - refUrl
+        - domain
         - submitter
         - inferenceEndPoint
         - supportedPipelines
+        - taskSpecifications
       type: object
       properties:
+        name:
+          maxLength: 100
+          minLength: 3
+          type: string
+          description: model name that you want your users to see
+          example: vakyansh asr model
+        version:
+          maxLength: 20
+          minLength: 1
+          type: string
+          description: version for the model
+          example: v1
+        description:
+          maxLength: 1000
+          minLength: 25
+          type: string
+          description: brief description about model, its goal, basically something sweet about it
+          example: Speech recognition model for classroom lecture
+        domain:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+        refUrl:
+          maxLength: 200
+          minLength: 5
+          type: string
+          description: github link or url giving further info about the model
+          example: https://github.com/Open-Speech-EkStep/vakyansh-models
+      
         submitter:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/InferenceAPIEndPoint'
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
         supportedPipelines:
           $ref: "#/components/schemas/ListOfPipelines"
+        taskSpecifications:
+          $ref: '#/components/schemas/TaskSpecifications'
     
     ListOfPipelines:
       type: array
@@ -44,7 +79,7 @@ components:
         callbackUrl:
           type: string
           format: url
-        inferenceApiKey:
+        masterApiKey:
           required:
             - value
           type: object
@@ -71,3 +106,36 @@ components:
         
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
 
+    TaskSpecifications:
+      type: array
+      items: 
+        $ref: "#/components/schemas/TaskSpecification"
+
+    TaskSpecification:
+      required:
+        - task
+        - languages
+      type: object
+      properties:
+        task:
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        languages:
+          $ref: '#/components/schemas/LanguagesList'
+
+    LanguagesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/LanguageSchema'
+
+    LanguageSchema:
+      required:
+        - sourceLanguage
+      type: object
+      properties:
+        sourceLanguage:
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        targetLanguage:
+            $ref: >-
+              https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
