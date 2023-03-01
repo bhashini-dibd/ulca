@@ -71,22 +71,22 @@ components:
           $ref: '#/components/schemas/TranslationRequestConfig'
     ASRTask:
       required:
-        - type
+        - task
       type: object
       properties:
-        type:
+        task:
           $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         config:
           $ref: '#/components/schemas/ASRRequestConfig'
     TTSTask:
       required:
-        - type
+        - task
       type: object
       properties:
-        type:
+        task:
           $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         config:
           $ref: '#/components/schemas/TTSRequestConfig'
     TranslationRequestConfig:
