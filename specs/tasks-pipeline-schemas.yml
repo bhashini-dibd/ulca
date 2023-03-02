@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
-  title: ULCA - service schema
-  description: The documentation defines the model.
+  title: Pipeline Tasks Schema
+  description: The schema defines the request and response to identify whether an endpoint supports certain pipeline or not. It returns the pipeline endpoint details and supported model configurations.
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
@@ -13,24 +13,30 @@ components:
   schemas:
     PipelineRequest:
       required:
-        - task
-        - pipelineConfig
+        - pipelineTasks
+        - pipelineRequestConfig
       type: object
       properties:
-        task:
+        pipelineTasks:
           $ref: '#/components/schemas/PipelineTasks'
-        pipelineConfig:
+        pipelineRequestConfig:
           $ref: '#/components/schemas/PipelineConfig'
     PipelineResponse:
       required:
-        - pipelineConfig
+        - pipelineResponseConfig
         - languages
+        - pipelineInferenceAPIEndPoint
       type: object
       properties:
         languages:
           $ref: '#/components/schemas/LanguagesList'
-        pipelineConfig:
-          $ref: '#/components/schemas/InferenceSchemaList'
+        pipelineResponseConfig:
+          $ref: '#/components/schemas/TaskSchemaList'
+        pipelineInferenceAPIEndPoint:
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+            
+
     PipelineConfig:
       required:
         - submitter
@@ -67,22 +73,22 @@ components:
           $ref: '#/components/schemas/TranslationRequestConfig'
     ASRTask:
       required:
-        - type
+        - task
       type: object
       properties:
-        type:
+        task:
           $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         config:
           $ref: '#/components/schemas/ASRRequestConfig'
     TTSTask:
       required:
-        - type
+        - task
       type: object
       properties:
-        type:
+        task:
           $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         config:
           $ref: '#/components/schemas/TTSRequestConfig'
     TranslationRequestConfig:
@@ -126,31 +132,29 @@ components:
           items:
             $ref: >-
               https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
-    InferenceSchema:
+    TaskSchema:
       anyOf:
-        - $ref: '#/components/schemas/TranslationInference'
-        - $ref: '#/components/schemas/ASRInference'
-        - $ref: '#/components/schemas/TTSInference'
+        - $ref: '#/components/schemas/TranslationTaskInference'
+        - $ref: '#/components/schemas/ASRTaskInference'
+        - $ref: '#/components/schemas/TTSTaskInference'
       discriminator:
         propertyName: taskType
         mapping:
-          translation: '#/components/schemas/TranslationInference'
-          asr: '#/components/schemas/ASRInference'
-          tts: '#/components/schemas/TTSInference'
-    InferenceSchemaList:
+          translation: '#/components/schemas/TranslationTaskInference'
+          asr: '#/components/schemas/TranslationTaskInference'
+          tts: '#/components/schemas/TranslationTaskInference'
+    TaskSchemaList:
       type: array
       items:
-        $ref: '#/components/schemas/InferenceSchema'
+        $ref: '#/components/schemas/TaskSchema'
     LanguagesList:
       type: array
       items:
         $ref: '#/components/schemas/LanguageSchema'
-    TranslationInference:
+    TranslationTaskInference:
       required:
         - task
         - config
-        - callbackUrl
-        - inferenceAPIKey
       type: object
       properties:
         callbackUrl:
@@ -184,11 +188,10 @@ components:
           description: list of
           items:
             $ref: '#/components/schemas/TranslationResponseConfig'
-    ASRInference:
+    ASRTaskInference:
       required:
         - task
-        - callbackUrl
-        - inferenceAPIKey
+        - config
       type: object
       properties:
         callbackUrl:
@@ -222,11 +225,10 @@ components:
           description: list of
           items:
             $ref: '#/components/schemas/ASRResponseConfig'
-    TTSInference:
+    TTSTaskInference:
       required:
         - task
-        - callbackUrl
-        - inferenceAPIKey
+        - config
       type: object
       properties:
         callbackUrl:
@@ -263,7 +265,6 @@ components:
     TranslationResponseConfig:
       required:
         - language
-        - modelId
       type: object
       properties:
         modelId:
@@ -280,7 +281,6 @@ components:
     TTSResponseConfig:
       required:
         - language
-        - modelId
       type: object
       properties:
         modelId:
@@ -303,7 +303,6 @@ components:
     ASRResponseConfig:
       required:
         - language
-        - modelId
       type: object
       properties:
         modelId:
