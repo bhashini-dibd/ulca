@@ -51,7 +51,13 @@ components:
         - $ref: '#/components/schemas/TranslationTask'
         - $ref: '#/components/schemas/ASRTask'
         - $ref: '#/components/schemas/TTSTask'
-        
+      discriminator:
+        propertyName: taskType
+        mapping:
+          translation: '#/components/schemas/TranslationTaskInference'
+          asr: '#/components/schemas/TranslationTaskInference'
+          tts: '#/components/schemas/TranslationTaskInference'
+          
     PipelineTasks:
       type: array
       items:
