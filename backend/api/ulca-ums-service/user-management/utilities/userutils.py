@@ -1,4 +1,5 @@
 import uuid
+from uuid import uuid4
 import time
 import re
 import bcrypt
@@ -16,7 +17,7 @@ import requests
 from flask_mail import Mail, Message
 from app import mail
 from flask import render_template
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION
+from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,max_api_key
 
 import logging
 
@@ -45,6 +46,14 @@ class UserUtils:
 
         return(uuid.uuid4().hex)
 
+
+    @staticmethod
+    def generate_user_api_key():
+        eventId = datetime.now().strftime('%S') + str(uuid4())
+        return eventId
+
+#take timestamp epoch and add/generate uid based on this time. 38 character
+#by default apiKey will be 1. Maximum apiKey should be 5. if list has only 1 value, we should be able to call generateApiKey. If user has 5 apiKey already existed=>reached max apiKey
 
     @staticmethod
     def validate_email_format(email):
@@ -578,6 +587,37 @@ class UserUtils:
             return post_error("Database exception","Exception occurred:{}".format(str(e)),None)
 
 
+    @staticmethod
+    def get_userAPI(userId):
+        try:
+            ulca_api_keys = []
+            coll = db.get_db()[USR_MONGO_COLLECTION]
+            apiKeys = coll.find({"userID": userId})
+            if apiKeys:
+                if "userApiKey" in ak.keys():
+                    if len(ak["userApiKey"]) >= max_api_key:
+                        return post_error("Maximum number of keys registered in ULCA, Please delete some to create new apiKeys",None)
+                    for ak in apiKeys:
+                        ulca_api_keys.append(ak["userApiKey"])
+                else : 
+                    return post_error("Couldn't find userApiKey",None)
+            if apiKeys.count() == 0: #return list of available ulca-api-keys
+                log.info("Not a valid userId")
+                return post_error("Not Valid","This userId address is not registered with ULCA",None)
+            
+            return ulca_api_keys
+        except Exception as e:
+            log.exception("Not a valid userId")
+            return post_error("error processing ULCA userId:{}".format(str(e)),None)
+
+    @staticmethod
+    def revoke_userApiKey(userid, userapikey):
+        collection = db.get_db()[USR_MONGO_COLLECTION]
+
+        revoke = collection.update({"userID":userid}, {"$pull":{"userApiKey": userapikey}})
+        log.info(f"revoke apiKEYS {revoke}")
+        if revoke["nMatched"] == 1 and revoke["nModified"] == 1:
+            return "successfully revoked apiKey"
 
 
                 

@@ -174,3 +174,24 @@ class Health(Resource):
         return jsonify(response)
 
 
+class getApiKey(Resource):
+    def get(self):
+        body = request.get_json()
+        if "userID" not in body["users"]:
+            return post_error("Data Missing", "users not found", None), 400
+        user = body['userID']
+        #for usr in user:
+        findUser = UserUtils.get_userAPI(user)
+        res = CustomResponse(Status.SUCCESS_USER_APIKEY.value, findUser)
+        return res.getresjson(), 200
+
+
+class revokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys() and "userApiKey" not in body.keys():
+            return post_error("Data Missing", "userID and userApiKey not found", None), 400
+        
+        userid = body["userID"]
+        userapikey = body["userApiKey"]
+        revokekey = UserUtils.revoke_userApiKey(userid, userapikey)

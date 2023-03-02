@@ -14,6 +14,7 @@ class Status(enum.Enum):
     EMPTY_USR_SEARCH        =   {"message" : "Search result is empty"}
     SUCCESS_USR_SEARCH      =   {"message" : "Search result is ready"}
     SUCCESS_USR_UPDATION    =   {"message" : "User details updated successfully"}
+    SUCCESS_USER_APIKEY     =   {"message" : "UserApiKey found successfully"}
 
 
    
