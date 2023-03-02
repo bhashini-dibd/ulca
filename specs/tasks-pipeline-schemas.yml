@@ -47,7 +47,7 @@ components:
           description: Submitter Name
           example: AI4Bharat
     PipelineTask:
-      anyOf:
+      oneOf:
         - $ref: '#/components/schemas/TranslationTask'
         - $ref: '#/components/schemas/ASRTask'
         - $ref: '#/components/schemas/TTSTask'
@@ -134,7 +134,7 @@ components:
             $ref: >-
               https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
     TaskSchema:
-      anyOf:
+      oneOf:
         - $ref: '#/components/schemas/TranslationTaskInference'
         - $ref: '#/components/schemas/ASRTaskInference'
         - $ref: '#/components/schemas/TTSTaskInference'
