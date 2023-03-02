@@ -195,3 +195,17 @@ class revokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
         userid = body["userID"]
         userapikey = body["userApiKey"]
         revokekey = UserUtils.revoke_userApiKey(userid, userapikey)
+        res = CustomResponse(Status.SUCCESS_USER_APIKEY.value, revokekey)
+        return res.getresjson(), 200
+
+class generateApiKey(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys():
+            return post_error("Data Missing", "userID and userApiKey not found", None), 400
+        user = body["userID"]
+        findUser_ = UserUtils.get_userAPI(user)
+        usr = UserUtils.generate_user_api_key()
+        log.info(f"users resources {usr}")
+        
+
