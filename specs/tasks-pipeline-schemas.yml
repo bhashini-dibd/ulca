@@ -34,7 +34,7 @@ components:
           $ref: '#/components/schemas/TaskSchemaList'
         pipelineInferenceAPIEndPoint:
           $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
             
 
     PipelineConfig:
@@ -51,12 +51,7 @@ components:
         - $ref: '#/components/schemas/TranslationTask'
         - $ref: '#/components/schemas/ASRTask'
         - $ref: '#/components/schemas/TTSTask'
-      discriminator:
-        propertyName: taskType
-        mapping:
-          translation: '#/components/schemas/TranslationInference'
-          asr: '#/components/schemas/ASRInference'
-          tts: '#/components/schemas/TTSInference'
+        
     PipelineTasks:
       type: array
       items:
