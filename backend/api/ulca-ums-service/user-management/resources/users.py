@@ -174,38 +174,43 @@ class Health(Resource):
         return jsonify(response)
 
 
-class getApiKey(Resource):
+class GetApiKey(Resource):
     def get(self):
         body = request.get_json()
-        if "userID" not in body["users"]:
+        if "userID" not in body.keys():
             return post_error("Data Missing", "users not found", None), 400
         user = body['userID']
         #for usr in user:
-        findUser = UserUtils.get_userAPI(user)
-        res = CustomResponse(Status.SUCCESS_USER_APIKEY.value, findUser)
+        userAPIKeys = UserUtils.get_user_api_keys(user)
+        res = CustomResponse(Status.SUCCESS_USER_APIKEY.value, userAPIKeys)
         return res.getresjson(), 200
 
 
-class revokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
+class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
     def post(self):
         body = request.get_json()
-        if "userID" not in body.keys() and "userApiKey" not in body.keys():
-            return post_error("Data Missing", "userID and userApiKey not found", None), 400
-        
+        if "userID" not in body.keys(): 
+            return post_error("400", "userID not found", None), 400
+        if "userApiKey" not in body.keys():
+            return post_error("400", "userApiKey not found", None), 400
         userid = body["userID"]
         userapikey = body["userApiKey"]
         revokekey = UserUtils.revoke_userApiKey(userid, userapikey)
         res = CustomResponse(Status.SUCCESS_USER_APIKEY.value, revokekey)
         return res.getresjson(), 200
 
-class generateApiKey(Resource):
+class GenerateApiKey(Resource):
     def post(self):
         body = request.get_json()
         if "userID" not in body.keys():
-            return post_error("Data Missing", "userID and userApiKey not found", None), 400
+            return post_error("400", "userID not found", None), 400
         user = body["userID"]
-        findUser_ = UserUtils.get_userAPI(user)
-        usr = UserUtils.generate_user_api_key()
-        log.info(f"users resources {usr}")
-        
+        user_api_keys = UserUtils.get_user_api_keys(user)
+        if isinstance(user_api_keys,list):
+            if len(user_api_keys) < 5:
+                usr = UserUtils.generate_user_api_key()
+                log.info(f"Generating API Key {usr}")
+                #Need to store in mongo
+            else:
+                return post_error("400", "Maximum Key Limit Reached", None), 400
 

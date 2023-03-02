@@ -586,29 +586,49 @@ class UserUtils:
             log.exception("exception while validating username/email"+str(e),  MODULE_CONTEXT, e)
             return post_error("Database exception","Exception occurred:{}".format(str(e)),None)
 
-
+    
     @staticmethod
-    def get_userAPI(userId):
+    def get_user_api_keys(userId):
         try:
             ulca_api_keys = []
             coll = db.get_db()[USR_MONGO_COLLECTION]
-            apiKeys = coll.find({"userID": userId})
-            if apiKeys:
-                if "userApiKey" in ak.keys():
-                    if len(ak["userApiKey"]) >= max_api_key:
-                        return post_error("Maximum number of keys registered in ULCA, Please delete some to create new apiKeys",None)
-                    for ak in apiKeys:
-                        ulca_api_keys.append(ak["userApiKey"])
-                else : 
-                    return post_error("Couldn't find userApiKey",None)
-            if apiKeys.count() == 0: #return list of available ulca-api-keys
+            response = coll.find_one({"userID": userId})
+            log.info(response)
+            log.info(type(response))
+            if isinstance(response,dict):
+                if 'userApiKey' in response.keys() and isinstance(response['userApiKey'],list):
+                    return response['userApiKey'] #Return the list of user api keys
+                else:
+                    return [] #If user doesn't have any api keys
+            else:
                 log.info("Not a valid userId")
                 return post_error("Not Valid","This userId address is not registered with ULCA",None)
-            
-            return ulca_api_keys
         except Exception as e:
             log.exception("Not a valid userId")
             return post_error("error processing ULCA userId:{}".format(str(e)),None)
+
+    # @staticmethod
+    # def get_userAPI(userId):
+    #     try:
+    #         ulca_api_keys = []
+    #         coll = db.get_db()[USR_MONGO_COLLECTION]
+    #         apiKeys = coll.find({"userID": userId})
+    #         if apiKeys:
+    #             if "userApiKey" in ak.keys():
+    #                 if len(ak["userApiKey"]) >= max_api_key:
+    #                     return post_error("Maximum number of keys registered in ULCA, Please delete some to create new apiKeys",None)
+    #                 for ak in apiKeys:
+    #                     ulca_api_keys.append(ak["userApiKey"])
+    #             else : 
+    #                 return post_error("Couldn't find userApiKey",None)
+    #         if apiKeys.count() == 0: #return list of available ulca-api-keys
+    #             log.info("Not a valid userId")
+    #             return post_error("Not Valid","This userId address is not registered with ULCA",None)
+            
+    #         return ulca_api_keys
+    #     except Exception as e:
+    #         log.exception("Not a valid userId")
+    #         return post_error("error processing ULCA userId:{}".format(str(e)),None)
 
     @staticmethod
     def revoke_userApiKey(userid, userapikey):
