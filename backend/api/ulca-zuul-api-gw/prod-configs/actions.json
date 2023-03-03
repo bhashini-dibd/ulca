@@ -73,6 +73,30 @@
       "description": "API to register"
     },
     {
+      "id": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+      "uri": "/ulca/user-mgmt/v1/users/generateApiKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate user api key"
+    },
+    {
+      "id": "43df383c-7857-4302-b64a-48066879739e",
+      "uri": "/ulca/user-mgmt/v1/users/revokeApiKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to revoke user api key"
+    },
+    {
+      "id": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+      "uri": "/ulca/user-mgmt/v1/users/getApiKeys",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get all user api keys"
+    },
+    {
       "id": "6eae39c6-d705-4ee2-9ec6-c2eb445e9f02",
       "uri": "/ulca/user-mgmt/v1/users/verify-user",
       "module": "ULCA-UMS",
