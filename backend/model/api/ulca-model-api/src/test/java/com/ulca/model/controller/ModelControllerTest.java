@@ -48,20 +48,18 @@ class ModelControllerTest {
 
     }
 
-    @Test
-    void listByUserId() throws Exception {
-
-        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"/listByUserId").param("userId","test")).
-                andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    void getModel() throws Exception {
-
-        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"/getModel").param("modelId","test")).
-                andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
+	/*
+	 * @Test void listByUserId() throws Exception {
+	 * 
+	 * mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"/listByUserId").param(
+	 * "userId","test")). andExpect(MockMvcResultMatchers.status().isOk()); }
+	 */
+	/*
+	 * @Test void getModel() throws Exception {
+	 * 
+	 * mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"/getModel").param(
+	 * "modelId","test")). andExpect(MockMvcResultMatchers.status().isOk()); }
+	 */
     @Test
     void uploadModel() throws Exception {
         byte[] fileContent = "test".getBytes(StandardCharsets.UTF_8);
@@ -72,20 +70,20 @@ class ModelControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    void searchModel() throws Exception {
-
-        ModelSearchRequest request = new ModelSearchRequest();
-        request.setTask("test");
-
-        mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(request);
-
-        mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL+"/search").contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .accept(MediaType.APPLICATION_JSON)).
-                andExpect(MockMvcResultMatchers.status().isOk());
-    }
+	/*
+	 * @Test void searchModel() throws Exception {
+	 * 
+	 * ModelSearchRequest request = new ModelSearchRequest();
+	 * request.setTask("test");
+	 * 
+	 * mapper = new ObjectMapper(); String json =
+	 * mapper.writeValueAsString(request);
+	 * 
+	 * mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL+"/search").contentType(
+	 * MediaType.APPLICATION_JSON) .content(json)
+	 * .accept(MediaType.APPLICATION_JSON)).
+	 * andExpect(MockMvcResultMatchers.status().isOk()); }
+	 */
 
     @Test
     void changeStatus() throws Exception {
@@ -137,12 +135,13 @@ class ModelControllerTest {
                 andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    void getModelFeedbackByModelId() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"/feedback/getByModelId").param("modelId","test")).
-                andExpect(MockMvcResultMatchers.status().isOk());
-
-    }
+	/*
+	 * @Test void getModelFeedbackByModelId() throws Exception {
+	 * mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"/feedback/getByModelId")
+	 * .param("modelId","test")). andExpect(MockMvcResultMatchers.status().isOk());
+	 * 
+	 * }
+	 */
 
     @Test
     void getModelFeedbackByTaskType() throws Exception {

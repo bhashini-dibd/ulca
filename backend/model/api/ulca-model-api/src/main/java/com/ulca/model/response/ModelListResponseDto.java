@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelExtendedDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ModelListResponseDto extends ModelExtended {
+public class ModelListResponseDto extends ModelExtendedDto {
 	
 	private List<String> metric;
 	List<BenchmarkProcess> benchmarkPerformance ;
