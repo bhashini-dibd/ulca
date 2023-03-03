@@ -25,13 +25,12 @@ class UserAuthenticationModel(object):
 
         try:
             user_keys = UserUtils.get_data_from_keybase(user_email,keys=True)
-            collections = get_db()[USR_MONGO_COLLECTION]
             if not user_keys:
-                user_keys   =   UserUtils.generate_api_keys(user_email)
+                    user_keys   =   UserUtils.generate_api_keys(user_email)
             if "errorID" in user_keys:
                 return user_keys
 
-            
+            collections = get_db()[USR_MONGO_COLLECTION]
             #fetching user data
             user_details = collections.find({"email": user_email, "isActive": True,"isVerified":True},{"_id":0,"password":0})
             if user_details.count() == 0:

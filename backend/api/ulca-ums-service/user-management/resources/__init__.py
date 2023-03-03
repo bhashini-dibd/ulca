@@ -1,2 +1,2 @@
-from .users import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, SearchRoles, Health, GetApiKey, RevokeApiKey, GenerateApiKey
+from .users import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, SearchRoles, Health
 from .user_auth import UserLogin, UserLogout, ApiKeySearch, ForgotPassword, ResetPassword, VerifyUser, ActivateDeactivateUser, VerifyToken

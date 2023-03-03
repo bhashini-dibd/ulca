@@ -114,7 +114,7 @@ public class OcrBenchmark {
 			OCRRequest ocrRequest = ocrInference.getRequest();
 			ocrRequest.setImage(imageFiles);
 
-			String resultText = okHttpClientService.ocrCompute(callBackUrl, ocrRequest);
+			String resultText = okHttpClientService.ocrCompute(inferenceAPIEndPoint, ocrRequest);
 
 			log.info("result :: " + resultText);
 			log.info("end time for calling the inference end point");
