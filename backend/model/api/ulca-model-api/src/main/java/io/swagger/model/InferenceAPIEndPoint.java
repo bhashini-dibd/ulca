@@ -3,6 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -65,11 +67,12 @@ public class InferenceAPIEndPoint   {
    **/
   @Schema(description = "")
   
-    @Valid
-    public InferenceAPIEndPointInferenceApiKey getInferenceApiKey() {
-    return inferenceApiKey;
-  }
-
+	
+	  @Valid 
+	  public InferenceAPIEndPointInferenceApiKey getInferenceApiKey() {
+	  return inferenceApiKey; 
+	  }
+	 
   public void setInferenceApiKey(InferenceAPIEndPointInferenceApiKey inferenceApiKey) {
     this.inferenceApiKey = inferenceApiKey;
   }
@@ -161,7 +164,7 @@ public class InferenceAPIEndPoint   {
     sb.append("class InferenceAPIEndPoint {\n");
     
     sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
-    sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
+   sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
     sb.append("    schema: ").append(toIndentedString(schema)).append("\n");
     sb.append("    isSyncApi: ").append(toIndentedString(isSyncApi)).append("\n");
     sb.append("    asyncApiDetails: ").append(toIndentedString(asyncApiDetails)).append("\n");

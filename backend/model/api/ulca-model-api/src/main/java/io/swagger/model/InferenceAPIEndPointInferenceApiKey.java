@@ -13,12 +13,12 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "if endpoint needs authorization in headers to fetch output")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-10T10:51:37.068454836Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-14T10:04:27.402932281Z[GMT]")
 
 
 public class InferenceAPIEndPointInferenceApiKey   {
   @JsonProperty("name")
-  private String name = "apiKey";
+  private String name = "Authorization";
 
   @JsonProperty("value")
   private String value = null;
@@ -29,10 +29,10 @@ public class InferenceAPIEndPointInferenceApiKey   {
   }
 
   /**
-   * expected if the callbackurl requires an API key with a particular name. `apiKey` will be considered as default name if value is provided without a name
+   * expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
    * @return name
    **/
-  @Schema(example = "apiKey", description = "expected if the callbackurl requires an API key with a particular name. `apiKey` will be considered as default name if value is provided without a name")
+  @Schema(example = "apiKey", description = "expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name")
   
     public String getName() {
     return name;
