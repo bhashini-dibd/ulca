@@ -15,8 +15,9 @@ class UserManagementRepositories:
             users_data                  =   {}
             hashed                      =   UserUtils.hash_password(user["password"])
             user_id                     =   UserUtils.generate_user_id()
-
+            user_api_key                =   UserUtils.generate_user_api_key()
             users_data["userID"]        =   user_id
+            users_data["userApiKey"]    =   user_api_key#should be a list
             users_data["email"]         =   user["email"]
             users_data["firstName"]     =   user["firstName"]
             users_data["password"]      =   hashed.decode("utf-8")
@@ -76,3 +77,6 @@ class UserManagementRepositories:
         result = userModel.get_roles_from_role_sheet()
         if result is not None:
             return result
+
+    # def get_user_apiKey(self):
+    #     result = UserUtils.
