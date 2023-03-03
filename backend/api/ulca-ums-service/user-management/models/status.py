@@ -15,6 +15,7 @@ class Status(enum.Enum):
     SUCCESS_USR_SEARCH      =   {"message" : "Search result is ready"}
     SUCCESS_USR_UPDATION    =   {"message" : "User details updated successfully"}
     SUCCESS_USER_APIKEY     =   {"message" : "UserApiKey found successfully"}
+    SUCCESS_GENERATE_APIKEY =  {"message" : "UserApiKey generated successfully"}
 
 
    
