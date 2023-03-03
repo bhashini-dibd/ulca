@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "stage life-cycle of model before it gets published")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:21:00.339Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:57:29.275643112Z[GMT]")
 
 
 public class Timeline   {

@@ -15,120 +15,121 @@ import javax.validation.constraints.*;
  * TxtLangDetectionInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
 
-public class TxtLangDetectionInference implements OneOfInferenceAPIEndPointSchema {
-	/*
-	 * @JsonProperty("taskType") private SupportedTasks taskType = null;
-	 */
 
-	@JsonProperty("request")
-	private TxtLangDetectionRequest request = null;
+public class TxtLangDetectionInference  implements OneOfInferenceAPIEndPointSchema {
+  @JsonProperty("taskType")
+  private SupportedTasks taskType = null;
 
-	@JsonProperty("response")
-	private TxtLangDetectionResponse response = null;
+  @JsonProperty("request")
+  private TxtLangDetectionRequest request = null;
 
-	/*
-	 * public TxtLangDetectionInference taskType(SupportedTasks taskType) {
-	 * this.taskType = taskType; return this; }
-	 * 
-	 *//**
-		 * Get taskType
-		 * 
-		 * @return taskType
-		 **//*
-			 * @Schema(required = true, description = "")
-			 * 
-			 * @NotNull
-			 * 
-			 * @Valid public SupportedTasks getTaskType() { return taskType; }
-			 * 
-			 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
-			 * }
-			 */
+  @JsonProperty("response")
+  private TxtLangDetectionResponse response = null;
 
-	public TxtLangDetectionInference request(TxtLangDetectionRequest request) {
-		this.request = request;
-		return this;
-	}
+  public TxtLangDetectionInference taskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+    return this;
+  }
 
-	/**
-	 * Get request
-	 * 
-	 * @return request
-	 **/
-	@Schema(required = true, description = "")
-	@NotNull
+  /**
+   * Get taskType
+   * @return taskType
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
 
-	@Valid
-	public TxtLangDetectionRequest getRequest() {
-		return request;
-	}
+    @Valid
+    public SupportedTasks getTaskType() {
+    return taskType;
+  }
 
-	public void setRequest(TxtLangDetectionRequest request) {
-		this.request = request;
-	}
+  public void setTaskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+  }
 
-	public TxtLangDetectionInference response(TxtLangDetectionResponse response) {
-		this.response = response;
-		return this;
-	}
+  public TxtLangDetectionInference request(TxtLangDetectionRequest request) {
+    this.request = request;
+    return this;
+  }
 
-	/**
-	 * Get response
-	 * 
-	 * @return response
-	 **/
-	@Schema(description = "")
+  /**
+   * Get request
+   * @return request
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
 
-	@Valid
-	public TxtLangDetectionResponse getResponse() {
-		return response;
-	}
+    @Valid
+    public TxtLangDetectionRequest getRequest() {
+    return request;
+  }
 
-	public void setResponse(TxtLangDetectionResponse response) {
-		this.response = response;
-	}
+  public void setRequest(TxtLangDetectionRequest request) {
+    this.request = request;
+  }
 
-	@Override
-	public boolean equals(java.lang.Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		TxtLangDetectionInference txtLangDetectionInference = (TxtLangDetectionInference) o;
-		return //Objects.equals(this.taskType, txtLangDetectionInference.taskType)
-				Objects.equals(this.request, txtLangDetectionInference.request)
-				&& Objects.equals(this.response, txtLangDetectionInference.response);
-	}
+  public TxtLangDetectionInference response(TxtLangDetectionResponse response) {
+    this.response = response;
+    return this;
+  }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash( request, response);
-	}
+  /**
+   * Get response
+   * @return response
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public TxtLangDetectionResponse getResponse() {
+    return response;
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("class TxtLangDetectionInference {\n");
+  public void setResponse(TxtLangDetectionResponse response) {
+    this.response = response;
+  }
 
-		//sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
-		sb.append("    request: ").append(toIndentedString(request)).append("\n");
-		sb.append("    response: ").append(toIndentedString(response)).append("\n");
-		sb.append("}");
-		return sb.toString();
-	}
 
-	/**
-	 * Convert the given object to string with each line indented by 4 spaces
-	 * (except the first line).
-	 */
-	private String toIndentedString(java.lang.Object o) {
-		if (o == null) {
-			return "null";
-		}
-		return o.toString().replace("\n", "\n    ");
-	}
+  @Override
+  public boolean equals(java.lang.Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    TxtLangDetectionInference txtLangDetectionInference = (TxtLangDetectionInference) o;
+    return Objects.equals(this.taskType, txtLangDetectionInference.taskType) &&
+        Objects.equals(this.request, txtLangDetectionInference.request) &&
+        Objects.equals(this.response, txtLangDetectionInference.response);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(taskType, request, response);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class TxtLangDetectionInference {\n");
+    
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+    sb.append("    request: ").append(toIndentedString(request)).append("\n");
+    sb.append("    response: ").append(toIndentedString(response)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
 }

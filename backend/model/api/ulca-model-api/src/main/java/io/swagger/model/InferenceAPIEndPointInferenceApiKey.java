@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "if endpoint needs authorization in headers to fetch output")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-14T10:04:27.402932281Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
 
 
 public class InferenceAPIEndPointInferenceApiKey   {
