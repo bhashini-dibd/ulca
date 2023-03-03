@@ -34,7 +34,7 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
-    GetApiKey, "/v1/users/getApiKey"
+    GetApiKey, "/v1/users/getApiKeys"
 )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
