@@ -25,14 +25,9 @@ class UserAuthenticationModel(object):
 
         try:
             user_keys = UserUtils.get_data_from_keybase(user_email,keys=True)
-            user_api_key = UserUtils.get_userAPI(user_email)# 
             collections = get_db()[USR_MONGO_COLLECTION]
             if not user_keys:
                 user_keys   =   UserUtils.generate_api_keys(user_email)
-            if not user_api_key:
-                create_usr_apiKey = UserUtils.generate_user_api_key()
-                apiKey = collections.update({"email": user_email}, {"$set": {"userApiKey" : [create_usr_apiKey]}})
-                log.info(f"apiKey at line 35 {apiKey}")
             if "errorID" in user_keys:
                 return user_keys
 
