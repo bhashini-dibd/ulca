@@ -175,7 +175,7 @@ class Health(Resource):
 
 
 class GetApiKey(Resource):
-    def get(self):
+    def post(self):
         body = request.get_json()
         if "userID" not in body.keys():
             return post_error("Data Missing", "users not found", None), 400
