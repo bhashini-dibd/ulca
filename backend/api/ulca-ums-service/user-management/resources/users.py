@@ -5,6 +5,7 @@ from utilities import UserUtils
 from flask import request, jsonify
 import config
 import logging
+from config import MAX_API_KEY
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -210,7 +211,7 @@ class GenerateApiKey(Resource):
             return post_error("400", "userID not found", None), 400
         user = body["userID"]
         user_api_keys = UserUtils.get_user_api_keys(user)
-        if isinstance(user_api_keys,list) and len(user_api_keys) < 5:
+        if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
             generatedapikey = UserUtils.generate_user_api_key()
             UserUtils.insert_generated_user_api_key(user,generatedapikey)
             res = CustomResponse(Status.SUCCESS_GENERATE_APIKEY.value, generatedapikey)
