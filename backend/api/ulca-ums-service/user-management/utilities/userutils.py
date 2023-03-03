@@ -18,7 +18,7 @@ from flask_mail import Mail, Message
 from app import mail
 from flask import render_template
 from bson import json_util
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,max_api_key
+from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION
 
 import logging
 
@@ -598,7 +598,6 @@ class UserUtils:
     @staticmethod
     def get_user_api_keys(userId):
         try:
-            ulca_api_keys = []
             coll = db.get_db()[USR_MONGO_COLLECTION]
             response = coll.find_one({"userID": userId})
             log.info(response)
