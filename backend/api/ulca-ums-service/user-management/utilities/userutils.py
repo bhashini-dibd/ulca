@@ -578,6 +578,37 @@ class UserUtils:
             return post_error("Database exception","Exception occurred:{}".format(str(e)),None)
 
 
+    @staticmethod
+    def get_userAPI(userId):
+        try:
+            ulca_api_keys = []
+            coll = db.get_db()[USR_MONGO_COLLECTION]
+            apiKeys = coll.find({"userID": userId})
+            if apiKeys:
+                if "userApiKey" in ak.keys():
+                    if len(ak["userApiKey"]) >= max_api_key:
+                        return post_error("Maximum number of keys registered in ULCA, Please delete some to create new apiKeys",None)
+                    for ak in apiKeys:
+                        ulca_api_keys.append(ak["userApiKey"])
+                else : 
+                    return post_error("Couldn't find userApiKey",None)
+            if apiKeys.count() == 0: #return list of available ulca-api-keys
+                log.info("Not a valid userId")
+                return post_error("Not Valid","This userId address is not registered with ULCA",None)
+            
+            return ulca_api_keys
+        except Exception as e:
+            log.exception("Not a valid userId")
+            return post_error("error processing ULCA userId:{}".format(str(e)),None)
+
+    @staticmethod
+    def revoke_userApiKey(userid, userapikey):
+        collection = db.get_db()[USR_MONGO_COLLECTION]
+
+        revoke = collection.update({"userID":userid}, {"$pull":{"userApiKey": userapikey}})
+        log.info(f"revoke apiKEYS {revoke}")
+        if revoke["nMatched"] == 1 and revoke["nModified"] == 1:
+            return "successfully revoked apiKey"
 
 
                 
