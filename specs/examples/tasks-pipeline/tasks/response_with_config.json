@@ -1,0 +1,44 @@
+{
+    "languages" : [
+        {
+            "sourceLanguage": "en",
+            "targetLanguageList":["hi"]
+        }
+    ],
+    "pipelineInferenceAPIEndPoint": {
+        "callbackUrl" : "URL goes here",
+        "inferenceApiKey" : {
+            "name" : "Auth",
+            "value": "23432egtre6y5"
+        }
+    },
+    "pipelineResponseConfig": [
+        {
+            "tasktype" : "asr",
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "en"
+                }
+            }
+        },
+        {
+            "task" : {
+                "type" : "translation"
+            },
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "en",
+                    "targetLanguage" : "hi"
+                }
+            }
+        },
+        {
+            "tasktype" : "tts",
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "hi"
+                }
+            }
+        }
+    ]
+}

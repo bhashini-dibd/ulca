@@ -1,0 +1,47 @@
+{
+    "pipelineTasks": [
+        {
+            "serviceId": "ai4bharat/conformer-en-gpu--t4",
+            "task": {
+                "type": "asr"
+            },
+            "config": {
+                "language": {
+                    "sourceLanguage": "en"
+                },
+                "audioFormat": "wav"
+            }
+        },
+        {
+            "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4",
+            "task": {
+                "type": "translation"
+            },
+            "config": {
+                "language": {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "hi"
+                }
+            }
+        },
+        {
+            "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4",
+            "task": {
+                "type": "tts"
+            },
+            "config": {
+                "language": {
+                    "sourceLanguage": "hi"
+                },
+                "gender": "male"
+            }
+        }
+    ],
+    "inputData": {
+        "audio": [
+            {
+                "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_english.wav"
+            }
+        ]
+    }
+}

@@ -1,0 +1,105 @@
+{
+    "languages" : [
+        {
+            "sourceLanguage": "en",
+            "targetLanguageList":["hi","te"]
+        },
+        {
+            "sourceLanguage": "hi",
+            "targetLanguageList":["mr","te"]
+        }
+    ],
+    "pipelineInferenceAPIEndPoint": {
+        "callbackUrl" : "URL goes here",
+        "inferenceApiKey" : {
+            "name" : "Auth",
+            "value": "23432egtre6y5"
+        }
+    },
+    "pipelineResponseConfig": [
+        {
+            "tasktype" : "asr",
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "en"
+                }
+            }
+        },
+        {
+            "task" : {
+                "type" : "translation"
+            },
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "en",
+                    "targetLanguage" : "hi"
+                }
+            }
+        },
+        {
+            "task" : {
+                "type" : "translation"
+            },
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "en",
+                    "targetLanguage" : "te"
+                }
+            }
+        },
+        {
+            "tasktype" : "tts",
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "te"
+                }
+            }
+        },
+        {
+            "tasktype" : "tts",
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "hi"
+                }
+            }
+        }
+        {
+            "tasktype" : "asr",
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "hi"
+                }
+            }
+        },
+        {
+            "task" : {
+                "type" : "translation"
+            },
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "hi",
+                    "targetLanguage" : "mr"
+                }
+            }
+        },
+        {
+            "task" : {
+                "type" : "translation"
+            },
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "hi",
+                    "targetLanguage" : "te"
+                }
+            }
+        },
+        {
+            "tasktype" : "tts",
+            "config" : {
+                "language" : {
+                    "sourceLanguage" : "mr"
+                }
+            }
+        }
+    ]
+}
