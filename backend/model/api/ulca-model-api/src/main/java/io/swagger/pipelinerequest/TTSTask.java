@@ -19,12 +19,12 @@ import javax.validation.constraints.*;
 
 public class TTSTask  implements PipelineTask {
   @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+  private String taskType = null;
 
   @JsonProperty("config")
   private TTSRequestConfig config = null;
 
-  public TTSTask taskType(SupportedTasks taskType) {
+  public TTSTask taskType(String taskType) {
     this.taskType = taskType;
     return this;
   }
@@ -37,11 +37,11 @@ public class TTSTask  implements PipelineTask {
       @NotNull
 
     @Valid
-    public SupportedTasks getTaskType() {
+    public String getTaskType() {
     return taskType;
   }
 
-  public void setTaskType(SupportedTasks taskType) {
+  public void setTaskType(String taskType) {
     this.taskType = taskType;
   }
 
