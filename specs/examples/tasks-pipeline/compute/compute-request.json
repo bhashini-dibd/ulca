@@ -1,7 +1,7 @@
 {
     "pipelineTasks": [
         {
-            "serviceId": "ai4bharat/conformer-en-gpu--t4",
+            "serviceId": "",
             "task": {
                 "type": "asr"
             },
@@ -14,7 +14,7 @@
             }
         },
         {
-            "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4",
+            "serviceId": "",
             "task": {
                 "type": "translation"
             },
@@ -26,7 +26,7 @@
             }
         },
         {
-            "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4",
+            "serviceId": "",
             "task": {
                 "type": "tts"
             },
