@@ -269,10 +269,11 @@ components:
     TranslationResponseConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
-          type: integer
+        serviceId:
+          type: string
           description: Unique identifier of model
           example: 103
         language:
@@ -284,10 +285,10 @@ components:
           $ref: '#/components/schemas/SupportedFormats'
     TTSResponseConfig:
       required:
-        - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: string
           description: Unique identifier of model
           example: 103
@@ -307,9 +308,10 @@ components:
     ASRResponseConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: string
           description: Unique identifier of model
           example: 103

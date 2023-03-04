@@ -19,87 +19,82 @@
     "pipelineResponseConfig": [
         {
             "tasktype" : "asr",
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "en"
+            "config" : [
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "en"
+                    }
+                },
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "hi"
+                    }
                 }
-            }
+            ]
         },
         {
-            "task" : {
-                "type" : "translation"
-            },
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "en",
-                    "targetLanguage" : "hi"
+            "tasktype" : "translation",
+            "config" : [
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "en",
+                        "targetLanguage" : "hi"
+                    }
+                },
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "en",
+                        "targetLanguage" : "te"
+                    }
+                },
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "hi",
+                        "targetLanguage" : "mr"
+                        }
+                },
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "hi",
+                        "targetLanguage" : "te"
+                    }
                 }
-            }
-        },
-        {
-            "task" : {
-                "type" : "translation"
-            },
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "en",
-                    "targetLanguage" : "te"
-                }
-            }
-        },
-        {
-            "tasktype" : "tts",
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "te"
-                }
-            }
-        },
-        {
-            "tasktype" : "tts",
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "hi"
-                }
-            }
-        }
-        {
-            "tasktype" : "asr",
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "hi"
-                }
-            }
-        },
-        {
-            "task" : {
-                "type" : "translation"
-            },
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "hi",
-                    "targetLanguage" : "mr"
-                }
-            }
-        },
-        {
-            "task" : {
-                "type" : "translation"
-            },
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "hi",
-                    "targetLanguage" : "te"
-                }
-            }
+            ]
         },
         {
             "tasktype" : "tts",
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "mr"
+            "config" : [
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "te"
+                    }
+                },
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "hi"
+                    }
+                },
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "hi"
+                        }
+                },
+                {
+                    "serviceId" : "",
+                    "language" : {
+                        "sourceLanguage" : "mr"
+                    }
                 }
-            }
+            ]
         }
     ]
 }

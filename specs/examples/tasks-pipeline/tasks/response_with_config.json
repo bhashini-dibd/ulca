@@ -15,30 +15,39 @@
     "pipelineResponseConfig": [
         {
             "tasktype" : "asr",
-            "config" : {
+            "config" : [
+              {
+                "serviceId" : "",
                 "language" : {
-                    "sourceLanguage" : "en"
-                }
-            }
+                      "sourceLanguage" : "en"
+                  }
+              }
+          ]
         },
         {
             "task" : {
                 "type" : "translation"
             },
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "en",
-                    "targetLanguage" : "hi"
-                }
-            }
+            "config" : [
+              {
+                  "serviceId" : "",
+                  "language" : {
+                      "sourceLanguage" : "en",
+                      "targetLanguage" : "hi"
+                  }
+              }
+          ]
         },
         {
             "tasktype" : "tts",
-            "config" : {
-                "language" : {
-                    "sourceLanguage" : "hi"
-                }
-            }
+            "config" : [
+              {
+                  "serviceId" : "",
+                  "language" : {
+                      "sourceLanguage" : "hi"
+                  }
+              }
+          ]
         }
     ]
 }
