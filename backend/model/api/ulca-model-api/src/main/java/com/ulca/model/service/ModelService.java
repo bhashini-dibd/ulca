@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -114,6 +116,8 @@ import io.swagger.pipelinerequest.PipelineConfig;
 import io.swagger.pipelinerequest.PipelineRequest;
 import io.swagger.pipelinerequest.PipelineTask;
 import io.swagger.pipelinerequest.PipelineTasks;
+import io.swagger.pipelinerequest.TTSRequestConfig;
+import io.swagger.pipelinerequest.TTSTask;
 import io.swagger.pipelinerequest.TranslationRequestConfig;
 import io.swagger.pipelinerequest.TranslationTask;
 import lombok.extern.slf4j.Slf4j;
@@ -1060,6 +1064,67 @@ public class ModelService {
 			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax");
 		}
 
+		
+		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
+
+	//	ArrayList<String> pipelineTaskSequence = new ArrayList<String>();
+		
+		Set<String> sourceLanguages = new HashSet<String>();
+		Set<String> targetLanguages = new HashSet<String>();
+
+
+		for(PipelineTask pipelineTask : pipelineTasks)
+		{
+			
+	     String task=pipelineTask.getTaskType();
+			if(task=="translation") {
+				
+				TranslationTask translationTask	=(TranslationTask)pipelineTask;
+			    TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
+			    LanguagePair languagePair =translationRequestConfig.getLanguage();
+			     if(languagePair.getSourceLanguage()==null) {
+			    	 
+			    	 for(String sourcelanguage : sourceLanguages) {
+			    		    for(String targetLanguage : targetLanguages) {
+			    		    	
+			    		    	LanguagePair pair = new LanguagePair();
+			    		    	pair.setSourceLanguage(SupportedLanguages.fromValue(sourcelanguage));
+			    		    	pair.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
+			    		    	
+			    		    	
+			    		    }
+			    		    
+			    		 
+			    	 }
+			    	 
+			    	 
+			    	 
+			     }else {
+			    	 
+			    	 
+			     }
+				 
+			}else if(task=="asr") {
+				
+				   ASRTask aSRTask=(ASRTask)pipelineTask;
+				  ASRRequestConfig aSRRequestConfig=aSRTask.getConfig();
+			}else if(task=="tts") {
+				
+				TTSTask tTSTask=(TTSTask)pipelineTask;
+			TTSRequestConfig  tTSRequestConfig	=tTSTask.getConfig();
+				
+			}
+	     
+	     
+	      
+		}
+		
+		
+		
+		
+		
+		
+		
 		// Boolean available =checkTaskSequence(pipelineRequest);
 		// log.info("available :: "+available);
 
@@ -1185,13 +1250,34 @@ public class ModelService {
 			throw new PipelineValidationException("Pipeline model with the request submitter does not exist");
 
 		ArrayList<PipelineTaskSequence> supportedPipelines = pipelineModel.getSupportedPipelines();
-
-		for(PipelineTaskSequence sequence : supportedPipelines)
+          boolean flag = false;
+		for(PipelineTaskSequence sequence : supportedPipelines) {
 
 			log.info("Sequence :: " + sequence);
-
+			ArrayList<String> pipelineTaskSequenceInModel = new ArrayList<String>();
+             for(SupportedTasks task:sequence) {
+            	 pipelineTaskSequenceInModel.add(task.name().toLowerCase());
+            	 
+             }
+			log.info("pipelineTaskSequenceInModel :: "+pipelineTaskSequenceInModel);
+			
+			if(pipelineTaskSequenceInModel.equals(pipelineTaskSequence)) {
+				log.info("available");
+				flag =true;
+				break;
+			}
+			
+			
+			
+		}
+		
+		if (!flag)
+			throw new PipelineValidationException("Requested pipeline in not exist with this submitter!");
+		
+		
+		
 		log.info("pipelineRequest.getPipelineTasks() validated");
-
+         
 
 		return true;
 	}
