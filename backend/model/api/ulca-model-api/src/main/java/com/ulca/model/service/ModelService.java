@@ -1072,7 +1072,7 @@ public class ModelService {
 		Set<String> sourceLanguages = new HashSet<String>();
 		Set<String> targetLanguages = new HashSet<String>();
 
-
+		//For each task in input pipeline request
 		for(PipelineTask pipelineTask : pipelineTasks)
 		{
 			
@@ -1080,38 +1080,195 @@ public class ModelService {
 			if(task=="translation") {
 				
 				TranslationTask translationTask	=(TranslationTask)pipelineTask;
-			    TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
-			    LanguagePair languagePair =translationRequestConfig.getLanguage();
-			     if(languagePair.getSourceLanguage()==null) {
-			    	 
-			    	 for(String sourcelanguage : sourceLanguages) {
-			    		    for(String targetLanguage : targetLanguages) {
-			    		    	
-			    		    	LanguagePair pair = new LanguagePair();
-			    		    	pair.setSourceLanguage(SupportedLanguages.fromValue(sourcelanguage));
-			    		    	pair.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
-			    		    	
-			    		    	
-			    		    }
-			    		    
-			    		 
-			    	 }
-			    	 
-			    	 
-			    	 
-			     }else {
-			    	 
-			    	 
-			     }
-				 
-			}else if(task=="asr") {
+				if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
+				{
+					TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
+					LanguagePair languagePair =translationRequestConfig.getLanguage();
+					if(languagePair.getSourceLanguage()!=null)
+						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
+					if(languagePair.getTargetLanguage()!=null)
+						targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
+					log.info("Source Languages :: "+sourceLanguages);
+					log.info("Target Languages :: "+targetLanguages);				
+				}
+
+				Query dynamicQuery = new Query();
 				
-				   ASRTask aSRTask=(ASRTask)pipelineTask;
-				  ASRRequestConfig aSRRequestConfig=aSRTask.getConfig();
-			}else if(task=="tts") {
+				Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+				dynamicQuery.addCriteria(modelTypeCriteria);
+
+				Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+				dynamicQuery.addCriteria(submitterCriteria);
+			    
+				Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
+				dynamicQuery.addCriteria(taskCriteria);
+
+				if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
+				{
+					Criteria languagesCriteria = new Criteria();
+					languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
+													   Criteria.where("languages.targetLanguage").in(targetLanguages));
+					dynamicQuery.addCriteria(languagesCriteria);
+				}
+				else if(sourceLanguages.size() !=0 )
+				{
+				 	Criteria languagesCriteria = new Criteria();
+				 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
+				 	dynamicQuery.addCriteria(languagesCriteria);
+				}
+				else if(targetLanguages.size() !=0 )
+				{
+				 	Criteria languagesCriteria = new Criteria();
+				 	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+				 	dynamicQuery.addCriteria(languagesCriteria);
+				}
+
+				//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
+				// if(targetLanguages.size() != 0)
+				// {
+				// 	Criteria targetLanguagesCriteria = new Criteria();
+				// 	targetLanguagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+				// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
+				// }
+
+				log.info("dynamicQuery in translation task search ::" + dynamicQuery.toString());
 				
+				List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+
+				for(ModelExtended each_model : translationModels) 
+				{
+					log.info("Model Name :: " + each_model.getName());
+				}
+		
+			}else if(task=="asr") 
+			{
+				ASRTask aSRTask=(ASRTask)pipelineTask;
+				ASRRequestConfig asrRequestConfig=aSRTask.getConfig();
+				if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
+				{
+					TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
+					LanguagePair languagePair =translationRequestConfig.getLanguage();
+					if(languagePair.getSourceLanguage()!=null)
+						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
+					if(languagePair.getTargetLanguage()!=null)
+						targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
+					log.info("Source Languages :: "+sourceLanguages);
+					log.info("Target Languages :: "+targetLanguages);				
+				}
+
+				Query dynamicQuery = new Query();
+				
+				Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+				dynamicQuery.addCriteria(modelTypeCriteria);
+
+				Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+				dynamicQuery.addCriteria(submitterCriteria);
+			    
+				Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
+				dynamicQuery.addCriteria(taskCriteria);
+
+				if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
+				{
+					Criteria languagesCriteria = new Criteria();
+					languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
+													   Criteria.where("languages.targetLanguage").in(targetLanguages));
+					dynamicQuery.addCriteria(languagesCriteria);
+				}
+				else if(sourceLanguages.size() !=0 )
+				{
+				 	Criteria languagesCriteria = new Criteria();
+				 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
+				 	dynamicQuery.addCriteria(languagesCriteria);
+				}
+				else if(targetLanguages.size() !=0 )
+				{
+				 	Criteria languagesCriteria = new Criteria();
+				 	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+				 	dynamicQuery.addCriteria(languagesCriteria);
+				}
+
+				//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
+				// if(targetLanguages.size() != 0)
+				// {
+				// 	Criteria targetLanguagesCriteria = new Criteria();
+				// 	targetLanguagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+				// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
+				// }
+
+				log.info("dynamicQuery in translation task search ::" + dynamicQuery.toString());
+				
+				List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+
+				for(ModelExtended each_model : translationModels) 
+				{
+					log.info("Model Name :: " + each_model.getName());
+				}
+
+			}
+			else if(task=="tts") 
+			{
 				TTSTask tTSTask=(TTSTask)pipelineTask;
-			TTSRequestConfig  tTSRequestConfig	=tTSTask.getConfig();
+				TTSRequestConfig  ttsRequestConfig	=tTSTask.getConfig();
+				if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
+				{
+					TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
+					LanguagePair languagePair =translationRequestConfig.getLanguage();
+					if(languagePair.getSourceLanguage()!=null)
+						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
+					if(languagePair.getTargetLanguage()!=null)
+						targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
+					log.info("Source Languages :: "+sourceLanguages);
+					log.info("Target Languages :: "+targetLanguages);				
+				}
+
+				Query dynamicQuery = new Query();
+				
+				Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+				dynamicQuery.addCriteria(modelTypeCriteria);
+
+				Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+				dynamicQuery.addCriteria(submitterCriteria);
+			    
+				Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
+				dynamicQuery.addCriteria(taskCriteria);
+
+				if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
+				{
+					Criteria languagesCriteria = new Criteria();
+					languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
+													   Criteria.where("languages.targetLanguage").in(targetLanguages));
+					dynamicQuery.addCriteria(languagesCriteria);
+				}
+				else if(sourceLanguages.size() !=0 )
+				{
+				 	Criteria languagesCriteria = new Criteria();
+				 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
+				 	dynamicQuery.addCriteria(languagesCriteria);
+				}
+				else if(targetLanguages.size() !=0 )
+				{
+				 	Criteria languagesCriteria = new Criteria();
+				 	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+				 	dynamicQuery.addCriteria(languagesCriteria);
+				}
+
+				//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
+				// if(targetLanguages.size() != 0)
+				// {
+				// 	Criteria targetLanguagesCriteria = new Criteria();
+				// 	targetLanguagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+				// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
+				// }
+
+				log.info("dynamicQuery in translation task search ::" + dynamicQuery.toString());
+				
+				List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+
+				for(ModelExtended each_model : translationModels) 
+				{
+					log.info("Model Name :: " + each_model.getName());
+				}
+
 				
 			}
 	     
