@@ -1107,7 +1107,7 @@ public class ModelService {
 				TranslationTask translationTask = (TranslationTask) pipelineTask;
 				log.info("translationTask :: " + translationTask);
 				
-				if (requestedList.indexOf(io.swagger.pipelinerequest.SupportedTasks.ASR)>=0) {
+				if (requestedList.contains(pipelineModel)) {
 
 					log.info("available");
 
