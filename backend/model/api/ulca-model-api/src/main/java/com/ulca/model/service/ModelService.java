@@ -1176,7 +1176,7 @@ public class ModelService {
 		Query dynamicQuery = new Query();
 		Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.PipelineModel");
 		dynamicQuery.addCriteria(modelTypeCriteria);
-		Criteria submitterCriteria = Criteria.where("submitter.name").is("pipelineRequest.getPipelineRequestConfig().getSubmitter()");
+		Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
 		dynamicQuery.addCriteria(submitterCriteria);
 		log.info("dynamicQuery : " + dynamicQuery.toString());
 		PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery, PipelineModel.class);
