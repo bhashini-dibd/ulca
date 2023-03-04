@@ -81,5 +81,5 @@ components:
         message:
           type: string
           description: A success message "API Key successfully revoked" if or a failure message describing the error faced such as "API Key not found".
-          example: zero
+          example: API Key successfully revoked
 
