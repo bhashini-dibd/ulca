@@ -7,6 +7,7 @@ import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
 import io.swagger.model.AudioFormat;
 import io.swagger.model.ModelProcessingType;
+import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;

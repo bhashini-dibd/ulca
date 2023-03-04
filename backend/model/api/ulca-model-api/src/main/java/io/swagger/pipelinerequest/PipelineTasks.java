@@ -11,7 +11,7 @@ import javax.validation.constraints.*;
  * PipelineTasks
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T15:13:32.801917688Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-04T10:09:49.734767395Z[GMT]")
 
 
 public class PipelineTasks extends ArrayList<PipelineTask>  {

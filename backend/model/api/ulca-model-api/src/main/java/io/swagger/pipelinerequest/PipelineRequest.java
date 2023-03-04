@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -15,24 +13,18 @@ import javax.validation.constraints.*;
  * PipelineRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T15:29:05.717756984Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-04T10:09:49.734767395Z[GMT]")
 
 
 public class PipelineRequest   {
   @JsonProperty("pipelineTasks")
-  @Valid
-  private List<PipelineTask> pipelineTasks = new ArrayList<PipelineTask>();
-  
+  private PipelineTasks pipelineTasks = null;
+
   @JsonProperty("pipelineRequestConfig")
   private PipelineConfig pipelineRequestConfig = null;
 
-  public PipelineRequest pipelineTasks(List<PipelineTask> pipelineTasks) {
+  public PipelineRequest pipelineTasks(PipelineTasks pipelineTasks) {
     this.pipelineTasks = pipelineTasks;
-    return this;
-  }
-
-  public PipelineRequest addPipelineTasksItem(PipelineTask pipelineTasksItem) {
-    this.pipelineTasks.add(pipelineTasksItem);
     return this;
   }
 
@@ -42,12 +34,13 @@ public class PipelineRequest   {
    **/
   @Schema(required = true, description = "")
       @NotNull
+
     @Valid
-    public List<PipelineTask> getPipelineTasks() {
+    public PipelineTasks getPipelineTasks() {
     return pipelineTasks;
   }
 
-  public void setPipelineTasks(List<PipelineTask> pipelineTasks) {
+  public void setPipelineTasks(PipelineTasks pipelineTasks) {
     this.pipelineTasks = pipelineTasks;
   }
 

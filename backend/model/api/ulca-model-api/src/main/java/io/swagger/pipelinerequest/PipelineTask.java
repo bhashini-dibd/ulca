@@ -3,19 +3,21 @@ package io.swagger.pipelinerequest;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import io.swagger.model.SupportedTasks;
 /**
 * PipelineTask
 */
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type")
+  property = "taskType")
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = TranslationTask.class, name = "TranslationTask"),
-  @JsonSubTypes.Type(value = ASRTask.class, name = "ASRTask"),
-  @JsonSubTypes.Type(value = TTSTask.class, name = "TTSTask")
+  @JsonSubTypes.Type(value = TranslationTask.class, name = "TRANSLATION"),
+  @JsonSubTypes.Type(value = ASRTask.class, name = "ASR"),
+  @JsonSubTypes.Type(value = TTSTask.class, name = "TTS")
 })
 public interface PipelineTask {
 
-    SupportedTasks getType();
+    SupportedTasks getTaskType();
 }

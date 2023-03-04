@@ -3,6 +3,8 @@ package io.swagger.pipelinerequest;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+
+import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -12,35 +14,35 @@ import javax.validation.constraints.*;
  * ASRTask
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-03T08:56:06.445513096Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-04T10:09:49.734767395Z[GMT]")
 
 
 public class ASRTask  implements PipelineTask {
-  @JsonProperty("type")
-  private SupportedTasks type = null;
+  @JsonProperty("taskType")
+  private SupportedTasks taskType = null;
 
   @JsonProperty("config")
   private ASRRequestConfig config = null;
 
-  public ASRTask type(SupportedTasks type) {
-    this.type = type;
+  public ASRTask taskType(SupportedTasks taskType) {
+    this.taskType = taskType;
     return this;
   }
 
   /**
-   * Get type
-   * @return type
+   * Get taskType
+   * @return taskType
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public SupportedTasks getType() {
-    return type;
+    public SupportedTasks getTaskType() {
+    return taskType;
   }
 
-  public void setType(SupportedTasks type) {
-    this.type = type;
+  public void setTaskType(SupportedTasks taskType) {
+    this.taskType = taskType;
   }
 
   public ASRTask config(ASRRequestConfig config) {
@@ -73,13 +75,13 @@ public class ASRTask  implements PipelineTask {
       return false;
     }
     ASRTask asRTask = (ASRTask) o;
-    return Objects.equals(this.type, asRTask.type) &&
+    return Objects.equals(this.taskType, asRTask.taskType) &&
         Objects.equals(this.config, asRTask.config);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, config);
+    return Objects.hash(taskType, config);
   }
 
   @Override
@@ -87,7 +89,7 @@ public class ASRTask  implements PipelineTask {
     StringBuilder sb = new StringBuilder();
     sb.append("class ASRTask {\n");
     
-    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
     sb.append("}");
     return sb.toString();

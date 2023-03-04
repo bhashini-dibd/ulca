@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AudioFormat;
 import io.swagger.model.ModelProcessingType;
+import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSRequest;
 import io.swagger.model.TTSResponse;
 import io.swagger.v3.oas.annotations.media.Schema;

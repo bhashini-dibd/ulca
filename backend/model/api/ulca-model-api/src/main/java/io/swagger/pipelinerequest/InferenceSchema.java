@@ -3,6 +3,8 @@ package io.swagger.pipelinerequest;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import io.swagger.model.SupportedTasks;
 /**
 * InferenceSchema
 */

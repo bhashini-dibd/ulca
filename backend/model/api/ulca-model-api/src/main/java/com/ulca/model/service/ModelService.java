@@ -477,26 +477,25 @@ public class ModelService {
 			} else {
 				inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 			}
-			
-			
-			if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
-              
-			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint
-					.getInferenceApiKey();
-			if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
-				String originalName = inferenceAPIEndPointInferenceApiKey.getName();
-				String originalValue = inferenceAPIEndPointInferenceApiKey.getValue();
-				log.info("SecretKey :: " + SECRET_KEY);
-				String encryptedName = Aes256.encrypt(originalName, SECRET_KEY);
-				log.info("encryptedName ::" + encryptedName);
-				String encryptedValue = Aes256.encrypt(originalValue, SECRET_KEY);
-				log.info("encryptedValue ::" + encryptedValue);
 
-				inferenceAPIEndPointInferenceApiKey.setName(encryptedName);
-				inferenceAPIEndPointInferenceApiKey.setValue(encryptedValue);
-				inferenceAPIEndPoint.setInferenceApiKey(inferenceAPIEndPointInferenceApiKey);
+			if (inferenceAPIEndPoint.getInferenceApiKey() != null) {
+
+				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint
+						.getInferenceApiKey();
+				if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
+					String originalName = inferenceAPIEndPointInferenceApiKey.getName();
+					String originalValue = inferenceAPIEndPointInferenceApiKey.getValue();
+					log.info("SecretKey :: " + SECRET_KEY);
+					String encryptedName = Aes256.encrypt(originalName, SECRET_KEY);
+					log.info("encryptedName ::" + encryptedName);
+					String encryptedValue = Aes256.encrypt(originalValue, SECRET_KEY);
+					log.info("encryptedValue ::" + encryptedValue);
+
+					inferenceAPIEndPointInferenceApiKey.setName(encryptedName);
+					inferenceAPIEndPointInferenceApiKey.setValue(encryptedValue);
+					inferenceAPIEndPoint.setInferenceApiKey(inferenceAPIEndPointInferenceApiKey);
+				}
 			}
-		}
 			modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
 
 			if (modelObj != null) {
@@ -1052,80 +1051,76 @@ public class ModelService {
 
 	public ModelPipelineResponse getModelsPipeline(MultipartFile file, String userId) throws Exception {
 
-		/*
-		 * PipelineRequest pipelineRequest = getPipelineRequest(file);
-		 * log.info("pipelineRequest :: " + pipelineRequest); if (pipelineRequest !=
-		 * null) { validatePipelineRequest(pipelineRequest); } else { throw new
-		 * PipelineValidationException("Pipeline validation failed. Check uploaded file syntax"
-		 * ); }
-		 */
+		PipelineRequest pipelineRequest = getPipelineRequest(file);
+		log.info("pipelineRequest :: " + pipelineRequest);
+		if (pipelineRequest != null) {
+			validatePipelineRequest(pipelineRequest);
+		} else {
+			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax");
+		}
 
 		// Boolean available =checkTaskSequence(pipelineRequest);
 		// log.info("available :: "+available);
 
-		List<PipelineTask> requestList = new ArrayList<PipelineTask>();
-		ASRTask task1 = new ASRTask();
-		task1.setType(io.swagger.pipelinerequest.SupportedTasks.ASR);
-		ASRRequestConfig config1 = new ASRRequestConfig();
-		LanguagePair pair1 = new LanguagePair();
-		pair1.setSourceLanguage(SupportedLanguages.EN);
-		config1.setLanguage(pair1);
-		task1.setConfig(config1);
-		requestList.add(task1);
-
-		TranslationTask task2 = new TranslationTask();
-		task2.setType(io.swagger.pipelinerequest.SupportedTasks.TRANSLATION);
-		TranslationRequestConfig config2 = new TranslationRequestConfig();
-		LanguagePair pair2 = new LanguagePair();
-		pair2.setSourceLanguage(SupportedLanguages.EN);
-		config2.setLanguage(pair2);
-		task2.setConfig(config2);
-		requestList.add(task2);
-
-		PipelineRequest request = new PipelineRequest();
-		request.setPipelineTasks(requestList);
-		PipelineConfig pipelineConfig = new PipelineConfig();
-		pipelineConfig.setSubmitter("AI4Bharat");
-		request.setPipelineRequestConfig(pipelineConfig);
-
-		log.info("request :: " + request);
-
-		boolean available = checkTaskSequence(request);
-
-		log.info(" available TaskSequence :: " + available);
-
-		PipelineModel pipelineModel = pipelineModelDao
-				.findBySubmitterName(request.getPipelineRequestConfig().getSubmitter());
-		List<PipelineTask> requestedList = request.getPipelineTasks();
-		List<io.swagger.pipelinerequest.SupportedTasks> tasksList = new ArrayList<io.swagger.pipelinerequest.SupportedTasks>();
-            for(PipelineTask pipelineTask : requestedList) {
-            	
-            	tasksList.add(pipelineTask.getType());
-            	
-            }
-		
-		for (PipelineTask pipelineTask : requestedList) {
-
-			if (pipelineTask.getType().equals(io.swagger.pipelinerequest.SupportedTasks.TRANSLATION)) {
-
-				log.info("Translation");
-				TranslationTask translationTask = (TranslationTask) pipelineTask;
-				log.info("translationTask :: " + translationTask);
-	             
-				if (tasksList.contains(io.swagger.pipelinerequest.SupportedTasks.ASR)) {
-                   
-					log.info("available");
-
-				}
-
-				
-				
-				
-
-			}
-
-		}
-
+		/*
+		 * List<PipelineTask> requestList = new ArrayList<PipelineTask>(); ASRTask task1
+		 * = new ASRTask();
+		 * task1.setType(io.swagger.pipelinerequest.SupportedTasks.ASR);
+		 * ASRRequestConfig config1 = new ASRRequestConfig(); LanguagePair pair1 = new
+		 * LanguagePair(); pair1.setSourceLanguage(SupportedLanguages.EN);
+		 * config1.setLanguage(pair1); task1.setConfig(config1); requestList.add(task1);
+		 * 
+		 * TranslationTask task2 = new TranslationTask();
+		 * task2.setType(io.swagger.pipelinerequest.SupportedTasks.TRANSLATION);
+		 * TranslationRequestConfig config2 = new TranslationRequestConfig();
+		 * LanguagePair pair2 = new LanguagePair();
+		 * pair2.setSourceLanguage(SupportedLanguages.EN); config2.setLanguage(pair2);
+		 * task2.setConfig(config2); requestList.add(task2);
+		 * 
+		 * PipelineRequest request = new PipelineRequest();
+		 * request.setPipelineTasks(requestList); PipelineConfig pipelineConfig = new
+		 * PipelineConfig(); pipelineConfig.setSubmitter("AI4Bharat");
+		 * request.setPipelineRequestConfig(pipelineConfig);
+		 * 
+		 * log.info("request :: " + request);
+		 * 
+		 * boolean available = checkTaskSequence(request);
+		 * 
+		 * log.info(" available TaskSequence :: " + available);
+		 * 
+		 * PipelineModel pipelineModel = pipelineModelDao
+		 * .findBySubmitterName(request.getPipelineRequestConfig().getSubmitter());
+		 * List<PipelineTask> requestedList = request.getPipelineTasks();
+		 * List<io.swagger.pipelinerequest.SupportedTasks> tasksList = new
+		 * ArrayList<io.swagger.pipelinerequest.SupportedTasks>(); for(PipelineTask
+		 * pipelineTask : requestedList) {
+		 * 
+		 * tasksList.add(pipelineTask.getType());
+		 * 
+		 * }
+		 * 
+		 * for (PipelineTask pipelineTask : requestedList) {
+		 * 
+		 * if (pipelineTask.getType().equals(io.swagger.pipelinerequest.SupportedTasks.
+		 * TRANSLATION)) {
+		 * 
+		 * log.info("Translation"); TranslationTask translationTask = (TranslationTask)
+		 * pipelineTask; log.info("translationTask :: " + translationTask);
+		 * 
+		 * if (tasksList.contains(io.swagger.pipelinerequest.SupportedTasks.ASR)) {
+		 * 
+		 * log.info("available");
+		 * 
+		 * }
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * }
+		 * 
+		 * }
+		 */
 		return new ModelPipelineResponse();
 	}
 
@@ -1193,49 +1188,48 @@ public class ModelService {
 
 	}
 
-	public Boolean checkTaskSequence(PipelineRequest pipelineRequest) {
-
-		PipelineModel pipelineModel = pipelineModelDao
-				.findBySubmitterName(pipelineRequest.getPipelineRequestConfig().getSubmitter());
-
-		if (pipelineModel == null)
-			throw new PipelineValidationException("This submitter don't have any pipeline model!");
-
-		PipelineTaskSequence requestPipelineTaskSequence = new PipelineTaskSequence();
-		List<PipelineTask> requestList = pipelineRequest.getPipelineTasks();
-
-		for (PipelineTask pipelineTask : requestList) {
-
-			String task = pipelineTask.getType().name();
-			log.info("task :: " + task);
-			requestPipelineTaskSequence.add(SupportedTasks.valueOf(task));
-		}
-
-		log.info("requestPipelineTaskSequence :: " + requestPipelineTaskSequence);
-
-		boolean flag = false;
-		ListOfPipelines listOfPipelines = pipelineModel.getSupportedPipelines();
-
-		for (PipelineTaskSequence pipelineTaskSequence : listOfPipelines) {
-			log.info("pipelineTaskSequence :: " + pipelineTaskSequence);
-
-			if (pipelineTaskSequence.hashCode() == requestPipelineTaskSequence.hashCode()) {
-
-				log.info("matched");
-				flag = true;
-				break;
-			}
-
-		}
-
-		if (!flag) {
-
-			throw new PipelineValidationException("This pipeline doesn't exist!");
-
-		}
-
-		return true;
-
-	}
-
+	/*
+	 * public Boolean checkTaskSequence(PipelineRequest pipelineRequest) {
+	 * 
+	 * PipelineModel pipelineModel = pipelineModelDao
+	 * .findBySubmitterName(pipelineRequest.getPipelineRequestConfig().getSubmitter(
+	 * ));
+	 * 
+	 * if (pipelineModel == null) throw new
+	 * PipelineValidationException("This submitter don't have any pipeline model!");
+	 * 
+	 * PipelineTaskSequence requestPipelineTaskSequence = new
+	 * PipelineTaskSequence(); List<PipelineTask> requestList =
+	 * pipelineRequest.getPipelineTasks();
+	 * 
+	 * for (PipelineTask pipelineTask : requestList) {
+	 * 
+	 * String task = pipelineTask.getType().name(); log.info("task :: " + task);
+	 * requestPipelineTaskSequence.add(SupportedTasks.valueOf(task)); }
+	 * 
+	 * log.info("requestPipelineTaskSequence :: " + requestPipelineTaskSequence);
+	 * 
+	 * boolean flag = false; ListOfPipelines listOfPipelines =
+	 * pipelineModel.getSupportedPipelines();
+	 * 
+	 * for (PipelineTaskSequence pipelineTaskSequence : listOfPipelines) {
+	 * log.info("pipelineTaskSequence :: " + pipelineTaskSequence);
+	 * 
+	 * if (pipelineTaskSequence.hashCode() ==
+	 * requestPipelineTaskSequence.hashCode()) {
+	 * 
+	 * log.info("matched"); flag = true; break; }
+	 * 
+	 * }
+	 * 
+	 * if (!flag) {
+	 * 
+	 * throw new PipelineValidationException("This pipeline doesn't exist!");
+	 * 
+	 * }
+	 * 
+	 * return true;
+	 * 
+	 * }
+	 */
 }
