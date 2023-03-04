@@ -1097,7 +1097,12 @@ public class ModelService {
 		PipelineModel pipelineModel = pipelineModelDao
 				.findBySubmitterName(request.getPipelineRequestConfig().getSubmitter());
 		List<PipelineTask> requestedList = request.getPipelineTasks();
-            
+		List<io.swagger.pipelinerequest.SupportedTasks> tasksList = new ArrayList<io.swagger.pipelinerequest.SupportedTasks>();
+            for(PipelineTask pipelineTask : requestedList) {
+            	
+            	tasksList.add(pipelineTask.getType());
+            	
+            }
 		
 		for (PipelineTask pipelineTask : requestedList) {
 
@@ -1106,20 +1111,16 @@ public class ModelService {
 				log.info("Translation");
 				TranslationTask translationTask = (TranslationTask) pipelineTask;
 				log.info("translationTask :: " + translationTask);
-				
-				if (requestedList.contains(pipelineModel)) {
-
+	             
+				if (tasksList.contains(io.swagger.pipelinerequest.SupportedTasks.ASR)) {
+                   
 					log.info("available");
 
 				}
 
 				
 				
-				if (requestedList.contains(io.swagger.pipelinerequest.SupportedTasks.ASR)) {
-
-					log.info("available");
-
-				}
+				
 
 			}
 
