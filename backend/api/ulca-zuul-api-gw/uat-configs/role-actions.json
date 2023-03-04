@@ -334,6 +334,66 @@
         "role": "ADMIN",
         "actionID": "4bfad84c-9a9e-4875-8d79-3e686ea4d72d",
         "active": true
+      },
+      {
+        "role": "ADMIN",
+        "actionID": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+        "active": true
+      },
+      {
+        "role": "CONTRIBUTOR-USER",
+        "actionID": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+        "active": true
+      },
+      {
+        "role": "MODEL-ONLY-USER",
+        "actionID": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+        "active": true
+      },
+      {
+        "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+        "actionID": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+        "active": true
+      },
+      {
+        "role": "ADMIN",
+        "actionID": "43df383c-7857-4302-b64a-48066879739e",
+        "active": true
+      },
+      {
+        "role": "CONTRIBUTOR-USER",
+        "actionID": "43df383c-7857-4302-b64a-48066879739e",
+        "active": true
+      },
+      {
+        "role": "MODEL-ONLY-USER",
+        "actionID": "43df383c-7857-4302-b64a-48066879739e",
+        "active": true
+      },
+      {
+        "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+        "actionID": "43df383c-7857-4302-b64a-48066879739e",
+        "active": true
+      },
+      {
+        "role": "ADMIN",
+        "actionID": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+        "active": true
+      },
+      {
+        "role": "CONTRIBUTOR-USER",
+        "actionID": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+        "active": true
+      },
+      {
+        "role": "MODEL-ONLY-USER",
+        "actionID": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+        "active": true
+      },
+      {
+        "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+        "actionID": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+        "active": true
       }
     ]
   }
