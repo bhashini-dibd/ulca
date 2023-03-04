@@ -1,5 +1,6 @@
 package com.ulca.model.service;
 
+import java.util.Iterator;	
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -94,9 +95,9 @@ import io.swagger.model.NerInference;
 import io.swagger.model.OCRInference;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 
+import io.swagger.model.SupportedTasks;
 import io.swagger.model.Submitter;
 import io.swagger.model.SupportedLanguages;
-import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSInference;
 import io.swagger.model.TranslationInference;
 import io.swagger.model.TranslationResponse;
@@ -1050,7 +1051,7 @@ public class ModelService {
 	}
 
 	public ModelPipelineResponse getModelsPipeline(MultipartFile file, String userId) throws Exception {
-
+		log.info("File :: " + file.toString());
 		PipelineRequest pipelineRequest = getPipelineRequest(file);
 		log.info("pipelineRequest :: " + pipelineRequest);
 		if (pipelineRequest != null) {
@@ -1161,6 +1162,36 @@ public class ModelService {
 			throw new PipelineValidationException("PipelineRequestConfig and submitter are required field");
 
 		log.info("pipelineRequest.getPipelineRequestConfig() is validated");
+
+		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
+
+		ArrayList<String> pipelineTaskSequence = new ArrayList<String>();
+
+		for(PipelineTask pipelineTask : pipelineTasks)
+			pipelineTaskSequence.add(pipelineTask.getTaskType());
+		
+		log.info("Pipeline Sequence :: "+pipelineTaskSequence);
+
+		//Make query and find pipeline model with the submitter name
+		Query dynamicQuery = new Query();
+		Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.PipelineModel");
+		dynamicQuery.addCriteria(modelTypeCriteria);
+		Criteria submitterCriteria = Criteria.where("submitter.name").is("pipelineRequest.getPipelineRequestConfig().getSubmitter()");
+		dynamicQuery.addCriteria(submitterCriteria);
+		log.info("dynamicQuery : " + dynamicQuery.toString());
+		PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery, PipelineModel.class);
+
+		if (pipelineModel == null)
+			throw new PipelineValidationException("Pipeline model with the request submitter does not exist");
+
+		ArrayList<PipelineTaskSequence> supportedPipelines = pipelineModel.getSupportedPipelines();
+
+		for(PipelineTaskSequence sequence : supportedPipelines)
+
+			log.info("Sequence :: " + sequence);
+
+		log.info("pipelineRequest.getPipelineTasks() validated");
+
 
 		return true;
 	}

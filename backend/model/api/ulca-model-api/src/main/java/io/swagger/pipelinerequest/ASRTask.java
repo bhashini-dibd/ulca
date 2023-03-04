@@ -19,12 +19,12 @@ import javax.validation.constraints.*;
 
 public class ASRTask  implements PipelineTask {
   @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+  private String taskType = "asr";
 
   @JsonProperty("config")
   private ASRRequestConfig config = null;
 
-  public ASRTask taskType(SupportedTasks taskType) {
+  public ASRTask taskType(String taskType) {
     this.taskType = taskType;
     return this;
   }
@@ -37,11 +37,11 @@ public class ASRTask  implements PipelineTask {
       @NotNull
 
     @Valid
-    public SupportedTasks getTaskType() {
+    public String getTaskType() {
     return taskType;
   }
 
-  public void setTaskType(SupportedTasks taskType) {
+  public void setTaskType(String taskType) {
     this.taskType = taskType;
   }
 

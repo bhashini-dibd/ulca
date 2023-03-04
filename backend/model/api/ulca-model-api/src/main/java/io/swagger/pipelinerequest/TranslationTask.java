@@ -19,12 +19,12 @@ import javax.validation.constraints.*;
 
 public class TranslationTask  implements PipelineTask {
   @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+  private String taskType = "translation";
 
   @JsonProperty("config")
   private TranslationRequestConfig config = null;
 
-  public TranslationTask taskType(SupportedTasks taskType) {
+  public TranslationTask taskType(String taskType) {
     this.taskType = taskType;
     return this;
   }
@@ -37,11 +37,11 @@ public class TranslationTask  implements PipelineTask {
       @NotNull
 
     @Valid
-    public SupportedTasks getTaskType() {
+    public String getTaskType() {
     return taskType;
   }
 
-  public void setTaskType(SupportedTasks taskType) {
+  public void setTaskType(String taskType) {
     this.taskType = taskType;
   }
 
