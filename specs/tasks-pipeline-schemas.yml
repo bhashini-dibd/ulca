@@ -92,6 +92,7 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: '#/components/schemas/TTSRequestConfig'
+
     TranslationRequestConfig:
       required:
         - language
@@ -100,6 +101,7 @@ components:
         language:
           $ref: >-
             https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+            
     TTSRequestConfig:
       required:
         - language
