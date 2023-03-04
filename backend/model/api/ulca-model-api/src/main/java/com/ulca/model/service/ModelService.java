@@ -120,6 +120,7 @@ import io.swagger.pipelinerequest.TTSRequestConfig;
 import io.swagger.pipelinerequest.TTSTask;
 import io.swagger.pipelinerequest.TranslationRequestConfig;
 import io.swagger.pipelinerequest.TranslationTask;
+import io.swagger.pipelinerequest.PipelineResponse;
 import lombok.extern.slf4j.Slf4j;
 import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
@@ -1054,7 +1055,7 @@ public class ModelService {
 
 	}
 
-	public ModelPipelineResponse getModelsPipeline(MultipartFile file, String userId) throws Exception {
+	public PipelineResponse getModelsPipeline(MultipartFile file, String userId) throws Exception {
 		log.info("File :: " + file.toString());
 		PipelineRequest pipelineRequest = getPipelineRequest(file);
 		log.info("pipelineRequest :: " + pipelineRequest);
@@ -1140,7 +1141,9 @@ public class ModelService {
 					log.info("Model Name :: " + each_model.getName());
 				}
 		
-			}else if(task=="asr") 
+			}
+			
+			else if(task=="asr") 
 			{
 				ASRTask aSRTask=(ASRTask)pipelineTask;
 				if(aSRTask.getConfig()!=null && aSRTask.getConfig().getLanguage()!=null)
@@ -1166,25 +1169,25 @@ public class ModelService {
 				Criteria taskCriteria = Criteria.where("task.type").is("ASR");
 				dynamicQuery.addCriteria(taskCriteria);
 
-				if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
-				{
-					Criteria languagesCriteria = new Criteria();
-					languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
-													   Criteria.where("languages.targetLanguage").in(targetLanguages));
-					dynamicQuery.addCriteria(languagesCriteria);
-				}
-				else if(sourceLanguages.size() !=0 )
+				// if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
+				// {
+				// 	Criteria languagesCriteria = new Criteria();
+				// 	languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
+				// 									   Criteria.where("languages.targetLanguage").in(targetLanguages));
+				// 	dynamicQuery.addCriteria(languagesCriteria);
+				// }
+				if(sourceLanguages.size() !=0 )
 				{
 				 	Criteria languagesCriteria = new Criteria();
 				 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
 				 	dynamicQuery.addCriteria(languagesCriteria);
 				}
-				else if(targetLanguages.size() !=0 )
-				{
-				 	Criteria languagesCriteria = new Criteria();
-				 	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
-				 	dynamicQuery.addCriteria(languagesCriteria);
-				}
+				// else if(targetLanguages.size() !=0 )
+				// {
+				//  	Criteria languagesCriteria = new Criteria();
+				//  	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+				//  	dynamicQuery.addCriteria(languagesCriteria);
+				// }
 
 				//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
 				// if(targetLanguages.size() != 0)
@@ -1194,11 +1197,11 @@ public class ModelService {
 				// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
 				// }
 
-				log.info("dynamicQuery in translation task search ::" + dynamicQuery.toString());
+				log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
 				
-				List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+				List<ModelExtended> asrModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
 
-				for(ModelExtended each_model : translationModels) 
+				for(ModelExtended each_model : asrModels) 
 				{
 					log.info("Model Name :: " + each_model.getName());
 				}
@@ -1209,7 +1212,7 @@ public class ModelService {
 				TTSTask ttsTask=(TTSTask)pipelineTask;
 				if(ttsTask.getConfig()!=null && ttsTask.getConfig().getLanguage()!=null)
 				{
-					TTSRequestConfig  ttsRequestConfig =	ttsTask.getConfig();
+					TTSRequestConfig  ttsRequestConfig = ttsTask.getConfig();
 					LanguagePair languagePair = ttsRequestConfig.getLanguage();
 					if(languagePair.getSourceLanguage()!=null)
 						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
@@ -1230,25 +1233,25 @@ public class ModelService {
 				Criteria taskCriteria = Criteria.where("task.type").is("TTS");
 				dynamicQuery.addCriteria(taskCriteria);
 
-				if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
-				{
-					Criteria languagesCriteria = new Criteria();
-					languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
-													   Criteria.where("languages.targetLanguage").in(targetLanguages));
-					dynamicQuery.addCriteria(languagesCriteria);
-				}
-				else if(sourceLanguages.size() !=0 )
+				// if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
+				// {
+				// 	Criteria languagesCriteria = new Criteria();
+				// 	languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
+				// 									   Criteria.where("languages.targetLanguage").in(targetLanguages));
+				// 	dynamicQuery.addCriteria(languagesCriteria);
+				// }
+				if(sourceLanguages.size() !=0 )
 				{
 				 	Criteria languagesCriteria = new Criteria();
 				 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
 				 	dynamicQuery.addCriteria(languagesCriteria);
 				}
-				else if(targetLanguages.size() !=0 )
-				{
-				 	Criteria languagesCriteria = new Criteria();
-				 	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
-				 	dynamicQuery.addCriteria(languagesCriteria);
-				}
+				// else if(targetLanguages.size() !=0 )
+				// {
+				//  	Criteria languagesCriteria = new Criteria();
+				//  	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+				//  	dynamicQuery.addCriteria(languagesCriteria);
+				// }
 
 				//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
 				// if(targetLanguages.size() != 0)
@@ -1258,11 +1261,11 @@ public class ModelService {
 				// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
 				// }
 
-				log.info("dynamicQuery in translation task search ::" + dynamicQuery.toString());
+				log.info("dynamicQuery in TTS Models task search ::" + dynamicQuery.toString());
 				
-				List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+				List<ModelExtended> ttsModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
 
-				for(ModelExtended each_model : translationModels) 
+				for(ModelExtended each_model : ttsModels) 
 				{
 					log.info("Model Name :: " + each_model.getName());
 				}
@@ -1342,7 +1345,7 @@ public class ModelService {
 		 * 
 		 * }
 		 */
-		return new ModelPipelineResponse();
+		return new PipelineResponse();
 	}
 
 	public static String checkModel(MultipartFile file) {

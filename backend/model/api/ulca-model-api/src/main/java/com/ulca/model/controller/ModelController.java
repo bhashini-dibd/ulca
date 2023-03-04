@@ -35,6 +35,8 @@ import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.UploadModelResponse;
 import com.ulca.model.service.ModelService;
 
+import io.swagger.pipelinerequest.PipelineResponse;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -140,7 +142,7 @@ public class ModelController {
 	}
 
 	@PostMapping("/getModelsPipeline")
-	public ModelPipelineResponse getModelsPipeline(@RequestParam("file") MultipartFile file,
+	public PipelineResponse getModelsPipeline(@RequestParam("file") MultipartFile file,
 			@RequestParam(required = true) String userId) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");
 		return modelService.getModelsPipeline(file, userId);
