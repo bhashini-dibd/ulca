@@ -86,7 +86,7 @@
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": false,
-      "description": "API to revoke user api key"
+      "description": "API to revoke one user api key"
     },
     {
       "id": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
