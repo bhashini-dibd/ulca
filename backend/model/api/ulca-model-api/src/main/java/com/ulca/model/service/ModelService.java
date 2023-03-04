@@ -1143,11 +1143,10 @@ public class ModelService {
 			}else if(task=="asr") 
 			{
 				ASRTask aSRTask=(ASRTask)pipelineTask;
-				ASRRequestConfig asrRequestConfig=aSRTask.getConfig();
-				if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
+				if(aSRTask.getConfig()!=null && aSRTask.getConfig().getLanguage()!=null)
 				{
-					TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
-					LanguagePair languagePair =translationRequestConfig.getLanguage();
+					ASRRequestConfig asrRequestConfig =	aSRTask.getConfig();
+					LanguagePair languagePair =asrRequestConfig.getLanguage();
 					if(languagePair.getSourceLanguage()!=null)
 						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
 					if(languagePair.getTargetLanguage()!=null)
@@ -1164,7 +1163,7 @@ public class ModelService {
 				Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
 				dynamicQuery.addCriteria(submitterCriteria);
 			    
-				Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
+				Criteria taskCriteria = Criteria.where("task.type").is("ASR");
 				dynamicQuery.addCriteria(taskCriteria);
 
 				if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
@@ -1207,12 +1206,11 @@ public class ModelService {
 			}
 			else if(task=="tts") 
 			{
-				TTSTask tTSTask=(TTSTask)pipelineTask;
-				TTSRequestConfig  ttsRequestConfig	=tTSTask.getConfig();
-				if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
+				TTSTask ttsTask=(TTSTask)pipelineTask;
+				if(ttsTask.getConfig()!=null && ttsTask.getConfig().getLanguage()!=null)
 				{
-					TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
-					LanguagePair languagePair =translationRequestConfig.getLanguage();
+					TTSRequestConfig  ttsRequestConfig =	ttsTask.getConfig();
+					LanguagePair languagePair = ttsRequestConfig.getLanguage();
 					if(languagePair.getSourceLanguage()!=null)
 						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
 					if(languagePair.getTargetLanguage()!=null)
@@ -1229,7 +1227,7 @@ public class ModelService {
 				Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
 				dynamicQuery.addCriteria(submitterCriteria);
 			    
-				Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
+				Criteria taskCriteria = Criteria.where("task.type").is("TTS");
 				dynamicQuery.addCriteria(taskCriteria);
 
 				if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
