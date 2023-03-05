@@ -56,12 +56,7 @@ class UserUtils:
 #take timestamp epoch and add/generate uid based on this time. 38 character
 #by default apiKey will be 1. Maximum apiKey should be 5. if list has only 1 value, we should be able to call generateApiKey. If user has 5 apiKey already existed=>reached max apiKey
 
-    @staticmethod
-    def insert_generated_user_api_key(user,apikey):
-        collection = db.get_db()[USR_MONGO_COLLECTION]
-        details = collection.update({"userID":user}, {"$push":{"userApiKey": apikey}})
-        return details
-
+   
 
     @staticmethod
     def validate_email_format(email):
@@ -600,11 +595,9 @@ class UserUtils:
         try:
             coll = db.get_db()[USR_MONGO_COLLECTION]
             response = coll.find_one({"userID": userId})
-            log.info(response)
-            log.info(type(response))
             if isinstance(response,dict):
-                if 'userApiKey' in response.keys() and isinstance(response['userApiKey'],list):
-                    return response['userApiKey'] #Return the list of user api keys
+                if 'userke' in response.keys() and isinstance(response['userke'],list):
+                    return [k for d in response['userke'] for k in d.keys()] #Return the list of user api keys
                 else:
                     return [] #If user doesn't have any api keys
             else:
@@ -614,11 +607,18 @@ class UserUtils:
             log.exception("Not a valid userId")
             return post_error("error processing ULCA userId:{}".format(str(e)),None)
 
+    @staticmethod
+    def insert_generated_user_api_key(user,appName,apikey):
+        collection = db.get_db()[USR_MONGO_COLLECTION]
+        details = collection.update({"userID":user}, {"$push":{"userke":{apikey: appName}}})
+        return details
+
 
     @staticmethod
     def revoke_userApiKey(userid, userapikey):
         collection = db.get_db()[USR_MONGO_COLLECTION]
-        revoke = collection.update({"userID":userid}, {"$pull":{"userApiKey": userapikey}})
+        log.info(f"userapikey {userapikey}")
+        revoke = collection.update({"userID":userid}, {"$pull":{"userke": {userapikey : {"$exists":True}}}})
         return json.loads(json_util.dumps(revoke))
 
 
