@@ -11,19 +11,21 @@ servers:
 paths: {}
 components:
   schemas:
-  
     APIKeyGenerationRequest:
       required:
-        - userDetails
         - email
+        - appName
       type: object
       properties:
-        userDetails:
-          type: string
-          description: AppName and User API Key (ULCA) separated by /
-          example: BhashiniAndroid/34rtegregy43b
         email:
           type: string
+          description: Email of the user for which api key is to be generated
+          example: ulca.ulca@gmail.com/bhashini-prod-android
+        appName:
+          type: string
+          description: App name mapped with ULCA api key of the user for which service api key is to be generated
+          example: bhashini-prod-android
+        
 
     APIKeyGenerationResponse:
       required:
@@ -37,49 +39,39 @@ components:
           properties:
             name:
               type: string
-              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name. The name and value will be provided as a key-value pair in the header for compute request.
               default: Authorization
               example: apiKey
             value:
               type: string
               description: expected if the callbackurl requires an API key so as to fetch output
               example: dde19858-b354-4e24-8e92-a7a4b320c066
-
+   
     APIKeyRevokeRequest:
       required:
-        - userDetails
         - email
-        - ApiKey
+        - appName
       type: object
       properties:
-        userDetails:
-          type: string
-          description: AppName and User API Key (ULCA) separated by /
-          example: BhashiniAndroid/34rtegregy43b
         email:
           type: string
-        ApiKey:
-          required:
-            - value
-          type: object
-          properties:
-            name:
-              type: string
-              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
-              default: Authorization
-              example: apiKey
-            value:
-              type: string
-              description: expected if the callbackurl requires an API key so as to fetch output
-              example: dde19858-b354-4e24-8e92-a7a4b320c066
+          description: Email of the user for which api key is to be revoked
+          example: ulca.ulca@gmail.com/bhashini-prod-android
+        appName:
+          type: string
+          description: App name mapped with ULCA api key of the user for which service api key is to be revoked
+          example: bhashini-prod-android
 
     APIKeyRevokeResponse:
       required:
-        - message
+        - isRevoked
       type: object
       properties:
+        isRevoked: 
+          type: boolean
+          description: Return true if successfully revoked. Else, return false.
+          example: true
         message:
           type: string
           description: A success message "API Key successfully revoked" if or a failure message describing the error faced such as "API Key not found".
           example: API Key successfully revoked
-
