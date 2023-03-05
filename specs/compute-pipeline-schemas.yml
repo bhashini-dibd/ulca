@@ -65,24 +65,22 @@ components:
     TranslationRequestConfig:
       required:
         - config
-        - task
+        - taskType
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: "#/components/schemas/TranslationConfig"
 
     ASRRequestConfig:
       required:
         - config
-        - task
+        - taskType
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: "#/components/schemas/AudioConfig"
 
@@ -105,12 +103,11 @@ components:
     TTSRequestConfig:
       required:
         - config
-        - task
+        - taskType
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: "#/components/schemas/TTSConfig"
 
@@ -284,12 +281,11 @@ components:
       description: the response for translation.  Standard http status codes to be used.
       required:
         - output
-        - task
+        - taskType
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         output:
           $ref: "#/components/schemas/Sentences"
         config:
@@ -299,12 +295,11 @@ components:
       description: the response for translation.  Standard http status codes to be used.
       required:
         - output
-        - task
+        - taskType
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         output:
           $ref: "#/components/schemas/Sentences"
         config:
@@ -314,12 +309,11 @@ components:
       description: the response for translation.  Standard http status codes to be used.
       required:
         - audio
-        - task
+        - taskType
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         audio:
           $ref: "#/components/schemas/AudioFiles"
         config:
