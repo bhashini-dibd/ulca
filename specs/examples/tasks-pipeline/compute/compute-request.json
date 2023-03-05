@@ -2,9 +2,7 @@
     "pipelineTasks": [
         {
             "serviceId": "",
-            "task": {
-                "type": "asr"
-            },
+            "taskType": "asr",
             "config": {
                 "language": {
                     "sourceLanguage": "en"
@@ -15,9 +13,7 @@
         },
         {
             "serviceId": "",
-            "task": {
-                "type": "translation"
-            },
+            "taskType": "translation",
             "config": {
                 "language": {
                     "sourceLanguage": "en",
@@ -27,9 +23,7 @@
         },
         {
             "serviceId": "",
-            "task": {
-                "type": "tts"
-            },
+            "taskType": "tts",
             "config": {
                 "language": {
                     "sourceLanguage": "hi"
@@ -41,7 +35,7 @@
     "inputData": {
         "audio": [
             {
-                "audioContent": "Uk6HfSIOvu7dTp7ong6e318Ojs6fDr8f206/N1fOr4gNTo+3S86/zMdOn9VJDq+XUM6fWBNOn05TDo+xDY6f4H8Of8f7zl/Ees5fwLZOYDfkjkA0nQ5/667Of9t4Dk/+gg6/xwNOoCNrTkAenk5AA0dOQD6NTkAaKM3ANYhuQCCirgANE44AGpFOQCtYzmAr4E5AKg9OQCOhrgAami5/7nouf+f1bn/H7y5AA0zuQBKCTkAgBU5AHjWuACba7mAYI"
+                "audioContent": "UklGRnI0CABXQVZFZm10IBIAAAADAAEAIlYAAIhYAQAEACAAAABmYWN0BAAAABANAgBkYXRhQDQIAIBQpTl/zMo5/+XnOf/U4Dn/puY5f/vmOX+O9jl/b+85f9v4Of/93jn/VRQ6PzQPOr9zATp/+Qc6f3n3Of/f4zn/yw06fxfoOf87+Dn/kfc5f4brOX/kDTp/Pws6f3QZOr+KHTp/EyM6P2oWOj9iFjp/vg86fwMSOr/+Azq/+SA6fyj0OT97ADr/MgA6PwsIOr+rFDo+Ljs6f9scOv9LCjr/HAw6f7v/Of8v6zl/B+05/1feOb8NEzp/j/g5//UROv99Fzr/rAw6vwUHOr+qDjr/a/A5/xvwOX8gyTl/mPs5fxXxOX9tBDr/isc5AN+yOf+Rwzn/0fw5/6UEOj9MBDp/9Bc6/6ULOn9r+jl/vRQ6v7MJOv8LCzr/I8Y5gBSwOX93+Dm9VEg6u111Ovsdfzo8wGg6P30KOn+ryTl/ivM5v4kKOj7hPjq9JVQ6v3sQOn/29Tl+oTI6fo1GOj8QBzr/MuQ5f2keOn2PVzq8f2M6PwUeOn+S6Tl/YuM5v5kkOv12Xjp+6UA6P5oCOn8wzTn/2wQ6//QJOn8U9Tl/7fo5/yj5Of/IFzq+ui06/3kkOn96Jjr/ohg6P50ZOv5qRTo9IE46fssyOj9sJzo"
             }
         ]
     }
