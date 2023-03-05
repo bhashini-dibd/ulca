@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
 
 public class TranslationResponseConfig   {
   @JsonProperty("modelId")
-  private Integer modelId = null;
+  private String modelId = null;
 
   @JsonProperty("language")
   private LanguagePair language = null;
@@ -29,7 +29,7 @@ public class TranslationResponseConfig   {
   @JsonProperty("outputFormat")
   private SupportedFormats outputFormat = null;
 
-  public TranslationResponseConfig modelId(Integer modelId) {
+  public TranslationResponseConfig modelId(String modelId) {
     this.modelId = modelId;
     return this;
   }
@@ -40,11 +40,11 @@ public class TranslationResponseConfig   {
    **/
   @Schema(example = "103", description = "Unique identifier of model")
   
-    public Integer getModelId() {
+    public String getModelId() {
     return modelId;
   }
 
-  public void setModelId(Integer modelId) {
+  public void setModelId(String modelId) {
     this.modelId = modelId;
   }
 

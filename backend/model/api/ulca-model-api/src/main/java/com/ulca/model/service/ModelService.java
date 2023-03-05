@@ -131,6 +131,8 @@ import io.swagger.pipelinerequest.TranslationResponseConfig;
 import io.swagger.pipelinerequest.TranslationTask;
 import io.swagger.pipelinerequest.TranslationTaskInference;
 import io.swagger.pipelinerequest.PipelineResponse;
+import io.swagger.pipelinerequest.LanguagesList;
+
 import lombok.extern.slf4j.Slf4j;
 import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
@@ -1193,12 +1195,11 @@ public class ModelService {
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
 						targetLanguages.add(lp.getTargetLanguage().toString().toUpperCase());	
+						translationResponseConfig.setModelId("");
 						translationResponseConfig.setLanguage(lp);
-
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
 					config.add(translationResponseConfig);
-					
 				}
 				
 				log.info(" SourceLanguages at end of Translation :: "+sourceLanguages);
@@ -1211,16 +1212,16 @@ public class ModelService {
 			else if(task=="asr") 
 			{
 				
-				ASRTaskInference aSRTaskInference = new ASRTaskInference();
+				ASRTaskInference asrTaskInference = new ASRTaskInference();
 				//aSRTaskInference.setTaskType(SupportedTasks.fromValue(task));
 				
 				List<ASRResponseConfig> config = new ArrayList<ASRResponseConfig>();
 
 				
-				ASRTask aSRTask=(ASRTask)pipelineTask;
-				if(aSRTask.getConfig()!=null && aSRTask.getConfig().getLanguage()!=null)
+				ASRTask asrTask=(ASRTask)pipelineTask;
+				if(asrTask.getConfig()!=null && asrTask.getConfig().getLanguage()!=null)
 				{
-					ASRRequestConfig asrRequestConfig =	aSRTask.getConfig();
+					ASRRequestConfig asrRequestConfig =	asrTask.getConfig();
 					LanguagePair languagePair =asrRequestConfig.getLanguage();
 					if(languagePair.getSourceLanguage()!=null)
 					{
@@ -1282,30 +1283,31 @@ public class ModelService {
 				for(ModelExtended each_model : asrModels) 
 				{
 					
-					ASRResponseConfig aSRResponseConfig = new ASRResponseConfig();
+					ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
 					log.info("Model Name :: " + each_model.getName());
 					LanguagePairs langPair = each_model.getLanguages();
 					for(LanguagePair lp : langPair)	
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
-						aSRResponseConfig.setLanguage(lp);
+						asrResponseConfig.setModelId("");
+						asrResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
-					aSRResponseConfig.setDomain(each_model.getDomain());
+					asrResponseConfig.setDomain(each_model.getDomain());
 				
 					
 					
-					config.add(aSRResponseConfig);
+					config.add(asrResponseConfig);
 				}
 				
-				aSRTaskInference.setConfig(config);
-				taskSchemaList.add(aSRTaskInference);
+				asrTaskInference.setConfig(config);
+				taskSchemaList.add(asrTaskInference);
 
 			}
 			else if(task=="tts") 
 			{
 				
-				TTSTaskInference tTSTaskInference = new TTSTaskInference();
+				TTSTaskInference ttsTaskInference = new TTSTaskInference();
 				//tTSTaskInference.setTaskType(SupportedTasks.fromValue(task));
 				
 				List<TTSResponseConfig> config = new ArrayList<TTSResponseConfig>();
@@ -1377,35 +1379,45 @@ public class ModelService {
 				for(ModelExtended each_model : ttsModels) 
 				{
 					
-					TTSResponseConfig tTSResponseConfig = new TTSResponseConfig();
+					TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
 
 					log.info("Model Name :: " + each_model.getName());
 					LanguagePairs langPair = each_model.getLanguages();
 					for(LanguagePair lp : langPair)	
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
-						tTSResponseConfig.setLanguage(lp);
+						ttsResponseConfig.setModelId("");
+						ttsResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
 			
-					config.add(tTSResponseConfig);
+					config.add(ttsResponseConfig);
 
 				}
 				
 				log.info("config :: "+config);
-				tTSTaskInference.setConfig(config);
-				taskSchemaList.add(tTSTaskInference);
+				ttsTaskInference.setConfig(config);
+				taskSchemaList.add(ttsTaskInference);
 			}
 	     
 
 	      
 		}
 		pipelineResponse.setPipelineResponseConfig(taskSchemaList);
+		
 		//TODO: Add PipelineInferenceEndPoint without api keys (Except for it, everything else copied from pipelinemodel)
 		
+		//TODO: Add language pairs to response
+
+		TaskSchemaList responseConfig = pipelineResponse.getPipelineResponseConfig(); 
 		
-		//code for hiding null fields
-		
+		LanguagesList languageList = pipelineResponse.getLanguages();
+
+		for(TaskSchema each_task : responseConfig) 
+		{
+			log.info("Each Task :: "+each_task.getClass());
+			if(each)
+		}
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
