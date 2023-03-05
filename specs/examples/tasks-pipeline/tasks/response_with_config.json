@@ -25,9 +25,7 @@
           ]
         },
         {
-            "task" : {
-                "type" : "translation"
-            },
+            "taskType" : "translation",
             "config" : [
               {
                   "serviceId" : "",
