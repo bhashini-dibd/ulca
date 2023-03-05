@@ -5,13 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
-import io.swagger.model.AudioFormat;
 import io.swagger.model.ModelProcessingType;
 import io.swagger.model.SupportedTasks;
-import io.swagger.model.TextFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -20,23 +16,16 @@ import javax.validation.constraints.*;
  * ASRInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
 
 public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+	/*
+	 * @JsonProperty("taskType") private SupportedTasks taskType = null;
+	 */
 
   @JsonProperty("modelProcessingType")
   private ModelProcessingType modelProcessingType = null;
-
-  @JsonProperty("supportedInputAudioFormats")
-  @Valid
-  private List<AudioFormat> supportedInputAudioFormats = null;
-
-  @JsonProperty("supportedOutputTextFormats")
-  @Valid
-  private List<TextFormat> supportedOutputTextFormats = null;
 
   @JsonProperty("request")
   private ASRRequest request = null;
@@ -44,27 +33,26 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("response")
   private ASRResponse response = null;
 
-  public ASRInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	/*
+	 * public ASRInference taskType(SupportedTasks taskType) { this.taskType =
+	 * taskType; return this; }
+	 */
 
   /**
    * Get taskType
    * @return taskType
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
-
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
-
+	/*
+	 * @Schema(required = true, description = "")
+	 * 
+	 * @NotNull
+	 * 
+	 * @Valid public SupportedTasks getTaskType() { return taskType; }
+	 */
+	/*
+	 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+	 * }
+	 */
   public ASRInference modelProcessingType(ModelProcessingType modelProcessingType) {
     this.modelProcessingType = modelProcessingType;
     return this;
@@ -84,60 +72,6 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
 
   public void setModelProcessingType(ModelProcessingType modelProcessingType) {
     this.modelProcessingType = modelProcessingType;
-  }
-
-  public ASRInference supportedInputAudioFormats(List<AudioFormat> supportedInputAudioFormats) {
-    this.supportedInputAudioFormats = supportedInputAudioFormats;
-    return this;
-  }
-
-  public ASRInference addSupportedInputAudioFormatsItem(AudioFormat supportedInputAudioFormatsItem) {
-    if (this.supportedInputAudioFormats == null) {
-      this.supportedInputAudioFormats = new ArrayList<AudioFormat>();
-    }
-    this.supportedInputAudioFormats.add(supportedInputAudioFormatsItem);
-    return this;
-  }
-
-  /**
-   * list of
-   * @return supportedInputAudioFormats
-   **/
-  @Schema(description = "list of")
-      @Valid
-    public List<AudioFormat> getSupportedInputAudioFormats() {
-    return supportedInputAudioFormats;
-  }
-
-  public void setSupportedInputAudioFormats(List<AudioFormat> supportedInputAudioFormats) {
-    this.supportedInputAudioFormats = supportedInputAudioFormats;
-  }
-
-  public ASRInference supportedOutputTextFormats(List<TextFormat> supportedOutputTextFormats) {
-    this.supportedOutputTextFormats = supportedOutputTextFormats;
-    return this;
-  }
-
-  public ASRInference addSupportedOutputTextFormatsItem(TextFormat supportedOutputTextFormatsItem) {
-    if (this.supportedOutputTextFormats == null) {
-      this.supportedOutputTextFormats = new ArrayList<TextFormat>();
-    }
-    this.supportedOutputTextFormats.add(supportedOutputTextFormatsItem);
-    return this;
-  }
-
-  /**
-   * list of
-   * @return supportedOutputTextFormats
-   **/
-  @Schema(description = "list of")
-      @Valid
-    public List<TextFormat> getSupportedOutputTextFormats() {
-    return supportedOutputTextFormats;
-  }
-
-  public void setSupportedOutputTextFormats(List<TextFormat> supportedOutputTextFormats) {
-    this.supportedOutputTextFormats = supportedOutputTextFormats;
   }
 
   public ASRInference request(ASRRequest request) {
@@ -191,28 +125,31 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
       return false;
     }
     ASRInference asRInference = (ASRInference) o;
-    return Objects.equals(this.taskType, asRInference.taskType) &&
+    return //Objects.equals(this.taskType, asRInference.taskType) &&
         Objects.equals(this.modelProcessingType, asRInference.modelProcessingType) &&
-        Objects.equals(this.supportedInputAudioFormats, asRInference.supportedInputAudioFormats) &&
-        Objects.equals(this.supportedOutputTextFormats, asRInference.supportedOutputTextFormats) &&
         Objects.equals(this.request, asRInference.request) &&
         Objects.equals(this.response, asRInference.response);
   }
 
+	/*
+	 * @Override public int hashCode() { return Objects.hash(taskType,
+	 * modelProcessingType, request, response); }
+	 */
+  
+  
   @Override
   public int hashCode() {
-    return Objects.hash(taskType, modelProcessingType, supportedInputAudioFormats, supportedOutputTextFormats, request, response);
+    return Objects.hash( modelProcessingType, request, response);
   }
-
+  
+  
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ASRInference {\n");
     
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+   // sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
-    sb.append("    supportedInputAudioFormats: ").append(toIndentedString(supportedInputAudioFormats)).append("\n");
-    sb.append("    supportedOutputTextFormats: ").append(toIndentedString(supportedOutputTextFormats)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("}");

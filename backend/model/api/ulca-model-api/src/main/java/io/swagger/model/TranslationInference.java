@@ -15,121 +15,122 @@ import javax.validation.constraints.*;
  * TranslationInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
 
+public class TranslationInference implements OneOfInferenceAPIEndPointSchema {
+	
+	//This is commented field
+	
+	/* @JsonProperty("taskType") private SupportedTasks taskType = null; */
+	 
 
-public class TranslationInference  implements OneOfInferenceAPIEndPointSchema {
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+	@JsonProperty("request")
+	private TranslationRequest request = null;
 
-  @JsonProperty("request")
-  private TranslationRequest request = null;
+	@JsonProperty("response")
+	private TranslationResponse response = null;
 
-  @JsonProperty("response")
-  private TranslationResponse response = null;
+	/*
+	 * public TranslationInference taskType(SupportedTasks taskType) { this.taskType
+	 * = taskType; return this; }
+	 * 
+	 *//**
+		 * Get taskType
+		 * 
+		 * @return taskType
+		 **//*
+			 * @Schema(required = true, description = "")
+			 * 
+			 * @NotNull
+			 * 
+			 * @Valid public SupportedTasks getTaskType() { return taskType; }
+			 * 
+			 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+			 * }
+			 */
+	public TranslationInference request(TranslationRequest request) {
+		this.request = request;
+		return this;
+	}
 
-  public TranslationInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	/**
+	 * Get request
+	 * 
+	 * @return request
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-  /**
-   * Get taskType
-   * @return taskType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public TranslationRequest getRequest() {
+		return request;
+	}
 
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
+	public void setRequest(TranslationRequest request) {
+		this.request = request;
+	}
 
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
+	public TranslationInference response(TranslationResponse response) {
+		this.response = response;
+		return this;
+	}
 
-  public TranslationInference request(TranslationRequest request) {
-    this.request = request;
-    return this;
-  }
+	/**
+	 * Get response
+	 * 
+	 * @return response
+	 **/
+	@Schema(description = "")
 
-  /**
-   * Get request
-   * @return request
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public TranslationResponse getResponse() {
+		return response;
+	}
 
-    @Valid
-    public TranslationRequest getRequest() {
-    return request;
-  }
+	public void setResponse(TranslationResponse response) {
+		this.response = response;
+	}
 
-  public void setRequest(TranslationRequest request) {
-    this.request = request;
-  }
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		TranslationInference translationInference = (TranslationInference) o;
+		return //Objects.equals(//this.taskType, translationInference.taskType)
+				 Objects.equals(this.request, translationInference.request)
+				&& Objects.equals(this.response, translationInference.response);
+	}
 
-  public TranslationInference response(TranslationResponse response) {
-    this.response = response;
-    return this;
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash( request, response);
+	}
 
-  /**
-   * Get response
-   * @return response
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public TranslationResponse getResponse() {
-    return response;
-  }
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class TranslationInference {\n");
 
-  public void setResponse(TranslationResponse response) {
-    this.response = response;
-  }
+		//sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+		sb.append("    request: ").append(toIndentedString(request)).append("\n");
+		sb.append("    response: ").append(toIndentedString(response)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    TranslationInference translationInference = (TranslationInference) o;
-    return Objects.equals(this.taskType, translationInference.taskType) &&
-        Objects.equals(this.request, translationInference.request) &&
-        Objects.equals(this.response, translationInference.response);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(taskType, request, response);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class TranslationInference {\n");
-    
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
-    sb.append("    request: ").append(toIndentedString(request)).append("\n");
-    sb.append("    response: ").append(toIndentedString(response)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
+	
+	
+	
+	
 }
