@@ -13,11 +13,11 @@ components:
   schemas:
     APIKeyGenerationRequest:
       required:
-        - email
+        - emailId
         - appName
       type: object
       properties:
-        email:
+        emailId:
           type: string
           description: Email of the user for which api key is to be generated
           example: ulca.ulca@gmail.com/bhashini-prod-android
@@ -49,11 +49,11 @@ components:
    
     APIKeyRevokeRequest:
       required:
-        - email
+        - emailId
         - appName
       type: object
       properties:
-        email:
+        emailId:
           type: string
           description: Email of the user for which api key is to be revoked
           example: ulca.ulca@gmail.com/bhashini-prod-android
