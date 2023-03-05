@@ -1416,8 +1416,9 @@ public class ModelService {
 		for(TaskSchema each_task : responseConfig) 
 		{
 			log.info("Each Task :: "+each_task.getClass());
-			if(each)
 		}
+		
+		pipelineResponse.setLanguages(languageList);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
