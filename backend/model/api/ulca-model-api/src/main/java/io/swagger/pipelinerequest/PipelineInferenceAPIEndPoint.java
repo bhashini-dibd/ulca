@@ -3,6 +3,8 @@ package io.swagger.pipelinerequest;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,7 @@ import javax.validation.constraints.*;
 @Schema(description = "hosted location defines the end point of the model inference. specify a taskType along with Inference type")
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T08:00:21.046011704Z[GMT]")
+
 
 
 public class PipelineInferenceAPIEndPoint   {

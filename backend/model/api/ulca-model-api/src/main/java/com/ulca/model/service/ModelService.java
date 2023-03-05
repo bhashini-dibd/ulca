@@ -44,6 +44,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -1401,7 +1402,12 @@ public class ModelService {
 		//TODO: Add PipelineInferenceEndPoint without api keys (Except for it, everything else copied from pipelinemodel)
 		
 		
+	///code for hiding null fields
 		
+		
+		//ObjectMapper om = new ObjectMapper();
+		//om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		//PipelineResponse copiedPipelineResponse = om.convertValue(pipelineResponse, PipelineResponse.class);
 		
 		
 		

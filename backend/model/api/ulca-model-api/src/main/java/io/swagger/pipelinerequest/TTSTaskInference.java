@@ -25,8 +25,8 @@ public class TTSTaskInference implements TaskSchema {
 	@JsonProperty("inferenceApiKey")
 	private TranslationTaskInferenceInferenceApiKey inferenceApiKey = null;
 
-	@JsonProperty("taskType")
-	private SupportedTasks taskType = null;
+	// @JsonProperty("taskType")
+	// private SupportedTasks taskType = null;
 
 	@JsonProperty("config")
 	@Valid
@@ -73,24 +73,24 @@ public class TTSTaskInference implements TaskSchema {
 		this.inferenceApiKey = inferenceApiKey;
 	}
 
-	
-	  public TTSTaskInference taskType(SupportedTasks taskType) { this.taskType =
-	  taskType; return this; }
-	  
-	 /**
+	/*
+	 * public TTSTaskInference taskType(SupportedTasks taskType) { this.taskType =
+	 * taskType; return this; }
+	 * 
+	 *//**
 		 * Get taskType
 		 * 
 		 * @return taskType
-		 */
-			  @Schema(required = true, description = "")
-			  
-			  @NotNull
-			  
-			  @Valid public SupportedTasks getTaskType() { return taskType; }
-			  
-			  public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
-			  }
-			 
+		 *//*
+			 * @Schema(required = true, description = "")
+			 * 
+			 * @NotNull
+			 * 
+			 * @Valid public SupportedTasks getTaskType() { return taskType; }
+			 * 
+			 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+			 * }
+			 */
 
 	public TTSTaskInference config(List<TTSResponseConfig> config) {
 		this.config = config;
@@ -129,13 +129,13 @@ public class TTSTaskInference implements TaskSchema {
 		TTSTaskInference ttSTaskInference = (TTSTaskInference) o;
 		return Objects.equals(this.callbackUrl, ttSTaskInference.callbackUrl)
 				&& Objects.equals(this.inferenceApiKey, ttSTaskInference.inferenceApiKey)
-				&& Objects.equals(this.taskType, ttSTaskInference.taskType)
+				//&& Objects.equals(this.taskType, ttSTaskInference.taskType)
 				&& Objects.equals(this.config, ttSTaskInference.config);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(callbackUrl, inferenceApiKey,taskType, config);
+		return Objects.hash(callbackUrl, inferenceApiKey,  config);
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class TTSTaskInference implements TaskSchema {
 
 		sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
 		sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
-		sb.append(" taskType: ").append(toIndentedString(taskType)).append("\n");
+		//sb.append(" taskType: ").append(toIndentedString(taskType)).append("\n");
 		sb.append("    config: ").append(toIndentedString(config)).append("\n");
 		sb.append("}");
 		return sb.toString();
