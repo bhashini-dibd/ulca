@@ -111,15 +111,24 @@ import io.swagger.pipelinemodel.InferenceAPIEndPointMasterApiKey;
 import io.swagger.pipelinemodel.ListOfPipelines;
 import io.swagger.pipelinemodel.PipelineTaskSequence;
 import io.swagger.pipelinerequest.ASRRequestConfig;
+import io.swagger.pipelinerequest.ASRResponseConfig;
 import io.swagger.pipelinerequest.ASRTask;
+import io.swagger.pipelinerequest.ASRTaskInference;
 import io.swagger.pipelinerequest.PipelineConfig;
+import io.swagger.pipelinerequest.PipelineInferenceAPIEndPoint;
 import io.swagger.pipelinerequest.PipelineRequest;
 import io.swagger.pipelinerequest.PipelineTask;
 import io.swagger.pipelinerequest.PipelineTasks;
 import io.swagger.pipelinerequest.TTSRequestConfig;
+import io.swagger.pipelinerequest.TTSResponseConfig;
 import io.swagger.pipelinerequest.TTSTask;
+import io.swagger.pipelinerequest.TTSTaskInference;
+import io.swagger.pipelinerequest.TaskSchema;
+import io.swagger.pipelinerequest.TaskSchemaList;
 import io.swagger.pipelinerequest.TranslationRequestConfig;
+import io.swagger.pipelinerequest.TranslationResponseConfig;
 import io.swagger.pipelinerequest.TranslationTask;
+import io.swagger.pipelinerequest.TranslationTaskInference;
 import io.swagger.pipelinerequest.PipelineResponse;
 import lombok.extern.slf4j.Slf4j;
 import com.github.mervick.aes_everywhere.Aes256;
@@ -1064,12 +1073,31 @@ public class ModelService {
 		} else {
 			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax");
 		}
-
+        
+		
+		//Make query and find pipeline model with the submitter name
+				Query dynamicQuery1 = new Query();
+				Criteria modelTypeCriteria1 = Criteria.where("_class").is("com.ulca.model.dao.PipelineModel");
+				dynamicQuery1.addCriteria(modelTypeCriteria1);
+				Criteria submitterCriteria1 = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+				dynamicQuery1.addCriteria(submitterCriteria1);
+				log.info("dynamicQuery : " + dynamicQuery1.toString());
+				PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery1, PipelineModel.class);
 		
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
 	//	ArrayList<String> pipelineTaskSequence = new ArrayList<String>();
 		
+		PipelineResponse pipelineResponse = new PipelineResponse();
+		
+	   PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
+	   pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
+	   pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
+	   pipelineInferenceAPIEndPoint.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
+	   pipelineInferenceAPIEndPoint.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
+	   pipelineResponse.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
+	   TaskSchemaList taskSchemaList = new TaskSchemaList();
+	   
 		Set<String> sourceLanguages = new HashSet<String>();
 		Set<String> targetLanguages = new HashSet<String>();
 
@@ -1079,6 +1107,9 @@ public class ModelService {
 			
 	     String task=pipelineTask.getTaskType();
 			if(task=="translation") {
+			
+				TranslationTaskInference translationTaskInference = new TranslationTaskInference();
+				//translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
 				
 				TranslationTask translationTask	=(TranslationTask)pipelineTask;
 				targetLanguages.clear();
@@ -1147,29 +1178,42 @@ public class ModelService {
 
 				sourceLanguages.clear();
 				targetLanguages.clear();
-
+				
+				List<TranslationResponseConfig> config = new ArrayList<TranslationResponseConfig>();
 				for(ModelExtended each_model : translationModels) 
 				{
 					log.info("Model Name :: " + each_model.getName());
 					LanguagePairs langPair = each_model.getLanguages();
+					TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
+
 					for(LanguagePair lp : langPair)	
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
 						targetLanguages.add(lp.getTargetLanguage().toString().toUpperCase());	
+						translationResponseConfig.setLanguage(lp);
+
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
-
-
+					config.add(translationResponseConfig);
+					
 				}
 				
 				log.info(" SourceLanguages at end of Translation :: "+sourceLanguages);
 				log.info(" TargetLanguages at end of Translation :: "+targetLanguages);
 				sourceLanguages = targetLanguages;
-
+				translationTaskInference.setConfig(config);
+				taskSchemaList.add(translationTaskInference);
 			}
 			
 			else if(task=="asr") 
 			{
+				
+				ASRTaskInference aSRTaskInference = new ASRTaskInference();
+				//aSRTaskInference.setTaskType(SupportedTasks.fromValue(task));
+				
+				List<ASRResponseConfig> config = new ArrayList<ASRResponseConfig>();
+
+				
 				ASRTask aSRTask=(ASRTask)pipelineTask;
 				if(aSRTask.getConfig()!=null && aSRTask.getConfig().getLanguage()!=null)
 				{
@@ -1234,18 +1278,38 @@ public class ModelService {
 
 				for(ModelExtended each_model : asrModels) 
 				{
+					
+					ASRResponseConfig aSRResponseConfig = new ASRResponseConfig();
 					log.info("Model Name :: " + each_model.getName());
 					LanguagePairs langPair = each_model.getLanguages();
 					for(LanguagePair lp : langPair)	
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+						aSRResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
-
+					aSRResponseConfig.setDomain(each_model.getDomain());
+				
+					
+					
+					config.add(aSRResponseConfig);
 				}
+				
+				aSRTaskInference.setConfig(config);
+				taskSchemaList.add(aSRTaskInference);
+
 			}
 			else if(task=="tts") 
 			{
+				
+				TTSTaskInference tTSTaskInference = new TTSTaskInference();
+				//tTSTaskInference.setTaskType(SupportedTasks.fromValue(task));
+				
+				List<TTSResponseConfig> config = new ArrayList<TTSResponseConfig>();
+
+				
+				
+				
 				TTSTask ttsTask=(TTSTask)pipelineTask;
 				if(ttsTask.getConfig()!=null && ttsTask.getConfig().getLanguage()!=null)
 				{
@@ -1309,91 +1373,39 @@ public class ModelService {
 				
 				for(ModelExtended each_model : ttsModels) 
 				{
+					
+					TTSResponseConfig tTSResponseConfig = new TTSResponseConfig();
+
 					log.info("Model Name :: " + each_model.getName());
 					LanguagePairs langPair = each_model.getLanguages();
 					for(LanguagePair lp : langPair)	
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+						tTSResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
+			
+					config.add(tTSResponseConfig);
 
 				}
 				
+				log.info("config :: "+config);
+				tTSTaskInference.setConfig(config);
+				taskSchemaList.add(tTSTaskInference);
 			}
 	     
 
 	      
 		}
-		
+		pipelineResponse.setPipelineResponseConfig(taskSchemaList);
 		//TODO: Add PipelineInferenceEndPoint without api keys (Except for it, everything else copied from pipelinemodel)
 		
 		
 		
 		
 		
-		// Boolean available =checkTaskSequence(pipelineRequest);
-		// log.info("available :: "+available);
-
-		/*
-		 * List<PipelineTask> requestList = new ArrayList<PipelineTask>(); ASRTask task1
-		 * = new ASRTask();
-		 * task1.setType(io.swagger.pipelinerequest.SupportedTasks.ASR);
-		 * ASRRequestConfig config1 = new ASRRequestConfig(); LanguagePair pair1 = new
-		 * LanguagePair(); pair1.setSourceLanguage(SupportedLanguages.EN);
-		 * config1.setLanguage(pair1); task1.setConfig(config1); requestList.add(task1);
-		 * 
-		 * TranslationTask task2 = new TranslationTask();
-		 * task2.setType(io.swagger.pipelinerequest.SupportedTasks.TRANSLATION);
-		 * TranslationRequestConfig config2 = new TranslationRequestConfig();
-		 * LanguagePair pair2 = new LanguagePair();
-		 * pair2.setSourceLanguage(SupportedLanguages.EN); config2.setLanguage(pair2);
-		 * task2.setConfig(config2); requestList.add(task2);
-		 * 
-		 * PipelineRequest request = new PipelineRequest();
-		 * request.setPipelineTasks(requestList); PipelineConfig pipelineConfig = new
-		 * PipelineConfig(); pipelineConfig.setSubmitter("AI4Bharat");
-		 * request.setPipelineRequestConfig(pipelineConfig);
-		 * 
-		 * log.info("request :: " + request);
-		 * 
-		 * boolean available = checkTaskSequence(request);
-		 * 
-		 * log.info(" available TaskSequence :: " + available);
-		 * 
-		 * PipelineModel pipelineModel = pipelineModelDao
-		 * .findBySubmitterName(request.getPipelineRequestConfig().getSubmitter());
-		 * List<PipelineTask> requestedList = request.getPipelineTasks();
-		 * List<io.swagger.pipelinerequest.SupportedTasks> tasksList = new
-		 * ArrayList<io.swagger.pipelinerequest.SupportedTasks>(); for(PipelineTask
-		 * pipelineTask : requestedList) {
-		 * 
-		 * tasksList.add(pipelineTask.getType());
-		 * 
-		 * }
-		 * 
-		 * for (PipelineTask pipelineTask : requestedList) {
-		 * 
-		 * if (pipelineTask.getType().equals(io.swagger.pipelinerequest.SupportedTasks.
-		 * TRANSLATION)) {
-		 * 
-		 * log.info("Translation"); TranslationTask translationTask = (TranslationTask)
-		 * pipelineTask; log.info("translationTask :: " + translationTask);
-		 * 
-		 * if (tasksList.contains(io.swagger.pipelinerequest.SupportedTasks.ASR)) {
-		 * 
-		 * log.info("available");
-		 * 
-		 * }
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * }
-		 * 
-		 * }
-		 */
-		return new PipelineResponse();
+		
+		return  pipelineResponse;
 	}
 
 	public static String checkModel(MultipartFile file) {

@@ -26,8 +26,8 @@ public class TranslationTaskInference  implements TaskSchema {
   @JsonProperty("inferenceApiKey")
   private TranslationTaskInferenceInferenceApiKey inferenceApiKey = null;
 
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+  //@JsonProperty("taskType")
+  //private SupportedTasks taskType = null;
 
   @JsonProperty("config")
   @Valid
@@ -72,27 +72,25 @@ public class TranslationTaskInference  implements TaskSchema {
     this.inferenceApiKey = inferenceApiKey;
   }
 
-  public TranslationTaskInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	/*
+	 * public TranslationTaskInference taskType(SupportedTasks taskType) {
+	 * this.taskType = taskType; return this; }
+	 */
 
   /**
    * Get taskType
    * @return taskType
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
-
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
-
+	/*
+	 * @Schema(required = true, description = "")
+	 * 
+	 * @NotNull
+	 * 
+	 * @Valid public SupportedTasks getTaskType() { return taskType; }
+	 * 
+	 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+	 * }
+	 */
   public TranslationTaskInference config(List<TranslationResponseConfig> config) {
     this.config = config;
     return this;
@@ -130,13 +128,13 @@ public class TranslationTaskInference  implements TaskSchema {
     TranslationTaskInference translationTaskInference = (TranslationTaskInference) o;
     return Objects.equals(this.callbackUrl, translationTaskInference.callbackUrl) &&
         Objects.equals(this.inferenceApiKey, translationTaskInference.inferenceApiKey) &&
-        Objects.equals(this.taskType, translationTaskInference.taskType) &&
+       // Objects.equals(this.taskType, translationTaskInference.taskType) &&
         Objects.equals(this.config, translationTaskInference.config);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(callbackUrl, inferenceApiKey, taskType, config);
+    return Objects.hash(callbackUrl, inferenceApiKey, config);
   }
 
   @Override
@@ -146,7 +144,7 @@ public class TranslationTaskInference  implements TaskSchema {
     
     sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
     sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+   // sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -18,148 +18,147 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T11:59:30.120199210Z[GMT]")
 
+public class TTSTaskInference implements TaskSchema {
+	@JsonProperty("callbackUrl")
+	private String callbackUrl = null;
 
-public class TTSTaskInference  implements TaskSchema {
-  @JsonProperty("callbackUrl")
-  private String callbackUrl = null;
+	@JsonProperty("inferenceApiKey")
+	private TranslationTaskInferenceInferenceApiKey inferenceApiKey = null;
 
-  @JsonProperty("inferenceApiKey")
-  private TranslationTaskInferenceInferenceApiKey inferenceApiKey = null;
+	@JsonProperty("taskType")
+	private SupportedTasks taskType = null;
 
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+	@JsonProperty("config")
+	@Valid
+	private List<TTSResponseConfig> config = new ArrayList<TTSResponseConfig>();
 
-  @JsonProperty("config")
-  @Valid
-  private List<TTSResponseConfig> config = new ArrayList<TTSResponseConfig>();
+	public TTSTaskInference callbackUrl(String callbackUrl) {
+		this.callbackUrl = callbackUrl;
+		return this;
+	}
 
-  public TTSTaskInference callbackUrl(String callbackUrl) {
-    this.callbackUrl = callbackUrl;
-    return this;
-  }
+	/**
+	 * Get callbackUrl
+	 * 
+	 * @return callbackUrl
+	 **/
+	@Schema(description = "")
 
-  /**
-   * Get callbackUrl
-   * @return callbackUrl
-   **/
-  @Schema(description = "")
-  
-    public String getCallbackUrl() {
-    return callbackUrl;
-  }
+	public String getCallbackUrl() {
+		return callbackUrl;
+	}
 
-  public void setCallbackUrl(String callbackUrl) {
-    this.callbackUrl = callbackUrl;
-  }
+	public void setCallbackUrl(String callbackUrl) {
+		this.callbackUrl = callbackUrl;
+	}
 
-  public TTSTaskInference inferenceApiKey(TranslationTaskInferenceInferenceApiKey inferenceApiKey) {
-    this.inferenceApiKey = inferenceApiKey;
-    return this;
-  }
+	public TTSTaskInference inferenceApiKey(TranslationTaskInferenceInferenceApiKey inferenceApiKey) {
+		this.inferenceApiKey = inferenceApiKey;
+		return this;
+	}
 
-  /**
-   * Get inferenceApiKey
-   * @return inferenceApiKey
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public TranslationTaskInferenceInferenceApiKey getInferenceApiKey() {
-    return inferenceApiKey;
-  }
+	/**
+	 * Get inferenceApiKey
+	 * 
+	 * @return inferenceApiKey
+	 **/
+	@Schema(description = "")
 
-  public void setInferenceApiKey(TranslationTaskInferenceInferenceApiKey inferenceApiKey) {
-    this.inferenceApiKey = inferenceApiKey;
-  }
+	@Valid
+	public TranslationTaskInferenceInferenceApiKey getInferenceApiKey() {
+		return inferenceApiKey;
+	}
 
-  public TTSTaskInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	public void setInferenceApiKey(TranslationTaskInferenceInferenceApiKey inferenceApiKey) {
+		this.inferenceApiKey = inferenceApiKey;
+	}
 
-  /**
-   * Get taskType
-   * @return taskType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	
+	  public TTSTaskInference taskType(SupportedTasks taskType) { this.taskType =
+	  taskType; return this; }
+	  
+	 /**
+		 * Get taskType
+		 * 
+		 * @return taskType
+		 */
+			  @Schema(required = true, description = "")
+			  
+			  @NotNull
+			  
+			  @Valid public SupportedTasks getTaskType() { return taskType; }
+			  
+			  public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+			  }
+			 
 
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
+	public TTSTaskInference config(List<TTSResponseConfig> config) {
+		this.config = config;
+		return this;
+	}
 
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
+	public TTSTaskInference addConfigItem(TTSResponseConfig configItem) {
+		this.config.add(configItem);
+		return this;
+	}
 
-  public TTSTaskInference config(List<TTSResponseConfig> config) {
-    this.config = config;
-    return this;
-  }
+	/**
+	 * list of
+	 * 
+	 * @return config
+	 **/
+	@Schema(required = true, description = "list of")
+	@NotNull
+	@Valid
+	public List<TTSResponseConfig> getConfig() {
+		return config;
+	}
 
-  public TTSTaskInference addConfigItem(TTSResponseConfig configItem) {
-    this.config.add(configItem);
-    return this;
-  }
+	public void setConfig(List<TTSResponseConfig> config) {
+		this.config = config;
+	}
 
-  /**
-   * list of
-   * @return config
-   **/
-  @Schema(required = true, description = "list of")
-      @NotNull
-    @Valid
-    public List<TTSResponseConfig> getConfig() {
-    return config;
-  }
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		TTSTaskInference ttSTaskInference = (TTSTaskInference) o;
+		return Objects.equals(this.callbackUrl, ttSTaskInference.callbackUrl)
+				&& Objects.equals(this.inferenceApiKey, ttSTaskInference.inferenceApiKey)
+				&& Objects.equals(this.taskType, ttSTaskInference.taskType)
+				&& Objects.equals(this.config, ttSTaskInference.config);
+	}
 
-  public void setConfig(List<TTSResponseConfig> config) {
-    this.config = config;
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash(callbackUrl, inferenceApiKey,taskType, config);
+	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class TTSTaskInference {\n");
 
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    TTSTaskInference ttSTaskInference = (TTSTaskInference) o;
-    return Objects.equals(this.callbackUrl, ttSTaskInference.callbackUrl) &&
-        Objects.equals(this.inferenceApiKey, ttSTaskInference.inferenceApiKey) &&
-        Objects.equals(this.taskType, ttSTaskInference.taskType) &&
-        Objects.equals(this.config, ttSTaskInference.config);
-  }
+		sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
+		sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
+		sb.append(" taskType: ").append(toIndentedString(taskType)).append("\n");
+		sb.append("    config: ").append(toIndentedString(config)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(callbackUrl, inferenceApiKey, taskType, config);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class TTSTaskInference {\n");
-    
-    sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
-    sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
-    sb.append("    config: ").append(toIndentedString(config)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 }
