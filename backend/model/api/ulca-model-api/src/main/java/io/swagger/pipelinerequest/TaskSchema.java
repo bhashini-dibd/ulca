@@ -19,5 +19,5 @@ import io.swagger.model.SupportedTasks;
 })
 public interface TaskSchema {
 
-    //SupportedTasks getTaskType();
+    String getTaskType();
 }

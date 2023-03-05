@@ -25,8 +25,8 @@ public class TTSTaskInference implements TaskSchema {
 	@JsonProperty("inferenceApiKey")
 	private TranslationTaskInferenceInferenceApiKey inferenceApiKey = null;
 
-	// @JsonProperty("taskType")
-	// private SupportedTasks taskType = null;
+	@JsonProperty("taskType")
+	private String taskType = "tts";
 
 	@JsonProperty("config")
 	@Valid
@@ -73,24 +73,24 @@ public class TTSTaskInference implements TaskSchema {
 		this.inferenceApiKey = inferenceApiKey;
 	}
 
-	/*
-	 * public TTSTaskInference taskType(SupportedTasks taskType) { this.taskType =
-	 * taskType; return this; }
-	 * 
-	 *//**
+	
+	 public TTSTaskInference taskType(String taskType) { this.taskType =
+	 taskType; return this; }
+	 
+	 /**
 		 * Get taskType
 		 * 
 		 * @return taskType
-		 *//*
-			 * @Schema(required = true, description = "")
-			 * 
-			 * @NotNull
-			 * 
-			 * @Valid public SupportedTasks getTaskType() { return taskType; }
-			 * 
-			 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
-			 * }
-			 */
+		 */
+			 @Schema(required = true, description = "")
+			 
+			 @NotNull
+			 
+			 @Valid public String getTaskType() { return taskType; }
+			 
+			 public void setTaskType(String taskType) { this.taskType = taskType;
+			 }
+			 
 
 	public TTSTaskInference config(List<TTSResponseConfig> config) {
 		this.config = config;

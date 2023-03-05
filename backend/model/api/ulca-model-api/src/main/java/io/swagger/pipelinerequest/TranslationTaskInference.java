@@ -26,8 +26,8 @@ public class TranslationTaskInference  implements TaskSchema {
   @JsonProperty("inferenceApiKey")
   private TranslationTaskInferenceInferenceApiKey inferenceApiKey = null;
 
-  //@JsonProperty("taskType")
-  //private SupportedTasks taskType = null;
+  @JsonProperty("taskType")
+  private String taskType = "translation";
 
   @JsonProperty("config")
   @Valid
@@ -72,25 +72,25 @@ public class TranslationTaskInference  implements TaskSchema {
     this.inferenceApiKey = inferenceApiKey;
   }
 
-	/*
-	 * public TranslationTaskInference taskType(SupportedTasks taskType) {
-	 * this.taskType = taskType; return this; }
-	 */
+	
+	 public TranslationTaskInference taskType(String taskType) {
+	 this.taskType = taskType; return this; }
+	 
 
-  /**
-   * Get taskType
-   * @return taskType
-   **/
-	/*
-	 * @Schema(required = true, description = "")
-	 * 
-	 * @NotNull
-	 * 
-	 * @Valid public SupportedTasks getTaskType() { return taskType; }
-	 * 
-	 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
-	 * }
-	 */
+  // /**
+  //  * Get taskType
+  //  * @return taskType
+  //  **/
+	
+	 @Schema(required = true, description = "")
+	 
+	 @NotNull
+	 
+	 @Valid public String getTaskType() { return taskType; }
+	 
+	 public void setTaskType(String taskType) { this.taskType = taskType;
+	 }
+	 
   public TranslationTaskInference config(List<TranslationResponseConfig> config) {
     this.config = config;
     return this;

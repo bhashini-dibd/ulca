@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.validation.Valid;
 
@@ -132,6 +134,7 @@ import io.swagger.pipelinerequest.TranslationTask;
 import io.swagger.pipelinerequest.TranslationTaskInference;
 import io.swagger.pipelinerequest.PipelineResponse;
 import io.swagger.pipelinerequest.LanguagesList;
+import io.swagger.pipelinerequest.LanguageSchema;
 
 import lombok.extern.slf4j.Slf4j;
 import com.github.mervick.aes_everywhere.Aes256;
@@ -1413,16 +1416,102 @@ public class ModelService {
 		
 		LanguagesList languageList = pipelineResponse.getLanguages();
 
-		for(TaskSchema each_task : responseConfig) 
-		{
-			log.info("Each Task :: "+each_task.getClass());
-			if(each_task.getClass().toString() == "io.swagger.pipelinerequest.ASRTaskInference")
-			{
-				ASRTaskInference asrtaskinference = (ASRTaskInference)each_task;
+		
 
+		Set<String> sourceLangList = new HashSet<String>();
+		Set<String> targetLangList = new HashSet<String>();
+
+
+		String first_task_type = responseConfig.get(0).getTaskType();
+		log.info("FIRST TASK : "+ responseConfig.get(0));
+		if(first_task_type == "asr") 
+		{
+			ASRTaskInference asrTaskInference = (ASRTaskInference)responseConfig.get(0);
+			List<ASRResponseConfig> asrResponseConfigList = asrTaskInference.getConfig();
+			for(ASRResponseConfig each_asrconfig : asrResponseConfigList)
+			{
+				sourceLangList.add(each_asrconfig.getLanguage().getSourceLanguage().toString());
 			}
-			break;
+			targetLangList = sourceLangList;
 		}
+		else if(first_task_type == "translation") 
+		{
+			TranslationTaskInference translationTaskInference = (TranslationTaskInference)responseConfig.get(0);
+			List<TranslationResponseConfig> translationrResponseConfigList = translationTaskInference.getConfig();
+			for(TranslationResponseConfig each_translationconfig : translationrResponseConfigList)
+			{
+				sourceLangList.add(each_translationconfig.getLanguage().getSourceLanguage().toString());
+				targetLangList.add(each_translationconfig.getLanguage().getTargetLanguage().toString());
+			}
+		}
+		else if(first_task_type == "tts") 
+		{
+			TTSTaskInference ttsTaskInference = (TTSTaskInference)responseConfig.get(0);
+			List<TTSResponseConfig> ttsResponseConfigList = ttsTaskInference.getConfig();
+			for(TTSResponseConfig each_ttsconfig : ttsResponseConfigList)
+			{
+				sourceLangList.add(each_ttsconfig.getLanguage().getSourceLanguage().toString());
+			}
+			targetLangList = sourceLangList;			
+		}
+
+		log.info("SOURCE LANGUAGES : "+sourceLangList);
+		log.info("TARGET LANGUAGES : "+targetLangList);
+
+		int size = responseConfig.size();
+
+		Queue<String> intermediateQueue = new LinkedList<>();
+		
+		for(String lang : targetLangList)
+			intermediateQueue.add(lang);
+
+		int queueSize = intermediateQueue.size();
+		//intermediateQueue stores all the targetlanguages of the first task
+
+		//For each target language of previous task
+		for(int i =0;i<queueSize;i++) 
+		{
+			String targetLang = intermediateQueue.poll();
+			LanguageSchema languageSchema = new LanguageSchema();
+			languageSchema.setSourceLanguage(SupportedLanguages.fromValue(targetLang));
+				for(int j=1;j<size;j++) //go through each task (from 2nd one)
+				{
+					String current_task_type = responseConfig.get(i).getTaskType();
+					if(current_task_type == "asr") 
+					{
+						ASRTaskInference asrTaskInference = (ASRTaskInference)responseConfig.get(j);
+						List<ASRResponseConfig> asrResponseConfigList = asrTaskInference.getConfig();
+						for(ASRResponseConfig each_asrconfig : asrResponseConfigList)
+						{
+							if(each_asrconfig.getLanguage().getSourceLanguage().toString() == targetLang)
+								intermediateQueue.add(each_asrconfig.getLanguage().getSourceLanguage().toString());
+							//If source language of task is equal to target language of previous task, add target language of current task to intermediateSet
+						}
+					}
+					else if(current_task_type == "translation") 
+					{
+						TranslationTaskInference translationTaskInference = (TranslationTaskInference)responseConfig.get(j);
+						List<TranslationResponseConfig> translationrResponseConfigList = translationTaskInference.getConfig();
+						for(TranslationResponseConfig each_translationconfig : translationrResponseConfigList)
+						{
+							if(each_translationconfig.getLanguage().getSourceLanguage().toString() == targetLang)
+								intermediateQueue.add(each_translationconfig.getLanguage().getTargetLanguage().toString());
+						}
+					}
+					else if(current_task_type == "tts") 
+					{
+						TTSTaskInference ttsTaskInference = (TTSTaskInference)responseConfig.get(j);
+						List<TTSResponseConfig> ttsResponseConfigList = ttsTaskInference.getConfig();
+						for(TTSResponseConfig each_ttsconfig : ttsResponseConfigList)
+						{
+							if(each_ttsconfig.getLanguage().getSourceLanguage().toString() == targetLang)
+								intermediateQueue.add(each_ttsconfig.getLanguage().getSourceLanguage().toString());
+						}			
+					}
+			
+				}
+		}
+
 		
 		pipelineResponse.setLanguages(languageList);
 		

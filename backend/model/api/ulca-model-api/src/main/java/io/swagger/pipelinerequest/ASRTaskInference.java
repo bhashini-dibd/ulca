@@ -25,8 +25,8 @@ public class ASRTaskInference implements TaskSchema {
 	@JsonProperty("inferenceApiKey")
 	private TranslationTaskInferenceInferenceApiKey inferenceApiKey = null;
 
-	// @JsonProperty("taskType")
-	// private SupportedTasks taskType = null;
+	@JsonProperty("taskType")
+	private String taskType = "asr";
 
 	@JsonProperty("config")
 	@Valid
@@ -73,24 +73,27 @@ public class ASRTaskInference implements TaskSchema {
 		this.inferenceApiKey = inferenceApiKey;
 	}
 
-	/*
-	 * public ASRTaskInference taskType(SupportedTasks taskType) { this.taskType =
-	 * taskType; return this; }
-	 * 
-	 *//**
+	
+	 public ASRTaskInference taskType(String taskType) 
+	 { 
+		this.taskType =taskType; 
+		return this; 
+	 }
+	 
+	 /**
 		 * Get taskType
 		 * 
 		 * @return taskType
-		 **//*
-			 * @Schema(required = true, description = "")
-			 * 
-			 * @NotNull
-			 * 
-			 * @Valid public SupportedTasks getTaskType() { return taskType; }
-			 * 
-			 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
-			 * }
-			 */
+		 **/
+			//  @Schema(required = true, description = "")
+			 
+			//  @NotNull
+			 
+			 @Valid public String getTaskType() { return taskType; }
+			 
+			 public void setTaskType(String taskType) { this.taskType = taskType;
+			 }
+			 
 	public ASRTaskInference config(List<ASRResponseConfig> config) {
 		this.config = config;
 		return this;
