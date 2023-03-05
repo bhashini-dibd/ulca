@@ -47,45 +47,52 @@ components:
           description: Submitter Name
           example: AI4Bharat
     PipelineTask:
-      anyOf:
+      oneOf:
         - $ref: '#/components/schemas/TranslationTask'
         - $ref: '#/components/schemas/ASRTask'
         - $ref: '#/components/schemas/TTSTask'
-        
+      discriminator:
+        propertyName: taskType
+        mapping:
+          translation: '#/components/schemas/TranslationTask'
+          asr: '#/components/schemas/ASRTask'
+          tts: '#/components/schemas/TTSTask'
+          
     PipelineTasks:
       type: array
       items:
         $ref: '#/components/schemas/PipelineTask'
+        
     TranslationTask:
       required:
-        - task
+        - taskType
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: '#/components/schemas/TranslationRequestConfig'
+
     ASRTask:
       required:
-        - task
+        - taskType
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: '#/components/schemas/ASRRequestConfig'
+
     TTSTask:
       required:
-        - task
+        - taskType
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: '#/components/schemas/TTSRequestConfig'
+
     TranslationRequestConfig:
       required:
         - language
@@ -94,6 +101,7 @@ components:
         language:
           $ref: >-
             https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+            
     TTSRequestConfig:
       required:
         - language
@@ -128,7 +136,7 @@ components:
             $ref: >-
               https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
     TaskSchema:
-      anyOf:
+      oneOf:
         - $ref: '#/components/schemas/TranslationTaskInference'
         - $ref: '#/components/schemas/ASRTaskInference'
         - $ref: '#/components/schemas/TTSTaskInference'
@@ -136,8 +144,9 @@ components:
         propertyName: taskType
         mapping:
           translation: '#/components/schemas/TranslationTaskInference'
-          asr: '#/components/schemas/TranslationTaskInference'
-          tts: '#/components/schemas/TranslationTaskInference'
+          asr: '#/components/schemas/ASRTaskInference'
+          tts: '#/components/schemas/TTSTaskInference'
+
     TaskSchemaList:
       type: array
       items:
@@ -146,9 +155,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/LanguageSchema'
+
     TranslationTaskInference:
       required:
-        - task
+        - taskType
         - config
       type: object
       properties:
@@ -175,17 +185,17 @@ components:
                 expected if the callbackurl requires an API key so as to fetch
                 output
               example: dde19858-b354-4e24-8e92-a7a4b320c066
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           type: array
           description: list of
           items:
             $ref: '#/components/schemas/TranslationResponseConfig'
+
     ASRTaskInference:
       required:
-        - task
+        - taskType
         - config
       type: object
       properties:
@@ -212,17 +222,17 @@ components:
                 expected if the callbackurl requires an API key so as to fetch
                 output
               example: dde19858-b354-4e24-8e92-a7a4b320c066
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           type: array
           description: list of
           items:
             $ref: '#/components/schemas/ASRResponseConfig'
+
     TTSTaskInference:
       required:
-        - task
+        - taskType
         - config
       type: object
       properties:
@@ -249,9 +259,8 @@ components:
                 expected if the callbackurl requires an API key so as to fetch
                 output
               example: dde19858-b354-4e24-8e92-a7a4b320c066
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           type: array
           description: list of
@@ -260,10 +269,11 @@ components:
     TranslationResponseConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
-          type: integer
+        serviceId:
+          type: string
           description: Unique identifier of model
           example: 103
         language:
@@ -275,10 +285,10 @@ components:
           $ref: '#/components/schemas/SupportedFormats'
     TTSResponseConfig:
       required:
-        - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: string
           description: Unique identifier of model
           example: 103
@@ -298,9 +308,10 @@ components:
     ASRResponseConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: string
           description: Unique identifier of model
           example: 103

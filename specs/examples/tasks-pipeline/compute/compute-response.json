@@ -1,0 +1,52 @@
+{
+  "pipelineResponse": [
+    {
+      "config": {
+        "language": {
+          "sourceLanguage": "en"
+        },
+        "audioFormat": "wav",
+        "encoding": null,
+        "samplingRate": 44100,
+        "postProcessors": null
+      },
+      "output": [
+        {
+          "source": "so the second step is that somebody has to specify this in the project request and write"
+        }
+      ],
+      "audio": null
+    },
+    {
+      "config": {
+        "language": {
+          "sourceLanguage": "en",
+          "targetLanguage": "hi"
+        }
+      },
+      "output": [
+        {
+          "source": "so the second step is that somebody has to specify this in the project request and write",
+          "target": "तो दूसरा कदम यह है कि किसी को परियोजना अनुरोध में इसे निर्दिष्ट करना और लिखना है"
+        }
+      ],
+      "audio": null
+    },
+    {
+      "config": {
+        "language": {
+          "sourceLanguage": "hi"
+        },
+        "audioFormat": "wav",
+        "encoding": "base64",
+        "samplingRate": 22050
+      },
+      "output": null,
+      "audio": [
+        {
+          "audioContent": "Uk6HfSIOvu7dTp7ong6e318Ojs6fDr8f206/N1fOr4gNTo+3S86/zMdOn9VJDq+XUM6fWBNOn05TDo+xDY6f4H8Of8f7zl/Ees5fwLZOYDfkjkA0nQ5/667Of9t4Dk/+gg6/xwNOoCNrTkAenk5AA0dOQD6NTkAaKM3ANYhuQCCirgANE44AGpFOQCtYzmAr4E5AKg9OQCOhrgAami5/7nouf+f1bn/H7y5AA0zuQBKCTkAgBU5AHjWuACba7mAYI"
+        }
+      ]
+    }
+  ]
+}

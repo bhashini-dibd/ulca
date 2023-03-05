@@ -1,0 +1,48 @@
+{
+    "pipelineTasks": [
+        {
+            "serviceId": "",
+            "task": {
+                "type": "asr"
+            },
+            "config": {
+                "language": {
+                    "sourceLanguage": "en"
+                },
+                "audioFormat": "wav",
+                "samplingRate": "44100"
+            }
+        },
+        {
+            "serviceId": "",
+            "task": {
+                "type": "translation"
+            },
+            "config": {
+                "language": {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "hi"
+                }
+            }
+        },
+        {
+            "serviceId": "",
+            "task": {
+                "type": "tts"
+            },
+            "config": {
+                "language": {
+                    "sourceLanguage": "hi"
+                },
+                "gender": "male"
+            }
+        }
+    ],
+    "inputData": {
+        "audio": [
+            {
+                "audioContent": "Uk6HfSIOvu7dTp7ong6e318Ojs6fDr8f206/N1fOr4gNTo+3S86/zMdOn9VJDq+XUM6fWBNOn05TDo+xDY6f4H8Of8f7zl/Ees5fwLZOYDfkjkA0nQ5/667Of9t4Dk/+gg6/xwNOoCNrTkAenk5AA0dOQD6NTkAaKM3ANYhuQCCirgANE44AGpFOQCtYzmAr4E5AKg9OQCOhrgAami5/7nouf+f1bn/H7y5AA0zuQBKCTkAgBU5AHjWuACba7mAYI"
+            }
+        ]
+    }
+}
