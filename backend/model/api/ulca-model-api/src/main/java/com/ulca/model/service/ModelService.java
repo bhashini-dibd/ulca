@@ -1416,6 +1416,12 @@ public class ModelService {
 		for(TaskSchema each_task : responseConfig) 
 		{
 			log.info("Each Task :: "+each_task.getClass());
+			if(each_task.getClass().toString() == "io.swagger.pipelinerequest.ASRTaskInference")
+			{
+				ASRTaskInference asrtaskinference = (ASRTaskInference)each_task;
+
+			}
+			break;
 		}
 		
 		pipelineResponse.setLanguages(languageList);
