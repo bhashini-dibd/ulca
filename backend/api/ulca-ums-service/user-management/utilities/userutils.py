@@ -18,7 +18,7 @@ from flask_mail import Mail, Message
 from app import mail
 from flask import render_template
 from bson import json_util
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION
+from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY
 
 import logging
 
@@ -596,10 +596,27 @@ class UserUtils:
             coll = db.get_db()[USR_MONGO_COLLECTION]
             response = coll.find_one({"userID": userId})
             if isinstance(response,dict):
-                if 'userke' in response.keys() and isinstance(response['userke'],list):
-                    return [k for d in response['userke'] for k in d.keys()] #Return the list of user api keys
+                if 'userApiKey' in response.keys() and isinstance(response['userApiKey'],list):
+                    return [k for d in response['userApiKey'] for k in d.keys()] #Return the list of user api keys
                 else:
                     return [] #If user doesn't have any api keys
+            else:
+                log.info("Not a valid userId")
+                return post_error("Not Valid","This userId address is not registered with ULCA",None)
+        except Exception as e:
+            log.exception("Not a valid userId")
+            return post_error("error processing ULCA userId:{}".format(str(e)),None)
+    
+    @staticmethod
+    def get_user_de_api_keys(userId):
+        try:
+            coll = db.get_db()[USR_MONGO_COLLECTION]
+            response = coll.find_one({"userID": userId})
+            if isinstance(response,dict):
+                if 'userApiKey' in response.keys() and isinstance(response['userApiKey'],list) and len(response["userApiKey"]) < MAX_API_KEY :
+                    return response["userApiKey"] #Return the list of user api keys
+                else:
+                    return post_error("Not Valid.","Provide valid userApiKey",None) #If user doesn't have any api keys
             else:
                 log.info("Not a valid userId")
                 return post_error("Not Valid","This userId address is not registered with ULCA",None)
@@ -610,7 +627,7 @@ class UserUtils:
     @staticmethod
     def insert_generated_user_api_key(user,appName,apikey):
         collection = db.get_db()[USR_MONGO_COLLECTION]
-        details = collection.update({"userID":user}, {"$push":{"userke":{apikey: appName}}})
+        details = collection.update({"userID":user}, {"$push":{"userApiKey":{apikey: appName}}})
         return details
 
 
@@ -618,7 +635,7 @@ class UserUtils:
     def revoke_userApiKey(userid, userapikey):
         collection = db.get_db()[USR_MONGO_COLLECTION]
         log.info(f"userapikey {userapikey}")
-        revoke = collection.update({"userID":userid}, {"$pull":{"userke": {userapikey : {"$exists":True}}}})
+        revoke = collection.update({"userID":userid}, {"$pull":{"userApiKey": {userapikey : {"$exists":True}}}})
         return json.loads(json_util.dumps(revoke))
 
 

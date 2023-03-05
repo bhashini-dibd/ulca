@@ -223,3 +223,14 @@ class GenerateApiKey(Resource):
         else:
             return post_error("400", "Maximum Key Limit Reached", None), 400
 
+class GetDeApiKey(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys() and isinstance(body, dict):
+            return post_error("400", "Missing userID", None), 400
+        user = body["userID"]
+        user_api_keys = UserUtils.get_user_de_api_keys(user)
+        if len(user_api_keys) == 0:
+            return post_error("400", "Couldn't find the User ID", None), 400
+        res = CustomResponse(Status.SUCCESS_FOUND_APIKEY.value, user_api_keys)
+        return res.getresjson(), 200
