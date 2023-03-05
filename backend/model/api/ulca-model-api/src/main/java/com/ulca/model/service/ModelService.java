@@ -1081,17 +1081,26 @@ public class ModelService {
 			if(task=="translation") {
 				
 				TranslationTask translationTask	=(TranslationTask)pipelineTask;
+				targetLanguages.clear();
 				if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
 				{
 					TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
 					LanguagePair languagePair =translationRequestConfig.getLanguage();
-					if(languagePair.getSourceLanguage()!=null)
+					{
+						sourceLanguages.clear();
 						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
+					}
 					if(languagePair.getTargetLanguage()!=null)
+					{
+						//targetLanguages.clear();
 						targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
+					}
 					log.info("Source Languages :: "+sourceLanguages);
 					log.info("Target Languages :: "+targetLanguages);				
 				}
+
+				log.info("SourceLanguages :: "+sourceLanguages);
+				log.info("TargetLanguages :: "+targetLanguages);
 
 				Query dynamicQuery = new Query();
 				
@@ -1136,11 +1145,27 @@ public class ModelService {
 				
 				List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
 
+				sourceLanguages.clear();
+				targetLanguages.clear();
+
 				for(ModelExtended each_model : translationModels) 
 				{
 					log.info("Model Name :: " + each_model.getName());
+					LanguagePairs langPair = each_model.getLanguages();
+					for(LanguagePair lp : langPair)	
+					{
+						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+						targetLanguages.add(lp.getTargetLanguage().toString().toUpperCase());	
+					}
+					//TODO: Read each model and store the results in PipelineResponseConfig
+
+
 				}
-		
+				
+				log.info(" SourceLanguages at end of Translation :: "+sourceLanguages);
+				log.info(" TargetLanguages at end of Translation :: "+targetLanguages);
+				sourceLanguages = targetLanguages;
+
 			}
 			
 			else if(task=="asr") 
@@ -1151,11 +1176,14 @@ public class ModelService {
 					ASRRequestConfig asrRequestConfig =	aSRTask.getConfig();
 					LanguagePair languagePair =asrRequestConfig.getLanguage();
 					if(languagePair.getSourceLanguage()!=null)
+					{
+						sourceLanguages.clear();
 						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
-					if(languagePair.getTargetLanguage()!=null)
-						targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
+					}
+					// if(languagePair.getTargetLanguage()!=null)
+					// 	targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
 					log.info("Source Languages :: "+sourceLanguages);
-					log.info("Target Languages :: "+targetLanguages);				
+					// log.info("Target Languages :: "+targetLanguages);				
 				}
 
 				Query dynamicQuery = new Query();
@@ -1176,7 +1204,7 @@ public class ModelService {
 				// 									   Criteria.where("languages.targetLanguage").in(targetLanguages));
 				// 	dynamicQuery.addCriteria(languagesCriteria);
 				// }
-				if(sourceLanguages.size() !=0 )
+				if(sourceLanguages.size() !=0)
 				{
 				 	Criteria languagesCriteria = new Criteria();
 				 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
@@ -1189,7 +1217,6 @@ public class ModelService {
 				//  	dynamicQuery.addCriteria(languagesCriteria);
 				// }
 
-				//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
 				// if(targetLanguages.size() != 0)
 				// {
 				// 	Criteria targetLanguagesCriteria = new Criteria();
@@ -1198,14 +1225,24 @@ public class ModelService {
 				// }
 
 				log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+
 				
 				List<ModelExtended> asrModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+
+				sourceLanguages.clear();
+				targetLanguages.clear();
 
 				for(ModelExtended each_model : asrModels) 
 				{
 					log.info("Model Name :: " + each_model.getName());
-				}
+					LanguagePairs langPair = each_model.getLanguages();
+					for(LanguagePair lp : langPair)	
+					{
+						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+					}
+					//TODO: Read each model and store the results in PipelineResponseConfig
 
+				}
 			}
 			else if(task=="tts") 
 			{
@@ -1215,11 +1252,13 @@ public class ModelService {
 					TTSRequestConfig  ttsRequestConfig = ttsTask.getConfig();
 					LanguagePair languagePair = ttsRequestConfig.getLanguage();
 					if(languagePair.getSourceLanguage()!=null)
+					{
+						sourceLanguages.clear();
 						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
-					if(languagePair.getTargetLanguage()!=null)
-						targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
+					}					// if(languagePair.getTargetLanguage()!=null)
+					// 	targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
 					log.info("Source Languages :: "+sourceLanguages);
-					log.info("Target Languages :: "+targetLanguages);				
+					// log.info("Target Languages :: "+targetLanguages);				
 				}
 
 				Query dynamicQuery = new Query();
@@ -1262,22 +1301,31 @@ public class ModelService {
 				// }
 
 				log.info("dynamicQuery in TTS Models task search ::" + dynamicQuery.toString());
-				
+
 				List<ModelExtended> ttsModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
 
+				sourceLanguages.clear();
+				targetLanguages.clear();
+				
 				for(ModelExtended each_model : ttsModels) 
 				{
 					log.info("Model Name :: " + each_model.getName());
-				}
+					LanguagePairs langPair = each_model.getLanguages();
+					for(LanguagePair lp : langPair)	
+					{
+						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+					}
+					//TODO: Read each model and store the results in PipelineResponseConfig
 
+				}
 				
 			}
 	     
-	     
+
 	      
 		}
 		
-		
+		//TODO: Add PipelineInferenceEndPoint without api keys (Except for it, everything else copied from pipelinemodel)
 		
 		
 		

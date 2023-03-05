@@ -19,7 +19,7 @@ import javax.validation.constraints.*;
 
 public class TTSTask  implements PipelineTask {
   @JsonProperty("taskType")
-  private String taskType = null;
+  private String taskType = "tts";
 
   @JsonProperty("config")
   private TTSRequestConfig config = null;
