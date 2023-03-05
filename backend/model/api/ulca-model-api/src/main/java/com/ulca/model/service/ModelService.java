@@ -136,6 +136,8 @@ import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
 import com.mongodb.client.model.geojson.LineString;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 @Slf4j
 @Service
 public class ModelService {
@@ -1065,7 +1067,7 @@ public class ModelService {
 
 	}
 
-	public PipelineResponse getModelsPipeline(MultipartFile file, String userId) throws Exception {
+	public String getModelsPipeline(MultipartFile file, String userId) throws Exception {
 		log.info("File :: " + file.toString());
 		PipelineRequest pipelineRequest = getPipelineRequest(file);
 		log.info("pipelineRequest :: " + pipelineRequest);
@@ -1402,16 +1404,14 @@ public class ModelService {
 		//TODO: Add PipelineInferenceEndPoint without api keys (Except for it, everything else copied from pipelinemodel)
 		
 		
-	///code for hiding null fields
+		//code for hiding null fields
 		
 		
-		//ObjectMapper om = new ObjectMapper();
-		//om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		//PipelineResponse copiedPipelineResponse = om.convertValue(pipelineResponse, PipelineResponse.class);
-		
-		
-		
-		return  pipelineResponse;
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		String json = mapper.writeValueAsString(pipelineResponse);
+		log.info("String JSON :: "+json);
+		return json;
 	}
 
 	public static String checkModel(MultipartFile file) {

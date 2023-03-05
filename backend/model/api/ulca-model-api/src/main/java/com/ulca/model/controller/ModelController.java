@@ -142,7 +142,7 @@ public class ModelController {
 	}
 
 	@PostMapping("/getModelsPipeline")
-	public PipelineResponse getModelsPipeline(@RequestParam("file") MultipartFile file,
+	public String getModelsPipeline(@RequestParam("file") MultipartFile file,
 			@RequestParam(required = true) String userId) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");
 		return modelService.getModelsPipeline(file, userId);
