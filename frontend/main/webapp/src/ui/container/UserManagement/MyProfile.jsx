@@ -33,8 +33,7 @@ const MyProfile = (props) => {
 
     const resp = await res.json();
     if (res.ok) {
-      console.log(resp);
-      setTableData(resp);
+      setTableData(resp?.data);
       setLoading(false);
     } else {
       setSnackbarInfo({
@@ -50,9 +49,9 @@ const MyProfile = (props) => {
     getApiKeysCall();
   }, [])
 
-  const revokeApiKeyCall = async () => {
+  const revokeApiKeyCall = async (ulcaApiKey) => {
     setLoading(true);
-    const apiObj = new RevokeApiKeyAPI();
+    const apiObj = new RevokeApiKeyAPI(ulcaApiKey);
 
     const res = await fetch(apiObj.apiEndPoint(), {
       method: "POST",
@@ -68,6 +67,7 @@ const MyProfile = (props) => {
         variant: "success",
       });
       setLoading(false);
+      await getApiKeysCall();
     } else {
       setSnackbarInfo({
         open: true,
@@ -160,22 +160,21 @@ const MyProfile = (props) => {
       options: {
         filter: false,
         sort: false,
-      },
-      customBodyRender: (value, tableMeta) => {
-        console.log(tableMeta,'tableMeta');
-        return (
-          <Button
-            variant="contained"
-            className={classes.myProfileActionBtn}
-            onClick={() => revokeApiKeyCall()}
-          >
-            {loading ? (
-              <CircularProgress color="primary" size={20} />
-            ) : (
-              "Revoke"
-            )}
-          </Button>
-        );
+        customBodyRender: (value, tableMeta) => {
+          return (
+            <Button
+              variant="contained"
+              className={classes.myProfileActionBtn}
+              onClick={() => revokeApiKeyCall(tableMeta.rowData[1])}
+            >
+              {loading ? (
+                <CircularProgress color="primary" size={20} />
+              ) : (
+                "Revoke"
+              )}
+            </Button>
+          );
+        },
       },
     },
   ];
@@ -210,25 +209,7 @@ const MyProfile = (props) => {
   return (
     <div>
       <DataTable
-        data={[
-          {
-            appName: "ULCA",
-            ulcaApiKey: "/ulca/apikey",
-            action: (
-              <Button
-                variant="contained"
-                className={classes.myProfileActionBtn}
-                onClick={() => revokeApiKeyCall()}
-              >
-                {loading ? (
-                  <CircularProgress color="primary" size={20} />
-                ) : (
-                  "Revoke"
-                )}
-              </Button>
-            ),
-          },
-        ]}
+        data={tableData}
         columns={columns}
         options={options}
       />
