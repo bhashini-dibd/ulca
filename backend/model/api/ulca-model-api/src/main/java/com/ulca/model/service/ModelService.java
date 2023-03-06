@@ -1107,9 +1107,9 @@ public class ModelService {
 
 	}
 
-	public String getModelsPipeline(MultipartFile file, String userId) throws Exception {
-		log.info("File :: " + file.toString());
-		PipelineRequest pipelineRequest = getPipelineRequest(file);
+	public String getModelsPipeline(PipelineRequest pipelineRequest) throws Exception {
+		//log.info("File :: " + file.toString());
+		//PipelineRequest pipelineRequest = getPipelineRequest(file);
 		log.info("pipelineRequest :: " + pipelineRequest);
 		if (pipelineRequest != null) {
 			validatePipelineRequest(pipelineRequest);
