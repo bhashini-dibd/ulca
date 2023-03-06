@@ -614,7 +614,7 @@ class UserUtils:
         #     spk = []
         # elif len(serviceProviderKey) >1:
         #     spk = serviceProviderKey
-        details = collection.update({"userID":user}, {"$push": {"apiKeyDetails":{"appName":appName,"ulcaApiKey":apikey,"serviceProviderKeys":serviceProviderKey}}})
+        details = collection.update({"userID":user}, {"$push": {"apiKeyDetails":{"appName":appName,"ulcaApiKey":apikey,"createdTimestamp":str(int(time.time())),"serviceProviderKeys":serviceProviderKey}}})
         return details
 
 
