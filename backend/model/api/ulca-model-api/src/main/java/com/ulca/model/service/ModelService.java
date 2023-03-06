@@ -1231,7 +1231,7 @@ public class ModelService {
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
 						targetLanguages.add(lp.getTargetLanguage().toString().toUpperCase());	
-						translationResponseConfig.setModelId("");
+						translationResponseConfig.setServiceId("");
 						translationResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
@@ -1329,7 +1329,7 @@ public class ModelService {
 					for(LanguagePair lp : langPair)	
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
-						asrResponseConfig.setModelId("");
+						asrResponseConfig.setServiceId("");
 						asrResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
@@ -1425,7 +1425,7 @@ public class ModelService {
 					for(LanguagePair lp : langPair)	
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
-						ttsResponseConfig.setModelId("");
+						ttsResponseConfig.setServiceId("");
 						ttsResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig

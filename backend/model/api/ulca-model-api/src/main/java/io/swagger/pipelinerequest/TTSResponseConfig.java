@@ -15,12 +15,12 @@ import javax.validation.constraints.*;
  * TTSResponseConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T08:00:21.046011704Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-06T10:58:36.709959799Z[GMT]")
 
 
 public class TTSResponseConfig   {
-  @JsonProperty("modelId")
-  private String modelId = null;
+  @JsonProperty("serviceId")
+  private String serviceId = null;
 
   @JsonProperty("language")
   private LanguagePair language = null;
@@ -37,23 +37,24 @@ public class TTSResponseConfig   {
   @JsonProperty("outputFormat")
   private SupportedFormats outputFormat = null;
 
-  public TTSResponseConfig modelId(String modelId) {
-    this.modelId = modelId;
+  public TTSResponseConfig serviceId(String serviceId) {
+    this.serviceId = serviceId;
     return this;
   }
 
   /**
    * Unique identifier of model
-   * @return modelId
+   * @return serviceId
    **/
-  @Schema(example = "103", description = "Unique identifier of model")
-  
-    public String getModelId() {
-    return modelId;
+  @Schema(example = "103", required = true, description = "Unique identifier of model")
+      @NotNull
+
+    public String getServiceId() {
+    return serviceId;
   }
 
-  public void setModelId(String modelId) {
-    this.modelId = modelId;
+  public void setServiceId(String serviceId) {
+    this.serviceId = serviceId;
   }
 
   public TTSResponseConfig language(LanguagePair language) {
@@ -65,9 +66,8 @@ public class TTSResponseConfig   {
    * Get language
    * @return language
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
     public LanguagePair getLanguage() {
     return language;
@@ -167,7 +167,7 @@ public class TTSResponseConfig   {
       return false;
     }
     TTSResponseConfig ttSResponseConfig = (TTSResponseConfig) o;
-    return Objects.equals(this.modelId, ttSResponseConfig.modelId) &&
+    return Objects.equals(this.serviceId, ttSResponseConfig.serviceId) &&
         Objects.equals(this.language, ttSResponseConfig.language) &&
         Objects.equals(this.gender, ttSResponseConfig.gender) &&
         Objects.equals(this.samplingRate, ttSResponseConfig.samplingRate) &&
@@ -177,7 +177,7 @@ public class TTSResponseConfig   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, language, gender, samplingRate, inputFormat, outputFormat);
+    return Objects.hash(serviceId, language, gender, samplingRate, inputFormat, outputFormat);
   }
 
   @Override
@@ -185,7 +185,7 @@ public class TTSResponseConfig   {
     StringBuilder sb = new StringBuilder();
     sb.append("class TTSResponseConfig {\n");
     
-    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
+    sb.append("    serviceId: ").append(toIndentedString(serviceId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("    gender: ").append(toIndentedString(gender)).append("\n");
     sb.append("    samplingRate: ").append(toIndentedString(samplingRate)).append("\n");

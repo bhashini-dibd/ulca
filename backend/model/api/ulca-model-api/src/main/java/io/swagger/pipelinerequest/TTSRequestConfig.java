@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * TTSRequestConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T08:00:21.046011704Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-06T10:58:36.709959799Z[GMT]")
 
 
 public class TTSRequestConfig   {
