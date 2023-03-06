@@ -27,6 +27,7 @@ const MyProfile = (props) => {
     message: "",
     variant: "success",
   });
+  console.log(snackbar,"snackbarsnackbar")
   const [modal, setModal] = useState(false);
   const [appName, setAppName] = useState("");
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -52,12 +53,14 @@ const handleSubmitGenerateApiKey =  async() =>{
   });
 
   const resp = await res.json();
+  console.log(resp,"")
   if (res.ok) {
     setSnackbarInfo({
       open: true,
       message: resp?.message,
       variant: "success",
     });
+    await getApiKeysCall();
     setLoading(false);
   } else {
     setSnackbarInfo({
@@ -294,8 +297,22 @@ const handleSubmitGenerateApiKey =  async() =>{
   };
 
 
+  const renderSnackBar = () => {
+    return (
+      <CustomizedSnackbars
+        open={snackbar.open}
+        handleClose={() =>
+          setSnackbarInfo({ open: false, message: "", variant: "" })
+        }
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        variant={snackbar.variant}
+        message={snackbar.message}
+      />
+    );
+  };
   return (
     <div>
+       {renderSnackBar()}
       <DataTable
         data={tableData}
         columns={columns}
@@ -344,7 +361,7 @@ const handleSubmitGenerateApiKey =  async() =>{
         </Grid>
       </Modal>
 
-      {snackbar.open && (
+      {/* {snackbar.open && (
         <Snackbar
           open={snackbar.open}
           handleClose={setSnackbarInfo({ ...snackbar, open: false })}
@@ -352,7 +369,7 @@ const handleSubmitGenerateApiKey =  async() =>{
           message={snackbar.message}
           variant={snackbar.variant}
         />
-      )}
+      )} */}
     </div>
   );
 };
