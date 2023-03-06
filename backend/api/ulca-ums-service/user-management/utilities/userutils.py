@@ -16,6 +16,8 @@ import requests
 from flask_mail import Mail, Message
 from app import mail
 from flask import render_template
+from bson import json_util
+from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY
 from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION
 
 import logging
@@ -45,6 +47,16 @@ class UserUtils:
 
         return(uuid.uuid4().hex)
 
+
+    @staticmethod
+    def generate_user_api_key():
+        eventId = datetime.now().strftime('%S') + str(uuid4())
+        return eventId
+
+#take timestamp epoch and add/generate uid based on this time. 38 character
+#by default apiKey will be 1. Maximum apiKey should be 5. if list has only 1 value, we should be able to call generateApiKey. If user has 5 apiKey already existed=>reached max apiKey
+
+   
 
     @staticmethod
     def validate_email_format(email):
@@ -583,6 +595,14 @@ class UserUtils:
         try:
             ulca_api_keys = []
             coll = db.get_db()[USR_MONGO_COLLECTION]
+            response = coll.find_one({"userID": userId})
+            if isinstance(response,dict):
+                if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                    return response['apiKeyDetails'] #Return the list of user api keys
+                else:
+                    return [] #If user doesn't have any api keys
+            else:
+
             apiKeys = coll.find({"userID": userId})
             if apiKeys:
                 if "userApiKey" in ak.keys():
@@ -600,6 +620,28 @@ class UserUtils:
         except Exception as e:
             log.exception("Not a valid userId")
             return post_error("error processing ULCA userId:{}".format(str(e)),None)
+
+    @staticmethod
+    def insert_generated_user_api_key(user,appName,apikey,serviceProviderKey):
+        collection = db.get_db()[USR_MONGO_COLLECTION]
+        # if len(serviceProviderKey) == 0:
+        #     spk = []
+        # elif len(serviceProviderKey) >1:
+        #     spk = serviceProviderKey
+        details = collection.update({"userID":user}, {"$push": {"apiKeyDetails":{"appName":appName,"ulcaApiKey":apikey,"createdTimestamp":str(int(time.time())),"serviceProviderKeys":serviceProviderKey}}})
+        return details
+
+
+    @staticmethod
+    def revoke_userApiKey(userid, userapikey):
+        collection = db.get_db()[USR_MONGO_COLLECTION]
+        log.info(f"userapikey {userapikey}")
+        reoke = collection.find({"userID":userid})
+        for i in reoke:
+           log.info(i)
+        revoke = collection.update({"userID":userid}, {"$pull":{"apiKeyDetails": {"ulcaApiKey" : userapikey.replace(" ","")}}})
+        log.info(revoke)
+        return json.loads(json_util.dumps(revoke))
 
     @staticmethod
     def revoke_userApiKey(userid, userapikey):
