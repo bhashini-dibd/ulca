@@ -625,7 +625,7 @@ class UserUtils:
         reoke = collection.find({"userID":userid})
         for i in reoke:
            log.info(i)
-        revoke = collection.update({"userID":userid}, {"$pull":{"apiKeyDetails": {"ulcaApiKey" : userapikey}}})
+        revoke = collection.update({"userID":userid}, {"$pull":{"apiKeyDetails": {"ulcaApiKey" : userapikey.replace(" ","")}}})
         log.info(revoke)
         return json.loads(json_util.dumps(revoke))
 
