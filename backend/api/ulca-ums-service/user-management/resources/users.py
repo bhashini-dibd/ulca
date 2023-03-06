@@ -207,10 +207,10 @@ class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
 class GenerateApiKey(Resource):
     def post(self):
         body = request.get_json()
-        if "userID" not in body.keys() and "appName" not in body.keys() and "serviceProviderKeys" not in body.keys():
+        if "userID" not in body.keys() and "appName" not in body.keys():
             return post_error("400", "Please provide appName, userID and serviceProviderKeys", None), 400
        
-        serviceProviderKey = body["serviceProviderKeys"]
+        serviceProviderKey = []
         user = body["userID"]
         appName = body["appName"]
 
