@@ -5,9 +5,50 @@ import { translate } from "../../../assets/localisation";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { Cached } from "@material-ui/icons";
 import DataSet from "../../styles/Dataset";
+import Spinner from "../../components/common/Spinner";
+import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiKeys";
+import Snackbar from '../../components/common/Snackbar';
+import { useEffect, useState } from "react";
 
 const MyProfile = (props) => {
   const {classes} = props;
+  const [loading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [snackbar, setSnackbarInfo] = useState({
+    open: false,
+    message: "",
+    variant: "success",
+  });
+
+  const getApiKeysCall = async () => {
+    setLoading(true);
+    const apiObj = new FetchApiKeysAPI();
+
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    });
+
+    const resp = await res.json();
+    if (res.ok) {
+      console.log(resp);
+      setTableData(resp);
+      setLoading(false);
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getApiKeysCall();
+  }, [])
+
   const fetchHeaderButton = () => {
     return (
       <Grid container spacing={1} className={classes.Gridroot}>
@@ -67,6 +108,10 @@ const MyProfile = (props) => {
     );
   };
 
+  const renderActionButtons = () => {
+    ;
+  };
+
   const columns = [
     {
       name: "appName",
@@ -91,12 +136,28 @@ const MyProfile = (props) => {
         filter: false,
         sort: false,
       },
+      customBodyRender: () => {
+          return <Button
+          size="small"
+          variant="contained"
+          // style={{
+          //   color: status === "published" ? "#F54336" : "#139D60",
+          //   fontSize: "1rem",
+          //   marginTop: status !== "published" ? "8px" : "0",
+          //   width: "fit-content",
+          // }}
+          // onClick={() => openConfirmationDialog(status, modelId)}
+        >
+          Revoke
+        </Button>;
+      },
     },
   ];
+  
   const options = {
     textLabels: {
       body: {
-        noMatch: "No records ",
+        noMatch: loading ? <Spinner /> : "No records",
       },
       toolbar: {
         search: "Search",
@@ -119,6 +180,7 @@ const MyProfile = (props) => {
     expandableRowsOnClick: true,
     expandableRows: false,
   };
+
   return (
     <div>
       <DataTable
@@ -126,11 +188,29 @@ const MyProfile = (props) => {
           {
             appName: "ULCA",
             ulcaApiKey: "/ulca/apikey",
+            action: (
+              <Button
+                variant="contained"
+                className={classes.myProfileActionBtn}
+              >
+                Revoke
+              </Button>
+            ),
           },
         ]}
         columns={columns}
         options={options}
       />
+
+      {snackbar.open && (
+        <Snackbar
+          open={snackbar.open}
+          handleClose={setSnackbarInfo({ ...snackbar, open: false })}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          message={snackbar.message}
+          variant={snackbar.variant}
+        />
+      )}
     </div>
   );
 };
