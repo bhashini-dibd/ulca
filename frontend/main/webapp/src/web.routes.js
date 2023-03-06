@@ -305,7 +305,7 @@ export default function App() {
             index={0}
           />
            <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/user/profile`}
+            path={`${process.env.PUBLIC_URL}/profile`}
             title={"My Profile"}
             component={MyProfile}
             authenticate={authenticateUser}

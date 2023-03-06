@@ -305,7 +305,7 @@ const Header = (props) => {
                      <MenuItem
                     className={classes.styledMenu}
                     onClick={() => {       
-                      handleRedirection("/user/profile");
+                      handleRedirection("/profile");
                     }}
                   >
                     {translate("label.myProfile")}
