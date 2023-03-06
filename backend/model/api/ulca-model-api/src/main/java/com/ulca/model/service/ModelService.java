@@ -1418,8 +1418,8 @@ public class ModelService {
 
 		
 
-		Set<String> sourceLangList = new HashSet<String>();
-		Set<String> targetLangList = new HashSet<String>();
+		ArrayList<String> sourceLangList = new ArrayList<String>();
+		ArrayList<String> targetLangList = new ArrayList<String>();
 
 
 		String first_task_type = responseConfig.get(0).getTaskType();
@@ -1455,10 +1455,20 @@ public class ModelService {
 			targetLangList = sourceLangList;			
 		}
 
+		//Source and Target Languages of first task
 		log.info("SOURCE LANGUAGES : "+sourceLangList);
 		log.info("TARGET LANGUAGES : "+targetLangList);
 
-		int size = responseConfig.size();
+		int numTasks = responseConfig.size();
+
+		LanguageSchema languageSchema = new LanguageSchema();
+
+		if(numTasks == 1)	{
+			//do something
+		}
+		else {
+			ArrayList<String> prev_target_languages = sourceLangList;
+		}
 
 		// Queue<String> intermediateQueue = new LinkedList<>();
 		
@@ -1513,7 +1523,7 @@ public class ModelService {
 		// }
 
 		
-		// pipelineResponse.setLanguages(languageList);
+		pipelineResponse.setLanguages(languageList);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);

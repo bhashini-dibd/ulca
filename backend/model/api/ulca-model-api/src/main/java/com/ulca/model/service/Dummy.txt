@@ -18,26 +18,42 @@ Source : [te]
 If number of tasks == 1
     Keep source and target languages of the one task only
 
-prev_target_languages = [en,hi] #Of ASR
+prev_target_languages = [en,hi] #Of ASR #queue
 If number of tasks > 1:
 next_task_index = 1
 final_task_index = 2
-For each target language of first task: 
 
-    while(next_task_index<=final_task_index):
-        #en in ASR
-        #populate the queue with next_task source and target languages
-        If queue is empty
-            get the languages of next task [next_task_index = 1] => get tasks of Translation and store in queue.
-            While storing in queue, check prev_target_languages
-            increase next_task_index
+queue = empty
 
-        #populate the queue with only source languages of tne next task and remove current_task details
-        #[[en-hi],[en-ta],[en-te],[hi-ta],[hi-te],[hi-mr]]
-        size = queue.size()
-        For each element in queue (until you reach the size):
-            pop the element
-            check if the source language matches "en"
-            If it matches, store target language in prev_target_languages queue
+sourceLanguages = [list of source languages for first task]
+targetLanguages = [list of target languages for first task]
+
+for each targetLanguage in targetLanguages:
+    prev_target_languages = [targetLanguage]
+    
+    while(next_task_index>final_task_index): 
+
+        tgtSize = prev_target_languages.size()
+
+        if tgtSize == 0:
+            complete = 1
+            break
+
+        if(next_task_index>final_task_index):
+            complete = 1
+            break;
+
+        For each_target_value in prev_target_languages (until you reach the size): 
             
-        #[hi,ta,te]
+            For each_config in next_task_index: 
+                if each_target_value is sourceLanguage within each_config
+                    store target language of each_config in prev_target_languages
+            pop the element
+                
+        next_task_index++
+
+
+
+
+
+
