@@ -203,10 +203,6 @@ class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
             return res.getresjson(), 200
         else:
             return post_error("400", "Unable to revoke ulcaApiKey. Please check the userID and/or ulcaApiKey.")
-            res = CustomResponse(Status.SUCCESS_USER_APIKEY.value, "SUCCESS")
-            return res.getresjson(), 200
-        else:
-            return post_error("400", "Unable to revoke userApiKey. Please check the userID and/or userApiKey.")
 
 class GenerateApiKey(Resource):
     def post(self):
