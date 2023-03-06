@@ -16,6 +16,7 @@ import Spinner from "../../components/common/Spinner";
 import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiKeys";
 import RevokeApiKeyAPI from "../../../redux/actions/api/UserManagement/RevokeApiKey";
 import Snackbar from '../../components/common/Snackbar';
+import RevokeDialog from "../../components/common/RevokeDialog";
 
 
 const MyProfile = (props) => {
@@ -27,9 +28,11 @@ const MyProfile = (props) => {
     message: "",
     variant: "success",
   });
-  console.log(snackbar,"snackbarsnackbar")
   const [modal, setModal] = useState(false);
   const [appName, setAppName] = useState("");
+  const [message, setMessage] = useState("Are sure u want to Revoke ?");
+  const [open, setOpen] = useState(false);
+  const [UlcaApiKey, setUlcaApiKey] = useState('');
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const handlecChangeAddName = (e) =>{
@@ -38,6 +41,7 @@ const MyProfile = (props) => {
   const handleClose = () =>{
     setModal(false)
     setAppName("")
+    setOpen(false)
   }
 
 const handleSubmitGenerateApiKey =  async() =>{
@@ -102,9 +106,9 @@ const handleSubmitGenerateApiKey =  async() =>{
     getApiKeysCall();
   }, [])
 
-  const revokeApiKeyCall = async (ulcaApiKey) => {
+  const revokeApiKeyCall = async () => {
     setLoading(true);
-    const apiObj = new RevokeApiKeyAPI(ulcaApiKey);
+    const apiObj = new RevokeApiKeyAPI(UlcaApiKey);
 
     const res = await fetch(apiObj.apiEndPoint(), {
       method: "POST",
@@ -128,8 +132,14 @@ const handleSubmitGenerateApiKey =  async() =>{
         variant: "error",
       });
       setLoading(false);
+     
     }
+    setOpen(false)
   };
+  const handleDialogSubmit = (ulcaApiKey) => {
+    setOpen(true)
+    setUlcaApiKey(ulcaApiKey)
+   };
 
   const fetchHeaderButton = () => {
     return (
@@ -234,6 +244,7 @@ const handleSubmitGenerateApiKey =  async() =>{
       options: {
         filter: false,
         sort: false,
+        align: "center",
       },
     },
     {
@@ -242,6 +253,7 @@ const handleSubmitGenerateApiKey =  async() =>{
       options: {
         filter: false,
         sort: false,
+        align: "center",
       },
     },
     {
@@ -250,12 +262,17 @@ const handleSubmitGenerateApiKey =  async() =>{
       options: {
         filter: false,
         sort: false,
+        align: "center",
+        setCellHeaderProps: () => ({
+          style: { paddingLeft: "46px" },
+        }),
         customBodyRender: (value, tableMeta) => {
           return (
             <Button
               variant="contained"
               className={classes.myProfileActionBtn}
-              onClick={() => revokeApiKeyCall(tableMeta.rowData[1])}
+              onClick={ () => handleDialogSubmit(tableMeta.rowData[1])}
+              style={{color:"red"}}
             >
               {loading ? (
                 <CircularProgress color="primary" size={20} />
@@ -360,6 +377,17 @@ const handleSubmitGenerateApiKey =  async() =>{
           </Grid>
         </Grid>
       </Modal>
+
+      {open && (
+          <RevokeDialog
+          open={open}
+          handleClose={handleClose}
+           
+           
+            submit={() => revokeApiKeyCall()}
+          />
+        )}
+    
 
       {/* {snackbar.open && (
         <Snackbar
