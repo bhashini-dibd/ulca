@@ -1,39 +1,39 @@
 {
-    "roles": [
+    "roles":[
         {
-            "code": "SUPERUSER",
-            "active": true,
-            "description": "Has access to every resource in the system"
+            "code":"SUPERUSER",
+            "active":true,
+            "description":"Has access to every resource in the system"
         },
         {
-            "code": "ADMIN",
-            "active": true,
-            "description": "Has access to user management related resources"
+            "code":"ADMIN",
+            "active":true,
+            "description":"Has access to user management related resources"
         },
         {
-            "code": "CONTRIBUTOR-USER",
-            "active": true,
-            "description": "Has access to CRUD operations on all resources"
+            "code":"CONTRIBUTOR-USER",
+            "active":true,
+            "description":"Has access to CRUD operations on all resources"
         },
         {
-            "code": "READONLY-USER",
-            "active": true,
-            "description": "Has access to ONLY Search features on ULCA"
+            "code":"READONLY-USER",
+            "active":true,
+            "description":"Has access to ONLY Search features on ULCA"
         },
         {
-            "code": "BENCHMARK-DATASET-SUBMITTER",
-            "active": true,
-            "description": "Specific role to submit benchmark datasets"
+            "code":"BENCHMARK-DATASET-SUBMITTER",
+            "active":true,
+            "description":"Specific role to submit benchmark datasets"
         },
         {
-            "code": "MODEL-ONLY-USER",
-            "active": true,
-            "description": "Specific role to submit models, fetch models and run benchmarks"
+            "code":"MODEL-ONLY-USER",
+            "active":true,
+            "description":"Specific role to submit models, fetch models and run benchmarks"
         },
         {
-            "code": "BENCHMARK-DATASET-CONTRIBUTOR",
-            "active": true,
-            "description": "Role that is CONTRIBUTOR-USER + BENCHMARK-DATASET-SUBMITTER"
-        }
-    ]
-}
+          "code":"BENCHMARK-DATASET-CONTRIBUTOR",
+          "active":true,
+          "description":"Role that is CONTRIBUTOR-USER + BENCHMARK-DATASET-SUBMITTER"
+      }
+      ]
+  }

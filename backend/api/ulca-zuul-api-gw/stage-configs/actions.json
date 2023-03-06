@@ -86,7 +86,7 @@
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": false,
-      "description": "API to revoke user api key"
+      "description": "API to revoke one user api key"
     },
     {
       "id": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
@@ -192,6 +192,14 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch models"
+    },
+    {
+      "id": "f47a4ebf-f2d3-4496-beab-062ef2a318d2",
+      "uri": "/ulca/apis/v0/model/getModelsPipeline",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch tasks pipeline"
     },
     {
       "id": "a4c9f08d-0968-403d-ab1f-008b1b1aff44",

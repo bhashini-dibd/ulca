@@ -60,7 +60,6 @@
 			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
 	      <groupId>org.springdoc</groupId>
 	      <artifactId>springdoc-openapi-ui</artifactId>
@@ -106,6 +105,11 @@
 		    <artifactId>commons-io</artifactId>
 		    <version>2.11.0</version>
 		</dependency>
+		<dependency>
+    <groupId>com.github.mervick</groupId>
+    <artifactId>aes-everywhere-java</artifactId>
+    <version>1.2.7</version>
+  </dependency>
 	</dependencies>
 
 	<build>
