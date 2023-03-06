@@ -18,7 +18,6 @@ class Status(enum.Enum):
     SUCCESS_GET_APIKEY      =   {"message" : "UserApiKey found successfully"}
     SUCCESS_GENERATE_APIKEY =   {"message" : "UserApiKey generated successfully"}
     SUCCESS_FOUND_APIKEY    =   {"message" : "ApiKey found successfully"}
-    SUCCESS_USER_APIKEY     =   {"message" : "UserApiKey found and revoked successfully"}
 
 
    

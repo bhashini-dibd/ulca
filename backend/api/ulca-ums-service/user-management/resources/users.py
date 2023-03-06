@@ -221,15 +221,6 @@ class GenerateApiKey(Resource):
         if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
             generatedapikey = UserUtils.generate_user_api_key()
             UserUtils.insert_generated_user_api_key(user,appName,generatedapikey,serviceProviderKey)
-        if "userID" not in body.keys() and "appName" not in body.keys():
-            return post_error("400", "Missing userID and/or appName", None), 400
-        user = body["userID"]
-        appName = body["appName"]
-
-        user_api_keys = UserUtils.get_user_api_keys(user)
-        if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
-            generatedapikey = UserUtils.generate_user_api_key()
-            UserUtils.insert_generated_user_api_key(user,appName,generatedapikey)
             res = CustomResponse(Status.SUCCESS_GENERATE_APIKEY.value, generatedapikey)
             return res.getresjson(), 200
         elif isinstance(user_api_keys,dict) and "errorID" in user_api_keys.keys():
