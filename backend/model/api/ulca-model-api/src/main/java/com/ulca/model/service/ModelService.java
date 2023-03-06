@@ -416,9 +416,14 @@ public class ModelService {
 				throw new ModelValidationException("PipelineModel validation failed. Check uploaded file syntax");
 
 			}
+			                    
+			PipelineModel checkModel =pipelineModelDao.findBySubmitterName(pipelineModelObj.getSubmitter().getName());
+			
+			if(checkModel==null) {
+			
 			pipelineModelObj.setUserId(userId);
 			pipelineModelObj.setSubmittedOn(Instant.now().toEpochMilli());
-
+           if(pipelineModelObj.getInferenceEndPoint().getMasterApiKey()!=null) {
 			InferenceAPIEndPointMasterApiKey pipelineInferenceMasterApiKey = pipelineModelObj.getInferenceEndPoint()
 					.getMasterApiKey();
 			if (pipelineInferenceMasterApiKey.getValue() != null) {
@@ -436,7 +441,36 @@ public class ModelService {
 				pipelineModelObj.getInferenceEndPoint().setMasterApiKey(pipelineInferenceMasterApiKey);
 
 			}
+		}
+           
+			}else {
+				pipelineModelObj.setPipelineModelId(checkModel.getPipelineModelId());
+				pipelineModelObj.setUserId(userId);
+				pipelineModelObj.setSubmittedOn(Instant.now().toEpochMilli());
+	           if(pipelineModelObj.getInferenceEndPoint().getMasterApiKey()!=null) {
+				InferenceAPIEndPointMasterApiKey pipelineInferenceMasterApiKey = pipelineModelObj.getInferenceEndPoint()
+						.getMasterApiKey();
+				if (pipelineInferenceMasterApiKey.getValue() != null) {
+					log.info("SecretKey :: " + SECRET_KEY);
+					String originalApiKeyName = pipelineInferenceMasterApiKey.getName();
+					log.info("originalApiKeyName :: " + originalApiKeyName);
+					String originalApiKeyValue = pipelineInferenceMasterApiKey.getValue();
+					log.info("originalApiKeyValue :: " + originalApiKeyValue);
+					String encryptedApiKeyName = Aes256.encrypt(originalApiKeyName, SECRET_KEY);
+					log.info("encryptedApiKeyName :: " + encryptedApiKeyName);
+					String encryptedApiKeyValue = Aes256.encrypt(originalApiKeyValue, SECRET_KEY);
+					log.info("encryptedApiKeyValue :: " + encryptedApiKeyValue);
+					pipelineInferenceMasterApiKey.setName(encryptedApiKeyName);
+					pipelineInferenceMasterApiKey.setValue(encryptedApiKeyValue);
+					pipelineModelObj.getInferenceEndPoint().setMasterApiKey(pipelineInferenceMasterApiKey);
 
+				}
+			}
+	           
+				
+			}
+           
+           
 			log.info("pipelineModelObj :: " + pipelineModelObj);
 
 			if (pipelineModelObj != null) {
