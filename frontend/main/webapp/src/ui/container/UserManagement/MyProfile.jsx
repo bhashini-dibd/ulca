@@ -1,11 +1,5 @@
 import DataTable from "../../components/common/DataTable";
-import {
-  withStyles,
-  Button,
-  Typography,
-  Grid,
-  TextField,
-} from "@material-ui/core";
+import { withStyles, Button, Typography, Grid, Box, CircularProgress , TextField,} from "@material-ui/core";
 import Search from "../../components/Datasets&Model/Search";
 import { translate } from "../../../assets/localisation";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -18,18 +12,23 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import GenerateAPI from "../../../redux/actions/api/UserManagement/GenerateApiKey";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import CustomizedSnackbars from "../../components/common/Snackbar";
+import Spinner from "../../components/common/Spinner";
+import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiKeys";
+import RevokeApiKeyAPI from "../../../redux/actions/api/UserManagement/RevokeApiKey";
+import Snackbar from '../../components/common/Snackbar';
 
 
 const MyProfile = (props) => {
-  const { classes } = props;
-  const dispatch = useDispatch();
-  const [modal, setModal] = useState(false);
-  const [appName, setAppName] = useState("");
+  const {classes} = props;
+  const [loading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState([]);
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: "",
     variant: "success",
   });
+  const [modal, setModal] = useState(false);
+  const [appName, setAppName] = useState("");
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const handlecChangeAddName = (e) =>{
@@ -46,12 +45,12 @@ const handleSubmitGenerateApiKey =  async() =>{
     appName : appName
   }
   const userObj = new GenerateAPI(data);
-  // dispatch(APITransport(userObj));
   const res = await fetch(userObj.apiEndPoint(), {
     method: "POST",
-    body: JSON.stringify(userObj.getBody()),
     headers: userObj.getHeaders().headers,
+    body: JSON.stringify(userObj.getBody()),
   });
+
   const resp = await res.json();
   if (res.ok) {
     setSnackbarInfo({
@@ -59,16 +58,75 @@ const handleSubmitGenerateApiKey =  async() =>{
       message: resp?.message,
       variant: "success",
     });
+    setLoading(false);
   } else {
     setSnackbarInfo({
       open: true,
       message: resp?.message,
       variant: "error",
     });
+    setLoading(false);
   }
   setModal(false)
   setAppName("")
 }
+
+  const getApiKeysCall = async () => {
+    setLoading(true);
+    const apiObj = new FetchApiKeysAPI();
+
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    });
+
+    const resp = await res.json();
+    if (res.ok) {
+      setTableData(resp?.data);
+      setLoading(false);
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getApiKeysCall();
+  }, [])
+
+  const revokeApiKeyCall = async (ulcaApiKey) => {
+    setLoading(true);
+    const apiObj = new RevokeApiKeyAPI(ulcaApiKey);
+
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+
+    const resp = await res.json();
+    if (res.ok) {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "success",
+      });
+      setLoading(false);
+      await getApiKeysCall();
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+      setLoading(false);
+    }
+  };
 
   const fetchHeaderButton = () => {
     return (
@@ -189,13 +247,29 @@ const handleSubmitGenerateApiKey =  async() =>{
       options: {
         filter: false,
         sort: false,
+        customBodyRender: (value, tableMeta) => {
+          return (
+            <Button
+              variant="contained"
+              className={classes.myProfileActionBtn}
+              onClick={() => revokeApiKeyCall(tableMeta.rowData[1])}
+            >
+              {loading ? (
+                <CircularProgress color="primary" size={20} />
+              ) : (
+                "Revoke"
+              )}
+            </Button>
+          );
+        },
       },
     },
   ];
+  
   const options = {
     textLabels: {
       body: {
-        noMatch: "No records ",
+        noMatch: loading ? <Spinner /> : "No records",
       },
       toolbar: {
         search: "Search",
@@ -219,29 +293,11 @@ const handleSubmitGenerateApiKey =  async() =>{
     expandableRows: false,
   };
 
-  const renderSnackBar = () => {
-    return (
-      <CustomizedSnackbars
-        open={snackbar.open}
-        handleClose={() =>
-          setSnackbarInfo({ open: false, message: "", variant: "" })
-        }
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        variant={snackbar.variant}
-        message={snackbar.message}
-      />
-    );
-  };
+
   return (
     <div>
-        {renderSnackBar()}
       <DataTable
-        data={[
-          {
-            appName: "ULCA",
-            ulcaApiKey: "/ulca/apikey",
-          },
-        ]}
+        data={tableData}
         columns={columns}
         options={options}
       />
@@ -287,6 +343,16 @@ const handleSubmitGenerateApiKey =  async() =>{
           </Grid>
         </Grid>
       </Modal>
+
+      {snackbar.open && (
+        <Snackbar
+          open={snackbar.open}
+          handleClose={setSnackbarInfo({ ...snackbar, open: false })}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          message={snackbar.message}
+          variant={snackbar.variant}
+        />
+      )}
     </div>
   );
 };
