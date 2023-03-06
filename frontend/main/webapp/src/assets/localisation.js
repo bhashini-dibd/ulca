@@ -145,7 +145,8 @@ const localization_EN_Data = {
   "lable.Pleaserateyourexperience":"Please rate your experience...",
   "button.Suggest an edit":"Suggest an edit",
   "lable.Addyourcomments":"Add your comments",
-  "button.detect": "Detect"
+  "button.detect": "Detect",
+  "button.generate":"Generate",
 };
 
 export function translate(locale_text) {

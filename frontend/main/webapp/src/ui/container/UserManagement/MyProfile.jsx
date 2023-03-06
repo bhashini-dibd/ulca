@@ -1,20 +1,90 @@
 import DataTable from "../../components/common/DataTable";
-import { withStyles, Button, Typography, Grid, Box } from "@material-ui/core";
+import {
+  withStyles,
+  Button,
+  Typography,
+  Grid,
+  TextField,
+} from "@material-ui/core";
 import Search from "../../components/Datasets&Model/Search";
 import { translate } from "../../../assets/localisation";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { Cached } from "@material-ui/icons";
 import DataSet from "../../styles/Dataset";
+import Modal from  "../../components/common/Modal"
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import GenerateAPI from "../../../redux/actions/api/UserManagement/GenerateApiKey";
+import APITransport from "../../../redux/actions/apitransport/apitransport";
+import CustomizedSnackbars from "../../components/common/Snackbar";
+
 
 const MyProfile = (props) => {
-  const {classes} = props;
+  const { classes } = props;
+  const dispatch = useDispatch();
+  const [modal, setModal] = useState(false);
+  const [appName, setAppName] = useState("");
+  const [snackbar, setSnackbarInfo] = useState({
+    open: false,
+    message: "",
+    variant: "success",
+  });
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+  const handlecChangeAddName = (e) =>{
+    setAppName(e.target.value)
+  }
+  const handleClose = () =>{
+    setModal(false)
+    setAppName("")
+  }
+
+const handleSubmitGenerateApiKey =  async() =>{
+  const data={
+    userID : userDetails?.userID,
+    appName : appName
+  }
+  const userObj = new GenerateAPI(data);
+  // dispatch(APITransport(userObj));
+  const res = await fetch(userObj.apiEndPoint(), {
+    method: "POST",
+    body: JSON.stringify(userObj.getBody()),
+    headers: userObj.getHeaders().headers,
+  });
+  const resp = await res.json();
+  if (res.ok) {
+    setSnackbarInfo({
+      open: true,
+      message: resp?.message,
+      variant: "success",
+    });
+  } else {
+    setSnackbarInfo({
+      open: true,
+      message: resp?.message,
+      variant: "error",
+    });
+  }
+  setModal(false)
+  setAppName("")
+}
+
   const fetchHeaderButton = () => {
     return (
       <Grid container spacing={1} className={classes.Gridroot}>
         <Grid item xs={7} sm={8} md={8} lg={8} xl={8}>
-          <Search value=""  />
+          <Search value="" />
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGridMobile}>
+        <Grid
+          item
+          xs={2}
+          sm={2}
+          md={2}
+          lg={2}
+          xl={2}
+          className={classes.filterGridMobile}
+        >
           <Button
             color={"default"}
             size="small"
@@ -26,7 +96,15 @@ const MyProfile = (props) => {
             <FilterListIcon className={classes.iconStyle} />
           </Button>
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGrid}>
+        <Grid
+          item
+          xs={2}
+          sm={2}
+          md={2}
+          lg={2}
+          xl={2}
+          className={classes.filterGrid}
+        >
           <Button
             color={"default"}
             size="medium"
@@ -39,28 +117,49 @@ const MyProfile = (props) => {
             {translate("button.filter")}
           </Button>
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGrid}>
+       
+        <Grid
+          item
+          xs={2}
+          sm={2}
+          md={2}
+          lg={2}
+          xl={2}
+          className={classes.filterGrid}
+        >
           <Button
-            color={"primary"}
+            color="primary"
             size="medium"
-            variant="outlined"
+            variant="contained"
             className={classes.ButtonRefresh}
-            // onClick={() => MyContributionListApi()}
+            onClick={() => {
+              setModal(true);
+            }}
           >
-            <Cached className={classes.iconStyle} />
-            {translate("button.refresh")}
+            {" "} 
+            {translate("button.generate")}
           </Button>
         </Grid>
-        <Grid item xs={3} sm={2} md={2} lg={2} xl={2} className={classes.filterGridMobile}>
+        <Grid
+          item
+          xs={2}
+          sm={2}
+          md={2}
+          lg={2}
+          xl={2}
+          className={classes.filterGridMobile}
+        >
           <Button
-            color={"primary"}
+            color={"default"}
             size="small"
             variant="outlined"
             className={classes.ButtonRefreshMobile}
-            // onClick={() => MyContributionListApi()}
+            onClick={() => {
+              setModal(true);
+            }}
           >
-           
-            <Cached className={classes.iconStyle} />
+            {" "}
+            <AddBoxIcon color="primary" className={classes.iconStyle} />
           </Button>
         </Grid>
       </Grid>
@@ -119,8 +218,23 @@ const MyProfile = (props) => {
     expandableRowsOnClick: true,
     expandableRows: false,
   };
+
+  const renderSnackBar = () => {
+    return (
+      <CustomizedSnackbars
+        open={snackbar.open}
+        handleClose={() =>
+          setSnackbarInfo({ open: false, message: "", variant: "" })
+        }
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        variant={snackbar.variant}
+        message={snackbar.message}
+      />
+    );
+  };
   return (
     <div>
+        {renderSnackBar()}
       <DataTable
         data={[
           {
@@ -131,6 +245,48 @@ const MyProfile = (props) => {
         columns={columns}
         options={options}
       />
+      <Modal
+        open={modal}
+        onClose={() => setModal(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <Grid container direction="row" spacing={0} style={{textAlign: "end",marginTop:"25px"}} >
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label="Enter App Name"
+              variant="outlined"
+              value={appName}
+              onChange={handlecChangeAddName}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Button
+              variant="contained"
+              color="primary"
+              style={{ borderRadius: "20px", marginTop: "20px",marginRight:"10px" }}
+              onClick={handleClose}
+            >
+              Close
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ borderRadius: "20px", marginTop: "20px" }}
+              onClick={handleSubmitGenerateApiKey}
+              disabled={
+                appName 
+                  ? false
+                  : true
+              }
+            >
+              Submit
+            </Button>
+          </Grid>
+        </Grid>
+      </Modal>
     </div>
   );
 };
