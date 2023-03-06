@@ -2,11 +2,12 @@ import API from "../../api";
 import ENDPOINTS from "../../../../configs/apiendpoints";
 import md5 from "md5";
 
-export default class FetchApiKeysAPI extends API {
-  constructor(timeout = 2000) {
+export default class RevokeApiKeyAPI extends API {
+  constructor(ulcaApiKey, timeout = 2000) {
     super("POST", timeout, false);
+    this.ulcaApiKey = ulcaApiKey;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
-    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getApiKeys}`;
+    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.revokeApiKey}`;
   }
 
   apiEndPoint() {
@@ -16,6 +17,7 @@ export default class FetchApiKeysAPI extends API {
   getBody() {
     return {
       userID: JSON.parse(localStorage.getItem("userDetails")).userID,
+      ulcaApiKey: this.ulcaApiKey,
     };
   }
 

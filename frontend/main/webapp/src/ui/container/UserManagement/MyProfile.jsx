@@ -1,5 +1,5 @@
 import DataTable from "../../components/common/DataTable";
-import { withStyles, Button, Typography, Grid, Box } from "@material-ui/core";
+import { withStyles, Button, Typography, Grid, Box, CircularProgress } from "@material-ui/core";
 import Search from "../../components/Datasets&Model/Search";
 import { translate } from "../../../assets/localisation";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -7,6 +7,7 @@ import { Cached } from "@material-ui/icons";
 import DataSet from "../../styles/Dataset";
 import Spinner from "../../components/common/Spinner";
 import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiKeys";
+import RevokeApiKeyAPI from "../../../redux/actions/api/UserManagement/RevokeApiKey";
 import Snackbar from '../../components/common/Snackbar';
 import { useEffect, useState } from "react";
 
@@ -48,6 +49,34 @@ const MyProfile = (props) => {
   useEffect(() => {
     getApiKeysCall();
   }, [])
+
+  const revokeApiKeyCall = async () => {
+    setLoading(true);
+    const apiObj = new RevokeApiKeyAPI();
+
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+
+    const resp = await res.json();
+    if (res.ok) {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "success",
+      });
+      setLoading(false);
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+      setLoading(false);
+    }
+  };
 
   const fetchHeaderButton = () => {
     return (
@@ -108,10 +137,6 @@ const MyProfile = (props) => {
     );
   };
 
-  const renderActionButtons = () => {
-    ;
-  };
-
   const columns = [
     {
       name: "appName",
@@ -136,20 +161,21 @@ const MyProfile = (props) => {
         filter: false,
         sort: false,
       },
-      customBodyRender: () => {
-          return <Button
-          size="small"
-          variant="contained"
-          // style={{
-          //   color: status === "published" ? "#F54336" : "#139D60",
-          //   fontSize: "1rem",
-          //   marginTop: status !== "published" ? "8px" : "0",
-          //   width: "fit-content",
-          // }}
-          // onClick={() => openConfirmationDialog(status, modelId)}
-        >
-          Revoke
-        </Button>;
+      customBodyRender: (value, tableMeta) => {
+        console.log(tableMeta,'tableMeta');
+        return (
+          <Button
+            variant="contained"
+            className={classes.myProfileActionBtn}
+            onClick={() => revokeApiKeyCall()}
+          >
+            {loading ? (
+              <CircularProgress color="primary" size={20} />
+            ) : (
+              "Revoke"
+            )}
+          </Button>
+        );
       },
     },
   ];
@@ -192,8 +218,13 @@ const MyProfile = (props) => {
               <Button
                 variant="contained"
                 className={classes.myProfileActionBtn}
+                onClick={() => revokeApiKeyCall()}
               >
-                Revoke
+                {loading ? (
+                  <CircularProgress color="primary" size={20} />
+                ) : (
+                  "Revoke"
+                )}
               </Button>
             ),
           },
