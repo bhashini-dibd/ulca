@@ -1,0 +1,43 @@
+First task: ASR
+Source : [en]
+Source : [hi]
+
+Second task: Translation
+Source – Target : [en-hi]
+Source – Target : [en-ta]
+Source – Target : [en-te]
+Source – Target : [hi-ta]
+Source – Target : [hi-te]
+Source – Target : [hi-mr]
+
+Third task: TTS
+Source : [hi]
+Source : [ta]
+Source : [te]
+
+If number of tasks == 1
+    Keep source and target languages of the one task only
+
+prev_target_languages = [en,hi] #Of ASR
+If number of tasks > 1:
+next_task_index = 1
+final_task_index = 2
+For each target language of first task: 
+
+    while(next_task_index<=final_task_index):
+        #en in ASR
+        #populate the queue with next_task source and target languages
+        If queue is empty
+            get the languages of next task [next_task_index = 1] => get tasks of Translation and store in queue.
+            While storing in queue, check prev_target_languages
+            increase next_task_index
+
+        #populate the queue with only source languages of tne next task and remove current_task details
+        #[[en-hi],[en-ta],[en-te],[hi-ta],[hi-te],[hi-mr]]
+        size = queue.size()
+        For each element in queue (until you reach the size):
+            pop the element
+            check if the source language matches "en"
+            If it matches, store target language in prev_target_languages queue
+            
+        #[hi,ta,te]

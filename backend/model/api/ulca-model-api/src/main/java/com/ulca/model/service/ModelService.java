@@ -1460,60 +1460,60 @@ public class ModelService {
 
 		int size = responseConfig.size();
 
-		Queue<String> intermediateQueue = new LinkedList<>();
+		// Queue<String> intermediateQueue = new LinkedList<>();
 		
-		for(String lang : targetLangList)
-			intermediateQueue.add(lang);
+		// for(String lang : targetLangList)
+		// 	intermediateQueue.add(lang);
 
-		int queueSize = intermediateQueue.size();
-		//intermediateQueue stores all the targetlanguages of the first task
+		// int queueSize = intermediateQueue.size();
+		// //intermediateQueue stores all the targetlanguages of the first task
 
-		//For each target language of previous task
-		for(int i =0;i<queueSize;i++) 
-		{
-			String targetLang = intermediateQueue.poll();
-			LanguageSchema languageSchema = new LanguageSchema();
-			languageSchema.setSourceLanguage(SupportedLanguages.fromValue(targetLang));
-				for(int j=1;j<size;j++) //go through each task (from 2nd one)
-				{
-					String current_task_type = responseConfig.get(i).getTaskType();
-					if(current_task_type == "asr") 
-					{
-						ASRTaskInference asrTaskInference = (ASRTaskInference)responseConfig.get(j);
-						List<ASRResponseConfig> asrResponseConfigList = asrTaskInference.getConfig();
-						for(ASRResponseConfig each_asrconfig : asrResponseConfigList)
-						{
-							if(each_asrconfig.getLanguage().getSourceLanguage().toString() == targetLang)
-								intermediateQueue.add(each_asrconfig.getLanguage().getSourceLanguage().toString());
-							//If source language of task is equal to target language of previous task, add target language of current task to intermediateSet
-						}
-					}
-					else if(current_task_type == "translation") 
-					{
-						TranslationTaskInference translationTaskInference = (TranslationTaskInference)responseConfig.get(j);
-						List<TranslationResponseConfig> translationrResponseConfigList = translationTaskInference.getConfig();
-						for(TranslationResponseConfig each_translationconfig : translationrResponseConfigList)
-						{
-							if(each_translationconfig.getLanguage().getSourceLanguage().toString() == targetLang)
-								intermediateQueue.add(each_translationconfig.getLanguage().getTargetLanguage().toString());
-						}
-					}
-					else if(current_task_type == "tts") 
-					{
-						TTSTaskInference ttsTaskInference = (TTSTaskInference)responseConfig.get(j);
-						List<TTSResponseConfig> ttsResponseConfigList = ttsTaskInference.getConfig();
-						for(TTSResponseConfig each_ttsconfig : ttsResponseConfigList)
-						{
-							if(each_ttsconfig.getLanguage().getSourceLanguage().toString() == targetLang)
-								intermediateQueue.add(each_ttsconfig.getLanguage().getSourceLanguage().toString());
-						}			
-					}
+		// //For each target language of previous task
+		// for(int i =0;i<queueSize;i++) 
+		// {
+		// 	String targetLang = intermediateQueue.poll();
+		// 	LanguageSchema languageSchema = new LanguageSchema();
+		// 	languageSchema.setSourceLanguage(SupportedLanguages.fromValue(targetLang));
+		// 		for(int j=1;j<size;j++) //go through each task (from 2nd one)
+		// 		{
+		// 			String current_task_type = responseConfig.get(i).getTaskType();
+		// 			if(current_task_type == "asr") 
+		// 			{
+		// 				ASRTaskInference asrTaskInference = (ASRTaskInference)responseConfig.get(j);
+		// 				List<ASRResponseConfig> asrResponseConfigList = asrTaskInference.getConfig();
+		// 				for(ASRResponseConfig each_asrconfig : asrResponseConfigList)
+		// 				{
+		// 					if(each_asrconfig.getLanguage().getSourceLanguage().toString() == targetLang)
+		// 						intermediateQueue.add(each_asrconfig.getLanguage().getSourceLanguage().toString());
+		// 					//If source language of task is equal to target language of previous task, add target language of current task to intermediateSet
+		// 				}
+		// 			}
+		// 			else if(current_task_type == "translation") 
+		// 			{
+		// 				TranslationTaskInference translationTaskInference = (TranslationTaskInference)responseConfig.get(j);
+		// 				List<TranslationResponseConfig> translationrResponseConfigList = translationTaskInference.getConfig();
+		// 				for(TranslationResponseConfig each_translationconfig : translationrResponseConfigList)
+		// 				{
+		// 					if(each_translationconfig.getLanguage().getSourceLanguage().toString() == targetLang)
+		// 						intermediateQueue.add(each_translationconfig.getLanguage().getTargetLanguage().toString());
+		// 				}
+		// 			}
+		// 			else if(current_task_type == "tts") 
+		// 			{
+		// 				TTSTaskInference ttsTaskInference = (TTSTaskInference)responseConfig.get(j);
+		// 				List<TTSResponseConfig> ttsResponseConfigList = ttsTaskInference.getConfig();
+		// 				for(TTSResponseConfig each_ttsconfig : ttsResponseConfigList)
+		// 				{
+		// 					if(each_ttsconfig.getLanguage().getSourceLanguage().toString() == targetLang)
+		// 						intermediateQueue.add(each_ttsconfig.getLanguage().getSourceLanguage().toString());
+		// 				}			
+		// 			}
 			
-				}
-		}
+		// 		}
+		// }
 
 		
-		pipelineResponse.setLanguages(languageList);
+		// pipelineResponse.setLanguages(languageList);
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
