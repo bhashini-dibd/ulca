@@ -1,0 +1,19 @@
+{
+    "benchmarkDLMetrics": [
+      {
+        "code": "precision",
+        "label": "Precision",
+        "active": true
+      },
+      {
+        "code": "recall",
+        "label": "Recall",
+        "active": true
+      },
+      {
+        "code": "h1-mean",
+        "label": "h1-mean",
+        "active": true
+      }
+    ]
+  }

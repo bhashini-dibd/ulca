@@ -116,7 +116,7 @@ class PTRepo:
             if val:
                 client.hincrby(key, value, 1)
                 if seconds:
-                    client.hincrby(key, sec_value, seconds)
+                    client.hincrbyfloat(key, sec_value, seconds)
         except Exception as e:
             log.exception(f'Exception in redis_key_inc: {e}', e)
             return None

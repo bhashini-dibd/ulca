@@ -4,6 +4,7 @@ from datetime import datetime
 from logging.config import dictConfig
 from configs.configs import pt_publish_tool, pt_inprogress_status, pt_success_status, pt_failed_status, pt_update_batch
 from .ptrepo import PTRepo
+import time 
 
 log = logging.getLogger('file')
 
@@ -15,10 +16,14 @@ class ProcessTracker:
         pass
 
     def update_task_details(self, data):
+        duration = None
+        if 'duration' in data.keys():
+            duration = data['duration']
+
         if data["status"] == "SUCCESS":
-            repo.redis_key_inc('ServiceRequestNumber_'+data["serviceRequestNumber"], False)
+            repo.redis_key_inc('ServiceRequestNumber_'+data["serviceRequestNumber"], duration, False)
         else:
-            repo.redis_key_inc('ServiceRequestNumber_'+data["serviceRequestNumber"], True)
+            repo.redis_key_inc('ServiceRequestNumber_'+data["serviceRequestNumber"], duration, True)
 
     def create_task_event(self, data):
         log.info(f'Publishing pt event for SUBMIT -- {data["serviceRequestNumber"]}')
@@ -31,13 +36,16 @@ class ProcessTracker:
                 else:
                     log.error(f'Record received for a {task_event_entry["taskEvent"]["status"]} SRN -- {data["serviceRequestNumber"]}')
                     return
+            strtime = eval(str(time.time()).replace('.', '')[0:13])
+            lastmodtime = eval(str(time.time()).replace('.', '')[0:13])
             task_event = {"id": str(uuid.uuid4()), "tool": pt_publish_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                          "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
+                          "startTime": strtime, "lastModifiedTime": lastmodtime}
             if data["status"] == "SUCCESS":
                 processed_count = [{"type": "success", "count": 1}, {"type": "failed", "typeDetails": {}, "count": 0}]
             else:
                 processed_count = [{"type": "failed", "typeDetails": {data["code"]: 1}, "count": 1}, {"type": "success", "count": 0}]
-            details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed_count, "timeStamp": str(datetime.now())}
+            timeStmp = eval(str(time.time()).replace('.', '')[0:13])
+            details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed_count, "timeStamp": timeStmp}
             task_event["details"] = details
             log.info(f'Creating PT event for SRN -- {data["serviceRequestNumber"]}')
             repo.insert(task_event)
@@ -59,7 +67,7 @@ class ProcessTracker:
                     task_event = task_event_entry["taskEvent"]
                 if task_event["status"] == pt_inprogress_status:
                     task_event["status"] = pt_success_status
-                    task_event["endTime"] = task_event["lastModifiedTime"] = str(datetime.now())
+                    task_event["endTime"] = task_event["lastModifiedTime"] = eval(str(time.time()).replace('.', '')[0:13])
                     repo.update(task_event)
                     return task_event
                 else:
@@ -98,9 +106,9 @@ class ProcessTracker:
                         if not found:
                             type_details[data["code"]] = 1
                         value["count"] += 1
-            details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed, "timeStamp": str(datetime.now())}
+            details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed, "timeStamp": eval(str(time.time()).replace('.', '')[0:13])}
             task_event["details"] = details
-            task_event["lastModifiedTime"] = str(datetime.now())
+            task_event["lastModifiedTime"] = eval(str(time.time()).replace('.', '')[0:13])
             repo.redis_upsert(f'{data["serviceRequestNumber"]}|{pt_publish_tool}', {"taskEvent": task_event, "count": count})
             return
         except Exception as e:

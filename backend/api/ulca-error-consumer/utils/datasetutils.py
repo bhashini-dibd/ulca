@@ -3,6 +3,7 @@ import logging
 from logging.config import dictConfig
 from configs.configs import file_store_host, file_store_upload_endpoint
 import requests
+import csv
 
 log = logging.getLogger('file')
 
@@ -22,10 +23,27 @@ class DatasetUtils:
             response_data = response.content
             log.info("Received data from upload end point of file store service")
             response = json.loads(response_data)
+            if "data" not in response:
+                return False
             return response["data"]
         except Exception as e:
             log.exception(f'Exception while pushing error file to object store: {e}')
         return False
+    
+    def create_csv(self, data_list, file, srn):
+        try:
+            csv_headers = ['stage','message','count']
+            log.info('Started csv writing !...')
+            with open(file, 'a', newline='') as output_file:
+                dict_writer = csv.DictWriter(output_file,fieldnames=csv_headers,extrasaction='ignore')
+                dict_writer.writeheader()
+                for data in data_list:
+                    dict_writer.writerow(data)
+            log.info(f'{len(data_list)} Errors written to csv for SRN -- {srn}')
+            return 
+        except Exception as e:
+            log.exception(f'Exception in csv writer: {e}')
+            return
 
 
 # Log config

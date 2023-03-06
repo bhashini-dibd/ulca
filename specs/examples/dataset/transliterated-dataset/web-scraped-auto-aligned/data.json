@@ -1,0 +1,31 @@
+[
+    {
+        "sourceText": "chithramulla",
+        "targetText": "ചിത്രമുള്ള",
+        "collectionMethod": {
+            "collectionDetails": {
+                "alignmentScore": 0.91784
+            }
+        }
+    },
+    {
+        "sourceText": "verthirikkunnathu",
+        "targetText": "വേർതിരിക്കുന്നത്",
+        "collectionMethod": {
+            "collectionDetails": {
+                "alignmentScore": 0.79782
+            }
+        }
+    },
+    {
+        "sourceText": "athishayokthi",
+        "targetText": "അതിശയോക്തി",
+        "collectionMethod": {
+            "collectionDetails": {
+                "alignmentScore": 0.69784
+            }
+        }
+    }
+   
+]
+

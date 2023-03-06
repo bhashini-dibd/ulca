@@ -1,0 +1,34 @@
+{
+    "modelTasks": [
+      {
+        "code": "translation",
+        "label": "TRANSLATION",
+        "active": true
+      },
+      {
+        "code": "asr",
+        "label": "ASR",
+        "active": true
+      },
+      {
+        "code": "tts",
+        "label": "TTS",
+        "active": true
+      },
+      {
+        "code": "ocr",
+        "label": "OCR",
+        "active": true
+      },
+      {
+        "code": "transliteration",
+        "label": "TRANSLITERATION",
+        "active": true
+      },
+      {
+        "code": "txt-lang-detection",
+        "label": "TXT-LANG-DETECTION",
+        "active": true
+      }
+    ]
+  }

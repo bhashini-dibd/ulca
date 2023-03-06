@@ -1,0 +1,64 @@
+{
+   "name": "Anuvaad Translation English-Gujarati",
+   "version": "v1.0",
+   "description": "Anuvaad-NMT is a set of domain specific(legal) Transformer-base (~100 M) bilingual NMT models trained on Legal datasets obtained from various public sources like Indiakanoon, law commission etc. The models were trained using OpenNMT-py framework with sentencepiece tokenisation, and productionised using Ctranslate2 binary framework. Currently the bilingual models are released for following 9 languages- English to Indic(Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Punjabi, Tamil, Telugu) and Indic to English, a total of 18 bilingual models.",
+   "refUrl": "https://github.com/project-anuvaad/anuvaad",
+   "task": {
+      "type" : "translation"
+   },
+   "languages": [
+      {
+         "sourceLanguage": "en",
+         "targetLanguage": "gu"
+      }
+   ],
+   "license": "mit",
+   "domain": [
+      "general"
+   ],
+   "submitter": {
+      "name": "Anuvaad",
+      "aboutMe": "Project Anuvaad has been conceptualised to provide translation capabilities for Indic languages. Project Anuvaad is open sourced under the MIT license and is funded by EkStep foundation.",
+      "team": [
+         {
+            "name": "Kumar Deepak",
+            "aboutMe": "Tarento, EkStep"
+         },
+         {
+            "name": "Vivek Raghavan",
+            "aboutMe": "EkStep"
+         },
+         {
+            "name": "Sujit Sahoo",
+            "aboutMe": "Tarento, EkStep"
+         },
+         {
+            "name": "Ajitesh Sharma",
+            "aboutMe": "Tarento, EkStep"
+         }
+      ]
+   },
+   "inferenceEndPoint": {
+      "callbackUrl": "https://users-auth.anuvaad.org/nmt-inference/v0/translate",
+      "schema": {
+         "taskType": "translation",
+         "request": {
+            "input": [
+               {
+                  "source": "How are you?"
+               }
+            ],
+            "config": {
+               "modelId":10,
+               "language": {
+                  "sourceLanguage": "en",
+                  "targetLanguage": "gu"
+               }
+            }
+         }
+      }
+   },
+   "trainingDataset": {
+      "description": "Trained on the datasets curated as part of Anuvaad project."
+   }
+}

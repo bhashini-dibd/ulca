@@ -10,6 +10,9 @@ public enum AsrDatasetParamsSchemaKeys {
 		license,
 		submitter,
 		//optional
+		version,
+		licenseUrl,
+		mixedDataSource,
 		format,
 		channel,
 		samplingRate,
@@ -20,9 +23,6 @@ public enum AsrDatasetParamsSchemaKeys {
 		dialect,
 		snr,
 		collectionMethod
-		
-	
-	
 	
 }
 

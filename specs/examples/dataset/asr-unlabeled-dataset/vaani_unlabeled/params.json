@@ -1,0 +1,47 @@
+{
+    "datasetType": "asr-unlabeled-corpus",
+    "languages": {
+        "sourceLanguage": "mixed"
+    },
+    "collectionSource": [
+        "iisc"
+    ],
+    "mixedDataSource": "vaani",
+    "domain": [
+        "general"
+    ],
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "PIB",
+        "aboutMe": "Part of the Vani project, funded by Google",
+        "oauthId": {
+            "oauthId": "prasantg@iisc.ac.in",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Prasanta",
+                "oauthId": {
+                    "oauthId": "prasantg@iisc.ac.in",
+                    "provider": "google"
+                }
+            }
+        ]
+    },
+    "format": "wav",
+    "channel": "mono",
+    "samplingRate": 16,
+    "bitsPerSample": "sixteen",
+    "numberOfSpeakers": 1,
+    "collectionMethod": {
+        "collectionDescription": [
+            "manual-transcribed"
+        ],
+        "collectionDetails": {
+            "contributor": {
+                "name": "Prasanta Kumar Ghosh",
+                "aboutMe": "Member of Vaani team"
+            }
+        }
+    }
+}

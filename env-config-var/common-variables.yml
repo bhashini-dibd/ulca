@@ -1,0 +1,15 @@
+DS_TYPE_PARALLEL='parallel-corpus'
+DS_TYPE_ASR='asr-corpus'
+DS_TYPE_OCR='ocr-corpus'
+DS_TYPE_MONOLINGUAL='monolingual-corpus'
+
+STATUS_INPROGRESS='In-Progress'
+STATUS_COMPLETED='Completed'
+STATUS_FAILED='Failed'
+STATUS_PENDING='Pending'
+
+ULCA_NOTIFIER_DS_SUBMIT_COMPLETED_STATUS='dataset-submit-completed'
+ULCA_NOTIFIER_DS_SUBMIT_FAILED_STATUS='dataset-submit-failed'
+ULCA_NOTIFIER_BM_RUN_COMPLETED_STATUS='benchmark-run-completed'
+ULCA_NOTIFIER_BM_RUN_FAILED_STATUS='benchmark-run-failed'
+ULCA_NOTIFIER_DS_SEARCH_COMPLETED_STATUS='search-records-completed'

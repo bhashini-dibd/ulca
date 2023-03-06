@@ -1,7 +1,9 @@
 package com.ulca.dataset.kakfa;
 
 import java.io.File;
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +53,9 @@ public interface DatasetValidateIngest {
 					JSONObject valueJson = (JSONObject) value;
 					deepMerge(valueJson, target.getJSONObject(key));
 				} else {
-					target.put(key, value);
+					if(value != null && !value.equals(null)) {
+						target.put(key, value);
+					}
 				}
 			}
 		}
@@ -59,11 +63,13 @@ public interface DatasetValidateIngest {
 	}
 
 	public default boolean isFileAvailable(String filePath) {
-		File f = new File(filePath);
+		
+		Path path = Paths.get(filePath);
+		boolean exists = Files.exists(path);
 		
         // Check if the specified file
         // Exists or not
-        if (f.exists()) {
+        if (exists) {
         	return true;
         }
         

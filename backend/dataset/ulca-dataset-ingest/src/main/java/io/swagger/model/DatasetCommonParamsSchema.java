@@ -1,245 +1,266 @@
 package io.swagger.model;
 
 import java.util.Objects;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.validation.annotation.Validated;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.DatasetType;
+import io.swagger.model.Domain;
+import io.swagger.model.LanguagePair;
+import io.swagger.model.License;
+import io.swagger.model.Source;
+import io.swagger.model.Submitter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
- * common parameters or attributes of dataset that is primarily same across the
- * supported dataset.
+ * common parameters or attributes of dataset that is primarily same across the supported dataset.
  */
 @Schema(description = "common parameters or attributes of dataset that is primarily same across the supported dataset.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
 
-public class DatasetCommonParamsSchema {
-	@JsonProperty("version")
-	private String version = "1";
 
-	@JsonProperty("datasetType")
-	private DatasetType datasetType = null;
+public class DatasetCommonParamsSchema   {
+  @JsonProperty("version")
+  private String version = "1";
 
-	@JsonProperty("languages")
-	private LanguagePair languages = null;
+  @JsonProperty("datasetType")
+  private DatasetType datasetType = null;
 
-	@JsonProperty("collectionSource")
-	private Source collectionSource = null;
+  @JsonProperty("languages")
+  private LanguagePair languages = null;
 
-	@JsonProperty("domain")
-	private Domain domain = null;
+  @JsonProperty("collectionSource")
+  private Source collectionSource = null;
 
-	@JsonProperty("license")
-	private License license = null;
+  @JsonProperty("domain")
+  private Domain domain = null;
 
-	@JsonProperty("submitter")
-	private Submitter submitter = null;
+  @JsonProperty("license")
+  private License license = null;
 
-	public DatasetCommonParamsSchema version(String version) {
-		this.version = version;
-		return this;
-	}
+  @JsonProperty("licenseUrl")
+  private String licenseUrl = null;
 
-	/**
-	 * params schema version
-	 * 
-	 * @return version
-	 **/
-	@Schema(description = "params schema version")
+  @JsonProperty("submitter")
+  private Submitter submitter = null;
 
-	public String getVersion() {
-		return version;
-	}
+  public DatasetCommonParamsSchema version(String version) {
+    this.version = version;
+    return this;
+  }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+  /**
+   * params schema version
+   * @return version
+   **/
+  @Schema(description = "params schema version")
+  
+    public String getVersion() {
+    return version;
+  }
 
-	public DatasetCommonParamsSchema datasetType(DatasetType datasetType) {
-		this.datasetType = datasetType;
-		return this;
-	}
+  public void setVersion(String version) {
+    this.version = version;
+  }
 
-	/**
-	 * Get datasetType
-	 * 
-	 * @return datasetType
-	 **/
-	@Schema(required = true, description = "")
-	@NotNull
+  public DatasetCommonParamsSchema datasetType(DatasetType datasetType) {
+    this.datasetType = datasetType;
+    return this;
+  }
 
-	@Valid
-	public DatasetType getDatasetType() {
-		return datasetType;
-	}
+  /**
+   * Get datasetType
+   * @return datasetType
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
 
-	public void setDatasetType(DatasetType datasetType) {
-		this.datasetType = datasetType;
-	}
+    @Valid
+    public DatasetType getDatasetType() {
+    return datasetType;
+  }
 
-	public DatasetCommonParamsSchema languages(LanguagePair languages) {
-		this.languages = languages;
-		return this;
-	}
+  public void setDatasetType(DatasetType datasetType) {
+    this.datasetType = datasetType;
+  }
 
-	/**
-	 * Get languages
-	 * 
-	 * @return languages
-	 **/
-	@Schema(required = true, description = "")
-	@NotNull
+  public DatasetCommonParamsSchema languages(LanguagePair languages) {
+    this.languages = languages;
+    return this;
+  }
 
-	@Valid
-	public LanguagePair getLanguages() {
-		return languages;
-	}
+  /**
+   * Get languages
+   * @return languages
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
 
-	public void setLanguages(LanguagePair languages) {
-		this.languages = languages;
-	}
+    @Valid
+    public LanguagePair getLanguages() {
+    return languages;
+  }
 
-	public DatasetCommonParamsSchema collectionSource(Source collectionSource) {
-		this.collectionSource = collectionSource;
-		return this;
-	}
+  public void setLanguages(LanguagePair languages) {
+    this.languages = languages;
+  }
 
-	/**
-	 * Get collectionSource
-	 * 
-	 * @return collectionSource
-	 **/
-	@Schema(required = true, description = "")
-	@NotNull
+  public DatasetCommonParamsSchema collectionSource(Source collectionSource) {
+    this.collectionSource = collectionSource;
+    return this;
+  }
 
-	@Valid
-	public Source getCollectionSource() {
-		return collectionSource;
-	}
+  /**
+   * Get collectionSource
+   * @return collectionSource
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
 
-	public void setCollectionSource(Source collectionSource) {
-		this.collectionSource = collectionSource;
-	}
+    @Valid
+    public Source getCollectionSource() {
+    return collectionSource;
+  }
 
-	public DatasetCommonParamsSchema domain(Domain domain) {
-		this.domain = domain;
-		return this;
-	}
+  public void setCollectionSource(Source collectionSource) {
+    this.collectionSource = collectionSource;
+  }
 
-	/**
-	 * Get domain
-	 * 
-	 * @return domain
-	 **/
-	@Schema(required = true, description = "")
-	@NotNull
+  public DatasetCommonParamsSchema domain(Domain domain) {
+    this.domain = domain;
+    return this;
+  }
 
-	@Valid
-	public Domain getDomain() {
-		return domain;
-	}
+  /**
+   * Get domain
+   * @return domain
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
 
-	public void setDomain(Domain domain) {
-		this.domain = domain;
-	}
+    @Valid
+    public Domain getDomain() {
+    return domain;
+  }
 
-	public DatasetCommonParamsSchema license(License license) {
-		this.license = license;
-		return this;
-	}
+  public void setDomain(Domain domain) {
+    this.domain = domain;
+  }
 
-	/**
-	 * Get license
-	 * 
-	 * @return license
-	 **/
-	@Schema(required = true, description = "")
-	@NotNull
+  public DatasetCommonParamsSchema license(License license) {
+    this.license = license;
+    return this;
+  }
 
-	@Valid
-	public License getLicense() {
-		return license;
-	}
+  /**
+   * Get license
+   * @return license
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
 
-	public void setLicense(License license) {
-		this.license = license;
-	}
+    @Valid
+    public License getLicense() {
+    return license;
+  }
 
-	public DatasetCommonParamsSchema submitter(Submitter submitter) {
-		this.submitter = submitter;
-		return this;
-	}
+  public void setLicense(License license) {
+    this.license = license;
+  }
 
-	/**
-	 * Get submitter
-	 * 
-	 * @return submitter
-	 **/
-	@Schema(required = true, description = "")
-	@NotNull
+  public DatasetCommonParamsSchema licenseUrl(String licenseUrl) {
+    this.licenseUrl = licenseUrl;
+    return this;
+  }
 
-	@Valid
-	public Submitter getSubmitter() {
-		return submitter;
-	}
+  /**
+   * url of the custom license
+   * @return licenseUrl
+   **/
+  @Schema(description = "url of the custom license")
+  
+    public String getLicenseUrl() {
+    return licenseUrl;
+  }
 
-	public void setSubmitter(Submitter submitter) {
-		this.submitter = submitter;
-	}
+  public void setLicenseUrl(String licenseUrl) {
+    this.licenseUrl = licenseUrl;
+  }
 
-	@Override
-	public boolean equals(java.lang.Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		DatasetCommonParamsSchema datasetCommonParamsSchema = (DatasetCommonParamsSchema) o;
-		return Objects.equals(this.version, datasetCommonParamsSchema.version)
-				&& Objects.equals(this.datasetType, datasetCommonParamsSchema.datasetType)
-				&& Objects.equals(this.languages, datasetCommonParamsSchema.languages)
-				&& Objects.equals(this.collectionSource, datasetCommonParamsSchema.collectionSource)
-				&& Objects.equals(this.domain, datasetCommonParamsSchema.domain)
-				&& Objects.equals(this.license, datasetCommonParamsSchema.license)
-				&& Objects.equals(this.submitter, datasetCommonParamsSchema.submitter);
-	}
+  public DatasetCommonParamsSchema submitter(Submitter submitter) {
+    this.submitter = submitter;
+    return this;
+  }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(version, datasetType, languages, collectionSource, domain, license, submitter);
-	}
+  /**
+   * Get submitter
+   * @return submitter
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("class DatasetCommonParamsSchema {\n");
+    @Valid
+    public Submitter getSubmitter() {
+    return submitter;
+  }
 
-		sb.append("    version: ").append(toIndentedString(version)).append("\n");
-		sb.append("    datasetType: ").append(toIndentedString(datasetType)).append("\n");
-		sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
-		sb.append("    collectionSource: ").append(toIndentedString(collectionSource)).append("\n");
-		sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
-		sb.append("    license: ").append(toIndentedString(license)).append("\n");
-		sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
-		sb.append("}");
-		return sb.toString();
-	}
+  public void setSubmitter(Submitter submitter) {
+    this.submitter = submitter;
+  }
 
-	/**
-	 * Convert the given object to string with each line indented by 4 spaces
-	 * (except the first line).
-	 */
-	private String toIndentedString(java.lang.Object o) {
-		if (o == null) {
-			return "null";
-		}
-		return o.toString().replace("\n", "\n    ");
-	}
+
+  @Override
+  public boolean equals(java.lang.Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    DatasetCommonParamsSchema datasetCommonParamsSchema = (DatasetCommonParamsSchema) o;
+    return Objects.equals(this.version, datasetCommonParamsSchema.version) &&
+        Objects.equals(this.datasetType, datasetCommonParamsSchema.datasetType) &&
+        Objects.equals(this.languages, datasetCommonParamsSchema.languages) &&
+        Objects.equals(this.collectionSource, datasetCommonParamsSchema.collectionSource) &&
+        Objects.equals(this.domain, datasetCommonParamsSchema.domain) &&
+        Objects.equals(this.license, datasetCommonParamsSchema.license) &&
+        Objects.equals(this.licenseUrl, datasetCommonParamsSchema.licenseUrl) &&
+        Objects.equals(this.submitter, datasetCommonParamsSchema.submitter);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(version, datasetType, languages, collectionSource, domain, license, licenseUrl, submitter);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class DatasetCommonParamsSchema {\n");
+    
+    sb.append("    version: ").append(toIndentedString(version)).append("\n");
+    sb.append("    datasetType: ").append(toIndentedString(datasetType)).append("\n");
+    sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
+    sb.append("    collectionSource: ").append(toIndentedString(collectionSource)).append("\n");
+    sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
+    sb.append("    license: ").append(toIndentedString(license)).append("\n");
+    sb.append("    licenseUrl: ").append(toIndentedString(licenseUrl)).append("\n");
+    sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
 }

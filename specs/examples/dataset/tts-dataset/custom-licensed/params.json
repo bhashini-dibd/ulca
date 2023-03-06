@@ -1,0 +1,32 @@
+{   
+  "datasetType": "tts-corpus",
+  "languages": {
+      "sourceLanguage": "si"
+  },
+  "collectionSource": [
+      "IITM", "https://www.iitm.ac.in/donlab/tts/"
+  ],
+  "domain":[
+      "general"
+  ],
+  "license":  "custom-license",
+  "licenseUrl":  "https://www.iitm.ac.in/donlab/tts/downloads/license.pdf",
+  "submitter": {
+      "name": "IITM-Donlab",
+      "team": [
+          {
+              "name": "Jom",
+              "oauthId": {
+                "oauthId": "jom@gmail.com",
+                "provider": "google"
+            }
+          }
+      ]
+  },
+  "format": "wav",
+  "collectionMethod": {
+      "collectionDescription": [
+          "studio-recorded"
+      ]
+  }
+}

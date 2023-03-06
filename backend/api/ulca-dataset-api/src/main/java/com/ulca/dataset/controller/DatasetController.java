@@ -25,65 +25,65 @@ import com.ulca.dataset.service.DatasetService;
 
 import lombok.extern.slf4j.Slf4j;
 
-
-
 @Slf4j
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping(value= "/ulca/apis/v0/dataset")
+@RequestMapping(value = "/ulca/apis/v0/dataset")
 public class DatasetController {
-	
+
 	@Autowired
 	DatasetService datasetService;
-	
-	
+
 	@PostMapping("/corpus/submit")
-	public DatasetSubmitResponse datasetSubmit(@Valid  @RequestBody DatasetSubmitRequest request) {
-		
-		
-	    log.info("******** Entry DatasetController:: datasetSubmit *******" );
-	    return datasetService.datasetSubmit(request);
-	  }
+	public DatasetSubmitResponse datasetSubmit(@Valid @RequestBody DatasetSubmitRequest request) {
+
+		log.info("******** Entry DatasetController:: datasetSubmit *******");
+		return datasetService.datasetSubmit(request);
+	}
 
 	@GetMapping("/listByUserId")
-	public DatasetListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage) {
-		log.info("******** Entry DatasetController:: listByUserId *******" );
-		
-		return datasetService.datasetListByUserId(userId, startPage, endPage);
+	public DatasetListByUserIdResponse listByUserId(@RequestParam String userId,
+			@RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage,
+			@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String name) {
+
+		log.info("******** Entry DatasetController:: listByUserId *******");
+		return datasetService.datasetListByUserId(userId, startPage, endPage, pageSize, name);
 	}
-	
+
 	@GetMapping("/getByDatasetId")
 	public DatasetByIdResponse datasetById(@RequestParam String datasetId) {
-		log.info("******** Entry DatasetController:: listByUserId *******" );
-		
+
+		log.info("******** Entry DatasetController:: listByUserId *******");
 		return datasetService.datasetById(datasetId);
 	}
-	
+
 	@GetMapping("/getByServiceRequestNumber")
 	public DatasetByServiceReqNrResponse datasetByServiceRequestNumber(@RequestParam String serviceRequestNumber) {
-		log.info("******** Entry DatasetController:: listByUserId *******" );
-		
+
+		log.info("******** Entry DatasetController:: listByUserId *******");
 		return datasetService.datasetByServiceRequestNumber(serviceRequestNumber);
 	}
-	
+
 	@PostMapping("/corpus/search")
-	public DatasetCorpusSearchResponse corpusSearch(@RequestBody DatasetCorpusSearchRequest request) throws JsonProcessingException {
-		
-		
-	    log.info("******** Entry DatasetController:: corpusSearch *******" );
-	    return datasetService.corpusSearch(request);
-	  }
+	public DatasetCorpusSearchResponse corpusSearch(@RequestBody DatasetCorpusSearchRequest request)
+			throws JsonProcessingException {
+
+		log.info("******** Entry DatasetController:: corpusSearch *******");
+		return datasetService.corpusSearch(request);
+	}
 
 	@GetMapping("/corpus/search/status")
 	public DatasetSearchStatusResponse searchStatus(@RequestParam String serviceRequestNumber) {
-		log.info("******** Entry DatasetController:: searchStatus *******" );
 		
+		log.info("******** Entry DatasetController:: searchStatus *******");
 		return datasetService.searchStatus(serviceRequestNumber);
 	}
+
 	@GetMapping("/corpus/search/listByUserId")
-	public SearchListByUserIdResponse searchListByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage) {
-		log.info("******** Entry DatasetController:: searchListByUserId *******" );
+	public SearchListByUserIdResponse searchListByUserId(@RequestParam String userId,
+			@RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage) {
 		
-		return datasetService.searchListByUserId(userId,startPage, endPage );
+		log.info("******** Entry DatasetController:: searchListByUserId *******");
+		return datasetService.searchListByUserId(userId, startPage, endPage);
 	}
 }

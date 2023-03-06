@@ -16,7 +16,8 @@ public enum AudioFormat {
   WAV("wav"),
     PCM("pcm"),
     MP3("mp3"),
-    FLAC("flac");
+    FLAC("flac"),
+    SPH("sph");
 
   private String value;
 

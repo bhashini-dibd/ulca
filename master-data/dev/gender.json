@@ -1,0 +1,24 @@
+{
+    "gender": [
+      {
+        "code": "male",
+        "label": "Male",
+        "active": true
+      },
+      {
+        "code": "female",
+        "label": "Female",
+        "active": true
+      },
+      {
+        "code": "transgender",
+        "label": "Transgender",
+        "active": true
+      },
+      {
+        "code": "others",
+        "label": "Others",
+        "active": true
+      }
+    ]
+  }

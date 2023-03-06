@@ -2,6 +2,9 @@ import logging
 from collections import OrderedDict
 from datetime import datetime
 from logging.config import dictConfig
+
+from bson import ObjectId
+
 from configs.configs import db_cluster, db, asr_unlabeled_collection
 
 import pymongo
@@ -57,7 +60,11 @@ class ASRUnlabeledRepo:
 
     def update(self, object_in):
         col = self.get_mongo_instance()
-        col.replace_one({"id": object_in["id"]}, object_in)
+        try:
+            object_in["_id"] = ObjectId(object_in["_id"])
+            col.replace_one({"_id": object_in["_id"]}, object_in, False)
+        except Exception as e:
+            log.exception(f"Exception while updating: {e}", e)
 
     def delete(self, rec_id):
         col = self.get_mongo_instance()
@@ -68,18 +75,25 @@ class ASRUnlabeledRepo:
             seconds, hours = 0, 0
             col = self.get_mongo_instance()
             if offset is None and res_limit is None:
-                res = col.find(query, exclude).sort([('_id', 1)])
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', 1)])
+                else:
+                    res = col.find(query).sort([('_id', 1)])
             else:
-                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                else:
+                    res = col.find(query).sort([('_id', -1)]).skip(offset).limit(res_limit)
             result = []
             for record in res:
+                if "_id" in record.keys():
+                    record["_id"] = str(record["_id"])
                 if 'durationInSeconds' in record.keys():
                     seconds += record["durationInSeconds"]
                 result.append(record)
-            log.info(f'seconds: {seconds}')
             if seconds != 0:
                 hours = seconds/3600
-            return result, hours
+            return result, round(hours, 3)
         except Exception as e:
             log.exception(e)
             return [], 0

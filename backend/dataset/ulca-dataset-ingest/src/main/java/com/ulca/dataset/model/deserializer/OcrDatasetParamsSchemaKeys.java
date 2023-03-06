@@ -10,6 +10,10 @@ public enum OcrDatasetParamsSchemaKeys {
 		license,
 		submitter,
 		
+		//dataset optional params
+		version,
+		licenseUrl,
+		
 		//ocr params required
 		format,
 		dpi,

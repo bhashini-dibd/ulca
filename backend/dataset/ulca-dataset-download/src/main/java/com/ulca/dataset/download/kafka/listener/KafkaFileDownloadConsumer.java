@@ -7,15 +7,21 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,11 +29,14 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.ulca.dataset.download.constants.DatasetDownloadConstants;
+import com.ulca.dataset.dao.DatasetKafkaTransactionErrorLogDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.service.DatasetErrorPublishService;
+import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.kakfa.model.FileDownload;
+import com.ulca.dataset.model.DatasetKafkaTransactionErrorLog;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker;
@@ -61,13 +70,18 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	FileIdentifierDao fileIdentifierDao;
 	
+
+	@Autowired
+	DatasetKafkaTransactionErrorLogDao datasetKafkaTransactionErrorLogDao;
+	
 	@Autowired
 	private KafkaTemplate<String, DatasetIngest> datasetIngestKafkaTemplate;
 
 	@Value("${kafka.ulca.ds.ingest.ip.topic}")
 	private String datasetIngestTopic;
 	
-	
+	@Autowired
+	NotificationService notificationService;
 																																						
 	@KafkaListener(groupId = "${kafka.ulca.ds.filedownload.ip.topic.group.id}", topics = "${kafka.ulca.ds.filedownload.ip.topic}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
@@ -81,9 +95,6 @@ public class KafkaFileDownloadConsumer {
 		String userId = file.getUserId();
 		
 		DatasetIngest datasetIngest = new DatasetIngest();
-		//disabling pseudo ingest
-		//datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
-		datasetIngest.setMode(DatasetDownloadConstants.INGEST_REAL_MODE);
 		
 		
 		Map<String,String> fileMap = null;
@@ -126,6 +137,10 @@ public class KafkaFileDownloadConsumer {
 				datasetIngest.setMd5hash(md5hash);
 				datasetIngest.setDatasetType(datasetType);
 				datasetIngest.setUserId(userId);
+				
+				datasetIngest.setMode(DatasetDownloadConstants.INGEST_PRECHECK_MODE);
+				
+				
 
 			} catch (IOException e) {
 				
@@ -139,13 +154,90 @@ public class KafkaFileDownloadConsumer {
 				
 				//send error event for download failure
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , null, null) ;
+				
+				notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
 				e.printStackTrace();
 				
 				return;
 			}
-			datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
-			//datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
 			
+			
+			//datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
+			
+			try {
+				
+				 ListenableFuture<SendResult<String, DatasetIngest>> future = datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
+					
+					 future.addCallback(new ListenableFutureCallback<SendResult<String, DatasetIngest>>() {
+
+						    public void onSuccess(SendResult<String, DatasetIngest> result) {
+						    	log.info("message sent successfully to datasetIngestTopic, serviceRequestNumber :: "+ serviceRequestNumber);
+						    }
+
+						    @Override
+						    public void onFailure(Throwable ex) {
+						    	log.info("Error occured while sending message to datasetIngestTopic, serviceRequestNumber :: "+ serviceRequestNumber);
+						    	log.info("Error message :: " + ex.getMessage());
+						    	
+						    	DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
+						    	error.setServiceRequestNumber(serviceRequestNumber);
+						    	error.setAttempt(0);
+						    	error.setCreatedOn(new Date().toString());
+						    	error.setLastModifiedOn(new Date().toString());
+						    	error.setFailed(false);
+						    	error.setSuccess(false);
+						    	error.setStage("ingest");
+						    	List<String> er = new ArrayList<String>();
+						    	er.add(ex.getMessage());
+						    	error.setErrors(er);
+						    	ObjectMapper mapper = new ObjectMapper();
+							
+									String dataRow;
+									try {
+										dataRow = mapper.writeValueAsString(datasetIngest);
+								    	error.setData(dataRow);
+								    	datasetKafkaTransactionErrorLogDao.save(error);
+								    	
+									} catch (JsonProcessingException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+						    	
+						    }
+						});
+					 
+			}catch ( KafkaException ex) {
+				log.info("Error occured while sending message to datasetIngestTopic, serviceRequestNumber :: "+serviceRequestNumber);
+				log.info("Error message :: " + ex.getMessage());
+				DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
+		    	error.setServiceRequestNumber(serviceRequestNumber);
+		    	error.setAttempt(0);
+		    	error.setCreatedOn(new Date().toString());
+		    	error.setLastModifiedOn(new Date().toString());
+		    	error.setFailed(false);
+		    	error.setSuccess(false);
+		    	error.setStage("ingest");
+		    	List<String> er = new ArrayList<String>();
+		    	er.add(ex.getMessage());
+		    	error.setErrors(er);
+		    	ObjectMapper mapper = new ObjectMapper();
+			
+					String dataRow;
+					try {
+						dataRow = mapper.writeValueAsString(datasetIngest);
+				    	error.setData(dataRow);
+				    	datasetKafkaTransactionErrorLogDao.save(error);
+				    	
+					} catch (JsonProcessingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+				throw ex;
+			}
+
+			//datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
 			
 			log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
 			
@@ -153,9 +245,7 @@ public class KafkaFileDownloadConsumer {
 			log.info("Unhadled Exception :: " + e.getMessage());
 			log.info("cause :: " + e.getClass());
 			e.printStackTrace();
-			
 		}
-		
 	}
 
 	private String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {
@@ -234,9 +324,17 @@ public class KafkaFileDownloadConsumer {
 			if(params.isEmpty() || !params.has("datasetType")) {
 				 throw new IOException("params.json does not contain datasetType");
 			}
-			String type = params.getString("datasetType");
+			String type = params.get("datasetType").toString();
+			if (type.equalsIgnoreCase("null") ||  type.isBlank()){
+				throw new IOException("datasetType value should not be null or empty");
+			}
+
 			datasetType = DatasetType.fromValue(type);
-			
+
+			if(datasetType==null){
+				throw new IOException("Invalid datasetType");
+			}
+
 			return datasetType;
 			
 			

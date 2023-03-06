@@ -21,8 +21,8 @@ if config.ENABLE_CORS:
 
 def start_cron():
     with app.test_request_context():
-        cron = StatusCronProcessor(threading.Event())
-        cron.start()
+        statcron    =    StatusCronProcessor(threading.Event())
+        statcron.start()
 
 for blueprint in vars(routes).values():
     if isinstance(blueprint, Blueprint):

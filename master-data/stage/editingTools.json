@@ -1,0 +1,27 @@
+{
+    "editingTools": [
+        {
+            "code": "microsoft excel",
+            "label": "Microsoft Excel",
+            "active": true,
+            "collectionMethod": [
+                "manual-aligned"
+            ],
+            "datasetType": [
+                "parallel-corpus"
+            ]
+        },
+        {
+            "code": "google translation",
+            "label": "Google Translation",
+            "active": true,
+            "collectionMethod": [
+                "machine-translated-post-edited",
+                "manual-translated"
+            ],
+            "datasetType": [
+                "parallel-corpus"
+            ]
+        }
+    ]
+}

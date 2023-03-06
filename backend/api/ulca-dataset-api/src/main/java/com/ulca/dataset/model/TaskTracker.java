@@ -33,7 +33,7 @@ public class TaskTracker   {
    */
   public enum ToolEnum {
     download("download"),
-    pseudo("pseudo"),
+    precheck("Pre-Check"),
     ingest("ingest"),
     
     validate("validate"),
@@ -67,7 +67,7 @@ public class TaskTracker   {
     }
   }
   @JsonProperty("tool")
-  private ToolEnum tool = null;
+  private String tool = null;
 
   /**
    * Status of the task
@@ -116,16 +116,16 @@ public class TaskTracker   {
   private String details = null;
 
   @JsonProperty("startTime")
-  //@DateTimeFormat(iso=ISO.DATE_TIME)
-  private String startTime = null;
+  //@DateTimeFormat(unix timestamp millisec)
+  private Long startTime;
 
   @JsonProperty("endTime")
- // @DateTimeFormat(iso=ISO.DATE_TIME)
-  private String endTime = null;
+ // @DateTimeFormat(unix timestamp millisec)
+  private Long endTime;
 
   @JsonProperty("lastModified")
- // @DateTimeFormat(iso=ISO.DATE_TIME)
-  private String lastModified = null;
+ // @DateTimeFormat(unix timestamp millisec)
+  private Long lastModified;
 
   @JsonProperty("error")
   private Error error = null;
@@ -149,7 +149,7 @@ public class TaskTracker   {
     this.serviceRequestNumber = serviceRequestNumber;
   }
 
-  public TaskTracker tool(ToolEnum tool) {
+  public TaskTracker tool(String tool) {
     this.tool = tool;
     return this;
   }
@@ -160,11 +160,11 @@ public class TaskTracker   {
    **/
   @Schema(description = "Tool updating this data")
   
-    public ToolEnum getTool() {
+    public String getTool() {
     return tool;
   }
 
-  public void setTool(ToolEnum tool) {
+  public void setTool(String tool) {
     this.tool = tool;
   }
 
@@ -206,7 +206,7 @@ public class TaskTracker   {
     this.details = details;
   }
 
-  public TaskTracker startTime(String startTime) {
+  public TaskTracker startTime(Long startTime) {
     this.startTime = startTime;
     return this;
   }
@@ -219,15 +219,15 @@ public class TaskTracker   {
   
     @Valid
     
-    public String getStartTime() {
+    public Long getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(String startTime) {
+  public void setStartTime(Long startTime) {
     this.startTime = startTime;
   }
 
-  public TaskTracker endTime(String endTime) {
+  public TaskTracker endTime(Long endTime) {
     this.endTime = endTime;
     return this;
   }
@@ -239,15 +239,15 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public String getEndTime() {
+    public Long getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(String endTime) {
+  public void setEndTime(Long endTime) {
     this.endTime = endTime;
   }
 
-  public TaskTracker lastModified(String lastModified) {
+  public TaskTracker lastModified(Long lastModified) {
     this.lastModified = lastModified;
     return this;
   }
@@ -259,11 +259,11 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public String getLastModified() {
+    public Long getLastModified() {
     return lastModified;
   }
 
-  public void setLastModified(String lastModified) {
+  public void setLastModified(Long lastModified) {
     this.lastModified = lastModified;
   }
 

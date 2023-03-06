@@ -1,172 +1,380 @@
 {
-    "actions":[
-        {
-            "id":"409c94af-2f8e-47ac-bc1f-4ba113cb96da",
-            "uri":"/ulca/apis/v0/dataset/corpus/submit",
-            "module":"ULCA-API",
-            "active":true,
-            "whiteList":false,
-            "description":"API to submit corpus"
-        },
-        {
-            "id":"8cdac1f3-146c-4046-a00b-50fa3bc4fa63",
-            "uri":"/ulca/apis/v0/dataset/listByUserId",
-            "module":"ULCA-API",
-            "active":true,
-            "whiteList":false,
-            "description":"API to get dataset contributions by user id"
-        },
-        {
-            "id":"573ddaef-daac-4479-a9f6-4b0bc272de20",
-            "uri":"/ulca/apis/v0/dataset/corpus/search",
-            "module":"ULCA-API",
-            "active":true,
-            "whiteList":false,
-            "description":"API to search corpus"
-        },
-        {
-            "id":"9085ca30-ca0c-4b7e-81ba-0ca41568a372",
-            "uri":"/ulca/apis/v0/dataset/corpus/search/listByUserId",
-            "module":"ULCA-API",
-            "active":true,
-            "whiteList":false,
-            "description":"API to fetch user searches by user id"
-        },
-        {
-            "id":"a854ad66-00f3-4d05-983c-2bcdbab6562c",
-            "uri":"/ulca/apis/v0/dataset/getByServiceRequestNumber",
-            "module":"ULCA-API",
-            "active":true,
-            "whiteList":false,
-            "description":"API to fetch dataset details on srn"
-        },
-        {
-            "id":"b3d4b271-4de3-4781-8d03-8b3cee833f13",
-            "uri":"/ulca/error-consumer/v0/error/report",
-            "module":"ERROR-CONSUMER",
-            "active":true,
-            "whiteList":false,
-            "description":"API to fetch error report for a service request"
-        },
-        {
-            "id":"db24a2b7-07bf-4522-a23d-a77f4b8f5ad3",
-            "uri":"/ulca/data-metric/v0/store/search",
-            "module":"ULCA-METRICS",
-            "active":true,
-            "whiteList":true,
-            "description":"API to fetch metrics from the ULCA platform"
-        },
-        {
-            "id":"bcef7afd-5477-4f04-9a6f-b84e4b9a491f",
-            "uri":"/ulca/user-mgmt/v1/users/login",
-            "module":"ULCA-UMS",
-            "active":true,
-            "whiteList":true,
-            "description":"API to login"
-        },
-        {
-            "id":"d6fbf062-8d1a-4ae3-a4b8-83466753efad",
-            "uri":"/ulca/user-mgmt/v1/users/signup",
-            "module":"ULCA-UMS",
-            "active":true,
-            "whiteList":true,
-            "description":"API to register"
-        },
-        {
-            "id":"6eae39c6-d705-4ee2-9ec6-c2eb445e9f02",
-            "uri":"/ulca/user-mgmt/v1/users/verify-user",
-            "module":"ULCA-UMS",
-            "active":true,
-            "whiteList":true,
-            "description":"API to verify the user"
-        },
-        {
-            "id":"8a0abebe-e05a-4456-92ac-36f879ca9276",
-            "uri":"/ulca/user-mgmt/v1/users/forgot-password",
-            "module":"ULCA-UMS",
-            "active":true,
-            "whiteList":true,
-            "description":"API for forgot pwd"
-        },
-        {
-            "id":"f0fdba5b-972e-4542-babd-716537def248",
-            "uri":"/ulca/user-mgmt/v1/users/token-search",
-            "module":"ULCA-UMS",
-            "active":true,
-            "whiteList":false,
-            "description":"API for token search"
-        },
-        {
-            "id":"d7da02b7-248c-43ab-aa9a-dac8b6c3a66f",
-            "uri":"/ulca/user-mgmt/v1/users/reset-password",
-            "module":"ULCA-UMS",
-            "active":true,
-            "whiteList":false,
-            "description":"API to reset user pwd"
-        },
-        {
-            "id":"2c3ea074-fc02-498f-9b45-4f7c8ebc36d2",
-            "uri":"/ulca/data-metric/v0/store/attributes",
-            "module":"ULCA-UMS",
-            "active":true,
-            "whiteList":true,
-            "description":"API to get metrics attributes"
-        },
-        {
-            "id":"ae66dde8-5b4b-4320-8ed8-1716a0f88747",
-            "uri":"/ulca/user-mgmt/v1/users/get/token/status",
-            "module":"ULCA-UMS",
-            "active":true,
-            "whiteList":true,
-            "description":"API to get token status"
-        },
-        {
-            "id":"3ac962a1-de14-4609-91b0-6b4bcb87b856",
-            "uri":"/ulca/publish/v0/cluster/set",
-            "module":"ULCA-PUBLISH",
-            "active":true,
-            "whiteList":false,
-            "description":"API to set DB cluster up for ulca"
-        },
-        {
-            "id":"edcb16f8-3c8c-41b1-8e7e-1b2f3bf09145",
-            "uri":"/ulca/apis/v0/model/upload",
-            "module":"ULCA-API-MODEL",
-            "active":true,
-            "whiteList":false,
-            "description":"API to upload models"
-        },
-        {
-            "id":"19d4bc9c-0c90-45d1-a992-78ae21b37d12",
-            "uri":"/ulca/apis/v0/model/search",
-            "module":"ULCA-API-MODEL",
-            "active":true,
-            "whiteList":true,
-            "description":"API to fetch models"
-        },
-        {
-            "id":"a4c9f08d-0968-403d-ab1f-008b1b1aff44",
-            "uri":"/ulca/apis/v0/model/listByUserId",
-            "module":"ULCA-API-MODEL",
-            "active":true,
-            "whiteList":false,
-            "description":"API to fetch models"
-        },
-        {
-            "id":"5c3038d9-17fc-452d-9e01-967dcc2e876e",
-            "uri":"/ulca/apis/v0/model/compute",
-            "module":"ULCA-API-MODEL",
-            "active":true,
-            "whiteList":true,
-            "description":"API to compute models"
-        },
-        {
-            "id":"6c5b13f8-cbad-4729-ac94-05eb0248490b",
-            "uri":"/ulca/apis/asr/v1/model/compute",
-            "module":"ASR-MODEL-COMPUTE",
-            "active":true,
-            "whiteList":true,
-            "description":"API to compute asr models"
-        }
-    ]
+  "actions": [
+    {
+      "id": "409c94af-2f8e-47ac-bc1f-4ba113cb96da",
+      "uri": "/ulca/apis/v0/dataset/corpus/submit",
+      "module": "ULCA-API",
+      "active": true,
+      "whiteList": false,
+      "description": "API to submit corpus"
+    },
+    {
+      "id": "8cdac1f3-146c-4046-a00b-50fa3bc4fa63",
+      "uri": "/ulca/apis/v0/dataset/listByUserId",
+      "module": "ULCA-API",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get dataset contributions by user id"
+    },
+    {
+      "id": "573ddaef-daac-4479-a9f6-4b0bc272de20",
+      "uri": "/ulca/apis/v0/dataset/corpus/search",
+      "module": "ULCA-API",
+      "active": true,
+      "whiteList": false,
+      "description": "API to search corpus"
+    },
+    {
+      "id": "9085ca30-ca0c-4b7e-81ba-0ca41568a372",
+      "uri": "/ulca/apis/v0/dataset/corpus/search/listByUserId",
+      "module": "ULCA-API",
+      "active": true,
+      "whiteList": false,
+      "description": "API to fetch user searches by user id"
+    },
+    {
+      "id": "a854ad66-00f3-4d05-983c-2bcdbab6562c",
+      "uri": "/ulca/apis/v0/dataset/getByServiceRequestNumber",
+      "module": "ULCA-API",
+      "active": true,
+      "whiteList": false,
+      "description": "API to fetch dataset details on srn"
+    },
+    {
+      "id": "b3d4b271-4de3-4781-8d03-8b3cee833f13",
+      "uri": "/ulca/error-consumer/v0/error/report",
+      "module": "ERROR-CONSUMER",
+      "active": true,
+      "whiteList": false,
+      "description": "API to fetch error report for a service request"
+    },
+    {
+      "id": "db24a2b7-07bf-4522-a23d-a77f4b8f5ad3",
+      "uri": "/ulca/data-metric/v0/store/search",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch metrics from the ULCA platform"
+    },
+    {
+      "id": "bcef7afd-5477-4f04-9a6f-b84e4b9a491f",
+      "uri": "/ulca/user-mgmt/v1/users/login",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to login"
+    },
+    {
+      "id": "d6fbf062-8d1a-4ae3-a4b8-83466753efad",
+      "uri": "/ulca/user-mgmt/v1/users/signup",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to register"
+    },
+    {
+      "id": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+      "uri": "/ulca/user-mgmt/v1/users/generateApiKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate user api key"
+    },
+    {
+      "id": "43df383c-7857-4302-b64a-48066879739e",
+      "uri": "/ulca/user-mgmt/v1/users/revokeApiKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to revoke one user api key"
+    },
+    {
+      "id": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+      "uri": "/ulca/user-mgmt/v1/users/getApiKeys",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get all user api keys"
+    },
+    {
+      "id": "6eae39c6-d705-4ee2-9ec6-c2eb445e9f02",
+      "uri": "/ulca/user-mgmt/v1/users/verify-user",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to verify the user"
+    },
+    {
+      "id": "8a0abebe-e05a-4456-92ac-36f879ca9276",
+      "uri": "/ulca/user-mgmt/v1/users/forgot-password",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API for forgot pwd"
+    },
+    {
+      "id": "f0fdba5b-972e-4542-babd-716537def248",
+      "uri": "/ulca/user-mgmt/v1/users/token-search",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API for token search"
+    },
+    {
+      "id": "d7da02b7-248c-43ab-aa9a-dac8b6c3a66f",
+      "uri": "/ulca/user-mgmt/v1/users/reset-password",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to reset user pwd"
+    },
+    {
+      "id": "2c3ea074-fc02-498f-9b45-4f7c8ebc36d2",
+      "uri": "/ulca/data-metric/v0/store/attributes",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to get metrics attributes"
+    },
+    {
+      "id": "ae66dde8-5b4b-4320-8ed8-1716a0f88747",
+      "uri": "/ulca/user-mgmt/v1/users/get/token/status",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to get token status"
+    },
+    {
+      "id": "7a275ce1-2882-49de-9875-cff890fab88f",
+      "uri": "/ulca/user-mgmt/v1/users/search",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to search users"
+    },
+    {
+      "id": "d9927b51-d0b8-4c96-99dd-d13c89864792",
+      "uri": "/ulca/user-mgmt/v1/users/update",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to update user details"
+    },
+    {
+      "id": "4bfad84c-9a9e-4875-8d79-3e686ea4d72d",
+      "uri": "/ulca/user-mgmt/v1/users/update/active/status",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to activate/deactivate a user "
+    },
+    {
+      "id": "3ac962a1-de14-4609-91b0-6b4bcb87b856",
+      "uri": "/ulca/publish/v0/cluster/set",
+      "module": "ULCA-PUBLISH",
+      "active": true,
+      "whiteList": false,
+      "description": "API to set DB cluster up for ulca"
+    },
+    {
+      "id": "edcb16f8-3c8c-41b1-8e7e-1b2f3bf09145",
+      "uri": "/ulca/apis/v0/model/upload",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": false,
+      "description": "API to upload models"
+    },
+    {
+      "id": "19d4bc9c-0c90-45d1-a992-78ae21b37d12",
+      "uri": "/ulca/apis/v0/model/search",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch models"
+    },
+    {
+      "id": "a4c9f08d-0968-403d-ab1f-008b1b1aff44",
+      "uri": "/ulca/apis/v0/model/listByUserId",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": false,
+      "description": "API to fetch models"
+    },
+    {
+      "id": "5c3038d9-17fc-452d-9e01-967dcc2e876e",
+      "uri": "/ulca/apis/v0/model/compute",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "API to compute models"
+    },
+    {
+      "id": "4d717fca-f82d-499d-9363-4fb8a90c5eef",
+      "uri": "/ulca/apis/v0/model/leaderboard/filters",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": false,
+      "description": "API to fetch leaderboard filters"
+    },
+    {
+      "id": "1bdbb278-3f7e-4680-b892-519294a07518",
+      "uri": "/ulca/apis/v0/benchmark/submit",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": false,
+      "description": "API to insert benchmark dataset"
+    },
+    {
+      "id": "63b59091-ad6a-4147-bc7d-a10712147c05",
+      "uri": "/ulca/apis/v0/benchmark/execute",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": false,
+      "description": "API to execute a benchmarking task on the model"
+    },
+    {
+      "id": "889e497c-1df3-4b55-880d-0252c896f2c0",
+      "uri": "/ulca/apis/v0/benchmark/getBytask",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get benchmark by task"
+    },
+    {
+      "id": "28445a4b-b7bf-44bf-b846-ad9b2802cae6",
+      "uri": "/ulca/apis/v0/benchmark/search",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "Open to fetch benchmark datasets"
+    },
+    {
+      "id": "b8839a7d-5744-4db8-83a4-e28c9ff0098b",
+      "uri": "/ulca/apis/v0/benchmark/getBenchmark",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "Open API providing benchmark leader board deatils "
+    },
+    {
+      "id": "9d7420d4-1a61-493f-a2fe-fd3f27d98925",
+      "uri": "/ulca/apis/v0/model/getModel",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "Open API to try models"
+    },
+    {
+      "id": "28445a4b-b7bf-44bf-b846-ad9b2802cae6",
+      "uri": "/ulca/apis/v0/benchmark/search",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "Open API to fetch benchmark datasets"
+    },
+    {
+      "id": "60705ffd-e7dc-4e2a-95a2-d2b3db6a5a63",
+      "uri": "/ulca/apis/v0/model/tryMe",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "Open API to try models"
+    },
+    {
+      "id": "d8812e00-cc10-470d-9957-045425ba7ff8",
+      "uri": "/ulca/apis/v0/model/status/change",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": false,
+      "description": "Api for publish/unpublish of model"
+    },
+    {
+      "id": "6c5b13f8-cbad-4729-ac94-05eb0248490b",
+      "uri": "/ulca/apis/asr/v1/model/compute",
+      "module": "ASR-MODEL-COMPUTE",
+      "active": true,
+      "whiteList": true,
+      "description": "API to compute asr models"
+    },
+    {
+      "id": "7c000df6-5c72-48ca-950d-0f2ca1691a9b",
+      "uri": "/ulca/notifier/v0/notify/user",
+      "module": "NOTIFIER",
+      "active": true,
+      "whiteList": false,
+      "description": "API to send email notifs"
+    },
+    {
+      "id": "162bf6e7-b9cd-4c2a-baa1-0e7e4c77e6eb",
+      "uri": "/ulca/mdms/v0/fetch-master",
+      "module": "MDMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to fetch MDMS data"
+    },
+    {
+      "id": "9253e82c-d33a-4011-acb2-733c14ee6c85",
+      "uri": "/ulca/mdms/v0/fetch-master/bulk",
+      "module": "MDMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch MDMS data in buklk"
+    },
+    {
+      "id": "ede5a901-807b-460c-b2bd-10975b991b08",
+      "uri": "/ulca/mdms/v0/bust-cache",
+      "module": "MDMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to bust cache"
+    },
+    {
+      "id": "d2cf506f-1e4e-4614-ac59-26305fa4d376",
+      "uri": "/ulca/cron-manager/v1/calculate/time",
+      "module": "CRON-MANAGER",
+      "active": true,
+      "whiteList": true,
+      "description": "API to calculate ETA for dataset tasks"
+    },
+    {
+      "id": "ac563c5d-9094-450b-863c-ad4b00a7729e",
+      "uri": "/ulca/cron-manager/v1/estimates/get/values",
+      "module": "CRON-MANAGER",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch pre calculated ETAs"
+    },
+    {
+      "id": "939d5109-c3c5-466c-b1cf-6810c1f182d8",
+      "uri": "/ulca/data-metric/v0/store/reportdata",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch reports on ULCA"
+    },
+    {
+      "id": "fb876483-130d-4674-8371-00ed262c9be3",
+      "uri": "/ulca/apis/v0/dataset/getByDatasetId",
+      "module": "ULCA-API",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get datasets by datasetID"
+    },
+    {
+      "id": "4ff88bd8-659a-11ed-abd1-60a5e2472759",
+      "uri": "/ulca/data-metric/v0/store/ai4b",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch AI4Bharat and Samanantar datasets"
+    },
+    {
+      "id": "6f408f06-659b-11ed-bddf-60a5e2472759",
+      "uri": "/ulca/data-metric/v0/store/ai4bmodels",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch AI4Bharat Models"
+    }
+  ]
 }

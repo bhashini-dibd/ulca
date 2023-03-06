@@ -1,0 +1,207 @@
+{
+    "ttsCorpusFilters": [
+        {
+            "code": "sourceLanguage",
+            "label": "Source Language",
+            "active": true,
+            "values": {
+                "master": "/languages.json",
+                "jsonPath": "$.languages"
+            }
+        },
+        {
+            "code": "collectionMethod",
+            "label": "Collection Method",
+            "active": true,
+            "values": {
+                "master": "/collectionMethods.json",
+                "jsonPath": "$.collectionMethods"
+            }
+        },
+        {
+            "code": "domain",
+            "label": "Domain",
+            "active": true,
+            "values": {
+                "master": "/domains.json",
+                "jsonPath": "$.domains"
+            }
+        },
+        {
+            "code": "collectionSource",
+            "label": "Collection Source",
+            "active": true,
+            "values": []
+        },
+        {
+            "code": "license",
+            "label": "License",
+            "active": true,
+            "values": {
+                "master": "/licenses.json",
+                "jsonPath": "$.licenses"
+            }
+        },
+        {
+            "code": "submitterName",
+            "label": "Submitter",
+            "active": true,
+            "values": []
+        },
+        {
+            "code": "format",
+            "label": "Format",
+            "active": true,
+            "values": {
+                "master": "/audioFormats.json",
+                "jsonPath": "$.audioFormats"
+            }
+        },
+        {
+            "code": "channel",
+            "label": "Channel",
+            "active": true,
+            "values": {
+                "master": "/audioChannels.json",
+                "jsonPath": "$.audioChannels"
+            }
+        },
+        {
+            "code": "samplingRate",
+            "label": "Sampling Rate",
+            "active": true,
+            "values": {
+                "master": "/samplingRates.json",
+                "jsonPath": "$.samplingRates"
+            }
+        },
+        {
+            "code": "bitsPerSample",
+            "label": "Bits Per Sample",
+            "active": true,
+            "values": {
+                "master": "/bitsPerSample.json",
+                "jsonPath": "$.bitsPerSample"
+            }
+        },
+        {
+            "code": "gender",
+            "label": "Gender",
+            "active": true,
+            "values": {
+                "master": "/gender.json",
+                "jsonPath": "$.gender"
+            }
+        },
+        {
+            "code": "dialect",
+            "label": "Dialect",
+            "active": true,
+            "values": {
+                "master": "/dialects.json",
+                "jsonPath": "$.dialects"
+            }
+        },
+        {
+            "code": "minNoOfSpeakers",
+            "label": "Min No of Speakers",
+            "active": true,
+            "values": [
+                {
+                    "code": 1,
+                    "label": "1",
+                    "active": true
+                },
+                {
+                    "code": 5,
+                    "label": "5",
+                    "active": true
+                }
+            ]
+        },
+        {
+            "code": "maxNoOfSpeakers",
+            "label": "Max No of Speakers",
+            "active": true,
+            "values": [
+                {
+                    "code": 5,
+                    "label": "5",
+                    "active": true
+                },
+                {
+                    "code": 10,
+                    "label": "10",
+                    "active": true
+                }
+            ]
+        },
+        {
+            "code": "noOfSpeakers",
+            "label": "Number of Speakers",
+            "active": true,
+            "values": []
+        },
+        {
+            "code": "minAge",
+            "label": "Min Age",
+            "active": true,
+            "values": [
+                {
+                    "code": 0,
+                    "label": "0",
+                    "active": true
+                },
+                {
+                    "code": 10,
+                    "label": "10",
+                    "active": true
+                },
+                {
+                    "code": 20,
+                    "label": "60",
+                    "active": true
+                },
+                {
+                    "code": 60,
+                    "label": "60",
+                    "active": true
+                }
+            ]
+        },
+        {
+            "code": "maxAge",
+            "label": "Max Age",
+            "active": true,
+            "values": [
+                {
+                    "code": 10,
+                    "label": "10",
+                    "active": true
+                },
+                {
+                    "code": 20,
+                    "label": "20",
+                    "active": true
+                },
+                {
+                    "code": 60,
+                    "label": "60",
+                    "active": true
+                },
+                {
+                    "code": 100,
+                    "label": "100",
+                    "active": true
+                }
+            ]
+        },
+        {
+            "code": "age",
+            "label": "Age",
+            "active": true,
+            "values": []
+        }
+    ],
+    "relatedMaster": true
+}

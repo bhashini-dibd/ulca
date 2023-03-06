@@ -12,6 +12,10 @@ asr_config_path = os.environ.get('ULCA_VALIDATE_ASR_CONFIG', 'configs/asr_config
 ocr_config_path = os.environ.get('ULCA_VALIDATE_OCR_CONFIG', 'configs/ocr_config.json')
 monolingual_config_path = os.environ.get('ULCA_VALIDATE_MONOLINGUAL_CONFIG', 'configs/monolingual_config.json')
 asr_unlabeled_config_path = os.environ.get('ULCA_VALIDATE_ASR_UNLABELED_CONFIG', 'configs/asr_unlabeled_config.json')
+tts_config_path = os.environ.get('ULCA_VALIDATE_TTS_CONFIG', 'configs/tts_config.json')
+transliteration_config_path = os.environ.get('ULCA_VALIDATE_TRANSLITERATION_CONFIG', 'configs/transliteration_config.json')
+glossary_config_path = os.environ.get('ULCA_VALIDATE_GLOSSARY_CONFIG', 'configs/glossary_config.json')
+
 
 pt_update_batch = os.environ.get('ULCA_PT_UPDATE_BATCH', 1000)
 if isinstance(pt_update_batch, str):
@@ -39,6 +43,9 @@ if isinstance(validate_dedup_redis_db, str):
 record_expiry_in_sec = os.environ.get('ULCA_VALIDATE_RECORD_EXPIRY_IN_SEC', 172800)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
 
+user_mode_pseudo = os.environ.get('USER_MODE_PSEUDO', 'pseudo')
+user_mode_real = os.environ.get('USER_MODE_REAL', 'real')
+
 ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
@@ -53,9 +60,14 @@ dataset_type_asr = os.environ.get('DS_TYPE_ASR', 'asr-corpus')
 dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
 dataset_type_asr_unlabeled = os.environ.get('DS_TYPE_ASR_UNLABELED', 'asr-unlabeled-corpus')
+dataset_type_tts = os.environ.get('DS_TYPE_TTS', 'tts-corpus')
+dataset_type_transliteration = os.environ.get('DS_TYPE_TRANSLITERATION', 'transliteration-corpus')
+dataset_type_glossary = os.environ.get('DS_TYPE_GLOSSARY', 'glossary-corpus')
+
 
 validate_text_length_threshold = os.environ.get('DS_VALIDATE_TEXT_LENGTH_THRESHOLD', 2)
+validate_text_length_threshold_transliteration = os.environ.get('DS_VALIDATE_TEXT_LENGTH_THRESHOLD_TRANSLITERATION', 1)
 asr_minimum_words_per_min = os.environ.get('DS_VALIDATE_MINIMUM_WORDS_PER_MIN', 10)
 validate_parallel_labse_threshold = os.environ.get('VALIDATE_PARALLEL_LABSE_THRESHOLD', 0.75)
-
-
+validate_profanity_reference_en = os.environ.get('DS_VALIDATE_PROFANITY_REFERENCE_EN', "https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en")
+validate_profanity_reference_hi = os.environ.get('DS_VALIDATE_PROFANITY_REFERENCE_HI', "https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/hi")

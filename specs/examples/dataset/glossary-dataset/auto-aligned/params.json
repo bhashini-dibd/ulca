@@ -1,0 +1,37 @@
+{
+    "datasetType": "glossary-corpus",
+    "languages": {
+        "sourceLanguage": "en",
+        "targetLanguage": "hi"
+    },
+    "collectionSource": [
+        "Anuvaad"
+    ],
+    "domain":[
+        "legal"
+    ],
+    "collectionMethod": {
+        "collectionDescription": [
+            "auto-aligned"
+        ],
+        "collectionDetails": {
+            "alignmentTool": "LaBSE",
+            "alignmentToolVersion": "v2"
+        }
+    },
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project",
+        "team": [
+            {
+                "name": "Navneet Kumar",
+                "aboutMe": "Part of Tarento Data team working for Anuvaad project."
+            },
+            {
+                "name": "Aswin Pradeep",
+                "aboutMe": "Part of Tarento Data team working for Anuvaad project."
+            }
+        ]
+    }
+}

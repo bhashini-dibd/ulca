@@ -21,8 +21,13 @@ class ASRValidate:
     def execute_validation_pipeline(self, request):
         try:
             log.info("Executing ASR dataset validation....  {}".format(datetime.now()))
+            duration = 0
+
             v_pipeline = ValidationPipeline.getInstance()
             res = v_pipeline.runAsrValidators(request)
+            if 'durationInSeconds' in request['record'].keys():
+                duration = request["record"]["durationInSeconds"]
+            
             if res:
                 log.info("Validation complete....  {}".format(res))
                 # Produce event for publish
@@ -37,15 +42,15 @@ class ASRValidate:
                     error_event.create_error_event(error)
 
                 # Update task tracker
-                tracker_data = {"status": res["status"], "code": res["message"], "serviceRequestNumber": request["serviceRequestNumber"], "currentRecordIndex": request["currentRecordIndex"]}
+                tracker_data = {"status": res["status"], "code": res["message"], "serviceRequestNumber": request["serviceRequestNumber"], "currentRecordIndex": request["currentRecordIndex"], "duration": duration}
                 pt.update_task_details(tracker_data)
             else:
                 log.info("Exception occured, validation result: {}".format(res))
-                tracker_data = {"status": "FAILED"}
+                tracker_data = {"status": "FAILED", "duration": duration}
                 pt.update_task_details(tracker_data)
         except Exception as e:
             log.exception(f"Exception in validation of asr dataset: {str(e)}", e)
-            tracker_data = {"status": "FAILED"}
+            tracker_data = {"status": "FAILED", "duration": duration}
             pt.update_task_details(tracker_data)
             return {"message": "EXCEPTION while validating dataset!!", "status": "FAILED"}
 

@@ -1,0 +1,19 @@
+{
+    "dialects": [
+      {
+        "code": "hi-thethi",
+        "label": "hi-thethi",
+        "active": true
+      },
+      {
+        "code": "hi-magahi",
+        "label": "hi-magahi",
+        "active": true
+      },
+      {
+        "code": "ta-madurai",
+        "label": "ta-madurai",
+        "active": true
+      }
+    ]
+  }

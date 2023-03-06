@@ -1,4 +1,6 @@
 #!groovy
+import hudson.model.*
+   
 node('server_build_slave') {
 
 try {
@@ -12,9 +14,10 @@ withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials
 {
 sh '''
 cd backend/model/api/ulca-model-api
-if [ -f "$(pwd)/build" ]
+ls -al
+if [ -d "$(pwd)/src/test/resources/model" ]
 then
-  sudo rm -rf $(pwd)/build
+  sudo rm -rf $(pwd)/src/test/resources/model
 fi
 if [  $( docker ps -q -f status=exited --filter "name=$JOB_BASE_NAME" ) ]
 then
@@ -29,6 +32,10 @@ docker login -u $dockerhub_user -p $dockerhub_pass
 docker push anuvaadio/$image_name:$commit_id
 sudo rm -rf target/
 '''
+   
+def matcher = manager.getLogMatcher(".*tagged anuvaadio.(.*).*")
+def buildMsg = matcher.group(1)
+manager.addShortText(buildMsg)
 
         }
 }

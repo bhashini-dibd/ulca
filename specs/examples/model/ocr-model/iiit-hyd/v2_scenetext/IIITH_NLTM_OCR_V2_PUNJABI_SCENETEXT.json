@@ -1,0 +1,63 @@
+{
+    "name": "IIITH OCR - Punjabi - SceneText",
+    "version": "v2.0",
+    "description": "IIITH-OCR is a CNN-RNN with spatial transformation network based OCR Model that is trained on word level images from various internal datasets.",
+    "refUrl": "https://www.iiit.ac.in/",
+    "task": {
+        "type": "ocr"
+    },
+    "languages": [
+        {
+            "sourceLanguage": "pa"
+        }
+    ],
+    "license": "mit",
+    "domain": [
+        "general"
+    ],
+    "submitter": {
+        "name": "IIITH",
+        "aboutMe": "International Institute of Information Technology, Hyderabad",
+        "team": [
+            {
+                "name": "CV Jawahar",
+                "aboutMe": "PI, IIITH"
+            },
+            {
+                "name": "Ajoy Mondal",
+                "aboutMe": "PI, IIITH"
+            },
+            {
+                "name": "Krishna Tulsyan",
+                "aboutMe": "Tech Lead, IIITH"
+            }
+        ]
+    },
+    "inferenceEndPoint": {
+        "callbackUrl": "https://ilocr.iiit.ac.in/ocr/ulca/v2/scenetext",
+        "schema": {
+            "taskType": "ocr",
+            "request": {
+                "image": [
+                    {
+                        "imageUri": "http://bhasha.iiit.ac.in/bhashini-iiith/static/ulca_examples/punjabi_word_image1.jpg"
+                    },
+                    {
+                        "imageUri": "http://bhasha.iiit.ac.in/bhashini-iiith/static/ulca_examples/punjabi_word_image2.jpg"
+                    },
+                    {
+                        "imageUri": "http://bhasha.iiit.ac.in/bhashini-iiith/static/ulca_examples/punjabi_word_image3.jpg"
+                    }
+                ],
+                "config": {
+                    "language": {
+                        "sourceLanguage": "pa"
+                    }
+                }
+            }
+        }
+    },
+    "trainingDataset": {
+        "description": "Various Internal Datasets"
+    }
+}

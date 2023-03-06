@@ -1,0 +1,357 @@
+{
+  "asrCorpusFilters": [
+    {
+      "code": "sourceLanguage",
+      "label": "Source Language",
+      "active": true,
+      "values": {
+        "master": "/vmdslanguages.json",
+        "jsonPath": "$.vmdslanguages"
+      }
+    },
+    {
+      "code": "collectionMethod",
+      "label": "Collection Method",
+      "active": true,
+      "values": {
+        "master": "/collectionMethods.json",
+        "jsonPath": "$.collectionMethods"
+      }
+    },
+    {
+      "code": "domain",
+      "label": "Domain",
+      "active": true,
+      "values": {
+        "master": "/domains.json",
+        "jsonPath": "$.domains"
+      }
+    },
+    {
+      "code": "collectionSource",
+      "label": "Collection Source",
+      "active": true,
+      "values": []
+    },
+    {
+      "code": "license",
+      "label": "License",
+      "active": true,
+      "values": {
+        "master": "/licenses.json",
+        "jsonPath": "$.licenses"
+      }
+    },
+    {
+      "code": "submitterName",
+      "label": "Submitter",
+      "active": true,
+      "values": []
+    },
+    {
+      "code": "format",
+      "label": "Format",
+      "active": true,
+      "values": {
+        "master": "/audioFormats.json",
+        "jsonPath": "$.audioFormats"
+      }
+    },
+    {
+      "code": "channel",
+      "label": "Channel",
+      "active": true,
+      "values": {
+        "master": "/audioChannels.json",
+        "jsonPath": "$.audioChannels"
+      }
+    },
+    {
+      "code": "asrModel",
+      "label": "ASR Model",
+      "active": true,
+      "values": {
+        "master": "/asrModels.json",
+        "jsonPath": "$.asrModels"
+      }
+    },
+    {
+      "code": "samplingRate",
+      "label": "Sampling Rate",
+      "active": true,
+      "values": {
+        "master": "/samplingRates.json",
+        "jsonPath": "$.samplingRates"
+      }
+    },
+    {
+      "code": "bitsPerSample",
+      "label": "Bits Per Sample",
+      "active": true,
+      "values": {
+        "master": "/bitsPerSample.json",
+        "jsonPath": "$.bitsPerSample"
+      }
+    },
+    {
+      "code": "gender",
+      "label": "Gender",
+      "active": true,
+      "values": {
+        "master": "/gender.json",
+        "jsonPath": "$.gender"
+      }
+    },
+    {
+      "code": "dialect",
+      "label": "Dialect",
+      "active": true,
+      "values": {
+        "master": "/dialects.json",
+        "jsonPath": "$.dialects"
+      }
+    },
+    {
+      "code": "snrTool",
+      "label": "SNR Tool",
+      "active": true,
+      "values": {
+        "master": "/snrTool.json",
+        "jsonPath": "$.snrTool"
+      }
+    },
+    {
+      "code": "minSnr",
+      "label": "Min SNR",
+      "active": true,
+      "values": [
+        {
+          "code": 0,
+          "label": "0",
+          "active": true
+        },
+        {
+          "code": 18,
+          "label": "18",
+          "active": true
+        }
+      ]
+    },
+    {
+      "code": "maxSnr",
+      "label": "Max SNR",
+      "active": true,
+      "values": [
+        {
+          "code": 18,
+          "label": "18",
+          "active": true
+        },
+        {
+          "code": 30,
+          "label": "30",
+          "active": true
+        }
+      ]
+    },
+    {
+      "code": "snr",
+      "label": "SNR",
+      "active": true,
+      "values": []
+    },
+    {
+      "code": "minNoOfSpeakers",
+      "label": "Min No of Speakers",
+      "active": true,
+      "values": [
+        {
+          "code": 1,
+          "label": "1",
+          "active": true
+        },
+        {
+          "code": 5,
+          "label": "5",
+          "active": true
+        }
+      ]
+    },
+    {
+      "code": "maxNoOfSpeakers",
+      "label": "Max No of Speakers",
+      "active": true,
+      "values": [
+        {
+          "code": 5,
+          "label": "5",
+          "active": true
+        },
+        {
+          "code": 10,
+          "label": "10",
+          "active": true
+        }
+      ]
+    },
+    {
+      "code": "noOfSpeakers",
+      "label": "Number of Speakers",
+      "active": true,
+      "values": []
+    },
+    {
+      "code": "minAge",
+      "label": "Min Age",
+      "active": true,
+      "values": [
+        {
+          "code": 0,
+          "label": "0",
+          "active": true
+        },
+        {
+          "code": 10,
+          "label": "10",
+          "active": true
+        },
+        {
+          "code": 20,
+          "label": "60",
+          "active": true
+        },
+        {
+          "code": 60,
+          "label": "60",
+          "active": true
+        }
+      ]
+    },
+    {
+      "code": "maxAge",
+      "label": "Max Age",
+      "active": true,
+      "values": [
+        {
+          "code": 10,
+          "label": "10",
+          "active": true
+        },
+        {
+          "code": 20,
+          "label": "20",
+          "active": true
+        },
+        {
+          "code": 60,
+          "label": "60",
+          "active": true
+        },
+        {
+          "code": 100,
+          "label": "100",
+          "active": true
+        }
+      ]
+    },
+    {
+      "code": "age",
+      "label": "Age",
+      "active": true,
+      "values": []
+    },
+    {
+      "code": "evaluationMethod",
+      "label": "Evaluation Method",
+      "active": true,
+      "values": {
+        "master": "/evaluationMethods.json",
+        "jsonPath": "$.evaluationMethods"
+      }
+    },
+    {
+      "code": "alignmentTool",
+      "label": "Alignment Tool",
+      "active": true,
+      "values": {
+        "master": "/alignmentTools.json",
+        "jsonPath": "$.alignmentTools"
+      }
+    },
+    {
+      "code": "minScore",
+      "label": "Min Alignment Score",
+      "active": true,
+      "values": [
+        {
+          "code": 0,
+          "label": "0.0",
+          "active": true
+        },
+        {
+          "code": 0.5,
+          "label": "0.5",
+          "active": true
+        },
+        {
+          "code": 0.6,
+          "label": "0.6",
+          "active": true
+        },
+        {
+          "code": 0.7,
+          "label": "0.7",
+          "active": true
+        },
+        {
+          "code": 0.8,
+          "label": "0.8",
+          "active": true
+        },
+        {
+          "code": 0.9,
+          "label": "0.9",
+          "active": true
+        }
+      ]
+    },
+    {
+      "code": "maxScore",
+      "label": "Max Alignment Score",
+      "active": true,
+      "values": [
+        {
+          "code": 0.5,
+          "label": "0.5",
+          "active": true
+        },
+        {
+          "code": 0.6,
+          "label": "0.6",
+          "active": true
+        },
+        {
+          "code": 0.7,
+          "label": "0.7",
+          "active": true
+        },
+        {
+          "code": 0.8,
+          "label": "0.8",
+          "active": true
+        },
+        {
+          "code": 0.9,
+          "label": "0.9",
+          "active": true
+        },
+        {
+          "code": 1,
+          "label": "1.0",
+          "active": true
+        }
+      ]
+    }
+  ],
+  "relatedMaster": true
+}

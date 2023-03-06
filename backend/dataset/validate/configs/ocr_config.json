@@ -9,15 +9,18 @@
         "test_name":"WordLengthCheck", "active":"True"
     },
     {
-        "test_name":"DuplicateWhitespaces", "active":"True"
+        "test_name":"ProfanityCheck", "active":"True"
     },
     {
-        "test_name":"SpecialCharacterCheck", "active":"True"
+        "test_name":"RemoveDuplicateWhitespaces", "active":"True"
     },
     {
-        "test_name":"ImageMetadataCheck", "active":"False"
+        "test_name":"RemoveSpecialCharacters", "active":"True"
+    },
+    {
+        "test_name":"ImageMetadataCheck", "active":"True"
     },
 	{
-        "test_name":"CaseDedup", "active":"True"
+        "test_name":"HashDedup", "active":"True"
     }
 ]

@@ -1,12 +1,15 @@
 import hashlib
+import io
 import json
 import logging
 import os
+import zipfile
 from logging.config import dictConfig
 
 import requests
 
-from configs.configs import shared_storage_path, dataset_prefix, file_store_host, file_store_upload_endpoint
+from configs.configs import shared_storage_path, dataset_prefix, file_store_host, file_store_upload_endpoint, \
+    zip_chunk_size
 
 log = logging.getLogger('file')
 
@@ -40,15 +43,14 @@ class DatasetUtils:
     def push_result_to_object_store(self, result, service_req_no, size):
         log.info(f'Writing results and sample to Object Store......')
         try:
-            res_path = f'{shared_storage_path}{service_req_no}-ds.json'
-            with open(res_path, 'w') as f:
-                json.dump(result, f)
-            res_path_sample = f'{shared_storage_path}{service_req_no}-sample-ds.json'
+            log.info(f'Zipping the result set......')
+            res_path = self.zip_result(result, service_req_no)
+            res_path_sample = f'{shared_storage_path}{service_req_no}-sample.json'
             with open(res_path_sample, 'w') as f:
                 json.dump(result[:size], f)
             log.info(f'Publishing results and sample to Object Store......')
-            res_path_os = self.upload_file(res_path, dataset_prefix, f'{service_req_no}-ds.json')
-            res_path_sample_os = self.upload_file(res_path_sample, dataset_prefix, f'{service_req_no}-sample-ds.json')
+            res_path_os = self.upload_file(res_path, dataset_prefix, f'{service_req_no}.zip')
+            res_path_sample_os = self.upload_file(res_path_sample, dataset_prefix, f'{service_req_no}-sample.json')
             return res_path_os, res_path_sample_os
         except Exception as e:
             log.exception(f'Exception while pushing search results to object store: {e}', e)
@@ -103,6 +105,19 @@ class DatasetUtils:
         except Exception as e:
             log.exception(f'Exception while making the api call: {str(e)}')
             return None
+
+    # Method to break a list of dicts into chunks and create zipped folder of the files.
+    def zip_result(self, list_dict, file_name):
+        full_list = [list_dict[x:x+zip_chunk_size] for x in range(0, len(list_dict), zip_chunk_size)]
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+            for idx, fil in enumerate(range(len(full_list))):
+                with zip_file.open(f'{file_name}-{str(idx)}.json', 'w') as file:
+                    list_data = json.dumps(full_list[idx]).encode('utf-8')
+                    file.write(list_data)
+        with open(f'{shared_storage_path}{file_name}.zip', 'wb') as f:
+            f.write(zip_buffer.getvalue())
+        return f'{shared_storage_path}{file_name}.zip'
 
 # Log config
 dictConfig({

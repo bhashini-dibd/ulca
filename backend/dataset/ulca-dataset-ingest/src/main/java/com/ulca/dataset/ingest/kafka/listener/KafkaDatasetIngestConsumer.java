@@ -3,28 +3,23 @@ package com.ulca.dataset.ingest.kafka.listener;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import com.ulca.dataset.constants.DatasetConstants;
 import com.ulca.dataset.dao.DatasetDao;
-import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.kakfa.DatasetAsrUnlabeledValidateIngest;
 import com.ulca.dataset.kakfa.DatasetAsrValidateIngest;
 import com.ulca.dataset.kakfa.DatasetDocumentLayoutValidateIngest;
-import com.ulca.dataset.kakfa.DatasetErrorPublishService;
+import com.ulca.dataset.kakfa.DatasetGlossaryCorpusValidateIngest;
 import com.ulca.dataset.kakfa.DatasetMonolingualValidateIngest;
 import com.ulca.dataset.kakfa.DatasetOcrValidateIngest;
 import com.ulca.dataset.kakfa.DatasetParallelCorpusValidateIngest;
+import com.ulca.dataset.kakfa.DatasetTransliterationValidateIngest;
+import com.ulca.dataset.kakfa.DatasetTtsValidateIngest;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
-import com.ulca.dataset.model.Dataset;
-import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.TaskTracker;
-import com.ulca.dataset.service.ProcessTaskTrackerService;
-//import com.ulca.dataset.util.UnzipUtility;
 
 import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +30,9 @@ public class KafkaDatasetIngestConsumer {
 
 	@Autowired
 	DatasetAsrValidateIngest datasetAsrValidateIngest;
+	
+	@Autowired
+	DatasetTtsValidateIngest datasetTtsValidateIngest;
 
 	@Autowired
 	DatasetAsrUnlabeledValidateIngest datasetAsrUnlabeledValidateIngest;
@@ -50,6 +48,12 @@ public class KafkaDatasetIngestConsumer {
 
 	@Autowired
 	DatasetDocumentLayoutValidateIngest datasetDocumentLayoutValidateIngest;
+	
+	@Autowired
+	DatasetTransliterationValidateIngest datasetTransliterationValidateIngest;
+	
+	@Autowired
+	DatasetGlossaryCorpusValidateIngest datasetGlossaryCorpusValidateIngest;
 
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
@@ -69,26 +73,13 @@ public class KafkaDatasetIngestConsumer {
 			String mode = datasetIngest.getMode();
 			log.info("serviceRequestNumber :: " + serviceRequestNumber);
 			log.info("mode :: " + mode);
-			TaskTracker.ToolEnum tool = (mode.equalsIgnoreCase("real"))? TaskTracker.ToolEnum.ingest : TaskTracker.ToolEnum.pseudo;
-			List<TaskTracker> list = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool);
+			TaskTracker.ToolEnum tool = (mode.equalsIgnoreCase("real"))? TaskTracker.ToolEnum.ingest : TaskTracker.ToolEnum.precheck;
+			List<TaskTracker> list = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
 			if(list.size() > 0) {
 				log.info("Duplicate ingest processing of serviceRequestNumber :: " + serviceRequestNumber + " and mode :: " + mode);
 				return;
 			}
 			
-			/*
-			if (mode.equalsIgnoreCase("real")) {
-				ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
-				String userId = processTracker.getUserId();
-				Dataset dataset = datasetDao.findByDatasetId(processTracker.getDatasetId());
-				datasetIngest.setUserId(userId);
-				datasetIngest.setDatasetId(processTracker.getDatasetId());
-				datasetIngest.setDatasetName(dataset.getDatasetName());
-				datasetIngest.setDatasetType(DatasetType.fromValue(dataset.getDatasetType()));
-
-			}
-			*/
-
 			DatasetType datasetType = datasetIngest.getDatasetType();
 
 			switch (datasetType) {
@@ -103,6 +94,11 @@ public class KafkaDatasetIngestConsumer {
 				datasetAsrValidateIngest.validateIngest(datasetIngest);
 				break;
 
+			case TTS_CORPUS:
+				log.info("calling the tts validate service");
+				datasetTtsValidateIngest.validateIngest(datasetIngest);
+				break;
+				
 			case ASR_UNLABELED_CORPUS:
 				log.info("calling the asr-unlabeled-corpus validate service");
 				datasetAsrUnlabeledValidateIngest.validateIngest(datasetIngest);
@@ -121,7 +117,17 @@ public class KafkaDatasetIngestConsumer {
 				log.info("calling the document-layout-corpus validate service");
 				datasetDocumentLayoutValidateIngest.validateIngest(datasetIngest);
 				break;
+				
+			case TRANSLITERATION_CORPUS:
+				log.info("calling the transliteration-corpus validate service");
+				datasetTransliterationValidateIngest.validateIngest(datasetIngest);
+				break;
 
+			case GLOSSARY_CORPUS:
+				log.info("calling the glossary-corpus validate service");
+				datasetGlossaryCorpusValidateIngest.validateIngest(datasetIngest);
+				break;
+				
 			default:
 				log.info("datasetType for serviceRequestNumber not one of defined datasetType");
 				break;

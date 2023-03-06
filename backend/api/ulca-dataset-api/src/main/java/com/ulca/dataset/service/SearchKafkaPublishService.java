@@ -1,6 +1,6 @@
 package com.ulca.dataset.service;
 
-import java.util.Date;
+import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +52,7 @@ public class SearchKafkaPublishService {
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.search);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.pending.toString());
-		processTracker.setStartTime(new Date().toString());
+		processTracker.setStartTime(Instant.now().toEpochMilli());
 		
 		processTrackerDao.save(processTracker);
 		
@@ -61,7 +61,7 @@ public class SearchKafkaPublishService {
 		searchCriteria.setServiceRequestNumber(processTracker.getServiceRequestNumber());
 		//searchCriteria.setGroupBy(request.getGroupby());
 		searchCriteria.setDatasetType(request.getDatasetType().toString());
-		
+		searchCriteria.setUserId(userId);		
 		log.info(searchCriteria.toString());
 		
 		datasetSearchKafkaTemplate.send(datasetSearchTopic, searchCriteria);

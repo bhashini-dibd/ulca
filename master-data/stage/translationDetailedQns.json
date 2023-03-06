@@ -1,0 +1,17 @@
+{
+"translationDetailedQns": [
+      {
+        "code":"translation",
+        "label":"TRANSLATION",
+        "active":true,
+        "taskType": "translation",
+        "question": "Please rate your experience...",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "question": "Add your comments",
+        "answerType": "freetext"
+      }
+]
+}

@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_asr, dataset_type_asr_unlabeled, asr_minimum_words_per_min
+from configs.configs import dataset_type_asr, dataset_type_asr_unlabeled, dataset_type_tts, asr_minimum_words_per_min
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -17,7 +17,7 @@ class AudioMetadataCheck(BaseValidator):
     def execute(self, request):
         log.info('----Executing the audio file metadata check----')
         try:
-            if request["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled]:
+            if request["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled, dataset_type_tts]:
                 audio_file = request['record']['fileLocation']
                 try:
                     if os.path.exists(audio_file) and os.path.isfile(audio_file):
@@ -42,14 +42,6 @@ class AudioMetadataCheck(BaseValidator):
                     log.exception(f"Exception while loading the audio file: {str(e)}")
                     return {"message": "Unable to load the audio file, file format is unsupported or the file is corrupt", "code": "INVALID_AUDIO_FILE", "status": "FAILED"}
 
-                if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
-                    if metadata.streaminfo.sample_rate != request['record']['samplingRate']*1000:
-                        error_message = 'Sampling rate does not match the specified value: Expected Value - ' + str(metadata.streaminfo.sample_rate/1000) + ', Specified Value - ' + str(request['record']['samplingRate'])
-                        return {"message": error_message, "code": "INCORRECT_SAMPLING_RATE", "status": "FAILED"}
-                if 'bitsPerSample' in request['record'].keys() and request['record']['bitsPerSample'] != None:
-                    if metadata.streaminfo.bit_depth != w2n.word_to_num(request['record']['bitsPerSample']):
-                        error_message = 'Bits per sample does not match the specified value: Expected Value - ' + str(metadata.streaminfo.bit_depth) + ', Specified Value - ' + str(request['record']['bitsPerSample'])
-                        return {"message": error_message, "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
 
                 if 'duration' in request['record'].keys():
                     request['record']['durationInSeconds'] = request['record']['duration']
@@ -62,7 +54,18 @@ class AudioMetadataCheck(BaseValidator):
                 else:
                     request['record']['durationInSeconds'] = metadata.streaminfo.duration
 
-                if request["datasetType"] == dataset_type_asr:
+
+                if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
+                    if metadata.streaminfo.sample_rate != request['record']['samplingRate']*1000:
+                        error_message = 'Sampling rate does not match the specified value: Expected Value - ' + str(metadata.streaminfo.sample_rate/1000) + ', Specified Value - ' + str(request['record']['samplingRate'])
+                        return {"message": error_message, "code": "INCORRECT_SAMPLING_RATE", "status": "FAILED"}
+                if 'bitsPerSample' in request['record'].keys() and request['record']['bitsPerSample'] != None:
+                    if metadata.filepath.split('.')[-1] != 'mp3' and metadata.streaminfo.bit_depth != w2n.word_to_num(request['record']['bitsPerSample']):
+                        error_message = 'Bits per sample does not match the specified value: Expected Value - ' + str(metadata.streaminfo.bit_depth) + ', Specified Value - ' + str(request['record']['bitsPerSample'])
+                        return {"message": error_message, "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
+
+
+                if request["datasetType"] in [dataset_type_asr, dataset_type_tts]:
                     num_words = len(list(request['record']['text'].split()))
                     words_per_minute = (num_words/request['record']['durationInSeconds'])*60
                     if words_per_minute < asr_minimum_words_per_min:

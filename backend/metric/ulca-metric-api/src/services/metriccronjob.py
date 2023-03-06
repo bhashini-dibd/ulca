@@ -1,5 +1,5 @@
 from threading import Thread
-from config import error_cron_interval_sec
+from config import metric_cron_interval_sec
 import config
 import logging
 from src.db import ModelRepo
@@ -16,7 +16,7 @@ class CronProcessor(Thread):
     # Cron JOB to update filter set params
     def run(self):
         run = 0
-        while not self.stopped.wait(error_cron_interval_sec):
+        while not self.stopped.wait(metric_cron_interval_sec):
             log.info(f'Metric Cron Processor run :{run}')
             try:
                 headers =   {"Content-Type": "application/json"}

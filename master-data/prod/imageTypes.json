@@ -1,0 +1,24 @@
+{
+    "imageTypes": [
+      {
+        "code": "jpeg",
+        "label": "JPEG",
+        "active": true
+      },
+      {
+        "code": "bmp",
+        "label": "BMP",
+        "active": true
+      },
+      {
+        "code": "png",
+        "label": "PNG",
+        "active": true
+      },
+      {
+        "code": "tiff",
+        "label": "TIFF",
+        "active": true
+      }
+    ]
+  }

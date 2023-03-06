@@ -1,0 +1,29 @@
+{
+    "audioFormats": [
+      {
+        "code": "wav",
+        "label": "WAV",
+        "active": true
+      },
+      {
+        "code": "pcm",
+        "label": "PCM",
+        "active": true
+      },
+      {
+        "code": "mp3",
+        "label": "MP3",
+        "active": true
+      },
+      {
+        "code": "flac",
+        "label": "FLAC",
+        "active": true
+      },
+      {
+        "code": "sph",
+        "label": "SPH",
+        "active": true
+      }
+    ]
+  }

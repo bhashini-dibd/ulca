@@ -12,7 +12,8 @@ import lombok.Data;
 public class ModelListByUserIdResponse {
 	
 	String message;
-	List<ModelExtended> data;
+	List<ModelListResponseDto> data;
 	int count;
+	int totalCount;
 
 }

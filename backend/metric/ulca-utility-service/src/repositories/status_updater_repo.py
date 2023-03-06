@@ -5,47 +5,43 @@ import pymongo
 log = logging.getLogger('file')
 
 
-process_mongo_instance = None
-
 class StatusUpdaterRepo:
     
     def __init__(self):
         pass
         
     #method to instantiate mongo client object
-    def instantiate(self):
+    def get_mongo_instance(self,database,collection):
         global mongo_instance
         client = pymongo.MongoClient(process_connection_url)
-        process_mongo_instance = client[process_db_schema][process_col]
-        return process_mongo_instance
-
-    #geting the mongo clent object
-    def get_mongo_instance(self):
-        global process_mongo_instance
-        if not process_mongo_instance:
-            return self.instantiate()
-        else:
-            return process_mongo_instance
+        mongo_instance = client[database][collection]
+        return mongo_instance
 
     # Updates the object in the mongo collection
-    def update(self, cond,query):
+    def update(self, cond,query,multi_flag,db,col):
         try:
-            col = self.get_mongo_instance()
-            col.update(cond, query)
+            col = self.get_mongo_instance(db,col)
+            col.update(cond, query,multi=multi_flag)
         except Exception as e:
             print(e)
             log.info(f'Exception while updating document : {e}')
 
-    def insert(self, object_in):
-        col = self.get_mongo_instance()
-        col.insert(object_in)
+    def find(self, query, db, col):
+        try:
+            col = self.get_mongo_instance(db,col)
+            res = col.find(query)
+            results = []
+            for record in res:
+                results.append(record)
+            return results
+        except Exception as e:
+            log.exception(f'Exception in repo find: {e}',e)
+            return []
 
-
-
-    def aggregate(self, query):
+    def aggregate(self, query,db,col):
         
         try:
-            col = self.get_mongo_instance()
+            col = self.get_mongo_instance(db,col)
             res = col.aggregate(query)
             result = []
             for record in res:

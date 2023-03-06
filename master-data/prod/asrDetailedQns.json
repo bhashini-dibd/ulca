@@ -1,0 +1,17 @@
+{
+"asrDetailedQns": [
+      {
+        "code":"asr",
+        "label":"ASR",
+        "active":true,
+        "taskType": "asr",
+        "question": "Please rate your experience...",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "question": "Add your comments",
+        "answerType": "freetext"
+      }
+]
+}

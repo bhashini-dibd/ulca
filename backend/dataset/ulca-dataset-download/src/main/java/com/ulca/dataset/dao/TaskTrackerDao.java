@@ -14,7 +14,7 @@ public interface TaskTrackerDao extends MongoRepository<TaskTracker, String> {
 
 	List<TaskTracker> findAllByServiceRequestNumber(String serviceRequestNumber);
 	
-	List<TaskTracker> findAllByServiceRequestNumberAndTool(String serviceRequestNumber,ToolEnum tool );
+	List<TaskTracker> findAllByServiceRequestNumberAndTool(String serviceRequestNumber,String tool );
 
 
 

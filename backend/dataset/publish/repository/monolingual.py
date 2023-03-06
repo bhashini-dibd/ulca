@@ -1,6 +1,9 @@
 import logging
 from collections import OrderedDict
 from logging.config import dictConfig
+
+from bson import ObjectId
+
 from configs.configs import db_cluster, db, monolingual_collection
 
 import pymongo
@@ -62,18 +65,29 @@ class MonolingualRepo:
     # Updates the object in the mongo collection
     def update(self, object_in):
         col = self.get_mongo_instance()
-        col.replace_one({"id": object_in["id"]}, object_in)
+        try:
+            object_in["_id"] = ObjectId(object_in["_id"])
+            col.replace_one({"_id": object_in["_id"]}, object_in, False)
+        except Exception as e:
+            log.exception(f"Exception while updating: {e}", e)
 
-    # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
         try:
             col = self.get_mongo_instance()
             if offset is None and res_limit is None:
-                res = col.find(query, exclude).sort([('_id', 1)])
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', 1)])
+                else:
+                    res = col.find(query).sort([('_id', 1)])
             else:
-                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                else:
+                    res = col.find(query).sort([('_id', -1)]).skip(offset).limit(res_limit)
             result = []
             for record in res:
+                if "_id" in record.keys():
+                    record["_id"] = str(record["_id"])
                 result.append(record)
             return result
         except Exception as e:

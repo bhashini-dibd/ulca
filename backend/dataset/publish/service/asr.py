@@ -1,9 +1,10 @@
 import logging
+import re
 import time
 from logging.config import dictConfig
-from configs.configs import ds_batch_size, no_of_parallel_processes, asr_prefix, \
+from configs.configs import ds_batch_size, asr_prefix, \
     sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, \
-    asr_search_ignore_keys, asr_updatable_keys
+    asr_search_ignore_keys, asr_updatable_keys, submiter_name_whitelist_enabled, submitter_names_to_whitelist
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -33,10 +34,12 @@ class ASRService:
     '''
     def load_asr_dataset(self, request):
         try:
+            #log.info(f"TEST52: request: {request}")
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
             if record:
+                # log.info(f"Test55 load_asr_dataset {record}")
                 result = self.get_enriched_asr_data(record, metadata)
                 if result:
                     if result[0] == "INSERT":
@@ -44,9 +47,11 @@ class ASRService:
                             repo.insert([result[1]])
                             count += 1
                             metrics.build_metric_event(result[1], metadata, None, None)
-                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr})
+                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr})
                     elif result[0] == "UPDATE":
-                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr})
+                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr, "isUpdate": True})
                         metric_record = (result[1], result[2])
                         metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1
@@ -55,14 +60,16 @@ class ASRService:
                             {"record": result[1], "code": "UPLOAD_FAILED", "datasetName": metadata["datasetName"],
                              "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
                              "message": "Upload of audio file to object store failed"})
-                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr})
+                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr})
                     else:
                         error_list.append({"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
                                            "datasetType": dataset_type_asr,
                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
                                            "message": "This record is already available in the system",
                                            "datasetName": metadata["datasetName"]})
-                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr})
+                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr})
                 else:
                     log.error(f'INTERNAL ERROR: Failing record due to internal error: ID: {record["id"]}, SRN: {metadata["serviceRequestNumber"]}')
                     error_list.append(
@@ -71,11 +78,11 @@ class ASRService:
                          "serviceRequestNumber": metadata["serviceRequestNumber"],
                          "message": "There was an exception while processing this record!"})
                     pt.update_task_details(
-                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "durationInSeconds": record["durationInSeconds"],
                          "datasetType": dataset_type_asr})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'ASR - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'ASR - {metadata["userMode"]} - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading ASR dataset!!", "status": "FAILED"}
@@ -89,18 +96,51 @@ class ASRService:
     def get_enriched_asr_data(self, data, metadata):
         try:
             hashes = [data["audioHash"], data["textHash"]]
-            record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
+            imageHashExists = False
+            #check if age is missing but exactAge is present, autofill it
+            if 'exactAge' in data.keys():
+                if 'age' not in data.keys() or data['age'] is None:
+                    if data['exactAge'] in range(1,11):
+                        data["age"] = "1-10"
+                    elif data['exactAge'] in range(1,21):
+                        data["age"] = "11-20"
+                    elif data['exactAge'] in range(21,61):
+                        data["age"] = "21-60"
+                    elif data['exactAge'] in range(61,101):
+                        data["age"] = "61-100"
+                    
+            #Check if the image hash exists already in mongo
+            #record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
+            if 'imageHash' in data.keys():
+                record = self.get_asr_dataset_internal({"$or": [{"tags": data["imageHash"]},
+	                                                        {"$and": [{"tags":data["audioHash"]},
+		                                                          {"tags":data["textHash"]}]
+	                                                        }]
+                                                   })           
+            else:
+                record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
+            #log.info("Test55 load_asr_dataset {record}")
             if record:
-                if isinstance(record, list):
-                    record = record[0]
-                dup_data = service.enrich_duplicate_data(data, record, metadata, asr_immutable_keys, asr_updatable_keys, asr_non_tag_keys)
-                if dup_data:
-                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                    if metadata["userMode"] != user_mode_pseudo:
-                        repo.update(dup_data)
-                    return "UPDATE", dup_data, record
-                else:
-                    return "DUPLICATE", data, record
+                #If image hash exists in records, copy image url and store it in data.
+                #If image hash exists, set imageHashExists to True
+                log.info(f"Data within Publish: {data}")
+                for each_record in record:
+                    if 'imageHash' in data.keys():
+                        if data['imageHash'] in each_record['tags']:
+                            imageHashExists = True
+                            data['refImgStorePath'] = each_record['refImgStorePath']
+                    #Check if audio and text hash are same of any record and data
+                    if data['audioHash'] in each_record['tags'] and data['textHash'] in each_record['tags']:
+                        if isinstance(each_record, list):
+                            each_record = each_record[0]
+                        dup_data = service.enrich_duplicate_data(data, each_record, metadata, asr_immutable_keys, asr_updatable_keys, asr_non_tag_keys)
+                        if dup_data:
+                            if metadata["userMode"] != user_mode_pseudo:
+                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                                repo.update(dup_data)
+                            return "UPDATE", dup_data, each_record
+                        else:
+                            return "DUPLICATE", data, each_record
             insert_data = data
             for key in insert_data.keys():
                 if key not in asr_immutable_keys and key not in asr_updatable_keys:
@@ -117,6 +157,17 @@ class ASRService:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
                 insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                if 'imageFileLocation' in data.keys() and imageHashExists == False:
+                    epoch = eval(str(time.time()).replace('.', '')[0:13])
+                    if isinstance(data['imageFilename'],list):
+                        data['imageFilename'] = data['imageFilename'][0]
+                    imageFileName = data['imageFilename']#.split('/')[-1]
+                    s3_img_file_name = f'{metadata["datasetId"]}|{epoch}|{imageFileName}'
+                    img_object_store_path = utils.upload_file(data["imageFileLocation"], asr_prefix, s3_img_file_name)
+                    if not img_object_store_path:
+                        return "FAILED", insert_data, insert_data
+                    else:
+                        insert_data["refImgStorePath"] = img_object_store_path
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
@@ -128,12 +179,14 @@ class ASRService:
     '''
     def get_asr_dataset_internal(self, query):
         try:
-            exclude = {"_id": False}
-            data = repo.search(query, exclude, None, None)
+            data = repo.search(query, None, None, None)
+            #data is a tuple
             if data:
+                # log.info(f"Test55: Data within Repo Search {data}")
                 asr_data = data[0]
+                #asr_data is a list of dictionaries, each dictionary is one record / document
                 if asr_data:
-                    return asr_data[0]
+                   return asr_data
                 else:
                     return None
             else:
@@ -148,27 +201,61 @@ class ASRService:
     '''
     def get_asr_dataset(self, query):
         log.info(f'Fetching ASR datasets for SRN -- {query["serviceRequestNumber"]}')
-        pt.task_event_search(query, None)
+        pt.task_event_search(query, None, dataset_type_asr)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
             db_query, tags = {}, []
             if 'sourceLanguage' in query.keys():
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionMode"])
+            if 'mixedDataSource' in query.keys():
+                db_query["mixedDataSource"] = query["mixedDataSource"]
+                if 'assertLanguage' in query.keys() and len(query["assertLanguage"])> 0 :
+                    db_query["assertLanguage"] = {"$in": query["assertLanguage"]}
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
             if 'license' in query.keys():
-                tags.extend(query["licence"])
+                tags.extend(query["license"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'channel' in query.keys():
-                tags.append(query["channel"])
+                tags.extend(query["channel"])
             if 'gender' in query.keys():
-                tags.append(query["gender"])
+                tags.extend(query["gender"])
+            if 'format' in query.keys():
+                tags.extend(query["format"])
+            if 'bitsPerSample' in query.keys():
+                tags.extend(query["bitsPerSample"])
+            if 'dialect' in query.keys():
+                tags.extend(query["dialect"])
+            if 'snrTool' in query.keys():
+                tags.extend(query["snrTool"])
             if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
+                tags.extend(query["datasetId"])
+            if 'collectionSource' in query.keys():
+                coll_source = [re.compile(cs, re.IGNORECASE) for cs in query["collectionSource"]]
+                db_query["collectionSource"] = {"$in": coll_source}
+            if 'submitterName' in query.keys():
+                db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
+            if 'samplingRate' in query.keys():
+                db_query["samplingRate"] = query["samplingRate"]
+            no_of_speakers_query, age_query = {}, {}
+            if 'minNoOfSpeakers' in query.keys():
+                no_of_speakers_query["$gte"] = query["minNoOfSpeakers"]
+            if 'maxNoOfSpeakers' in query.keys():
+                no_of_speakers_query["$lte"] = query["maxNoOfSpeakers"]
+            if no_of_speakers_query:
+                db_query["numberOfSpeakers"] = no_of_speakers_query
+            if 'noOfSpeakers' in query.keys():
+                db_query["numberOfSpeakers"] = query["noOfSpeakers"]
+            if 'minAge' in query.keys():
+                no_of_speakers_query["$gte"] = query["minAge"]
+            if 'maxAge' in query.keys():
+                no_of_speakers_query["$lte"] = query["maxAge"]
+            if age_query:
+                db_query["age"] = age_query
+            if 'age' in query.keys():
+                db_query["age"] = query["age"]
             if 'multipleContributors' in query.keys():
                 if query['multipleContributors']:
                     db_query[f'collectionMethod.1'] = {"$exists": True}
@@ -177,6 +264,28 @@ class ASRService:
             exclude = {"_id": False}
             for key in asr_search_ignore_keys:
                 exclude[key] = False
+
+            log.info(f"old Db query: {db_query}")
+            #logic to whitelist few data based on submitername
+            if submiter_name_whitelist_enabled:
+                if 'collectionSource' in db_query.keys():
+                  del db_query["collectionSource"]
+                if 'submitter' in db_query.keys():
+                  del db_query["submitter"]
+                coll_source_to_whitelist = [re.compile(cs, re.IGNORECASE)
+                               for cs in query["collectionSource"]]
+                             
+                names_to_whitelist = [re.compile(wsn, re.IGNORECASE)
+                                       for wsn in submitter_names_to_whitelist]
+                new_db_query = {
+                    "$and": [
+                        {"$or": [{"collectionSource": {"$in": coll_source_to_whitelist}}, {
+                            "submitter": {"$elemMatch": {"name": {"$in": names_to_whitelist}}}}]},db_query
+                    ]
+                }
+                log.info(f"new Db query: {new_db_query}")
+                db_query = new_db_query
+
             result, hours = repo.search(db_query, exclude, off, lim)
             count = len(result)
             log.info(f'Result --- Count: {count}, Query: {query}')
@@ -185,19 +294,21 @@ class ASRService:
                 size = sample_size if count > sample_size else count
                 path, path_sample = utils.push_result_to_object_store(result, query["serviceRequestNumber"], size)
                 if path:
-                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": hours, "dataset": path, "datasetSample": path_sample}
-                    pt.task_event_search(op, None)
+                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                          "count": hours, "dataset": path, "datasetSample": path_sample}
+                    pt.task_event_search(op, None, dataset_type_asr)
                 else:
                     log.error(f'There was an error while pushing result to S3')
                     error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_asr, "serviceRequestNumber": query["serviceRequestNumber"],
                                                    "message": "There was an error while pushing result to object store"}
-                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
-                    pt.task_event_search(op, error)
+                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                          "count": 0, "sample": [], "dataset": None, "datasetSample": None}
+                    pt.task_event_search(op, error, dataset_type_asr)
             else:
                 log.info(f'No records retrieved for SRN -- {query["serviceRequestNumber"]}')
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None,
-                      "datasetSample": None}
-                pt.task_event_search(op, None)
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                      "count": 0, "sample": [], "dataset": None, "datasetSample": None}
+                pt.task_event_search(op, None, dataset_type_asr)
             log.info(f'Done!')
             return op
         except Exception as e:

@@ -2,41 +2,48 @@ import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
 from src.db import ModelRepo
+from .queryutils import QueryUtils
 
 repo    =   ModelRepo()
+utils   =   QueryUtils()
 class AggregateModelData(object):
+    """
+    Processing model aggregation
+    #from mongo
+    """
     def __init__(self):
-        pass
-# "data": [{"_id": "as", "label": "Assamese", "value": 2460}, {"_id": "bn", "label": "Bengali", "value": 62495}, {"_id": "gu", "label": "Gujarati", "value": 1216904}, {"_id": "hi", "label": "H
+        self.mdmsconfigs  = utils.get_master_data()
 
     def data_aggregator(self, request_object):
         try:
-            count   =   repo.count({})
-            # dtype = request_object["type"]
+            count   =   repo.count({"status" : "published","task.type":{"$ne":None}})  # counting models where the task type is defined and status being published
             match_params = None
             if "criterions" in request_object:
-                match_params = request_object["criterions"]
+                match_params = request_object["criterions"] # where conditions
             grpby_params = None
             if "groupby" in request_object:
-                grpby_params = request_object["groupby"]
-
+                grpby_params = request_object["groupby"]  #grouping fields
+            
+            #aggregating the model types; initial chart
             if (match_params ==  None and grpby_params == None):
-                query   =   [{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
-                log.info(f"Query : {query}")
+                query   =   [{"$match":{"status":"published"}},{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
                 result = repo.aggregate(query)
+                new_result = [rc for rc in result if rc["_id"]["model"] != None]
                 chart_data = []
-                for record in result:
+                for record in new_result:
+                    #log.info(record)
                     rec = {}
                     rec["_id"]      =   record["_id"]["model"]
-                    if len(record["_id"]["model"])>9:
+                    if record["_id"]["model"] and len(record["_id"]["model"])>9:
                         rec["label"]    =   str(record["_id"]["model"]).title()
                     else:
                         rec["label"]    =   record["_id"]["model"]
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
+                log.info(chart_data)
                 return chart_data,count
 
-
+            #1st levl drill down on model selected and languages  
             if grpby_params[0]["field"] == "language":
                 query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }}, { '$unwind': "$languages" },
                             { "$group": {"_id": {"lang1":"$languages.sourceLanguage","lang2":"$languages.targetLanguage"},
@@ -46,16 +53,26 @@ class AggregateModelData(object):
                 chart_data = []
                 for record in result:
                     rec = {}
-                    if match_params[0]["value"] == "TRANSLATION":
+                    if match_params[0]["value"] == "TRANSLATION" or match_params[0]["value"] == "TRANSLITERATION" :
                         rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
-                        rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
+                        try:
+                            rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())["label"]+"-"+self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
+                        except:
+                            log.info(f'Language code not found on MDMS : {record["_id"]["lang1"], record["_id"]["lang2"]}')
+                            rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
+            
                     else:
-                        rec["_id"]      =   record["_id"]["lang1"]
-                        rec["label"]    =   str(record["_id"]["lang1"]).title()
+                        rec["_id"]      =   record["_id"]["lang1"] # label :language 
+                        try:
+                            rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())["label"]
+                        except:
+                            log.info(f'Language code not found on MDMS : {record["_id"]["lang1"]}')
+                            rec["label"]    =   str(record["_id"]["lang1"]).title()
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
                 return chart_data,count
 
+            #1st levl drill down on model selected and submitters
             if grpby_params[0]["field"] == "submitter":
                 query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }},
                             { "$group": {"_id": {"submitter":"$submitter.name"},
@@ -72,5 +89,5 @@ class AggregateModelData(object):
                 return chart_data,count
                 
         except Exception as e:
-            log.info(f"Exception on AggregateodelData :{e}")
+            log.info(f"Exception on AggregateModelData :{e}")
             return []

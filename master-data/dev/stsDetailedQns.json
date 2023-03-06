@@ -1,0 +1,35 @@
+{
+"stsDetailedQns": [
+      {
+        "code":"asr",
+        "label":"ASR",
+        "active":true,
+        "taskType": "asr",
+        "question": "Rate Speech to Text Quality",
+        "answerType": "5-star-rating",
+        "editbox": "true"
+      },
+      {
+       "code":"translation",
+       "label":"TRANSLATION",
+       "active":true,
+        "taskType": "translation",
+        "question": "Rate Translated Text Quality",
+        "answerType": "5-star-rating",
+        "editbox": "true"
+      },
+      {
+      "code":"tts",
+       "label":"TTS",
+       "active":true,
+        "taskType": "tts",
+        "question": "Rate Translated Speech Quality",
+        "answerType": "5-star-rating",
+        "editbox": "false"
+      },
+      {
+        "question": "Add your comments",
+        "answerType": "freetext"
+      }
+    ]
+}

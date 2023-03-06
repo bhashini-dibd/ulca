@@ -1,32 +1,33 @@
 package com.ulca.dataset.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
+import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.dataset.constants.DatasetConstants;
 import com.ulca.dataset.dao.DatasetDao;
+import com.ulca.dataset.dao.DatasetKafkaTransactionErrorLogDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.exception.ServiceRequestNumberNotFoundException;
 import com.ulca.dataset.kakfa.model.FileDownload;
 import com.ulca.dataset.model.Dataset;
+import com.ulca.dataset.model.DatasetKafkaTransactionErrorLog;
 import com.ulca.dataset.model.Fileidentifier;
 import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.ProcessTracker.ServiceRequestActionEnum;
@@ -58,12 +59,19 @@ public class DatasetService {
 	
 	@Autowired
 	DatasetDao datasetDao;
-
+	
 	@Autowired
 	FileIdentifierDao fileIdentifierDao;
 
 	@Autowired
 	ProcessTrackerDao processTrackerDao;
+	
+	@Autowired
+	DatasetKafkaTransactionErrorLogDao datasetKafkaTransactionErrorLogDao;
+
+
+	@Autowired
+	KafkaService kafkaService;
 
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
@@ -83,8 +91,9 @@ public class DatasetService {
 		String userId = request.getUserId();
 		Dataset dataset = new Dataset();
 		dataset.setDatasetName(request.getDatasetName());
+		dataset.setSubmitterId(userId);
 		//dataset.setDatasetType(request.getType().toString());
-		dataset.setCreatedOn(new Date().toString());
+		dataset.setCreatedOn(Instant.now().toEpochMilli());
 
 		Fileidentifier fileIndetifier = new Fileidentifier();
 		fileIndetifier.setFileLocationURL(request.getUrl());
@@ -109,7 +118,7 @@ public class DatasetService {
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.pending.toString());
-		processTracker.setStartTime(new Date().toString());
+		processTracker.setStartTime(Instant.now().toEpochMilli());
 
 		processTrackerDao.insert(processTracker);
 
@@ -121,124 +130,97 @@ public class DatasetService {
 		fileDownload.setFileUrl(request.getUrl());
 		fileDownload.setServiceRequestNumber(processTracker.getServiceRequestNumber());
 		
-		datasetFiledownloadKafkaTemplate.send(fileDownloadTopic, fileDownload);
-		
+		//datasetFiledownloadKafkaTemplate.send(fileDownloadTopic, fileDownload);
+
+
+		kafkaService.datasetFiledownload(fileDownloadTopic, fileDownload,processTracker);
+
+
 		String message = "Dataset Submit success";
 		return new DatasetSubmitResponse(message,processTracker.getServiceRequestNumber(), dataset.getDatasetId(),
 				dataset.getCreatedOn());
 	}
-	
-	public DatasetListByUserIdResponse datasetListByUserId(String userId, Integer startPage, Integer endPage) {
-		
+
+	public DatasetListByUserIdResponse datasetListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
+		log.info("******** Entry DatasetService:: datasetListByUserId *******");
 		DatasetListByUserIdResponse response = null;
-		
-		if(startPage == null) {
-			response = datasetListByUserIdFetchAll(userId);
+		Integer count = datasetDao.countBySubmitterId(userId);
+		List<Dataset> list = new ArrayList<Dataset>();
+		if (startPage != null) {
+			int startPg = startPage - 1;
+			for (int i = startPg; i < endPage; i++) {
+				Pageable paging = null;
+				if (pgSize != null) {
+					paging = PageRequest.of(i, pgSize, Sort.by("createdOn").descending());
+				} else {
+					paging = PageRequest.of(i, PAGE_SIZE, Sort.by("createdOn").descending());
+				}
+				Page<Dataset> datasetList = null;
+				if (name != null) {
+					Dataset dataset = new Dataset();
+					dataset.setSubmitterId(userId);
+					dataset.setDatasetName(name);
+					Example<Dataset> example = Example.of(dataset);
+
+					datasetList = datasetDao.findAll(example, paging);
+					count = datasetDao.countBySubmitterIdAndDatasetName(userId, name);
+				} else {
+					datasetList = datasetDao.findBySubmitterId(userId, paging);
+				}
+				list.addAll(datasetList.toList());
+			}
 		} else {
-			
-			response = datasetListByUserIdPagination(userId, startPage, endPage);
-		}
-		return response;
-	}
+			if (name != null) {
+				Dataset dataset = new Dataset();
+				dataset.setSubmitterId(userId);
+				dataset.setDatasetName(name);
+				Example<Dataset> example = Example.of(dataset);
+				list = datasetDao.findAll(example);
+				count = list.size();
+			} else {
+				list = datasetDao.findBySubmitterId(userId);
 
-	public DatasetListByUserIdResponse datasetListByUserIdPagination(String userId, Integer startPage, Integer endPage) {
-
-		log.info("******** Entry DatasetService:: datasetListByUserIdPagination *******");
-		
-		List<DatasetListByUserIdResponseDto> list = new ArrayList<DatasetListByUserIdResponseDto>();
-		int startPg = startPage - 1;
-		for(int i= startPg; i< endPage; i++) {
-			
-			Pageable paging = PageRequest.of(i, PAGE_SIZE);
-			Page<ProcessTracker> processTrackerPage = processTrackerDao.findByUserId(userId,paging);
-			
-			for (ProcessTracker p : processTrackerPage) {
-				if (p.getDatasetId() != null && !p.getDatasetId().isEmpty()) {
-					
-					String status = p.getStatus().toString();
-					Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
-					
-					if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
-						list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-								dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
-					}else {
-						
-						List<TaskTracker> taskTrackerList = taskTrackerDao
-								.findAllByServiceRequestNumber(p.getServiceRequestNumber());
-
-						HashMap<String, String> map = new HashMap<String, String>();
-						for (TaskTracker tTracker : taskTrackerList) {
-							map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
-						}
-						if(map.containsValue(TaskTracker.StatusEnum.failed.toString())) {
-							status = ProcessTracker.StatusEnum.failed.toString();
-						}else if(map.containsValue(ProcessTracker.StatusEnum.inprogress.toString())) {
-							status = ProcessTracker.StatusEnum.inprogress.toString();
-						}else if (map.containsKey(TaskTracker.ToolEnum.publish.toString())) {
-							status = map.get(TaskTracker.ToolEnum.publish.toString());
-						} 
-
-						list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-								dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
-					}
-				}
 			}
 		}
 
-		String msg = "Dataset List By userId";
-		DatasetListByUserIdResponse response = new DatasetListByUserIdResponse(msg,list, startPage, endPage);
-		log.info("******** Exit DatasetService:: datasetListByUserIdPagination *******");
-		return response;
 
-	}
-	
-	public DatasetListByUserIdResponse datasetListByUserIdFetchAll(String userId) {
+		List<DatasetListByUserIdResponseDto> datasetDtoList = new ArrayList<DatasetListByUserIdResponseDto>();
+		for (Dataset dataset : list) {
+			ProcessTracker processTracker = processTrackerDao.findByDatasetId(dataset.getDatasetId()).get(0);
+			String serviceRequestNumber = processTracker.getServiceRequestNumber();
+			String status = processTracker.getStatus();
+			if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
+				datasetDtoList.add(new DatasetListByUserIdResponseDto(dataset.getDatasetId(), serviceRequestNumber,
+						dataset.getDatasetName(), dataset.getDatasetType(), dataset.getCreatedOn(), status));
+			} else  {
 
-		log.info("******** Entry DatasetService:: datasetListByUserIdFetchAll *******");
+				List<TaskTracker> taskTrackerList = taskTrackerDao
+						.findAllByServiceRequestNumber(serviceRequestNumber);
 
-		List<DatasetListByUserIdResponseDto> list = new ArrayList<DatasetListByUserIdResponseDto>();
-
-		List<ProcessTracker> processList = processTrackerDao.findByUserId(userId);
-
-		for (ProcessTracker p : processList) {
-			if (p.getDatasetId() != null && !p.getDatasetId().isEmpty()) {
-				
-				String status = p.getStatus().toString();
-				Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
-				
-				if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
-					list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-							dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
-				}else {
-					
-					List<TaskTracker> taskTrackerList = taskTrackerDao
-							.findAllByServiceRequestNumber(p.getServiceRequestNumber());
-
-					HashMap<String, String> map = new HashMap<String, String>();
-					for (TaskTracker tTracker : taskTrackerList) {
-						map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
-					}
-					if(map.containsValue(TaskTracker.StatusEnum.failed.toString())) {
-						status = ProcessTracker.StatusEnum.failed.toString();
-					}else if(map.containsValue(ProcessTracker.StatusEnum.inprogress.toString())) {
-						status = ProcessTracker.StatusEnum.inprogress.toString();
-					}else if (map.containsKey(TaskTracker.ToolEnum.publish.toString())) {
-						status = map.get(TaskTracker.ToolEnum.publish.toString());
-					} 
-
-					list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-							dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
+				HashMap<String, String> map = new HashMap<String, String>();
+				for (TaskTracker tTracker : taskTrackerList) {
+					map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
 				}
-			}
-		}
-		String msg = "Dataset List By userId";
-		DatasetListByUserIdResponse response = new DatasetListByUserIdResponse(msg,list);
-		log.info("******** Exit DatasetService:: datasetListByUserIdFetchAll *******");
-		return response;
+				if(map.containsValue(TaskTracker.StatusEnum.failed.toString())) {
+					status = ProcessTracker.StatusEnum.failed.toString();
+				}else if(map.containsValue(ProcessTracker.StatusEnum.inprogress.toString())) {
+					status = ProcessTracker.StatusEnum.inprogress.toString();
+				}else if (map.containsKey(TaskTracker.ToolEnum.publish.toString())) {
+					status = map.get(TaskTracker.ToolEnum.publish.toString());
+				}
 
+				datasetDtoList.add(new DatasetListByUserIdResponseDto(dataset.getDatasetId(), serviceRequestNumber,
+						dataset.getDatasetName(), dataset.getDatasetType(), dataset.getCreatedOn(), status));
+			}
+
+		}
+		log.info("******** Exit DatasetService:: datasetListByUserId *******");
+
+
+		datasetDtoList.sort(Comparator.comparing(DatasetListByUserIdResponseDto::getSubmittedOn).reversed());
+		return new DatasetListByUserIdResponse("Dataset List By userId", datasetDtoList, startPage, endPage, count);
 	}
-	
-	public DatasetByIdResponse datasetById(String datasetId) {
+		public DatasetByIdResponse datasetById(String datasetId) {
 
 		Map<String, ArrayList<TaskTracker>> map = new HashMap<String, ArrayList<TaskTracker>>();
 
@@ -254,7 +236,7 @@ public class DatasetService {
 
 				
 				List<TaskTracker> taskTrackerListUpdated = getStatusUpdatedTaskTrackerList(taskTrackerList, serviceRequestNumber);
-				map.put(serviceRequestNumber, (ArrayList<TaskTracker>) taskTrackerListUpdated);
+				map.put("details", (ArrayList<TaskTracker>) taskTrackerListUpdated);
 			}
 
 		}
@@ -268,12 +250,12 @@ public class DatasetService {
 		if(processTrackerList == null) {
 			throw new ServiceRequestNumberNotFoundException("serviceRequestNumber :: " + serviceRequestNumber + " not found");
 		}
-
+		Dataset dataset = datasetDao.findByDatasetId(processTrackerList.getDatasetId());
 		List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 		
 		List<TaskTracker> taskTrackerListUpdated = getStatusUpdatedTaskTrackerList(taskTrackerList, serviceRequestNumber);
 		
-		DatasetByServiceReqNrResponse response = new DatasetByServiceReqNrResponse("Dataset details", taskTrackerListUpdated);
+		DatasetByServiceReqNrResponse response = new DatasetByServiceReqNrResponse("Dataset details",dataset.getDatasetName(), taskTrackerListUpdated);
 		return response;
 	}
 	
@@ -431,25 +413,25 @@ public class DatasetService {
 		if(!mapTemp.containsKey(TaskTracker.ToolEnum.download.toString())) {
 			TaskTracker download = new TaskTracker();
 			download.serviceRequestNumber(serviceRequestNumber);
-			download.setTool(ToolEnum.download);
+			download.setTool(ToolEnum.download.toString());
 			download.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(download);
 			
 			TaskTracker ingest = new TaskTracker();
 			ingest.serviceRequestNumber(serviceRequestNumber);
-			ingest.setTool(ToolEnum.ingest);
+			ingest.setTool(ToolEnum.ingest.toString());
 			ingest.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(ingest);
 			
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
 			
@@ -458,19 +440,19 @@ public class DatasetService {
 		}else if(mapTemp.get(TaskTracker.ToolEnum.download.toString()).equals(TaskTracker.StatusEnum.inprogress.toString())) {
 			TaskTracker ingest = new TaskTracker();
 			ingest.serviceRequestNumber(serviceRequestNumber);
-			ingest.setTool(ToolEnum.ingest);
+			ingest.setTool(ToolEnum.ingest.toString());
 			ingest.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(ingest);
 			
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
 			
@@ -480,70 +462,118 @@ public class DatasetService {
 		} else if(mapTemp.get(TaskTracker.ToolEnum.download.toString()).equals(TaskTracker.StatusEnum.failed.toString())) {
 			TaskTracker ingest = new TaskTracker();
 			ingest.serviceRequestNumber(serviceRequestNumber);
-			ingest.setTool(ToolEnum.ingest);
+			ingest.setTool(ToolEnum.ingest.toString());
 			ingest.setStatus(TaskTracker.StatusEnum.na.toString());
 			taskTrackerList.add(ingest);
 			
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.na.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.na.toString());
 			taskTrackerList.add(publish);
 			
 			return taskTrackerList;
 			
-		} else if(!mapTemp.containsKey(TaskTracker.ToolEnum.ingest.toString())) {
+		}else if(mapTemp.containsKey(TaskTracker.ToolEnum.precheck.toString()) && mapTemp.get(TaskTracker.ToolEnum.precheck.toString()).equals(TaskTracker.StatusEnum.failed.toString())) {
 			TaskTracker ingest = new TaskTracker();
 			ingest.serviceRequestNumber(serviceRequestNumber);
-			ingest.setTool(ToolEnum.ingest);
+			ingest.setTool(ToolEnum.ingest.toString());
+			ingest.setStatus(TaskTracker.StatusEnum.na.toString());
+			taskTrackerList.add(ingest);
+			
+			TaskTracker validate = new TaskTracker();
+			validate.serviceRequestNumber(serviceRequestNumber);
+			validate.setTool(ToolEnum.validate.toString());
+			validate.setStatus(TaskTracker.StatusEnum.na.toString());
+			taskTrackerList.add(validate);
+			
+			TaskTracker publish = new TaskTracker();
+			publish.serviceRequestNumber(serviceRequestNumber);
+			publish.setTool(ToolEnum.publish.toString());
+			publish.setStatus(TaskTracker.StatusEnum.na.toString());
+			taskTrackerList.add(publish);
+			
+			return taskTrackerList;
+			
+		} else if(mapTemp.containsKey(TaskTracker.ToolEnum.precheck.toString()) && mapTemp.get(TaskTracker.ToolEnum.precheck.toString()).equals(TaskTracker.StatusEnum.inprogress.toString())) {
+			TaskTracker ingest = new TaskTracker();
+			ingest.serviceRequestNumber(serviceRequestNumber);
+			ingest.setTool(ToolEnum.ingest.toString());
 			ingest.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(ingest);
 			
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
+			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
+			taskTrackerList.add(publish);
+			
+			return taskTrackerList;
+			
+		}else if(!mapTemp.containsKey(TaskTracker.ToolEnum.ingest.toString())) {
+			TaskTracker ingest = new TaskTracker();
+			ingest.serviceRequestNumber(serviceRequestNumber);
+			ingest.setTool(ToolEnum.ingest.toString());
+			ingest.setStatus(TaskTracker.StatusEnum.pending.toString());
+			taskTrackerList.add(ingest);
+			
+			TaskTracker validate = new TaskTracker();
+			validate.serviceRequestNumber(serviceRequestNumber);
+			validate.setTool(ToolEnum.validate.toString());
+			validate.setStatus(TaskTracker.StatusEnum.pending.toString());
+			taskTrackerList.add(validate);
+			
+			TaskTracker publish = new TaskTracker();
+			publish.serviceRequestNumber(serviceRequestNumber);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
 			
 			return taskTrackerList;
 			
 		} else if(mapTemp.get(TaskTracker.ToolEnum.ingest.toString()).equals(TaskTracker.StatusEnum.failed.toString())) {
-			TaskTracker validate = new TaskTracker();
-			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
-			validate.setStatus(TaskTracker.StatusEnum.na.toString());
-			taskTrackerList.add(validate);
 			
-			TaskTracker publish = new TaskTracker();
-			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
-			publish.setStatus(TaskTracker.StatusEnum.na.toString());
-			taskTrackerList.add(publish);
+			if(!mapTemp.containsKey(TaskTracker.ToolEnum.validate.toString())) {
+				TaskTracker validate = new TaskTracker();
+				validate.serviceRequestNumber(serviceRequestNumber);
+				validate.setTool(ToolEnum.validate.toString());
+				validate.setStatus(TaskTracker.StatusEnum.na.toString());
+				taskTrackerList.add(validate);
+			}
+			if(!mapTemp.containsKey(TaskTracker.ToolEnum.publish.toString())) {
+				TaskTracker publish = new TaskTracker();
+				publish.serviceRequestNumber(serviceRequestNumber);
+				publish.setTool(ToolEnum.publish.toString());
+				publish.setStatus(TaskTracker.StatusEnum.na.toString());
+				taskTrackerList.add(publish);
+			}
+			
+			
 			return taskTrackerList;
 			
 		}else if(mapTemp.get(TaskTracker.ToolEnum.ingest.toString()).equals(TaskTracker.StatusEnum.pending.toString()) ) {
 				
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
 			return taskTrackerList;
@@ -555,14 +585,14 @@ public class DatasetService {
 			if(!mapTemp.containsKey(TaskTracker.ToolEnum.validate.toString())) {
 				TaskTracker validate = new TaskTracker();
 				validate.serviceRequestNumber(serviceRequestNumber);
-				validate.setTool(ToolEnum.validate);
+				validate.setTool(ToolEnum.validate.toString());
 				validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 				taskTrackerList.add(validate);
 			}
 			if(!mapTemp.containsKey(TaskTracker.ToolEnum.publish.toString())) {
 				TaskTracker validate = new TaskTracker();
 				validate.serviceRequestNumber(serviceRequestNumber);
-				validate.setTool(ToolEnum.publish);
+				validate.setTool(ToolEnum.publish.toString());
 				validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 				taskTrackerList.add(validate);
 			}

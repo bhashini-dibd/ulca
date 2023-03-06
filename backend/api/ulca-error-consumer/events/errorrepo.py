@@ -44,9 +44,9 @@ class ErrorRepo:
         return len(data)
 
     # Updates the object in the mongo collection
-    def update(self, object_in):
+    def update(self, cond,object_in,upsert_flag):
         col = self.get_mongo_instance()
-        col.replace_one({"id": object_in["id"]}, object_in)
+        col.update(cond, object_in,upsert = upsert_flag)
 
     # delete a single object in the mongo collection
     def delete(self, rec_id):
@@ -87,11 +87,22 @@ class ErrorRepo:
     def upsert(self, object_in):
         try:
             col = self.get_mongo_instance()
-            col.update({"serviceRequestNumber": object_in["serviceRequestNumber"]}, {'$set' : object_in}, upsert=True)
+            upd = col.update(object_in,{ '$inc': { 'count': 1 } }, upsert=True)
         except Exception as e:
             log.exception(f'Exception in repo upsert: {e}', e)
 
-
+     #mongo aggregate
+    def aggregate(self, query):
+        try:
+            col = self.get_mongo_instance()
+            res = col.aggregate(query)
+            result = []
+            for record in res:
+                result.append(record)
+            return result
+        except Exception as e:
+            log.exception(f'Exception in repo search: {e}', e)
+            return []
 
 # Log config
 dictConfig({

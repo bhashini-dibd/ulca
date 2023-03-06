@@ -19,6 +19,8 @@ class MetricEvent:
             return
         if is_upd:
             previous_record, new_record = records[1], records[0]
+            if isinstance(previous_record,list):
+                previous_record = previous_record[0]
             previous_record["serviceRequestNumber"], previous_record["userId"] = metadata["serviceRequestNumber"], metadata["userId"]
             previous_record["datasetType"], previous_record["isUpdate"] = metadata["datasetType"], True
             self.create_metric_event(previous_record)
@@ -68,7 +70,7 @@ class MetricEvent:
                             primary_submitter_ids.append(submitter["id"])
                         if 'name' in submitter.keys():
                             primary_submitter_names.append(submitter["name"])
-                        if 'team' in submitter.keys():
+                        if 'team' in submitter.keys() and submitter['team'] is not None:
                             for team in submitter["team"]:
                                 secondary_submitters.append(team["name"])
                 if primary_submitter_ids:
@@ -83,7 +85,11 @@ class MetricEvent:
                     for cm in data["collectionMethod"]:
                         if cm:
                             if 'collectionDescription' in cm.keys():
-                                coll_desc.append(cm["collectionDescription"])
+                                if cm["collectionDescription"]:
+                                    if isinstance(cm["collectionDescription"], list):
+                                        coll_desc.extend(cm["collectionDescription"])
+                                    else:
+                                        coll_desc.append(cm["collectionDescription"])
                             if 'collectionDetails' in cm.keys():
                                 if cm["collectionDetails"]:
                                     if 'alignmentTool' in cm["collectionDetails"].keys():
@@ -106,13 +112,16 @@ class MetricEvent:
                 event["durationInSeconds"] = data["durationInSeconds"]
             if 'isDelete' in data.keys():
                 event["isDelete"] = True
+                log.info(f"Data sent to kafka topic org-ulca-bievent-dataset-v3 is {event}")
                 prod.produce(event, metric_event_input_topic, None)
             elif 'isUpdate' in data.keys():
                 event["isDelete"] = data["isUpdate"]
+                log.info(f"Data sent to kafka topic org-ulca-bievent-dataset-v3 is {event}")
                 prod.produce(event, metric_event_input_topic, None)
             else:
                 event["isDelete"] = False
+                log.info(f"Data sent to kafka topic org-ulca-bievent-dataset-v3 is {event}")
                 prod.produce(event, metric_event_input_topic, None)
         except Exception as e:
-            log.exception(e)
+            log.exception(data, e)
             return None

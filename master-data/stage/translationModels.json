@@ -1,0 +1,10 @@
+{
+    "translationModels": [
+      {
+        "code": "google-translate",
+        "label": "Google Translate",
+        "active": true,
+        "collectionMethod": ["machine-translated", "machine-translated-post-edited"]
+      }
+    ]
+  }

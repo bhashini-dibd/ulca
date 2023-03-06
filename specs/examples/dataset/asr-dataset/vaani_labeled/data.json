@@ -1,0 +1,68 @@
+[
+    {
+        "audioFilename": "audios/chunk_01.wav",
+        "imageFilename": "images/img_01.jpg",
+        "text": "में अपना आधा सफ़र अब पूरा कर लिया है",
+        "speaker": "goog_001",
+        "gender": "male",
+        "exactAge": 60,
+        "assertLanguage": "hi",
+        "languagesSpoken": [
+            "hindi",
+            "english",
+            "marathi"
+        ],
+        "state": "Haryana",
+        "district": "Gurgaon",
+        "pinCode": 133001,
+        "stayYears": "20",
+        "education": "post-graduate",
+        "socioEconomic": "middle-class"
+    },
+    {
+        "audioFilename": "audios/chunk_02.wav",
+        "text": "मेइस दौरान हमने अनेक विषयों पर बात की",
+        "speaker": "goog_002",
+        "gender": "male",
+        "exactAge": 35,
+        "assertLanguage": "hi",
+        "languagesSpoken": [
+            "hindi",
+            "english",
+            "tamil"
+        ],
+        "state": "Haryana",
+        "district": "Gurgaon",
+        "pinCode": 133001,
+        "stayYears": "20",
+        "education": "graduate",
+        "socioEconomic": "upper-middle-class"
+    },
+    {
+        "audioFilename": "audios/chunk_03.wav",
+        "text": "मेस्वाभाविक है कि जो वैश्विक महामारी आयी मानव जाति पर जो संकट आया उस पर हमारी बातचीत कुछ ज्यादा ही रही लेकिन",
+        "speaker": "goog_002",
+        "gender": "male",
+        "exactAge": 35
+    },
+    {
+        "audioFilename": "audios/chunk_04.wav",
+        "imageFilename": "images/img_04.jpg",
+        "text": "इन दिनों मैं देख रहा हूं लगातार लोगों में एक विषय पर चर्चा हो रही है कि आखिर ये साल कब बीतेगा",
+        "speaker": "goog_001",
+        "gender": "male",
+        "exactAge": 60,
+        "assertLanguage": "hi",
+        "languagesSpoken": [
+            "hindi",
+            "english",
+            "marathi"
+        ],
+        "state": "Haryana",
+        "district": "Gurgaon",
+        "pinCode": 133001,
+        "stayYears": "20",
+        "education": "graduate",
+        "socioEconomic": "middle-class"
+    }
+]

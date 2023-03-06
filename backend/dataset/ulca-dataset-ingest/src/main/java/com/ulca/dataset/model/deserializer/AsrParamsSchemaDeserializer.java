@@ -32,8 +32,10 @@ import io.swagger.model.Domain;
 import io.swagger.model.DomainEnum;
 import io.swagger.model.Gender;
 import io.swagger.model.LanguagePair;
+import io.swagger.model.MixedDataSource;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
+import io.swagger.model.SupportedLanguages;
 import io.swagger.model.TranscriptionEvaluationMethod1;
 import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
@@ -73,11 +75,12 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 			try {
 				AsrDatasetParamsSchemaKeys key = AsrDatasetParamsSchemaKeys.valueOf(k);
 			} catch (Exception ex) {
-				log.info("no enums found ");
+				log.info("AsrDatasetParamsSchemaKeys " + k + " not in defined keys");
 				errorList.add(k + " unknown property ");
 			}
 		}
 
+        
 		// required
 
 		if (!node.has("datasetType")) {
@@ -103,9 +106,9 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 
 				if (node.get("languages").has("sourceLanguage")) {
 					String sourceLanguage = node.get("languages").get("sourceLanguage").asText();
-					if (LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage) != null) {
-						lp.setSourceLanguage(LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage));
-					} else {
+					if(SupportedLanguages.fromValue(sourceLanguage) != null) {
+						lp.setSourceLanguage(SupportedLanguages.fromValue(sourceLanguage));
+					}else {
 						errorList.add("sourceLanguage is not one of defined language pair");
 					}
 
@@ -118,9 +121,8 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 				}
 				if (node.get("languages").has("targetLanguage")) {
 					String targetLanguage = node.get("languages").get("targetLanguage").asText();
-
-					if (LanguagePair.TargetLanguageEnum.fromValue(targetLanguage) != null) {
-						lp.setTargetLanguage(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage));
+					if(SupportedLanguages.fromValue(targetLanguage) != null) {
+						lp.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
 					}
 
 				}
@@ -197,6 +199,12 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 				io.swagger.model.License license = io.swagger.model.License.fromValue(licenseText);
 				if (license != null) {
 					asrParamsSchema.setLicense(license);
+					if(license == io.swagger.model.License.CUSTOM_LICENSE) {
+						String licenseUrl = node.get("licenseUrl").asText();
+						if(licenseUrl.isBlank()) {
+							errorList.add("custom licenseUrl field value should be present");
+						}
+					}
 				} else {
 					errorList.add("license field value should be present in license list");
 				}
@@ -223,6 +231,39 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 		}
 
 		// optional params
+		
+		if (node.has("version")) {
+			if (!node.get("version").isTextual()) {
+				errorList.add("version field should be String");
+			} else {
+				String version = node.get("version").asText();
+				asrParamsSchema.setVersion(version);
+			}
+
+		}
+		if (node.has("licenseUrl")) {
+			if (!node.get("licenseUrl").isTextual()) {
+				errorList.add("licenseUrl field should be String");
+			} else {
+				String licenseUrl = node.get("licenseUrl").asText();
+				asrParamsSchema.setLicenseUrl(licenseUrl);
+			}
+
+		}
+		
+		if (node.has("mixedDataSource")) {
+			if (!node.get("mixedDataSource").isTextual()) {
+				errorList.add("mixedDataSource field should be String");
+			} else {
+				String mixedDataSource = node.get("mixedDataSource").asText();
+				MixedDataSource mixedDataSr = MixedDataSource.fromValue(mixedDataSource);
+				if(mixedDataSr != null) {
+					asrParamsSchema.setMixedDataSource(mixedDataSr);
+				}else {
+					errorList.add("mixedDataSource not among one of specified values");
+				}
+			}
+		}
 
 		if (node.has("format")) {
 			if (!node.get("format").isTextual()) {
@@ -250,9 +291,7 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 				} else {
 					errorList.add("channel not among one of specified");
 				}
-
 			}
-
 		}
 
 		if (node.has("samplingRate")) {
@@ -278,7 +317,6 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 					errorList.add("bitsPerSample not among one of specified");
 				}
 			}
-
 		}
 
 		if (node.has("numberOfSpeakers")) {
@@ -367,12 +405,17 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 								.asText();
 						CollectionMethodAudio.CollectionDescriptionEnum collectionDescriptionEnum = CollectionMethodAudio.CollectionDescriptionEnum
 								.fromValue(collectionDescription);
-
+						
 						CollectionMethodAudio collectionMethodAudio = new CollectionMethodAudio();
 						List<CollectionMethodAudio.CollectionDescriptionEnum> list = new ArrayList<CollectionMethodAudio.CollectionDescriptionEnum>();
 						list.add(collectionDescriptionEnum);
 						collectionMethodAudio.setCollectionDescription(list);
-
+						asrParamsSchema.setCollectionMethod(collectionMethodAudio);
+						/*
+						 * collectionDetails is non mandatory
+						 */
+						if (node.get("collectionMethod").has("collectionDetails")) { 
+							
 						switch (collectionDescriptionEnum) {
 						case AUTO_ALIGNED:
 							if (node.get("collectionMethod").get("collectionDetails").has("alignmentTool")) {
@@ -456,6 +499,7 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 							log.info("manual-transcribed");
 							break;
 						}
+					}
 					} catch (Exception e) {
 						log.info("collection method not proper");
 						errorList.add("collectionMethod field value not proper.");

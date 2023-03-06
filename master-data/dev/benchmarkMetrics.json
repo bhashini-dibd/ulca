@@ -1,0 +1,55 @@
+{
+    "benchmarkMetrics": [
+      {
+        "code": "benchmark-metrics-translation",
+        "label": "Translation",
+        "active": true,
+        "task": "translation",
+        "values": {
+          "master": "/benchmarkTranslationMetrics.json",
+          "jsonPath": "$.benchmarkTranslationMetrics"
+        }
+      },
+      {
+        "code": "benchmark-metrics-asr",
+        "label": "ASR",
+        "active": true,
+        "task": "asr",
+        "values": {
+          "master": "/benchmarkASRMetrics.json",
+          "jsonPath": "$.benchmarkASRMetrics"
+        }
+      },
+      {
+        "code": "benchmark-metrics-tts",
+        "label": "TTS",
+        "active": true,
+        "task": "tts",
+        "values": {
+          "master": "/benchmarkTTSMetrics.json",
+          "jsonPath": "$.benchmarkTTSMetrics"
+        }
+      },
+      {
+        "code": "benchmark-metrics-ocr",
+        "label": "OCR",
+        "active": true,
+        "task": "ocr",
+        "values": {
+          "master": "/benchmarkOCRMetrics.json",
+          "jsonPath": "$.benchmarkOCRMetrics"
+        }
+      },
+      {
+        "code": "benchmark-metrics-document-layout",
+        "label": "DL",
+        "active": true,
+        "task": "dl",
+        "values": {
+          "master": "/benchmarkDLMetrics.json",
+          "jsonPath": "$.benchmarkDLMetrics"
+        }
+      }
+    ],
+    "relatedMaster": true
+  }

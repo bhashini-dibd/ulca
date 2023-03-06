@@ -127,7 +127,8 @@ public class OcrDatasetRowDataSchemaDeserializer extends StdDeserializer<OcrData
 							List<OcrCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<OcrCollectionMethod.CollectionDescriptionEnum>();
 							list.add(collectionDescriptionEnum);
 							ocrCollectionMethod.setCollectionDescription(list);
-							
+							asrRowSchema.setCollectionMethod(ocrCollectionMethod);
+
 							if(!node.get("collectionMethod").get("collectionDetails").has("ocrTool")){
 								errorList.add("collectionDetails should contain ocrTool");
 							}else if(!node.get("collectionMethod").get("collectionDetails").get("ocrTool").isTextual()) {
@@ -153,10 +154,9 @@ public class OcrDatasetRowDataSchemaDeserializer extends StdDeserializer<OcrData
 
 
 						} catch (Exception e) {
-							System.out.println("collection method not proper");
+							log.info("collection method not proper");
 							errorList.add("collectionMethod field value not proper.");
-							System.out.println("tracing the error");
-							
+							log.info("tracing the error");
 							e.printStackTrace();
 						}
 					}

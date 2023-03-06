@@ -1,0 +1,24 @@
+{
+    "imageTextTypes": [
+      {
+        "code": "scene-text",
+        "label": "Scene Text",
+        "active": true
+      },
+      {
+        "code": "typewriter-typed-text",
+        "label": "Typewriter Typed Text",
+        "active": true
+      },
+      {
+        "code": "computer-typed-text",
+        "label": "Computer Typed Text",
+        "active": true
+      },
+      {
+        "code": "handwritten-text",
+        "label": "Handwritten Text",
+        "active": true
+      }
+    ]
+  }

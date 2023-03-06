@@ -1,11 +1,13 @@
 import logging
+import threading
 import uuid
 from logging.config import dictConfig
-from configs.configs import redis_key_expiry
+from configs.configs import redis_key_expiry, shared_storage_path,error_prefix
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
 from service.cronrepo import StoreRepo
-
+from datetime import datetime
+import time
 
 log = logging.getLogger('file')
 mongo_instance = None
@@ -18,8 +20,8 @@ class ErrorEvent:
         pass
     
     #dumping errors onto redis store
-    def write_error(self, data):
-        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
+    def write_error_in_redis(self, data):
+        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]} in redis')
         try:
             error_id = data["serviceRequestNumber"]+'.'+str(uuid.uuid4())
             expiry_time = redis_key_expiry
@@ -29,17 +31,48 @@ class ErrorEvent:
             return False
 
     #fetches back error record (object store link) from db
-    def search_error_report(self, srn, internal):
+    def get_error_report(self, srn, internal):
         try:
             query = {"serviceRequestNumber": srn,"uploaded":True}
             exclude = {"_id": False}
             log.info(f'Search for error reports of SRN -- {srn} from db started')
-            error_records = error_repo.search(query, exclude, None, None)
-            log.info(f'Error report returned for {srn}')
-            return error_records
+            error_record = error_repo.search(query, exclude, None, None)
+            if error_record:
+                return error_record
+            return [{"consolidated_file":None,"count":None,"file":None,"serviceRequestNumber":srn,"time_stamp":None,"uploaded":None}]
+
         except Exception as e:
             log.exception(f'Exception while fetching error report: {e}')
             return []
+
+    #writing errors to mongostore
+    def write_error_in_mongo(self,data):
+        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]} in mongo')
+        try:
+            error_rec = {'datasetName':data['datasetName'],'serviceRequestNumber':data['serviceRequestNumber'],'stage':data['stage'],'message':data['message']}
+            error_repo.upsert(error_rec)
+
+        except Exception as e:
+            log.exception(f'Exception while writing errors: {e}')
+            return False
+    
+    def upload_error_to_object_store(self,srn,file,error_records_count):
+        file_name = str(file).replace("/opt/","")
+        #initiating upload API call
+        error_object_path = utils.file_store_upload_call(file,file_name,error_prefix)
+        if error_object_path == False:
+            return  None
+        log.info(f'Error file uploaded on to object store : {error_object_path} for srn -- {srn} ')
+        error_record = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp":eval(str(time.time()).replace('.', '')[0:13]), "internal_file": file, "file": error_object_path, "count": error_records_count}
+        persister = threading.Thread(target=self.update_db_status, args=(error_record,srn))
+        persister.start()
+        return error_record
+
+    def update_db_status(self,record,srn):
+        error_repo.remove({"serviceRequestNumber": srn})
+        error_repo.insert(record)
+
+
 
 # Log config
 dictConfig({

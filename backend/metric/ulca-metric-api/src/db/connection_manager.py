@@ -1,5 +1,5 @@
 import sqlalchemy as db
-from config import MONGO_CONNECTION_URL,MONGO_DB_SCHEMA,MONGO_MODEL_COLLECTION,DRUID_CONNECTION_URL
+from config import MONGO_CONNECTION_URL,MONGO_DB_SCHEMA,MONGO_MODEL_COLLECTION,DRUID_CONNECTION_URL, MONGO_BM_COLLECTION
 import pymongo
 import logging
 import config
@@ -15,6 +15,7 @@ def get_data_store():
 
 
 mongo_instance = None
+mongo_bm_instance = None
 
 class ModelRepo:
     
@@ -46,6 +47,17 @@ class ModelRepo:
         except Exception as e:
             log.exception(f'Exception in repo search: {e}', e)
             return []
+
+    def find(self,query):
+        try:
+            col = self.get_mongo_instance()
+            res = col.find(query)
+            result = []
+            for r in res:
+                result.append(r)
+            return result
+        except Exception as e:
+            log.exception(f'Exception in searching repo: {e}',e)
 
     def count(self, query):
         try:
@@ -87,6 +99,48 @@ class ModelRepo:
         except Exception as e:
             log.exception(f'Exception in repo search: {e}', e)
             return []
+
+class BenchRepo:
+    
+    def __init__(self):
+       pass
+    #method to instantiate mongo client object
+    def instantiate(self):
+        global mongo_bm_instance
+        client = pymongo.MongoClient(MONGO_CONNECTION_URL)
+        mongo_bm_instance = client[MONGO_DB_SCHEMA][MONGO_BM_COLLECTION]
+        return mongo_bm_instance
+
+    #geting the mongo clent object
+    def get_mongo_instance(self):
+        global mongo_bm_instance
+        if not mongo_bm_instance:
+            return self.instantiate()
+        else:
+            return mongo_bm_instance
+
+    def aggregate(self, query):
+        try:
+            col = self.get_mongo_instance()
+            res =   col.aggregate(query) 
+            result = []
+            for record in res:
+                result.append(record)
+            return result
+        except Exception as e:
+            log.exception(f'Exception in repo search: {e}', e)
+            return []
+
+    def count(self, query):
+        try:
+            col = self.get_mongo_instance()
+            res =   col.count(query) 
+            return res
+        except Exception as e:
+            log.exception(f'Exception in repo search: {e}', e)
+            return 0
+
+   
 
 #  Log config
 dictConfig({

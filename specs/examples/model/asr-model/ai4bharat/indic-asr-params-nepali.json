@@ -1,0 +1,111 @@
+{
+    "name": "AI4Bharat IndicWav2Vec ASR Batch - Nepali",
+    "version": "v2.0",
+    "description": "IndicWav2Vec is a multilingual speech model pretrained on 40 Indian langauges. This model represents the largest diversity of Indian languages in the pool of multilingual speech models. We fine-tune this model for downstream ASR for 9 languages and obtain state-of-the-art results on 3 public benchmarks, namely MUCS, MSR and OpenSLR. This model is based on Wav2Vec2.0 large architecture",
+    "refUrl": "https://github.com/AI4Bharat/IndicWav2Vec",
+    "task": {
+        "type": "asr"
+    },
+    "languages": [
+        {
+            "sourceLanguage": "ne"
+        }
+    ],
+    "license": "mit",
+    "domain": [
+        "general"
+    ],
+    "submitter": {
+        "name": "AI4Bharat",
+        "oauthId": {
+            "oauthId": "tahir@cse.iitm.ac.in",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Tahir Javed",
+                "oauthId": {
+                    "oauthId": "tahir@smail.iitm.ac.in",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Sumanth Doddapaneni",
+                "oauthId": {
+                    "oauthId": "dsumanth17@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Kaushal Bhogale",
+                "oauthId": {
+                    "oauthId": "kaushal98b@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Abhigyan Raman",
+                "oauthId": {
+                    "oauthId": "ramanabhigyan@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Gowtham Ramesh",
+                "oauthId": {
+                    "oauthId": "gowtham.ramesh1@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Mitesh Khapra",
+                "oauthId": {
+                    "oauthId": "miteshk@cse.iitm.ac.in",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Pratyush Kumar",
+                "oauthId": {
+                    "oauthId": "pratyush.k.panda@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Anoop Kunchukuttan",
+                "oauthId": {
+                    "oauthId": "anoop.kunchukuttan@gmail.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    },
+    "inferenceEndPoint": {
+        "callbackUrl": "https://asr-api.ai4bharat.org/asr/v1/recognize/ne",
+        "schema": {
+            "taskType": "asr",
+            "modelProcessingType": {
+                "type": "batch"
+            },
+            "request": {
+                "audio": [
+                    {
+                        "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_nepali.wav"
+                    }
+                ],
+                "config": {
+                    "audioFormat": "wav",
+                    "transcriptionFormat": {
+                        "value": "transcript"
+                    },
+                    "language": {
+                        "sourceLanguage": "ne"
+                    }
+                }
+            }
+        }
+    },
+    "trainingDataset": {
+        "description": "Trained on benchmark datasets"
+    }
+}
