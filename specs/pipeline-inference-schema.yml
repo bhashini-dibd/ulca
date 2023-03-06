@@ -59,7 +59,9 @@ components:
           $ref: "#/components/schemas/ListOfPipelines"
         taskSpecifications:
           $ref: '#/components/schemas/TaskSpecifications'
-    
+        apiEndPoints:
+          $ref: '#/components/schemas/ApiEndPoints'
+
     ListOfPipelines:
       type: array
       items: 
@@ -139,3 +141,16 @@ components:
         targetLanguage:
             $ref: >-
               https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+
+    ApiEndPoints:
+      required:
+        - apiKeyGenerationUrl
+        - apiKeyDeletionUrl
+      type: object
+      properties:
+        apiKeyGenerationUrl:
+          type: string
+          format: url
+        apiKeyDeletionUrl:
+          type: string
+          format: url
