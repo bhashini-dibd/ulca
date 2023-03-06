@@ -97,6 +97,11 @@ const Header = (props) => {
     history.push(`${process.env.PUBLIC_URL}${url ? url : urlLink}`);
     handleClose();
   };
+  const handleRedirection= (url) => {
+    console.log(`${process.env.PUBLIC_URL}${url}`)
+    history.push(`${process.env.PUBLIC_URL}${url}`);
+    handleClose();
+  };
 
   const handleChange = (event, newValue) => {
     dispatch(getMenuOption(newValue));
@@ -297,6 +302,14 @@ const Header = (props) => {
                     >
                       Feedback
                     </MenuItem> */}
+                     <MenuItem
+                    className={classes.styledMenu}
+                    onClick={() => {       
+                      handleRedirection("/user/profile");
+                    }}
+                  >
+                    {translate("label.myProfile")}
+                  </MenuItem>
                   <MenuItem
                     className={classes.styledMenu}
                     onClick={() => {

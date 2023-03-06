@@ -38,6 +38,7 @@ import GetMasterDataAPI from './redux/actions/api/Common/getMasterData';
 import { useDispatch } from "react-redux";
 import APITransport from './redux/actions/apitransport/apitransport';
 import DatasetMetrics from "./ui/container/DataSet/DatasetMetrics/DatasetMetrics";
+import MyProfile from "./ui/container/UserManagement/MyProfile";
 
 const PrivateRoute = ({
   path,
@@ -49,6 +50,7 @@ const PrivateRoute = ({
   index,
   ...rest
 }) => {
+  console.log("hiiiii",title,authenticate())
   return (
     <Route
       {...rest}
@@ -301,6 +303,14 @@ export default function App() {
             dontShowHeader={false}
             type={"admin"}
             index={0}
+          />
+           <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/user/profile`}
+            title={"My Profile"}
+            component={MyProfile}
+            authenticate={authenticateUser}
+            currentMenu="user-my-profile"
+            dontShowHeader={false}
           />
           <Route
             path={"*"}
