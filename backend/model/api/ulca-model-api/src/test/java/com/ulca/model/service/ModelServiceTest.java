@@ -157,105 +157,77 @@ class ModelServiceTest {
                          Arguments.of(modelExtended1,null));
     }
 
-	/*
-	 * @ParameterizedTest
-	 * 
-	 * @MethodSource("getModelByModelIdParam") void getModelByModelId(ModelExtended
-	 * modelExtended, ModelListResponseDto modelListResponseDto) {
-	 * 
-	 * ReflectionTestUtils.setField(modelService,"modelConstants",new
-	 * ModelConstants());
-	 * 
-	 * if(modelExtended.getModelId().equalsIgnoreCase("test")) {
-	 * when(modelDao.findById(modelExtended.getModelId())).thenReturn((Optional.of(
-	 * modelExtended)));
-	 * when(benchmarkProcessDao.findByModelIdAndStatus(modelExtended.getModelId(),
-	 * "Completed")) .thenReturn(Collections.singletonList(new BenchmarkProcess()));
-	 * } assertEquals(modelListResponseDto,modelService.getModelByModelId(
-	 * modelExtended.getModelId())); }
-	 */
+	
+	  @ParameterizedTest
+	  
+	  @MethodSource("getModelByModelIdParam") void getModelByModelId(ModelExtended
+	  modelExtended, ModelListResponseDto modelListResponseDto) {
+	  
+	  ReflectionTestUtils.setField(modelService,"modelConstants",new
+	  ModelConstants());
+	  
+	  if(modelExtended.getModelId().equalsIgnoreCase("test")) {
+	  when(modelDao.findById(modelExtended.getModelId())).thenReturn((Optional.of(
+	  modelExtended)));
+	  when(benchmarkProcessDao.findByModelIdAndStatus(modelExtended.getModelId(),
+	  "Completed")) .thenReturn(Collections.singletonList(new BenchmarkProcess()));
+	  } assertEquals(modelListResponseDto,modelService.getModelByModelId(
+	  modelExtended.getModelId())); }
+	 
 
-    private static Stream<Arguments> uploadModelParam(){
-        byte[] fileContent = ("{\n" +
-                "   \"name\": \"test\",\n" +
-                "   \"version\": \"v1.0\",\n" +
-                "   \"description\": \"test\",\n" +
-                "   \"refUrl\": \"test\",\n" +
-                "   \"task\": {\n" +
-                "      \"type\" : \"translation\"\n" +
-                "   },\n" +
-                "   \"languages\": [\n" +
-                "      {\n" +
-                "         \"sourceLanguage\": \"en\",\n" +
-                "          \"targetLanguage\": \"hi\"\n" +
-                "      }\n" +
-                "   ],\n" +
-                "   \"license\": \"mit\",\n" +
-                "   \"domain\": [\n" +
-                "      \"general\"\n" +
-                "   ],\n" +
-                "   \"submitter\": {\n" +
-                "       \"name\": \"test\"\n" +
-                "       },\n" +
-                "   \"inferenceEndPoint\": {\n" +
-                "      \"callbackUrl\": \"test+\",\n" +
-                "      \"schema\": {\n" +
-                "         \"taskType\": \"translation\",\n" +
-                "         \"request\": {\n" +
-                "            \"config\": {\n" +
-                "               \"modelId\": \"103\",\n" +
-                "               \"language\": {\n" +
-                "                  \"sourceLanguage\": \"en\",\n" +
-                "                  \"targetLanguage\": \"hi\"\n" +
-                "               }\n" +
-                "            }\n" +
-                "         }\n" +
-                "      }\n" +
-                "   },\n" +
-                "   \"trainingDataset\": {\n" +
-                "      \"datasetId\": \"2398749282\",\n" +
-                "      \"description\": \"test\"\n" +
-                "   }\n" +
-                "}\n").getBytes(StandardCharsets.UTF_8);
+	
+	  private static Stream<Arguments> uploadModelParam(){ byte[] fileContent =
+	  ("{\n" + "   \"name\": \"test\",\n" + "   \"version\": \"v1.0\",\n" +
+	  "   \"description\": \"test\",\n" + "   \"refUrl\": \"test\",\n" +
+	  "   \"task\": {\n" + "      \"type\" : \"translation\"\n" + "   },\n" +
+	  "   \"languages\": [\n" + "      {\n" +
+	  "         \"sourceLanguage\": \"en\",\n" +
+	  "          \"targetLanguage\": \"hi\"\n" + "      }\n" + "   ],\n" +
+	  "   \"license\": \"mit\",\n" + "   \"domain\": [\n" + "      \"general\"\n" +
+	  "   ],\n" + "   \"submitter\": {\n" + "       \"name\": \"test\"\n" +
+	  "       },\n" + "   \"inferenceEndPoint\": {\n" +
+	  "      \"callbackUrl\": \"test+\",\n" + "      \"schema\": {\n" +
+	  "         \"taskType\": \"translation\",\n" + "         \"request\": {\n" +
+	  "            \"config\": {\n" + "               \"modelId\": \"103\",\n" +
+	  "               \"language\": {\n" +
+	  "                  \"sourceLanguage\": \"en\",\n" +
+	  "                  \"targetLanguage\": \"hi\"\n" + "               }\n" +
+	  "            }\n" + "         }\n" + "      }\n" + "   },\n" +
+	  "   \"trainingDataset\": {\n" + "      \"datasetId\": \"2398749282\",\n" +
+	  "      \"description\": \"test\"\n" + "   }\n" +
+	  "}\n").getBytes(StandardCharsets.UTF_8);
+	  
+	  MockMultipartFile filePart = new MockMultipartFile("file", "test", "JSON",
+	  fileContent); ModelExtended modelExtended = new ModelExtended();
+	  modelExtended.setModelId("test"); modelExtended.setName("test");
+	  modelExtended.setDescription("test"); modelExtended.setRefUrl("test");
+	  modelExtended.setLicense(License.fromValue("mit")); Domain domain = new
+	  Domain(); domain.add("general"); modelExtended.setDomain(domain);
+	  
+	  LanguagePairs languagePairs = new LanguagePairs(); LanguagePair languagePair
+	  = new LanguagePair(); languagePair.setSourceLanguage(SupportedLanguages.EN);
+	  languagePair.setTargetLanguage(SupportedLanguages.HI);
+	  
+	  languagePairs.add(languagePair); modelExtended.setLanguages(languagePairs);
+	  
+	  Submitter submitter = new Submitter(); submitter.setName("test");
+	  modelExtended.setSubmitter(submitter);
+	  
+	  TrainingDataset trainingDataset = new TrainingDataset();
+	  trainingDataset.setDatasetId("2398749282");
+	  trainingDataset.setDescription("test");
+	  modelExtended.setTrainingDataset(trainingDataset);
+	  
+	  ModelTask modelTask = new ModelTask();
+	  modelTask.setType(SupportedTasks.TRANSLATION);
+	  modelExtended.setTask(modelTask); UploadModelResponse response = new
+	  UploadModelResponse("Model Saved Successfully",modelExtended);
+	  
+	  
+	  return Stream.of(Arguments.of(filePart,"test",response)); }
+	 
 
-        MockMultipartFile filePart = new MockMultipartFile("file", "test", "JSON", fileContent);
-        ModelExtended modelExtended = new ModelExtended();
-        modelExtended.setModelId("test");
-        modelExtended.setName("test");
-        modelExtended.setDescription("test");
-        modelExtended.setRefUrl("test");
-        modelExtended.setLicense(License.fromValue("mit"));
-        Domain domain = new Domain();
-        domain.add("general");
-        modelExtended.setDomain(domain);
-
-        LanguagePairs languagePairs = new LanguagePairs();
-        LanguagePair languagePair = new LanguagePair();
-        languagePair.setSourceLanguage(SupportedLanguages.EN);
-        languagePair.setTargetLanguage(SupportedLanguages.HI);
-
-        languagePairs.add(languagePair);
-        modelExtended.setLanguages(languagePairs);
-
-        Submitter submitter = new Submitter();
-        submitter.setName("test");
-        modelExtended.setSubmitter(submitter);
-
-        TrainingDataset trainingDataset = new TrainingDataset();
-        trainingDataset.setDatasetId("2398749282");
-        trainingDataset.setDescription("test");
-        modelExtended.setTrainingDataset(trainingDataset);
-
-        ModelTask modelTask = new ModelTask();
-        modelTask.setType(SupportedTasks.TRANSLATION);
-        modelExtended.setTask(modelTask);
-        UploadModelResponse response = new UploadModelResponse("Model Saved Successfully",modelExtended);
-
-
-        return Stream.of(Arguments.of(filePart,"test",response));
-    }
-
-    /*
+    
     @ParameterizedTest
     @MethodSource("uploadModelParam")
     void uploadModel(MultipartFile multipartFile,String userId,UploadModelResponse response) throws Exception {
@@ -263,7 +235,7 @@ class ModelServiceTest {
 
         assertEquals(modelService.uploadModel(multipartFile,userId),response);
     }
-*/
+
 	/*
 	 * private static Stream<Arguments> searchModelParam(){ ModelSearchRequest
 	 * request = new ModelSearchRequest(); request.setTask("translation");

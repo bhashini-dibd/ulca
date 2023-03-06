@@ -155,45 +155,44 @@ class BenchmarkServiceTest {
 
     }
 
-    @Test
-    void listByTaskID() {
-        BenchmarkListByModelRequest request = new BenchmarkListByModelRequest();
-        request.setModelId("test");
-
-        ModelExtended modelExtended = new ModelExtended();
-        LanguagePairs languagePairs = new LanguagePairs();
-        LanguagePair languagePair = new LanguagePair();
-        languagePair.setSourceLanguage(SupportedLanguages.EN);
-        languagePair.setTargetLanguage(SupportedLanguages.HI);
-        languagePairs.add(languagePair);
-        modelExtended.setLanguages(languagePairs);
-
-        Benchmark benchmark = new Benchmark();
-        benchmark.setBenchmarkId("test");
-
-        ModelTask modelTask = new ModelTask();
-        modelTask.setType(SupportedTasks.TRANSLATION);
-        benchmark.setTask(modelTask);
-
-        BenchmarkProcess benchmarkProcess = new BenchmarkProcess();
-        benchmarkProcess.setBenchmarkProcessId("test");
-        benchmarkProcess.setStatus("test");
-
-        ModelConstants modelConstants = new ModelConstants();
-
-
-        ReflectionTestUtils.setField(benchmarkService,"modelConstants",modelConstants);
-
-
-        when(modelDao.findByModelId("test")).thenReturn(modelExtended);
-        when(benchmarkDao.findByTaskAndLanguages(modelExtended.getTask(),languagePair)).thenReturn(Collections.singletonList(benchmark));
-        when(benchmarkProcessDao.findByModelIdAndBenchmarkDatasetId("test","test")).thenReturn(Collections.singletonList(benchmarkProcess));
-
-       assertInstanceOf(BenchmarkListByModelResponse.class,benchmarkService.listByTaskID(request));
-
-
-    }
-
+	
+	  @Test void listByTaskID() { BenchmarkListByModelRequest request = new
+	  BenchmarkListByModelRequest(); request.setModelId("test");
+	  
+	  ModelExtended modelExtended = new ModelExtended(); LanguagePairs
+	  languagePairs = new LanguagePairs(); LanguagePair languagePair = new
+	  LanguagePair(); languagePair.setSourceLanguage(SupportedLanguages.EN);
+	  languagePair.setTargetLanguage(SupportedLanguages.HI);
+	  languagePairs.add(languagePair); modelExtended.setLanguages(languagePairs);
+	  
+	  Benchmark benchmark = new Benchmark(); benchmark.setBenchmarkId("test");
+	  
+	  ModelTask modelTask = new ModelTask();
+	  modelTask.setType(SupportedTasks.TRANSLATION); benchmark.setTask(modelTask);
+	  
+	  BenchmarkProcess benchmarkProcess = new BenchmarkProcess();
+	  benchmarkProcess.setBenchmarkProcessId("test");
+	  benchmarkProcess.setStatus("test");
+	  
+	  ModelConstants modelConstants = new ModelConstants();
+	  
+	  
+	  ReflectionTestUtils.setField(benchmarkService,"modelConstants",modelConstants
+	  );
+	  
+	  
+	  when(modelDao.findByModelId("test")).thenReturn(modelExtended);
+	  when(benchmarkDao.findByTaskAndLanguages(modelExtended.getTask(),languagePair
+	  )).thenReturn(Collections.singletonList(benchmark));
+	  when(benchmarkProcessDao.findByModelIdAndBenchmarkDatasetId("test","test")).
+	  thenReturn(Collections.singletonList(benchmarkProcess));
+	  
+	  assertInstanceOf(BenchmarkListByModelResponse.class,benchmarkService.
+	  listByTaskID(request));
+	  
+	  
+	  }
+	 
     private static Stream<Arguments> searchBenchmarkParam(){
         BenchmarkSearchRequest request = new BenchmarkSearchRequest();
         request.setTask("translation");

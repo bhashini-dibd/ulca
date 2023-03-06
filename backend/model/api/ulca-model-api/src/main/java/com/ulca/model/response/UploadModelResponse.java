@@ -10,6 +10,7 @@ import lombok.Data;
 public class UploadModelResponse {
 
 	String message;
-	ModelExtended data;
+	//ModelExtended data;
+	Object data;
 	
 }
