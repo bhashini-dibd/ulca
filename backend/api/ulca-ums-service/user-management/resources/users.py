@@ -183,7 +183,7 @@ class GetApiKey(Resource):
         user = body['userID']
         userAPIKeys = UserUtils.get_user_api_keys(user)
         if isinstance(userAPIKeys, list) and len(userAPIKeys) != 0:
-            res = CustomResponse(Status.SUCCESS_USER_APIKEY.value, userAPIKeys)
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
             return res.getresjson(), 200
         else:
             return post_error("400", "User API Key is not available")
@@ -199,16 +199,18 @@ class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
         userapikey = body["ulcaApiKey"]
         revokekey = UserUtils.revoke_userApiKey(userid, userapikey)
         if revokekey["nModified"] == 1:
-            res = CustomResponse(Status.SUCCESS_USER_APIKEY.value, "SUCCESS")
+            res = CustomResponse(Status.SUCCESS_REVOKE_APIKEY.value, "SUCCESS")
             return res.getresjson(), 200
         else:
-            return post_error("400", "Unable to revoke userApiKey. Please check the userID and/or userApiKey.")
+            return post_error("400", "Unable to revoke ulcaApiKey. Please check the userID and/or ulcaApiKey.")
 
 class GenerateApiKey(Resource):
     def post(self):
         body = request.get_json()
-        if "userID" not in body.keys() and "appName" not in body.keys():
-            return post_error("400", "Please provide appName, userID and serviceProviderKeys", None), 400
+        if "userID" not in body.keys(): 
+            return post_error("400", "Please provide userID", None), 400
+        if "appName" not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
        
         serviceProviderKey = []
         user = body["userID"]
