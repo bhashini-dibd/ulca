@@ -1,3 +1,12 @@
+FirstTaskList: 
+{
+    srcLang 
+    targetLang
+}
+{
+
+}
+
 First task: ASR
 Source : [en]
 Source : [hi]
@@ -23,7 +32,14 @@ If number of tasks > 1:
 next_task_index = 1
 final_task_index = 2
 
-queue = empty
+srcLang = [en]
+tgtLang = [hi]
+
+srcLang = [en]
+tgtLang = [or]
+
+srcLang = [en]
+tgtLang = [hi,or]
 
 sourceLanguages = [list of source languages for first task]
 targetLanguages = [list of target languages for first task]
