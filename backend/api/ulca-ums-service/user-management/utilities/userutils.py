@@ -596,8 +596,8 @@ class UserUtils:
             coll = db.get_db()[USR_MONGO_COLLECTION]
             response = coll.find_one({"userID": userId})
             if isinstance(response,dict):
-                if 'userApiKey' in response.keys() and isinstance(response['userApiKey'],list):
-                    return [k for d in response['userApiKey'] for k in d.keys()] #Return the list of user api keys
+                if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                    return response['apiKeyDetails'] #Return the list of user api keys
                 else:
                     return [] #If user doesn't have any api keys
             else:
@@ -606,28 +606,15 @@ class UserUtils:
         except Exception as e:
             log.exception("Not a valid userId")
             return post_error("error processing ULCA userId:{}".format(str(e)),None)
-    
-    @staticmethod
-    def get_user_de_api_keys(userId):
-        try:
-            coll = db.get_db()[USR_MONGO_COLLECTION]
-            response = coll.find_one({"userID": userId})
-            if isinstance(response,dict):
-                if 'userApiKey' in response.keys() and isinstance(response['userApiKey'],list) and len(response["userApiKey"]) < MAX_API_KEY :
-                    return response["userApiKey"] #Return the list of user api keys
-                else:
-                    return post_error("Not Valid.","Provide valid userApiKey",None) #If user doesn't have any api keys
-            else:
-                log.info("Not a valid userId")
-                return post_error("Not Valid","This userId address is not registered with ULCA",None)
-        except Exception as e:
-            log.exception("Not a valid userId")
-            return post_error("error processing ULCA userId:{}".format(str(e)),None)
 
     @staticmethod
-    def insert_generated_user_api_key(user,appName,apikey):
+    def insert_generated_user_api_key(user,appName,apikey,serviceProviderKey):
         collection = db.get_db()[USR_MONGO_COLLECTION]
-        details = collection.update({"userID":user}, {"$push":{"userApiKey":{apikey: appName}}})
+        # if len(serviceProviderKey) == 0:
+        #     spk = []
+        # elif len(serviceProviderKey) >1:
+        #     spk = serviceProviderKey
+        details = collection.update({"userID":user}, {"$push": {"apiKeyDetails":{"appName":appName,"ulcaApiKey":apikey,"serviceProviderKeys":serviceProviderKey}}})
         return details
 
 
@@ -635,7 +622,11 @@ class UserUtils:
     def revoke_userApiKey(userid, userapikey):
         collection = db.get_db()[USR_MONGO_COLLECTION]
         log.info(f"userapikey {userapikey}")
-        revoke = collection.update({"userID":userid}, {"$pull":{"userApiKey": {userapikey : {"$exists":True}}}})
+        reoke = collection.find({"userID":userid})
+        for i in reoke:
+           log.info(i)
+        revoke = collection.update({"userID":userid}, {"$pull":{"apiKeyDetails": {"ulcaApiKey" : userapikey}}})
+        log.info(revoke)
         return json.loads(json_util.dumps(revoke))
 
 
