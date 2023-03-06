@@ -60,7 +60,7 @@ class AudioMetadataCheck(BaseValidator):
                         error_message = 'Sampling rate does not match the specified value: Expected Value - ' + str(metadata.streaminfo.sample_rate/1000) + ', Specified Value - ' + str(request['record']['samplingRate'])
                         return {"message": error_message, "code": "INCORRECT_SAMPLING_RATE", "status": "FAILED"}
                 if 'bitsPerSample' in request['record'].keys() and request['record']['bitsPerSample'] != None:
-                    if metadata.streaminfo.bit_depth != w2n.word_to_num(request['record']['bitsPerSample']):
+                    if metadata.filepath.split('.')[-1] != 'mp3' and metadata.streaminfo.bit_depth != w2n.word_to_num(request['record']['bitsPerSample']):
                         error_message = 'Bits per sample does not match the specified value: Expected Value - ' + str(metadata.streaminfo.bit_depth) + ', Specified Value - ' + str(request['record']['bitsPerSample'])
                         return {"message": error_message, "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
 

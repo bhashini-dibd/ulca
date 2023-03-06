@@ -12,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * 
  * @JsonSubTypes({
  * 
- * @JsonSubTypes.Type(value = TranslationBenchmarkResult.class, name =Gg
+
+ * @JsonSubTypes.Type(value = TranslationBenchmarkResult.class, name =
  * "TranslationBenchmarkResult"),
  * 
  * @JsonSubTypes.Type(value = TransliterationBenchmarkResult.class, name =

@@ -3,7 +3,7 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.TxtLangDetectionConfig;
+import io.swagger.model.LangDetectionConfig;
 import io.swagger.model.TxtLanguagesList;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-15T10:08:37.438508852Z[GMT]")
 
 
 public class TxtLangDetectionResponse   {
@@ -23,7 +23,7 @@ public class TxtLangDetectionResponse   {
   private TxtLanguagesList output = null;
 
   @JsonProperty("config")
-  private TxtLangDetectionConfig config = null;
+  private LangDetectionConfig config = null;
 
   public TxtLangDetectionResponse output(TxtLanguagesList output) {
     this.output = output;
@@ -46,7 +46,7 @@ public class TxtLangDetectionResponse   {
     this.output = output;
   }
 
-  public TxtLangDetectionResponse config(TxtLangDetectionConfig config) {
+  public TxtLangDetectionResponse config(LangDetectionConfig config) {
     this.config = config;
     return this;
   }
@@ -58,11 +58,11 @@ public class TxtLangDetectionResponse   {
   @Schema(description = "")
   
     @Valid
-    public TxtLangDetectionConfig getConfig() {
+    public LangDetectionConfig getConfig() {
     return config;
   }
 
-  public void setConfig(TxtLangDetectionConfig config) {
+  public void setConfig(LangDetectionConfig config) {
     this.config = config;
   }
 

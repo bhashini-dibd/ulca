@@ -39,12 +39,24 @@ class TextLanguageCheck(BaseValidator):
                 # Skipping for few languages as the current model doesnt support them
                 if lang in ['brx', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt', 'sd','unknown','mixed']:
                     continue
+                #workaround to fix en language check for glossary dataset
+                if request["datasetType"] == dataset_type_glossary and lang == 'en':
+                    en_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    temp = list(filter(lambda x: x in en_chars, text))
+                    text_modified = "".join(temp)
+                    if len(text_modified) < len(text)/3:
+                        return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
+                    else:
+                        continue
 
                 try:
                     detector = Detector(text)
+                    log.info(f"Text Language Detection: Text {text}")
                     # The language detection model does not support these languages,
                     # So check for closest possible language to rule out non-Indic languages
                     # TODO: Temporary implementation for now, need better solution
+                    log.info(f"Detector Language Code: Text {detector.language.code}")
+                    log.info(f"Detector Language Confidence: Text {detector.language.confidence}")
                     if lang in ['doi', 'kok', 'mai']:
                         if detector.language.code not in ['hi', 'mr', 'bh', 'ne', 'sa'] or detector.language.confidence<50:
                             return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
