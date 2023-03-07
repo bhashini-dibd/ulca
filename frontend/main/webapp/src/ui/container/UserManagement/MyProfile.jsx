@@ -1,5 +1,5 @@
 import DataTable from "../../components/common/DataTable";
-import { withStyles, Button, Typography, Grid, Box, CircularProgress , TextField,} from "@material-ui/core";
+import { withStyles, Button, Typography, Grid, Box, CircularProgress , TextField, TableCell, Table,} from "@material-ui/core";
 import Search from "../../components/Datasets&Model/Search";
 import { translate } from "../../../assets/localisation";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -17,6 +17,10 @@ import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiK
 import RevokeApiKeyAPI from "../../../redux/actions/api/UserManagement/RevokeApiKey";
 import Snackbar from '../../components/common/Snackbar';
 import RevokeDialog from "../../components/common/RevokeDialog";
+import TableRow from "@material-ui/core/TableRow";
+import TableHead from "@material-ui/core/TableHead";
+import TableBody from "@material-ui/core/TableBody";
+
 
 
 const MyProfile = (props) => {
@@ -257,6 +261,13 @@ const handleSubmitGenerateApiKey =  async() =>{
       },
     },
     {
+      name:"serviceProviderKeys",
+      label: "Service Provider Keys",
+      options:{
+        display: "excluded"
+      }
+    },
+    {
       name: "action",
       label: "Action",
       options: {
@@ -285,7 +296,6 @@ const handleSubmitGenerateApiKey =  async() =>{
       },
     },
   ];
-  
   const options = {
     textLabels: {
       body: {
@@ -308,9 +318,61 @@ const handleSubmitGenerateApiKey =  async() =>{
     download: false,
     search: false,
     filter: false,
-    expandableRowsHeader: false,
-    expandableRowsOnClick: true,
-    expandableRows: false,
+    expandableRowsOnClick: false,
+    expandableRows: true,
+    displaySelectToolbar: false,
+    disableToolbarSelect: "none",
+    renderExpandableRow: (rowData, rowMeta) => {
+      const data = rowData[2];
+      if(data.length)
+        return (
+          <>
+          <TableRow>
+            <TableCell colSpan={5}>
+              <>
+              <Box>
+                  <Table size="small" aria-label="purchases">
+                  <TableHead>
+                      <TableCell>Service Provider Name</TableCell>
+                      <TableCell>Inference API Key Name</TableCell>
+                      <TableCell>Inference API Key Value</TableCell>
+                      <TableCell>Action</TableCell>
+                  </TableHead>
+                  <TableBody>
+                    {
+                      data.map((row,i)=>{
+                        return (
+                          <TableRow
+                          style={{
+                            backgroundColor: "rgba(254, 191, 44, 0.1)",
+                          }}
+                          key={i}
+                          >
+                            <TableCell>{row?.serviceProviderName}</TableCell>
+                            <TableCell>{row?.inferenceApiKey?.name}</TableCell>
+                            <TableCell>{row?.inferenceApiKey?.value}</TableCell>
+                            <TableCell>
+                              <Button
+                                variant="contained"
+                                className={classes.myProfileActionBtn}
+                                style={{color:"red"}}>
+                                  Revoke
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      })
+                    }
+                  </TableBody>
+                </Table>
+              </Box>
+              </>
+            </TableCell>
+          </TableRow>
+          </>
+        );
+      return <></>
+    }
   };
 
 
