@@ -51,6 +51,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
@@ -1111,7 +1112,7 @@ public class ModelService {
 
 	}
 
-	public String getModelsPipeline(PipelineRequest pipelineRequest) throws Exception {
+	public ObjectNode getModelsPipeline(PipelineRequest pipelineRequest) throws Exception {
 		//log.info("File :: " + file.toString());
 		//PipelineRequest pipelineRequest = getPipelineRequest(file);
 		log.info("pipelineRequest :: " + pipelineRequest);
@@ -1602,7 +1603,9 @@ public class ModelService {
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		String json = mapper.writeValueAsString(pipelineResponse);
 		//log.info("String JSON :: "+json);
-		return json;
+		
+        ObjectNode node = mapper.valueToTree(pipelineResponse);
+		return node;
 	}
 
 	public static String checkModel(MultipartFile file) {

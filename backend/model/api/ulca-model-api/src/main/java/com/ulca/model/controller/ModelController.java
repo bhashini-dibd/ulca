@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ulca.model.dao.ModelFeedback;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
@@ -152,7 +153,7 @@ public class ModelController {
 	 */
 	
 	@PostMapping("/getModelsPipeline")
-	public String getModelsPipeline(@RequestBody PipelineRequest pipelineRequest) throws Exception {
+	public ObjectNode getModelsPipeline(@RequestBody PipelineRequest pipelineRequest) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");
 		return modelService.getModelsPipeline(pipelineRequest);
 	}
