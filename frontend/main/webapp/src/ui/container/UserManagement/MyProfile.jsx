@@ -167,7 +167,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             <FilterListIcon className={classes.iconStyle} />
           </Button>
         </Grid>
-        <Grid
+        {/* <Grid
           item
           xs={2}
           sm={2}
@@ -187,7 +187,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             <FilterListIcon className={classes.iconStyle} />
             {translate("button.filter")}
           </Button>
-        </Grid>
+        </Grid> */}
        
         <Grid
           item
@@ -354,12 +354,12 @@ const handleSubmitGenerateApiKey =  async() =>{
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Button
-              variant="contained"
+              variant="text"
               color="primary"
               style={{ borderRadius: "20px", marginTop: "20px",marginRight:"10px" }}
               onClick={handleClose}
             >
-              Close
+              Cancel
             </Button>
             <Button
               variant="contained"
