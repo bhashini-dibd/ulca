@@ -186,6 +186,15 @@ public class ModelService {
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
 
+	@Value("${userId}")
+	private String userId;
+
+	@Value("${ulca.apikey1}")
+	private String ulcaapikey1;
+
+	@Value("${apikey2}")
+	private String ulcaapikey2;
+
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
 
@@ -1160,15 +1169,15 @@ public class ModelService {
 		
 		
 		   TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = new TranslationTaskInferenceInferenceApiKey();
-		String dbUserId="6a73afa4fc774dcdb28d5fff944511f6";
+		String dbUserId=userId;
 		
 		
 		String inferenceApiKeyName1="Authorization";
-		String ulcaApiKey1="5293e934c3-986e-40c0-bebb-8270cffacaca";
+		String ulcaApiKey1=ulcaapikey1;
 		String inferenceApiKeyValue1=aessecretkey1;
 		
 		String inferenceApiKeyName2="Authorization";
-		String ulcaApiKey2 ="35764737a9-3a15-4e9c-ad95-c7b69fe22qqq";
+		String ulcaApiKey2 =ulcaapikey2;
 	    String inferenceApiKeyValue2=aessecretkey2;
 		
 		if(userID.equals(dbUserId)) {
