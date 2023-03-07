@@ -152,7 +152,7 @@ public class ModelController {
 	 */
 	
 	@PostMapping("/getModelsPipeline")
-	public ModelPipelineResponse getModelsPipeline(@RequestBody PipelineRequest pipelineRequest) throws Exception {
+	public String getModelsPipeline(@RequestBody PipelineRequest pipelineRequest) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");
 		return modelService.getModelsPipeline(pipelineRequest);
 	}

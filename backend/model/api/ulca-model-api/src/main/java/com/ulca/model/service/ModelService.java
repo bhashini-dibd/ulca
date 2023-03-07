@@ -1114,7 +1114,7 @@ public class ModelService {
 
 	}
 
-	public ModelPipelineResponse getModelsPipeline(PipelineRequest pipelineRequest) throws Exception {
+	public String getModelsPipeline(PipelineRequest pipelineRequest) throws Exception {
 		//log.info("File :: " + file.toString());
 		//PipelineRequest pipelineRequest = getPipelineRequest(file);
 		log.info("pipelineRequest :: " + pipelineRequest);
@@ -1608,12 +1608,14 @@ public class ModelService {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
-		//mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		String json = mapper.writeValueAsString(pipelineResponse);
 		//json = json.replaceAll("\"","");
 		//PipelineResponse responsePipeline = mapper.readValue(json,PipelineResponse.class);
 		//log.info("String JSON :: "+json);
-		return new ModelPipelineResponse("Pipeline Response", json);
+
+		return json;
+		//return new ModelPipelineResponse("Pipeline Response", json);
 	}
 
 	public static String checkModel(MultipartFile file) {
