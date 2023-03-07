@@ -17,7 +17,10 @@ class CustomResponse:
 
     def __init__(self, statuscode, data, count=0):
         self.statuscode = statuscode
-        self.statuscode['data'] = data
+        if data != "":
+            self.statuscode['data'] = data
+        elif data == "":
+            self.statuscode['data'] = " "
         self.statuscode['count'] = count
 
     def getres(self):

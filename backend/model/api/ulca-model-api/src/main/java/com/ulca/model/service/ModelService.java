@@ -21,11 +21,12 @@ import java.util.Set;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.apache.commons.io.FilenameUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONString;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -143,8 +144,10 @@ import io.swagger.pipelinerequest.LanguageSchema;
 import lombok.extern.slf4j.Slf4j;
 import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mongodb.client.model.geojson.LineString;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Slf4j
@@ -1273,7 +1276,9 @@ public class ModelService {
 
 				sourceLanguages.clear();
 				targetLanguages.clear();
-				
+
+				HashSet<TranslationResponseConfig> hashConfig = new HashSet<TranslationResponseConfig>();
+
 				List<TranslationResponseConfig> config = new ArrayList<TranslationResponseConfig>();
 				for(ModelExtended each_model : translationModels) 
 				{
@@ -1289,10 +1294,12 @@ public class ModelService {
 						translationResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
-					
-					config.add(translationResponseConfig);
+					hashConfig.add(translationResponseConfig);
 				}
 				
+				for(TranslationResponseConfig each_config : hashConfig)
+					config.add(each_config);
+			
 				log.info(" SourceLanguages at end of Translation :: "+sourceLanguages);
 				log.info(" TargetLanguages at end of Translation :: "+targetLanguages);
 				sourceLanguages = targetLanguages;
@@ -1374,6 +1381,8 @@ public class ModelService {
 				sourceLanguages.clear();
 				targetLanguages.clear();
 
+				HashSet<ASRResponseConfig> hashConfig = new HashSet<ASRResponseConfig>();
+
 				for(ModelExtended each_model : asrModels) 
 				{
 					
@@ -1388,8 +1397,16 @@ public class ModelService {
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
 					asrResponseConfig.setDomain(each_model.getDomain());
-					config.add(asrResponseConfig);
+
+					
+					hashConfig.add(asrResponseConfig);
 				}
+
+				for(ASRResponseConfig each_config : hashConfig)
+				{
+					config.add(each_config);
+				}
+
 				if(config.size() == 0)
 					throw new PipelineValidationException("Languages are not supported within this pipeline");
 
@@ -1469,6 +1486,8 @@ public class ModelService {
 				sourceLanguages.clear();
 				targetLanguages.clear();
 				
+				HashSet<TTSResponseConfig> hashConfig = new HashSet<TTSResponseConfig>();
+
 				for(ModelExtended each_model : ttsModels) 
 				{
 					
@@ -1483,10 +1502,13 @@ public class ModelService {
 						ttsResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
-			
-					config.add(ttsResponseConfig);
+					hashConfig.add(ttsResponseConfig);
 
 				}
+
+				for(TTSResponseConfig each_config : hashConfig)
+					config.add(each_config);
+
 				if(config.size() == 0)
 					throw new PipelineValidationException("Languages are not supported within this pipeline");
 
@@ -1618,11 +1640,11 @@ public class ModelService {
 							{
 								if(prev_target_languages.get(i) == each_ttsconfig.getLanguage().getSourceLanguage())
 								{
-									prev_target_languages.add(each_ttsconfig.getLanguage().getSourceLanguage());
+										prev_target_languages.add(each_ttsconfig.getLanguage().getSourceLanguage());
 								}
 							}
 						}		
-						
+
 						next_task_index ++;
 						prev_target_languages.remove(0);
 						targetLangSize = prev_target_languages.size();
@@ -1630,7 +1652,12 @@ public class ModelService {
 							break;
 					}
 				}
-				for(SupportedLanguages each_target_language : prev_target_languages)
+				HashSet<SupportedLanguages> target_lang_hashSet = new HashSet<SupportedLanguages>();
+				for(SupportedLanguages each_lang : prev_target_languages) 
+				{
+					target_lang_hashSet.add(each_lang);
+				}
+				for(SupportedLanguages each_target_language : target_lang_hashSet)
 				{
 					languageSchema.addTargetLanguageListItem(each_target_language);
 					//TODO TEMP FIX: If multiTaskList has same source language as language schema, don't add it.
@@ -1644,13 +1671,16 @@ public class ModelService {
 						multiTaskList.add(languageSchema);
 					pipelineResponse.setLanguages(multiTaskList);
 				}
-				}
+			}
 		}
 
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		String json = mapper.writeValueAsString(pipelineResponse);
+		//json = json.replaceAll("\"","");
+		//PipelineResponse responsePipeline = mapper.readValue(json,PipelineResponse.class);
 		//log.info("String JSON :: "+json);
 		
         ObjectNode node = mapper.valueToTree(pipelineResponse);

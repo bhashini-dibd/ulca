@@ -96,7 +96,7 @@ public class TransliterationBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,callBackUrl);
+			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,inferenceAPIEndPoint);
 
 			transliteration = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
 			return transliteration;

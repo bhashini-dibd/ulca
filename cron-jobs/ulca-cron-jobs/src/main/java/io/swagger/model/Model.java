@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
  * Model
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-15T10:08:37.438508852Z[GMT]")
 
 
 public class Model   {
@@ -37,9 +37,8 @@ public class Model   {
   @JsonProperty("task")
   private ModelTask task = null;
 
-  // this has been manually modified to support list of LanguagePair
   @JsonProperty("languages")
-  private LanguagePairs languages = null;
+  private AllOfModelLanguages languages = null;
 
   @JsonProperty("license")
   private License license = null;
@@ -159,7 +158,7 @@ public class Model   {
     this.task = task;
   }
 
-  public Model languages(LanguagePairs languages) {
+  public Model languages(AllOfModelLanguages languages) {
     this.languages = languages;
     return this;
   }
@@ -171,11 +170,11 @@ public class Model   {
   @Schema(required = true, description = "")
       @NotNull
 
-    public LanguagePairs getLanguages() {
+    public AllOfModelLanguages getLanguages() {
     return languages;
   }
 
-  public void setLanguages(LanguagePairs languages) {
+  public void setLanguages(AllOfModelLanguages languages) {
     this.languages = languages;
   }
 
