@@ -25,22 +25,22 @@ const RevokeDialog = ({ open, handleClose, submit }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions >
-        <Button
-          variant="text"
-          onClick={handleClose}
-          style={{ borderRadius: "6px",color:"#042B91" }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => submit()}
-          autoFocus
-          style={{lineHeight: "1", borderRadius: "8px",height:"35px" }}
-        >
-          Delete
-        </Button>
+      <Button
+              variant="text"
+              color="primary"
+              style={{ borderRadius: "20px", marginTop: "10px",marginRight:"8px", marginBottom: "10px" }}
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ borderRadius: "20px", marginTop: "10px", marginRight:"8px", marginBottom: "10px"}}
+              onClick={() => submit()}
+            >
+              Revoke
+            </Button>
       </DialogActions>
     </Dialog>
   );
