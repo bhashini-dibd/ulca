@@ -21,11 +21,12 @@ import java.util.Set;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.apache.commons.io.FilenameUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONString;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -141,8 +142,10 @@ import io.swagger.pipelinerequest.LanguageSchema;
 import lombok.extern.slf4j.Slf4j;
 import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mongodb.client.model.geojson.LineString;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Slf4j
@@ -1111,7 +1114,7 @@ public class ModelService {
 
 	}
 
-	public String getModelsPipeline(PipelineRequest pipelineRequest) throws Exception {
+	public ModelPipelineResponse getModelsPipeline(PipelineRequest pipelineRequest) throws Exception {
 		//log.info("File :: " + file.toString());
 		//PipelineRequest pipelineRequest = getPipelineRequest(file);
 		log.info("pipelineRequest :: " + pipelineRequest);
@@ -1605,9 +1608,12 @@ public class ModelService {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
+		//mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		String json = mapper.writeValueAsString(pipelineResponse);
+		//json = json.replaceAll("\"","");
+		//PipelineResponse responsePipeline = mapper.readValue(json,PipelineResponse.class);
 		//log.info("String JSON :: "+json);
-		return json;
+		return new ModelPipelineResponse("Pipeline Response", json);
 	}
 
 	public static String checkModel(MultipartFile file) {
