@@ -1157,7 +1157,7 @@ public class ModelService {
 		
 		
 		String inferenceApiKeyName1="Authorization";
-		String ulcaApiKey1="293e934c3-986e-40c0-bebb-8270cffacaca";
+		String ulcaApiKey1="5293e934c3-986e-40c0-bebb-8270cffacaca";
 		String inferenceApiKeyValue1="b4be0986-dfa2-4ca0-8945-ce6e05ac713b";
 		
 		String inferenceApiKeyName2="Authorization";
