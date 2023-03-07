@@ -177,6 +177,12 @@ public class ModelService {
 	@Autowired
 	ModelHealthStatusDao modelHealthStatusDao;
 
+	@Value("${aes.secret.key1}")
+	private String aessecretkey1;
+
+	@Value("${aes.secret.key2}")
+	private String aessecretkey2;
+
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
 
@@ -191,6 +197,7 @@ public class ModelService {
 
 	@Autowired
 	MongoTemplate mongoTemplate;
+	
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -1158,11 +1165,11 @@ public class ModelService {
 		
 		String inferenceApiKeyName1="Authorization";
 		String ulcaApiKey1="5293e934c3-986e-40c0-bebb-8270cffacaca";
-		String inferenceApiKeyValue1="b4be0986-dfa2-4ca0-8945-ce6e05ac713b";
+		String inferenceApiKeyValue1=aessecretkey1;
 		
 		String inferenceApiKeyName2="Authorization";
 		String ulcaApiKey2 ="35764737a9-3a15-4e9c-ad95-c7b69fe22qqq";
-	   String inferenceApiKeyValue2="e294b2b0-272c-4d8c-adb7-8d0f6cefe523";
+	    String inferenceApiKeyValue2=aessecretkey2;
 		
 		if(userID.equals(dbUserId)) {
 			if(ulcaApiKey.equals(ulcaApiKey1)) {
