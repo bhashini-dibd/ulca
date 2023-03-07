@@ -114,6 +114,7 @@ import io.swagger.model.TxtLangDetectionRequest;
 import io.swagger.pipelinemodel.InferenceAPIEndPointMasterApiKey;
 import io.swagger.pipelinemodel.ListOfPipelines;
 import io.swagger.pipelinemodel.PipelineTaskSequence;
+
 import io.swagger.pipelinerequest.ASRRequestConfig;
 import io.swagger.pipelinerequest.ASRResponseConfig;
 import io.swagger.pipelinerequest.ASRTask;
@@ -424,8 +425,11 @@ public class ModelService {
 			
 			pipelineModelObj.setUserId(userId);
 			pipelineModelObj.setSubmittedOn(Instant.now().toEpochMilli());
-           if(pipelineModelObj.getInferenceEndPoint().getMasterApiKey()!=null) {
-			InferenceAPIEndPointMasterApiKey pipelineInferenceMasterApiKey = pipelineModelObj.getInferenceEndPoint()
+			
+			io.swagger.pipelinemodel.InferenceAPIEndPoint 	inferenceAPIEndPoint=pipelineModelObj.getInferenceEndPoint();
+			
+           if(inferenceAPIEndPoint.getMasterApiKey()!=null) {
+			InferenceAPIEndPointMasterApiKey pipelineInferenceMasterApiKey = inferenceAPIEndPoint
 					.getMasterApiKey();
 			if (pipelineInferenceMasterApiKey.getValue() != null) {
 				log.info("SecretKey :: " + SECRET_KEY);
