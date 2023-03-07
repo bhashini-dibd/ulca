@@ -192,7 +192,7 @@ public class ModelService {
 	@Value("${ulca.apikey1}")
 	private String ulcaapikey1;
 
-	@Value("${apikey2}")
+	@Value("${ulca.apikey2}")
 	private String ulcaapikey2;
 
 	@Autowired
