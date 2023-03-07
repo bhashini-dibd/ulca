@@ -135,6 +135,7 @@ import io.swagger.pipelinerequest.TranslationRequestConfig;
 import io.swagger.pipelinerequest.TranslationResponseConfig;
 import io.swagger.pipelinerequest.TranslationTask;
 import io.swagger.pipelinerequest.TranslationTaskInference;
+import io.swagger.pipelinerequest.TranslationTaskInferenceInferenceApiKey;
 import io.swagger.pipelinerequest.PipelineResponse;
 import io.swagger.pipelinerequest.LanguagesList;
 import io.swagger.pipelinerequest.LanguageSchema;
@@ -1112,7 +1113,7 @@ public class ModelService {
 
 	}
 
-	public ObjectNode getModelsPipeline(PipelineRequest pipelineRequest) throws Exception {
+	public ObjectNode getModelsPipeline(PipelineRequest pipelineRequest,String userID,String ulcaApiKey) throws Exception {
 		//log.info("File :: " + file.toString());
 		//PipelineRequest pipelineRequest = getPipelineRequest(file);
 		log.info("pipelineRequest :: " + pipelineRequest);
@@ -1136,14 +1137,62 @@ public class ModelService {
 
 	//	ArrayList<String> pipelineTaskSequence = new ArrayList<String>();
 		
-		PipelineResponse pipelineResponse = new PipelineResponse();
 		
-	   PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
-	   pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
-	   pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
-	   pipelineInferenceAPIEndPoint.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
-	   pipelineInferenceAPIEndPoint.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
-	   pipelineResponse.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
+		PipelineResponse pipelineResponse = new PipelineResponse();
+		///Ulca ApiKey Part
+		
+		
+		PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
+		   pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
+		   pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
+		   pipelineInferenceAPIEndPoint.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
+		   pipelineInferenceAPIEndPoint.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
+		
+		
+		   TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = new TranslationTaskInferenceInferenceApiKey();
+		String dbUserId="6a73afa4fc774dcdb28d5fff944511f6";
+		
+		
+		String inferenceApiKeyName1="Authorization";
+		String ulcaApiKey1="293e934c3-986e-40c0-bebb-8270cffacaca";
+		String inferenceApiKeyValue1="b4be0986-dfa2-4ca0-8945-ce6e05ac713b";
+		
+		String inferenceApiKeyName2="Authorization";
+		String ulcaApiKey2 ="35764737a9-3a15-4e9c-ad95-c7b69fe22qqq";
+	   String inferenceApiKeyValue2="e294b2b0-272c-4d8c-adb7-8d0f6cefe523";
+		
+		if(userID.equals(dbUserId)) {
+			if(ulcaApiKey.equals(ulcaApiKey1)) {
+				
+				translationTaskInferenceInferenceApiKey.setName(inferenceApiKeyName1);
+				translationTaskInferenceInferenceApiKey.setValue(inferenceApiKeyValue1);
+				
+				
+			}else if(ulcaApiKey.equals(ulcaApiKey2)) {
+				
+				translationTaskInferenceInferenceApiKey.setName(inferenceApiKeyName2);
+				translationTaskInferenceInferenceApiKey.setValue(inferenceApiKeyValue2);
+				
+			}else {
+				
+				throw new PipelineValidationException("Ulca Api Key does not exist!");
+	
+			}
+			
+			
+		}else {
+			throw new PipelineValidationException("User Id does not exist!");
+
+			
+		}
+		
+		pipelineInferenceAPIEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
+		
+		   pipelineResponse.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
+
+		
+		
+	   
 	   TaskSchemaList taskSchemaList = new TaskSchemaList();
 	   
 		Set<String> sourceLanguages = new HashSet<String>();
