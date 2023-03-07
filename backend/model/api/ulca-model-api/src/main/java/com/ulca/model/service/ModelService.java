@@ -1227,35 +1227,29 @@ public class ModelService {
 				sourceLanguages.clear();
 				targetLanguages.clear();
 
-				Long latestSubmitted = 0l;
-				ModelExtended latestModel = new ModelExtended();
+				HashSet<TranslationResponseConfig> hashConfig = new HashSet<TranslationResponseConfig>();
+
+				List<TranslationResponseConfig> config = new ArrayList<TranslationResponseConfig>();
 				for(ModelExtended each_model : translationModels) 
 				{
-					Long submittedTime = each_model.getSubmittedOn();
-					if(submittedTime > latestSubmitted)
-					{
-						latestModel = each_model;
-						latestSubmitted = submittedTime;
-					}
-				}
-				
-				List<TranslationResponseConfig> config = new ArrayList<TranslationResponseConfig>();
-				
-				log.info("Model Name :: " + latestModel.getName());
-				LanguagePairs langPair = latestModel.getLanguages();
-				TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
+					log.info("Model Name :: " + each_model.getName());
+					LanguagePairs langPair = each_model.getLanguages();
+					TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
 
-				for(LanguagePair lp : langPair)	
-				{
-					sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
-					targetLanguages.add(lp.getTargetLanguage().toString().toUpperCase());	
-					translationResponseConfig.setServiceId("");
-					translationResponseConfig.setLanguage(lp);
+					for(LanguagePair lp : langPair)	
+					{
+						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+						targetLanguages.add(lp.getTargetLanguage().toString().toUpperCase());	
+						translationResponseConfig.setServiceId("");
+						translationResponseConfig.setLanguage(lp);
+					}
+					//TODO: Read each model and store the results in PipelineResponseConfig
+					hashConfig.add(translationResponseConfig);
 				}
-				//TODO: Read each model and store the results in PipelineResponseConfig
 				
-				config.add(translationResponseConfig);
-				
+				for(TranslationResponseConfig each_config : hashConfig)
+					config.add(each_config);
+			
 				log.info(" SourceLanguages at end of Translation :: "+sourceLanguages);
 				log.info(" TargetLanguages at end of Translation :: "+targetLanguages);
 				sourceLanguages = targetLanguages;
@@ -1333,35 +1327,35 @@ public class ModelService {
 
 				
 				List<ModelExtended> asrModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
-				
-				//Find latest model out of all ASR Models
-				Long latestSubmitted = 0l;
-				ModelExtended latestModel = new ModelExtended();
-				for(ModelExtended each_model : asrModels) 
-				{
-					Long submittedTime = each_model.getSubmittedOn();
-					if(submittedTime > latestSubmitted)
-					{
-						latestModel = each_model;
-						latestSubmitted = submittedTime;
-					}
-				}
 
 				sourceLanguages.clear();
 				targetLanguages.clear();
 
-				ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
-				log.info("Model Name :: " + latestModel.getName());
-				LanguagePairs langPair = latestModel.getLanguages();
-				for(LanguagePair lp : langPair)	
+				HashSet<ASRResponseConfig> hashConfig = new HashSet<ASRResponseConfig>();
+
+				for(ModelExtended each_model : asrModels) 
 				{
-					sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
-					asrResponseConfig.setServiceId("");
-					asrResponseConfig.setLanguage(lp);
+					
+					ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
+					log.info("Model Name :: " + each_model.getName());
+					LanguagePairs langPair = each_model.getLanguages();
+					for(LanguagePair lp : langPair)	
+					{
+						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+						asrResponseConfig.setServiceId("");
+						asrResponseConfig.setLanguage(lp);
+					}
+					//TODO: Read each model and store the results in PipelineResponseConfig
+					asrResponseConfig.setDomain(each_model.getDomain());
+
+					
+					hashConfig.add(asrResponseConfig);
 				}
-				//TODO: Read each model and store the results in PipelineResponseConfig
-				asrResponseConfig.setDomain(latestModel.getDomain());
-				config.add(asrResponseConfig);
+
+				for(ASRResponseConfig each_config : hashConfig)
+				{
+					config.add(each_config);
+				}
 
 				if(config.size() == 0)
 					throw new PipelineValidationException("Languages are not supported within this pipeline");
@@ -1441,24 +1435,16 @@ public class ModelService {
 
 				sourceLanguages.clear();
 				targetLanguages.clear();
+				
+				HashSet<TTSResponseConfig> hashConfig = new HashSet<TTSResponseConfig>();
 
-				//Find latest model out of all ASR Models
-				Long latestSubmitted = 0l;
-				ModelExtended latestModel = new ModelExtended();
 				for(ModelExtended each_model : ttsModels) 
 				{
-					Long submittedTime = each_model.getSubmittedOn();
-					if(submittedTime > latestSubmitted)
-					{
-						latestModel = each_model;
-						latestSubmitted = submittedTime;
-					}
-				}
-
+					
 					TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
 
-					log.info("Model Name :: " + latestModel.getName());
-					LanguagePairs langPair = latestModel.getLanguages();
+					log.info("Model Name :: " + each_model.getName());
+					LanguagePairs langPair = each_model.getLanguages();
 					for(LanguagePair lp : langPair)	
 					{
 						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
@@ -1466,8 +1452,12 @@ public class ModelService {
 						ttsResponseConfig.setLanguage(lp);
 					}
 					//TODO: Read each model and store the results in PipelineResponseConfig
-			
-					config.add(ttsResponseConfig);
+					hashConfig.add(ttsResponseConfig);
+
+				}
+
+				for(TTSResponseConfig each_config : hashConfig)
+					config.add(each_config);
 
 				if(config.size() == 0)
 					throw new PipelineValidationException("Languages are not supported within this pipeline");
