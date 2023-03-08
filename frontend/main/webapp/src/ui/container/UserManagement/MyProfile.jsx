@@ -242,7 +242,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             onClick={() => {
               setModal(true);
             }}
-            style={{marginTop:"5px"}}
+            style={{height:"37px"}}
           >
             {" "} 
             {translate("button.generate")}
@@ -265,7 +265,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             onClick={() => {
               setModal(true);
             }}
-            style={{marginTop:"5px"}}
+            style={{height:"37px"}}
           >
             {" "}
             <AddBoxIcon color="primary" className={classes.iconStyle} />
@@ -283,6 +283,9 @@ const handleSubmitGenerateApiKey =  async() =>{
         filter: false,
         sort: false,
         align: "center",
+        setCellHeaderProps: () => ({
+          style: { width:"100px" },
+        }),
       },
     },
     {
@@ -292,13 +295,19 @@ const handleSubmitGenerateApiKey =  async() =>{
         filter: false,
         sort: false,
         align: "center",
+        setCellHeaderProps: () => ({
+          style: { width:"100px" },
+        }),
       },
     },
     {
       name:"serviceProviderKeys",
       label: "Service Provider Keys",
       options:{
-        display: "excluded"
+        display: "excluded",
+        setCellHeaderProps: () => ({
+          style: { width:"100px" },
+        }),
       }
     },
     {
@@ -309,7 +318,7 @@ const handleSubmitGenerateApiKey =  async() =>{
         sort: false,
         align: "center",
         setCellHeaderProps: () => ({
-          style: { paddingLeft: "46px" },
+          style: { paddingLeft: "46px",  },
         }),
         customBodyRender: (value, tableMeta) => {
           return (
@@ -365,6 +374,7 @@ const handleSubmitGenerateApiKey =  async() =>{
     filter: false,
     expandableRowsOnClick: false,
     expandableRows: true,
+    expandableRowsHeader: true,
     displaySelectToolbar: false,
     disableToolbarSelect: "none",
     renderExpandableRow: (rowData, rowMeta) => {
@@ -372,16 +382,16 @@ const handleSubmitGenerateApiKey =  async() =>{
       if(data?.length)
         return (
           <>
-          <TableRow>
+          <TableRow >
             <TableCell colSpan={5}>
               <>
-              <Box>
-                  <Table size="small" aria-label="purchases">
-                  <TableHead>
+              <Box style={{ margin: "0 80px" }}>
+                  <Table size="small" aria-label="purchases" >
+                  <TableHead >
                       <TableCell>Service Provider Name</TableCell>
                       <TableCell>Inference API Key Name</TableCell>
-                      <TableCell>Inference API Key Value</TableCell>
-                      <TableCell>Action</TableCell>
+                      <TableCell >Inference API Key Value</TableCell>
+                      <TableCell style={{paddingLeft: "40px"}}>Action</TableCell>
                   </TableHead>
                   <TableBody>
                     {
@@ -400,7 +410,7 @@ const handleSubmitGenerateApiKey =  async() =>{
                               <Button
                                 variant="contained"
                                 className={classes.myProfileActionBtn}
-                                style={{color:"red"}}>
+                                style={{color:"red",textAlign:"center"}}>
                                   Revoke
                               </Button>
                             </TableCell>
