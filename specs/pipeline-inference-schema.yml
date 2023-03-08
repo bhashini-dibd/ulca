@@ -60,7 +60,7 @@ components:
         taskSpecifications:
           $ref: '#/components/schemas/TaskSpecifications'
         apiEndPoints:
-          $ref: '#/components/schemas/ApiEndPoints'
+          $ref: '#/components/schemas/ApiEndPoint'
 
     ListOfPipelines:
       type: array
@@ -142,15 +142,12 @@ components:
             $ref: >-
               https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
 
-    ApiEndPoints:
+    ApiEndPoint:
       required:
-        - apiKeyGenerationUrl
-        - apiKeyDeletionUrl
+        - apiKeyUrl
       type: object
       properties:
-        apiKeyGenerationUrl:
-          type: string
-          format: url
-        apiKeyDeletionUrl:
+        apiKeyUrl:
+          description: URL to generate api keys (using POST Method) and delete api keys (using DELETE method).
           type: string
           format: url
