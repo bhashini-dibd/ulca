@@ -337,6 +337,7 @@ const handleSubmitGenerateApiKey =  async() =>{
         return [
           el.appName,
           el.ulcaApiKey,
+          el.serviceProviderKeys
         ];
       })
     : [];
@@ -367,8 +368,9 @@ const handleSubmitGenerateApiKey =  async() =>{
     displaySelectToolbar: false,
     disableToolbarSelect: "none",
     renderExpandableRow: (rowData, rowMeta) => {
+      console.log(rowData,"rowDatarowData")
       const data = rowData[2];
-      if(data.length)
+      if(data?.length)
         return (
           <>
           <TableRow>
