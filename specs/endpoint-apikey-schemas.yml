@@ -62,7 +62,7 @@ components:
           description: App name mapped with ULCA api key of the user for which service api key is to be deleted
           example: bhashini-prod-android
 
-    APIKeyDeleteRequest:
+    APIKeyDeleteResponse:
       required:
         - isRevoked
       type: object
