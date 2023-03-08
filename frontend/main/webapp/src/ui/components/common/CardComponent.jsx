@@ -12,7 +12,7 @@ import { getCamelCase } from "../../../utils/util";
 const CardComponent = (props) => {
   const { classes, data, index } = props;
   const location = useLocation();
- // console.log("location", location)
+ /// console.log("location", location)
   const renderPublishedOn = (data) => {
     if (data.publishedOn)
       return (
