@@ -368,7 +368,6 @@ const handleSubmitGenerateApiKey =  async() =>{
     displaySelectToolbar: false,
     disableToolbarSelect: "none",
     renderExpandableRow: (rowData, rowMeta) => {
-      console.log(rowData,"rowDatarowData")
       const data = rowData[2];
       if(data?.length)
         return (
