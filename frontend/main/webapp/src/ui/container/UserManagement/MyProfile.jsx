@@ -21,11 +21,12 @@ import RevokeDialog from "../../components/common/RevokeDialog";
 import TableRow from "@material-ui/core/TableRow";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
-
+import getSearchedValue from "../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
 
 
 const MyProfile = (props) => {
   const {classes} = props;
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [snackbar, setSnackbarInfo] = useState({
@@ -38,6 +39,7 @@ const MyProfile = (props) => {
   const [message, setMessage] = useState("Are sure u want to Revoke ?");
   const [open, setOpen] = useState(false);
   const [UlcaApiKey, setUlcaApiKey] = useState('');
+  const [searchKey, setSearchKey] = useState("");
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const handlecChangeAddName = (e) =>{
@@ -48,6 +50,23 @@ const MyProfile = (props) => {
     setAppName("")
     setOpen(false)
   }
+
+  const onKeyDown = (event) => {
+    if (event.keyCode == 27) {
+      setModal(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onKeyDown]);
+
+  const handleSearch = (value) => {
+    setSearchKey(value);
+    // prepareDataforTable(columns, tableData, value);
+    dispatch(getSearchedValue(value));
+  };
 
 const handleSubmitGenerateApiKey =  async() =>{
   const data={
@@ -146,13 +165,25 @@ const handleSubmitGenerateApiKey =  async() =>{
     setUlcaApiKey(ulcaApiKey)
    };
 
+   const pageSearch = () => {
+    return tableData.filter((el) => {
+      if (searchKey == "") {
+        return el;
+      } else if (
+        el.appName?.toLowerCase().includes(searchKey?.toLowerCase())
+      ) {
+        return el;
+      } 
+    });
+  };
+
   const fetchHeaderButton = () => {
     return (
       <Grid container spacing={1} className={classes.Gridroot}>
-        <Grid item xs={7} sm={8} md={8} lg={8} xl={8}>
-          <Search value="" />
+        <Grid item xs={9} sm={10} md={10} lg={10} xl={10}>
+          <Search value="" handleSearch={(e) => handleSearch(e.target.value)}/>
         </Grid>
-        <Grid
+        {/* <Grid
           item
           xs={2}
           sm={2}
@@ -171,7 +202,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             {" "}
             <FilterListIcon className={classes.iconStyle} />
           </Button>
-        </Grid>
+        </Grid> */}
         {/* <Grid
           item
           xs={2}
@@ -211,6 +242,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             onClick={() => {
               setModal(true);
             }}
+            style={{marginTop:"5px"}}
           >
             {" "} 
             {translate("button.generate")}
@@ -233,6 +265,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             onClick={() => {
               setModal(true);
             }}
+            style={{marginTop:"5px"}}
           >
             {" "}
             <AddBoxIcon color="primary" className={classes.iconStyle} />
@@ -297,6 +330,16 @@ const handleSubmitGenerateApiKey =  async() =>{
       },
     },
   ];
+
+  const data =
+  tableData && tableData.length > 0
+    ? pageSearch().map((el, i) => {
+        return [
+          el.appName,
+          el.ulcaApiKey,
+        ];
+      })
+    : [];
   const options = {
     textLabels: {
       body: {
@@ -394,7 +437,7 @@ const handleSubmitGenerateApiKey =  async() =>{
     <div>
        {renderSnackBar()}
       <DataTable
-        data={tableData}
+        data={data}
         columns={columns}
         options={options}
       />
