@@ -393,13 +393,18 @@ const handleSubmitGenerateApiKey =  async() =>{
         filter: false,
         sort: false,
         align: "center",
+        setCellHeaderProps: () => ({
+          style: {
+            paddingLeft: "37px",
+          },
+        }),
         customBodyRender: (value, tableMeta) => {
           return (
             <Button
               variant="contained"
               className={classes.myProfileActionBtn}
               onClick={ () => handleDialogSubmit(tableMeta.rowData[1])}
-              style={{color:"red"}}
+              style={{color:"red",textTransform: "capitalize"}}
             >
               {loading ? (
                 <CircularProgress color="primary" size={20} />
@@ -484,7 +489,7 @@ const handleSubmitGenerateApiKey =  async() =>{
                                 variant="contained"
                                 className={classes.myProfileActionBtn}
                                 disabled 
-                                style={{color:"red",textAlign:"center"}}>
+                                style={{color:"red",textAlign:"center",textTransform: "capitalize"}}>
                                   Revoke
                               </Button>
                             </TableCell>
