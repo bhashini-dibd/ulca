@@ -1931,10 +1931,29 @@ public class ModelService {
 											{
 												currentTaskLanguageSchema.setSourceLanguage(previousTargetLanguage);
 												//Add all target languages where source Language is pa
+
 												for(io.swagger.pipelinemodel.LanguageSchema specLangSchema : curTaskLanguages)
 												{
+													//TODO: This is if there are no target languages in the current source language for translation
+
 													if(specLangSchema.getSourceLanguage().equals(previousTargetLanguage))
-													currentTaskLanguageSchema.addTargetLanguageListItem(specLangSchema.getTargetLanguage());
+													{
+														TranslationTask translationTask	=(TranslationTask)pipelineTasks.get(i);
+														TranslationRequestConfig translationConfig = translationTask.getConfig();
+														SupportedLanguages currentTaskTarget;
+														if(translationConfig!=null && translationConfig.getLanguage()!=null && translationConfig.getLanguage().getTargetLanguage() != null)
+														{
+															currentTaskTarget = translationConfig.getLanguage().getTargetLanguage();
+														}
+														else 
+														{
+															currentTaskTarget = specLangSchema.getTargetLanguage();
+														}
+														if(currentTaskLanguageSchema.getTargetLanguageList() == null)
+															currentTaskLanguageSchema.addTargetLanguageListItem(currentTaskTarget);
+														else if(!currentTaskLanguageSchema.getTargetLanguageList().contains(currentTaskTarget))
+															currentTaskLanguageSchema.addTargetLanguageListItem(currentTaskTarget);
+													}
 												}
 												currentTaskLangList.add(currentTaskLanguageSchema);	
 											}
@@ -2055,7 +2074,136 @@ public class ModelService {
 
 		log.info("FIRST LANGUAGE LIST :: "+languagesArrayList);
 
+		//TODO
+		//Go through each first sourceLanguage in languagesArrayList and get a LanguageList element and update
+		LanguagesList newLanguageList = new LanguagesList();
+		//newLanguageList.clear();	
+		TaskSchemaList newPipelineResponseConfig = pipelineResponse.getPipelineResponseConfig();
+		newPipelineResponseConfig.clear();
+		for(LanguageSchema firstTaskSchema : languagesArrayList.get(0))
+		{
+			log.info("FIRST Task Source Languages ::"+firstTaskSchema.getSourceLanguage());
+			LanguageSchema pipelineSchema = new LanguageSchema();
+			pipelineSchema.setSourceLanguage(firstTaskSchema.getSourceLanguage());
+			List<SupportedLanguages> targetLangList = new ArrayList<SupportedLanguages>();
+			log.info("FIRST Task Target Languages :: "+firstTaskSchema.getTargetLanguageList());
+			List<SupportedLanguages> targetLangListCopy = new ArrayList<SupportedLanguages>();
+			for(SupportedLanguages sl : firstTaskSchema.getTargetLanguageList())
+			{
+				targetLangList.add(sl);
+				targetLangListCopy.add(sl);
+			}
+			//DFS for targetLangList creation [Final Pipeline Target Lang List]
+			int targetLangSize = targetLangList.size();
+			int targetLangSizeCopy = targetLangSize;
+			int currentTaskIndex = 1; 
+			while(currentTaskIndex < taskLength)
+			{
+				for(int i=0;i<targetLangSize;i++)
+				{
+					SupportedLanguages targetLanguage = targetLangList.get(0); //refers to prev. target language task list
+					targetLangList.remove(0);
+					LanguagesList currentLangList = languagesArrayList.get(currentTaskIndex);
+					for(LanguageSchema curLangSchema : currentLangList)
+					{
+						LanguageSchema tempLanguageSchema = new LanguageSchema();
+						if(targetLanguage.equals(curLangSchema.getSourceLanguage()))
+						{
+							if(curLangSchema.getTargetLanguageList()!=null)
+							{
+								for(SupportedLanguages targLang : curLangSchema.getTargetLanguageList())
+								{
+									targetLangList.add(targLang);
+								}
+							}
+							else
+								targetLangList.add(curLangSchema.getSourceLanguage());
+						}
+						tempLanguageSchema.setSourceLanguage(curLangSchema.getSourceLanguage());
+						tempLanguageSchema.setTargetLanguageList(curLangSchema.getTargetLanguageList());
+					}
+				}
+				targetLangSize = targetLangList.size();
+				currentTaskIndex++;
+			}
+			pipelineSchema.setTargetLanguageList(targetLangList);
+			boolean srcLangExists = false;
+			for(LanguageSchema each_schema : newLanguageList)
+			{
+				if(each_schema.getSourceLanguage().equals(pipelineSchema.getSourceLanguage()))
+				{
+					srcLangExists = true;
+					break;
+				}
+			}	
+			if(srcLangExists == false && pipelineSchema.getTargetLanguageList().size()!=0)
+			{
+				//log.info("MODEL BUILD LIST :: "+modelBuildList);
+				newLanguageList.add(pipelineSchema);
+				currentTaskIndex = 1;
+				while(currentTaskIndex < taskLength)
+				{
+					for(int i=0;i<targetLangSizeCopy;i++)
+					{
+						SupportedLanguages sourceLang = targetLangListCopy.get(0);
+						log.info("CURRENT TASK " + currentTaskIndex + " SOURCE LANGUAGE :: "+targetLangListCopy.get(0));
+						SupportedLanguages targetLanguage = targetLangListCopy.get(0); //refers to prev. target language task list
+						targetLangListCopy.remove(0);
+						LanguagesList currentLangList = languagesArrayList.get(currentTaskIndex);
+						for(LanguageSchema curLangSchema : currentLangList)
+						{
+							LanguageSchema tempLanguageSchema = new LanguageSchema();
+							if(targetLanguage.equals(curLangSchema.getSourceLanguage()))
+							{
+								if(curLangSchema.getTargetLanguageList()!=null)
+								{
+									for(SupportedLanguages targLang : curLangSchema.getTargetLanguageList())
+									{
+										targetLangListCopy.add(targLang);
+									}
+								}
+								else
+								targetLangListCopy.add(curLangSchema.getSourceLanguage());
+							}
+							tempLanguageSchema.setSourceLanguage(curLangSchema.getSourceLanguage());
+							tempLanguageSchema.setTargetLanguageList(curLangSchema.getTargetLanguageList());
+						}
+						log.info("CURRENT TASK " + pipelineTasks.get(currentTaskIndex).getTaskType() + " " + currentTaskIndex + " TARGET LANGUAGE :: "+targetLangListCopy);
+						List<SupportedLanguages> targetLanguageList = targetLangListCopy;
+						//Add pipelineModels by searching within Mongo via here.
 
+						//FOR EACH TASK TYPE: CALL MONGO QUERIES FOR SOURCELANG AND TARGETLANGUAGELIST
+
+
+
+
+
+
+						//Add TranslationTaskInference, ASRTaskInference and TTSTaskInference within newPipelineResponseConfig
+						// String currentTaskType = pipelineTasks.get(currentTaskIndex).getTaskType();
+						// if(currentTaskType == "asr")
+						// {
+						// 	ASRTaskInference asrInference = (ASRTaskInference)newPipelineResponseConfig.get(currentTaskIndex);
+						// 	//Do Mongo Query for targetLangListCopy
+						// 	newPipelineResponseConfig.add(asrInference);
+						// }
+
+
+
+
+
+
+
+
+					}
+					targetLangSizeCopy = targetLangListCopy.size();
+					currentTaskIndex++;
+				}
+			}
+		}
+
+		log.info("NEW LANGUAGE LIST :: "+newLanguageList);
+		pipelineResponse.setLanguages(newLanguageList);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
