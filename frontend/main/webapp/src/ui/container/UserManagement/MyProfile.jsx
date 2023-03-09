@@ -406,6 +406,7 @@ const handleSubmitGenerateApiKey =  async() =>{
                               <Button
                                 variant="contained"
                                 className={classes.myProfileActionBtn}
+                                disabled 
                                 style={{color:"red",textAlign:"center"}}>
                                   Revoke
                               </Button>
