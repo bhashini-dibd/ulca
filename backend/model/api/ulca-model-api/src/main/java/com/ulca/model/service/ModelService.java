@@ -2074,6 +2074,13 @@ public class ModelService {
 
 		log.info("FIRST LANGUAGE LIST :: "+languagesArrayList);
 
+
+		ASRTaskInference asrInference = new ASRTaskInference();
+		TTSTaskInference ttsInference = new TTSTaskInference();
+		TranslationTaskInference translationInference = new TranslationTaskInference();
+
+
+
 		//TODO
 		//Go through each first sourceLanguage in languagesArrayList and get a LanguageList element and update
 		LanguagesList newLanguageList = new LanguagesList();
@@ -2180,16 +2187,142 @@ public class ModelService {
 
 
 						//Add TranslationTaskInference, ASRTaskInference and TTSTaskInference within newPipelineResponseConfig
-						// String currentTaskType = pipelineTasks.get(currentTaskIndex).getTaskType();
-						// if(currentTaskType == "asr")
-						// {
-						// 	ASRTaskInference asrInference = (ASRTaskInference)newPipelineResponseConfig.get(currentTaskIndex);
-						// 	//Do Mongo Query for targetLangListCopy
-						// 	newPipelineResponseConfig.add(asrInference);
-						// }
+						String currentTaskType = pipelineTasks.get(currentTaskIndex).getTaskType();
+						if(currentTaskType == "asr")
+						{
+							//Do Mongo Query for targetLangListCopy
+							
+							Query dynamicQuery = new Query();
+			
+							Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+							dynamicQuery.addCriteria(modelTypeCriteria);
+			
+							Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+							dynamicQuery.addCriteria(submitterCriteria);
+							
+							Criteria taskCriteria = Criteria.where("task.type").is("ASR");
+							dynamicQuery.addCriteria(taskCriteria);
+			
+							Criteria languageCriteria = Criteria.where("languages.sourceLanguage").is(sourceLang);
+							dynamicQuery.addCriteria(languageCriteria);
+							dynamicQuery.with(Sort.by(Sort.Direction.DESC,"submittedOn"));
+	
+							log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+							
+							
+							List<ModelExtended> asrModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+			
+							log.info("MODEL : "+asrModels.get(0));
+							
+
+							ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
+							log.info("Model Name :: " + asrModels.get(0).getName());
+							LanguagePairs langPair = asrModels.get(0).getLanguages();
+							for(LanguagePair lp : langPair)	
+							{
+								asrResponseConfig.setServiceId("");
+								asrResponseConfig.setLanguage(lp);
+							}
+							//TODO: Read each model and store the results in PipelineResponseConfig
+							asrResponseConfig.setDomain(asrModels.get(0).getDomain());
+			
+							asrInference.addConfigItem(asrResponseConfig);
+
+						}
 
 
+						else if(currentTaskType == "translation")
+						{
 
+
+							//Do Mongo Query for targetLangListCopy
+							
+							
+							for(SupportedLanguages targetLang : targetLanguageList)
+							{
+								Query dynamicQuery = new Query();
+			
+								Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+								dynamicQuery.addCriteria(modelTypeCriteria);
+				
+								Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+								dynamicQuery.addCriteria(submitterCriteria);
+								
+								Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
+								dynamicQuery.addCriteria(taskCriteria);
+				
+								Criteria languageCriteria = Criteria.where("languages.sourceLanguage").is(sourceLang);
+								dynamicQuery.addCriteria(languageCriteria);
+								dynamicQuery.with(Sort.by(Sort.Direction.DESC,"submittedOn"));
+		
+								log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+
+								Criteria targetLanguageCriteria = Criteria.where("languages.targetLanguage").is(targetLang);
+								dynamicQuery.addCriteria(targetLanguageCriteria);
+
+								List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+				
+								if(translationModels.size()>0)
+								{
+									TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
+									log.info("Model Name :: " + translationModels.get(0).getName());
+									LanguagePairs langPair = translationModels.get(0).getLanguages();
+									for(LanguagePair lp : langPair)	
+									{
+										translationResponseConfig.setServiceId("");
+										translationResponseConfig.setLanguage(lp);
+									}
+									//TODO: Read each model and store the results in PipelineResponseConfig
+									//translationResponseConfig.setDomain(translationModels.get(0).getDomain());
+					
+									translationInference.addConfigItem(translationResponseConfig);
+
+								}
+	
+							}
+						}
+
+						else if(currentTaskType == "tts")
+						{
+							//Do Mongo Query for targetLangListCopy
+							
+							Query dynamicQuery = new Query();
+			
+							Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+							dynamicQuery.addCriteria(modelTypeCriteria);
+			
+							Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+							dynamicQuery.addCriteria(submitterCriteria);
+							
+							Criteria taskCriteria = Criteria.where("task.type").is("TTS");
+							dynamicQuery.addCriteria(taskCriteria);
+			
+							Criteria languageCriteria = Criteria.where("languages.sourceLanguage").is(sourceLang);
+							dynamicQuery.addCriteria(languageCriteria);
+							dynamicQuery.with(Sort.by(Sort.Direction.DESC,"submittedOn"));
+	
+							log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+							
+							
+							List<ModelExtended> ttsModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+			
+							log.info("MODEL : "+ttsModels.get(0));
+							
+
+							TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
+							log.info("Model Name :: " + ttsModels.get(0).getName());
+							LanguagePairs langPair = ttsModels.get(0).getLanguages();
+							for(LanguagePair lp : langPair)	
+							{
+								ttsResponseConfig.setServiceId("");
+								ttsResponseConfig.setLanguage(lp);
+							}
+							//TODO: Read each model and store the results in PipelineResponseConfig
+							//ttsResponseConfig.setDomain(ttsModels.get(0).getDomain());
+			
+							ttsInference.addConfigItem(ttsResponseConfig);
+
+						}
 
 
 
@@ -2201,6 +2334,11 @@ public class ModelService {
 				}
 			}
 		}
+
+
+		newPipelineResponseConfig.add(asrInference);
+		newPipelineResponseConfig.add(ttsInference);
+		newPipelineResponseConfig.add(translationInference);
 
 		log.info("NEW LANGUAGE LIST :: "+newLanguageList);
 		pipelineResponse.setLanguages(newLanguageList);
