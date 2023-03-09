@@ -290,7 +290,7 @@ const handleSubmitGenerateApiKey =  async() =>{
     },
     {
       name: "ulcaApiKey",
-      label: "Ulca Api Key",
+      label: "ULCA API Key",
       options: {
         filter: false,
         sort: false,
@@ -448,6 +448,7 @@ const handleSubmitGenerateApiKey =  async() =>{
     <div>
        {renderSnackBar()}
       <DataTable
+      title={"App Integration Details"}
         data={data}
         columns={columns}
         options={options}
