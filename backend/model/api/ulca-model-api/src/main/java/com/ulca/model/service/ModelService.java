@@ -116,7 +116,7 @@ import io.swagger.model.TxtLangDetectionRequest;
 import io.swagger.pipelinemodel.InferenceAPIEndPointMasterApiKey;
 import io.swagger.pipelinemodel.ListOfPipelines;
 import io.swagger.pipelinemodel.PipelineTaskSequence;
-
+import io.swagger.pipelinemodel.TaskSpecification;
 import io.swagger.pipelinerequest.ASRRequestConfig;
 import io.swagger.pipelinerequest.ASRResponseConfig;
 import io.swagger.pipelinerequest.ASRTask;
@@ -140,6 +140,8 @@ import io.swagger.pipelinerequest.TranslationTaskInferenceInferenceApiKey;
 import io.swagger.pipelinerequest.PipelineResponse;
 import io.swagger.pipelinerequest.LanguagesList;
 import io.swagger.pipelinerequest.LanguageSchema;
+import io.swagger.pipelinemodel.TaskSpecifications;
+import io.swagger.pipelinemodel.TaskSpecification;
 
 import lombok.extern.slf4j.Slf4j;
 import com.github.mervick.aes_everywhere.Aes256;
@@ -1144,13 +1146,13 @@ public class ModelService {
         
 		
 		//Make query and find pipeline model with the submitter name
-				Query dynamicQuery1 = new Query();
-				Criteria modelTypeCriteria1 = Criteria.where("_class").is("com.ulca.model.dao.PipelineModel");
-				dynamicQuery1.addCriteria(modelTypeCriteria1);
-				Criteria submitterCriteria1 = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
-				dynamicQuery1.addCriteria(submitterCriteria1);
-				log.info("dynamicQuery : " + dynamicQuery1.toString());
-				PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery1, PipelineModel.class);
+		Query dynamicQuery1 = new Query();
+		Criteria modelTypeCriteria1 = Criteria.where("_class").is("com.ulca.model.dao.PipelineModel");
+		dynamicQuery1.addCriteria(modelTypeCriteria1);
+		Criteria submitterCriteria1 = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+		dynamicQuery1.addCriteria(submitterCriteria1);
+		log.info("dynamicQuery : " + dynamicQuery1.toString());
+		PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery1, PipelineModel.class);
 		
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
@@ -1690,7 +1692,370 @@ public class ModelService {
 			}
 		}
 
-		
+		//New Logic: 
+		//Generate Language List
+		ArrayList<LanguagesList> languagesArrayList = new ArrayList<LanguagesList>();
+		pipelineResponse.getLanguages();
+		TaskSpecifications pipelineTaskSpecifications = pipelineModel.getTaskSpecifications();
+		boolean first_task = true;
+
+		PipelineTask pipelineTask = pipelineTasks.get(0);
+
+		LanguagesList firstTaskLanguageList = new LanguagesList();
+		String task=pipelineTask.getTaskType();
+		if(task=="translation") 
+		{
+			//TranslationTaskInference translationTaskInference = new TranslationTaskInference();
+			//translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
+			
+			TranslationTask translationTask	=(TranslationTask)pipelineTask;
+			//If task has languages
+			if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
+			{
+				TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
+				LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+				LanguagePair languagePair =translationRequestConfig.getLanguage();
+				{
+					firstTaskLanguageSchema.setSourceLanguage(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																										.toString()
+																										.toLowerCase()
+																											));
+				}
+				if(languagePair.getTargetLanguage()!=null)
+				{
+					//targetLanguages.clear();
+					firstTaskLanguageSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(languagePair.getTargetLanguage()
+																												.toString()
+																												.toLowerCase()));
+				}
+				firstTaskLanguageList.add(firstTaskLanguageSchema);
+			}
+			//If task doesn't have languages
+			else 
+			{
+				for(TaskSpecification firstTaskSpec : pipelineTaskSpecifications) 
+				{
+					if(firstTaskSpec.getTask().getType().toString() == task)
+					{
+						io.swagger.pipelinemodel.LanguagesList firstTaskLanguages = firstTaskSpec.getLanguages();
+						for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : firstTaskLanguages)
+						{
+							LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							boolean sourceLangExists = false;
+							for(LanguageSchema eachStoredFirstTaskSchema : firstTaskLanguageList)
+							{
+								//if that source language exists within our stored first task schema
+								if(eachStoredFirstTaskSchema.getSourceLanguage()!=null && eachStoredFirstTaskSchema.getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()))
+								{
+									eachStoredFirstTaskSchema.addTargetLanguageListItem((specLanguageSchema.getTargetLanguage()));									
+									sourceLangExists = true;
+								}
+							}	
+							if(sourceLangExists == false)
+							{
+								firstTaskLanguageSchema.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								firstTaskLanguageSchema.addTargetLanguageListItem((specLanguageSchema.getTargetLanguage()));					
+								firstTaskLanguageList.add(firstTaskLanguageSchema);	
+							}
+						}
+					}
+				}
+			}
+
+		}
+		else if(task=="asr") 
+		{
+			//TranslationTaskInference translationTaskInference = new TranslationTaskInference();
+			//translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
+			
+			ASRTask asrTask	=(ASRTask)pipelineTask;
+			//If task has languages
+			if(asrTask.getConfig()!=null && asrTask.getConfig().getLanguage()!=null)
+			{
+				ASRRequestConfig asrRequestConfig =	asrTask.getConfig();
+				LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+				LanguagePair languagePair =asrRequestConfig.getLanguage();
+				{
+					log.info("CODE HERE");
+					firstTaskLanguageSchema.setSourceLanguage(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																										.toString()
+																										.toLowerCase()
+																											));
+				}
+				firstTaskLanguageSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																												.toString()
+																												.toLowerCase()));
+				
+				firstTaskLanguageList.add(firstTaskLanguageSchema);
+			}
+			//If task doesn't have languages
+			else 
+			{
+				for(TaskSpecification firstTaskSpec : pipelineTaskSpecifications) 
+				{
+					if(firstTaskSpec.getTask().getType().toString() == task)
+					{
+						io.swagger.pipelinemodel.LanguagesList firstTaskLanguages = firstTaskSpec.getLanguages();
+						for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : firstTaskLanguages)
+						{
+							LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							boolean sourceLangExists = false;
+							for(LanguageSchema eachStoredFirstTaskSchema : firstTaskLanguageList)
+							{
+								//if that source language exists within our stored first task schema
+								if(eachStoredFirstTaskSchema.getSourceLanguage()!=null && eachStoredFirstTaskSchema.getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()))
+								{
+									eachStoredFirstTaskSchema.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));									
+									sourceLangExists = true;
+								}
+							}	
+							if(sourceLangExists == false)
+							{
+								firstTaskLanguageSchema.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								firstTaskLanguageSchema.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));
+								firstTaskLanguageList.add(firstTaskLanguageSchema);	
+							}
+						}
+					}
+				}
+			}
+
+
+		}
+		else if(task=="tts") 
+		{
+			//TranslationTaskInference translationTaskInference = new TranslationTaskInference();
+			//translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
+			
+			TTSTask ttsTask	=(TTSTask)pipelineTask;
+			//If task has languages
+			if(ttsTask.getConfig()!=null && ttsTask.getConfig().getLanguage()!=null)
+			{
+				TTSRequestConfig ttsRequestTask =	ttsTask.getConfig();
+				LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+				LanguagePair languagePair =ttsRequestTask.getLanguage();
+				{
+					firstTaskLanguageSchema.setSourceLanguage(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																										.toString()
+																										.toLowerCase()
+																											));
+				}
+					//targetLanguages.clear();
+				firstTaskLanguageSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																												.toString()
+																												.toLowerCase()));
+				
+				firstTaskLanguageList.add(firstTaskLanguageSchema);
+			}
+			//If task doesn't have languages
+			else 
+			{
+				for(TaskSpecification firstTaskSpec : pipelineTaskSpecifications) 
+				{
+					if(firstTaskSpec.getTask().getType().toString() == task)
+					{
+						io.swagger.pipelinemodel.LanguagesList firstTaskLanguages = firstTaskSpec.getLanguages();
+						for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : firstTaskLanguages)
+						{
+							LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							boolean sourceLangExists = false;
+							for(LanguageSchema eachStoredFirstTaskSchema : firstTaskLanguageList)
+							{
+								//if that source language exists within our stored first task schema
+								if(eachStoredFirstTaskSchema.getSourceLanguage()!=null && eachStoredFirstTaskSchema.getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()))
+								{
+									eachStoredFirstTaskSchema.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));									
+									sourceLangExists = true;
+								}
+							}	
+							if(sourceLangExists == false)
+							{
+								firstTaskLanguageSchema.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								firstTaskLanguageSchema.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));					
+								firstTaskLanguageList.add(firstTaskLanguageSchema);	
+							}
+						}
+					}
+				}
+			}
+		}
+
+		languagesArrayList.add(firstTaskLanguageList);
+
+		//Do the same task for remaining languages.
+		//firstTaskLanguage list consists of all language conbinations of first task.: 
+
+		int taskLength = pipelineTasks.size();
+		if(taskLength > 1)
+		{
+			for(int i=1;i<taskLength;i++)	//For each task from 2nd task
+			{
+				PipelineTask currentTask = pipelineTasks.get(i);
+				LanguagesList currentTaskLangList = new LanguagesList();
+				String currentTaskType = currentTask.getTaskType();
+				LanguagesList previousTaskLangList = languagesArrayList.get(i-1); //get last task's languages
+				if(currentTaskType == "translation")
+				{
+					for(LanguageSchema previousSchema : previousTaskLangList) //For each previous task's schema
+					{
+						List<SupportedLanguages> previousTargetLanguageList = previousSchema.getTargetLanguageList();
+						for(SupportedLanguages previousTargetLanguage : previousTargetLanguageList) //For each target language in previous task's schema
+						{
+							LanguageSchema currentTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							
+							TaskSpecifications taskSpecificiations = pipelineModel.getTaskSpecifications();
+							for(TaskSpecification curTaskSpec : taskSpecificiations) 
+							{
+								if(curTaskSpec.getTask().getType().toString() == currentTaskType)
+								{
+									io.swagger.pipelinemodel.LanguagesList curTaskLanguages = curTaskSpec.getLanguages();
+									for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : curTaskLanguages)
+									{
+										if(specLanguageSchema.getSourceLanguage() == previousTargetLanguage)
+										{
+											boolean sourceLanguageExists = false;
+											for(LanguageSchema eachSchema : currentTaskLangList)
+											{
+												//if previous target language of prev. task already exists as a source language in cur. task
+												if(eachSchema.getSourceLanguage()!=null && eachSchema.getSourceLanguage().equals(previousTargetLanguage))
+												{
+													sourceLanguageExists = true;
+													break;
+												}													
+											}
+											if(sourceLanguageExists == false)
+											{
+												currentTaskLanguageSchema.setSourceLanguage(previousTargetLanguage);
+												//Add all target languages where source Language is pa
+												for(io.swagger.pipelinemodel.LanguageSchema specLangSchema : curTaskLanguages)
+												{
+													if(specLangSchema.getSourceLanguage().equals(previousTargetLanguage))
+													currentTaskLanguageSchema.addTargetLanguageListItem(specLangSchema.getTargetLanguage());
+												}
+												currentTaskLangList.add(currentTaskLanguageSchema);	
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					languagesArrayList.add(currentTaskLangList);
+				}
+				if(currentTaskType == "asr")
+				{
+					for(LanguageSchema previousSchema : previousTaskLangList) //For each previous task's schema
+					{
+						List<SupportedLanguages> previousTargetLanguageList = previousSchema.getTargetLanguageList();
+						for(SupportedLanguages previousTargetLanguage : previousTargetLanguageList) //For each target language in previous task's schema
+						{
+							LanguageSchema currentTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							
+							TaskSpecifications taskSpecificiations = pipelineModel.getTaskSpecifications();
+							for(TaskSpecification curTaskSpec : taskSpecificiations) 
+							{
+								if(curTaskSpec.getTask().getType().toString() == currentTaskType)
+								{
+									io.swagger.pipelinemodel.LanguagesList curTaskLanguages = curTaskSpec.getLanguages();
+									for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : curTaskLanguages)
+									{
+										if(specLanguageSchema.getSourceLanguage() == previousTargetLanguage)
+										{
+											boolean sourceLanguageExists = false;
+											for(LanguageSchema eachSchema : currentTaskLangList)
+											{
+												//if previous target language of prev. task already exists as a source language in cur. task
+												if(eachSchema.getSourceLanguage()!=null && eachSchema.getSourceLanguage().equals(previousTargetLanguage))
+												{
+													sourceLanguageExists = true;
+													break;
+												}													
+											}
+											if(sourceLanguageExists == false)
+											{
+												currentTaskLanguageSchema.setSourceLanguage(previousTargetLanguage);
+												//Add all target languages where source Language is pa
+												currentTaskLanguageSchema.addTargetLanguageListItem(specLanguageSchema.getSourceLanguage());
+												//specLanguageSchema
+												// for(io.swagger.pipelinemodel.LanguageSchema specLangSchema : curTaskLanguages)
+												// {
+												// 	if(specLangSchema.getSourceLanguage().equals(previousTargetLanguage))
+												// 	currentTaskLanguageSchema.addTargetLanguageListItem(specLangSchema.getTargetLanguage());
+												// }
+												currentTaskLangList.add(currentTaskLanguageSchema);	
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					languagesArrayList.add(currentTaskLangList);
+				}
+				if(currentTaskType == "tts")
+				{
+					for(LanguageSchema previousSchema : previousTaskLangList) //For each previous task's schema
+					{
+						List<SupportedLanguages> previousTargetLanguageList = previousSchema.getTargetLanguageList();
+						for(SupportedLanguages previousTargetLanguage : previousTargetLanguageList) //For each target language in previous task's schema
+						{
+							LanguageSchema currentTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							
+							TaskSpecifications taskSpecificiations = pipelineModel.getTaskSpecifications();
+							for(TaskSpecification curTaskSpec : taskSpecificiations) 
+							{
+								if(curTaskSpec.getTask().getType().toString() == currentTaskType)
+								{
+									io.swagger.pipelinemodel.LanguagesList curTaskLanguages = curTaskSpec.getLanguages();
+									for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : curTaskLanguages)
+									{
+										if(specLanguageSchema.getSourceLanguage() == previousTargetLanguage)
+										{
+											boolean sourceLanguageExists = false;
+											for(LanguageSchema eachSchema : currentTaskLangList)
+											{
+												//if previous target language of prev. task already exists as a source language in cur. task
+												if(eachSchema.getSourceLanguage()!=null && eachSchema.getSourceLanguage().equals(previousTargetLanguage))
+												{
+													sourceLanguageExists = true;
+													break;
+												}													
+											}
+											if(sourceLanguageExists == false)
+											{
+												currentTaskLanguageSchema.setSourceLanguage(previousTargetLanguage);
+												//Add all target languages where source Language is pa
+												currentTaskLanguageSchema.addTargetLanguageListItem(specLanguageSchema.getSourceLanguage());
+												//specLanguageSchema
+												// for(io.swagger.pipelinemodel.LanguageSchema specLangSchema : curTaskLanguages)
+												// {
+												// 	if(specLangSchema.getSourceLanguage().equals(previousTargetLanguage))
+												// 	currentTaskLanguageSchema.addTargetLanguageListItem(specLangSchema.getTargetLanguage());
+												// }
+												currentTaskLangList.add(currentTaskLanguageSchema);	
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					languagesArrayList.add(currentTaskLangList);
+				}
+			}
+	
+		}
+
+
+		log.info("FIRST LANGUAGE LIST :: "+languagesArrayList);
+
+
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
