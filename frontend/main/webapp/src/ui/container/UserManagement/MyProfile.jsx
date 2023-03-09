@@ -281,6 +281,11 @@ const handleSubmitGenerateApiKey =  async() =>{
   const getMuiTheme = () =>
     createMuiTheme({
       overrides: {
+        MuiTable: {
+          root: {
+            borderCollapse: "hidden !important",
+          },
+        },
         MUIDataTableBodyRow: {
           root: {
             "&:nth-child(odd)": {
@@ -295,7 +300,7 @@ const handleSubmitGenerateApiKey =  async() =>{
           paper: {
             maxWidth:"100%",
             minHeight: "560px",
-            boxShadow: "0px 0px 2px #00000029",
+            boxShadow: "0px 0px 0px #00000029",
             border: "1px solid #0000001F",
            
           },
