@@ -214,16 +214,20 @@ class GenerateApiKey(Resource):
        
         serviceProviderKey = []
         user = body["userID"]
-        appName = body["appName"]
+        appName = body["appName"]        
+        user_api_keys, status = UserUtils.get_user_api_keys(user,appName)
+        if status == False:
+            if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
+                generatedapikey = UserUtils.generate_user_api_key()
+                UserUtils.insert_generated_user_api_key(user,appName,generatedapikey,serviceProviderKey)
+                res = CustomResponse(Status.SUCCESS_GENERATE_APIKEY.value, generatedapikey)
+                return res.getresjson(), 200
+            else:
+                return post_error("400", "Maximum Key Limit Reached", None), 400
+        
+        if status == True and "errorID" in user_api_keys.keys():
+            return post_error("400", user_api_keys['message'], None), 400
 
 
-        user_api_keys = UserUtils.get_user_api_keys(user)
-        if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
-            generatedapikey = UserUtils.generate_user_api_key()
-            UserUtils.insert_generated_user_api_key(user,appName,generatedapikey,serviceProviderKey)
-            res = CustomResponse(Status.SUCCESS_GENERATE_APIKEY.value, generatedapikey)
-            return res.getresjson(), 200
-        elif isinstance(user_api_keys,dict) and "errorID" in user_api_keys.keys():
-            return user_api_keys
-        else:
-            return post_error("400", "Maximum Key Limit Reached", None), 400
+
+
