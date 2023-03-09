@@ -245,7 +245,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             onClick={() => {
               setModal(true);
             }}
-            style={{height:"37px"}}
+            style={{height:"37px",textTransform: "capitalize",fontSize:"1rem"}}
           >
             {" "} 
             {translate("button.generate")}
@@ -283,7 +283,7 @@ const handleSubmitGenerateApiKey =  async() =>{
       overrides: {
         MuiTable: {
           root: {
-            borderCollapse: "hidden !important",
+            borderCollapse: "hidden",
           },
         },
         MUIDataTableBodyRow: {
