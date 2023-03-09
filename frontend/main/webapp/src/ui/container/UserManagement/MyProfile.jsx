@@ -2,6 +2,9 @@
 import DataTable from "../../components/common/DataTable";
 import { withStyles, Button, Typography, Grid, Box, CircularProgress , TextField, TableCell, Table,} from "@material-ui/core";
 import Search from "../../components/Datasets&Model/Search";
+import { MuiThemeProvider } from "@material-ui/core/styles";
+import createMuiTheme from "../../styles/Datatable";
+import MUIDataTable from "mui-datatables";
 import { translate } from "../../../assets/localisation";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { Cached } from "@material-ui/icons";
@@ -275,6 +278,8 @@ const handleSubmitGenerateApiKey =  async() =>{
     );
   };
 
+ 
+
   const columns = [
     {
       name: "appName",
@@ -283,9 +288,7 @@ const handleSubmitGenerateApiKey =  async() =>{
         filter: false,
         sort: false,
         align: "center",
-        setCellHeaderProps: () => ({
-          style: { width:"100px" },
-        }),
+       
       },
     },
     {
@@ -295,9 +298,7 @@ const handleSubmitGenerateApiKey =  async() =>{
         filter: false,
         sort: false,
         align: "center",
-        setCellHeaderProps: () => ({
-          style: { width:"100px" },
-        }),
+        
       },
     },
     {
@@ -305,9 +306,7 @@ const handleSubmitGenerateApiKey =  async() =>{
       label: "Service Provider Keys",
       options:{
         display: "excluded",
-        setCellHeaderProps: () => ({
-          style: { width:"100px" },
-        }),
+        
       }
     },
     {
@@ -317,9 +316,6 @@ const handleSubmitGenerateApiKey =  async() =>{
         filter: false,
         sort: false,
         align: "center",
-        setCellHeaderProps: () => ({
-          style: { paddingLeft: "46px",  },
-        }),
         customBodyRender: (value, tableMeta) => {
           return (
             <Button
@@ -424,6 +420,7 @@ const handleSubmitGenerateApiKey =  async() =>{
               </>
             </TableCell>
           </TableRow>
+          <TableRow className={classes.tableRow}></TableRow>
           </>
         );
       return <></>
@@ -447,11 +444,13 @@ const handleSubmitGenerateApiKey =  async() =>{
   return (
     <div>
        {renderSnackBar()}
-      <DataTable
-        data={data}
-        columns={columns}
-        options={options}
-      />
+       <MuiThemeProvider theme={createMuiTheme}>
+                      <MUIDataTable
+                        data={data}
+                        columns={columns}
+                        options={options}
+                      />
+                    </MuiThemeProvider>
       <Modal
         open={modal}
         onClose={() => setModal(false)}
