@@ -597,20 +597,30 @@ class UserUtils:
             response = coll.find_one({"userID": userId})
             dupStatus = True
             dupAppName = []
-            if isinstance(response,dict):
-                if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
-                    for appN in response["apiKeyDetails"]:
-                        dupAppName.append(appN["appName"])
-                    if appName in dupAppName:
-                        return post_error("Not Valid","This appName is already in use, please try by changing appName",None) , dupStatus
-                    elif appName not in dupAppName:
-                        dupStatus = False
-                        return response['apiKeyDetails'], dupStatus#,dupStatus #Return the list of user api keys
+            if appName == None:
+                if isinstance(response,dict):
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        return response['apiKeyDetails'] #Return the list of user api keys
+                    else:
+                        return [] #If user doesn't have any api keys
                 else:
-                    return [] #If user doesn't have any api keys
-            else:
-                log.info("Not a valid userId")
-                return post_error("Not Valid","This userId address is not registered with ULCA",None)
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None)
+            if appName != None:
+                if isinstance(response,dict):
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        for appN in response["apiKeyDetails"]:
+                            dupAppName.append(appN["appName"])
+                        if appName in dupAppName:
+                            return post_error("Not Valid","This appName is already in use, please try by changing appName",None) , dupStatus
+                        elif appName not in dupAppName:
+                            dupStatus = False
+                            return response['apiKeyDetails'], dupStatus#,dupStatus #Return the list of user api keys
+                    else:
+                        return [], dupStatus #If user doesn't have any api keys
+                else:
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None), dupStatus
         except Exception as e:
             log.exception("Not a valid userId")
             return post_error("error processing ULCA userId:{}".format(str(e)),None)

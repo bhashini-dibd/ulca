@@ -181,7 +181,8 @@ class GetApiKey(Resource):
         if "userID" not in body.keys():
             return post_error("Data Missing", "users not found", None), 400
         user = body['userID']
-        userAPIKeys = UserUtils.get_user_api_keys(user)
+        appName = None
+        userAPIKeys = UserUtils.get_user_api_keys(user,appName)
         if isinstance(userAPIKeys, list) and len(userAPIKeys) != 0:
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
             return res.getresjson(), 200
@@ -216,6 +217,7 @@ class GenerateApiKey(Resource):
         user = body["userID"]
         appName = body["appName"]        
         user_api_keys, status = UserUtils.get_user_api_keys(user,appName)
+        log.info(f"suer_api_key {user_api_keys}" )
         if status == False:
             if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
                 generatedapikey = UserUtils.generate_user_api_key()
