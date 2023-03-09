@@ -1,9 +1,9 @@
 
 import DataTable from "../../components/common/DataTable";
-import { withStyles, Button, Typography, Grid, Box, CircularProgress , TextField, TableCell, Table,} from "@material-ui/core";
+import { withStyles,createMuiTheme, Button, Typography, Grid, Box, CircularProgress , TextField, TableCell, Table,} from "@material-ui/core";
 import Search from "../../components/Datasets&Model/Search";
 import { MuiThemeProvider } from "@material-ui/core/styles";
-import createMuiTheme from "../../styles/Datatable";
+// import createMuiTheme from "../../styles/Datatable";
 import MUIDataTable from "mui-datatables";
 import { translate } from "../../../assets/localisation";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -278,7 +278,84 @@ const handleSubmitGenerateApiKey =  async() =>{
     );
   };
 
- 
+  const getMuiTheme = () =>
+    createMuiTheme({
+      overrides: {
+        MUIDataTableBodyRow: {
+          root: {
+            "&:nth-child(odd)": {
+              backgroundColor: "#D6EAF8",
+            },
+            "&:nth-child(even)": {
+              backgroundColor: "#E9F7EF",
+            },
+          },
+        },
+        MUIDataTable: {
+          paper: {
+            maxWidth:"100%",
+            minHeight: "560px",
+            boxShadow: "0px 0px 2px #00000029",
+            border: "1px solid #0000001F",
+           
+          },
+          responsiveBase: {
+            minHeight: "560px",
+          
+          },
+        },
+        
+        MuiTableCell: {
+          head: {
+            // padding: ".6rem .5rem .6rem 1.5rem",
+            backgroundColor: "#F8F8FA !important",
+            marginLeft: "25px",
+            letterSpacing: "0.74",
+            fontWeight: "bold",
+            minHeight: "700px",
+           
+          },
+         
+        },
+        MuiTableRow: {
+          root: {
+            border: "1px solid #3A3A3A1A",
+            opacity: 1,
+            "&$hover:hover:nth-child(odd)": { backgroundColor: "#D6EAF8" },
+            "&$hover:hover:nth-child(even)": { backgroundColor: "#E9F7EF" },
+          },
+        },
+        MUIDataTableBodyCell: {
+          stackedCommon:{
+            "@media (max-width: 400px)": {
+            width:" 30%",
+             height: "auto",
+         }
+         
+          },
+
+      },
+        MUIDataTableHeadCell: {
+          root: {
+            "&$nth-child(1)": {
+              width: "3%",
+            },
+          },
+        },
+        MuiTypography: {
+        
+          h6 : {
+            fontSize: "1.125rem",
+            fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
+            fontWeight: "300",
+            paddingTop:"4px",
+            lineHeight: "1.6px"
+           
+            },
+        },
+      },
+    });
+
 
   const columns = [
     {
@@ -383,7 +460,7 @@ const handleSubmitGenerateApiKey =  async() =>{
               <>
               <Box style={{ margin: "0 80px" }}>
                   <Table size="small" aria-label="purchases" >
-                  <TableHead >
+                  <TableHead  style={{height:"60px"}}>
                       <TableCell>Service Provider Name</TableCell>
                       <TableCell>Inference API Key Name</TableCell>
                       <TableCell >Inference API Key Value</TableCell>
@@ -442,10 +519,12 @@ const handleSubmitGenerateApiKey =  async() =>{
       />
     );
   };
+
+
   return (
     <div>
        {renderSnackBar()}
-       <MuiThemeProvider theme={createMuiTheme}>
+       <MuiThemeProvider theme={getMuiTheme}>
                       <MUIDataTable
                         title={"App Integration Details"}
                         data={data}
