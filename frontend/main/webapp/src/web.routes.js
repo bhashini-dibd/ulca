@@ -50,7 +50,6 @@ const PrivateRoute = ({
   index,
   ...rest
 }) => {
-  console.log("hiiiii",title,authenticate())
   return (
     <Route
       {...rest}
