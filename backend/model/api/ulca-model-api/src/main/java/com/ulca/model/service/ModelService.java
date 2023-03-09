@@ -1150,6 +1150,7 @@ public class ModelService {
 				Criteria submitterCriteria1 = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
 				dynamicQuery1.addCriteria(submitterCriteria1);
 				log.info("dynamicQuery : " + dynamicQuery1.toString());
+				//dynamicQuery1.with(new Sort(Sort.Direction.DESC, "_id"));
 				PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery1, PipelineModel.class);
 		
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
