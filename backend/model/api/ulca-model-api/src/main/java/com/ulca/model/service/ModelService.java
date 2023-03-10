@@ -41,6 +41,7 @@ import org.springframework.data.geo.Polygon;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -1141,7 +1142,7 @@ public class ModelService {
 		if (pipelineRequest != null) {
 			validatePipelineRequest(pipelineRequest);
 		} else {
-			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax");
+			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax",HttpStatus.BAD_REQUEST);
 		}
         
 		
@@ -1196,13 +1197,13 @@ public class ModelService {
 				
 			}else {
 				
-				throw new PipelineValidationException("Ulca Api Key does not exist!");
+				throw new PipelineValidationException("Ulca Api Key does not exist!",HttpStatus.BAD_REQUEST);
 	
 			}
 			
 			
 		}else {
-			throw new PipelineValidationException("User Id does not exist!");
+			throw new PipelineValidationException("User Id does not exist!",HttpStatus.BAD_REQUEST);
 
 			
 		}
@@ -2625,7 +2626,7 @@ public class ModelService {
 	public Boolean validatePipelineRequest(PipelineRequest pipelineRequest) {
 		log.info("Enter to validate pipelineRequest");
 		if (pipelineRequest.getPipelineTasks() == null || pipelineRequest.getPipelineTasks().isEmpty())
-			throw new PipelineValidationException("PipelineTasks is required field");
+			throw new PipelineValidationException("PipelineTasks is required field",HttpStatus.BAD_REQUEST);
 
 		log.info("pipelineRequest.getPipelineTasks() validated");
 
@@ -2654,7 +2655,7 @@ public class ModelService {
 		PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery, PipelineModel.class);
 
 		if (pipelineModel == null)
-			throw new PipelineValidationException("Pipeline model with the request submitter does not exist");
+			throw new PipelineValidationException("Pipeline model with the request submitter does not exist",HttpStatus.BAD_REQUEST);
 
 		ArrayList<PipelineTaskSequence> supportedPipelines = pipelineModel.getSupportedPipelines();
           boolean flag = false;
@@ -2679,7 +2680,7 @@ public class ModelService {
 		}
 		
 		if (!flag)
-			throw new PipelineValidationException("Requested pipeline in not exist with this submitter!");
+			throw new PipelineValidationException("Requested pipeline in not exist with this submitter!",HttpStatus.BAD_REQUEST);
 		
 		
 		
