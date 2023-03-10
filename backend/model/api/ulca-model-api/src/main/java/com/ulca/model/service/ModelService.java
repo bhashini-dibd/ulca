@@ -2581,6 +2581,8 @@ public class ModelService {
 		if(pipelineTasks.size()!=countResponseConfigs)
 		{
 			log.info("SHOULD RETURN ERROR");
+			throw new PipelineValidationException("Sequence of languages not supported",HttpStatus.BAD_REQUEST);
+
 		}
 
 		pipelineResponse.setPipelineResponseConfig(newPipelineResponseConfig);
