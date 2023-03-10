@@ -2682,7 +2682,7 @@ public class ModelService {
 		}
 		
 		if (!flag)
-			throw new PipelineValidationException("Requested pipeline in not exist with this submitter!",HttpStatus.BAD_REQUEST);
+			throw new PipelineValidationException("Requested pipeline does not exist with this submitter!",HttpStatus.BAD_REQUEST);
 		
 		
 		
