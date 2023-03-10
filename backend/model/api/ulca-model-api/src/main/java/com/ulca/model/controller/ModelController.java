@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.validation.Valid;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -153,6 +153,7 @@ public class ModelController {
 	 * return modelService.getModelsPipeline(file, userId); }
 	 */
 	
+	@CrossOrigin(origins = "http://localhost:8080")
 	@PostMapping("/getModelsPipeline")
 	public ObjectNode getModelsPipeline(@RequestHeader("userID") String userID,@RequestHeader("ulcaApiKey") String ulcaApiKey,@RequestBody PipelineRequest pipelineRequest) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");

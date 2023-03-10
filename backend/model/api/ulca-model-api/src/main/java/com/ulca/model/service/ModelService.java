@@ -156,6 +156,7 @@ import okhttp3.Response;
 import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.mongodb.client.model.geojson.LineString;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -1185,7 +1186,7 @@ public class ModelService {
 		
 		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = new TranslationTaskInferenceInferenceApiKey();
 
-		validateUserDetails(userID,ulcaApiKey);
+		//validateUserDetails(userID,ulcaApiKey);
 
 		String dbUserId=userId;
 		
@@ -2730,60 +2731,62 @@ public class ModelService {
 
 	}
 
-	public InferenceAPIEndPointInferenceApiKey validateUserDetails(String userID, String ulcaApiKey)
-	{
+	// public InferenceAPIEndPointInferenceApiKey validateUserDetails(String userID, String ulcaApiKey)
+	// {
 		
-		log.info("++++++++++++++++Entry to validate User Details+++++++++++++++");
+	// 	log.info("++++++++++++++++Entry to validate User Details+++++++++++++++");
 		
 		
-		InferenceAPIEndPointInferenceApiKey infKey = new InferenceAPIEndPointInferenceApiKey();
-		infKey.setName(null);
-		//Make a call to UMS [Get API Keys]
-		ObjectMapper objectMapper = new ObjectMapper();
-        JSONObject data = new JSONObject();
-        data.put("userID",userID);
-        data.put("ulcaApiKey", ulcaApiKey);
+	// 	InferenceAPIEndPointInferenceApiKey infKey = new InferenceAPIEndPointInferenceApiKey();
+	// 	infKey.setName(null);
+	// 	//Make a call to UMS [Get API Keys]
+	// 	ObjectMapper objectMapper = new ObjectMapper();
+    //     JSONObject data = new JSONObject();
+    //     data.put("userID",userID);
+    //     data.put("ulcaApiKey", ulcaApiKey);
         
-        String requestUrl=ulca_ums_host+"/ulca/user-mgmt/v1/users/getApiKeys";
-	      log.info("requestUrl :: "+requestUrl);
+    //     String requestUrl=ulca_ums_host+"/ulca/user-mgmt/v1/users/getApiKeys";
+	//       log.info("requestUrl :: "+requestUrl);
+	// 	String responseJsonStr = null;
+	// 	try {
+	// 	String	requestJson = data.toString();
 		
-		try {
-		String	requestJson = data.toString();
-		
-           log.info("requestJson :: "+requestJson);
-		OkHttpClient client = new OkHttpClient();
+    //        log.info("requestJson :: "+requestJson);
+	// 	OkHttpClient client = new OkHttpClient();
 		
 		
 		
-		RequestBody body = RequestBody.create(requestJson, okhttp3.MediaType.parse("application/json"));
+	// 	RequestBody body = RequestBody.create(requestJson, okhttp3.MediaType.parse("application/json"));
          
-		log.info("body :: "+body.toString());
-	        Request httpRequest = new Request.Builder().url(requestUrl).post(body).build();
-		    log.info("httpRequest : "+httpRequest.toString());
+	// 	log.info("body :: "+body.toString());
+	//         Request httpRequest = new Request.Builder().url(requestUrl).post(body).build();
+	// 	    log.info("httpRequest : "+httpRequest.toString());
 		
 		
 				
-		Response httpResponse = client.newCall(httpRequest).execute();
+	// 	Response httpResponse = client.newCall(httpRequest).execute();
 		
-		if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+	// 	if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
-			log.info(httpResponse.toString());
-			throw new PipelineValidationException("UMS is not responding!",HttpStatus.BAD_REQUEST);
+	// 		log.info(httpResponse.toString());
+	// 		throw new PipelineValidationException("UMS is not responding!",HttpStatus.BAD_REQUEST);
 
 			
-		}
+	// 	}
 
 		
-			String responseJsonStr = httpResponse.body().string();
+	// 		responseJsonStr = httpResponse.body().string();
 			
-			log.info("responseJsonStr :: "+responseJsonStr);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		log.info("++++++++++++++++Exit to validate User Details+++++++++++++++");
+	// 		log.info("responseJsonStr :: "+responseJsonStr);
+	// 	} catch (Exception e) {
+	// 		e.printStackTrace();
+	// 	}
+	// 	//JSONObject json = (JSONObject) JsonParser.parseString(responseJsonStr);  
+	// 	//log.info("OBJECT :: "+json);
+	// 	log.info("++++++++++++++++Exit to validate User Details+++++++++++++++");
 
-		return infKey;
-	}
+	// 	return infKey;
+	// }
 
 	/*
 	 * public Boolean checkTaskSequence(PipelineRequest pipelineRequest) {
