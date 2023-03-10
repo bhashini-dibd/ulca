@@ -153,7 +153,7 @@ public class ModelController {
 	 * return modelService.getModelsPipeline(file, userId); }
 	 */
 	
-	//@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/getModelsPipeline")
 	public ObjectNode getModelsPipeline(@RequestHeader("userID") String userID,@RequestHeader("ulcaApiKey") String ulcaApiKey,@RequestBody PipelineRequest pipelineRequest) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");
