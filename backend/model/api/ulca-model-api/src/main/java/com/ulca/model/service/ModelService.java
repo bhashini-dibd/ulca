@@ -50,6 +50,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,6 +70,7 @@ import com.ulca.model.dao.ModelHealthStatusDao;
 import com.ulca.model.dao.PipelineModel;
 import com.ulca.model.dao.PipelineModelDao;
 import com.ulca.model.exception.FileExtensionNotSupportedException;
+import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.exception.ModelStatusChangeException;
 import com.ulca.model.exception.ModelValidationException;
@@ -90,6 +92,7 @@ import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.UploadModelResponse;
 
+import io.netty.handler.codec.http.HttpRequest;
 import io.swagger.model.ASRInference;
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.ImageFormat;
@@ -145,6 +148,11 @@ import io.swagger.pipelinemodel.TaskSpecifications;
 import io.swagger.pipelinemodel.TaskSpecification;
 
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -197,6 +205,10 @@ public class ModelService {
 
 	@Value("${ulca.apikey2}")
 	private String ulcaapikey2;
+	
+	
+	@Value("${ulca.ums.host}")
+	private String ulca_ums_host;
 
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
@@ -2720,10 +2732,56 @@ public class ModelService {
 
 	public InferenceAPIEndPointInferenceApiKey validateUserDetails(String userID, String ulcaApiKey)
 	{
+		
+		log.info("++++++++++++++++Entry to validate User Details+++++++++++++++");
+		
+		
 		InferenceAPIEndPointInferenceApiKey infKey = new InferenceAPIEndPointInferenceApiKey();
 		infKey.setName(null);
 		//Make a call to UMS [Get API Keys]
-		//
+		ObjectMapper objectMapper = new ObjectMapper();
+        JSONObject data = new JSONObject();
+        data.put("userID",userID);
+        data.put("ulcaApiKey", ulcaApiKey);
+        
+        String requestUrl=ulca_ums_host+"/ulca/user-mgmt/v1/users/getApiKeys";
+	      log.info("requestUrl :: "+requestUrl);
+		
+		try {
+		String	requestJson = data.toString();
+		
+           log.info("requestJson :: "+requestJson);
+		OkHttpClient client = new OkHttpClient();
+		
+		
+		
+		RequestBody body = RequestBody.create(requestJson, okhttp3.MediaType.parse("application/json"));
+         
+		log.info("body :: "+body.toString());
+	        Request httpRequest = new Request.Builder().url(requestUrl).post(body).build();
+		    log.info("httpRequest : "+httpRequest.toString());
+		
+		
+				
+		Response httpResponse = client.newCall(httpRequest).execute();
+		
+		if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+			log.info(httpResponse.toString());
+			throw new PipelineValidationException("UMS is not responding!",HttpStatus.BAD_REQUEST);
+
+			
+		}
+
+		
+			String responseJsonStr = httpResponse.body().string();
+			
+			log.info("responseJsonStr :: "+responseJsonStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.info("++++++++++++++++Exit to validate User Details+++++++++++++++");
+
 		return infKey;
 	}
 
