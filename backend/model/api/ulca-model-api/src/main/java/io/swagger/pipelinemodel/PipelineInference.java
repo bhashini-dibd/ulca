@@ -36,7 +36,7 @@ public class PipelineInference   {
   private Submitter submitter = null;
 
   @JsonProperty("inferenceEndPoint")
-  private InferenceAPIEndPoint inferenceEndPoint = null;
+  private io.swagger.pipelinemodel.InferenceAPIEndPoint inferenceEndPoint = null;
 
   @JsonProperty("supportedPipelines")
   private ListOfPipelines supportedPipelines = null;

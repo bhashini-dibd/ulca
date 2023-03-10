@@ -21,11 +21,12 @@ import java.util.Set;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.apache.commons.io.FilenameUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONString;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +41,7 @@ import org.springframework.data.geo.Polygon;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +53,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
@@ -114,6 +117,7 @@ import io.swagger.model.TxtLangDetectionRequest;
 import io.swagger.pipelinemodel.InferenceAPIEndPointMasterApiKey;
 import io.swagger.pipelinemodel.ListOfPipelines;
 import io.swagger.pipelinemodel.PipelineTaskSequence;
+import io.swagger.pipelinemodel.TaskSpecification;
 import io.swagger.pipelinerequest.ASRRequestConfig;
 import io.swagger.pipelinerequest.ASRResponseConfig;
 import io.swagger.pipelinerequest.ASRTask;
@@ -133,15 +137,20 @@ import io.swagger.pipelinerequest.TranslationRequestConfig;
 import io.swagger.pipelinerequest.TranslationResponseConfig;
 import io.swagger.pipelinerequest.TranslationTask;
 import io.swagger.pipelinerequest.TranslationTaskInference;
+import io.swagger.pipelinerequest.TranslationTaskInferenceInferenceApiKey;
 import io.swagger.pipelinerequest.PipelineResponse;
 import io.swagger.pipelinerequest.LanguagesList;
 import io.swagger.pipelinerequest.LanguageSchema;
+import io.swagger.pipelinemodel.TaskSpecifications;
+import io.swagger.pipelinemodel.TaskSpecification;
 
 import lombok.extern.slf4j.Slf4j;
 import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mongodb.client.model.geojson.LineString;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Slf4j
@@ -171,8 +180,23 @@ public class ModelService {
 	@Autowired
 	ModelHealthStatusDao modelHealthStatusDao;
 
+	@Value("${aes.secret.key1}")
+	private String aessecretkey1;
+
+	@Value("${aes.secret.key2}")
+	private String aessecretkey2;
+
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
+
+	@Value("${userId}")
+	private String userId;
+
+	@Value("${ulca.apikey1}")
+	private String ulcaapikey1;
+
+	@Value("${ulca.apikey2}")
+	private String ulcaapikey2;
 
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
@@ -185,6 +209,7 @@ public class ModelService {
 
 	@Autowired
 	MongoTemplate mongoTemplate;
+	
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -424,8 +449,11 @@ public class ModelService {
 			
 			pipelineModelObj.setUserId(userId);
 			pipelineModelObj.setSubmittedOn(Instant.now().toEpochMilli());
-           if(pipelineModelObj.getInferenceEndPoint().getMasterApiKey()!=null) {
-			InferenceAPIEndPointMasterApiKey pipelineInferenceMasterApiKey = pipelineModelObj.getInferenceEndPoint()
+			
+			io.swagger.pipelinemodel.InferenceAPIEndPoint 	inferenceAPIEndPoint=pipelineModelObj.getInferenceEndPoint();
+			
+           if(inferenceAPIEndPoint.getMasterApiKey()!=null) {
+			InferenceAPIEndPointMasterApiKey pipelineInferenceMasterApiKey = inferenceAPIEndPoint
 					.getMasterApiKey();
 			if (pipelineInferenceMasterApiKey.getValue() != null) {
 				log.info("SecretKey :: " + SECRET_KEY);
@@ -1107,503 +1135,1469 @@ public class ModelService {
 
 	}
 
-	public String getModelsPipeline(PipelineRequest pipelineRequest) throws Exception {
+	public ObjectNode getModelsPipeline(PipelineRequest pipelineRequest,String userID,String ulcaApiKey) throws Exception {
 		//log.info("File :: " + file.toString());
 		//PipelineRequest pipelineRequest = getPipelineRequest(file);
 		log.info("pipelineRequest :: " + pipelineRequest);
 		if (pipelineRequest != null) {
 			validatePipelineRequest(pipelineRequest);
 		} else {
-			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax");
+			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax",HttpStatus.BAD_REQUEST);
 		}
         
 		
 		//Make query and find pipeline model with the submitter name
-				Query dynamicQuery1 = new Query();
-				Criteria modelTypeCriteria1 = Criteria.where("_class").is("com.ulca.model.dao.PipelineModel");
-				dynamicQuery1.addCriteria(modelTypeCriteria1);
-				Criteria submitterCriteria1 = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
-				dynamicQuery1.addCriteria(submitterCriteria1);
-				log.info("dynamicQuery : " + dynamicQuery1.toString());
-				PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery1, PipelineModel.class);
+		Query dynamicQuery1 = new Query();
+		Criteria modelTypeCriteria1 = Criteria.where("_class").is("com.ulca.model.dao.PipelineModel");
+		dynamicQuery1.addCriteria(modelTypeCriteria1);
+		Criteria submitterCriteria1 = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+		dynamicQuery1.addCriteria(submitterCriteria1);
+		log.info("dynamicQuery : " + dynamicQuery1.toString());
+		PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery1, PipelineModel.class);
 		
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
 	//	ArrayList<String> pipelineTaskSequence = new ArrayList<String>();
 		
-		PipelineResponse pipelineResponse = new PipelineResponse();
 		
-	   PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
-	   pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
-	   pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
-	   pipelineInferenceAPIEndPoint.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
-	   pipelineInferenceAPIEndPoint.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
-	   pipelineResponse.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
-	   TaskSchemaList taskSchemaList = new TaskSchemaList();
+		PipelineResponse pipelineResponse = new PipelineResponse();
+		///Ulca ApiKey Part
+		
+		
+		PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
+		   pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
+		   pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
+		   pipelineInferenceAPIEndPoint.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
+		   pipelineInferenceAPIEndPoint.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
+		
+		
+		   TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = new TranslationTaskInferenceInferenceApiKey();
+		String dbUserId=userId;
+		
+		
+		String inferenceApiKeyName1="Authorization";
+		String ulcaApiKey1=ulcaapikey1;
+		String inferenceApiKeyValue1=aessecretkey1;
+		
+		String inferenceApiKeyName2="Authorization";
+		String ulcaApiKey2 =ulcaapikey2;
+	    String inferenceApiKeyValue2=aessecretkey2;
+		
+		if(userID.equals(dbUserId)) {
+			if(ulcaApiKey.equals(ulcaApiKey1)) {
+				
+				translationTaskInferenceInferenceApiKey.setName(inferenceApiKeyName1);
+				translationTaskInferenceInferenceApiKey.setValue(inferenceApiKeyValue1);
+				
+				
+			}else if(ulcaApiKey.equals(ulcaApiKey2)) {
+				
+				translationTaskInferenceInferenceApiKey.setName(inferenceApiKeyName2);
+				translationTaskInferenceInferenceApiKey.setValue(inferenceApiKeyValue2);
+				
+			}else {
+				
+				throw new PipelineValidationException("Ulca Api Key does not exist!",HttpStatus.BAD_REQUEST);
+	
+			}
+			
+			
+		}else {
+			throw new PipelineValidationException("User Id does not exist!",HttpStatus.BAD_REQUEST);
+
+			
+		}
+		
+		pipelineInferenceAPIEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
+		
+		   pipelineResponse.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
+
+		
+		
 	   
-		Set<String> sourceLanguages = new HashSet<String>();
-		Set<String> targetLanguages = new HashSet<String>();
+	//    TaskSchemaList taskSchemaList = new TaskSchemaList();
+	   
+	// 	Set<String> sourceLanguages = new HashSet<String>();
+	// 	Set<String> targetLanguages = new HashSet<String>();
 
-		//For each task in input pipeline request
-		for(PipelineTask pipelineTask : pipelineTasks)
-		{
+	// 	//For each task in input pipeline request
+	// 	for(PipelineTask pipelineTask : pipelineTasks)
+	// 	{
 			
-	     String task=pipelineTask.getTaskType();
-			if(task=="translation") {
+	//      String task=pipelineTask.getTaskType();
+	// 		if(task=="translation") {
 			
-				TranslationTaskInference translationTaskInference = new TranslationTaskInference();
-				//translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
+	// 			TranslationTaskInference translationTaskInference = new TranslationTaskInference();
+	// 			//translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
 				
-				TranslationTask translationTask	=(TranslationTask)pipelineTask;
-				targetLanguages.clear();
-				if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
-				{
-					TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
-					LanguagePair languagePair =translationRequestConfig.getLanguage();
-					{
-						sourceLanguages.clear();
-						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
-					}
-					if(languagePair.getTargetLanguage()!=null)
-					{
-						//targetLanguages.clear();
-						targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
-					}
-				}
+	// 			TranslationTask translationTask	=(TranslationTask)pipelineTask;
+	// 			targetLanguages.clear();
+	// 			if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
+	// 			{
+	// 				TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
+	// 				LanguagePair languagePair =translationRequestConfig.getLanguage();
+	// 				{
+	// 					sourceLanguages.clear();
+	// 					sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
+	// 				}
+	// 				if(languagePair.getTargetLanguage()!=null)
+	// 				{
+	// 					//targetLanguages.clear();
+	// 					targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
+	// 				}
+	// 			}
 
-				log.info("SourceLanguages :: "+sourceLanguages);
-				log.info("TargetLanguages :: "+targetLanguages);
+	// 			log.info("SourceLanguages :: "+sourceLanguages);
+	// 			log.info("TargetLanguages :: "+targetLanguages);
 
-				Query dynamicQuery = new Query();
+	// 			Query dynamicQuery = new Query();
 				
-				Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
-				dynamicQuery.addCriteria(modelTypeCriteria);
+	// 			Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+	// 			dynamicQuery.addCriteria(modelTypeCriteria);
 
-				Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
-				dynamicQuery.addCriteria(submitterCriteria);
+	// 			Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+	// 			dynamicQuery.addCriteria(submitterCriteria);
 			    
-				Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
-				dynamicQuery.addCriteria(taskCriteria);
+	// 			Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
+	// 			dynamicQuery.addCriteria(taskCriteria);
 
-				if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
-				{
-					Criteria languagesCriteria = new Criteria();
-					languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
-													   Criteria.where("languages.targetLanguage").in(targetLanguages));
-					dynamicQuery.addCriteria(languagesCriteria);
-				}
-				else if(sourceLanguages.size() !=0 )
-				{
-				 	Criteria languagesCriteria = new Criteria();
-				 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
-				 	dynamicQuery.addCriteria(languagesCriteria);
-				}
-				else if(targetLanguages.size() !=0 )
-				{
-				 	Criteria languagesCriteria = new Criteria();
-				 	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
-				 	dynamicQuery.addCriteria(languagesCriteria);
-				}
+	// 			if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
+	// 			{
+	// 				Criteria languagesCriteria = new Criteria();
+	// 				languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
+	// 												   Criteria.where("languages.targetLanguage").in(targetLanguages));
+	// 				dynamicQuery.addCriteria(languagesCriteria);
+	// 			}
+	// 			else if(sourceLanguages.size() !=0 )
+	// 			{
+	// 			 	Criteria languagesCriteria = new Criteria();
+	// 			 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
+	// 			 	dynamicQuery.addCriteria(languagesCriteria);
+	// 			}
+	// 			else if(targetLanguages.size() !=0 )
+	// 			{
+	// 			 	Criteria languagesCriteria = new Criteria();
+	// 			 	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+	// 			 	dynamicQuery.addCriteria(languagesCriteria);
+	// 			}
 
-				//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
-				// if(targetLanguages.size() != 0)
-				// {
-				// 	Criteria targetLanguagesCriteria = new Criteria();
-				// 	targetLanguagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
-				// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
-				// }
+	// 			//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
+	// 			// if(targetLanguages.size() != 0)
+	// 			// {
+	// 			// 	Criteria targetLanguagesCriteria = new Criteria();
+	// 			// 	targetLanguagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+	// 			// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
+	// 			// }
 
-				log.info("dynamicQuery in translation task search ::" + dynamicQuery.toString());
+	// 			log.info("dynamicQuery in translation task search ::" + dynamicQuery.toString());
 				
-				List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+	// 			List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
 
-				sourceLanguages.clear();
-				targetLanguages.clear();
-				
-				List<TranslationResponseConfig> config = new ArrayList<TranslationResponseConfig>();
-				for(ModelExtended each_model : translationModels) 
-				{
-					log.info("Model Name :: " + each_model.getName());
-					LanguagePairs langPair = each_model.getLanguages();
-					TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
+	// 			sourceLanguages.clear();
+	// 			targetLanguages.clear();
 
-					for(LanguagePair lp : langPair)	
-					{
-						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
-						targetLanguages.add(lp.getTargetLanguage().toString().toUpperCase());	
-						translationResponseConfig.setServiceId("");
-						translationResponseConfig.setLanguage(lp);
-					}
-					//TODO: Read each model and store the results in PipelineResponseConfig
-					
-					config.add(translationResponseConfig);
-				}
+	// 			HashSet<TranslationResponseConfig> hashConfig = new HashSet<TranslationResponseConfig>();
+
+	// 			List<TranslationResponseConfig> config = new ArrayList<TranslationResponseConfig>();
+	// 			for(ModelExtended each_model : translationModels) 
+	// 			{
+	// 				log.info("Model Name :: " + each_model.getName());
+	// 				LanguagePairs langPair = each_model.getLanguages();
+	// 				TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
+
+	// 				for(LanguagePair lp : langPair)	
+	// 				{
+	// 					sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+	// 					targetLanguages.add(lp.getTargetLanguage().toString().toUpperCase());	
+	// 					translationResponseConfig.setServiceId("");
+	// 					translationResponseConfig.setLanguage(lp);
+	// 				}
+	// 				//TODO: Read each model and store the results in PipelineResponseConfig
+	// 				hashConfig.add(translationResponseConfig);
+	// 			}
 				
-				log.info(" SourceLanguages at end of Translation :: "+sourceLanguages);
-				log.info(" TargetLanguages at end of Translation :: "+targetLanguages);
-				sourceLanguages = targetLanguages;
-				if(config.size() == 0)
-					throw new PipelineValidationException("Languages are not supported within this pipeline");
-				translationTaskInference.setConfig(config);
-				log.info("TRANSLATION TASK INFERENCE : "+translationTaskInference);
-				taskSchemaList.add(translationTaskInference);
-			}
+	// 			for(TranslationResponseConfig each_config : hashConfig)
+	// 				config.add(each_config);
 			
-			else if(task=="asr") 
-			{
-				
-				ASRTaskInference asrTaskInference = new ASRTaskInference();
-				//aSRTaskInference.setTaskType(SupportedTasks.fromValue(task));
-				
-				List<ASRResponseConfig> config = new ArrayList<ASRResponseConfig>();
-
-				
-				ASRTask asrTask=(ASRTask)pipelineTask;
-				if(asrTask.getConfig()!=null && asrTask.getConfig().getLanguage()!=null)
-				{
-					ASRRequestConfig asrRequestConfig =	asrTask.getConfig();
-					LanguagePair languagePair =asrRequestConfig.getLanguage();
-					if(languagePair.getSourceLanguage()!=null)
-					{
-						sourceLanguages.clear();
-						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
-					}
-					// if(languagePair.getTargetLanguage()!=null)
-					// 	targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
-					log.info("Source Languages :: "+sourceLanguages);
-					// log.info("Target Languages :: "+targetLanguages);				
-				}
-
-				Query dynamicQuery = new Query();
-				
-				Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
-				dynamicQuery.addCriteria(modelTypeCriteria);
-
-				Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
-				dynamicQuery.addCriteria(submitterCriteria);
-			    
-				Criteria taskCriteria = Criteria.where("task.type").is("ASR");
-				dynamicQuery.addCriteria(taskCriteria);
-
-				// if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
-				// {
-				// 	Criteria languagesCriteria = new Criteria();
-				// 	languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
-				// 									   Criteria.where("languages.targetLanguage").in(targetLanguages));
-				// 	dynamicQuery.addCriteria(languagesCriteria);
-				// }
-				if(sourceLanguages.size() !=0)
-				{
-				 	Criteria languagesCriteria = new Criteria();
-				 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
-				 	dynamicQuery.addCriteria(languagesCriteria);
-				}
-				// else if(targetLanguages.size() !=0 )
-				// {
-				//  	Criteria languagesCriteria = new Criteria();
-				//  	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
-				//  	dynamicQuery.addCriteria(languagesCriteria);
-				// }
-
-				// if(targetLanguages.size() != 0)
-				// {
-				// 	Criteria targetLanguagesCriteria = new Criteria();
-				// 	targetLanguagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
-				// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
-				// }
-
-				log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
-
-				
-				List<ModelExtended> asrModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
-
-				sourceLanguages.clear();
-				targetLanguages.clear();
-
-				for(ModelExtended each_model : asrModels) 
-				{
-					
-					ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
-					log.info("Model Name :: " + each_model.getName());
-					LanguagePairs langPair = each_model.getLanguages();
-					for(LanguagePair lp : langPair)	
-					{
-						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
-						asrResponseConfig.setServiceId("");
-						asrResponseConfig.setLanguage(lp);
-					}
-					//TODO: Read each model and store the results in PipelineResponseConfig
-					asrResponseConfig.setDomain(each_model.getDomain());
-					config.add(asrResponseConfig);
-				}
-				if(config.size() == 0)
-					throw new PipelineValidationException("Languages are not supported within this pipeline");
-
-				asrTaskInference.setConfig(config);
-				taskSchemaList.add(asrTaskInference);
-
-			}
-			else if(task=="tts") 
-			{
-				
-				TTSTaskInference ttsTaskInference = new TTSTaskInference();
-				//tTSTaskInference.setTaskType(SupportedTasks.fromValue(task));
-				
-				List<TTSResponseConfig> config = new ArrayList<TTSResponseConfig>();
-
-				
-				
-				
-				TTSTask ttsTask=(TTSTask)pipelineTask;
-				if(ttsTask.getConfig()!=null && ttsTask.getConfig().getLanguage()!=null)
-				{
-					TTSRequestConfig  ttsRequestConfig = ttsTask.getConfig();
-					LanguagePair languagePair = ttsRequestConfig.getLanguage();
-					if(languagePair.getSourceLanguage()!=null)
-					{
-						sourceLanguages.clear();
-						sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
-					}					// if(languagePair.getTargetLanguage()!=null)
-					// 	targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
-					log.info("Source Languages :: "+sourceLanguages);
-					// log.info("Target Languages :: "+targetLanguages);				
-				}
-
-				Query dynamicQuery = new Query();
-				
-				Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
-				dynamicQuery.addCriteria(modelTypeCriteria);
-
-				Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
-				dynamicQuery.addCriteria(submitterCriteria);
-			    
-				Criteria taskCriteria = Criteria.where("task.type").is("TTS");
-				dynamicQuery.addCriteria(taskCriteria);
-
-				// if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
-				// {
-				// 	Criteria languagesCriteria = new Criteria();
-				// 	languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
-				// 									   Criteria.where("languages.targetLanguage").in(targetLanguages));
-				// 	dynamicQuery.addCriteria(languagesCriteria);
-				// }
-				if(sourceLanguages.size() !=0 )
-				{
-				 	Criteria languagesCriteria = new Criteria();
-				 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
-				 	dynamicQuery.addCriteria(languagesCriteria);
-				}
-				// else if(targetLanguages.size() !=0 )
-				// {
-				//  	Criteria languagesCriteria = new Criteria();
-				//  	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
-				//  	dynamicQuery.addCriteria(languagesCriteria);
-				// }
-
-				//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
-				// if(targetLanguages.size() != 0)
-				// {
-				// 	Criteria targetLanguagesCriteria = new Criteria();
-				// 	targetLanguagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
-				// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
-				// }
-
-				log.info("dynamicQuery in TTS Models task search ::" + dynamicQuery.toString());
-
-				List<ModelExtended> ttsModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
-
-				sourceLanguages.clear();
-				targetLanguages.clear();
-				
-				for(ModelExtended each_model : ttsModels) 
-				{
-					
-					TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
-
-					log.info("Model Name :: " + each_model.getName());
-					LanguagePairs langPair = each_model.getLanguages();
-					for(LanguagePair lp : langPair)	
-					{
-						sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
-						ttsResponseConfig.setServiceId("");
-						ttsResponseConfig.setLanguage(lp);
-					}
-					//TODO: Read each model and store the results in PipelineResponseConfig
+	// 			log.info(" SourceLanguages at end of Translation :: "+sourceLanguages);
+	// 			log.info(" TargetLanguages at end of Translation :: "+targetLanguages);
+	// 			sourceLanguages = targetLanguages;
+	// 			if(config.size() == 0)
+	// 				throw new PipelineValidationException("Languages are not supported within this pipeline");
+	// 			translationTaskInference.setConfig(config);
+	// 			log.info("TRANSLATION TASK INFERENCE : "+translationTaskInference);
+	// 			taskSchemaList.add(translationTaskInference);
+	// 		}
 			
-					config.add(ttsResponseConfig);
+	// 		else if(task=="asr") 
+	// 		{
+				
+	// 			ASRTaskInference asrTaskInference = new ASRTaskInference();
+	// 			//aSRTaskInference.setTaskType(SupportedTasks.fromValue(task));
+				
+	// 			List<ASRResponseConfig> config = new ArrayList<ASRResponseConfig>();
 
-				}
-				if(config.size() == 0)
-					throw new PipelineValidationException("Languages are not supported within this pipeline");
+				
+	// 			ASRTask asrTask=(ASRTask)pipelineTask;
+	// 			if(asrTask.getConfig()!=null && asrTask.getConfig().getLanguage()!=null)
+	// 			{
+	// 				ASRRequestConfig asrRequestConfig =	asrTask.getConfig();
+	// 				LanguagePair languagePair =asrRequestConfig.getLanguage();
+	// 				if(languagePair.getSourceLanguage()!=null)
+	// 				{
+	// 					sourceLanguages.clear();
+	// 					sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
+	// 				}
+	// 				// if(languagePair.getTargetLanguage()!=null)
+	// 				// 	targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
+	// 				log.info("Source Languages :: "+sourceLanguages);
+	// 				// log.info("Target Languages :: "+targetLanguages);				
+	// 			}
 
-				//log.info("config :: "+config);
-				ttsTaskInference.setConfig(config);
-				taskSchemaList.add(ttsTaskInference);
-			}
+	// 			Query dynamicQuery = new Query();
+				
+	// 			Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+	// 			dynamicQuery.addCriteria(modelTypeCriteria);
+
+	// 			Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+	// 			dynamicQuery.addCriteria(submitterCriteria);
+			    
+	// 			Criteria taskCriteria = Criteria.where("task.type").is("ASR");
+	// 			dynamicQuery.addCriteria(taskCriteria);
+
+	// 			// if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
+	// 			// {
+	// 			// 	Criteria languagesCriteria = new Criteria();
+	// 			// 	languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
+	// 			// 									   Criteria.where("languages.targetLanguage").in(targetLanguages));
+	// 			// 	dynamicQuery.addCriteria(languagesCriteria);
+	// 			// }
+	// 			if(sourceLanguages.size() !=0)
+	// 			{
+	// 			 	Criteria languagesCriteria = new Criteria();
+	// 			 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
+	// 			 	dynamicQuery.addCriteria(languagesCriteria);
+	// 			}
+	// 			// else if(targetLanguages.size() !=0 )
+	// 			// {
+	// 			//  	Criteria languagesCriteria = new Criteria();
+	// 			//  	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+	// 			//  	dynamicQuery.addCriteria(languagesCriteria);
+	// 			// }
+
+	// 			// if(targetLanguages.size() != 0)
+	// 			// {
+	// 			// 	Criteria targetLanguagesCriteria = new Criteria();
+	// 			// 	targetLanguagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+	// 			// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
+	// 			// }
+
+	// 			log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+
+				
+	// 			List<ModelExtended> asrModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+
+	// 			sourceLanguages.clear();
+	// 			targetLanguages.clear();
+
+	// 			HashSet<ASRResponseConfig> hashConfig = new HashSet<ASRResponseConfig>();
+
+	// 			for(ModelExtended each_model : asrModels) 
+	// 			{
+					
+	// 				ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
+	// 				log.info("Model Name :: " + each_model.getName());
+	// 				LanguagePairs langPair = each_model.getLanguages();
+	// 				for(LanguagePair lp : langPair)	
+	// 				{
+	// 					sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+	// 					asrResponseConfig.setServiceId("");
+	// 					asrResponseConfig.setLanguage(lp);
+	// 				}
+	// 				//TODO: Read each model and store the results in PipelineResponseConfig
+	// 				asrResponseConfig.setDomain(each_model.getDomain());
+
+					
+	// 				hashConfig.add(asrResponseConfig);
+	// 			}
+
+	// 			for(ASRResponseConfig each_config : hashConfig)
+	// 			{
+	// 				config.add(each_config);
+	// 			}
+
+	// 			if(config.size() == 0)
+	// 				throw new PipelineValidationException("Languages are not supported within this pipeline");
+
+	// 			asrTaskInference.setConfig(config);
+	// 			taskSchemaList.add(asrTaskInference);
+
+	// 		}
+	// 		else if(task=="tts") 
+	// 		{
+				
+	// 			TTSTaskInference ttsTaskInference = new TTSTaskInference();
+	// 			//tTSTaskInference.setTaskType(SupportedTasks.fromValue(task));
+				
+	// 			List<TTSResponseConfig> config = new ArrayList<TTSResponseConfig>();
+
+				
+				
+				
+	// 			TTSTask ttsTask=(TTSTask)pipelineTask;
+	// 			if(ttsTask.getConfig()!=null && ttsTask.getConfig().getLanguage()!=null)
+	// 			{
+	// 				TTSRequestConfig  ttsRequestConfig = ttsTask.getConfig();
+	// 				LanguagePair languagePair = ttsRequestConfig.getLanguage();
+	// 				if(languagePair.getSourceLanguage()!=null)
+	// 				{
+	// 					sourceLanguages.clear();
+	// 					sourceLanguages.add(languagePair.getSourceLanguage().toString().toUpperCase());
+	// 				}					// if(languagePair.getTargetLanguage()!=null)
+	// 				// 	targetLanguages.add(languagePair.getTargetLanguage().toString().toUpperCase());
+	// 				log.info("Source Languages :: "+sourceLanguages);
+	// 				// log.info("Target Languages :: "+targetLanguages);				
+	// 			}
+
+	// 			Query dynamicQuery = new Query();
+				
+	// 			Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+	// 			dynamicQuery.addCriteria(modelTypeCriteria);
+
+	// 			Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+	// 			dynamicQuery.addCriteria(submitterCriteria);
+			    
+	// 			Criteria taskCriteria = Criteria.where("task.type").is("TTS");
+	// 			dynamicQuery.addCriteria(taskCriteria);
+
+	// 			// if(sourceLanguages.size() != 0 && targetLanguages.size() != 0)
+	// 			// {
+	// 			// 	Criteria languagesCriteria = new Criteria();
+	// 			// 	languagesCriteria.andOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages),
+	// 			// 									   Criteria.where("languages.targetLanguage").in(targetLanguages));
+	// 			// 	dynamicQuery.addCriteria(languagesCriteria);
+	// 			// }
+	// 			if(sourceLanguages.size() !=0 )
+	// 			{
+	// 			 	Criteria languagesCriteria = new Criteria();
+	// 			 	languagesCriteria.orOperator(Criteria.where("languages.sourceLanguage").in(sourceLanguages));
+	// 			 	dynamicQuery.addCriteria(languagesCriteria);
+	// 			}
+	// 			// else if(targetLanguages.size() !=0 )
+	// 			// {
+	// 			//  	Criteria languagesCriteria = new Criteria();
+	// 			//  	languagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+	// 			//  	dynamicQuery.addCriteria(languagesCriteria);
+	// 			// }
+
+	// 			//TODO: CHANGE LOGIC TO WORK FOR OR CRITERIA FOR LIST OF SOURCE AND TARGET LANGUAGES
+	// 			// if(targetLanguages.size() != 0)
+	// 			// {
+	// 			// 	Criteria targetLanguagesCriteria = new Criteria();
+	// 			// 	targetLanguagesCriteria.orOperator(Criteria.where("languages.targetLanguage").in(targetLanguages));
+	// 			// 	dynamicQuery.addCriteria(targetLanguagesCriteria);
+	// 			// }
+
+	// 			log.info("dynamicQuery in TTS Models task search ::" + dynamicQuery.toString());
+
+	// 			List<ModelExtended> ttsModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+
+	// 			sourceLanguages.clear();
+	// 			targetLanguages.clear();
+				
+	// 			HashSet<TTSResponseConfig> hashConfig = new HashSet<TTSResponseConfig>();
+
+	// 			for(ModelExtended each_model : ttsModels) 
+	// 			{
+					
+	// 				TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
+
+	// 				log.info("Model Name :: " + each_model.getName());
+	// 				LanguagePairs langPair = each_model.getLanguages();
+	// 				for(LanguagePair lp : langPair)	
+	// 				{
+	// 					sourceLanguages.add(lp.getSourceLanguage().toString().toUpperCase());
+	// 					ttsResponseConfig.setServiceId("");
+	// 					ttsResponseConfig.setLanguage(lp);
+	// 				}
+	// 				//TODO: Read each model and store the results in PipelineResponseConfig
+	// 				hashConfig.add(ttsResponseConfig);
+
+	// 			}
+
+	// 			for(TTSResponseConfig each_config : hashConfig)
+	// 				config.add(each_config);
+
+	// 			if(config.size() == 0)
+	// 				throw new PipelineValidationException("Languages are not supported within this pipeline");
+
+	// 			//log.info("config :: "+config);
+	// 			ttsTaskInference.setConfig(config);
+	// 			taskSchemaList.add(ttsTaskInference);
+	// 		}
 	     
 
 	      
-		}
-		pipelineResponse.setPipelineResponseConfig(taskSchemaList);
+	// 	}
+	// 	pipelineResponse.setPipelineResponseConfig(taskSchemaList);
 		
-		//TODO: Add PipelineInferenceEndPoint without api keys (Except for it, everything else copied from pipelinemodel)
+	// 	//TODO: Add PipelineInferenceEndPoint without api keys (Except for it, everything else copied from pipelinemodel)
 		
-		//TODO: Add language pairs to response
+	// 	//TODO: Add language pairs to response
 
-		TaskSchemaList responseConfig = pipelineResponse.getPipelineResponseConfig(); 
+	// 	TaskSchemaList responseConfig = pipelineResponse.getPipelineResponseConfig(); 
 		
-		LanguagesList languageList = pipelineResponse.getLanguages();
+	// 	LanguagesList languageList = pipelineResponse.getLanguages();
 
-		LanguagesList firstTaskList = new LanguagesList();
-		LanguagesList multiTaskList = new LanguagesList();
-		LanguagesList targetLanguagesList = new LanguagesList();
-		//ArrayList<String> sourceLangList = new ArrayList<String>();
-		//ArrayList<String> targetLangList = new ArrayList<String>();
+	// 	LanguagesList firstTaskList = new LanguagesList();
+	// 	LanguagesList multiTaskList = new LanguagesList();
+	// 	LanguagesList targetLanguagesList = new LanguagesList();
+	// 	//ArrayList<String> sourceLangList = new ArrayList<String>();
+	// 	//ArrayList<String> targetLangList = new ArrayList<String>();
 
 
-		String first_task_type = responseConfig.get(0).getTaskType();
-		//log.info("FIRST TASK : "+ responseConfig.get(0));
-		if(first_task_type == "asr") 
+	// 	String first_task_type = responseConfig.get(0).getTaskType();
+	// 	//log.info("FIRST TASK : "+ responseConfig.get(0));
+	// 	if(first_task_type == "asr") 
+	// 	{
+	// 		ASRTaskInference asrTaskInference = (ASRTaskInference)responseConfig.get(0);
+	// 		List<ASRResponseConfig> asrResponseConfigList = asrTaskInference.getConfig();
+	// 		for(ASRResponseConfig each_asrconfig : asrResponseConfigList)
+	// 		{
+	// 			LanguageSchema langSchema = new LanguageSchema();
+	// 			langSchema.setSourceLanguage(SupportedLanguages.fromValue(each_asrconfig.getLanguage().getSourceLanguage().toString()));
+	// 			langSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(each_asrconfig.getLanguage().getSourceLanguage().toString()));
+	// 			if(!firstTaskList.contains(langSchema))
+	// 				firstTaskList.add(langSchema);
+	// 		}
+	// 	}
+	// 	else if(first_task_type == "translation") 
+	// 	{
+	// 		TranslationTaskInference translationTaskInference = (TranslationTaskInference)responseConfig.get(0);
+	// 		List<TranslationResponseConfig> translationrResponseConfigList = translationTaskInference.getConfig();
+	// 		for(TranslationResponseConfig each_translationconfig : translationrResponseConfigList)
+	// 		{
+	// 			LanguageSchema langSchema = new LanguageSchema();
+	// 			langSchema.setSourceLanguage(SupportedLanguages.fromValue(each_translationconfig.getLanguage().getSourceLanguage().toString()));
+	// 			langSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(each_translationconfig.getLanguage().getTargetLanguage().toString()));
+	// 			if(!firstTaskList.contains(langSchema))
+	// 				firstTaskList.add(langSchema);
+	// 		}
+	// 	}
+	// 	else if(first_task_type == "tts") 
+	// 	{
+	// 		TTSTaskInference ttsTaskInference = (TTSTaskInference)responseConfig.get(0);
+	// 		List<TTSResponseConfig> ttsResponseConfigList = ttsTaskInference.getConfig();
+	// 		for(TTSResponseConfig each_ttsconfig : ttsResponseConfigList)
+	// 		{
+	// 			LanguageSchema langSchema = new LanguageSchema();
+	// 			langSchema.setSourceLanguage(SupportedLanguages.fromValue(each_ttsconfig.getLanguage().getSourceLanguage().toString()));
+	// 			langSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(each_ttsconfig.getLanguage().getSourceLanguage().toString()));
+	// 			if(!firstTaskList.contains(langSchema))
+	// 				firstTaskList.add(langSchema);
+	// 		}
+	// 	}
+
+
+	// 	//Source and Target Languages of first task
+	// 	log.info("First Task Languages : "+firstTaskList);
+
+	// 	int numTasks = responseConfig.size();
+
+
+	// 	if(numTasks == 1)	{
+	// 		pipelineResponse.setLanguages(firstTaskList);
+	// 	}
+	// 	else {
+	// 		//eachSchema will have one sourceLang and targetLangList for first task only.
+	// 		//eachSchema : sL = en, tL = [hi,ka]
+	// 		for(LanguageSchema eachSchema : firstTaskList) 
+	// 		{
+	// 			List<SupportedLanguages> prev_target_languages = eachSchema.getTargetLanguageList();
+	// 			int next_task_index = 1;
+	// 			int final_task_index = responseConfig.size();
+	// 			int targetLangSize = prev_target_languages.size();
+	// 			if(prev_target_languages.size()==0)
+	// 				break;
+	// 			LanguageSchema languageSchema = new LanguageSchema();
+	// 			languageSchema.setSourceLanguage(eachSchema.getSourceLanguage());
+	// 			for(int i=0;i<targetLangSize;i++) 
+	// 			{
+	// 				while(next_task_index < final_task_index)
+	// 				{
+	// 					String next_task_type = responseConfig.get(next_task_index).getTaskType();
+	// 					//log.info("FIRST TASK : "+ responseConfig.get(0));
+	// 					if(next_task_type == "asr") 
+	// 					{
+	// 						ASRTaskInference asrTaskInference = (ASRTaskInference)responseConfig.get(next_task_index);
+	// 						List<ASRResponseConfig> asrResponseConfigList = asrTaskInference.getConfig();
+	// 						for(ASRResponseConfig each_asrconfig : asrResponseConfigList)
+	// 						{
+	// 							if(prev_target_languages.get(i) == each_asrconfig.getLanguage().getSourceLanguage())
+	// 							{
+	// 								prev_target_languages.add(each_asrconfig.getLanguage().getSourceLanguage());
+	// 							}
+	// 						}
+	// 					}
+	// 					else if(next_task_type == "translation") 
+	// 					{
+	// 						TranslationTaskInference translationTaskInference = (TranslationTaskInference)responseConfig.get(next_task_index);
+	// 						List<TranslationResponseConfig> translationrResponseConfigList = translationTaskInference.getConfig();
+	// 						for(TranslationResponseConfig each_translationconfig : translationrResponseConfigList)
+	// 						{
+	// 							if(prev_target_languages.get(i) == each_translationconfig.getLanguage().getSourceLanguage())
+	// 							{
+	// 								prev_target_languages.add(each_translationconfig.getLanguage().getTargetLanguage());
+	// 							}
+	// 						}
+	// 					}
+	// 					else if(next_task_type == "tts") 
+	// 					{
+	// 						TTSTaskInference ttsTaskInference = (TTSTaskInference)responseConfig.get(next_task_index);
+	// 						List<TTSResponseConfig> ttsResponseConfigList = ttsTaskInference.getConfig();
+	// 						for(TTSResponseConfig each_ttsconfig : ttsResponseConfigList)
+	// 						{
+	// 							if(prev_target_languages.get(i) == each_ttsconfig.getLanguage().getSourceLanguage())
+	// 							{
+	// 									prev_target_languages.add(each_ttsconfig.getLanguage().getSourceLanguage());
+	// 							}
+	// 						}
+	// 					}		
+
+	// 					next_task_index ++;
+	// 					prev_target_languages.remove(0);
+	// 					targetLangSize = prev_target_languages.size();
+	// 					if(prev_target_languages.size()==0)
+	// 						break;
+	// 				}
+	// 			}
+	// 			HashSet<SupportedLanguages> target_lang_hashSet = new HashSet<SupportedLanguages>();
+	// 			for(SupportedLanguages each_lang : prev_target_languages) 
+	// 			{
+	// 				target_lang_hashSet.add(each_lang);
+	// 			}
+	// 			for(SupportedLanguages each_target_language : target_lang_hashSet)
+	// 			{
+	// 				languageSchema.addTargetLanguageListItem(each_target_language);
+	// 				//TODO TEMP FIX: If multiTaskList has same source language as language schema, don't add it.
+	// 				Boolean sourceLangExists = false;
+	// 				for(LanguageSchema each_schema : multiTaskList)	
+	// 				{
+	// 					if(each_schema.getSourceLanguage() == languageSchema.getSourceLanguage())
+	// 						sourceLangExists = true;
+	// 				}
+	// 				if(sourceLangExists == false)
+	// 					multiTaskList.add(languageSchema);
+	// 				pipelineResponse.setLanguages(multiTaskList);
+	// 			}
+	// 		}
+	// 	}
+
+		//New Logic: 
+		//Generate Language List
+		ArrayList<LanguagesList> languagesArrayList = new ArrayList<LanguagesList>();
+		pipelineResponse.getLanguages();
+		TaskSpecifications pipelineTaskSpecifications = pipelineModel.getTaskSpecifications();
+		boolean first_task = true;
+
+		PipelineTask pipelineTask = pipelineTasks.get(0);
+
+		LanguagesList firstTaskLanguageList = new LanguagesList();
+		String task=pipelineTask.getTaskType();
+		if(task=="translation") 
 		{
-			ASRTaskInference asrTaskInference = (ASRTaskInference)responseConfig.get(0);
-			List<ASRResponseConfig> asrResponseConfigList = asrTaskInference.getConfig();
-			for(ASRResponseConfig each_asrconfig : asrResponseConfigList)
+			//TranslationTaskInference translationTaskInference = new TranslationTaskInference();
+			//translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
+			
+			TranslationTask translationTask	=(TranslationTask)pipelineTask;
+			//If task has languages
+			if(translationTask.getConfig()!=null && translationTask.getConfig().getLanguage()!=null)
 			{
-				LanguageSchema langSchema = new LanguageSchema();
-				langSchema.setSourceLanguage(SupportedLanguages.fromValue(each_asrconfig.getLanguage().getSourceLanguage().toString()));
-				langSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(each_asrconfig.getLanguage().getSourceLanguage().toString()));
-				if(!firstTaskList.contains(langSchema))
-					firstTaskList.add(langSchema);
+				TranslationRequestConfig translationRequestConfig =	translationTask.getConfig();
+				LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+				LanguagePair languagePair =translationRequestConfig.getLanguage();
+				{
+					firstTaskLanguageSchema.setSourceLanguage(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																										.toString()
+																										.toLowerCase()
+																											));
+				}
+				if(languagePair.getTargetLanguage()!=null)
+				{
+					//targetLanguages.clear();
+					firstTaskLanguageSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(languagePair.getTargetLanguage()
+																												.toString()
+																												.toLowerCase()));
+				}
+				firstTaskLanguageList.add(firstTaskLanguageSchema);
+			}
+			//If task doesn't have languages
+			else 
+			{
+				for(TaskSpecification firstTaskSpec : pipelineTaskSpecifications) 
+				{
+					if(firstTaskSpec.getTask().getType().toString() == task)
+					{
+						io.swagger.pipelinemodel.LanguagesList firstTaskLanguages = firstTaskSpec.getLanguages();
+						for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : firstTaskLanguages)
+						{
+							LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							boolean sourceLangExists = false;
+							for(LanguageSchema eachStoredFirstTaskSchema : firstTaskLanguageList)
+							{
+								//if that source language exists within our stored first task schema
+								if(eachStoredFirstTaskSchema.getSourceLanguage()!=null && eachStoredFirstTaskSchema.getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()))
+								{
+									eachStoredFirstTaskSchema.addTargetLanguageListItem((specLanguageSchema.getTargetLanguage()));									
+									sourceLangExists = true;
+								}
+							}	
+							if(sourceLangExists == false)
+							{
+								firstTaskLanguageSchema.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								firstTaskLanguageSchema.addTargetLanguageListItem((specLanguageSchema.getTargetLanguage()));					
+								firstTaskLanguageList.add(firstTaskLanguageSchema);	
+							}
+						}
+					}
+				}
+			}
+
+		}
+		else if(task=="asr") 
+		{
+			//TranslationTaskInference translationTaskInference = new TranslationTaskInference();
+			//translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
+			
+			ASRTask asrTask	=(ASRTask)pipelineTask;
+			//If task has languages
+			if(asrTask.getConfig()!=null && asrTask.getConfig().getLanguage()!=null)
+			{
+				ASRRequestConfig asrRequestConfig =	asrTask.getConfig();
+				LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+				LanguagePair languagePair =asrRequestConfig.getLanguage();
+				{
+					log.info("CODE HERE");
+					firstTaskLanguageSchema.setSourceLanguage(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																										.toString()
+																										.toLowerCase()
+																											));
+				}
+				firstTaskLanguageSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																												.toString()
+																												.toLowerCase()));
+				
+				firstTaskLanguageList.add(firstTaskLanguageSchema);
+			}
+			//If task doesn't have languages
+			else 
+			{
+				for(TaskSpecification firstTaskSpec : pipelineTaskSpecifications) 
+				{
+					if(firstTaskSpec.getTask().getType().toString() == task)
+					{
+						io.swagger.pipelinemodel.LanguagesList firstTaskLanguages = firstTaskSpec.getLanguages();
+						for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : firstTaskLanguages)
+						{
+							LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							boolean sourceLangExists = false;
+							for(LanguageSchema eachStoredFirstTaskSchema : firstTaskLanguageList)
+							{
+								//if that source language exists within our stored first task schema
+								if(eachStoredFirstTaskSchema.getSourceLanguage()!=null && eachStoredFirstTaskSchema.getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()))
+								{
+									eachStoredFirstTaskSchema.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));									
+									sourceLangExists = true;
+								}
+							}	
+							if(sourceLangExists == false)
+							{
+								firstTaskLanguageSchema.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								firstTaskLanguageSchema.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));
+								firstTaskLanguageList.add(firstTaskLanguageSchema);	
+							}
+						}
+					}
+				}
+			}
+
+
+		}
+		else if(task=="tts") 
+		{
+			//TranslationTaskInference translationTaskInference = new TranslationTaskInference();
+			//translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
+			
+			TTSTask ttsTask	=(TTSTask)pipelineTask;
+			//If task has languages
+			if(ttsTask.getConfig()!=null && ttsTask.getConfig().getLanguage()!=null)
+			{
+				TTSRequestConfig ttsRequestTask =	ttsTask.getConfig();
+				LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+				LanguagePair languagePair =ttsRequestTask.getLanguage();
+				{
+					firstTaskLanguageSchema.setSourceLanguage(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																										.toString()
+																										.toLowerCase()
+																											));
+				}
+					//targetLanguages.clear();
+				firstTaskLanguageSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(languagePair.getSourceLanguage()
+																												.toString()
+																												.toLowerCase()));
+				
+				firstTaskLanguageList.add(firstTaskLanguageSchema);
+			}
+			//If task doesn't have languages
+			else 
+			{
+				for(TaskSpecification firstTaskSpec : pipelineTaskSpecifications) 
+				{
+					if(firstTaskSpec.getTask().getType().toString() == task)
+					{
+						io.swagger.pipelinemodel.LanguagesList firstTaskLanguages = firstTaskSpec.getLanguages();
+						for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : firstTaskLanguages)
+						{
+							LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							boolean sourceLangExists = false;
+							for(LanguageSchema eachStoredFirstTaskSchema : firstTaskLanguageList)
+							{
+								//if that source language exists within our stored first task schema
+								if(eachStoredFirstTaskSchema.getSourceLanguage()!=null && eachStoredFirstTaskSchema.getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()))
+								{
+									eachStoredFirstTaskSchema.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));									
+									sourceLangExists = true;
+								}
+							}	
+							if(sourceLangExists == false)
+							{
+								firstTaskLanguageSchema.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								firstTaskLanguageSchema.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));					
+								firstTaskLanguageList.add(firstTaskLanguageSchema);	
+							}
+						}
+					}
+				}
 			}
 		}
-		else if(first_task_type == "translation") 
+
+		languagesArrayList.add(firstTaskLanguageList);
+
+		//Do the same task for remaining languages.
+		//firstTaskLanguage list consists of all language conbinations of first task.: 
+
+		int taskLength = pipelineTasks.size();
+		if(taskLength > 1)
 		{
-			TranslationTaskInference translationTaskInference = (TranslationTaskInference)responseConfig.get(0);
-			List<TranslationResponseConfig> translationrResponseConfigList = translationTaskInference.getConfig();
-			for(TranslationResponseConfig each_translationconfig : translationrResponseConfigList)
+			for(int i=1;i<taskLength;i++)	//For each task from 2nd task
 			{
-				LanguageSchema langSchema = new LanguageSchema();
-				langSchema.setSourceLanguage(SupportedLanguages.fromValue(each_translationconfig.getLanguage().getSourceLanguage().toString()));
-				langSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(each_translationconfig.getLanguage().getTargetLanguage().toString()));
-				if(!firstTaskList.contains(langSchema))
-					firstTaskList.add(langSchema);
+				PipelineTask currentTask = pipelineTasks.get(i);
+				LanguagesList currentTaskLangList = new LanguagesList();
+				String currentTaskType = currentTask.getTaskType();
+				LanguagesList previousTaskLangList = languagesArrayList.get(i-1); //get last task's languages
+				if(currentTaskType == "translation")
+				{
+					for(LanguageSchema previousSchema : previousTaskLangList) //For each previous task's schema
+					{
+						List<SupportedLanguages> previousTargetLanguageList = previousSchema.getTargetLanguageList();
+						for(SupportedLanguages previousTargetLanguage : previousTargetLanguageList) //For each target language in previous task's schema
+						{
+							LanguageSchema currentTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							
+							TaskSpecifications taskSpecificiations = pipelineModel.getTaskSpecifications();
+							for(TaskSpecification curTaskSpec : taskSpecificiations) 
+							{
+								if(curTaskSpec.getTask().getType().toString() == currentTaskType)
+								{
+									io.swagger.pipelinemodel.LanguagesList curTaskLanguages = curTaskSpec.getLanguages();
+									for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : curTaskLanguages)
+									{
+										if(specLanguageSchema.getSourceLanguage() == previousTargetLanguage)
+										{
+											boolean sourceLanguageExists = false;
+											for(LanguageSchema eachSchema : currentTaskLangList)
+											{
+												//if previous target language of prev. task already exists as a source language in cur. task
+												if(eachSchema.getSourceLanguage()!=null && eachSchema.getSourceLanguage().equals(previousTargetLanguage))
+												{
+													sourceLanguageExists = true;
+													break;
+												}													
+											}
+											if(sourceLanguageExists == false)
+											{
+												currentTaskLanguageSchema.setSourceLanguage(previousTargetLanguage);
+												//Add all target languages where source Language is pa
+
+												for(io.swagger.pipelinemodel.LanguageSchema specLangSchema : curTaskLanguages)
+												{
+													//TODO: This is if there are no target languages in the current source language for translation
+
+													if(specLangSchema.getSourceLanguage().equals(previousTargetLanguage))
+													{
+														TranslationTask translationTask	=(TranslationTask)pipelineTasks.get(i);
+														TranslationRequestConfig translationConfig = translationTask.getConfig();
+														SupportedLanguages currentTaskTarget;
+														if(translationConfig!=null && translationConfig.getLanguage()!=null && translationConfig.getLanguage().getTargetLanguage() != null)
+														{
+															currentTaskTarget = translationConfig.getLanguage().getTargetLanguage();
+														}
+														else 
+														{
+															currentTaskTarget = specLangSchema.getTargetLanguage();
+														}
+														if(currentTaskLanguageSchema.getTargetLanguageList() == null)
+															currentTaskLanguageSchema.addTargetLanguageListItem(currentTaskTarget);
+														else if(!currentTaskLanguageSchema.getTargetLanguageList().contains(currentTaskTarget))
+															currentTaskLanguageSchema.addTargetLanguageListItem(currentTaskTarget);
+													}
+												}
+												currentTaskLangList.add(currentTaskLanguageSchema);	
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					languagesArrayList.add(currentTaskLangList);
+				}
+				if(currentTaskType == "asr")
+				{
+					for(LanguageSchema previousSchema : previousTaskLangList) //For each previous task's schema
+					{
+						List<SupportedLanguages> previousTargetLanguageList = previousSchema.getTargetLanguageList();
+						for(SupportedLanguages previousTargetLanguage : previousTargetLanguageList) //For each target language in previous task's schema
+						{
+							LanguageSchema currentTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							
+							TaskSpecifications taskSpecificiations = pipelineModel.getTaskSpecifications();
+							for(TaskSpecification curTaskSpec : taskSpecificiations) 
+							{
+								if(curTaskSpec.getTask().getType().toString() == currentTaskType)
+								{
+									io.swagger.pipelinemodel.LanguagesList curTaskLanguages = curTaskSpec.getLanguages();
+									for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : curTaskLanguages)
+									{
+										if(specLanguageSchema.getSourceLanguage() == previousTargetLanguage)
+										{
+											boolean sourceLanguageExists = false;
+											for(LanguageSchema eachSchema : currentTaskLangList)
+											{
+												//if previous target language of prev. task already exists as a source language in cur. task
+												if(eachSchema.getSourceLanguage()!=null && eachSchema.getSourceLanguage().equals(previousTargetLanguage))
+												{
+													sourceLanguageExists = true;
+													break;
+												}													
+											}
+											if(sourceLanguageExists == false)
+											{
+												currentTaskLanguageSchema.setSourceLanguage(previousTargetLanguage);
+												//Add all target languages where source Language is pa
+												currentTaskLanguageSchema.addTargetLanguageListItem(specLanguageSchema.getSourceLanguage());
+												//specLanguageSchema
+												// for(io.swagger.pipelinemodel.LanguageSchema specLangSchema : curTaskLanguages)
+												// {
+												// 	if(specLangSchema.getSourceLanguage().equals(previousTargetLanguage))
+												// 	currentTaskLanguageSchema.addTargetLanguageListItem(specLangSchema.getTargetLanguage());
+												// }
+												currentTaskLangList.add(currentTaskLanguageSchema);	
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					languagesArrayList.add(currentTaskLangList);
+				}
+				if(currentTaskType == "tts")
+				{
+					for(LanguageSchema previousSchema : previousTaskLangList) //For each previous task's schema
+					{
+						List<SupportedLanguages> previousTargetLanguageList = previousSchema.getTargetLanguageList();
+						for(SupportedLanguages previousTargetLanguage : previousTargetLanguageList) //For each target language in previous task's schema
+						{
+							LanguageSchema currentTaskLanguageSchema = new LanguageSchema();
+							//Go through each spec within submitted model
+							
+							TaskSpecifications taskSpecificiations = pipelineModel.getTaskSpecifications();
+							for(TaskSpecification curTaskSpec : taskSpecificiations) 
+							{
+								if(curTaskSpec.getTask().getType().toString() == currentTaskType)
+								{
+									io.swagger.pipelinemodel.LanguagesList curTaskLanguages = curTaskSpec.getLanguages();
+									for(io.swagger.pipelinemodel.LanguageSchema specLanguageSchema : curTaskLanguages)
+									{
+										if(specLanguageSchema.getSourceLanguage() == previousTargetLanguage)
+										{
+											boolean sourceLanguageExists = false;
+											for(LanguageSchema eachSchema : currentTaskLangList)
+											{
+												//if previous target language of prev. task already exists as a source language in cur. task
+												if(eachSchema.getSourceLanguage()!=null && eachSchema.getSourceLanguage().equals(previousTargetLanguage))
+												{
+													sourceLanguageExists = true;
+													break;
+												}													
+											}
+											if(sourceLanguageExists == false)
+											{
+												currentTaskLanguageSchema.setSourceLanguage(previousTargetLanguage);
+												//Add all target languages where source Language is pa
+												currentTaskLanguageSchema.addTargetLanguageListItem(specLanguageSchema.getSourceLanguage());
+												//specLanguageSchema
+												// for(io.swagger.pipelinemodel.LanguageSchema specLangSchema : curTaskLanguages)
+												// {
+												// 	if(specLangSchema.getSourceLanguage().equals(previousTargetLanguage))
+												// 	currentTaskLanguageSchema.addTargetLanguageListItem(specLangSchema.getTargetLanguage());
+												// }
+												currentTaskLangList.add(currentTaskLanguageSchema);	
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					languagesArrayList.add(currentTaskLangList);
+				}
 			}
+	
 		}
-		else if(first_task_type == "tts") 
+
+
+		log.info("FIRST LANGUAGE LIST :: "+languagesArrayList);
+
+
+		ASRTaskInference asrInference = new ASRTaskInference();
+		TTSTaskInference ttsInference = new TTSTaskInference();
+		TranslationTaskInference translationInference = new TranslationTaskInference();
+
+
+
+		//TODO
+		//Go through each first sourceLanguage in languagesArrayList and get a LanguageList element and update
+		LanguagesList newLanguageList = new LanguagesList();
+		//newLanguageList.clear();	
+		TaskSchemaList newPipelineResponseConfig = new TaskSchemaList();
+		//newPipelineResponseConfig.clear();
+		for(LanguageSchema firstTaskSchema : languagesArrayList.get(0))
 		{
-			TTSTaskInference ttsTaskInference = (TTSTaskInference)responseConfig.get(0);
-			List<TTSResponseConfig> ttsResponseConfigList = ttsTaskInference.getConfig();
-			for(TTSResponseConfig each_ttsconfig : ttsResponseConfigList)
+			log.info("FIRST Task Source Languages ::"+firstTaskSchema.getSourceLanguage());
+			LanguageSchema pipelineSchema = new LanguageSchema();
+			pipelineSchema.setSourceLanguage(firstTaskSchema.getSourceLanguage());
+			List<SupportedLanguages> targetLangList = new ArrayList<SupportedLanguages>();
+			log.info("FIRST Task Target Languages :: "+firstTaskSchema.getTargetLanguageList());
+			List<SupportedLanguages> targetLangListCopy = new ArrayList<SupportedLanguages>();
+			for(SupportedLanguages sl : firstTaskSchema.getTargetLanguageList())
 			{
-				LanguageSchema langSchema = new LanguageSchema();
-				langSchema.setSourceLanguage(SupportedLanguages.fromValue(each_ttsconfig.getLanguage().getSourceLanguage().toString()));
-				langSchema.addTargetLanguageListItem(SupportedLanguages.fromValue(each_ttsconfig.getLanguage().getSourceLanguage().toString()));
-				if(!firstTaskList.contains(langSchema))
-					firstTaskList.add(langSchema);
+				targetLangList.add(sl);
+				targetLangListCopy.add(sl);
 			}
-		}
-
-
-		//Source and Target Languages of first task
-		log.info("First Task Languages : "+firstTaskList);
-
-		int numTasks = responseConfig.size();
-
-
-		if(numTasks == 1)	{
-			pipelineResponse.setLanguages(firstTaskList);
-		}
-		else {
-			//eachSchema will have one sourceLang and targetLangList for first task only.
-			//eachSchema : sL = en, tL = [hi,ka]
-			for(LanguageSchema eachSchema : firstTaskList) 
+			//DFS for targetLangList creation [Final Pipeline Target Lang List]
+			int targetLangSize = targetLangList.size();
+			int targetLangSizeCopy = targetLangSize;
+			int currentTaskIndex = 1; 
+			while(currentTaskIndex < taskLength)
 			{
-				List<SupportedLanguages> prev_target_languages = eachSchema.getTargetLanguageList();
-				int next_task_index = 1;
-				int final_task_index = responseConfig.size();
-				int targetLangSize = prev_target_languages.size();
-				if(prev_target_languages.size()==0)
+				for(int i=0;i<targetLangSize;i++)
+				{
+					SupportedLanguages targetLanguage = targetLangList.get(0); //refers to prev. target language task list
+					targetLangList.remove(0);
+					LanguagesList currentLangList = languagesArrayList.get(currentTaskIndex);
+					for(LanguageSchema curLangSchema : currentLangList)
+					{
+						LanguageSchema tempLanguageSchema = new LanguageSchema();
+						if(targetLanguage.equals(curLangSchema.getSourceLanguage()))
+						{
+							if(curLangSchema.getTargetLanguageList()!=null)
+							{
+								for(SupportedLanguages targLang : curLangSchema.getTargetLanguageList())
+								{
+									targetLangList.add(targLang);
+								}
+							}
+							else
+								targetLangList.add(curLangSchema.getSourceLanguage());
+						}
+						tempLanguageSchema.setSourceLanguage(curLangSchema.getSourceLanguage());
+						tempLanguageSchema.setTargetLanguageList(curLangSchema.getTargetLanguageList());
+					}
+				}
+				targetLangSize = targetLangList.size();
+				currentTaskIndex++;
+			}
+			pipelineSchema.setTargetLanguageList(targetLangList);
+			boolean srcLangExists = false;
+			for(LanguageSchema each_schema : newLanguageList)
+			{
+				if(each_schema.getSourceLanguage().equals(pipelineSchema.getSourceLanguage()))
+				{
+					srcLangExists = true;
 					break;
-				LanguageSchema languageSchema = new LanguageSchema();
-				languageSchema.setSourceLanguage(eachSchema.getSourceLanguage());
-				for(int i=0;i<targetLangSize;i++) 
-				{
-					while(next_task_index < final_task_index)
-					{
-						String next_task_type = responseConfig.get(next_task_index).getTaskType();
-						//log.info("FIRST TASK : "+ responseConfig.get(0));
-						if(next_task_type == "asr") 
-						{
-							ASRTaskInference asrTaskInference = (ASRTaskInference)responseConfig.get(next_task_index);
-							List<ASRResponseConfig> asrResponseConfigList = asrTaskInference.getConfig();
-							for(ASRResponseConfig each_asrconfig : asrResponseConfigList)
-							{
-								if(prev_target_languages.get(i) == each_asrconfig.getLanguage().getSourceLanguage())
-								{
-									prev_target_languages.add(each_asrconfig.getLanguage().getSourceLanguage());
-								}
-							}
-						}
-						else if(next_task_type == "translation") 
-						{
-							TranslationTaskInference translationTaskInference = (TranslationTaskInference)responseConfig.get(next_task_index);
-							List<TranslationResponseConfig> translationrResponseConfigList = translationTaskInference.getConfig();
-							for(TranslationResponseConfig each_translationconfig : translationrResponseConfigList)
-							{
-								if(prev_target_languages.get(i) == each_translationconfig.getLanguage().getSourceLanguage())
-								{
-									prev_target_languages.add(each_translationconfig.getLanguage().getTargetLanguage());
-								}
-							}
-						}
-						else if(next_task_type == "tts") 
-						{
-							TTSTaskInference ttsTaskInference = (TTSTaskInference)responseConfig.get(next_task_index);
-							List<TTSResponseConfig> ttsResponseConfigList = ttsTaskInference.getConfig();
-							for(TTSResponseConfig each_ttsconfig : ttsResponseConfigList)
-							{
-								if(prev_target_languages.get(i) == each_ttsconfig.getLanguage().getSourceLanguage())
-								{
-										prev_target_languages.add(each_ttsconfig.getLanguage().getSourceLanguage());
-								}
-							}
-						}		
+				}
+			}	
+			if(srcLangExists == false && pipelineSchema.getTargetLanguageList().size()!=0)
+			{
+				//log.info("MODEL BUILD LIST :: "+modelBuildList);
+				newLanguageList.add(pipelineSchema);
+				currentTaskIndex = 1;
 
-						next_task_index ++;
-						prev_target_languages.remove(0);
-						targetLangSize = prev_target_languages.size();
-						if(prev_target_languages.size()==0)
-							break;
-					}
-				}
-				HashSet<SupportedLanguages> target_lang_hashSet = new HashSet<SupportedLanguages>();
-				for(SupportedLanguages each_lang : prev_target_languages) 
+				//TODO: ADD Query for First Task as well
+
+
+				String firstTaskType = pipelineTasks.get(0).getTaskType();
+				if(firstTaskType == "asr")
 				{
-					target_lang_hashSet.add(each_lang);
-				}
-				for(SupportedLanguages each_target_language : target_lang_hashSet)
-				{
-					languageSchema.addTargetLanguageListItem(each_target_language);
-					//TODO TEMP FIX: If multiTaskList has same source language as language schema, don't add it.
-					Boolean sourceLangExists = false;
-					for(LanguageSchema each_schema : multiTaskList)	
+					//Do Mongo Query for targetLangListCopy
+					Boolean modelExists = false;
+					for(ASRResponseConfig each_task : asrInference.getConfig())
 					{
-						if(each_schema.getSourceLanguage() == languageSchema.getSourceLanguage())
-							sourceLangExists = true;
+						if(each_task.getLanguage().getSourceLanguage().equals(firstTaskSchema.getSourceLanguage()))
+						{
+							modelExists = true;
+							break;
+						}
 					}
-					if(sourceLangExists == false)
-						multiTaskList.add(languageSchema);
-					pipelineResponse.setLanguages(multiTaskList);
+					if(modelExists == false)
+					{
+						
+						Query dynamicQuery = new Query();
+		
+						Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+						dynamicQuery.addCriteria(modelTypeCriteria);
+		
+						Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+						dynamicQuery.addCriteria(submitterCriteria);
+						
+						Criteria taskCriteria = Criteria.where("task.type").is("ASR");
+						dynamicQuery.addCriteria(taskCriteria);
+		
+						Criteria languageCriteria = Criteria.where("languages.sourceLanguage").is(firstTaskSchema.getSourceLanguage());
+						dynamicQuery.addCriteria(languageCriteria);
+						dynamicQuery.with(Sort.by(Sort.Direction.DESC,"submittedOn"));
+
+						log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+						
+						
+						List<ModelExtended> asrModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+		
+						log.info("MODEL : "+asrModels.get(0));
+						
+
+						ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
+						log.info("Model Name :: " + asrModels.get(0).getName());
+						LanguagePairs langPair = asrModels.get(0).getLanguages();
+						for(LanguagePair lp : langPair)	
+						{
+							asrResponseConfig.setServiceId("");
+							asrResponseConfig.setLanguage(lp);
+						}
+						//TODO: Read each model and store the results in PipelineResponseConfig
+						asrResponseConfig.setDomain(asrModels.get(0).getDomain());
+		
+						asrInference.addConfigItem(asrResponseConfig);
+					}
+				}
+
+
+				else if(firstTaskType == "translation")
+				{
+
+
+					//Do Mongo Query for targetLangListCopy
+					Boolean modelExists = false;
+					for(TranslationResponseConfig each_task : translationInference.getConfig())
+					{
+						if(each_task.getLanguage().getSourceLanguage().equals(firstTaskSchema.getSourceLanguage()))
+						{
+							modelExists = true;
+							break;
+						}
+					}
+					if(modelExists == false)
+					{
+						for(SupportedLanguages targetLang : firstTaskSchema.getTargetLanguageList())
+						{
+							Query dynamicQuery = new Query();
+		
+							Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+							dynamicQuery.addCriteria(modelTypeCriteria);
+			
+							Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+							dynamicQuery.addCriteria(submitterCriteria);
+							
+							Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
+							dynamicQuery.addCriteria(taskCriteria);
+			
+							Criteria languageCriteria = Criteria.where("languages.sourceLanguage").is(firstTaskSchema.getSourceLanguage());
+							dynamicQuery.addCriteria(languageCriteria);
+							dynamicQuery.with(Sort.by(Sort.Direction.DESC,"submittedOn"));
+	
+							log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+
+							Criteria targetLanguageCriteria = Criteria.where("languages.targetLanguage").is(targetLang);
+							dynamicQuery.addCriteria(targetLanguageCriteria);
+
+							List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+			
+							if(translationModels.size()>0)
+							{
+								TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
+								log.info("Model Name :: " + translationModels.get(0).getName());
+								LanguagePairs langPair = translationModels.get(0).getLanguages();
+								for(LanguagePair lp : langPair)	
+								{
+									translationResponseConfig.setServiceId("");
+									translationResponseConfig.setLanguage(lp);
+								}
+								//TODO: Read each model and store the results in PipelineResponseConfig
+								//translationResponseConfig.setDomain(translationModels.get(0).getDomain());
+				
+								translationInference.addConfigItem(translationResponseConfig);
+
+							}
+
+						}
+							
+					}
+					
+				}
+
+				else if(firstTaskType == "tts")
+				{
+					//Do Mongo Query for targetLangListCopy
+					//Do Mongo Query for targetLangListCopy
+					Boolean modelExists = false;
+					for(TTSResponseConfig each_task : ttsInference.getConfig())
+					{
+						if(each_task.getLanguage().getSourceLanguage().equals(firstTaskSchema.getSourceLanguage()))
+						{
+							modelExists = true;
+							break;
+						}
+					}
+					if(modelExists == false)
+					{
+					
+						Query dynamicQuery = new Query();
+		
+						Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+						dynamicQuery.addCriteria(modelTypeCriteria);
+		
+						Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+						dynamicQuery.addCriteria(submitterCriteria);
+						
+						Criteria taskCriteria = Criteria.where("task.type").is("TTS");
+						dynamicQuery.addCriteria(taskCriteria);
+		
+						Criteria languageCriteria = Criteria.where("languages.sourceLanguage").is(firstTaskSchema.getSourceLanguage());
+						dynamicQuery.addCriteria(languageCriteria);
+						dynamicQuery.with(Sort.by(Sort.Direction.DESC,"submittedOn"));
+
+						log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+						
+						
+						List<ModelExtended> ttsModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+		
+						log.info("MODEL : "+ttsModels.get(0));
+						
+
+						TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
+						log.info("Model Name :: " + ttsModels.get(0).getName());
+						LanguagePairs langPair = ttsModels.get(0).getLanguages();
+						for(LanguagePair lp : langPair)	
+						{
+							ttsResponseConfig.setServiceId("");
+							ttsResponseConfig.setLanguage(lp);
+						}
+						//TODO: Read each model and store the results in PipelineResponseConfig
+						//ttsResponseConfig.setDomain(ttsModels.get(0).getDomain());
+		
+						ttsInference.addConfigItem(ttsResponseConfig);
+					}
+				}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				while(currentTaskIndex < taskLength)
+				{
+					for(int i=0;i<targetLangSizeCopy;i++)
+					{
+						SupportedLanguages sourceLang = targetLangListCopy.get(0);
+						log.info("CURRENT TASK " + currentTaskIndex + " SOURCE LANGUAGE :: "+targetLangListCopy.get(0));
+						SupportedLanguages targetLanguage = targetLangListCopy.get(0); //refers to prev. target language task list
+						targetLangListCopy.remove(0);
+						LanguagesList currentLangList = languagesArrayList.get(currentTaskIndex);
+						for(LanguageSchema curLangSchema : currentLangList)
+						{
+							LanguageSchema tempLanguageSchema = new LanguageSchema();
+							if(targetLanguage.equals(curLangSchema.getSourceLanguage()))
+							{
+								if(curLangSchema.getTargetLanguageList()!=null)
+								{
+									for(SupportedLanguages targLang : curLangSchema.getTargetLanguageList())
+									{
+										targetLangListCopy.add(targLang);
+									}
+								}
+								else
+								targetLangListCopy.add(curLangSchema.getSourceLanguage());
+							}
+							tempLanguageSchema.setSourceLanguage(curLangSchema.getSourceLanguage());
+							tempLanguageSchema.setTargetLanguageList(curLangSchema.getTargetLanguageList());
+						}
+						log.info("CURRENT TASK " + pipelineTasks.get(currentTaskIndex).getTaskType() + " " + currentTaskIndex + " TARGET LANGUAGE :: "+targetLangListCopy);
+						List<SupportedLanguages> targetLanguageList = targetLangListCopy;
+						//Add pipelineModels by searching within Mongo via here.
+
+						//FOR EACH TASK TYPE: CALL MONGO QUERIES FOR SOURCELANG AND TARGETLANGUAGELIST
+
+
+
+
+
+
+						//Add TranslationTaskInference, ASRTaskInference and TTSTaskInference within newPipelineResponseConfig
+						String currentTaskType = pipelineTasks.get(currentTaskIndex).getTaskType();
+						if(currentTaskType == "asr")
+						{
+							//Do Mongo Query for targetLangListCopy
+							Boolean modelExists = false;
+							for(ASRResponseConfig each_task : asrInference.getConfig())
+							{
+								if(each_task.getLanguage().getSourceLanguage().equals(sourceLang))
+								{
+									modelExists = true;
+									break;
+								}
+							}
+							if(modelExists == false)
+							{
+								
+								Query dynamicQuery = new Query();
+				
+								Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+								dynamicQuery.addCriteria(modelTypeCriteria);
+				
+								Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+								dynamicQuery.addCriteria(submitterCriteria);
+								
+								Criteria taskCriteria = Criteria.where("task.type").is("ASR");
+								dynamicQuery.addCriteria(taskCriteria);
+				
+								Criteria languageCriteria = Criteria.where("languages.sourceLanguage").is(sourceLang);
+								dynamicQuery.addCriteria(languageCriteria);
+								dynamicQuery.with(Sort.by(Sort.Direction.DESC,"submittedOn"));
+		
+								log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+								
+								
+								List<ModelExtended> asrModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+				
+								log.info("MODEL : "+asrModels.get(0));
+								
+
+								ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
+								log.info("Model Name :: " + asrModels.get(0).getName());
+								LanguagePairs langPair = asrModels.get(0).getLanguages();
+								for(LanguagePair lp : langPair)	
+								{
+									asrResponseConfig.setServiceId("");
+									asrResponseConfig.setLanguage(lp);
+								}
+								//TODO: Read each model and store the results in PipelineResponseConfig
+								asrResponseConfig.setDomain(asrModels.get(0).getDomain());
+				
+								asrInference.addConfigItem(asrResponseConfig);
+							}
+						}
+
+
+						else if(currentTaskType == "translation")
+						{
+
+
+							//Do Mongo Query for targetLangListCopy
+							Boolean modelExists = false;
+							for(TranslationResponseConfig each_task : translationInference.getConfig())
+							{
+								if(each_task.getLanguage().getSourceLanguage().equals(sourceLang))
+								{
+									modelExists = true;
+									break;
+								}
+							}
+							if(modelExists == false)
+							{
+								for(SupportedLanguages targetLang : targetLanguageList)
+								{
+									Query dynamicQuery = new Query();
+				
+									Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+									dynamicQuery.addCriteria(modelTypeCriteria);
+					
+									Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+									dynamicQuery.addCriteria(submitterCriteria);
+									
+									Criteria taskCriteria = Criteria.where("task.type").is("TRANSLATION");
+									dynamicQuery.addCriteria(taskCriteria);
+					
+									Criteria languageCriteria = Criteria.where("languages.sourceLanguage").is(sourceLang);
+									dynamicQuery.addCriteria(languageCriteria);
+									dynamicQuery.with(Sort.by(Sort.Direction.DESC,"submittedOn"));
+			
+									log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+	
+									Criteria targetLanguageCriteria = Criteria.where("languages.targetLanguage").is(targetLang);
+									dynamicQuery.addCriteria(targetLanguageCriteria);
+	
+									List<ModelExtended> translationModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+					
+									if(translationModels.size()>0)
+									{
+										TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
+										log.info("Model Name :: " + translationModels.get(0).getName());
+										LanguagePairs langPair = translationModels.get(0).getLanguages();
+										for(LanguagePair lp : langPair)	
+										{
+											translationResponseConfig.setServiceId("");
+											translationResponseConfig.setLanguage(lp);
+										}
+										//TODO: Read each model and store the results in PipelineResponseConfig
+										//translationResponseConfig.setDomain(translationModels.get(0).getDomain());
+						
+										translationInference.addConfigItem(translationResponseConfig);
+	
+									}
+		
+								}
+									
+							}
+							
+						}
+
+						else if(currentTaskType == "tts")
+						{
+							//Do Mongo Query for targetLangListCopy
+							//Do Mongo Query for targetLangListCopy
+							Boolean modelExists = false;
+							for(TTSResponseConfig each_task : ttsInference.getConfig())
+							{
+								if(each_task.getLanguage().getSourceLanguage().equals(sourceLang))
+								{
+									modelExists = true;
+									break;
+								}
+							}
+							if(modelExists == false)
+							{
+							
+								Query dynamicQuery = new Query();
+				
+								Criteria modelTypeCriteria = Criteria.where("_class").is("com.ulca.model.dao.ModelExtended");
+								dynamicQuery.addCriteria(modelTypeCriteria);
+				
+								Criteria submitterCriteria = Criteria.where("submitter.name").is(pipelineRequest.getPipelineRequestConfig().getSubmitter());
+								dynamicQuery.addCriteria(submitterCriteria);
+								
+								Criteria taskCriteria = Criteria.where("task.type").is("TTS");
+								dynamicQuery.addCriteria(taskCriteria);
+				
+								Criteria languageCriteria = Criteria.where("languages.sourceLanguage").is(sourceLang);
+								dynamicQuery.addCriteria(languageCriteria);
+								dynamicQuery.with(Sort.by(Sort.Direction.DESC,"submittedOn"));
+		
+								log.info("dynamicQuery in ASR task search ::" + dynamicQuery.toString());
+								
+								
+								List<ModelExtended> ttsModels = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+				
+								log.info("MODEL : "+ttsModels.get(0));
+								
+
+								TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
+								log.info("Model Name :: " + ttsModels.get(0).getName());
+								LanguagePairs langPair = ttsModels.get(0).getLanguages();
+								for(LanguagePair lp : langPair)	
+								{
+									ttsResponseConfig.setServiceId("");
+									ttsResponseConfig.setLanguage(lp);
+								}
+								//TODO: Read each model and store the results in PipelineResponseConfig
+								//ttsResponseConfig.setDomain(ttsModels.get(0).getDomain());
+				
+								ttsInference.addConfigItem(ttsResponseConfig);
+							}
+						}
+
+
+
+
+
+					}
+					targetLangSizeCopy = targetLangListCopy.size();
+					currentTaskIndex++;
 				}
 			}
 		}
+		int countResponseConfigs = 0;
+		if(asrInference.getConfig().size()!=0)
+		{
+			newPipelineResponseConfig.add(asrInference);
+			countResponseConfigs++;
+		}
+		if(ttsInference.getConfig().size()!=0)
+		{
+			newPipelineResponseConfig.add(ttsInference);						
+			countResponseConfigs++;
+		}	
+		if(translationInference.getConfig().size()!=0)
+		{
+			newPipelineResponseConfig.add(translationInference);						
+			countResponseConfigs++;
+		}			
 
-		
+		if(pipelineTasks.size()!=countResponseConfigs)
+		{
+			log.info("SHOULD RETURN ERROR");
+			throw new PipelineValidationException("Sequence of languages not supported",HttpStatus.BAD_REQUEST);
+
+		}
+
+		pipelineResponse.setPipelineResponseConfig(newPipelineResponseConfig);
+		log.info("NEW LANGUAGE LIST :: "+newLanguageList);
+		pipelineResponse.setLanguages(newLanguageList);
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		String json = mapper.writeValueAsString(pipelineResponse);
+		//json = json.replaceAll("\"","");
+		//PipelineResponse responsePipeline = mapper.readValue(json,PipelineResponse.class);
 		//log.info("String JSON :: "+json);
-		return json;
+		
+        ObjectNode node = mapper.valueToTree(pipelineResponse);
+		return node;
 	}
 
 	public static String checkModel(MultipartFile file) {
@@ -1634,7 +2628,7 @@ public class ModelService {
 	public Boolean validatePipelineRequest(PipelineRequest pipelineRequest) {
 		log.info("Enter to validate pipelineRequest");
 		if (pipelineRequest.getPipelineTasks() == null || pipelineRequest.getPipelineTasks().isEmpty())
-			throw new PipelineValidationException("PipelineTasks is required field");
+			throw new PipelineValidationException("PipelineTasks is required field",HttpStatus.BAD_REQUEST);
 
 		log.info("pipelineRequest.getPipelineTasks() validated");
 
@@ -1663,7 +2657,7 @@ public class ModelService {
 		PipelineModel pipelineModel = mongoTemplate.findOne(dynamicQuery, PipelineModel.class);
 
 		if (pipelineModel == null)
-			throw new PipelineValidationException("Pipeline model with the request submitter does not exist");
+			throw new PipelineValidationException("Pipeline model with the request submitter does not exist",HttpStatus.BAD_REQUEST);
 
 		ArrayList<PipelineTaskSequence> supportedPipelines = pipelineModel.getSupportedPipelines();
           boolean flag = false;
@@ -1688,7 +2682,7 @@ public class ModelService {
 		}
 		
 		if (!flag)
-			throw new PipelineValidationException("Requested pipeline in not exist with this submitter!");
+			throw new PipelineValidationException("Requested pipeline does not exist with this submitter!",HttpStatus.BAD_REQUEST);
 		
 		
 		
