@@ -43,7 +43,7 @@ import io.swagger.pipelinerequest.PipelineResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(value = "/ulca/apis/v0/model")
 public class ModelController {
@@ -153,7 +153,7 @@ public class ModelController {
 	 * return modelService.getModelsPipeline(file, userId); }
 	 */
 	
-	@CrossOrigin
+	//@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/getModelsPipeline")
 	public ObjectNode getModelsPipeline(@RequestHeader("userID") String userID,@RequestHeader("ulcaApiKey") String ulcaApiKey,@RequestBody PipelineRequest pipelineRequest) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");
