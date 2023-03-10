@@ -129,5 +129,11 @@ public class ModelControllerExceptionHandler {
 	    return new ResponseEntity(errorDetails, ex.getStatus());
 	  }
 	
-	
+
+	@ExceptionHandler(PipelineValidationException.class)
+	  public final ResponseEntity<Object> handlePipelineException(PipelineValidationException ex, WebRequest request) {
+		
+		ErrorDetails errorDetails = new ErrorDetails(ex.getStatus().toString(),ex.getMessage(), new Date());
+	    return new ResponseEntity(errorDetails ,ex.getStatus());
+	  }
 }
