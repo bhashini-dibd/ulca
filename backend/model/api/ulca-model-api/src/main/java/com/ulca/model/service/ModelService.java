@@ -1171,7 +1171,10 @@ public class ModelService {
 		   pipelineInferenceAPIEndPoint.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
 		
 		
-		   TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = new TranslationTaskInferenceInferenceApiKey();
+		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = new TranslationTaskInferenceInferenceApiKey();
+
+		validateUserDetails(userID,ulcaApiKey);
+
 		String dbUserId=userId;
 		
 		
@@ -2713,6 +2716,15 @@ public class ModelService {
 
 		return pipelineRequest;
 
+	}
+
+	public InferenceAPIEndPointInferenceApiKey validateUserDetails(String userID, String ulcaApiKey)
+	{
+		InferenceAPIEndPointInferenceApiKey infKey = new InferenceAPIEndPointInferenceApiKey();
+		infKey.setName(null);
+		//Make a call to UMS [Get API Keys]
+		//
+		return infKey;
 	}
 
 	/*
