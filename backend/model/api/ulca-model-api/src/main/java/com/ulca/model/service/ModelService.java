@@ -2560,11 +2560,28 @@ public class ModelService {
 				}
 			}
 		}
+		int countResponseConfigs = 0;
+		if(asrInference.getConfig().size()!=0)
+		{
+			newPipelineResponseConfig.add(asrInference);
+			countResponseConfigs++;
+		}
+		if(ttsInference.getConfig().size()!=0)
+		{
+			newPipelineResponseConfig.add(ttsInference);						
+			countResponseConfigs++;
+		}	
+		if(translationInference.getConfig().size()!=0)
+		{
+			newPipelineResponseConfig.add(translationInference);						
+			countResponseConfigs++;
+		}			
 
+		if(pipelineTasks.size()!=countResponseConfigs)
+		{
+			log.info("SHOULD RETURN ERROR");
+		}
 
-		newPipelineResponseConfig.add(asrInference);
-		newPipelineResponseConfig.add(ttsInference);
-		newPipelineResponseConfig.add(translationInference);
 		pipelineResponse.setPipelineResponseConfig(newPipelineResponseConfig);
 		log.info("NEW LANGUAGE LIST :: "+newLanguageList);
 		pipelineResponse.setLanguages(newLanguageList);
