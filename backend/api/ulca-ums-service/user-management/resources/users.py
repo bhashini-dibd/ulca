@@ -187,7 +187,7 @@ class GetApiKey(Resource):
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
             return res.getresjson(), 200
         else:
-            return post_error("400", "ulcaApiKey is not available, please provide userID")
+            return post_error("400", "userID cannot be empty, please provide one.")
 
 class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
     def post(self): #userID and userApiKey mandatory.
