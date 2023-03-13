@@ -122,6 +122,7 @@ components:
         $ref: '#/components/schemas/LanguageSchema'
     LanguageSchema:
       required:
+        - modelId
         - sourceLanguage
       type: object
       properties:
