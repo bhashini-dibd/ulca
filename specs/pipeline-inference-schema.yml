@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.0
+  version: 1.0.1
 servers:
   - url: /ulca
 paths: {}
@@ -50,29 +50,25 @@ components:
           type: string
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
-      
         submitter:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
         supportedPipelines:
-          $ref: "#/components/schemas/ListOfPipelines"
+          $ref: '#/components/schemas/ListOfPipelines'
         taskSpecifications:
           $ref: '#/components/schemas/TaskSpecifications'
         apiEndPoints:
           $ref: '#/components/schemas/ApiEndPoint'
-
     ListOfPipelines:
       type: array
-      items: 
-        $ref: "#/components/schemas/PipelineTaskSequence"
-      
+      items:
+        $ref: '#/components/schemas/PipelineTaskSequence'
     PipelineTaskSequence:
-        type: array
-        items:
-          anyOf: 
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
-
+      type: array
+      items:
+        anyOf: null
+        $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     InferenceAPIEndPoint:
       required:
         - callbackUrl
@@ -104,15 +100,12 @@ components:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
         asyncApiDetails:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/AsyncApiDetails'
-        
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/AsyncApiDetails
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
-
     TaskSpecifications:
       type: array
-      items: 
-        $ref: "#/components/schemas/TaskSpecification"
-
+      items:
+        $ref: '#/components/schemas/TaskSpecification'
     TaskSpecification:
       required:
         - task
@@ -120,28 +113,26 @@ components:
       type: object
       properties:
         task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         languages:
           $ref: '#/components/schemas/LanguagesList'
-
     LanguagesList:
       type: array
       items:
         $ref: '#/components/schemas/LanguageSchema'
-
     LanguageSchema:
       required:
         - sourceLanguage
       type: object
       properties:
+        modelId:
+          type: integer
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
         sourceLanguage:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
         targetLanguage:
-            $ref: >-
-              https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
-
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
     ApiEndPoint:
       required:
         - apiKeyUrl
