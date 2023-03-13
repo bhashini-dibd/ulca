@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -55,6 +56,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ulca.benchmark.dao.BenchmarkDao;
@@ -1149,10 +1151,10 @@ public class ModelService {
 
 	}
 
-	public ObjectNode getModelsPipeline(PipelineRequest pipelineRequest, String userID, String ulcaApiKey)
+	public ObjectNode getModelsPipeline(String jsonRequest, String userID, String ulcaApiKey)
 			throws Exception {
 		// log.info("File :: " + file.toString());
-		// PipelineRequest pipelineRequest = getPipelineRequest(file);
+		 PipelineRequest pipelineRequest = checkTaskType(jsonRequest);
 		log.info("pipelineRequest :: " + pipelineRequest);
 		if (pipelineRequest != null) {
 			validatePipelineRequest(pipelineRequest);
@@ -1901,6 +1903,10 @@ public class ModelService {
 					}
 				}
 			}
+		}else {
+			throw new PipelineValidationException("TaskType is not valid!", HttpStatus.BAD_REQUEST);
+
+			
 		}
 
 		languagesArrayList.add(firstTaskLanguageList);
@@ -2590,9 +2596,18 @@ public class ModelService {
 
 		ArrayList<String> pipelineTaskSequence = new ArrayList<String>();
 
-		for (PipelineTask pipelineTask : pipelineTasks)
-			pipelineTaskSequence.add(pipelineTask.getTaskType());
+		for (PipelineTask pipelineTask : pipelineTasks) {
+			
+			log.info("pipelineTask :: "+pipelineTask.getTaskType());
+			if(pipelineTask.getTaskType()==null || pipelineTask.getTaskType().isEmpty() ) {
+				throw new PipelineValidationException("TaskType is not valid !",
+						HttpStatus.BAD_REQUEST);
+			}else {
+				
+				pipelineTaskSequence.add(pipelineTask.getTaskType());
 
+			}
+		}
 		log.info("Pipeline Sequence :: " + pipelineTaskSequence);
 
 		// Make query and find pipeline model with the submitter name
@@ -2815,4 +2830,47 @@ public class ModelService {
 	 * 
 	 * }
 	 */
+	
+	
+	public  PipelineRequest checkTaskType(String jsonRequest) {
+	
+		ObjectMapper om = new ObjectMapper();
+		JSONObject jo=	om.convertValue(jsonRequest, JSONObject.class);
+		log.info("jo :: "+jo.toString());
+		String [] taskArray = {"translation" ,"asr" ,"tts"};
+		List<String> taskList = Arrays.asList(taskArray);
+		JSONArray ja =(JSONArray)jo.get("pipelineTasks");
+		  if(ja.length()<1) {
+			  
+				throw new PipelineValidationException("TaskType is not available", HttpStatus.BAD_REQUEST);
+
+		  }
+		
+		for(int i=0; i<ja.length();i++) {
+			JSONObject jo1	=(JSONObject)ja.get(i);
+			if(jo1.isNull("taskType") || !taskList.contains(jo1.get("taskType"))) {
+				throw new PipelineValidationException("TaskType is not valid !", HttpStatus.BAD_REQUEST);
+
+				
+			}
+		}
+		
+		
+		PipelineRequest pipelineRequest=null;
+		try {
+			pipelineRequest = om.readValue(jsonRequest, PipelineRequest.class);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		log.info("pipelineRequest :: "+pipelineRequest.toString());
+          return pipelineRequest;
+	}
+	
+	
+	
 }
