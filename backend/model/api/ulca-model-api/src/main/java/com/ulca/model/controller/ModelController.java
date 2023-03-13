@@ -44,7 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin
 @RequestMapping(value = "/ulca/apis/v0/model")
 public class ModelController {
 
