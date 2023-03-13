@@ -589,20 +589,38 @@ class UserUtils:
             log.exception("exception while validating username/email"+str(e),  MODULE_CONTEXT, e)
             return post_error("Database exception","Exception occurred:{}".format(str(e)),None)
 
-    
+
     @staticmethod
-    def get_user_api_keys(userId):
+    def get_user_api_keys(userId,appName):
         try:
             coll = db.get_db()[USR_MONGO_COLLECTION]
             response = coll.find_one({"userID": userId})
-            if isinstance(response,dict):
-                if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
-                    return response['apiKeyDetails'] #Return the list of user api keys
+            dupStatus = True
+            dupAppName = []
+            if appName == None:
+                if isinstance(response,dict):
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        return response['apiKeyDetails'] #Return the list of user api keys
+                    else:
+                        return [] #If user doesn't have any api keys
                 else:
-                    return [] #If user doesn't have any api keys
-            else:
-                log.info("Not a valid userId")
-                return post_error("Not Valid","This userId address is not registered with ULCA",None)
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None)
+            if appName != None:
+                if isinstance(response,dict):
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        for appN in response["apiKeyDetails"]:
+                            dupAppName.append(appN["appName"])
+                        if appName in dupAppName:
+                            return post_error("Not Valid","This appName is already in use, please try by changing appName",None) , dupStatus
+                        elif appName not in dupAppName:
+                            dupStatus = False
+                            return response['apiKeyDetails'], dupStatus#,dupStatus #Return the list of user api keys
+                    else:
+                        return [], dupStatus #If user doesn't have any api keys
+                else:
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None), dupStatus
         except Exception as e:
             log.exception("Not a valid userId")
             return post_error("error processing ULCA userId:{}".format(str(e)),None)
@@ -622,11 +640,8 @@ class UserUtils:
     def revoke_userApiKey(userid, userapikey):
         collection = db.get_db()[USR_MONGO_COLLECTION]
         log.info(f"userapikey {userapikey}")
-        reoke = collection.find({"userID":userid})
-        for i in reoke:
-           log.info(i)
         revoke = collection.update({"userID":userid}, {"$pull":{"apiKeyDetails": {"ulcaApiKey" : userapikey.replace(" ","")}}})
-        log.info(revoke)
+        # log.info(revoke)
         return json.loads(json_util.dumps(revoke))
 
 

@@ -181,20 +181,21 @@ class GetApiKey(Resource):
         if "userID" not in body.keys():
             return post_error("Data Missing", "users not found", None), 400
         user = body['userID']
-        userAPIKeys = UserUtils.get_user_api_keys(user)
+        appName = None
+        userAPIKeys = UserUtils.get_user_api_keys(user,appName)
         if isinstance(userAPIKeys, list) and len(userAPIKeys) != 0:
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
             return res.getresjson(), 200
         else:
-            return post_error("400", "User API Key is not available")
+            return post_error("400", "ulcaApiKey is not available, please provide userID")
 
 class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
     def post(self): #userID and userApiKey mandatory.
         body = request.get_json()
         if "userID" not in body.keys(): 
-            return post_error("400", "userID not found", None), 400
+            return post_error("400", "userID not found", None), 400       
         if "ulcaApiKey" not in body.keys():
-            return post_error("400", "userApiKey not found", None), 400
+            return post_error("400", "ulcaApiKey not found", None), 400
         userid = body["userID"]
         userapikey = body["ulcaApiKey"]
         revokekey = UserUtils.revoke_userApiKey(userid, userapikey)
@@ -214,16 +215,21 @@ class GenerateApiKey(Resource):
        
         serviceProviderKey = []
         user = body["userID"]
-        appName = body["appName"]
+        appName = body["appName"]        
+        user_api_keys, status = UserUtils.get_user_api_keys(user,appName)
+        log.info(f"suer_api_key {user_api_keys}" )
+        if status == False:
+            if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
+                generatedapikey = UserUtils.generate_user_api_key()
+                UserUtils.insert_generated_user_api_key(user,appName,generatedapikey,serviceProviderKey)
+                res = CustomResponse(Status.SUCCESS_GENERATE_APIKEY.value, generatedapikey)
+                return res.getresjson(), 200
+            else:
+                return post_error("400", "Maximum Key Limit Reached", None), 400
+        
+        if status == True and "errorID" in user_api_keys.keys():
+            return post_error("400", user_api_keys['message'], None), 400
 
 
-        user_api_keys = UserUtils.get_user_api_keys(user)
-        if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
-            generatedapikey = UserUtils.generate_user_api_key()
-            UserUtils.insert_generated_user_api_key(user,appName,generatedapikey,serviceProviderKey)
-            res = CustomResponse(Status.SUCCESS_GENERATE_APIKEY.value, generatedapikey)
-            return res.getresjson(), 200
-        elif isinstance(user_api_keys,dict) and "errorID" in user_api_keys.keys():
-            return user_api_keys
-        else:
-            return post_error("400", "Maximum Key Limit Reached", None), 400
+
+
