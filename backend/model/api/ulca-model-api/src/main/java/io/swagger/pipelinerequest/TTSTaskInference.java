@@ -8,6 +8,8 @@ import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -17,7 +19,6 @@ import javax.validation.constraints.*;
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T11:59:30.120199210Z[GMT]")
-
 public class TTSTaskInference implements TaskSchema {
 	@JsonProperty("callbackUrl")
 	private String callbackUrl = null;
@@ -73,24 +74,28 @@ public class TTSTaskInference implements TaskSchema {
 		this.inferenceApiKey = inferenceApiKey;
 	}
 
-	
-	 public TTSTaskInference taskType(String taskType) { this.taskType =
-	 taskType; return this; }
-	 
-	 /**
-		 * Get taskType
-		 * 
-		 * @return taskType
-		 */
-			 @Schema(required = true, description = "")
-			 
-			 @NotNull
-			 
-			 @Valid public String getTaskType() { return taskType; }
-			 
-			 public void setTaskType(String taskType) { this.taskType = taskType;
-			 }
-			 
+	public TTSTaskInference taskType(String taskType) {
+		this.taskType = taskType;
+		return this;
+	}
+
+	/**
+	 * Get taskType
+	 * 
+	 * @return taskType
+	 */
+	@Schema(required = true, description = "")
+
+	@NotNull
+
+	@Valid
+	public String getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(String taskType) {
+		this.taskType = taskType;
+	}
 
 	public TTSTaskInference config(List<TTSResponseConfig> config) {
 		this.config = config;
@@ -129,13 +134,13 @@ public class TTSTaskInference implements TaskSchema {
 		TTSTaskInference ttSTaskInference = (TTSTaskInference) o;
 		return Objects.equals(this.callbackUrl, ttSTaskInference.callbackUrl)
 				&& Objects.equals(this.inferenceApiKey, ttSTaskInference.inferenceApiKey)
-				//&& Objects.equals(this.taskType, ttSTaskInference.taskType)
+				// && Objects.equals(this.taskType, ttSTaskInference.taskType)
 				&& Objects.equals(this.config, ttSTaskInference.config);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(callbackUrl, inferenceApiKey,  config);
+		return Objects.hash(callbackUrl, inferenceApiKey, config);
 	}
 
 	@Override
@@ -145,7 +150,7 @@ public class TTSTaskInference implements TaskSchema {
 
 		sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
 		sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
-		//sb.append(" taskType: ").append(toIndentedString(taskType)).append("\n");
+		// sb.append(" taskType: ").append(toIndentedString(taskType)).append("\n");
 		sb.append("    config: ").append(toIndentedString(config)).append("\n");
 		sb.append("}");
 		return sb.toString();
