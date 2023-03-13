@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.validation.Valid;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,8 +43,8 @@ import io.swagger.pipelinerequest.PipelineResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/ulca/apis/v0/model")
 public class ModelController {
 
