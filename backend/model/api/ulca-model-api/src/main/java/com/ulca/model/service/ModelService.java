@@ -2691,7 +2691,7 @@ public class ModelService {
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
 				log.info(httpResponse.toString());
-				throw new PipelineValidationException("UMS is not responding!", HttpStatus.BAD_REQUEST);
+				throw new PipelineValidationException("Ulca Api Key does not exist!", HttpStatus.BAD_REQUEST);
 
 			}
 
@@ -2700,7 +2700,7 @@ public class ModelService {
 			log.info("responseJsonStr :: " + responseJsonStr);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new PipelineValidationException("UMS is not responding!", HttpStatus.BAD_REQUEST);
+			throw new PipelineValidationException("Ulca Api Key does not exist!", HttpStatus.BAD_REQUEST);
 
 		}
 
@@ -2717,9 +2717,12 @@ public class ModelService {
 		// \"e294b2b0-272c-4d8c-adb7-8d0f6cefe523\"}}]}]}";
 	
 		log.info("responseJsonStr ::" + responseJsonStr);
+		JSONObject jsonObj1 = new JSONObject(responseJsonStr);
+
+		
 		String name = null;
 		String value = null;
-		if (responseJsonStr != null && !responseJsonStr.isEmpty()) {
+		if (!jsonObj1.isNull("data")) {
 
 			JSONObject jsonObj = new JSONObject(responseJsonStr);
 			JSONArray arr = (JSONArray) jsonObj.get("data");
@@ -2752,13 +2755,13 @@ public class ModelService {
 			}
 		} else {
 
-			throw new PipelineValidationException("Ulca Api Key does not exist!", HttpStatus.BAD_REQUEST);
+			throw new PipelineValidationException("User ID does not exist!", HttpStatus.BAD_REQUEST);
 
 		}
 		log.info("++++++++++++++++Exit to validate User Details+++++++++++++++");
 
 		if (name == null || value == null) {
-			throw new PipelineValidationException("Inference Api Key does not exist!", HttpStatus.BAD_REQUEST);
+			throw new PipelineValidationException("Ulca Api Key does not exist!", HttpStatus.BAD_REQUEST);
 
 		}
 
