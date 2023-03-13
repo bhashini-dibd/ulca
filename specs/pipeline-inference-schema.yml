@@ -127,7 +127,7 @@ components:
       type: object
       properties:
         modelId:
-          type: integer
+          type: string
           description: Unique identifier of model
           example: 63c9586ea0e5e81614ff96a8
         sourceLanguage:
