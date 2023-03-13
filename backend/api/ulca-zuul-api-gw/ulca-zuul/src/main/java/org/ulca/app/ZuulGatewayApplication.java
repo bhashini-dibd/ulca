@@ -57,7 +57,8 @@ public class ZuulGatewayApplication {
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
+        config.addAllowedHeader("userID");
+        config.addAllowedHeader("ulcaApiKey");
         //config.addAllowedMethod("OPTIONS");
         //config.addAllowedMethod("HEAD");
         //config.addAllowedMethod("GET");
