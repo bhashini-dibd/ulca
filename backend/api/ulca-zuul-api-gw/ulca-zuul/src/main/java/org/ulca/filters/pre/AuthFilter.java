@@ -105,9 +105,13 @@ public class AuthFilter extends ZuulFilter {
             String publicKey = headerMap.get("PK");
             String sig = headerMap.get("SIG");
             String payload = headerMap.get("PAYLOAD");
+            String userID = headerMap.get("userID");
+            String ulcaApiKey = headerMap.get("ulcaApiKey");
             ctx.set(PUBLIC_KEY, publicKey);
             ctx.set(SIG_KEY, sig);
             ctx.set(PAYLOAD_KEY, payload);
+            ctx.set("userID", userID);
+            ctx.set("ulcaApiKey", ulcaApiKey);
             User user = verifyAuthenticity(ctx, publicKey);
             if (null == user){
                 logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, ctx.get(ACTION_URI));
