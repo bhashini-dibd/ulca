@@ -53,6 +53,8 @@ const MyProfile = (props) => {
     setAppName("")
     setOpen(false)
   }
+const datavalue = {"Errors":[{"code":"ffffffffff","message":"hello how are yoy"}]}
+console.log(datavalue?.Errors[0].message,"datavaluedatavalue")
 
   const onKeyDown = (event) => {
     if (event.keyCode == 27) {
@@ -96,7 +98,7 @@ const handleSubmitGenerateApiKey =  async() =>{
   } else {
     setSnackbarInfo({
       open: true,
-      message: resp?.message,
+      message: resp?.Errors[0]?.message,
       variant: "error",
     });
     setLoading(false);
@@ -108,7 +110,6 @@ const handleSubmitGenerateApiKey =  async() =>{
   const getApiKeysCall = async () => {
     setLoading(true);
     const apiObj = new FetchApiKeysAPI();
-
     const res = await fetch(apiObj.apiEndPoint(), {
       method: "POST",
       headers: apiObj.getHeaders().headers,
@@ -122,7 +123,7 @@ const handleSubmitGenerateApiKey =  async() =>{
     } else {
       setSnackbarInfo({
         open: true,
-        message: resp?.message,
+        message: resp?.Errors[0]?.message,
         variant: "error",
       });
       setLoading(false);
@@ -155,7 +156,7 @@ const handleSubmitGenerateApiKey =  async() =>{
     } else {
       setSnackbarInfo({
         open: true,
-        message: resp?.message,
+        message: resp?.Errors[0]?.message,
         variant: "error",
       });
       setLoading(false);
@@ -433,10 +434,11 @@ const handleSubmitGenerateApiKey =  async() =>{
         ];
       })
     : [];
+
   const options = {
     textLabels: {
       body: {
-        noMatch: loading ? <Spinner /> : "No records",
+        noMatch: "No records",
       },
       toolbar: {
         search: "Search",
@@ -534,6 +536,7 @@ const handleSubmitGenerateApiKey =  async() =>{
   return (
     <div>
        {renderSnackBar()}
+       {loading && <Spinner />}
        <MuiThemeProvider theme={getMuiTheme}>
                       <MUIDataTable
                         title={"App Integration Details"}
