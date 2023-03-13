@@ -123,6 +123,7 @@ components:
     LanguageSchema:
       required:
         - modelId
+        - serviceId
         - sourceLanguage
       type: object
       properties:
@@ -130,6 +131,10 @@ components:
           type: string
           description: Unique identifier of model
           example: 63c9586ea0e5e81614ff96a8
+        serviceId:
+          type: string
+          description: specific id for the service
+          example: ai4bharat/speech-to-speech-gpu--t4
         sourceLanguage:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
         targetLanguage:
