@@ -21,7 +21,7 @@ const CustomizedSnackbars = (props) => {
         <MuiThemeProvider theme={getMuiTheme()}>
             <div className={classes.snackbar}>
                 <Snackbar
-                    autoHideDuration={props.hide? props.hide : 50000}
+                    autoHideDuration={props.hide? props.hide : 5000}
                     open={props.open}
                     onClose={props.handleClose}
                     anchorOrigin={props.anchorOrigin}

@@ -29,7 +29,7 @@ export default function SimpleModal(props) {
   const [modalStyle] = React.useState(getModalStyle);
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose} disableEscapeKeyDown={true}>
       <div style={modalStyle} className={classes.paper}>
         {props.children}
       </div>
