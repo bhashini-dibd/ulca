@@ -110,8 +110,10 @@ public class AuthFilter extends ZuulFilter {
             ctx.set(PUBLIC_KEY, publicKey);
             ctx.set(SIG_KEY, sig);
             ctx.set(PAYLOAD_KEY, payload);
-            ctx.set("userID", userID);
-            ctx.set("ulcaApiKey", ulcaApiKey);
+            if(userID!=null)
+                ctx.set("userID", userID);
+            if(ulcaApiKey!=null)            
+                ctx.set("ulcaApiKey", ulcaApiKey);
             User user = verifyAuthenticity(ctx, publicKey);
             if (null == user){
                 logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, ctx.get(ACTION_URI));
