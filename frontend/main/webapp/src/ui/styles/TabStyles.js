@@ -31,9 +31,6 @@ const styles = (theme) => ({
     paddingLeft: `calc(1em + ${theme.spacing(3)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-    },
     fontStyle: "italic",
     fontSize: "14px",
   },
