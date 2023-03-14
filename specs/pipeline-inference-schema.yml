@@ -109,18 +109,18 @@ components:
     TaskSpecification:
       required:
         - task
-        - languages
+        - taskConfig
       type: object
       properties:
         task:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
-        languages:
-          $ref: '#/components/schemas/LanguagesList'
-    LanguagesList:
+        taskConfig:
+          $ref: '#/components/schemas/ConfigList'
+    ConfigList:
       type: array
       items:
-        $ref: '#/components/schemas/LanguageSchema'
-    LanguageSchema:
+        $ref: '#/components/schemas/ConfigSchema'
+    ConfigSchema:
       required:
         - modelId
         - serviceId
