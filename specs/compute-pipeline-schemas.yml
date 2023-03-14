@@ -134,11 +134,12 @@ components:
     TranslationConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: integer
-          description: Unique identifier of model
+          description: Unique identifier of service
           example: 103
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
@@ -150,11 +151,12 @@ components:
     TTSConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: string
-          description: Unique identifier of model
+          description: Unique identifier of service
           example: 103
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
@@ -170,11 +172,12 @@ components:
     AudioConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: string
-          description: Unique identifier of model
+          description: Unique identifier of service
           example: 103
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair

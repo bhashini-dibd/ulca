@@ -18,7 +18,7 @@ components:
         - description
         - refUrl
         - domain
-        - submitter
+        - serviceProvider
         - inferenceEndPoint
         - supportedPipelines
         - taskSpecifications
@@ -50,7 +50,7 @@ components:
           type: string
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
-        submitter:
+        serviceProvider:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
