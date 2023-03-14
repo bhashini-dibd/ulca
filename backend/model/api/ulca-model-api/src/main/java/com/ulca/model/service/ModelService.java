@@ -1151,10 +1151,10 @@ public class ModelService {
 
 	}
 
-	public ObjectNode getModelsPipeline(String jsonRequest, String userID, String ulcaApiKey)
-			throws Exception {
+	public ObjectNode getModelsPipeline(String jsonRequest, String userID, String ulcaApiKey) throws Exception {
 		// log.info("File :: " + file.toString());
-		 PipelineRequest pipelineRequest = checkTaskType(jsonRequest);
+		PipelineRequest pipelineRequestCheckedTaskType = checkTaskType(jsonRequest);
+		PipelineRequest pipelineRequest=	checkLanguageSequence(pipelineRequestCheckedTaskType);
 		log.info("pipelineRequest :: " + pipelineRequest);
 		if (pipelineRequest != null) {
 			validatePipelineRequest(pipelineRequest);
@@ -1903,10 +1903,9 @@ public class ModelService {
 					}
 				}
 			}
-		}else {
+		} else {
 			throw new PipelineValidationException("TaskType is not valid!", HttpStatus.BAD_REQUEST);
 
-			
 		}
 
 		languagesArrayList.add(firstTaskLanguageList);
@@ -2597,13 +2596,12 @@ public class ModelService {
 		ArrayList<String> pipelineTaskSequence = new ArrayList<String>();
 
 		for (PipelineTask pipelineTask : pipelineTasks) {
-			
-			log.info("pipelineTask :: "+pipelineTask.getTaskType());
-			if(pipelineTask.getTaskType()==null || pipelineTask.getTaskType().isEmpty() ) {
-				throw new PipelineValidationException("TaskType is not valid !",
-						HttpStatus.BAD_REQUEST);
-			}else {
-				
+
+			log.info("pipelineTask :: " + pipelineTask.getTaskType());
+			if (pipelineTask.getTaskType() == null || pipelineTask.getTaskType().isEmpty()) {
+				throw new PipelineValidationException("TaskType is not valid !", HttpStatus.BAD_REQUEST);
+			} else {
+
 				pipelineTaskSequence.add(pipelineTask.getTaskType());
 
 			}
@@ -2730,11 +2728,10 @@ public class ModelService {
 		// \"serviceProviderKeys\": [{\"serviceProviderName\": \"Dhruva\",
 		// \"inferenceApiKey\": {\"name\": \"Authorization\", \"value\":
 		// \"e294b2b0-272c-4d8c-adb7-8d0f6cefe523\"}}]}]}";
-	
+
 		log.info("responseJsonStr ::" + responseJsonStr);
 		JSONObject jsonObj1 = new JSONObject(responseJsonStr);
 
-		
 		String name = null;
 		String value = null;
 		if (!jsonObj1.isNull("data")) {
@@ -2830,33 +2827,30 @@ public class ModelService {
 	 * 
 	 * }
 	 */
-	
-	
-	public  PipelineRequest checkTaskType(String jsonRequest) {
-	
-		ObjectMapper om = new ObjectMapper();
-		JSONObject jo=	om.convertValue(jsonRequest, JSONObject.class);
-		log.info("jo :: "+jo.toString());
-		String [] taskArray = {"translation" ,"asr" ,"tts"};
-		List<String> taskList = Arrays.asList(taskArray);
-		JSONArray ja =(JSONArray)jo.get("pipelineTasks");
-		  if(ja.length()<1) {
-			  
-				throw new PipelineValidationException("TaskType is not available", HttpStatus.BAD_REQUEST);
 
-		  }
-		
-		for(int i=0; i<ja.length();i++) {
-			JSONObject jo1	=(JSONObject)ja.get(i);
-			if(jo1.isNull("taskType") || !taskList.contains(jo1.get("taskType"))) {
+	public PipelineRequest checkTaskType(String jsonRequest) {
+
+		ObjectMapper om = new ObjectMapper();
+		JSONObject jo = om.convertValue(jsonRequest, JSONObject.class);
+		log.info("jo :: " + jo.toString());
+		String[] taskArray = { "translation", "asr", "tts" };
+		List<String> taskList = Arrays.asList(taskArray);
+		JSONArray ja = (JSONArray) jo.get("pipelineTasks");
+		if (ja.length() < 1) {
+
+			throw new PipelineValidationException("TaskType is not available", HttpStatus.BAD_REQUEST);
+
+		}
+
+		for (int i = 0; i < ja.length(); i++) {
+			JSONObject jo1 = (JSONObject) ja.get(i);
+			if (jo1.isNull("taskType") || !taskList.contains(jo1.get("taskType"))) {
 				throw new PipelineValidationException("TaskType is not valid !", HttpStatus.BAD_REQUEST);
 
-				
 			}
 		}
-		
-		
-		PipelineRequest pipelineRequest=null;
+
+		PipelineRequest pipelineRequest = null;
 		try {
 			pipelineRequest = om.readValue(jsonRequest, PipelineRequest.class);
 		} catch (JsonMappingException e) {
@@ -2866,11 +2860,174 @@ public class ModelService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		log.info("pipelineRequest :: "+pipelineRequest.toString());
-          return pipelineRequest;
+
+		log.info("pipelineRequest :: " + pipelineRequest.toString());
+		return pipelineRequest;
 	}
-	
-	
-	
+
+	public PipelineRequest checkLanguageSequence(PipelineRequest pipelineRequest) {
+		PipelineTasks pipelineTasks = pipelineRequest.getPipelineTasks();
+
+		for (int i = 0; i < pipelineTasks.size() - 1; i++) {
+
+			if (pipelineTasks.get(i).getTaskType() == "asr") {
+
+				ASRTask aSRTask = (ASRTask) pipelineTasks.get(i);
+				if (aSRTask.getConfig() != null) {
+					ASRRequestConfig aSRRequestConfig = aSRTask.getConfig();
+					if (pipelineTasks.get(i + 1).getTaskType() == "asr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
+
+						TranslationTask translationTaskNext = (TranslationTask) pipelineTasks.get(i + 1);
+						if (translationTaskNext.getConfig() != null) {
+							TranslationRequestConfig translationRequestConfigNext = translationTaskNext.getConfig();
+
+							if (aSRRequestConfig.getLanguage().getSourceLanguage() != null
+									|| translationRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!aSRRequestConfig.getLanguage().getSourceLanguage()
+										.equals(translationRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							} else {
+								throw new PipelineValidationException("Invalid Format of Pipeline Request!",
+										HttpStatus.BAD_REQUEST);
+
+							}
+
+						}
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "tts") {
+						TTSTask tTSTaskNext = (TTSTask) pipelineTasks.get(i + 1);
+						if (tTSTaskNext.getConfig() != null) {
+							TTSRequestConfig tTSRequestConfigNext = tTSTaskNext.getConfig();
+
+							if (aSRRequestConfig.getLanguage().getSourceLanguage() != null
+									|| tTSRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!aSRRequestConfig.getLanguage().getSourceLanguage()
+										.equals(tTSRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							} else {
+								throw new PipelineValidationException("Invalid Format of Pipeline Request!",
+										HttpStatus.BAD_REQUEST);
+
+							}
+
+						}
+
+					} else {
+						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
+
+					}
+
+				}
+
+			} else if (pipelineTasks.get(i).getTaskType() == "translation") {
+
+				TranslationTask translationTask = (TranslationTask) pipelineTasks.get(i);
+				if (translationTask.getConfig() != null) {
+					TranslationRequestConfig translationRequestConfig = translationTask.getConfig();
+					if (pipelineTasks.get(i + 1).getTaskType() == "asr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "tts") {
+						TTSTask tTSTaskNext = (TTSTask) pipelineTasks.get(i + 1);
+						if (tTSTaskNext.getConfig() != null) {
+							TTSRequestConfig tTSRequestConfigNext = tTSTaskNext.getConfig();
+
+							if (translationRequestConfig.getLanguage().getTargetLanguage() != null
+									|| tTSRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!translationRequestConfig.getLanguage().getTargetLanguage()
+										.equals(tTSRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							} else {
+								throw new PipelineValidationException("Invalid Format of Pipeline Request!",
+										HttpStatus.BAD_REQUEST);
+
+							}
+
+						}
+
+					} else {
+
+						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
+					}
+
+				}
+
+			} else if (pipelineTasks.get(i).getTaskType() == "tts") {
+				TTSTask tTSTask = (TTSTask) pipelineTasks.get(i);
+
+				if (tTSTask.getConfig() != null) {
+					TTSRequestConfig tTSRequestConfig = tTSTask.getConfig();
+					if (pipelineTasks.get(i + 1).getTaskType() == "asr") {
+
+						ASRTask aSRTaskNext = (ASRTask) pipelineTasks.get(i + 1);
+						if (aSRTaskNext.getConfig() != null) {
+							ASRRequestConfig aSRRequestConfigNext = aSRTaskNext.getConfig();
+
+							if (tTSRequestConfig.getLanguage().getSourceLanguage() != null
+									|| aSRRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!tTSRequestConfig.getLanguage().getTargetLanguage()
+										.equals(aSRRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							} else {
+								throw new PipelineValidationException("Invalid Format of Pipeline Request!",
+										HttpStatus.BAD_REQUEST);
+
+							}
+
+						}
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "tts") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else {
+						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
+
+					}
+
+				}
+
+			} else {
+				throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
+
+			}
+
+		}
+
+		return pipelineRequest;
+	}
+
 }
