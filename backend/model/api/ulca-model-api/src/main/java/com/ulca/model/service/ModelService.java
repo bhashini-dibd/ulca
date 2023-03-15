@@ -121,6 +121,7 @@ import io.swagger.model.TransliterationInference;
 import io.swagger.model.TransliterationRequest;
 import io.swagger.model.TxtLangDetectionInference;
 import io.swagger.model.TxtLangDetectionRequest;
+import io.swagger.model.VoiceTypes;
 import io.swagger.pipelinemodel.InferenceAPIEndPointMasterApiKey;
 import io.swagger.pipelinemodel.ListOfPipelines;
 import io.swagger.pipelinemodel.PipelineTaskSequence;
@@ -573,7 +574,22 @@ public class ModelService {
 
 					if (!ttsInference.getModelProcessingType().getType()
 							.equals(ModelProcessingType.TypeEnum.STREAMING)) {
-						inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+					if(ttsInference.getSupportedVoices()!=null) {	
+						List<VoiceTypes> supportedVoices	=ttsInference.getSupportedVoices();
+						if(!supportedVoices.isEmpty()) {
+						
+					
+							inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+						}else {
+							throw new ModelValidationException("Supported Voices Type is not available");
+
+							
+						}
+					}else {
+						throw new ModelValidationException("Supported Voices Type is not available");
+
+						
+					}
 					}
 				}
 			} else {
