@@ -1,14 +1,14 @@
 {
-    "name": "AI4Bharat English ASR (Conformer, Batch)",
+    "name": "AI4Bharat Odia Indo-Aryan ASR (Conformer, Batch)",
     "version": "v4.0",
-    "description": "English Indic-Conformer is a monolingual speech model trained on English datasets (~5K hours), with a focus on Indian-English. This model is based on Conformer large architecture, with 115 parameters",
+    "description": "Indo-Aryan Indic-Conformer is a multilingual speech model for North-Indian languages. This model is based on Conformer large architecture, with 115M parameters",
     "refUrl": "https://github.com/AI4Bharat/Indic-Conformer",
     "task": {
         "type": "asr"
     },
     "languages": [
         {
-            "sourceLanguage": "en"
+            "sourceLanguage": "or"
         }
     ],
     "license": "mit",
@@ -16,11 +16,8 @@
         "general"
     ],
     "inferenceEndPoint": {
-        "callbackUrl": "https://api.dhruva.ai4bharat.org/services/inference/asr?serviceId=ai4bharat/conformer-en-gpu--t4",
-        "inferenceApiKey": {
-            "name": "authorization",
-            "value": "INSERT-API-KEY-HERE"
-        },
+        "callbackUrl": "https://api.dhruva.ai4bharat.org/services/inference/asr?serviceId=ai4bharat/conformer-multilingual-indo_aryan-gpu--t4",
+        "isMultilingualEnabled": true,
         "schema": {
             "taskType": "asr",
             "modelProcessingType": {
@@ -29,7 +26,7 @@
             "request": {
                 "audio": [
                     {
-                        "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_english.wav"
+                        "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_odia.wav"
                     }
                 ],
                 "config": {
@@ -38,14 +35,14 @@
                         "value": "transcript"
                     },
                     "language": {
-                        "sourceLanguage": "en"
+                        "sourceLanguage": "or"
                     }
                 }
             }
         }
     },
     "trainingDataset": {
-        "description": "Trained on ULCA, NPTEL, Commonvoice datasets, along with some data from YouTube."
+        "description": "Trained on datasets: Shrutilipi, Kathbath, NPTEL, MUCS, IndicTTS, CommonVoice, Gramvaani, etc."
     },
     "submitter": {
         "name": "AI4Bharat",
@@ -69,7 +66,7 @@
             },
             {
                 "name": "Abhigyan Raman",
-                "aboutMe": "Project Officer at AI4Bharat",
+                "aboutMe": "AI Resident at AI4Bharat",
                 "oauthId": {
                     "oauthId": "ramanabhigyan@gmail.com",
                     "provider": "google"
