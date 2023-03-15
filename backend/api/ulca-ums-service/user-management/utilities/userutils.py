@@ -595,6 +595,7 @@ class UserUtils:
         try:
             coll = db.get_db()[USR_MONGO_COLLECTION]
             response = coll.find_one({"userID": userId})
+            log.info("RESPONSE from DB : ",response)
             dupStatus = True
             dupAppName = []
             if appName == None:
@@ -608,6 +609,8 @@ class UserUtils:
                     return post_error("Not Valid","This userId address is not registered with ULCA",None)
             if appName != None:
                 if isinstance(response,dict):
+                    if not 'apiKeyDetails' in response.keys():
+                        return [],False
                     if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
                         for appN in response["apiKeyDetails"]:
                             dupAppName.append(appN["appName"])

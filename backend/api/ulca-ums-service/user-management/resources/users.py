@@ -217,7 +217,7 @@ class GenerateApiKey(Resource):
         user = body["userID"]
         appName = body["appName"]        
         user_api_keys, status = UserUtils.get_user_api_keys(user,appName)
-        log.info(f"suer_api_key {user_api_keys}" )
+        log.info(f"user_api_key {user_api_keys}" )
         if status == False:
             if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
                 generatedapikey = UserUtils.generate_user_api_key()
