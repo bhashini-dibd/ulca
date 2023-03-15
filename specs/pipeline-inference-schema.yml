@@ -100,7 +100,18 @@ components:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
         asyncApiDetails:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/AsyncApiDetails
+          required:
+            - pollingUrl
+            - pollInterval
+          type: object
+          properties:
+            pollingUrl:
+              type: string
+              format: url
+              description: endpoint specified for polling in async calls
+            pollInterval:
+              type: integer
+              description: polling interval in millisec to check for status
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
     TaskSpecifications:
       type: array
