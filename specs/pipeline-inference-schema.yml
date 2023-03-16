@@ -58,7 +58,7 @@ components:
           $ref: '#/components/schemas/ListOfPipelines'
         taskSpecifications:
           $ref: '#/components/schemas/TaskSpecifications'
-        apiEndPoints:
+        apiEndPoint:
           $ref: '#/components/schemas/ApiEndPoint'
     ListOfPipelines:
       type: array
@@ -119,12 +119,12 @@ components:
         $ref: '#/components/schemas/TaskSpecification'
     TaskSpecification:
       required:
-        - task
+        - taskType
         - taskConfig
       type: object
       properties:
-        task:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         taskConfig:
           $ref: '#/components/schemas/ConfigList'
     ConfigList:
