@@ -6,11 +6,11 @@ const initialState = {
   filteredData: [],
   refreshStatus: false,
   filter: { status: [], modelType: [] },
-  selectedFilter: { language: [], domainFilter: [], submitter: [] },
+  selectedFilter: { language: [], domainFilter: [], submitter: [] ,type : []},
   searchValue: "",
   page: 0,
+  
 };
-
 const dateConversion = (value) => {
   var myDate = new Date(value);
   let result = myDate.toLocaleString("en-IN", {
@@ -29,6 +29,7 @@ const getFilterValue = (payload, data) => {
   let { filterValues } = payload;
   let languageFilter = [];
   let domainFilterValue = [];
+  let submitterFilterValue = [];
   let filterResult = [];
   if (
     filterValues &&
@@ -64,13 +65,27 @@ const getFilterValue = (payload, data) => {
     filterValues.hasOwnProperty("submitter") &&
     filterValues.submitter.length > 0
   ) {
-    filterResult = domainFilterValue.filter((value) => {
+    submitterFilterValue = domainFilterValue.filter((value) => {
       if (filterValues.submitter.includes(value.submitter)) {
         return value;
       }
     });
   } else {
-    filterResult = languageFilter;
+    submitterFilterValue = domainFilterValue;
+  }
+
+  if (
+    filterValues &&
+    filterValues.hasOwnProperty("type") &&
+    filterValues.type.length > 0
+  ) {
+    filterResult = submitterFilterValue.filter((value) => {
+      if (filterValues.type.includes(value.inferenceEndPoint?.schema?.modelProcessingType?.type)) {
+        return value;
+      }
+    });
+  } else {
+    filterResult = submitterFilterValue;
   }
   data.filteredData = filterResult;
   data.selectedFilter = filterValues;
@@ -96,7 +111,7 @@ const getDomainDetails = (data) => {
 
 const getClearFilter = (data) => {
   data.filteredData = data.responseData;
-  data.selectedFilter = { language: [], domainFilter: [], submitter: [] };
+  data.selectedFilter = { language: [], domainFilter: [], submitter: [] , type : [] };
   data.page = 0;
   return data;
 };
@@ -105,8 +120,9 @@ const getContributionList = (state, payload) => {
   let responseData = [];
   let languageFilter = [];
   let submitterFilter = [];
+  let typeFilter = [];
   let domainFilter = [];
-  let filter = { language: [], domainFilter: [], submitter: [] };
+  let filter = { language: [], domainFilter: [], submitter: [],type : []  };
   payload.forEach((element) => {
     let sLanguage =
       element.languages?.length > 0 &&
@@ -142,6 +158,7 @@ const getContributionList = (state, payload) => {
         element.languages[0].targetLanguage,
       licence: element.license,
       submitter: element.submitter.name,
+      type:element?.inferenceEndPoint?.schema?.modelProcessingType?.type,
       trainingDataset: element.trainingDataset,
       color:
         element.status === "Completed"
@@ -162,11 +179,15 @@ const getContributionList = (state, payload) => {
     !submitterFilter.includes(element.submitter.name) &&
       element.submitter.name &&
       submitterFilter.push(element.submitter.name);
+      !typeFilter.includes(element?.inferenceEndPoint?.schema?.modelProcessingType?.type) &&
+      element?.inferenceEndPoint?.schema?.modelProcessingType?.type &&
+      typeFilter.push(element?.inferenceEndPoint?.schema?.modelProcessingType?.type);
   });
 
   filter.language = [...new Set(languageFilter)];
   filter.domainFilter = [...new Set(domainFilter)];
   filter.submitter = [...new Set(submitterFilter)];
+  filter.type = [...new Set(typeFilter)];
 
   responseData = responseData.reverse();
   let filteredData = getFilterValue(
@@ -185,6 +206,7 @@ const getSearchedList = (state, searchValue) => {
     "modelName",
     "status",
     "submitter",
+    "type",
     "sLanguage",
     "tLanguage",
   ];

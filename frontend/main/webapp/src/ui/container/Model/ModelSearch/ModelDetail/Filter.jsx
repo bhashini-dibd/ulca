@@ -25,6 +25,10 @@ const FilterList = (props) => {
   const [selectedSubmitter, setSelectedSubmitter] = useState(
     selectedFilter.submitter
   );
+  const [selectedType, setSelectedType] = useState(
+    selectedFilter.type
+  );
+
   const handleDatasetChange = (e) => {
     if (e.target.checked) setSelectedDomain([...selectedDomain, e.target.name]);
     else {
@@ -63,10 +67,23 @@ const FilterList = (props) => {
       }
     }
   };
+  const handleTypeChange = (e) => {
+    if (e.target.checked)
+    setSelectedType([...selectedType, e.target.name]);
+    else {
+      const selected = Object.assign([], selectedType);
+      const index = selected.indexOf(e.target.name);
+      if (index > -1) {
+        selected.splice(index, 1);
+        setSelectedType(selected);
+      }
+    }
+  };
   const handleClearAll = () => {
     setSelectedDomain([]);
     setSelectedLanguage([]);
     setSelectedSubmitter([]);
+    setSelectedType([])
     clearAll({ modelType: [], status: [] });
   };
   const isChecked = (type, param) => {
@@ -75,7 +92,7 @@ const FilterList = (props) => {
         ? selectedDomain.indexOf(type)
         : param === "language"
         ? selectedLanguage.indexOf(type)
-        : selectedSubmitter.indexOf(type);
+        : param === "type" ? selectedType.indexOf(type) : selectedSubmitter.indexOf(type);
     if (index > -1) return true;
     return false;
   };
@@ -98,7 +115,7 @@ const FilterList = (props) => {
         }}
       >
         <Grid container className={classes.filterContainer}>
-          <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+          <Grid item xs={3} sm={3} md={ filter?.type.length > 0 ? 3 : 4} lg={filter.type.length > 0 ? 3 :4} xl={3}>
             <Typography variant="h6" className={classes.filterTypo}>
               Language
             </Typography>
@@ -124,7 +141,7 @@ const FilterList = (props) => {
           {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                         <Divider orientation="vertical"></Divider>
                     </Grid> */}
-          <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+          <Grid item xs={3} sm={3} md={ filter.type.length > 0 ? 3 :4} lg={filter.type.length > 0 ? 3 :4} xl={3}>
             <Typography variant="h6" className={classes.filterTypo}>
               Domain
             </Typography>
@@ -150,7 +167,7 @@ const FilterList = (props) => {
                         <Divider orientation="vertical"></Divider>
                     </Grid> */}
 
-          <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+          <Grid item xs={3} sm={3} md={ filter.type.length > 0 ? 3 :4} lg={filter.type.length > 0 ? 3 :4} xl={3}>
             <Typography variant="h6" className={classes.filterTypo}>
               Submitter
             </Typography>
@@ -172,6 +189,29 @@ const FilterList = (props) => {
               })}
             </FormGroup>
           </Grid>
+          {filter.type.length > 0  &&
+          <Grid item xs={3} sm={3} md={filter?.type.length > 0 ? 3 : 4} lg={filter.type.length > 0 ? 3 :4} xl={3}>
+            <Typography variant="h6" className={classes.filterTypo}>
+              Type
+            </Typography>
+            <FormGroup>
+              {filter.type.map((type) => {
+                return (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={isChecked(type, "type")}
+                        onChange={(e) => handleTypeChange(e)}
+                        name={type}
+                        color="primary"
+                      />
+                    }
+                    label={type}
+                  />
+                );
+              })}
+            </FormGroup>
+          </Grid>}
         </Grid>
         <Button
           // disabled={
@@ -186,6 +226,7 @@ const FilterList = (props) => {
               domainFilter: selectedDomain,
               language: selectedLanguage,
               submitter: selectedSubmitter,
+              type: selectedType,
             })
           }
           color="primary"
@@ -201,7 +242,8 @@ const FilterList = (props) => {
             !(
               selectedDomain.length ||
               selectedLanguage.length ||
-              selectedSubmitter.length
+              selectedSubmitter.length||
+              selectedType.length
             )
           }
           onClick={handleClearAll}
