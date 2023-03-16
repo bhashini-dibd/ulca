@@ -58,7 +58,7 @@ components:
           $ref: '#/components/schemas/ListOfPipelines'
         taskSpecifications:
           $ref: '#/components/schemas/TaskSpecifications'
-        apiEndPoint:
+        apiEndPoints:
           $ref: '#/components/schemas/ApiEndPoint'
     ListOfPipelines:
       type: array
