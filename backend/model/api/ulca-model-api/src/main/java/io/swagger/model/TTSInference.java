@@ -7,7 +7,10 @@ import io.swagger.model.ModelProcessingType;
 import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSRequest;
 import io.swagger.model.TTSResponse;
+import io.swagger.model.VoiceTypes;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -16,7 +19,7 @@ import javax.validation.constraints.*;
  * TTSInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-15T09:06:13.583587252Z[GMT]")
 
 public class TTSInference implements OneOfInferenceAPIEndPointSchema {
 	/*
@@ -25,6 +28,10 @@ public class TTSInference implements OneOfInferenceAPIEndPointSchema {
 
 	@JsonProperty("modelProcessingType")
 	private ModelProcessingType modelProcessingType = null;
+
+	@JsonProperty("supportedVoices")
+	@Valid
+	private List<VoiceTypes> supportedVoices = new ArrayList<VoiceTypes>();
 
 	@JsonProperty("request")
 	private TTSRequest request = null;
@@ -70,6 +77,32 @@ public class TTSInference implements OneOfInferenceAPIEndPointSchema {
 
 	public void setModelProcessingType(ModelProcessingType modelProcessingType) {
 		this.modelProcessingType = modelProcessingType;
+	}
+
+	public TTSInference supportedVoices(List<VoiceTypes> supportedVoices) {
+		this.supportedVoices = supportedVoices;
+		return this;
+	}
+
+	public TTSInference addSupportedVoicesItem(VoiceTypes supportedVoicesItem) {
+		this.supportedVoices.add(supportedVoicesItem);
+		return this;
+	}
+
+	/**
+	 * list of
+	 * 
+	 * @return supportedVoices
+	 **/
+	@Schema(example = "[\"male\",\"female\"]", required = true, description = "list of")
+	@NotNull
+	@Valid
+	public List<VoiceTypes> getSupportedVoices() {
+		return supportedVoices;
+	}
+
+	public void setSupportedVoices(List<VoiceTypes> supportedVoices) {
+		this.supportedVoices = supportedVoices;
 	}
 
 	public TTSInference request(TTSRequest request) {
@@ -124,15 +157,16 @@ public class TTSInference implements OneOfInferenceAPIEndPointSchema {
 			return false;
 		}
 		TTSInference ttSInference = (TTSInference) o;
-		return //Objects.equals(this.taskType, ttSInference.taskType)
-				Objects.equals(this.modelProcessingType, ttSInference.modelProcessingType)
+		return 
+			 Objects.equals(this.modelProcessingType, ttSInference.modelProcessingType)
+				&& Objects.equals(this.supportedVoices, ttSInference.supportedVoices)
 				&& Objects.equals(this.request, ttSInference.request)
 				&& Objects.equals(this.response, ttSInference.response);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash( modelProcessingType, request, response);
+		return Objects.hash( modelProcessingType, supportedVoices, request, response);
 	}
 
 	@Override
@@ -142,6 +176,7 @@ public class TTSInference implements OneOfInferenceAPIEndPointSchema {
 
 		//sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
 		sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
+		sb.append("    supportedVoices: ").append(toIndentedString(supportedVoices)).append("\n");
 		sb.append("    request: ").append(toIndentedString(request)).append("\n");
 		sb.append("    response: ").append(toIndentedString(response)).append("\n");
 		sb.append("}");
