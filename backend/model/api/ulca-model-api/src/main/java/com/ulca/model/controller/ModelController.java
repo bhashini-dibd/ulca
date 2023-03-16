@@ -44,7 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin
 @RequestMapping(value = "/ulca/apis/v0/model")
 public class ModelController {
 
@@ -154,7 +154,7 @@ public class ModelController {
 	 */
 	
 	@PostMapping("/getModelsPipeline")
-	public ObjectNode getModelsPipeline(@RequestHeader("userID") String userID,@RequestHeader("ulcaApiKey") String ulcaApiKey,@RequestBody PipelineRequest pipelineRequest) throws Exception {
+	public ObjectNode getModelsPipeline(@RequestHeader("userID") String userID,@RequestHeader("ulcaApiKey") String ulcaApiKey,@RequestBody String pipelineRequest) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");
 		log.info("userID :: "+userID);
 		log.info("ulcaApiKey :: "+ulcaApiKey);

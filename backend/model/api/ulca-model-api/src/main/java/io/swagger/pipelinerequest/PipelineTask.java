@@ -10,8 +10,9 @@ import io.swagger.model.SupportedTasks;
 */
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "taskType")
+//  include = JsonTypeInfo.As.PROPERTY,
+		  include = JsonTypeInfo.As.EXISTING_PROPERTY,
+		  property = "taskType")
 @JsonSubTypes({
   @JsonSubTypes.Type(value = TranslationTask.class, name = "translation"),
   @JsonSubTypes.Type(value = ASRTask.class, name = "asr"),

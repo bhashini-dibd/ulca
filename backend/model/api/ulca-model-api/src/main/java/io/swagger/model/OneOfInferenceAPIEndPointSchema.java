@@ -8,8 +8,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 */
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "taskType")
+		  include = JsonTypeInfo.As.PROPERTY, 
+property = "taskType"
+)
 @JsonSubTypes({
 	  @JsonSubTypes.Type(value = TranslationInference.class, name = "translation"),
 	  @JsonSubTypes.Type(value = TransliterationInference.class, name = "transliteration"),
