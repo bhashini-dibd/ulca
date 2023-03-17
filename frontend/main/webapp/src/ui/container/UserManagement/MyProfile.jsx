@@ -98,7 +98,7 @@ const handleSubmitGenerateApiKey =  async() =>{
   } else {
     setSnackbarInfo({
       open: true,
-      message: resp?.Errors[0]?.message,
+      message: resp?.message,
       variant: "error",
     });
     setLoading(false);
@@ -123,7 +123,7 @@ const handleSubmitGenerateApiKey =  async() =>{
     } else {
       setSnackbarInfo({
         open: true,
-        message: resp?.Errors[0]?.message,
+        message: resp?.message,
         variant: "error",
       });
       setLoading(false);
@@ -156,7 +156,7 @@ const handleSubmitGenerateApiKey =  async() =>{
     } else {
       setSnackbarInfo({
         open: true,
-        message: resp?.Errors[0]?.message,
+        message: resp?.message,
         variant: "error",
       });
       setLoading(false);
