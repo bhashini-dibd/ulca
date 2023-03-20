@@ -215,9 +215,9 @@ const getSearchedList = (state, searchValue) => {
       if (searchKey?.indexOf(key) > -1) {
         if (
           state.responseData[i][key] !== null &&
-          state.responseData[i][key]
-            .toLowerCase()
-            .includes(searchValue.toLowerCase())
+          state?.responseData[i][key]
+            ?.toLowerCase()
+            .includes(searchValue?.toLowerCase())
         ) {
           present[i] = i;
         }
