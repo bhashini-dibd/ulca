@@ -22,6 +22,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 @Slf4j
 @Component
@@ -62,7 +64,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			try {
 
 				Map<String, String> val = entry.getValue();
-
+				
 				String mode = val.containsKey("mode") ? val.get("mode") + "" : null;
 				if (mode.equalsIgnoreCase("real")) {
 					realIngestUpdate(val);
@@ -72,7 +74,11 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 			} catch (Exception e) {
 				log.info("Exception while processing the fetched Redis map data :: " + entry.toString());
-				e.printStackTrace();
+				log.info("Exception Message for the above Redis map data : "+e.getMessage());
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				log.info(sw.toString());
 			}
 
 		}
