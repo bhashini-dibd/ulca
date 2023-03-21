@@ -409,6 +409,8 @@ components:
           $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/TranslationConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     TransliterationRequest:
       required:
         - input
@@ -429,6 +431,8 @@ components:
           $ref: '#/components/schemas/SentencesList'
         config:
           $ref: '#/components/schemas/TransliterationConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     TxtLangDetectionRequest:
       required:
         - input
@@ -449,6 +453,8 @@ components:
           $ref: '#/components/schemas/TxtLanguagesList'
         config:
           $ref: '#/components/schemas/LangDetectionConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     AudioLangDetectionRequest:
       required:
         - audio
@@ -469,6 +475,8 @@ components:
           $ref: '#/components/schemas/AudioLanguagesList'
         config:
           $ref: '#/components/schemas/LangDetectionConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     NerResponse:
       description: the response for NER.  Standard http status codes to be used.
       required:
@@ -479,6 +487,8 @@ components:
           $ref: '#/components/schemas/NerList'
         config:
           $ref: '#/components/schemas/TranslationConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     ASRInference:
       required:
         - taskType
@@ -558,6 +568,8 @@ components:
           $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/TranslationConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     TTSInference:
       required:
         - taskType
@@ -644,6 +656,8 @@ components:
           $ref: '#/components/schemas/AudioFiles'
         config:
           $ref: '#/components/schemas/AudioConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     OCRInference:
       required:
         - taskType
@@ -700,6 +714,8 @@ components:
           $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/OCRConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     FileUploadRequest:
       type: object
       properties:
