@@ -301,12 +301,6 @@ components:
       properties:
         taskType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
-        supportedScripts:
-          type: array
-          description: list of
-          example: ["Beng","Deva"]
-          items:
-            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
         request:
           $ref: '#/components/schemas/TranslationRequest'
         response:
