@@ -4,6 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedScripts;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -14,21 +15,27 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "language pair, make targetLanguage null to reuse the object to indicate single language")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-20T09:24:02.077792125Z[GMT]")
 
 
-public class LanguagePair   {
+public class LanguagePair  implements OneOfSearchParamsParams {
   @JsonProperty("sourceLanguageName")
   private String sourceLanguageName = null;
 
   @JsonProperty("sourceLanguage")
   private SupportedLanguages sourceLanguage = null;
 
+  @JsonProperty("sourceScriptCode")
+  private SupportedScripts sourceScriptCode = null;
+
   @JsonProperty("targetLanguageName")
   private String targetLanguageName = null;
 
   @JsonProperty("targetLanguage")
   private SupportedLanguages targetLanguage = null;
+
+  @JsonProperty("targetScriptCode")
+  private SupportedScripts targetScriptCode = null;
 
   public LanguagePair sourceLanguageName(String sourceLanguageName) {
     this.sourceLanguageName = sourceLanguageName;
@@ -70,6 +77,26 @@ public class LanguagePair   {
     this.sourceLanguage = sourceLanguage;
   }
 
+  public LanguagePair sourceScriptCode(SupportedScripts sourceScriptCode) {
+    this.sourceScriptCode = sourceScriptCode;
+    return this;
+  }
+
+  /**
+   * Get sourceScriptCode
+   * @return sourceScriptCode
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public SupportedScripts getSourceScriptCode() {
+    return sourceScriptCode;
+  }
+
+  public void setSourceScriptCode(SupportedScripts sourceScriptCode) {
+    this.sourceScriptCode = sourceScriptCode;
+  }
+
   public LanguagePair targetLanguageName(String targetLanguageName) {
     this.targetLanguageName = targetLanguageName;
     return this;
@@ -109,6 +136,26 @@ public class LanguagePair   {
     this.targetLanguage = targetLanguage;
   }
 
+  public LanguagePair targetScriptCode(SupportedScripts targetScriptCode) {
+    this.targetScriptCode = targetScriptCode;
+    return this;
+  }
+
+  /**
+   * Get targetScriptCode
+   * @return targetScriptCode
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public SupportedScripts getTargetScriptCode() {
+    return targetScriptCode;
+  }
+
+  public void setTargetScriptCode(SupportedScripts targetScriptCode) {
+    this.targetScriptCode = targetScriptCode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -121,13 +168,15 @@ public class LanguagePair   {
     LanguagePair languagePair = (LanguagePair) o;
     return Objects.equals(this.sourceLanguageName, languagePair.sourceLanguageName) &&
         Objects.equals(this.sourceLanguage, languagePair.sourceLanguage) &&
+        Objects.equals(this.sourceScriptCode, languagePair.sourceScriptCode) &&
         Objects.equals(this.targetLanguageName, languagePair.targetLanguageName) &&
-        Objects.equals(this.targetLanguage, languagePair.targetLanguage);
+        Objects.equals(this.targetLanguage, languagePair.targetLanguage) &&
+        Objects.equals(this.targetScriptCode, languagePair.targetScriptCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sourceLanguageName, sourceLanguage, targetLanguageName, targetLanguage);
+    return Objects.hash(sourceLanguageName, sourceLanguage, sourceScriptCode, targetLanguageName, targetLanguage, targetScriptCode);
   }
 
   @Override
@@ -137,8 +186,10 @@ public class LanguagePair   {
     
     sb.append("    sourceLanguageName: ").append(toIndentedString(sourceLanguageName)).append("\n");
     sb.append("    sourceLanguage: ").append(toIndentedString(sourceLanguage)).append("\n");
+    sb.append("    sourceScriptCode: ").append(toIndentedString(sourceScriptCode)).append("\n");
     sb.append("    targetLanguageName: ").append(toIndentedString(targetLanguageName)).append("\n");
     sb.append("    targetLanguage: ").append(toIndentedString(targetLanguage)).append("\n");
+    sb.append("    targetScriptCode: ").append(toIndentedString(targetScriptCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }
