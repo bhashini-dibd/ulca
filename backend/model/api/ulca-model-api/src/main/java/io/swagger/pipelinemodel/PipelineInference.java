@@ -43,6 +43,31 @@ public class PipelineInference   {
 
   @JsonProperty("taskSpecifications")
   private TaskSpecifications taskSpecifications = null;
+  
+  @JsonProperty("apiEndPoints")
+  private ApiEndPoint apiEndPoints = null;
+  
+  
+  public PipelineInference apiEndPoints(ApiEndPoint apiEndPoints) {
+	    this.apiEndPoints = apiEndPoints;
+	    return this;
+	  }
+
+	  /**
+	   * Get apiEndPoints
+	   * @return apiEndPoints
+	   **/
+	  @Schema(description = "")
+	  
+	    @Valid
+	    public ApiEndPoint getApiEndPoints() {
+	    return apiEndPoints;
+	  }
+
+	  public void setApiEndPoints(ApiEndPoint apiEndPoints) {
+	    this.apiEndPoints = apiEndPoints;
+	  }
+  
 
   public PipelineInference name(String name) {
     this.name = name;
@@ -247,12 +272,14 @@ public class PipelineInference   {
         Objects.equals(this.submitter, pipelineInference.submitter) &&
         Objects.equals(this.inferenceEndPoint, pipelineInference.inferenceEndPoint) &&
         Objects.equals(this.supportedPipelines, pipelineInference.supportedPipelines) &&
-        Objects.equals(this.taskSpecifications, pipelineInference.taskSpecifications);
+        Objects.equals(this.taskSpecifications, pipelineInference.taskSpecifications)&&
+        Objects.equals(this.apiEndPoints, pipelineInference.apiEndPoints);
+
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, version, description, domain, refUrl, submitter, inferenceEndPoint, supportedPipelines, taskSpecifications);
+    return Objects.hash(name, version, description, domain, refUrl, submitter, inferenceEndPoint, supportedPipelines, taskSpecifications,apiEndPoints);
   }
 
   @Override
@@ -269,6 +296,7 @@ public class PipelineInference   {
     sb.append("    inferenceEndPoint: ").append(toIndentedString(inferenceEndPoint)).append("\n");
     sb.append("    supportedPipelines: ").append(toIndentedString(supportedPipelines)).append("\n");
     sb.append("    taskSpecifications: ").append(toIndentedString(taskSpecifications)).append("\n");
+    sb.append("    apiEndPoints: ").append(toIndentedString(apiEndPoints)).append("\n");
     sb.append("}");
     return sb.toString();
   }
