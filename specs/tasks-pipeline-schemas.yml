@@ -236,12 +236,17 @@ components:
       required:
         - language
         - serviceId
+        - modelId
       type: object
       properties:
         serviceId:
           type: string
           description: Unique identifier of model
           example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         inputFormat:
@@ -250,13 +255,19 @@ components:
           $ref: '#/components/schemas/SupportedFormats'
     TTSResponseConfig:
       required:
+        - language
         - serviceId
+        - modelId
       type: object
       properties:
         serviceId:
           type: string
           description: Unique identifier of model
           example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         supportedVoices:
@@ -275,12 +286,17 @@ components:
       required:
         - language
         - serviceId
+        - modelId
       type: object
       properties:
         serviceId:
           type: string
           description: Unique identifier of model
           example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         audioFormat:
