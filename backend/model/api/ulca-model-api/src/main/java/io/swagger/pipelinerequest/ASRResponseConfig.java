@@ -4,9 +4,13 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.model.Gender;
-import io.swagger.model.LanguagePair;
+import io.swagger.model.AudioBitsPerSample;
+import io.swagger.model.AudioChannel;
+import io.swagger.model.AudioFormat;
+import io.swagger.model.AudioPostProcessors;
 import io.swagger.model.Domain;
+import io.swagger.model.Encoding;
+import io.swagger.model.LanguagePair;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
@@ -17,12 +21,15 @@ import javax.validation.constraints.*;
  * ASRResponseConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-06T10:58:36.709959799Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-24T05:43:51.218317839Z[GMT]")
 
 
 public class ASRResponseConfig   {
   @JsonProperty("serviceId")
   private String serviceId = null;
+
+  @JsonProperty("modelId")
+  private String modelId = null;
 
   @JsonProperty("language")
   private LanguagePair language = null;
@@ -118,6 +125,26 @@ public class ASRResponseConfig   {
 
   public void setServiceId(String serviceId) {
     this.serviceId = serviceId;
+  }
+
+  public ASRResponseConfig modelId(String modelId) {
+    this.modelId = modelId;
+    return this;
+  }
+
+  /**
+   * Unique identifier of model
+   * @return modelId
+   **/
+  @Schema(example = "63c9586ea0e5e81614ff96a8", required = true, description = "Unique identifier of model")
+      @NotNull
+
+    public String getModelId() {
+    return modelId;
+  }
+
+  public void setModelId(String modelId) {
+    this.modelId = modelId;
   }
 
   public ASRResponseConfig language(LanguagePair language) {
@@ -409,6 +436,7 @@ public class ASRResponseConfig   {
     }
     ASRResponseConfig asRResponseConfig = (ASRResponseConfig) o;
     return Objects.equals(this.serviceId, asRResponseConfig.serviceId) &&
+        Objects.equals(this.modelId, asRResponseConfig.modelId) &&
         Objects.equals(this.language, asRResponseConfig.language) &&
         Objects.equals(this.audioFormat, asRResponseConfig.audioFormat) &&
         Objects.equals(this.channel, asRResponseConfig.channel) &&
@@ -427,7 +455,7 @@ public class ASRResponseConfig   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, inputFormat, outputFormat, postProcessors, domain, detailed, punctuation, model, encoding);
+    return Objects.hash(serviceId, modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, inputFormat, outputFormat, postProcessors, domain, detailed, punctuation, model, encoding);
   }
 
   @Override
@@ -436,6 +464,7 @@ public class ASRResponseConfig   {
     sb.append("class ASRResponseConfig {\n");
     
     sb.append("    serviceId: ").append(toIndentedString(serviceId)).append("\n");
+    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("    audioFormat: ").append(toIndentedString(audioFormat)).append("\n");
     sb.append("    channel: ").append(toIndentedString(channel)).append("\n");
