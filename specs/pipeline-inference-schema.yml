@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.1
+  version: 1.0.2
 servers:
   - url: /ulca
 paths: {}
@@ -18,6 +18,7 @@ components:
         - description
         - refUrl
         - domain
+        - pipelineOwner
         - serviceProvider
         - inferenceEndPoint
         - supportedPipelines
@@ -50,8 +51,15 @@ components:
           type: string
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
+        pipelineOwner:
+          type: string
+          description: name of the entity who owns the pipeline
+          example: ai4bharat
         serviceProvider:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
+          type: array
+          description: list of
+          items:
+              $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
         supportedPipelines:
