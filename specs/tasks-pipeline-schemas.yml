@@ -36,13 +36,13 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
     PipelineConfig:
       required:
-        - submitter
+        - pipelineId
       type: object
       properties:
-        submitter:
+        pipelineId:
           type: string
-          description: Submitter Name
-          example: AI4Bharat
+          description: ID of the pipeline submitter
+          example: AI4BharatID
     PipelineTask:
       oneOf:
         - $ref: '#/components/schemas/TranslationTask'
@@ -273,7 +273,9 @@ components:
         supportedVoices:
           type: array
           description: list of
-          example: ["male","female"]
+          example:
+            - male
+            - female
           items:
             $ref: '#/components/schemas/VoiceTypes'
         samplingRate:
