@@ -3,10 +3,12 @@ package io.swagger.pipelinerequest;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.Gender;
 import io.swagger.model.LanguagePair;
+import io.swagger.model.VoiceTypes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -15,18 +17,22 @@ import javax.validation.constraints.*;
  * TTSResponseConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-06T10:58:36.709959799Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-24T05:43:51.218317839Z[GMT]")
 
 
 public class TTSResponseConfig   {
   @JsonProperty("serviceId")
   private String serviceId = null;
 
+  @JsonProperty("modelId")
+  private String modelId = null;
+
   @JsonProperty("language")
   private LanguagePair language = null;
 
-  @JsonProperty("gender")
-  private Gender gender = null;
+  @JsonProperty("supportedVoices")
+  @Valid
+  private List<VoiceTypes> supportedVoices = null;
 
   @JsonProperty("samplingRate")
   private BigDecimal samplingRate = null;
@@ -57,6 +63,26 @@ public class TTSResponseConfig   {
     this.serviceId = serviceId;
   }
 
+  public TTSResponseConfig modelId(String modelId) {
+    this.modelId = modelId;
+    return this;
+  }
+
+  /**
+   * Unique identifier of model
+   * @return modelId
+   **/
+  @Schema(example = "63c9586ea0e5e81614ff96a8", required = true, description = "Unique identifier of model")
+      @NotNull
+
+    public String getModelId() {
+    return modelId;
+  }
+
+  public void setModelId(String modelId) {
+    this.modelId = modelId;
+  }
+
   public TTSResponseConfig language(LanguagePair language) {
     this.language = language;
     return this;
@@ -66,8 +92,9 @@ public class TTSResponseConfig   {
    * Get language
    * @return language
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
+
     @Valid
     public LanguagePair getLanguage() {
     return language;
@@ -77,24 +104,31 @@ public class TTSResponseConfig   {
     this.language = language;
   }
 
-  public TTSResponseConfig gender(Gender gender) {
-    this.gender = gender;
+  public TTSResponseConfig supportedVoices(List<VoiceTypes> supportedVoices) {
+    this.supportedVoices = supportedVoices;
+    return this;
+  }
+
+  public TTSResponseConfig addSupportedVoicesItem(VoiceTypes supportedVoicesItem) {
+    if (this.supportedVoices == null) {
+      this.supportedVoices = new ArrayList<VoiceTypes>();
+    }
+    this.supportedVoices.add(supportedVoicesItem);
     return this;
   }
 
   /**
-   * Get gender
-   * @return gender
+   * list of
+   * @return supportedVoices
    **/
-  @Schema(description = "")
-  
-    @Valid
-    public Gender getGender() {
-    return gender;
+  @Schema(example = "[\"male\",\"female\"]", description = "list of")
+      @Valid
+    public List<VoiceTypes> getSupportedVoices() {
+    return supportedVoices;
   }
 
-  public void setGender(Gender gender) {
-    this.gender = gender;
+  public void setSupportedVoices(List<VoiceTypes> supportedVoices) {
+    this.supportedVoices = supportedVoices;
   }
 
   public TTSResponseConfig samplingRate(BigDecimal samplingRate) {
@@ -168,8 +202,9 @@ public class TTSResponseConfig   {
     }
     TTSResponseConfig ttSResponseConfig = (TTSResponseConfig) o;
     return Objects.equals(this.serviceId, ttSResponseConfig.serviceId) &&
+        Objects.equals(this.modelId, ttSResponseConfig.modelId) &&
         Objects.equals(this.language, ttSResponseConfig.language) &&
-        Objects.equals(this.gender, ttSResponseConfig.gender) &&
+        Objects.equals(this.supportedVoices, ttSResponseConfig.supportedVoices) &&
         Objects.equals(this.samplingRate, ttSResponseConfig.samplingRate) &&
         Objects.equals(this.inputFormat, ttSResponseConfig.inputFormat) &&
         Objects.equals(this.outputFormat, ttSResponseConfig.outputFormat);
@@ -177,7 +212,7 @@ public class TTSResponseConfig   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, language, gender, samplingRate, inputFormat, outputFormat);
+    return Objects.hash(serviceId, modelId, language, supportedVoices, samplingRate, inputFormat, outputFormat);
   }
 
   @Override
@@ -186,8 +221,9 @@ public class TTSResponseConfig   {
     sb.append("class TTSResponseConfig {\n");
     
     sb.append("    serviceId: ").append(toIndentedString(serviceId)).append("\n");
+    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
-    sb.append("    gender: ").append(toIndentedString(gender)).append("\n");
+    sb.append("    supportedVoices: ").append(toIndentedString(supportedVoices)).append("\n");
     sb.append("    samplingRate: ").append(toIndentedString(samplingRate)).append("\n");
     sb.append("    inputFormat: ").append(toIndentedString(inputFormat)).append("\n");
     sb.append("    outputFormat: ").append(toIndentedString(outputFormat)).append("\n");

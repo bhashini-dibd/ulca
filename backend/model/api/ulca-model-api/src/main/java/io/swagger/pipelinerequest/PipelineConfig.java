@@ -12,31 +12,31 @@ import javax.validation.constraints.*;
  * PipelineConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T08:00:21.046011704Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-27T05:34:08.695093421Z[GMT]")
 
 
 public class PipelineConfig   {
-  @JsonProperty("submitter")
-  private String submitter = null;
+  @JsonProperty("pipelineId")
+  private String pipelineId = null;
 
-  public PipelineConfig submitter(String submitter) {
-    this.submitter = submitter;
+  public PipelineConfig pipelineId(String pipelineId) {
+    this.pipelineId = pipelineId;
     return this;
   }
 
   /**
-   * Submitter Name
-   * @return submitter
+   * ID of the pipeline submitter
+   * @return pipelineId
    **/
-  @Schema(example = "AI4Bharat", required = true, description = "Submitter Name")
+  @Schema(example = "AI4BharatID", required = true, description = "ID of the pipeline submitter")
       @NotNull
 
-    public String getSubmitter() {
-    return submitter;
+    public String getPipelineId() {
+    return pipelineId;
   }
 
-  public void setSubmitter(String submitter) {
-    this.submitter = submitter;
+  public void setPipelineId(String pipelineId) {
+    this.pipelineId = pipelineId;
   }
 
 
@@ -49,12 +49,12 @@ public class PipelineConfig   {
       return false;
     }
     PipelineConfig pipelineConfig = (PipelineConfig) o;
-    return Objects.equals(this.submitter, pipelineConfig.submitter);
+    return Objects.equals(this.pipelineId, pipelineConfig.pipelineId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(submitter);
+    return Objects.hash(pipelineId);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class PipelineConfig   {
     StringBuilder sb = new StringBuilder();
     sb.append("class PipelineConfig {\n");
     
-    sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
+    sb.append("    pipelineId: ").append(toIndentedString(pipelineId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
