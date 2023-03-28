@@ -301,7 +301,10 @@ public class BenchmarkService {
 		log.info("List of Languages in Model"+lps);
 		for (LanguagePair lp : lps) {
 
-			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(), lp);
+			LanguagePair lpsentPair = new LanguagePair();
+			lpsentPair.setSourceLanguage(lp.getSourceLanguage());
+			lpsentPair.setTargetLanguage(lp.getTargetLanguage());
+			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(), lpsentPair);
 			log.info("List of Benchmarks in response"+list);
 
 			for (Benchmark bm : list) {
