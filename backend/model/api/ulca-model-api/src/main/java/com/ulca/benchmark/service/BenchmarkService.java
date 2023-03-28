@@ -302,7 +302,7 @@ public class BenchmarkService {
 		for (LanguagePair lp : lps) {
 
 			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(), lp);
-
+			log.info("List of Benchmarks in response :: "+list);
 			for (Benchmark bm : list) {
 
 				BenchmarkDto dto = new BenchmarkDto();
