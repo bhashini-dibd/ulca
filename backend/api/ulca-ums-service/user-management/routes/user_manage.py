@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api
-from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey
+from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, ToggleDataTracking
 
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
@@ -45,5 +45,7 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     GenerateApiKey, "/v1/users/generateApiKey"
 )
 
-
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    ToggleDataTracking, "/v1/users/toggleDataTracking"
+)
 

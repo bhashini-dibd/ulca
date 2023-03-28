@@ -231,5 +231,12 @@ class GenerateApiKey(Resource):
             return post_error("400", user_api_keys['message'], None), 400
 
 
-
+class ToggleDataTracking(Resource):
+    def post(self):
+        body = request.get_json()
+        #validation
+        if "userID" not in body.keys(): 
+            return post_error("400", "Please provide userID", None), 400
+        if "ulcaApiKey" not in body.keys():
+            return post_error("400", "Please provide ulcaApiKey", None), 400
 
