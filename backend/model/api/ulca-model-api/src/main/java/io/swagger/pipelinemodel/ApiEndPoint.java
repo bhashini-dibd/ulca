@@ -11,8 +11,8 @@ import javax.validation.constraints.*;
 /**
  * ApiEndPoint
  */
-@Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-16T05:12:20.169133522Z[GMT]")
+
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-23T09:19:31.692607590Z[GMT]")
 
 
 public class ApiEndPoint   {
