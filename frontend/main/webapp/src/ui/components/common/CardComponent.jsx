@@ -7,9 +7,12 @@ import {
   FilterByDomain,
 } from "../../../utils/getLabel";
 import React from "react";
+import {  useLocation } from 'react-router-dom';
 import { getCamelCase } from "../../../utils/util";
 const CardComponent = (props) => {
   const { classes, data, index } = props;
+  const location = useLocation();
+ // console.log("location", location)
   const renderPublishedOn = (data) => {
     if (data.publishedOn)
       return (
@@ -117,7 +120,8 @@ const CardComponent = (props) => {
   };
 
   const renderProcessingType = (data) => {
-    if (data.task === "asr" || data.task === "tts") {
+   
+    if ((data.task === "asr" || data.task === "tts")&& !location.pathname.includes('benchmark-datasets')) {
       const {
         inferenceEndPoint: {
           schema: {

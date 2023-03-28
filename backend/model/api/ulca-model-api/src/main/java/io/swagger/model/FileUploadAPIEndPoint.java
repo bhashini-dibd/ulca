@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "hosted location of the file which would be sent for the validation of the Inference API endpoint.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
 
 
 public class FileUploadAPIEndPoint   {

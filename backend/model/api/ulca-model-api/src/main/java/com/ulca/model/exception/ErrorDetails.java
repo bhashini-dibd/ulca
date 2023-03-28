@@ -15,4 +15,11 @@ public class ErrorDetails {
 	private String message;
 	private Date timestamp;
 	
+	
+	public ErrorDetails (String message , Date timestamp) {
+		this.message=message;
+		this.timestamp=timestamp;
+		
+	}
+	
 }

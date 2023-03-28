@@ -3,7 +3,7 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.TxtLangDetectionPrediction;
+import io.swagger.model.LangDetectionPrediction;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
  * TxtLangDetectionList
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
 
 
 public class TxtLangDetectionList   {
@@ -24,7 +24,7 @@ public class TxtLangDetectionList   {
 
   @JsonProperty("langPrediction")
   @Valid
-  private List<TxtLangDetectionPrediction> langPrediction = null;
+  private List<LangDetectionPrediction> langPrediction = null;
 
   public TxtLangDetectionList source(String source) {
     this.source = source;
@@ -46,14 +46,14 @@ public class TxtLangDetectionList   {
     this.source = source;
   }
 
-  public TxtLangDetectionList langPrediction(List<TxtLangDetectionPrediction> langPrediction) {
+  public TxtLangDetectionList langPrediction(List<LangDetectionPrediction> langPrediction) {
     this.langPrediction = langPrediction;
     return this;
   }
 
-  public TxtLangDetectionList addLangPredictionItem(TxtLangDetectionPrediction langPredictionItem) {
+  public TxtLangDetectionList addLangPredictionItem(LangDetectionPrediction langPredictionItem) {
     if (this.langPrediction == null) {
-      this.langPrediction = new ArrayList<TxtLangDetectionPrediction>();
+      this.langPrediction = new ArrayList<LangDetectionPrediction>();
     }
     this.langPrediction.add(langPredictionItem);
     return this;
@@ -65,11 +65,11 @@ public class TxtLangDetectionList   {
    **/
   @Schema(description = "list of")
       @Valid
-    public List<TxtLangDetectionPrediction> getLangPrediction() {
+    public List<LangDetectionPrediction> getLangPrediction() {
     return langPrediction;
   }
 
-  public void setLangPrediction(List<TxtLangDetectionPrediction> langPrediction) {
+  public void setLangPrediction(List<LangDetectionPrediction> langPrediction) {
     this.langPrediction = langPrediction;
   }
 

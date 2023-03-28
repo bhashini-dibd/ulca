@@ -349,6 +349,86 @@
       "role": "BENCHMARK-DATASET-CONTRIBUTOR",
       "actionID": "fb876483-130d-4674-8371-00ed262c9be3",
       "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+      "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+      "active": true
+    },
+    {
+      "role": "MODEL-ONLY-USER",
+      "actionID": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "43df383c-7857-4302-b64a-48066879739e",
+      "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "43df383c-7857-4302-b64a-48066879739e",
+      "active": true
+    },
+    {
+      "role": "MODEL-ONLY-USER",
+      "actionID": "43df383c-7857-4302-b64a-48066879739e",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "43df383c-7857-4302-b64a-48066879739e",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+      "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+      "active": true
+    },
+    {
+      "role": "MODEL-ONLY-USER",
+      "actionID": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "f47a4ebf-f2d3-4496-beab-062ef2a318d2",
+      "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "f47a4ebf-f2d3-4496-beab-062ef2a318d2",
+      "active": true
+    },
+    {
+      "role": "MODEL-ONLY-USER",
+      "actionID": "f47a4ebf-f2d3-4496-beab-062ef2a318d2",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "f47a4ebf-f2d3-4496-beab-062ef2a318d2",
+      "active": true
     }
   ]
 }

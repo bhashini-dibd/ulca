@@ -58,7 +58,9 @@ public class ModelHeartBeatCheckService {
 				if (inferenceAPIEndPoint != null && inferenceAPIEndPoint.getCallbackUrl() != null) {
 
 					if (!inferenceAPIEndPoint.getCallbackUrl().isBlank()
-							&& !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())) {
+							&& !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())
+							&& inferenceAPIEndPoint.getCallbackUrl().startsWith("wss")==false) {
+
 						checkedUrl.add(inferenceAPIEndPoint.getCallbackUrl());
 						String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 

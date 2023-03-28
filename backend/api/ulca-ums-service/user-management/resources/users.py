@@ -5,6 +5,7 @@ from utilities import UserUtils
 from flask import request, jsonify
 import config
 import logging
+from config import MAX_API_KEY
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -172,5 +173,63 @@ class Health(Resource):
     def get(self):
         response = {"code": "200", "status": "ACTIVE"}
         return jsonify(response)
+
+
+class GetApiKey(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys():
+            return post_error("Data Missing", "users not found", None), 400
+        user = body['userID']
+        appName = None
+        userAPIKeys = UserUtils.get_user_api_keys(user,appName)
+        if isinstance(userAPIKeys, list) and len(userAPIKeys) != 0:
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "userID cannot be empty, please provide one.")
+
+class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
+    def post(self): #userID and userApiKey mandatory.
+        body = request.get_json()
+        if "userID" not in body.keys(): 
+            return post_error("400", "userID not found", None), 400       
+        if "ulcaApiKey" not in body.keys():
+            return post_error("400", "ulcaApiKey not found", None), 400
+        userid = body["userID"]
+        userapikey = body["ulcaApiKey"]
+        revokekey = UserUtils.revoke_userApiKey(userid, userapikey)
+        if revokekey["nModified"] == 1:
+            res = CustomResponse(Status.SUCCESS_REVOKE_APIKEY.value, "SUCCESS")
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "Unable to revoke ulcaApiKey. Please check the userID and/or ulcaApiKey.")
+
+class GenerateApiKey(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys(): 
+            return post_error("400", "Please provide userID", None), 400
+        if "appName" not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+       
+        serviceProviderKey = []
+        user = body["userID"]
+        appName = body["appName"]        
+        user_api_keys, status = UserUtils.get_user_api_keys(user,appName)
+        log.info(f"user_api_key {user_api_keys}" )
+        if status == False:
+            if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
+                generatedapikey = UserUtils.generate_user_api_key()
+                UserUtils.insert_generated_user_api_key(user,appName,generatedapikey,serviceProviderKey)
+                res = CustomResponse(Status.SUCCESS_GENERATE_APIKEY.value, generatedapikey)
+                return res.getresjson(), 200
+            else:
+                return post_error("400", "Maximum Key Limit Reached", None), 400
+        
+        if status == True and "errorID" in user_api_keys.keys():
+            return post_error("400", user_api_keys['message'], None), 400
+
+
 
 

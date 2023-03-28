@@ -4,6 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Sentences;
+import io.swagger.model.SupportedTasks;
 import io.swagger.model.TranslationConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +16,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-21T09:50:48.420331102Z[GMT]")
 
 
 public class TranslationResponse   {
@@ -24,6 +25,9 @@ public class TranslationResponse   {
 
   @JsonProperty("config")
   private TranslationConfig config = null;
+
+  @JsonProperty("taskType")
+  private SupportedTasks taskType = null;
 
   public TranslationResponse output(Sentences output) {
     this.output = output;
@@ -66,6 +70,26 @@ public class TranslationResponse   {
     this.config = config;
   }
 
+  public TranslationResponse taskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+    return this;
+  }
+
+  /**
+   * Get taskType
+   * @return taskType
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public SupportedTasks getTaskType() {
+    return taskType;
+  }
+
+  public void setTaskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -77,12 +101,13 @@ public class TranslationResponse   {
     }
     TranslationResponse translationResponse = (TranslationResponse) o;
     return Objects.equals(this.output, translationResponse.output) &&
-        Objects.equals(this.config, translationResponse.config);
+        Objects.equals(this.config, translationResponse.config) &&
+        Objects.equals(this.taskType, translationResponse.taskType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(output, config);
+    return Objects.hash(output, config, taskType);
   }
 
   @Override
@@ -92,6 +117,7 @@ public class TranslationResponse   {
     
     sb.append("    output: ").append(toIndentedString(output)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

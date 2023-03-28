@@ -728,6 +728,7 @@ const ContributionList = (props) => {
     expandableRowsOnClick: false,
     // isRowExpandable: (dataIndex, expandedRows) => expandedRows.data.filter(d=>index.indexOf(d.index) > -1),
     renderExpandableRow: (rowData, rowMeta) => {
+      console.log(rowData,"rowDatarowData")
       const colSpan = rowData.length + 1;
       const even_odd = rowMeta.rowIndex % 2 === 0;
       if (rowData[9].length) {

@@ -71,7 +71,32 @@
       "active": true,
       "whiteList": true,
       "description": "API to register"
+    },    
+    {
+      "id": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+      "uri": "/ulca/user-mgmt/v1/users/generateApiKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate user api key"
     },
+    {
+      "id": "43df383c-7857-4302-b64a-48066879739e",
+      "uri": "/ulca/user-mgmt/v1/users/revokeApiKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to revoke one user api key"
+    },
+    {
+      "id": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+      "uri": "/ulca/user-mgmt/v1/users/getApiKeys",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get all user api keys"
+    },
+
     {
       "id": "6eae39c6-d705-4ee2-9ec6-c2eb445e9f02",
       "uri": "/ulca/user-mgmt/v1/users/verify-user",
@@ -167,6 +192,14 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch models"
+    },
+    {
+      "id": "f47a4ebf-f2d3-4496-beab-062ef2a318d2",
+      "uri": "/ulca/apis/v0/model/getModelsPipeline",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch tasks pipeline"
     },
     {
       "id": "a4c9f08d-0968-403d-ab1f-008b1b1aff44",
@@ -319,6 +352,38 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch pre calculated ETAs"
+    },
+    {
+      "id": "939d5109-c3c5-466c-b1cf-6810c1f182d8",
+      "uri": "/ulca/data-metric/v0/store/reportdata",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch reports on ULCA"
+    },
+    {
+      "id": "fb876483-130d-4674-8371-00ed262c9be3",
+      "uri": "/ulca/apis/v0/dataset/getByDatasetId",
+      "module": "ULCA-API",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get datasets by datasetID"
+    },
+    {
+      "id": "4ff88bd8-659a-11ed-abd1-60a5e2472759",
+      "uri": "/ulca/data-metric/v0/store/ai4b",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch AI4Bharat and Samanantar datasets"
+    },
+    {
+      "id": "6f408f06-659b-11ed-bddf-60a5e2472759",
+      "uri": "/ulca/data-metric/v0/store/ai4bmodels",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch AI4Bharat Models"
     }
   ]
 }

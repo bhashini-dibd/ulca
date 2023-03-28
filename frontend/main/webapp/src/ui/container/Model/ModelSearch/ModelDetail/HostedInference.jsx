@@ -152,7 +152,7 @@ const HostedInference = (props) => {
   };
 
   const handleFeedbackSubmit = (feedback) => {
-    const apiObj = new SubmitFeedback('translation', sourceText, target, feedback)
+    const apiObj = new SubmitFeedback('translation', sourceText, target, feedback, [], modelId)
     fetch(apiObj.apiEndPoint(), {
       method: 'post',
       headers: apiObj.getHeaders().headers,

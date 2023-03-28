@@ -1,0 +1,54 @@
+{
+    "name": "AI4Bharat ASR for Indic languages",
+    "version": "4.0",
+    "description": "ASR model deployed by AI4Bharat, for 4 South-Indian languages and 7 North-Indian languages",
+    "refUrl": "github.com/ai4bharat",
+    "task": {
+        "type": "asr"
+    },
+    "inferenceEndPoint": {
+        "callbackUrl": "https://asr-api.ai4bharat.org/asr/v1/recognize/",
+        "isMultilingualEnabled": true,
+        "inferenceApiKey": {
+            "name": "authorization",
+            "value": "bbe19858-b354-4e24-8e92-a7a4b320c066"
+        },
+        "supportedInputFormats": [
+            "mp3",
+            "wav"
+        ],
+        "supportedOutputFormats": [
+            "raw-text",
+            "srt",
+            "webvtt"
+        ],
+        "providerName": "Dhruva",
+        "infraDescription": "Auto-scalable deployment, using T4 GPUs",
+        "inferenceModelId": "ai4bharat/indic-ner-multilingual-gpu",
+        "schema": {
+            "taskType": "asr",
+            "modelProcessingType": {
+                "type": "batch"
+            },
+            "request": [
+                {
+                    "audio": [
+                        {
+                            "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_bengali.wav"
+                        }
+                    ],
+                    "config": {
+                        "language": {
+                            "sourceLanguage": "bn"
+                        },
+                        "inputFormat": "mp3",
+                        "outputFormat": "raw-text"
+                    }
+                }
+            ]
+        }
+    },
+    "trainingDataset": {
+        "description": "Trained on benchmark datasets"
+    }
+}

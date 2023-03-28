@@ -1,0 +1,116 @@
+{
+   "name": "AI4Bharat Malayalam NER",
+   "version": "v1.0",
+   "description": "Multilingual Indic-NER model by AI4Bharat to recognize named-entities from provided text. For more details, check our research paper: https://arxiv.org/abs/2212.10168",
+   "refUrl": "https://huggingface.co/ai4bharat/IndicNER",
+   "task": {
+      "type": "ner"
+   },
+   "languages": [
+      {
+         "sourceLanguage": "ml"
+      }
+   ],
+   "license": "mit",
+   "domain": [
+      "general"
+   ],
+   "submitter": {
+      "name": "AI4Bharat",
+      "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+      "team": [
+         {
+            "name": "Arnav Mhaske",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Harshit Kedia",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Sumanth Doddapaneni",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Mitesh Khapra",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Pratyush Kumar",
+            "aboutMe": "Microsoft Research India"
+         },
+         {
+            "name": "Rudra Murthy",
+            "aboutMe": "IBM Research India"
+         },
+         {
+            "name": "Anoop Kunchukuttan",
+            "aboutMe": "Microsoft Research India"
+         }
+      ]
+   },
+   "inferenceEndPoint": {
+      "callbackUrl": "https://ner-api.ai4bharat.org/inference",
+      "schema": {
+         "taskType": "ner",
+         "tagsFormat": "IOB2",
+         "request": {
+            "input": [
+               {
+                  "source": "അമേരിക്കയിൽ നിന്നുള്ള ഗൂഗിൾ എന്ന കമ്പനിയിലാണ് സുന്ദർ ജോലി ചെയ്യുന്നത്."
+               }
+            ],
+            "config": {
+               "language": {
+                  "sourceLanguage": "ml"
+               }
+            }
+         },
+         "response": {
+            "output": [
+               {
+                  "source": "അമേരിക്കയിൽ നിന്നുള്ള ഗൂഗിൾ എന്ന കമ്പനിയിലാണ് സുന്ദർ ജോലി ചെയ്യുന്നത്.",
+                  "nerPrediction": [
+                     {
+                        "token": "അമേരിക്കയിൽ",
+                        "tag": "B-LOC"
+                     },
+                     {
+                        "token": "നിന്നുള്ള",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ഗൂഗിൾ",
+                        "tag": "B-ORG"
+                     },
+                     {
+                        "token": "എന്ന",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "കമ്പനിയിലാണ്",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "സുന്ദർ",
+                        "tag": "B-PER"
+                     },
+                     {
+                        "token": "ജോലി",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ചെയ്യുന്നത്.",
+                        "tag": "O"
+                     }
+                  ]
+               }
+            ]
+         }
+      }
+   },
+   "trainingDataset": {
+      "datasetId": "",
+      "description": "Trained on Naamapadam dataset, the largest publicly available Named Entity Annotated dataset for 11 Indic languages. More info: https://huggingface.co/datasets/ai4bharat/naamapadam"
+   }
+}

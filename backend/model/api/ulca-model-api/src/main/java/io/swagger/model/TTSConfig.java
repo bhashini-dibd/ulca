@@ -3,8 +3,10 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.AudioFormat;
 import io.swagger.model.Gender;
 import io.swagger.model.LanguagePair;
+import io.swagger.model.TTSConfigInputFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -14,7 +16,7 @@ import javax.validation.constraints.*;
  * TTSConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
 
 
 public class TTSConfig   {
@@ -26,6 +28,12 @@ public class TTSConfig   {
 
   @JsonProperty("gender")
   private Gender gender = null;
+
+  @JsonProperty("inputFormat")
+  private TTSConfigInputFormat inputFormat = null;
+
+  @JsonProperty("audioFormat")
+  private AudioFormat audioFormat = null;
 
   public TTSConfig modelId(String modelId) {
     this.modelId = modelId;
@@ -88,6 +96,46 @@ public class TTSConfig   {
     this.gender = gender;
   }
 
+  public TTSConfig inputFormat(TTSConfigInputFormat inputFormat) {
+    this.inputFormat = inputFormat;
+    return this;
+  }
+
+  /**
+   * Get inputFormat
+   * @return inputFormat
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public TTSConfigInputFormat getInputFormat() {
+    return inputFormat;
+  }
+
+  public void setInputFormat(TTSConfigInputFormat inputFormat) {
+    this.inputFormat = inputFormat;
+  }
+
+  public TTSConfig audioFormat(AudioFormat audioFormat) {
+    this.audioFormat = audioFormat;
+    return this;
+  }
+
+  /**
+   * Get audioFormat
+   * @return audioFormat
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public AudioFormat getAudioFormat() {
+    return audioFormat;
+  }
+
+  public void setAudioFormat(AudioFormat audioFormat) {
+    this.audioFormat = audioFormat;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -100,12 +148,14 @@ public class TTSConfig   {
     TTSConfig ttSConfig = (TTSConfig) o;
     return Objects.equals(this.modelId, ttSConfig.modelId) &&
         Objects.equals(this.language, ttSConfig.language) &&
-        Objects.equals(this.gender, ttSConfig.gender);
+        Objects.equals(this.gender, ttSConfig.gender) &&
+        Objects.equals(this.inputFormat, ttSConfig.inputFormat) &&
+        Objects.equals(this.audioFormat, ttSConfig.audioFormat);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, language, gender);
+    return Objects.hash(modelId, language, gender, inputFormat, audioFormat);
   }
 
   @Override
@@ -116,6 +166,8 @@ public class TTSConfig   {
     sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("    gender: ").append(toIndentedString(gender)).append("\n");
+    sb.append("    inputFormat: ").append(toIndentedString(inputFormat)).append("\n");
+    sb.append("    audioFormat: ").append(toIndentedString(audioFormat)).append("\n");
     sb.append("}");
     return sb.toString();
   }
