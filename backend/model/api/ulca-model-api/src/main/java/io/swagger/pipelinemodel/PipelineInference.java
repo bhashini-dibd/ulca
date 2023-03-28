@@ -69,10 +69,6 @@ public class PipelineInference   {
 	    this.apiEndPoints = apiEndPoints;
 	  }
   
-
-  @JsonProperty("apiEndPoints")
-  private ApiEndPoint apiEndPoints = null;
-
   public PipelineInference name(String name) {
     this.name = name;
     return this;
@@ -258,27 +254,6 @@ public class PipelineInference   {
     this.taskSpecifications = taskSpecifications;
   }
 
-  public PipelineInference apiEndPoints(ApiEndPoint apiEndPoints) {
-    this.apiEndPoints = apiEndPoints;
-    return this;
-  }
-
-  /**
-   * Get apiEndPoints
-   * @return apiEndPoints
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public ApiEndPoint getApiEndPoints() {
-    return apiEndPoints;
-  }
-
-  public void setApiEndPoints(ApiEndPoint apiEndPoints) {
-    this.apiEndPoints = apiEndPoints;
-  }
-
-
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -305,7 +280,7 @@ public class PipelineInference   {
   @Override
   public int hashCode() {
 
-    return Objects.hash(name, version, description, domain, refUrl, submitter, inferenceEndPoint, supportedPipelines, taskSpecifications,apiEndPoints);
+    return Objects.hash(name, version, description, serviceProvider, domain, refUrl, inferenceEndPoint, supportedPipelines, taskSpecifications, apiEndPoints);
 
   }
 
