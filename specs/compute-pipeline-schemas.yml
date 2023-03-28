@@ -16,20 +16,26 @@ components:
       required:
         - pipelineTasks
         - inputData
+        - controlConfig
       type: object
       properties:
         pipelineTasks:
           $ref: "#/components/schemas/PipelineRequestList"
         inputData:
           $ref: "#/components/schemas/PipelineInputList"
+        controlConfig:
+          $ref: "#/components/schemas/ControlConfig"
 
     PipelineComputeResponse:
       required:
         - pipelineResponse
+        - controlConfig
       type: object
       properties:
         pipelineResponse:
           $ref: "#/components/schemas/ResponseList"
+        controlConfig:
+          $ref: "#/components/schemas/ControlConfig"
 
     TaskRequestConfig:
       anyOf:
@@ -321,3 +327,14 @@ components:
           $ref: "#/components/schemas/AudioFiles"
         config:
           $ref: "#/components/schemas/AudioConfig"
+          
+    ControlConfig:
+      description: generic settings related to pipeline
+      required:
+        - dataTracking
+      type: object
+      properties:
+        dataTracking:
+          type: boolean
+          default: true
+          description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
