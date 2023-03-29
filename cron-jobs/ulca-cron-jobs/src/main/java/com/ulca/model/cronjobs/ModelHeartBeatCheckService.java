@@ -91,8 +91,7 @@ public class ModelHeartBeatCheckService {
 		log.info("*******  end ModelHeartBeatCheckService ::notifyFailedModelHeartbeatCheck ****** ");
 	}
 
-	//@Scheduled(cron = "0 0 */1 * * ?")
-	@Scheduled(cron = "0 */1 * * * *")
+	@Scheduled(cron = "0 0 */1 * * ?")
 	public void modelHeathStatusCheck() {
 
 		log.info("*******  start ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");
@@ -188,6 +187,7 @@ public class ModelHeartBeatCheckService {
 						+ model.getModelId() + " reason :: " + e.getMessage());
 				e.printStackTrace();
 			}
+		
 		}
 		log.info("*******  ModelHeartBeatCheckService ::modelHeathStatusCheck -- Number of published models fetched ::" + fetchedModels.size());
 		log.info("*******  ModelHeartBeatCheckService ::modelHeathStatusCheck -- Number of models being status checked available/unavailable ::" + checkedModels.size());
