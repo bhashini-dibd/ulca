@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
@@ -72,6 +73,9 @@ public class TranslationBenchmark {
 
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
+	
+	@Value("${aes.model.apikey.secretkey}")
+	private String SECRET_KEY;
 
 	public TranslationResponse computeSync(InferenceAPIEndPoint inferenceAPIEndPoint,
 										   List<String> sourceSentences)
@@ -326,36 +330,63 @@ public class TranslationBenchmark {
 		return res;
 	}
 
-	public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
-		   Request httpRequest =null;
-			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-			
-			if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
-			
-			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
-         log.info("callBackUrl : "+callBackUrl);
-			if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
-				
-					String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
-					String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
-					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
-					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
-				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
-				    log.info("httpRequest : "+httpRequest.toString());
-				
-				
-			       }
-			}else {
-				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-				    log.info("httpRequest : "+httpRequest.toString());
+	public  Request checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint, RequestBody body) {
+		Request httpRequest = null;
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 
+		if (inferenceAPIEndPoint.getInferenceApiKey() != null) {
 
+			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint
+					.getInferenceApiKey();
+			log.info("callBackUrl : " + callBackUrl);
+			if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
+
+				String encryptedInferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+				String encryptedInferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+				log.info("encryptedInferenceApiKeyName : " + encryptedInferenceApiKeyName);
+				log.info("encryptedInferenceApiKeyValue : " + encryptedInferenceApiKeyValue);
+				log.info("SECRET_KEY ::"+SECRET_KEY);
 				
-			}	
-	   
-		   
-		   return httpRequest;
-	   }
+				
+				
+				String originalInferenceApiKeyName=null ;
+
+				String originalInferenceApiKeyValue=null;
+				try {
+					originalInferenceApiKeyValue = Aes256.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+					originalInferenceApiKeyName = Aes256.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				log.info("originalInferenceApiKeyName : "+originalInferenceApiKeyName);
+				log.info("originalInferenceApiKeyValue : "+originalInferenceApiKeyValue);
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				httpRequest = new Request.Builder().url(callBackUrl)
+						.addHeader(originalInferenceApiKeyName, originalInferenceApiKeyValue).post(body).build();
+				log.info("httpRequest : " + httpRequest.toString());
+
+			}
+		} else {
+			httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			log.info("httpRequest : " + httpRequest.toString());
+
+		}
+
+		return httpRequest;
+	}
+
 	
 	
 }
