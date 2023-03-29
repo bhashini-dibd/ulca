@@ -245,7 +245,10 @@ class GenerateServiceProviderKey(Resource):
         body = request.get_json()
         #Consider input as userId, ulcaApiKey, pipelineId
         #Obtain submitterName and generate api key url from pipelineId:
+        #Check if serviceProviderName is same within pipelineId and the user service provider keys list
         #emailId and appName -> Call to Generate API Key [Add master headers] -> Obtain a key [Return name and value, dhruva]
+        #Take APIKEyURL from pipeline collection for that id.
+        #Take headers as master key name and value
         #Generate API Key [master headers and key url] both will be available in db.
         
 class RemoveServiceProviderKey(Resource):
