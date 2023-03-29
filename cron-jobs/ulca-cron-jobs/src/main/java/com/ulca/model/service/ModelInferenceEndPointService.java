@@ -1,7 +1,6 @@
 package com.ulca.model.service;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
@@ -13,12 +12,14 @@ import javax.net.ssl.X509TrustManager;
 
 import io.swagger.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mervick.aes_everywhere.Aes256;
 import com.ulca.model.service.exception.ModelComputeException;
 
 import io.netty.handler.ssl.SslContext;
@@ -39,9 +40,13 @@ public class ModelInferenceEndPointService {
 
     @Autowired
     WebClient.Builder builder;
+    
+
+	@Value("${aes.model.apikey.secretkey}")
+	private String SECRET_KEY;
 
     public InferenceAPIEndPoint validateSyncCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
-			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
+			throws Exception {
 
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
@@ -290,8 +295,7 @@ public class ModelInferenceEndPointService {
 	}
 
 
-	public InferenceAPIEndPoint validateAsyncUrl(InferenceAPIEndPoint inferenceAPIEndPoint) throws URISyntaxException,
-			IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
+	public InferenceAPIEndPoint validateAsyncUrl(InferenceAPIEndPoint inferenceAPIEndPoint) throws Exception {
 
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
@@ -373,7 +377,7 @@ public class ModelInferenceEndPointService {
     
     
     public Response okHttpClientPostCallInference(String requestJson, String url,InferenceAPIEndPoint inferenceAPIEndPoint)
-			throws IOException, KeyManagementException, NoSuchAlgorithmException {
+			throws Exception {
 
 		// OkHttpClient client = new OkHttpClient();
 
@@ -394,8 +398,7 @@ public class ModelInferenceEndPointService {
 	}
     
     public InferenceAPIEndPoint validateCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
-            throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException,
-            InterruptedException {
+            throws Exception {
 
         if (inferenceAPIEndPoint.isIsSyncApi()!= null && !inferenceAPIEndPoint.isIsSyncApi()) {
         	inferenceAPIEndPoint = validateAsyncUrl(inferenceAPIEndPoint);
@@ -436,7 +439,7 @@ public class ModelInferenceEndPointService {
     
     
     
-    public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
+    public Request checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) throws Exception {
 		   Request httpRequest =null;
 			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 			
@@ -446,12 +449,24 @@ public class ModelInferenceEndPointService {
          log.info("callBackUrl : "+callBackUrl);
 			if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
 				
-					String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
-					String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
-					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
-					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
-				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
-				    log.info("httpRequest : "+httpRequest.toString());
+				String encryptedInferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+				String encryptedInferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+				log.info("Secret Key :: "+SECRET_KEY);
+				
+				log.info("encryptedInferenceApiKeyName : "+encryptedInferenceApiKeyName);
+				log.info("encryptedInferenceApiKeyValue : "+encryptedInferenceApiKeyValue);
+				
+				String originalInferenceApiKeyName = Aes256.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+
+				String originalInferenceApiKeyValue = Aes256.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+				
+				
+				log.info("originalInferenceApiKeyName : "+originalInferenceApiKeyName);
+				log.info("originalInferenceApiKeyValue : "+originalInferenceApiKeyValue);
+				
+				
+			 httpRequest= new Request.Builder().url(callBackUrl).addHeader(originalInferenceApiKeyName, originalInferenceApiKeyValue).post(body).build();
+			    log.info("httpRequest : "+httpRequest.toString());
 				
 				
 			       }
