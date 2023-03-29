@@ -240,3 +240,16 @@ class ToggleDataTracking(Resource):
         if "ulcaApiKey" not in body.keys():
             return post_error("400", "Please provide ulcaApiKey", None), 400
 
+class GenerateServiceProviderKey(Resource):
+    def post(self):
+        body = request.get_json()
+        #Consider input as userId, ulcaApiKey, pipelineId
+        #Obtain submitterName and generate api key url from pipelineId:
+        #emailId and appName -> Call to Generate API Key [Add master headers] -> Obtain a key [Return name and value, dhruva]
+        #Generate API Key [master headers and key url] both will be available in db.
+        
+class RemoveServiceProviderKey(Resource):
+    def post(self):
+        body = request.get_json()
+        #Consider input as userId, ulcaApiKey, pipelineId
+
