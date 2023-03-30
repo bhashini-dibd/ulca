@@ -479,7 +479,7 @@ public class ModelService {
 				if (inferenceAPIEndPoint.getMasterApiKey() != null) {
 					InferenceAPIEndPointMasterApiKey pipelineInferenceMasterApiKey = inferenceAPIEndPoint
 							.getMasterApiKey();
-					if (pipelineInferenceMasterApiKey.getValue() != null) {
+					if (pipelineInferenceMasterApiKey.getValue() != null && !pipelineInferenceMasterApiKey.getValue().isEmpty()) {
 						log.info("SecretKey :: " + SECRET_KEY);
 						String originalApiKeyName = pipelineInferenceMasterApiKey.getName();
 						log.info("originalApiKeyName :: " + originalApiKeyName);
