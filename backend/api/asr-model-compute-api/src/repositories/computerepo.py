@@ -11,10 +11,34 @@ import requests
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
-from AesEverywhere import aes256
-
+from Crypto.Cipher import AES
+import base64
+import sys
+import os
 
 class ASRComputeRepo:
+
+    def decrypt(self, key, message):
+        """
+        Input encrypted bytes, return decrypted bytes, using iv and key
+        """
+
+        byte_array = base64.b64decode(message)
+
+        iv = byte_array[0:16] # extract the 16-byte initialization vector
+
+        messagebytes = byte_array[16:] # encrypted message is the bit after the iv
+
+        cipher = AES.new(key.encode("UTF-8"), AES.MODE_CBC, iv )
+
+        decrypted_padded = cipher.decrypt(messagebytes)
+
+        last_byte = decrypted_padded[-1]
+
+        decrypted = decrypted_padded[0:-last_byte]
+
+        return decrypted.decode("UTF-8")
+
 
     def process_asr(self,lang,audio,userId,inf_callbackurl,uri):
         """
@@ -33,13 +57,13 @@ class ASRComputeRepo:
             if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 #apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
                 #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                apiKeyName = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["name"], secret_key)
-                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], secret_key)
+                apiKeyName = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["name"])
+                apiKeyValue = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["value"])
                 
             elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 apiKeyName = None
                 #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], secret_key)
+                apiKeyValue = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["value"])
         else:
             apiKeyName = None
             apiKeyValue = None
