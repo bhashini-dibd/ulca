@@ -3,12 +3,11 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.AudioFormat;
 import io.swagger.model.ModelProcessingType;
 import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSRequest;
 import io.swagger.model.TTSResponse;
-import io.swagger.model.TextFormat;
+import io.swagger.model.VoiceTypes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,213 +19,184 @@ import javax.validation.constraints.*;
  * TTSInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-15T10:08:37.438508852Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-15T09:06:13.583587252Z[GMT]")
 
+public class TTSInference implements OneOfInferenceAPIEndPointSchema {
 
-public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+	@JsonProperty("taskType")
+	private SupportedTasks taskType = null;
 
-  @JsonProperty("modelProcessingType")
-  private ModelProcessingType modelProcessingType = null;
+	@JsonProperty("modelProcessingType")
+	private ModelProcessingType modelProcessingType = null;
 
-  @JsonProperty("supportedInputTextFormats")
-  @Valid
-  private List<TextFormat> supportedInputTextFormats = null;
+	@JsonProperty("supportedVoices")
+	@Valid
+	private List<VoiceTypes> supportedVoices = new ArrayList<VoiceTypes>();
 
-  @JsonProperty("supportedOutputAudioFormats")
-  @Valid
-  private List<AudioFormat> supportedOutputAudioFormats = null;
+	@JsonProperty("request")
+	private TTSRequest request = null;
 
-  @JsonProperty("request")
-  private TTSRequest request = null;
+	@JsonProperty("response")
+	private TTSResponse response = null;
 
-  @JsonProperty("response")
-  private TTSResponse response = null;
+	public TTSInference taskType(SupportedTasks taskType) {
+		this.taskType = taskType;
+		return this;
+	}
 
-  public TTSInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	/**
+	 * Get taskType
+	 * 
+	 * @return taskType
+	 */
+	@Schema(required = true, description = "")
 
-  /**
-   * Get taskType
-   * @return taskType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@NotNull
 
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
+	@Valid
+	public SupportedTasks getTaskType() {
+		return taskType;
+	}
 
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
+	public void setTaskType(SupportedTasks taskType) {
+		this.taskType = taskType;
+	}
 
-  public TTSInference modelProcessingType(ModelProcessingType modelProcessingType) {
-    this.modelProcessingType = modelProcessingType;
-    return this;
-  }
+	public TTSInference modelProcessingType(ModelProcessingType modelProcessingType) {
+		this.modelProcessingType = modelProcessingType;
+		return this;
+	}
 
-  /**
-   * Get modelProcessingType
-   * @return modelProcessingType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	/**
+	 * Get modelProcessingType
+	 * 
+	 * @return modelProcessingType
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-    @Valid
-    public ModelProcessingType getModelProcessingType() {
-    return modelProcessingType;
-  }
+	@Valid
+	public ModelProcessingType getModelProcessingType() {
+		return modelProcessingType;
+	}
 
-  public void setModelProcessingType(ModelProcessingType modelProcessingType) {
-    this.modelProcessingType = modelProcessingType;
-  }
+	public void setModelProcessingType(ModelProcessingType modelProcessingType) {
+		this.modelProcessingType = modelProcessingType;
+	}
 
-  public TTSInference supportedInputTextFormats(List<TextFormat> supportedInputTextFormats) {
-    this.supportedInputTextFormats = supportedInputTextFormats;
-    return this;
-  }
+	public TTSInference supportedVoices(List<VoiceTypes> supportedVoices) {
+		this.supportedVoices = supportedVoices;
+		return this;
+	}
 
-  public TTSInference addSupportedInputTextFormatsItem(TextFormat supportedInputTextFormatsItem) {
-    if (this.supportedInputTextFormats == null) {
-      this.supportedInputTextFormats = new ArrayList<TextFormat>();
-    }
-    this.supportedInputTextFormats.add(supportedInputTextFormatsItem);
-    return this;
-  }
+	public TTSInference addSupportedVoicesItem(VoiceTypes supportedVoicesItem) {
+		this.supportedVoices.add(supportedVoicesItem);
+		return this;
+	}
 
-  /**
-   * list of
-   * @return supportedInputTextFormats
-   **/
-  @Schema(description = "list of")
-      @Valid
-    public List<TextFormat> getSupportedInputTextFormats() {
-    return supportedInputTextFormats;
-  }
+	/**
+	 * list of
+	 * 
+	 * @return supportedVoices
+	 **/
+	@Schema(example = "[\"male\",\"female\"]", required = true, description = "list of")
+	@NotNull
+	@Valid
+	public List<VoiceTypes> getSupportedVoices() {
+		return supportedVoices;
+	}
 
-  public void setSupportedInputTextFormats(List<TextFormat> supportedInputTextFormats) {
-    this.supportedInputTextFormats = supportedInputTextFormats;
-  }
+	public void setSupportedVoices(List<VoiceTypes> supportedVoices) {
+		this.supportedVoices = supportedVoices;
+	}
 
-  public TTSInference supportedOutputAudioFormats(List<AudioFormat> supportedOutputAudioFormats) {
-    this.supportedOutputAudioFormats = supportedOutputAudioFormats;
-    return this;
-  }
+	public TTSInference request(TTSRequest request) {
+		this.request = request;
+		return this;
+	}
 
-  public TTSInference addSupportedOutputAudioFormatsItem(AudioFormat supportedOutputAudioFormatsItem) {
-    if (this.supportedOutputAudioFormats == null) {
-      this.supportedOutputAudioFormats = new ArrayList<AudioFormat>();
-    }
-    this.supportedOutputAudioFormats.add(supportedOutputAudioFormatsItem);
-    return this;
-  }
+	/**
+	 * Get request
+	 * 
+	 * @return request
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-  /**
-   * list of
-   * @return supportedOutputAudioFormats
-   **/
-  @Schema(description = "list of")
-      @Valid
-    public List<AudioFormat> getSupportedOutputAudioFormats() {
-    return supportedOutputAudioFormats;
-  }
+	@Valid
+	public TTSRequest getRequest() {
+		return request;
+	}
 
-  public void setSupportedOutputAudioFormats(List<AudioFormat> supportedOutputAudioFormats) {
-    this.supportedOutputAudioFormats = supportedOutputAudioFormats;
-  }
+	public void setRequest(TTSRequest request) {
+		this.request = request;
+	}
 
-  public TTSInference request(TTSRequest request) {
-    this.request = request;
-    return this;
-  }
+	public TTSInference response(TTSResponse response) {
+		this.response = response;
+		return this;
+	}
 
-  /**
-   * Get request
-   * @return request
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	/**
+	 * Get response
+	 * 
+	 * @return response
+	 **/
+	@Schema(description = "")
 
-    @Valid
-    public TTSRequest getRequest() {
-    return request;
-  }
+	@Valid
+	public TTSResponse getResponse() {
+		return response;
+	}
 
-  public void setRequest(TTSRequest request) {
-    this.request = request;
-  }
+	public void setResponse(TTSResponse response) {
+		this.response = response;
+	}
 
-  public TTSInference response(TTSResponse response) {
-    this.response = response;
-    return this;
-  }
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		TTSInference ttSInference = (TTSInference) o;
+		return Objects.equals(this.modelProcessingType, ttSInference.modelProcessingType)
+				&& Objects.equals(this.supportedVoices, ttSInference.supportedVoices)
+				&& Objects.equals(this.request, ttSInference.request)
+				&& Objects.equals(this.response, ttSInference.response)
+				&& Objects.equals(this.taskType, ttSInference.taskType);
 
-  /**
-   * Get response
-   * @return response
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public TTSResponse getResponse() {
-    return response;
-  }
+	}
 
-  public void setResponse(TTSResponse response) {
-    this.response = response;
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash(taskType,modelProcessingType, supportedVoices, request, response);
+	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class TTSInference {\n");
 
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    TTSInference ttSInference = (TTSInference) o;
-    return Objects.equals(this.taskType, ttSInference.taskType) &&
-        Objects.equals(this.modelProcessingType, ttSInference.modelProcessingType) &&
-        Objects.equals(this.supportedInputTextFormats, ttSInference.supportedInputTextFormats) &&
-        Objects.equals(this.supportedOutputAudioFormats, ttSInference.supportedOutputAudioFormats) &&
-        Objects.equals(this.request, ttSInference.request) &&
-        Objects.equals(this.response, ttSInference.response);
-  }
+		 sb.append(" taskType: ").append(toIndentedString(taskType)).append("\n");
+		sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
+		sb.append("    supportedVoices: ").append(toIndentedString(supportedVoices)).append("\n");
+		sb.append("    request: ").append(toIndentedString(request)).append("\n");
+		sb.append("    response: ").append(toIndentedString(response)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(taskType, modelProcessingType, supportedInputTextFormats, supportedOutputAudioFormats, request, response);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class TTSInference {\n");
-    
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
-    sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
-    sb.append("    supportedInputTextFormats: ").append(toIndentedString(supportedInputTextFormats)).append("\n");
-    sb.append("    supportedOutputAudioFormats: ").append(toIndentedString(supportedOutputAudioFormats)).append("\n");
-    sb.append("    request: ").append(toIndentedString(request)).append("\n");
-    sb.append("    response: ").append(toIndentedString(response)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 }

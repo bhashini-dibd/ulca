@@ -187,6 +187,7 @@ public class ModelHeartBeatCheckService {
 						+ model.getModelId() + " reason :: " + e.getMessage());
 				e.printStackTrace();
 			}
+		
 		}
 		log.info("*******  ModelHeartBeatCheckService ::modelHeathStatusCheck -- Number of published models fetched ::" + fetchedModels.size());
 		log.info("*******  ModelHeartBeatCheckService ::modelHeathStatusCheck -- Number of models being status checked available/unavailable ::" + checkedModels.size());
