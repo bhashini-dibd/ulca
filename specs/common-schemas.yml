@@ -300,9 +300,9 @@ components:
         - ascii
         - ascii85
     Speed:
-          type: number
-          description: optional field to specify the speed of audio
-          default: 1.0
+      type: number
+      description: optional field to specify the speed of audio
+      default: 1.0
     Duration:
       type: number
       description: optional field to specify the duration of audio in milliseconds
