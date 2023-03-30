@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class InferenceAPIEndPointDto {
 
-	  private String callbackUrl;
+	//  private String callbackUrl;
 
 
 	  private OneOfInferenceAPIEndPointSchema schema;
@@ -25,21 +25,17 @@ public class InferenceAPIEndPointDto {
 
 	  private AsyncApiDetails asyncApiDetails;
 
-	  public InferenceAPIEndPointDto callbackUrl(String callbackUrl) {
-	    this.callbackUrl = callbackUrl;
-	    return this;
-	  }
-
-	
-
-	    public String getCallbackUrl() {
-	    return callbackUrl;
-	  }
-
-	  public void setCallbackUrl(String callbackUrl) {
-	    this.callbackUrl = callbackUrl;
-	  }
-
+		/*
+		 * public InferenceAPIEndPointDto callbackUrl(String callbackUrl) {
+		 * this.callbackUrl = callbackUrl; return this; }
+		 * 
+		 * 
+		 * 
+		 * public String getCallbackUrl() { return callbackUrl; }
+		 * 
+		 * public void setCallbackUrl(String callbackUrl) { this.callbackUrl =
+		 * callbackUrl; }
+		 */
 	 
 
 	 
@@ -92,7 +88,7 @@ public class InferenceAPIEndPointDto {
 		  @Override public boolean equals(java.lang.Object o) { if (this == o) { return
 		  true; } if (o == null || getClass() != o.getClass()) { return false; }
 		  InferenceAPIEndPointDto inferenceAPIEndPoint = (InferenceAPIEndPointDto) o;
-		  return Objects.equals(this.callbackUrl, inferenceAPIEndPoint.callbackUrl) &&
+		  return// Objects.equals(this.callbackUrl, inferenceAPIEndPoint.callbackUrl) &&
 		  
 		  Objects.equals(this.schema, inferenceAPIEndPoint.schema) &&
 		  Objects.equals(this.isSyncApi, inferenceAPIEndPoint.isSyncApi) &&
@@ -100,7 +96,7 @@ public class InferenceAPIEndPointDto {
 		 
 
 		
-		  @Override public int hashCode() { return Objects.hash(callbackUrl, schema,
+		  @Override public int hashCode() { return Objects.hash(schema,
 		  isSyncApi, asyncApiDetails); }
 		 
 
@@ -108,8 +104,8 @@ public class InferenceAPIEndPointDto {
 		  @Override public String toString() { StringBuilder sb = new StringBuilder();
 		  sb.append("class InferenceAPIEndPoint {\n");
 		  
-		  sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append(
-		  "\n");
+		  //sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append(
+		  //"\n");
 		  
 		  sb.append("    schema: ").append(toIndentedString(schema)).append("\n");
 		  sb.append("    isSyncApi: ").append(toIndentedString(isSyncApi)).append("\n")

@@ -1079,11 +1079,13 @@ public class ModelInferenceEndPointService {
 					log.info("encryptedInferenceApiKeyName : "+encryptedInferenceApiKeyName);
 					log.info("encryptedInferenceApiKeyValue : "+encryptedInferenceApiKeyValue);
 					
-					String originalInferenceApiKeyName = Aes256.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+					//String originalInferenceApiKeyName = Aes256.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
 
-					String originalInferenceApiKeyValue = Aes256.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+					//String originalInferenceApiKeyValue = Aes256.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
 					
-					
+					String originalInferenceApiKeyName = EncryptDcryptService.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+
+					String originalInferenceApiKeyValue = EncryptDcryptService.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
 					log.info("originalInferenceApiKeyName : "+originalInferenceApiKeyName);
 					log.info("originalInferenceApiKeyValue : "+originalInferenceApiKeyValue);
 					

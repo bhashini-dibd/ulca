@@ -485,9 +485,13 @@ public class ModelService {
 						log.info("originalApiKeyName :: " + originalApiKeyName);
 						String originalApiKeyValue = pipelineInferenceMasterApiKey.getValue();
 						log.info("originalApiKeyValue :: " + originalApiKeyValue);
-						String encryptedApiKeyName = Aes256.encrypt(originalApiKeyName, SECRET_KEY);
+						//String encryptedApiKeyName = Aes256.encrypt(originalApiKeyName, SECRET_KEY);
+						String encryptedApiKeyName = EncryptDcryptService.encrypt(originalApiKeyName, SECRET_KEY);
+
 						log.info("encryptedApiKeyName :: " + encryptedApiKeyName);
-						String encryptedApiKeyValue = Aes256.encrypt(originalApiKeyValue, SECRET_KEY);
+						//String encryptedApiKeyValue = Aes256.encrypt(originalApiKeyValue, SECRET_KEY);
+						String encryptedApiKeyValue = EncryptDcryptService.encrypt(originalApiKeyValue, SECRET_KEY);
+
 						log.info("encryptedApiKeyValue :: " + encryptedApiKeyValue);
 						pipelineInferenceMasterApiKey.setName(encryptedApiKeyName);
 						pipelineInferenceMasterApiKey.setValue(encryptedApiKeyValue);
@@ -609,9 +613,13 @@ public class ModelService {
 					String originalName = inferenceAPIEndPointInferenceApiKey.getName();
 					String originalValue = inferenceAPIEndPointInferenceApiKey.getValue();
 					log.info("SecretKey :: " + SECRET_KEY);
-					String encryptedName = Aes256.encrypt(originalName, SECRET_KEY);
+					//String encryptedName = Aes256.encrypt(originalName, SECRET_KEY);
+					String encryptedName = EncryptDcryptService.encrypt(originalName, SECRET_KEY);
+
 					log.info("encryptedName ::" + encryptedName);
-					String encryptedValue = Aes256.encrypt(originalValue, SECRET_KEY);
+					//String encryptedValue = Aes256.encrypt(originalValue, SECRET_KEY);
+					String encryptedValue = EncryptDcryptService.encrypt(originalValue, SECRET_KEY);
+
 					log.info("encryptedValue ::" + encryptedValue);
 
 					inferenceAPIEndPointInferenceApiKey.setName(encryptedName);
