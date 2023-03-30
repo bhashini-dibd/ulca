@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.7
+  version: 0.7.1
 servers:
   - url: /
 paths: {}
@@ -299,6 +299,14 @@ components:
         - base32
         - ascii
         - ascii85
+    Speed:
+      type: number
+      description: optional field to specify the speed of audio
+      default: 1.0
+    Duration:
+      type: number
+      description: optional field to specify the duration of audio in milliseconds
+      example: 300
     ProcessStage:
       type: string
       description: various life-cycle stage of model when benchmarking
