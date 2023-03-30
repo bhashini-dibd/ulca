@@ -57,8 +57,12 @@ class ASRComputeRepo:
             if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 #apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
                 #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
+                log.info(inf_callbackurl["inferenceApiKey"]["name"])
+                log.info(inf_callbackurl["inferenceApiKey"]["value"])
                 apiKeyName = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["name"])
                 apiKeyValue = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["value"])
+                log.info(f"apiKeName {apiKeyName}")
+                log.info(f"apiKeyValue {apiKeyValue}")
                 
             elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 apiKeyName = None
