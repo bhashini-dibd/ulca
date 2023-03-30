@@ -243,6 +243,35 @@ class ToggleDataTracking(Resource):
 class GenerateServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
+       
+        if "pipelineId" not in body.keys():
+            return post_error("400", "Please provide pipelineId", None), 400
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "ulcaApiKey" not in body.keys():
+            return post_error("400", "Please provide ulcaApiKey", None), 400
+
+        user_document  = UserUtils.get_userDoc(body["userID"]) #UMS
+        pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
+
+        if isinstance(pipelineID,dict) and len(pipelineID) != 0:
+            serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+
+        if isinstance(user_document, dict) and len(user_document) != 0:
+            if "apiKeyDetails" in user_document.keys():
+                if "serviceProviderKeys" not in user_document["apiKeyDetails"]:
+                    for srvc in user_document["apiKeyDetails"]:
+                        if body["ulcaApiKey"] in srvc.values():
+
+                            fun = UserUtils.get_service_provider_keys(user_document["email"], srvc["appName"],serviceProviderKeyUrl,masterkeyname,masterkeyvalue)
+                            log.info(srvc["appName"])
+                            log.info(user_document["email"])
+
+        
+            
+
         #Consider input as userId, ulcaApiKey, pipelineId
         #Obtain submitterName and generate api key url from pipelineId:
         #emailId and appName -> Call to Generate API Key [Add master headers] -> Obtain a key [Return name and value, dhruva]

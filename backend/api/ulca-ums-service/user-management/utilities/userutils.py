@@ -18,7 +18,14 @@ from flask_mail import Mail, Message
 from app import mail
 from flask import render_template
 from bson import json_util
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY
+from bson.objectid import ObjectId
+from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION
+from Crypto.Cipher import AES
+import base64
+import sys
+import os
+
+aes_secret_key  =  "TjWnZr4u7xD*G-KaPdRgUkXp2s5v8"
 
 import logging
 
@@ -648,6 +655,36 @@ class UserUtils:
         return json.loads(json_util.dumps(revoke))
 
 
-                
+    @staticmethod
+    def get_userDoc(userID):
+        collection = db.get_db()[USR_MONGO_COLLECTION]
+        userdoc = collection.find_one({"userID" : userID})
+        #if len(pipeL) != 0 and isinstance(pipeL,dict):
+        return userdoc 
 
+    @staticmethod
+    def get_pipelineId(pipelineID):
+        collections = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipeL = collections.find_one({"_id" : ObjectId(pipelineID)})
+        return pipeL 
+
+    
+    @staticmethod
+    def decryptAes(nameValue,secreKey):
+        """
+        Input encrypted bytes, return decrypted bytes, using iv and key
+        """
+
+        byte_array = base64.b64decode(message)
+        iv = byte_array[0:16] # extract the 16-byte initialization vector
+        messagebytes = byte_array[16:] # encrypted message is the bit after the iv
+        cipher = AES.new(key.encode("UTF-8"), AES.MODE_CBC, iv )
+        decrypted_padded = cipher.decrypt(messagebytes)
+        last_byte = decrypted_padded[-1]
+        decrypted = decrypted_padded[0:-last_byte]
+        return decrypted.decode("UTF-8")
+
+
+    @staticmethod
+    def get_service_provider_keys(email, appName,url,name,value):
         

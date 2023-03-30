@@ -2,8 +2,8 @@ import os
 import time
 
 #CROSS_MODULE_COMMON_CONFIGS
-MONGO_SERVER_HOST   =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb://localhost:27017')#,localhost:27018/?replicaSet=foo
-
+MONGO_SERVER_HOST   =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb+srv://siddanthshaiva:nipRDLrxgpoajClS@cluster0.i15apyh.mongodb.net/test')#,localhost:27018/?replicaSet=foo
+DB_NAME        =   "ulca-process-tracker"
 
 #MODULE-SPECIFIC-CONFIGS
 
@@ -16,10 +16,12 @@ ENABLE_CORS =   False
 
 #mongodb-configs
 MONGO_DB_SCHEMA                 =   os.environ.get('UMS_MONGO_IDENTIFIER', 'ulca-user-management')
+MONGO_PROCESS_DB_SCHEMA         =   os.environ.get('ULCA_PROCESS_IDENTIFIER', 'ulca-process-tracker')
 USR_MONGO_COLLECTION            =   os.environ.get('UMS_USR_COLLECTION', 'ulca-users')
 USR_KEY_MONGO_COLLECTION        =   os.environ.get('UMS_USR_KEY_COLLECTION', 'ulca-user-keys')
 USR_TEMP_TOKEN_MONGO_COLLECTION =   os.environ.get('UMS_USR_TEMP_TOKEN_COLLECTION', 'ulca-user-tokens')
 USR_ORG_MONGO_COLLECTION        =   os.environ.get('UMS_ORG_COLLECTION', 'organization')
+USR_MONGO_PROCESS_COLLECTION    =   os.environ.get('ULCA_PROCESS_COLLECTION', 'pipeline-model')
 
  
 #common-variables

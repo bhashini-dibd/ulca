@@ -9,5 +9,5 @@ PyJWT==1.7.1
 pymongo==3.11.1
 requests==2.24.0
 uuid==1.30
-
+pycryptodome==3.17
 
