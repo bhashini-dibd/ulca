@@ -59,6 +59,7 @@ class ASRComputeRepo:
                 #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
                 log.info(inf_callbackurl["inferenceApiKey"]["name"])
                 log.info(inf_callbackurl["inferenceApiKey"]["value"])
+                log.info(f"secret_key {secret_key}")
                 apiKeyName = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["name"])
                 apiKeyValue = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["value"])
                 log.info(f"apiKeName {apiKeyName}")
