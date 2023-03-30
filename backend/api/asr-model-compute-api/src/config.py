@@ -15,5 +15,5 @@ shared_storage_path             =       os.environ.get("ULCA_SHARED_STORAGE_PATH
 ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://10.30.11.136:27017/")
 mongo_db_name = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 mongo_collection_name = os.environ.get('ULCA_MODEL_COLLECTION', "model")
-secret_key = os.environ.get('AES_MODEL_APIKEY_SECRETKEY', "secretKey")
+secret_key = os.environ.get('API_SECRET_KEY', "secretKey")
 
