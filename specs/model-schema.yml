@@ -961,9 +961,13 @@ components:
         encoding:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
         speed:
-           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Speed
+          type: number
+          description: optional field to specify the speed of audio
+          default: 1.0
         duration:
-           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Duration
+          type: number
+          description: optional field to specify the duration of audio in milliseconds
+          example: 300
           
     AudioConfig:
       required:
@@ -1010,9 +1014,13 @@ components:
         encoding:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
         speed:
-           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Speed
+          type: number
+          description: optional field to specify the speed of audio
+          default: 1.0
         duration:
-           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Duration
+          type: number
+          description: optional field to specify the duration of audio in milliseconds
+          example: 300
     ImageFiles:
       type: array
       description: list of
