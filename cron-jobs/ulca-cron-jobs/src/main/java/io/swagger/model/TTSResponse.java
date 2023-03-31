@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AudioConfig;
 import io.swagger.model.AudioFiles;
+import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -15,7 +16,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-15T10:08:37.438508852Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-21T09:50:48.420331102Z[GMT]")
 
 
 public class TTSResponse   {
@@ -24,6 +25,9 @@ public class TTSResponse   {
 
   @JsonProperty("config")
   private AudioConfig config = null;
+
+  @JsonProperty("taskType")
+  private SupportedTasks taskType = null;
 
   public TTSResponse audio(AudioFiles audio) {
     this.audio = audio;
@@ -66,6 +70,26 @@ public class TTSResponse   {
     this.config = config;
   }
 
+  public TTSResponse taskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+    return this;
+  }
+
+  /**
+   * Get taskType
+   * @return taskType
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public SupportedTasks getTaskType() {
+    return taskType;
+  }
+
+  public void setTaskType(SupportedTasks taskType) {
+    this.taskType = taskType;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -77,12 +101,13 @@ public class TTSResponse   {
     }
     TTSResponse ttSResponse = (TTSResponse) o;
     return Objects.equals(this.audio, ttSResponse.audio) &&
-        Objects.equals(this.config, ttSResponse.config);
+        Objects.equals(this.config, ttSResponse.config) &&
+        Objects.equals(this.taskType, ttSResponse.taskType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(audio, config);
+    return Objects.hash(audio, config, taskType);
   }
 
   @Override
@@ -92,6 +117,7 @@ public class TTSResponse   {
     
     sb.append("    audio: ").append(toIndentedString(audio)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("}");
     return sb.toString();
   }
