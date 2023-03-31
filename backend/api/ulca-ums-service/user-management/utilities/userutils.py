@@ -670,21 +670,44 @@ class UserUtils:
 
     
     @staticmethod
-    def decryptAes(nameValue,secreKey):
+    def decryptAes(secreKey,source):
         """
         Input encrypted bytes, return decrypted bytes, using iv and key
         """
+        decryptedMasterKeysList = []
+        decryptedMasterKeysDict = {}
+        #log.info(source)
+        if source and isinstance(source,list):
+            for decrp in range(2):
+                
+                byte_array = base64.b64decode(source[decrp])
+                iv = byte_array[0:16] # extract the 16-byte initialization vector
+                messagebytes = byte_array[16:] # encrypted message is the bit after the iv
+                cipher = AES.new(secreKey.encode("UTF-8"), AES.MODE_CBC, iv )
+                decrypted_padded = cipher.decrypt(messagebytes)
+                last_byte = decrypted_padded[-1]
+                decrypted = decrypted_padded[0:-last_byte]
+                decryptedMasterKeysList.append(decrypted.decode("UTF-8"))
+                #decryptedMasterKeysList.append(decrypted.decode("UTF-8"))
+                #decryptedMasterKeys["value"] = decrypted.decode("UTF-8")
+            #log.info(f"decrrrrrrrrrrrrr {decryptedMasterKeysList}")
 
-        byte_array = base64.b64decode(message)
-        iv = byte_array[0:16] # extract the 16-byte initialization vector
-        messagebytes = byte_array[16:] # encrypted message is the bit after the iv
-        cipher = AES.new(key.encode("UTF-8"), AES.MODE_CBC, iv )
-        decrypted_padded = cipher.decrypt(messagebytes)
-        last_byte = decrypted_padded[-1]
-        decrypted = decrypted_padded[0:-last_byte]
-        return decrypted.decode("UTF-8")
+            decryptedMasterKeysDict[decryptedMasterKeysList[0]] = decryptedMasterKeysList[1]
+           # decryptedMasterKeysDict["value"] = 
+        return decryptedMasterKeysDict
 
 
     @staticmethod
-    def get_service_provider_keys(email, appName,url,name,value):
+    def get_service_provider_keys(email, appName,EndPointurl,decryptedValues):
+        body = {"emailId" : email, "appName" : appName}
+
+        result = requests.post(url=EndPointurl, json=body, headers=decryptedValues)
+        #log.info(result.json())
+        return result.json()
+
+    @staticmethod
+    def pushServiceProvider(generatedApiKeys,ulcaApiKey,userServiceProviderName):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        updateDoc = collections.update({"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$push":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":userServiceProviderName,"inferenceApiKey":generatedApiKeys}}})
         
+        return json.loads(json_util.dumps(updateDoc))

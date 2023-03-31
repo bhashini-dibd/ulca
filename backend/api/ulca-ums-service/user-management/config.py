@@ -35,6 +35,7 @@ AUTH_TOKEN_EXPIRY_HRS   =   os.environ.get('UMS_TOKEN_EXP_HRS', 24)
 ADMIN_ROLE_KEY          =   os.environ.get('UMS_ADMIN_ROLE_KEY', 'ADMIN')
 LOGIN_AUTENTICATOR      =   os.environ.get('UMS_LOGIN_AUTENTICATORS',['ULCA'])
 MAX_API_KEY             =   os.environ.get('MAX_ULCA_API_KEYS', 5)
+SECRET_KEY              =   os.environ.get('API_SECRET_KEY', 'TjWnZr4u7xD*G-KaPdRgUkXp2s5v8acd')
 
 if isinstance(MAX_API_KEY,str):
     MAX_API_KEY = int(MAX_API_KEY)

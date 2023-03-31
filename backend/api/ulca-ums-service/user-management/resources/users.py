@@ -5,7 +5,7 @@ from utilities import UserUtils
 from flask import request, jsonify
 import config
 import logging
-from config import MAX_API_KEY
+from config import MAX_API_KEY, SECRET_KEY
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -254,21 +254,37 @@ class GenerateServiceProviderKey(Resource):
         user_document  = UserUtils.get_userDoc(body["userID"]) #UMS
         pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
 
-        if isinstance(pipelineID,dict) and len(pipelineID) != 0:
-            serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
-            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
-            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
-
-        if isinstance(user_document, dict) and len(user_document) != 0:
+        if isinstance(pipelineID,dict) and pipelineID:
+            masterList = []
+            if "serviceProvider" in pipelineID.keys():
+                serviceProviderName = pipelineID["serviceProvider"]["name"]
+            if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys():
+                serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+                masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+                masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+                masterList.append(masterkeyname)
+                masterList.append(masterkeyvalue)
+        if isinstance(user_document, dict) and user_document:
             if "apiKeyDetails" in user_document.keys():
-                if "serviceProviderKeys" not in user_document["apiKeyDetails"]:
+                log.info(user_document["apiKeyDetails"][0]["serviceProviderKeys"][0]["serviceProviderName"])
+                if "serviceProviderKeys" in user_document["apiKeyDetails"][0].keys():
+                    userserviceProviderName = user_document["apiKeyDetails"][0]["serviceProviderKeys"][0]["serviceProviderName"]
+                    log.info(f"something to print and shit {userserviceProviderName}")
+                    log.info(f"something to print and shit {serviceProviderName}")
+
+                    if userserviceProviderName == serviceProviderName:
+                            return post_error("400", "serviceProviderName already exists. Please use another one.", None), 400
+    
+                if "serviceProviderKeys" not in user_document["apiKeyDetails"][0].keys():#and serviceProviderName != :
                     for srvc in user_document["apiKeyDetails"]:
                         if body["ulcaApiKey"] in srvc.values():
-
-                            fun = UserUtils.get_service_provider_keys(user_document["email"], srvc["appName"],serviceProviderKeyUrl,masterkeyname,masterkeyvalue)
-                            log.info(srvc["appName"])
-                            log.info(user_document["email"])
-
+                            decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)#,masterkeyvalue)
+                            generatedSecretKeys = UserUtils.get_service_provider_keys(user_document["email"], srvc["appName"],serviceProviderKeyUrl,decryptedKeys)
+                            addServiceKeys = UserUtils.pushServiceProvider(generatedSecretKeys, body["ulcaApiKey"],serviceProviderName)
+                            
+                            #log.info(f"addSErviceand shit {addServiceKeys}")
+                            return {"generatedSecretKeys":"successBitch"}
+                    
         
             
 
