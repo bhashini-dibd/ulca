@@ -55,25 +55,17 @@ class ASRComputeRepo:
         callbackurl =   inf_callbackurl["callbackUrl"]
         if "inferenceApiKey" in inf_callbackurl.keys():
             if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
-                #apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
-                #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                log.info(inf_callbackurl["inferenceApiKey"]["name"])
-                log.info(inf_callbackurl["inferenceApiKey"]["value"])
-                log.info(f"secret_key {secret_key}")
                 apiKeyName = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["name"])
                 apiKeyValue = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["value"])
-                log.info(f"apiKeName {apiKeyName}")
-                log.info(f"apiKeyValue {apiKeyValue}")
+               
                 
             elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 apiKeyName = None
-                #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
                 apiKeyValue = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["value"])
         else:
             apiKeyName = None
             apiKeyValue = None
-        log.info(f"apiKeyValue, apiKeyName {apiKeyName}")
-        log.info(f"apiKeyValue, apiKeyName {apiKeyValue}")
+    
 
         transformat =   inf_callbackurl["schema"]["request"]["config"]["transcriptionFormat"]["value"].lower()
         audioformat =   inf_callbackurl["schema"]["request"]["config"]["audioFormat"].lower()
@@ -168,12 +160,9 @@ class ASRComputeRepo:
             log.info(f"Request body : {body}")
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
-            log.info(f"logging headers for apiKey {headers}")
             response = requests.post(url=request_url, headers = headers, json = body)
             content = response.content
-            log.info(content)
             response_data = json.loads(content)
-            log.info(f"Response : {response_data}")
             return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
