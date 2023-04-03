@@ -1,4 +1,4 @@
-from config import MONGO_SERVER_HOST, MONGO_DB_SCHEMA, MONGO_PROCESS_DB_SCHEMA, DB_NAME
+from config import MONGO_SERVER_HOST, MONGO_DB_SCHEMA, MONGO_PROCESS_DB_SCHEMA
 from utilities import MODULE_CONTEXT
 from pymongo import MongoClient
 from flask import g
