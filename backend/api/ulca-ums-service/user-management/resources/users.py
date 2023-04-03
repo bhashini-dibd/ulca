@@ -183,7 +183,7 @@ class GetApiKey(Resource):
         user = body['userID']
         appName = None
         userAPIKeys = UserUtils.get_user_api_keys(user,appName)
-        userAPIKeys.append({"userId": user})
+        #userAPIKeys.append({"userId": user})
         if isinstance(userAPIKeys, list):
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
             return res.getresjson(), 200
