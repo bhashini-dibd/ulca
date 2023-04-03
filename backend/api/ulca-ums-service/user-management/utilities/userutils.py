@@ -659,15 +659,22 @@ class UserUtils:
     def get_userDoc(userID):
         collection = db.get_db()[USR_MONGO_COLLECTION]
         userdoc = collection.find_one({"userID" : userID})
-        #if len(pipeL) != 0 and isinstance(pipeL,dict):
-        return userdoc 
+        #log.info(f"userdoc  231231 {userdoc}")
+        if userdoc:
+            if "apiKeyDetails" in userdoc.keys():
+                apiKeyDeets = userdoc["apiKeyDetails"]
+            return apiKeyDeets , userdoc["email"]
+        elif not userdoc:
+            return None, None
 
     @staticmethod
     def get_pipelineId(pipelineID):
         collections = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
         pipeL = collections.find_one({"_id" : ObjectId(pipelineID)})
-        return pipeL 
-
+        if pipeL:
+            return pipeL 
+        elif not pipeL:
+            return None
     
     @staticmethod
     def decryptAes(secreKey,source):
@@ -709,5 +716,6 @@ class UserUtils:
     def pushServiceProvider(generatedApiKeys,ulcaApiKey,userServiceProviderName):
         collections = db.get_db()[USR_MONGO_COLLECTION]
         updateDoc = collections.update({"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$push":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":userServiceProviderName,"inferenceApiKey":generatedApiKeys}}})
-        
-        return json.loads(json_util.dumps(updateDoc))
+        log.info("jsonified updated output",json.loads(json_util.dumps(updateDoc)))
+        servProvKe = {"serviceProviderName":userServiceProviderName,"inferenceApiKey":generatedApiKeys}
+        return json.loads(json_util.dumps(updateDoc)), servProvKe

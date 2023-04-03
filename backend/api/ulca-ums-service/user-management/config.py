@@ -2,8 +2,7 @@ import os
 import time
 
 #CROSS_MODULE_COMMON_CONFIGS
-MONGO_SERVER_HOST   =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb+srv://siddanthshaiva:nipRDLrxgpoajClS@cluster0.i15apyh.mongodb.net/test')#,localhost:27018/?replicaSet=foo
-DB_NAME        =   "ulca-process-tracker"
+MONGO_SERVER_HOST   =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb://localhost:27017')#,localhost:27018/?replicaSet=foo
 
 #MODULE-SPECIFIC-CONFIGS
 
