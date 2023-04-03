@@ -602,7 +602,8 @@ class UserUtils:
         try:
             coll = db.get_db()[USR_MONGO_COLLECTION]
             response = coll.find_one({"userID": userId})
-            log.info("RESPONSE from DB : ",response)
+            log.info("RESPONSE from DB : "+str(response),response)
+            #responseData = {"userId" : userId, "emailId": }
             dupStatus = True
             dupAppName = []
             if appName == None:
