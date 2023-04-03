@@ -183,9 +183,9 @@ class GetApiKey(Resource):
         user = body['userID']
         appName = None
         userAPIKeys = UserUtils.get_user_api_keys(user,appName)
-        userAPIKeys.append({"userId": user})
+        userId = {"userId": user}
         if isinstance(userAPIKeys, list):
-            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys, userId)
             return res.getresjson(), 200
         else:
             return post_error("400", "userID cannot be empty, please provide one.")
