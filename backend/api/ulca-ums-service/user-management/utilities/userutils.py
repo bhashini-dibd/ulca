@@ -723,7 +723,7 @@ class UserUtils:
         log.info("Get Service Provider Key Api Call URL"+str(EndPointurl))
         log.info("Get Service Provider Key Api Call Request"+str(body))
         result = requests.post(url=EndPointurl, json=body, headers=decryptedValues)
-        log.info("Get Service Provider Key Api Call Response"+str(result))
+        log.info("Get Service Provider Key Api Call Response"+str(result.json()))
         #log.info(result.json())
         return result.json()
 
