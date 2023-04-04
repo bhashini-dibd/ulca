@@ -34,6 +34,14 @@ components:
           $ref: '#/components/schemas/TaskSchemaList'
         pipelineInferenceAPIEndPoint:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+        dataTrackingToggleUrl:
+          description: URL to toggle data logging
+          type: string
+          format: url
+        feedbackUrl:
+          description: URL to give feedback regarding pipeline
+          type: string
+          format: url
     PipelineConfig:
       required:
         - pipelineId
