@@ -277,12 +277,19 @@ class GenerateServiceProviderKey(Resource):
                 
                 if body["ulcaApiKey"] in usr.values():
                     #log.info("first block")
-                    if "serviceProviderKeys" in usr.keys():
+                    serviceProviderNameExists = False
+                    #Check if ServiceProviderName Exists?
+                    if "serviceProviderKeys" in usr.keys() and len(usr['serviceProviderKeys'])!=0: 
+                        for each_provider in usr['serviceProviderKeys']:
+                            if each_provider['submitterName'] == serviceProviderName:
+                                serviceProviderNameExists = True
+                                break
+                    if serviceProviderNameExists == True:
                         servProvKeyExists = {}
                         servProvKeyExists["serviceProviderKeys"] = usr["serviceProviderKeys"]
                         servProvKeyExists["message"] = "Service Provider Key already exists"
                         return servProvKeyExists
-                    elif "serviceProviderKeys" not in usr.keys():
+                    else:
                         decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
                         generatedSecretKeys = UserUtils.get_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys)
                         addServiceKeys, servProvAdded = UserUtils.pushServiceProvider(generatedSecretKeys, body["ulcaApiKey"],serviceProviderName)
