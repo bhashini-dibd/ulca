@@ -19,7 +19,7 @@ from app import mail
 from flask import render_template
 from bson import json_util
 from bson.objectid import ObjectId
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION
+from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION,SPECIAL_CHARS
 from Crypto.Cipher import AES
 import base64
 import sys
@@ -63,7 +63,19 @@ class UserUtils:
 #take timestamp epoch and add/generate uid based on this time. 38 character
 #by default apiKey will be 1. Maximum apiKey should be 5. if list has only 1 value, we should be able to call generateApiKey. If user has 5 apiKey already existed=>reached max apiKey
 
-   
+    @staticmethod
+    def check_appName(string):
+        FLAG = None
+        FLAG_ = None
+        for strr in string:
+            if strr.isdigit() or strr in SPECIAL_CHARS or strr.isupper():
+                FLAG = True
+            else:
+                FLAG_ = False
+        if FLAG:
+            return True
+        elif not FLAG_:
+            return False
 
     @staticmethod
     def validate_email_format(email):

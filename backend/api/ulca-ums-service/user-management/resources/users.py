@@ -216,7 +216,11 @@ class GenerateApiKey(Resource):
        
         serviceProviderKey = []
         user = body["userID"]
-        appName = body["appName"]        
+        checkAppName = UserUtils.check_appName(body["appName"])
+        if checkAppName:
+            return post_error("400", "appName cannot contain special chars and/or uppercase", None), 400
+        elif not checkAppName:
+            appName = body["appName"] 
         user_api_keys, status = UserUtils.get_user_api_keys(user,appName)
         if status == False:
             if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
