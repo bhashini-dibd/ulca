@@ -68,8 +68,9 @@ const MyProfile = (props) => {
       setModal(false);
     }
   };
+
   const UserDetails = JSON.parse(localStorage.getItem("userDetails"));
-  console.log(UserDetails.email, "UserDetailsUserDetails");
+
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -118,7 +119,6 @@ const MyProfile = (props) => {
   const getApiKeysCall = async () => {
     setLoading(true);
     const apiObj = new FetchApiKeysAPI();
-
     const res = await fetch(apiObj.apiEndPoint(), {
       method: "POST",
       headers: apiObj.getHeaders().headers,
@@ -376,7 +376,6 @@ const MyProfile = (props) => {
             flex: 0,
           },
         },
-       
       },
     });
 
@@ -444,10 +443,11 @@ const MyProfile = (props) => {
           return [el.appName, el.ulcaApiKey, el.serviceProviderKeys];
         })
       : [];
+
   const options = {
     textLabels: {
       body: {
-        noMatch: loading ? <Spinner /> : "No records",
+        noMatch: "No records",
       },
       toolbar: {
         search: "Search",
@@ -552,6 +552,7 @@ const MyProfile = (props) => {
   return (
     <>
       {renderSnackBar()}
+      {loading && <Spinner />}
       <Grid container direction="row" spacing={1}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h3" component="h2" align="center">
