@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+  title: Pipeline feedback schema
+  description: The document defines request and response to collect feedback for a pipeline submitted to ULCA
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 1.0.0
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    PipelineFeedbackRequest:
+      required:
+        - pipelineId
+        - pipelineInput
+      type: object
+      properties:
+        pipelineId:
+          type: string
+          description: ID of the pipeline submitter
+          example: AI4BharatID
+        feedbackTimeStamp:
+          type: string
+          description: timestamp when feedback is provided
+          format: date-time
+          example: '2023-07-21T17:32:28Z'
+        feedback:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feedback'
+        pipelineInput:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeRequest
+        pipelineOutput:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
+        
+    PipelineFeedbackResponse:
+      required:
+        - output
+      type: object
+      properties:
+        output:
+          type: string
+          description: response string for feedback submission
+          example: feedback successfully submitted
+          
+    Feedback:
+      required:
+        - feedbackQuestion
+        - feedbackRating
+      type: object
+      properties:
+        feedbackQuestion:
+          type: string
+          description: question to which feedback is provided
+          example: Rate the outpt quality in a scale of 5
+        feedbackRating:
+          type: integer
+          description: rating provided to the feedback question in a scale of 5
+          example: 4
+        feedbackComment:
+          type: string
+          description: comment given on top of the rating
+          example : The output generated is really impressive. Cheers to the model developers and crew!!
+        
+          
