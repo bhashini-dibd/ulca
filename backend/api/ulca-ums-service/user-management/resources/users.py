@@ -274,14 +274,13 @@ class GenerateServiceProviderKey(Resource):
                 #log.info(f"usrrrrrrrrrrrrrrrrrrrrrrrrrr {usr}")
                 #if body["ulcaApiKey"] not in usr.values():
                  #   return post_error("400", "ulcaApiKey does not exist for this user.")
-                
                 if body["ulcaApiKey"] in usr.values():
                     #log.info("first block")
                     serviceProviderNameExists = False
                     #Check if ServiceProviderName Exists?
                     if "serviceProviderKeys" in usr.keys() and len(usr['serviceProviderKeys'])!=0: 
                         for each_provider in usr['serviceProviderKeys']:
-                            if each_provider['submitterName'] == serviceProviderName:
+                            if each_provider['serviceProviderName'] == serviceProviderName:
                                 serviceProviderNameExists = True
                                 break
                     if serviceProviderNameExists == True:
