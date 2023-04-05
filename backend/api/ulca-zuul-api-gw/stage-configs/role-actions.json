@@ -429,6 +429,46 @@
       "role": "BENCHMARK-DATASET-CONTRIBUTOR",
       "actionID": "f47a4ebf-f2d3-4496-beab-062ef2a318d2",
       "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "6703d5c9-0d9b-4f32-9b01-2c07d405ab6a",
+      "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "6703d5c9-0d9b-4f32-9b01-2c07d405ab6a",
+      "active": true
+    },
+    {
+      "role": "MODEL-ONLY-USER",
+      "actionID": "6703d5c9-0d9b-4f32-9b01-2c07d405ab6a",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "6703d5c9-0d9b-4f32-9b01-2c07d405ab6a",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "ac88e949-2616-4baa-aae5-c140369d894d",
+      "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "ac88e949-2616-4baa-aae5-c140369d894d",
+      "active": true
+    },
+    {
+      "role": "MODEL-ONLY-USER",
+      "actionID": "ac88e949-2616-4baa-aae5-c140369d894d",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "ac88e949-2616-4baa-aae5-c140369d894d",
+      "active": true
     }
   ]
 }

@@ -383,6 +383,24 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch AI4Bharat Models"
+    },
+    {
+      "id": "6703d5c9-0d9b-4f32-9b01-2c07d405ab6a",
+      "uri": "/ulca/user-mgmt/v1/users/removeServiceProviderKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to remove service provider api keys"
+    },
+    {
+      "id": "ac88e949-2616-4baa-aae5-c140369d894d",
+      "uri": "/ulca/user-mgmt/v1/users/generateServiceProviderKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate service provider api keys"
     }
   ]
 }
+
+
