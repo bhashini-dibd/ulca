@@ -561,7 +561,7 @@ const MyProfile = (props) => {
         </Grid>
         <Typography
           variant="body"
-          style={{ margin: "30px 0px 10px 8px", fontSize: "16px" }}
+          style={{ margin: "30px 0px 12px 10px", fontSize: "16px" }}
         >
           User ID : {UserDetails.userID}
         </Typography>
