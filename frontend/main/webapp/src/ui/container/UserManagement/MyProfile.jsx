@@ -553,7 +553,7 @@ const MyProfile = (props) => {
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
-      <Grid container direction="row" spacing={1}>
+      <Grid container direction="row" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h3" component="h2" align="center">
             App Integration Details
