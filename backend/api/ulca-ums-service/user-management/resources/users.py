@@ -313,26 +313,19 @@ class GenerateServiceProviderKey(Resource):
 class RemoveServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
-        if "pipelineId" not in body.keys():
-            return post_error("400", "Please provide pipelineId", None), 400
+        if "serviceProviderName" not in body.keys():
+            return post_error("400", "Please provide serviceProvideName", None), 400
         if "userID" not in body.keys():
             return post_error("400", "Please provide userID", None), 400
         if "ulcaApiKey" not in body.keys():
             return post_error("400", "Please provide ulcaApiKey", None), 400
-        
-        pipelineIdDoc = UserUtils.get_pipelineId(body["pipelineId"])
-        if isinstance(pipelineIdDoc,dict) and pipelineIdDoc:
-            if "serviceProvider" in pipelineIdDoc.keys():
-                serviceProviderName = pipelineIdDoc["serviceProvider"]["name"]
-                pullRecord = UserUtils.removeServiceProviders(body['userID'],body['ulcaApiKey'],serviceProviderName)
-                if pullRecord['nModified'] == 1:
-                    res = CustomResponse(Status.REMOVE_SERVICE_PROVIDER.value, "SUCCESS")
-                    return res.getresjson(), 200
-                else:
-                    return post_error("400", "Unable to revoke service provider details, please check userID and/or ulcaApiKey and/or pipe line ID ", None), 400
-        elif not pipelineIdDoc:
-            return post_error("400", "pipe line ID does not exist.", None), 400
 
+        pullRecord = UserUtils.removeServiceProviders(body['userID'],body['ulcaApiKey'],body["serviceProviderName"])
+        if pullRecord['nModified'] == 1:
+            res = CustomResponse(Status.REMOVE_SERVICE_PROVIDER.value, "SUCCESS")
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "Unable to revoke service provider details, please check userID and/or ulcaApiKey and/or pipe line ID ", None), 400
                     
         
 
