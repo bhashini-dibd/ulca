@@ -325,7 +325,7 @@ class RemoveServiceProviderKey(Resource):
             res = CustomResponse(Status.REMOVE_SERVICE_PROVIDER.value, "SUCCESS")
             return res.getresjson(), 200
         else:
-            return post_error("400", "Unable to revoke service provider details, please check userID and/or ulcaApiKey and/or pipe line ID ", None), 400
+            return post_error("400", "Unable to revoke service provider details, please check userID and/or ulcaApiKey and/or service provider Name ", None), 400
                     
         
 
