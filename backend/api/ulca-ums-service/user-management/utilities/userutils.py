@@ -734,3 +734,10 @@ class UserUtils:
         log.info("jsonified updated output",json.loads(json_util.dumps(updateDoc)))
         servProvKe = {"serviceProviderKeys":[{"serviceProviderName":userServiceProviderName,"inferenceApiKey":generatedApiKeys}]}
         return json.loads(json_util.dumps(updateDoc)), servProvKe
+
+    @staticmethod
+    def removeServiceProviders(userID,ulcaApiKey,serviceProviderName):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        deleteDoc = collections.update({"userID":userID,"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$pull":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":serviceProviderName}}})
+        log.info(f"removeSeriveProviders    {json.loads(json_util.dumps(deleteDoc))}")
+        return json.loads(json_util.dumps(deleteDoc))
