@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
+import io.swagger.model.AudioConfigTranscriptionFormat;
 import io.swagger.model.AudioFormat;
 import io.swagger.model.AudioPostProcessors;
 import io.swagger.model.Domain;
 import io.swagger.model.Encoding;
 import io.swagger.model.LanguagePair;
-import io.swagger.model.TTSConfigInputFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +22,7 @@ import javax.validation.constraints.*;
  * AudioConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-30T09:38:32.889477760Z[GMT]")
 
 
 public class AudioConfig   {
@@ -45,7 +45,7 @@ public class AudioConfig   {
   private AudioBitsPerSample bitsPerSample = null;
 
   @JsonProperty("transcriptionFormat")
-  private TTSConfigInputFormat transcriptionFormat = null;
+  private AudioConfigTranscriptionFormat transcriptionFormat = null;
 
   @JsonProperty("postProcessors")
   private AudioPostProcessors postProcessors = null;
@@ -98,6 +98,12 @@ public class AudioConfig   {
 
   @JsonProperty("encoding")
   private Encoding encoding = null;
+
+  @JsonProperty("speed")
+  private BigDecimal speed = new BigDecimal(1);
+
+  @JsonProperty("duration")
+  private BigDecimal duration = null;
 
   public AudioConfig modelId(String modelId) {
     this.modelId = modelId;
@@ -220,7 +226,7 @@ public class AudioConfig   {
     this.bitsPerSample = bitsPerSample;
   }
 
-  public AudioConfig transcriptionFormat(TTSConfigInputFormat transcriptionFormat) {
+  public AudioConfig transcriptionFormat(AudioConfigTranscriptionFormat transcriptionFormat) {
     this.transcriptionFormat = transcriptionFormat;
     return this;
   }
@@ -232,11 +238,11 @@ public class AudioConfig   {
   @Schema(description = "")
   
     @Valid
-    public TTSConfigInputFormat getTranscriptionFormat() {
+    public AudioConfigTranscriptionFormat getTranscriptionFormat() {
     return transcriptionFormat;
   }
 
-  public void setTranscriptionFormat(TTSConfigInputFormat transcriptionFormat) {
+  public void setTranscriptionFormat(AudioConfigTranscriptionFormat transcriptionFormat) {
     this.transcriptionFormat = transcriptionFormat;
   }
 
@@ -357,6 +363,46 @@ public class AudioConfig   {
     this.encoding = encoding;
   }
 
+  public AudioConfig speed(BigDecimal speed) {
+    this.speed = speed;
+    return this;
+  }
+
+  /**
+   * optional field to specify the speed of audio
+   * @return speed
+   **/
+  @Schema(description = "optional field to specify the speed of audio")
+  
+    @Valid
+    public BigDecimal getSpeed() {
+    return speed;
+  }
+
+  public void setSpeed(BigDecimal speed) {
+    this.speed = speed;
+  }
+
+  public AudioConfig duration(BigDecimal duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  /**
+   * optional field to specify the duration of audio in milliseconds
+   * @return duration
+   **/
+  @Schema(example = "300", description = "optional field to specify the duration of audio in milliseconds")
+  
+    @Valid
+    public BigDecimal getDuration() {
+    return duration;
+  }
+
+  public void setDuration(BigDecimal duration) {
+    this.duration = duration;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -379,12 +425,14 @@ public class AudioConfig   {
         Objects.equals(this.detailed, audioConfig.detailed) &&
         Objects.equals(this.punctuation, audioConfig.punctuation) &&
         Objects.equals(this.model, audioConfig.model) &&
-        Objects.equals(this.encoding, audioConfig.encoding);
+        Objects.equals(this.encoding, audioConfig.encoding) &&
+        Objects.equals(this.speed, audioConfig.speed) &&
+        Objects.equals(this.duration, audioConfig.duration);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, postProcessors, domain, detailed, punctuation, model, encoding);
+    return Objects.hash(modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, postProcessors, domain, detailed, punctuation, model, encoding, speed, duration);
   }
 
   @Override
@@ -405,6 +453,8 @@ public class AudioConfig   {
     sb.append("    punctuation: ").append(toIndentedString(punctuation)).append("\n");
     sb.append("    model: ").append(toIndentedString(model)).append("\n");
     sb.append("    encoding: ").append(toIndentedString(encoding)).append("\n");
+    sb.append("    speed: ").append(toIndentedString(speed)).append("\n");
+    sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
     sb.append("}");
     return sb.toString();
   }
