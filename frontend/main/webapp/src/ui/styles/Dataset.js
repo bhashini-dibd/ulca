@@ -1093,6 +1093,7 @@ const DataSet = (theme) => ({
     padding: "10px 20px",
     fontSize: "1rem",
     width: "fit-content",
+    height:"36px",
     cursor: "pointer",
     "&:hover": {
       backgroundColor: "white",
