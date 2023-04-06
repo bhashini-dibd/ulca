@@ -645,7 +645,7 @@ components:
         input:
           $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/TTSConfig'
+          $ref: '#/components/schemas/TTSRequestConfig'
     TTSResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
@@ -655,7 +655,7 @@ components:
         audio:
           $ref: '#/components/schemas/AudioFiles'
         config:
-          $ref: '#/components/schemas/AudioConfig'
+          $ref: '#/components/schemas/TTSResponseConfig'
         taskType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     OCRInference:
@@ -931,10 +931,48 @@ components:
           description : list of
           items:
            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
-    TTSConfig:
+    TTSRequestConfig:
       required:
         - language
         - gender
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        gender:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+        # inputFormat:
+        #   type: object
+        #   properties:
+        #     value:
+        #       $ref: '#/components/schemas/TextFormat'
+        audioFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        channel:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        bitsPerSample:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+        encoding:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+        speed:
+          type: number
+          description: optional field to specify the speed of audio
+          default: 1.0
+        duration:
+          type: number
+          description: optional field to specify the duration of audio in milliseconds
+          example: 300
+          
+    TTSResponseConfig:
+      required:
+        - language
+        - audioFormat
       type: object
       properties:
         modelId:
@@ -1013,14 +1051,7 @@ components:
             - default
         encoding:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
-        speed:
-          type: number
-          description: optional field to specify the speed of audio
-          default: 1.0
-        duration:
-          type: number
-          description: optional field to specify the duration of audio in milliseconds
-          example: 300
+       
     ImageFiles:
       type: array
       description: list of
