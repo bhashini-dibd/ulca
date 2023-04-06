@@ -2242,9 +2242,13 @@ public class ModelService {
 									if (taskSpecification.getTaskType().name().equals("TTS")) {
 
 										for (ConfigSchema configSchema : taskSpecification.getTaskConfig()) {
-											if (configSchema.getSourceLanguage()
-													.equals(firstTaskSchema.getSourceLanguage())) {
+											//targetLang
+											//if (configSchema.getSourceLanguage()
+													//.equals(firstTaskSchema.getSourceLanguage())) {
 
+														
+														if (configSchema.getSourceLanguage()
+																.equals(sourceLang)) {
 												ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 												log.info("Model Name :: " + model.getName());
 												LanguagePairs langPair = model.getLanguages();
