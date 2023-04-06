@@ -99,7 +99,7 @@ public class TranslationBenchmark {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
-
+             log.info("REQUEST JSON :: "+requestJson.toString());
 			//OkHttpClient client = new OkHttpClient();
 
 //			OkHttpClient client = new OkHttpClient.Builder()
@@ -115,7 +115,7 @@ public class TranslationBenchmark {
 //			Response httpResponse = client.newCall(httpRequest).execute();
 //			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,inferenceAPIEndPoint);
-
+            log.info("RESPONSE JSON :: "+responseJsonStr);
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 			return translation;
 		}
@@ -151,10 +151,10 @@ public class TranslationBenchmark {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
-
+            log.info("REQUEST JSON :: "+requestJson);
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,inferenceAPIEndPoint);
-
+            log.info("RESPONSE JSON :: "+responseJsonStr);
 			PollingRequest pollingRequest = objectMapper.readValue(responseJsonStr, PollingRequest.class);
 			translationAsyncInference.setResponse(pollingRequest);
 
@@ -232,7 +232,7 @@ public class TranslationBenchmark {
 			List<String> input = ipChunks.get(k);
 			List<String> expectedTgt = tgtChunks.get(k);
 			TranslationResponse translation = null;
-
+                
 			if(isSyncApi) {
 				translation = computeSync(inferenceAPIEndPoint,input );
 			}else {
