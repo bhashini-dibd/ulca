@@ -1,6 +1,16 @@
-
 import DataTable from "../../components/common/DataTable";
-import { withStyles,createMuiTheme, Button, Typography, Grid, Box, CircularProgress , TextField, TableCell, Table,} from "@material-ui/core";
+import {
+  withStyles,
+  createMuiTheme,
+  Button,
+  Typography,
+  Grid,
+  Box,
+  CircularProgress,
+  TextField,
+  TableCell,
+  Table,
+} from "@material-ui/core";
 import Search from "../../components/Datasets&Model/Search";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 // import createMuiTheme from "../../styles/Datatable";
@@ -9,26 +19,25 @@ import { translate } from "../../../assets/localisation";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { Cached } from "@material-ui/icons";
 import DataSet from "../../styles/Dataset";
-import Modal from  "../../components/common/Modal"
+import Modal from "../../components/common/Modal";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import AddBoxIcon from '@material-ui/icons/AddBox';
+import AddBoxIcon from "@material-ui/icons/AddBox";
 import GenerateAPI from "../../../redux/actions/api/UserManagement/GenerateApiKey";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import CustomizedSnackbars from "../../components/common/Snackbar";
 import Spinner from "../../components/common/Spinner";
 import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiKeys";
 import RevokeApiKeyAPI from "../../../redux/actions/api/UserManagement/RevokeApiKey";
-import Snackbar from '../../components/common/Snackbar';
+import Snackbar from "../../components/common/Snackbar";
 import RevokeDialog from "../../components/common/RevokeDialog";
 import TableRow from "@material-ui/core/TableRow";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import getSearchedValue from "../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
 
-
 const MyProfile = (props) => {
-  const {classes} = props;
+  const { classes } = props;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
@@ -41,24 +50,26 @@ const MyProfile = (props) => {
   const [appName, setAppName] = useState("");
   const [message, setMessage] = useState("Are sure u want to Revoke ?");
   const [open, setOpen] = useState(false);
-  const [UlcaApiKey, setUlcaApiKey] = useState('');
+  const [UlcaApiKey, setUlcaApiKey] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
-  const handlecChangeAddName = (e) =>{
-    setAppName(e.target.value)
-  }
-  const handleClose = () =>{
-    setModal(false)
-    setAppName("")
-    setOpen(false)
-  }
+  const handlecChangeAddName = (e) => {
+    setAppName(e.target.value);
+  };
+  const handleClose = () => {
+    setModal(false);
+    setAppName("");
+    setOpen(false);
+  };
 
   const onKeyDown = (event) => {
     if (event.keyCode == 27) {
       setModal(false);
     }
   };
+
+  const UserDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
@@ -71,48 +82,47 @@ const MyProfile = (props) => {
     dispatch(getSearchedValue(value));
   };
 
-const handleSubmitGenerateApiKey =  async() =>{
-  const data={
-    userID : userDetails?.userID,
-    appName : appName
-  }
-  const userObj = new GenerateAPI(data);
-  const res = await fetch(userObj.apiEndPoint(), {
-    method: "POST",
-    headers: userObj.getHeaders().headers,
-    body: JSON.stringify(userObj.getBody()),
-  });
+  const handleSubmitGenerateApiKey = async () => {
+    const data = {
+      userID: userDetails?.userID,
+      appName: appName,
+    };
+    const userObj = new GenerateAPI(data);
+    const res = await fetch(userObj.apiEndPoint(), {
+      method: "POST",
+      headers: userObj.getHeaders().headers,
+      body: JSON.stringify(userObj.getBody()),
+    });
 
-  const resp = await res.json();
-  console.log(resp,"")
-  if (res.ok) {
-    setSnackbarInfo({
-      open: true,
-      message: resp?.message,
-      variant: "success",
-    });
-    await getApiKeysCall();
-    setLoading(false);
-  } else {
-    setSnackbarInfo({
-      open: true,
-      message: resp?.message,
-      variant: "error",
-    });
-    setLoading(false);
-  }
-  setModal(false)
-  setAppName("")
-}
+    const resp = await res.json();
+    console.log(resp, "");
+    if (res.ok) {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "success",
+      });
+      await getApiKeysCall();
+      setLoading(false);
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+      setLoading(false);
+    }
+    setModal(false);
+    setAppName("");
+  };
 
   const getApiKeysCall = async () => {
     setLoading(true);
     const apiObj = new FetchApiKeysAPI();
-
     const res = await fetch(apiObj.apiEndPoint(), {
       method: "POST",
       headers: apiObj.getHeaders().headers,
-      body: JSON.stringify(apiObj.getBody())
+      body: JSON.stringify(apiObj.getBody()),
     });
 
     const resp = await res.json();
@@ -131,7 +141,7 @@ const handleSubmitGenerateApiKey =  async() =>{
 
   useEffect(() => {
     getApiKeysCall();
-  }, [])
+  }, []);
 
   const revokeApiKeyCall = async () => {
     setLoading(true);
@@ -159,32 +169,37 @@ const handleSubmitGenerateApiKey =  async() =>{
         variant: "error",
       });
       setLoading(false);
-     
     }
-    setOpen(false)
+    setOpen(false);
   };
   const handleDialogSubmit = (ulcaApiKey) => {
-    setOpen(true)
-    setUlcaApiKey(ulcaApiKey)
-   };
+    setOpen(true);
+    setUlcaApiKey(ulcaApiKey);
+  };
 
-   const pageSearch = () => {
+  const pageSearch = () => {
     return tableData.filter((el) => {
       if (searchKey == "") {
         return el;
-      } else if (
-        el.appName?.toLowerCase().includes(searchKey?.toLowerCase())
-      ) {
+      } else if (el.appName?.toLowerCase().includes(searchKey?.toLowerCase())) {
         return el;
-      } 
+      }
     });
   };
 
   const fetchHeaderButton = () => {
     return (
-      <Grid container spacing={1} className={classes.Gridroot}>
-        <Grid item xs={9} sm={10} md={10} lg={10} xl={10}>
-          <Search value="" handleSearch={(e) => handleSearch(e.target.value)}/>
+      <Grid container>
+        <Grid
+          item
+          xs={9}
+          sm={8}
+          md={8}
+          lg={9}
+          xl={9}
+          style={{ display: "flex", justifyContent: "flex-start" }}
+        >
+          <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
         </Grid>
         {/* <Grid
           item
@@ -227,7 +242,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             {translate("button.filter")}
           </Button>
         </Grid> */}
-       
+
         <Grid
           item
           xs={2}
@@ -236,6 +251,7 @@ const handleSubmitGenerateApiKey =  async() =>{
           lg={2}
           xl={2}
           className={classes.filterGrid}
+          style={{ marginLeft: "100px" }}
         >
           <Button
             color="primary"
@@ -245,12 +261,17 @@ const handleSubmitGenerateApiKey =  async() =>{
             onClick={() => {
               setModal(true);
             }}
-            style={{height:"37px",textTransform: "capitalize",fontSize:"1rem"}}
+            style={{
+              height: "36px",
+              textTransform: "capitalize",
+              fontSize: "1rem",
+            }}
           >
-            {" "} 
+            {" "}
             {translate("button.generate")}
           </Button>
         </Grid>
+
         <Grid
           item
           xs={2}
@@ -268,7 +289,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             onClick={() => {
               setModal(true);
             }}
-            style={{height:"37px"}}
+            style={{ height: "37px" }}
           >
             {" "}
             <AddBoxIcon color="primary" className={classes.iconStyle} />
@@ -298,18 +319,16 @@ const handleSubmitGenerateApiKey =  async() =>{
         },
         MUIDataTable: {
           paper: {
-            maxWidth:"100%",
+            maxWidth: "100%",
             minHeight: "560px",
             boxShadow: "0px 0px 0px #00000029",
             border: "1px solid #0000001F",
-           
           },
           responsiveBase: {
             minHeight: "560px",
-          
           },
         },
-        
+
         MuiTableCell: {
           head: {
             // padding: ".6rem .5rem .6rem 1.5rem",
@@ -318,9 +337,7 @@ const handleSubmitGenerateApiKey =  async() =>{
             letterSpacing: "0.74",
             fontWeight: "bold",
             minHeight: "700px",
-           
           },
-         
         },
         MuiTableRow: {
           root: {
@@ -331,15 +348,13 @@ const handleSubmitGenerateApiKey =  async() =>{
           },
         },
         MUIDataTableBodyCell: {
-          stackedCommon:{
+          stackedCommon: {
             "@media (max-width: 400px)": {
-            width:" 30%",
-             height: "auto",
-         }
-         
+              width: " 30%",
+              height: "auto",
+            },
           },
-
-      },
+        },
         MUIDataTableHeadCell: {
           root: {
             "&$nth-child(1)": {
@@ -348,19 +363,21 @@ const handleSubmitGenerateApiKey =  async() =>{
           },
         },
         MuiTypography: {
-        
-          h6 : {
+          h6: {
             fontSize: "1.125rem",
             fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
             fontWeight: "300",
-            paddingTop:"4px",
-            lineHeight: "1.6px"
-           
-            },
+            paddingTop: "4px",
+            lineHeight: "1.6px",
+          },
+        },
+        MUIDataTableToolbar: {
+          left: {
+            flex: 0,
+          },
         },
       },
     });
-
 
   const columns = [
     {
@@ -370,7 +387,6 @@ const handleSubmitGenerateApiKey =  async() =>{
         filter: false,
         sort: false,
         align: "center",
-       
       },
     },
     {
@@ -380,16 +396,14 @@ const handleSubmitGenerateApiKey =  async() =>{
         filter: false,
         sort: false,
         align: "center",
-        
       },
     },
     {
-      name:"serviceProviderKeys",
+      name: "serviceProviderKeys",
       label: "Service Provider Keys",
-      options:{
+      options: {
         display: "excluded",
-        
-      }
+      },
     },
     {
       name: "action",
@@ -408,8 +422,8 @@ const handleSubmitGenerateApiKey =  async() =>{
             <Button
               variant="contained"
               className={classes.myProfileActionBtn}
-              onClick={ () => handleDialogSubmit(tableMeta.rowData[1])}
-              style={{color:"red",textTransform: "capitalize"}}
+              onClick={() => handleDialogSubmit(tableMeta.rowData[1])}
+              style={{ color: "red", textTransform: "capitalize" }}
             >
               {loading ? (
                 <CircularProgress color="primary" size={20} />
@@ -424,19 +438,16 @@ const handleSubmitGenerateApiKey =  async() =>{
   ];
 
   const data =
-  tableData && tableData.length > 0
-    ? pageSearch().map((el, i) => {
-        return [
-          el.appName,
-          el.ulcaApiKey,
-          el.serviceProviderKeys
-        ];
-      })
-    : [];
+    tableData && tableData.length > 0
+      ? pageSearch().map((el, i) => {
+          return [el.appName, el.ulcaApiKey, el.serviceProviderKeys];
+        })
+      : [];
+
   const options = {
     textLabels: {
       body: {
-        noMatch: loading ? <Spinner /> : "No records",
+        noMatch: "No records",
       },
       toolbar: {
         search: "Search",
@@ -462,59 +473,67 @@ const handleSubmitGenerateApiKey =  async() =>{
     disableToolbarSelect: "none",
     renderExpandableRow: (rowData, rowMeta) => {
       const data = rowData[2];
-      if(data?.length)
+      if (data?.length)
         return (
           <>
-          <TableRow >
-            <TableCell colSpan={5}>
-              <>
-              <Box style={{ margin: "0 80px" }}>
-                  <Table size="small" aria-label="purchases" >
-                  <TableHead  style={{height:"60px"}}>
-                      <TableCell>Service Provider Name</TableCell>
-                      <TableCell>Inference API Key Name</TableCell>
-                      <TableCell >Inference API Key Value</TableCell>
-                      <TableCell style={{paddingLeft: "40px"}}>Action</TableCell>
-                  </TableHead>
-                  <TableBody>
-                    {
-                      data.map((row,i)=>{
-                        return (
-                          <TableRow
-                          style={{
-                            backgroundColor: "rgba(254, 191, 44, 0.1)",
-                          }}
-                          key={i}
-                          >
-                            <TableCell>{row?.serviceProviderName}</TableCell>
-                            <TableCell>{row?.inferenceApiKey?.name}</TableCell>
-                            <TableCell>{row?.inferenceApiKey?.value}</TableCell>
-                            <TableCell>
-                              <Button
-                                variant="contained"
-                                className={classes.myProfileActionBtn}
-                                disabled 
-                                style={{color:"red",textAlign:"center",textTransform: "capitalize"}}>
+            <TableRow>
+              <TableCell colSpan={5}>
+                <>
+                  <Box style={{ margin: "0 80px" }}>
+                    <Table size="small" aria-label="purchases">
+                      <TableHead style={{ height: "60px" }}>
+                        <TableCell>Service Provider Name</TableCell>
+                        <TableCell>Inference API Key Name</TableCell>
+                        <TableCell>Inference API Key Value</TableCell>
+                        <TableCell style={{ paddingLeft: "40px" }}>
+                          Action
+                        </TableCell>
+                      </TableHead>
+                      <TableBody>
+                        {data.map((row, i) => {
+                          return (
+                            <TableRow
+                              style={{
+                                backgroundColor: "rgba(254, 191, 44, 0.1)",
+                              }}
+                              key={i}
+                            >
+                              <TableCell>{row?.serviceProviderName}</TableCell>
+                              <TableCell>
+                                {row?.inferenceApiKey?.name}
+                              </TableCell>
+                              <TableCell>
+                                {row?.inferenceApiKey?.value}
+                              </TableCell>
+                              <TableCell>
+                                <Button
+                                  variant="contained"
+                                  className={classes.myProfileActionBtn}
+                                  disabled
+                                  style={{
+                                    color: "red",
+                                    textAlign: "center",
+                                    textTransform: "capitalize",
+                                  }}
+                                >
                                   Revoke
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })
-                    }
-                  </TableBody>
-                </Table>
-              </Box>
-              </>
-            </TableCell>
-          </TableRow>
-          <TableRow className={classes.tableRow}></TableRow>
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </Box>
+                </>
+              </TableCell>
+            </TableRow>
+            <TableRow className={classes.tableRow}></TableRow>
           </>
         );
-      return <></>
-    }
+      return <></>;
+    },
   };
-
 
   const renderSnackBar = () => {
     return (
@@ -530,26 +549,40 @@ const handleSubmitGenerateApiKey =  async() =>{
     );
   };
 
-
   return (
-    <div>
-       {renderSnackBar()}
-       <MuiThemeProvider theme={getMuiTheme}>
-                      <MUIDataTable
-                        title={"App Integration Details"}
-                        data={data}
-                        columns={columns}
-                        options={options}
-                      />
-                    </MuiThemeProvider>
+    <>
+      {renderSnackBar()}
+      {loading && <Spinner />}
+      <Grid container direction="row" spacing={2}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Typography variant="h3" component="h2" align="center">
+            App Integration Details
+          </Typography>
+        </Grid>
+        <Typography
+          variant="body"
+          style={{ margin: "30px 10px 12px", fontSize: "16px" , marginLeft:"auto"}}
+        >
+          User ID : {UserDetails.userID}
+        </Typography>
+      </Grid>
+
+      <MuiThemeProvider theme={getMuiTheme}>
+        <MUIDataTable data={data} columns={columns} options={options} />
+      </MuiThemeProvider>
       <Modal
         open={modal}
         onClose={() => setModal(false)}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <Grid container direction="row" spacing={0} style={{textAlign: "end",marginTop:"25px"}} >
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+        <Grid
+          container
+          direction="row"
+          spacing={0}
+          style={{ textAlign: "end", marginTop: "25px" }}
+        >
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             <TextField
               fullWidth
               id="outlined-basic"
@@ -560,10 +593,14 @@ const handleSubmitGenerateApiKey =  async() =>{
             />
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Button
+            <Button
               variant="text"
               color="primary"
-              style={{ borderRadius: "20px", marginTop: "20px",marginRight:"10px" }}
+              style={{
+                borderRadius: "20px",
+                marginTop: "20px",
+                marginRight: "10px",
+              }}
               onClick={handleClose}
             >
               Cancel
@@ -573,11 +610,7 @@ const handleSubmitGenerateApiKey =  async() =>{
               color="primary"
               style={{ borderRadius: "20px", marginTop: "20px" }}
               onClick={handleSubmitGenerateApiKey}
-              disabled={
-                appName 
-                  ? false
-                  : true
-              }
+              disabled={appName ? false : true}
             >
               Submit
             </Button>
@@ -586,15 +619,12 @@ const handleSubmitGenerateApiKey =  async() =>{
       </Modal>
 
       {open && (
-          <RevokeDialog
+        <RevokeDialog
           open={open}
           handleClose={handleClose}
-           
-           
-            submit={() => revokeApiKeyCall()}
-          />
-        )}
-    
+          submit={() => revokeApiKeyCall()}
+        />
+      )}
 
       {/* {snackbar.open && (
         <Snackbar
@@ -605,7 +635,7 @@ const handleSubmitGenerateApiKey =  async() =>{
           variant={snackbar.variant}
         />
       )} */}
-    </div>
+    </>
   );
 };
 
