@@ -707,6 +707,11 @@ public class ModelInferenceEndPointService {
 			request.setInput(sentences);
 			TTSRequestConfig config = request.getConfig();
 			config.setGender(compute.getGender());
+			
+			if(compute.getSpeed()!=null && compute.getDuration()!=null) {
+				config.setSpeed(compute.getSpeed());
+				config.setDuration(compute.getDuration());
+			}
 			request.setConfig(config);
 
 			ObjectMapper objectMapper = new ObjectMapper();
