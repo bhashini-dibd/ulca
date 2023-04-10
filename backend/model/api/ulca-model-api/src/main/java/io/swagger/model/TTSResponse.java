@@ -3,9 +3,9 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.AudioConfig;
 import io.swagger.model.AudioFiles;
 import io.swagger.model.SupportedTasks;
+import io.swagger.model.TTSResponseConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -16,7 +16,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-21T09:50:48.420331102Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-10T05:17:35.492966412Z[GMT]")
 
 
 public class TTSResponse   {
@@ -24,7 +24,7 @@ public class TTSResponse   {
   private AudioFiles audio = null;
 
   @JsonProperty("config")
-  private AudioConfig config = null;
+  private TTSResponseConfig config = null;
 
   @JsonProperty("taskType")
   private SupportedTasks taskType = null;
@@ -50,7 +50,7 @@ public class TTSResponse   {
     this.audio = audio;
   }
 
-  public TTSResponse config(AudioConfig config) {
+  public TTSResponse config(TTSResponseConfig config) {
     this.config = config;
     return this;
   }
@@ -62,11 +62,11 @@ public class TTSResponse   {
   @Schema(description = "")
   
     @Valid
-    public AudioConfig getConfig() {
+    public TTSResponseConfig getConfig() {
     return config;
   }
 
-  public void setConfig(AudioConfig config) {
+  public void setConfig(TTSResponseConfig config) {
     this.config = config;
   }
 
