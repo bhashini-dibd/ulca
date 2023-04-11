@@ -15,37 +15,18 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the schema of data file uploaded should adhere to this specified structure.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-11T16:18:51.317347392Z[GMT]")
 
 
 public class NerDatasetRowSchema  implements OneOfDatasetDataRowSchemaData {
-  @JsonProperty("sourceText")
-  private String sourceText = null;
-
   @JsonProperty("nerData")
   private NerDataArray nerData = null;
 
+  @JsonProperty("sourceText")
+  private String sourceText = null;
+
   @JsonProperty("collectionMethod")
   private NerDatasetCollectionMethod collectionMethod = null;
-
-  public NerDatasetRowSchema sourceText(String sourceText) {
-    this.sourceText = sourceText;
-    return this;
-  }
-
-  /**
-   * textual data in source language
-   * @return sourceText
-   **/
-  @Schema(description = "textual data in source language")
-  
-    public String getSourceText() {
-    return sourceText;
-  }
-
-  public void setSourceText(String sourceText) {
-    this.sourceText = sourceText;
-  }
 
   public NerDatasetRowSchema nerData(NerDataArray nerData) {
     this.nerData = nerData;
@@ -66,6 +47,25 @@ public class NerDatasetRowSchema  implements OneOfDatasetDataRowSchemaData {
 
   public void setNerData(NerDataArray nerData) {
     this.nerData = nerData;
+  }
+
+  public NerDatasetRowSchema sourceText(String sourceText) {
+    this.sourceText = sourceText;
+    return this;
+  }
+
+  /**
+   * textual data in source language
+   * @return sourceText
+   **/
+  @Schema(description = "textual data in source language")
+  
+    public String getSourceText() {
+    return sourceText;
+  }
+
+  public void setSourceText(String sourceText) {
+    this.sourceText = sourceText;
   }
 
   public NerDatasetRowSchema collectionMethod(NerDatasetCollectionMethod collectionMethod) {
@@ -98,14 +98,14 @@ public class NerDatasetRowSchema  implements OneOfDatasetDataRowSchemaData {
       return false;
     }
     NerDatasetRowSchema nerDatasetRowSchema = (NerDatasetRowSchema) o;
-    return Objects.equals(this.sourceText, nerDatasetRowSchema.sourceText) &&
-        Objects.equals(this.nerData, nerDatasetRowSchema.nerData) &&
+    return Objects.equals(this.nerData, nerDatasetRowSchema.nerData) &&
+        Objects.equals(this.sourceText, nerDatasetRowSchema.sourceText) &&
         Objects.equals(this.collectionMethod, nerDatasetRowSchema.collectionMethod);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sourceText, nerData, collectionMethod);
+    return Objects.hash(nerData, sourceText, collectionMethod);
   }
 
   @Override
@@ -113,8 +113,8 @@ public class NerDatasetRowSchema  implements OneOfDatasetDataRowSchemaData {
     StringBuilder sb = new StringBuilder();
     sb.append("class NerDatasetRowSchema {\n");
     
-    sb.append("    sourceText: ").append(toIndentedString(sourceText)).append("\n");
     sb.append("    nerData: ").append(toIndentedString(nerData)).append("\n");
+    sb.append("    sourceText: ").append(toIndentedString(sourceText)).append("\n");
     sb.append("    collectionMethod: ").append(toIndentedString(collectionMethod)).append("\n");
     sb.append("}");
     return sb.toString();
