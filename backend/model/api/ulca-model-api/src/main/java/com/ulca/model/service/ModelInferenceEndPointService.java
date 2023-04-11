@@ -58,6 +58,7 @@ import io.swagger.model.Sentence;
 import io.swagger.model.Sentences;
 import io.swagger.model.TTSConfig;
 import io.swagger.model.TTSRequest;
+import io.swagger.model.TTSRequestConfig;
 import io.swagger.model.TTSResponse;
 import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
@@ -704,8 +705,13 @@ public class ModelInferenceEndPointService {
 				sentences.add(sentense);
 			}
 			request.setInput(sentences);
-			TTSConfig config = request.getConfig();
+			TTSRequestConfig config = request.getConfig();
 			config.setGender(compute.getGender());
+			
+			if(compute.getSpeed()!=null && compute.getDuration()!=null) {
+				config.setSpeed(compute.getSpeed());
+				config.setDuration(compute.getDuration());
+			}
 			request.setConfig(config);
 
 			ObjectMapper objectMapper = new ObjectMapper();

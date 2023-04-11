@@ -16,13 +16,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * TTSConfig
+ * TTSResponseConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-30T09:38:32.889477760Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-10T05:17:35.492966412Z[GMT]")
 
 
-public class TTSConfig   {
+public class TTSResponseConfig   {
   @JsonProperty("modelId")
   private String modelId = null;
 
@@ -53,7 +53,7 @@ public class TTSConfig   {
   @JsonProperty("duration")
   private BigDecimal duration = null;
 
-  public TTSConfig modelId(String modelId) {
+  public TTSResponseConfig modelId(String modelId) {
     this.modelId = modelId;
     return this;
   }
@@ -72,7 +72,7 @@ public class TTSConfig   {
     this.modelId = modelId;
   }
 
-  public TTSConfig language(LanguagePair language) {
+  public TTSResponseConfig language(LanguagePair language) {
     this.language = language;
     return this;
   }
@@ -93,7 +93,7 @@ public class TTSConfig   {
     this.language = language;
   }
 
-  public TTSConfig gender(Gender gender) {
+  public TTSResponseConfig gender(Gender gender) {
     this.gender = gender;
     return this;
   }
@@ -102,9 +102,8 @@ public class TTSConfig   {
    * Get gender
    * @return gender
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
     public Gender getGender() {
     return gender;
@@ -114,7 +113,7 @@ public class TTSConfig   {
     this.gender = gender;
   }
 
-  public TTSConfig audioFormat(AudioFormat audioFormat) {
+  public TTSResponseConfig audioFormat(AudioFormat audioFormat) {
     this.audioFormat = audioFormat;
     return this;
   }
@@ -123,8 +122,9 @@ public class TTSConfig   {
    * Get audioFormat
    * @return audioFormat
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
+
     @Valid
     public AudioFormat getAudioFormat() {
     return audioFormat;
@@ -134,7 +134,7 @@ public class TTSConfig   {
     this.audioFormat = audioFormat;
   }
 
-  public TTSConfig channel(AudioChannel channel) {
+  public TTSResponseConfig channel(AudioChannel channel) {
     this.channel = channel;
     return this;
   }
@@ -154,7 +154,7 @@ public class TTSConfig   {
     this.channel = channel;
   }
 
-  public TTSConfig samplingRate(BigDecimal samplingRate) {
+  public TTSResponseConfig samplingRate(BigDecimal samplingRate) {
     this.samplingRate = samplingRate;
     return this;
   }
@@ -174,7 +174,7 @@ public class TTSConfig   {
     this.samplingRate = samplingRate;
   }
 
-  public TTSConfig bitsPerSample(AudioBitsPerSample bitsPerSample) {
+  public TTSResponseConfig bitsPerSample(AudioBitsPerSample bitsPerSample) {
     this.bitsPerSample = bitsPerSample;
     return this;
   }
@@ -194,7 +194,7 @@ public class TTSConfig   {
     this.bitsPerSample = bitsPerSample;
   }
 
-  public TTSConfig encoding(Encoding encoding) {
+  public TTSResponseConfig encoding(Encoding encoding) {
     this.encoding = encoding;
     return this;
   }
@@ -214,7 +214,7 @@ public class TTSConfig   {
     this.encoding = encoding;
   }
 
-  public TTSConfig speed(BigDecimal speed) {
+  public TTSResponseConfig speed(BigDecimal speed) {
     this.speed = speed;
     return this;
   }
@@ -234,7 +234,7 @@ public class TTSConfig   {
     this.speed = speed;
   }
 
-  public TTSConfig duration(BigDecimal duration) {
+  public TTSResponseConfig duration(BigDecimal duration) {
     this.duration = duration;
     return this;
   }
@@ -263,17 +263,17 @@ public class TTSConfig   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    TTSConfig ttSConfig = (TTSConfig) o;
-    return Objects.equals(this.modelId, ttSConfig.modelId) &&
-        Objects.equals(this.language, ttSConfig.language) &&
-        Objects.equals(this.gender, ttSConfig.gender) &&
-        Objects.equals(this.audioFormat, ttSConfig.audioFormat) &&
-        Objects.equals(this.channel, ttSConfig.channel) &&
-        Objects.equals(this.samplingRate, ttSConfig.samplingRate) &&
-        Objects.equals(this.bitsPerSample, ttSConfig.bitsPerSample) &&
-        Objects.equals(this.encoding, ttSConfig.encoding) &&
-        Objects.equals(this.speed, ttSConfig.speed) &&
-        Objects.equals(this.duration, ttSConfig.duration);
+    TTSResponseConfig ttSResponseConfig = (TTSResponseConfig) o;
+    return Objects.equals(this.modelId, ttSResponseConfig.modelId) &&
+        Objects.equals(this.language, ttSResponseConfig.language) &&
+        Objects.equals(this.gender, ttSResponseConfig.gender) &&
+        Objects.equals(this.audioFormat, ttSResponseConfig.audioFormat) &&
+        Objects.equals(this.channel, ttSResponseConfig.channel) &&
+        Objects.equals(this.samplingRate, ttSResponseConfig.samplingRate) &&
+        Objects.equals(this.bitsPerSample, ttSResponseConfig.bitsPerSample) &&
+        Objects.equals(this.encoding, ttSResponseConfig.encoding) &&
+        Objects.equals(this.speed, ttSResponseConfig.speed) &&
+        Objects.equals(this.duration, ttSResponseConfig.duration);
   }
 
   @Override
@@ -284,7 +284,7 @@ public class TTSConfig   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class TTSConfig {\n");
+    sb.append("class TTSResponseConfig {\n");
     
     sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
