@@ -26,13 +26,16 @@ components:
           description: timestamp when feedback is provided
           format: date-time
           example: '2023-07-21T17:32:28Z'
-        feedback:
+        taskFeedback:
           type: array
+          description: list of
           items:
-            $ref: '#/components/schemas/Feedback'
+            $ref: '#/components/schemas/TaskFeedback'
         pipelineInput:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeRequest
         pipelineOutput:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
+        expectedPipelineOutput:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
         
     PipelineFeedbackResponse:
@@ -45,6 +48,17 @@ components:
           description: response string for feedback submission
           example: feedback successfully submitted
           
+    TaskFeedback:
+      type: object
+      properties:
+        taskType:
+            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        feedback:
+          type: array
+          description : list of
+          items:
+             $ref: '#/components/schemas/Feedback'
+          
     Feedback:
       required:
         - feedbackQuestion
@@ -53,6 +67,9 @@ components:
       properties:
         feedbackQuestion:
           type: string
+          enum:
+            - how was the translation output?
+            - are you satisfied with ASR transcription quality
           description: question to which feedback is provided
           example: Rate the outpt quality in a scale of 5
         feedbackRating:
@@ -63,5 +80,3 @@ components:
           type: string
           description: comment given on top of the rating
           example : The output generated is really impressive. Cheers to the model developers and crew!!
-        
-          
