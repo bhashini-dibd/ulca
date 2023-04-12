@@ -728,9 +728,9 @@ class UserUtils:
         return result.json()
 
     @staticmethod
-    def pushServiceProvider(generatedApiKeys,ulcaApiKey,userServiceProviderName):
+    def pushServiceProvider(generatedApiKeys,ulcaApiKey,userServiceProviderName, dataTracking):
         collections = db.get_db()[USR_MONGO_COLLECTION]
-        updateDoc = collections.update({"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$push":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":userServiceProviderName,"inferenceApiKey":generatedApiKeys}}})
+        updateDoc = collections.update({"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$push":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":userServiceProviderName,"dataTracking":dataTracking,"inferenceApiKey":generatedApiKeys}}})
         log.info("jsonified updated output",json.loads(json_util.dumps(updateDoc)))
         servProvKe = {"serviceProviderKeys":[{"serviceProviderName":userServiceProviderName,"inferenceApiKey":generatedApiKeys}]}
         return json.loads(json_util.dumps(updateDoc)), servProvKe

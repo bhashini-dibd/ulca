@@ -254,6 +254,14 @@ class GenerateServiceProviderKey(Resource):
             return post_error("400", "Please provide userID", None), 400
         if "ulcaApiKey" not in body.keys():
             return post_error("400", "Please provide ulcaApiKey", None), 400
+        if "dataTracking" not in body.keys():
+            dataTracking = True
+        if "dataTracking" in body.keys():
+            if body['dataTracking'] == True:
+                dataTracking = True
+            elif body['dataTracking'] == False:
+                dataTracking = False
+
 
         user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
         pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
@@ -295,7 +303,7 @@ class GenerateServiceProviderKey(Resource):
                     else:
                         decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
                         generatedSecretKeys = UserUtils.get_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys)
-                        addServiceKeys, servProvAdded = UserUtils.pushServiceProvider(generatedSecretKeys, body["ulcaApiKey"],serviceProviderName)
+                        addServiceKeys, servProvAdded = UserUtils.pushServiceProvider(generatedSecretKeys, body["ulcaApiKey"],serviceProviderName, dataTracking)
                         if addServiceKeys["nModified"] == 1 and addServiceKeys["updatedExisting"] == True:
                             servProvAdded["message"] = "Service Provider Key created"
                         log.info(addServiceKeys)
@@ -305,16 +313,13 @@ class GenerateServiceProviderKey(Resource):
         
             
 
-        #Consider input as userId, ulcaApiKey, pipelineId
-        #Obtain submitterName and generate api key url from pipelineId:
-        #emailId and appName -> Call to Generate API Key [Add master headers] -> Obtain a key [Return name and value, dhruva]
-        #Generate API Key [master headers and key url] both will be available in db.
+
         
 class RemoveServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
         if "serviceProviderName" not in body.keys():
-            return post_error("400", "Please provide serviceProvideName", None), 400
+            return post_error("400", "Please provide serviceProviderName", None), 400
         if "userID" not in body.keys():
             return post_error("400", "Please provide userID", None), 400
         if "ulcaApiKey" not in body.keys():
