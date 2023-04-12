@@ -25,7 +25,10 @@ Few examples to show how a submitter can publish a Named Entity Recognition mode
     "output" :  [
         {        
         "source": "my name is ram and i live in chennai",       
-        "nerPrediction" : [{"token" : "ram", "tag" : "PER" },{"token" : "chennai", "tag" : "LOC" } ]    
+        "nerPrediction" : [
+            {"token" : "ram", "tag" : "PER","tokenStartIndex": 11,"tokenEndIndex": 13 },
+            {"token" : "chennai", "tag" : "LOC","tokenStartIndex": 29,"tokenEndIndex": 35 } 
+            ]    
         }
           ],           
     "status" : {  
