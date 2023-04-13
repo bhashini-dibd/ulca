@@ -399,6 +399,14 @@
       "active": true,
       "whiteList": false,
       "description": "API to generate service provider api keys"
+    },
+    {
+      "id": "5ed50c75-0606-4f0f-8ab1-3f3df6350a6a",
+      "uri": "/ulca/user-mgmt/v1/users/dataTrackingToggle",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate service provider api keys"
     }
   ]
 }
