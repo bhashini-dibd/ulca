@@ -32,6 +32,10 @@ class UserLogin(Resource):
         log.info("Login credentials check passed for {}".format(email))
         try:
             result = authRepo.user_login(email, password)
+            if "userDetails" in result.keys():
+                if "apiKeyDetails" in result["userDetails"]:
+                    del result["userDetails"]["apiKeyDetails"]
+
             if "errorID" in result:
                 log.exception("Login failed for {}".format(email))
                 return result, 400
