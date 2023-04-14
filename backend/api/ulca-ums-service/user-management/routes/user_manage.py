@@ -46,7 +46,7 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
-    ToggleDataTracking, "/v1/users/toggleDataTracking"
+    ToggleDataTracking, "/v1/users/dataTrackingToggle"
 )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
