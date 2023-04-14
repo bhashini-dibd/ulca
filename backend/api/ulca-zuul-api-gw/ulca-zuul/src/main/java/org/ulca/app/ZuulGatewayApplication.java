@@ -24,6 +24,9 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 
 @EnableZuulProxy
@@ -47,6 +50,7 @@ public class ZuulGatewayApplication {
 
     @Value(value = "${redis.ratelimit.db}")
     private Integer ratelimitDb;
+    
 
     @Bean
     public JedisConnectionFactory connectionFactory() {
