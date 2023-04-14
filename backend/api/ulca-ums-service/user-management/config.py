@@ -4,7 +4,6 @@ import time
 #CROSS_MODULE_COMMON_CONFIGS
 MONGO_SERVER_HOST   =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb://localhost:27017')#,localhost:27018/?replicaSet=foo
 
-
 #MODULE-SPECIFIC-CONFIGS
 
 #module configs
@@ -16,10 +15,12 @@ ENABLE_CORS =   False
 
 #mongodb-configs
 MONGO_DB_SCHEMA                 =   os.environ.get('UMS_MONGO_IDENTIFIER', 'ulca-user-management')
+MONGO_PROCESS_DB_SCHEMA         =   os.environ.get('ULCA_PROCESS_IDENTIFIER', 'ulca-process-tracker')
 USR_MONGO_COLLECTION            =   os.environ.get('UMS_USR_COLLECTION', 'ulca-users')
 USR_KEY_MONGO_COLLECTION        =   os.environ.get('UMS_USR_KEY_COLLECTION', 'ulca-user-keys')
 USR_TEMP_TOKEN_MONGO_COLLECTION =   os.environ.get('UMS_USR_TEMP_TOKEN_COLLECTION', 'ulca-user-tokens')
 USR_ORG_MONGO_COLLECTION        =   os.environ.get('UMS_ORG_COLLECTION', 'organization')
+USR_MONGO_PROCESS_COLLECTION    =   os.environ.get('ULCA_PROCESS_COLLECTION', 'pipeline-model')
 
  
 #common-variables
@@ -33,7 +34,8 @@ AUTH_TOKEN_EXPIRY_HRS   =   os.environ.get('UMS_TOKEN_EXP_HRS', 24)
 ADMIN_ROLE_KEY          =   os.environ.get('UMS_ADMIN_ROLE_KEY', 'ADMIN')
 LOGIN_AUTENTICATOR      =   os.environ.get('UMS_LOGIN_AUTENTICATORS',['ULCA'])
 MAX_API_KEY             =   os.environ.get('MAX_ULCA_API_KEYS', 5)
-
+SECRET_KEY              =   os.environ.get('API_SECRET_KEY', 'TjWnZr4u7xD*G-KaPdRgUkXp2s5v8acd')
+SPECIAL_CHARS           =   "!@#$%^''&*() -+?=,<>/"
 if isinstance(MAX_API_KEY,str):
     MAX_API_KEY = int(MAX_API_KEY)
 
