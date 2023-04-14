@@ -243,6 +243,16 @@ class ToggleDataTracking(Resource):
             return post_error("400", "Please provide userID", None), 400
         if "ulcaApiKey" not in body.keys():
             return post_error("400", "Please provide ulcaApiKey", None), 400
+        if "dataTracking" not in body.keys():
+            return post_error("400", "Please provide dataTracking", None), 400
+        if "ServiceProviderKey" not in body.keys():
+            return post_error("400", "Please provide ServiceProviderKey", None), 400
+
+
+
+
+
+
 
 class GenerateServiceProviderKey(Resource):
     def post(self):
@@ -263,7 +273,7 @@ class GenerateServiceProviderKey(Resource):
                 dataTracking = False
 
 
-        user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
+        
         pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
         #log.info(f"user_document details {user_document}")
         if isinstance(pipelineID,dict) and pipelineID:
@@ -278,16 +288,12 @@ class GenerateServiceProviderKey(Resource):
                 masterList.append(masterkeyvalue)
         elif pipelineID == None:
             return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
+        user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
         if isinstance(user_document, list) and user_document:
-            #if "ulcaApiKey" in user_document.keys():
             if not any(usr['ulcaApiKey'] == body['ulcaApiKey'] for usr in user_document):
                 return post_error("400", "ulcaApiKey does not exist. Please provide a valid one.", None), 400
             for usr in user_document:
-                #log.info(f"usrrrrrrrrrrrrrrrrrrrrrrrrrr {usr}")
-                #if body["ulcaApiKey"] not in usr.values():
-                 #   return post_error("400", "ulcaApiKey does not exist for this user.")
                 if body["ulcaApiKey"] in usr.values():
-                    #log.info("first block")
                     serviceProviderNameExists = False
                     #Check if ServiceProviderName Exists?
                     if "serviceProviderKeys" in usr.keys() and len(usr['serviceProviderKeys'])!=0: 
@@ -297,17 +303,19 @@ class GenerateServiceProviderKey(Resource):
                                 break
                     if serviceProviderNameExists == True:
                         servProvKeyExists = {}
-                        servProvKeyExists["serviceProviderKeys"] = usr["serviceProviderKeys"]
-                        servProvKeyExists["message"] = "Service Provider Key already exists"
+                        for users in usr["serviceProviderKeys"]:
+                            if users["serviceProviderName"] == serviceProviderName:
+                                servProvKeyExists["serviceProviderKeys"] = users
                         return servProvKeyExists
                     else:
                         decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
                         generatedSecretKeys = UserUtils.get_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys)
                         addServiceKeys, servProvAdded = UserUtils.pushServiceProvider(generatedSecretKeys, body["ulcaApiKey"],serviceProviderName, dataTracking)
+                        returnServiceProviderKey = {"serviceProviderKeys":servProvAdded["serviceProviderKeys"][0]}
                         if addServiceKeys["nModified"] == 1 and addServiceKeys["updatedExisting"] == True:
-                            servProvAdded["message"] = "Service Provider Key created"
+                            returnServiceProviderKey["message"] = "Service Provider Key created"
                         log.info(addServiceKeys)
-            return servProvAdded
+            return returnServiceProviderKey
         elif user_document == None:
             return post_error("400", "userID does not exist, please provide a valid one.", None), 400
         
