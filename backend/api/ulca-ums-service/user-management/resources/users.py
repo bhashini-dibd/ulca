@@ -311,10 +311,11 @@ class GenerateServiceProviderKey(Resource):
                         decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
                         generatedSecretKeys = UserUtils.get_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys)
                         addServiceKeys, servProvAdded = UserUtils.pushServiceProvider(generatedSecretKeys, body["ulcaApiKey"],serviceProviderName, dataTracking)
+                        returnServiceProviderKey = {"serviceProviderKeys":servProvAdded["serviceProviderKeys"][0]}
                         if addServiceKeys["nModified"] == 1 and addServiceKeys["updatedExisting"] == True:
-                            servProvAdded["message"] = "Service Provider Key created"
+                            returnServiceProviderKey["message"] = "Service Provider Key created"
                         log.info(addServiceKeys)
-            return servProvAdded
+            return returnServiceProviderKey
         elif user_document == None:
             return post_error("400", "userID does not exist, please provide a valid one.", None), 400
         
