@@ -1,0 +1,41 @@
+{   
+    "datasetType": "conversational-corpus",
+    "languages": {
+        "sourceLanguage": "en"
+    },
+    "collectionSource": [
+        "YouTube", "https://www.youtube.com/watch?v=UIkSFSHX9AU"
+    ],
+    "domain":[
+        "news"
+    ],
+    "license":  "cc-by-4.0",
+    "submitter": {
+        "name": "Anirudh",
+        "oauthId": {
+            "oauthId": "anirudh.gupta@thoughtworks.com",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Harveen",
+                "oauthId": {
+                    "oauthId": "anirudh.gupta@thoughtworks.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    },
+    "format": "wav",
+    "collectionMethod": {
+        "collectionDescription": [
+            "manual-transcribed"
+        ],
+        "collectionDetails": {
+            "contributor": {
+                "name": "Harveen",
+                "aboutMe": "Member of thoughtworks asr team"
+            }
+        }
+    }
+}

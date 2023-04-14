@@ -1,0 +1,59 @@
+[
+    {
+        "numberOfSpeakers": 2,
+        "numberOfAudios": 2,
+        "channel": "mono",
+        "samplingRate": 44,
+        "bitsPerSample": 6,
+        "audioContext": "teacher and student regarding marks",
+        "audio": [
+            {
+                "audioFilename": "audio1.wav",
+                "speakerId": ["s1"],
+                "duration": 3
+            },
+            {
+                "audioFilename": "audio2.wav",
+                "speakerId": ["s2"],
+                "duration": 3
+            }
+        ],
+        "speaker": [
+            {
+                "speakerName": "aswin",
+                "speakerId": "s1",
+                "gender": "male"
+            },
+            {
+                "speakerName": "govind",
+                "speakerId": "s2",
+                "gender": "male"
+            }
+        ],
+        "transcription": [
+            {
+                "endTime": 316.94451911964967,
+                "text": "how are you doing?",
+                "startTime": 316.4194781520336,
+                "speakerId": "s1"
+            },
+            {
+                "endTime": 320.24477663037925,
+                "text": "i am doing good",
+                "startTime": 317.0195249721662,
+                "speakerId": "s2"
+            },
+            {
+                "endTime": 321.94451911964967,
+                "text": "Great to hear that!",
+                "startTime": 321.4194781520336,
+                "speakerId": "s1"
+            }
+        ],
+        "additionalTranscriptionInfo": {
+            "referenceRawTranscriptUrl": "url1.html",
+            "externaltranscriptFormat": "webvtt",
+            "externaltranscriptUrl": "url2.webvtt"
+        }
+    }
+]

@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.6.4
+  version: 0.7
 servers:
   - url: /
 paths: {}
@@ -137,6 +137,7 @@ components:
         - document-layout-corpus
         - glossary-corpus
         - ner-corpus
+        - conversational-corpus
     OAuthIdentity:
       type: object
       properties:
