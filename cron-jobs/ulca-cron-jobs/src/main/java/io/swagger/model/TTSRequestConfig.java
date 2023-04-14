@@ -16,13 +16,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * TTSConfig
+ * TTSRequestConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-30T09:38:32.889477760Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-10T05:17:35.492966412Z[GMT]")
 
 
-public class TTSConfig   {
+public class TTSRequestConfig   {
   @JsonProperty("modelId")
   private String modelId = null;
 
@@ -53,7 +53,7 @@ public class TTSConfig   {
   @JsonProperty("duration")
   private BigDecimal duration = null;
 
-  public TTSConfig modelId(String modelId) {
+  public TTSRequestConfig modelId(String modelId) {
     this.modelId = modelId;
     return this;
   }
@@ -72,7 +72,7 @@ public class TTSConfig   {
     this.modelId = modelId;
   }
 
-  public TTSConfig language(LanguagePair language) {
+  public TTSRequestConfig language(LanguagePair language) {
     this.language = language;
     return this;
   }
@@ -93,7 +93,7 @@ public class TTSConfig   {
     this.language = language;
   }
 
-  public TTSConfig gender(Gender gender) {
+  public TTSRequestConfig gender(Gender gender) {
     this.gender = gender;
     return this;
   }
@@ -114,7 +114,7 @@ public class TTSConfig   {
     this.gender = gender;
   }
 
-  public TTSConfig audioFormat(AudioFormat audioFormat) {
+  public TTSRequestConfig audioFormat(AudioFormat audioFormat) {
     this.audioFormat = audioFormat;
     return this;
   }
@@ -134,7 +134,7 @@ public class TTSConfig   {
     this.audioFormat = audioFormat;
   }
 
-  public TTSConfig channel(AudioChannel channel) {
+  public TTSRequestConfig channel(AudioChannel channel) {
     this.channel = channel;
     return this;
   }
@@ -154,7 +154,7 @@ public class TTSConfig   {
     this.channel = channel;
   }
 
-  public TTSConfig samplingRate(BigDecimal samplingRate) {
+  public TTSRequestConfig samplingRate(BigDecimal samplingRate) {
     this.samplingRate = samplingRate;
     return this;
   }
@@ -174,7 +174,7 @@ public class TTSConfig   {
     this.samplingRate = samplingRate;
   }
 
-  public TTSConfig bitsPerSample(AudioBitsPerSample bitsPerSample) {
+  public TTSRequestConfig bitsPerSample(AudioBitsPerSample bitsPerSample) {
     this.bitsPerSample = bitsPerSample;
     return this;
   }
@@ -194,7 +194,7 @@ public class TTSConfig   {
     this.bitsPerSample = bitsPerSample;
   }
 
-  public TTSConfig encoding(Encoding encoding) {
+  public TTSRequestConfig encoding(Encoding encoding) {
     this.encoding = encoding;
     return this;
   }
@@ -214,7 +214,7 @@ public class TTSConfig   {
     this.encoding = encoding;
   }
 
-  public TTSConfig speed(BigDecimal speed) {
+  public TTSRequestConfig speed(BigDecimal speed) {
     this.speed = speed;
     return this;
   }
@@ -234,7 +234,7 @@ public class TTSConfig   {
     this.speed = speed;
   }
 
-  public TTSConfig duration(BigDecimal duration) {
+  public TTSRequestConfig duration(BigDecimal duration) {
     this.duration = duration;
     return this;
   }
@@ -263,17 +263,17 @@ public class TTSConfig   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    TTSConfig ttSConfig = (TTSConfig) o;
-    return Objects.equals(this.modelId, ttSConfig.modelId) &&
-        Objects.equals(this.language, ttSConfig.language) &&
-        Objects.equals(this.gender, ttSConfig.gender) &&
-        Objects.equals(this.audioFormat, ttSConfig.audioFormat) &&
-        Objects.equals(this.channel, ttSConfig.channel) &&
-        Objects.equals(this.samplingRate, ttSConfig.samplingRate) &&
-        Objects.equals(this.bitsPerSample, ttSConfig.bitsPerSample) &&
-        Objects.equals(this.encoding, ttSConfig.encoding) &&
-        Objects.equals(this.speed, ttSConfig.speed) &&
-        Objects.equals(this.duration, ttSConfig.duration);
+    TTSRequestConfig ttSRequestConfig = (TTSRequestConfig) o;
+    return Objects.equals(this.modelId, ttSRequestConfig.modelId) &&
+        Objects.equals(this.language, ttSRequestConfig.language) &&
+        Objects.equals(this.gender, ttSRequestConfig.gender) &&
+        Objects.equals(this.audioFormat, ttSRequestConfig.audioFormat) &&
+        Objects.equals(this.channel, ttSRequestConfig.channel) &&
+        Objects.equals(this.samplingRate, ttSRequestConfig.samplingRate) &&
+        Objects.equals(this.bitsPerSample, ttSRequestConfig.bitsPerSample) &&
+        Objects.equals(this.encoding, ttSRequestConfig.encoding) &&
+        Objects.equals(this.speed, ttSRequestConfig.speed) &&
+        Objects.equals(this.duration, ttSRequestConfig.duration);
   }
 
   @Override
@@ -284,7 +284,7 @@ public class TTSConfig   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class TTSConfig {\n");
+    sb.append("class TTSRequestConfig {\n");
     
     sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
