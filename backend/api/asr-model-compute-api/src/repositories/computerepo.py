@@ -11,10 +11,34 @@ import requests
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
-from AesEverywhere import aes256
-
+from Crypto.Cipher import AES
+import base64
+import sys
+import os
 
 class ASRComputeRepo:
+
+    def decrypt(self, key, message):
+        """
+        Input encrypted bytes, return decrypted bytes, using iv and key
+        """
+
+        byte_array = base64.b64decode(message)
+
+        iv = byte_array[0:16] # extract the 16-byte initialization vector
+
+        messagebytes = byte_array[16:] # encrypted message is the bit after the iv
+
+        cipher = AES.new(key.encode("UTF-8"), AES.MODE_CBC, iv )
+
+        decrypted_padded = cipher.decrypt(messagebytes)
+
+        last_byte = decrypted_padded[-1]
+
+        decrypted = decrypted_padded[0:-last_byte]
+
+        return decrypted.decode("UTF-8")
+
 
     def process_asr(self,lang,audio,userId,inf_callbackurl,uri):
         """
@@ -31,20 +55,17 @@ class ASRComputeRepo:
         callbackurl =   inf_callbackurl["callbackUrl"]
         if "inferenceApiKey" in inf_callbackurl.keys():
             if "name" in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
-                #apiKeyName = inf_callbackurl["inferenceApiKey"]["name"]
-                #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                apiKeyName = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["name"], secret_key)
-                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], secret_key)
+                apiKeyName = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["name"])
+                apiKeyValue = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["value"])
+               
                 
             elif  "name" not in inf_callbackurl["inferenceApiKey"].keys() and "value" in inf_callbackurl["inferenceApiKey"].keys():
                 apiKeyName = None
-                #apiKeyValue = inf_callbackurl["inferenceApiKey"]["value"]
-                apiKeyValue = aes256.decrypt(inf_callbackurl["inferenceApiKey"]["value"], secret_key)
+                apiKeyValue = self.decrypt(secret_key,inf_callbackurl["inferenceApiKey"]["value"])
         else:
             apiKeyName = None
             apiKeyValue = None
-        log.info(f"apiKeyValue, apiKeyName {apiKeyName}")
-        log.info(f"apiKeyValue, apiKeyName {apiKeyValue}")
+    
 
         transformat =   inf_callbackurl["schema"]["request"]["config"]["transcriptionFormat"]["value"].lower()
         audioformat =   inf_callbackurl["schema"]["request"]["config"]["audioFormat"].lower()
@@ -139,12 +160,9 @@ class ASRComputeRepo:
             log.info(f"Request body : {body}")
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
-            log.info(f"logging headers for apiKey {headers}")
             response = requests.post(url=request_url, headers = headers, json = body)
             content = response.content
-            log.info(content)
             response_data = json.loads(content)
-            log.info(f"Response : {response_data}")
             return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
@@ -169,6 +187,7 @@ class ASRComputeRepo:
                         "punctuation": punctiation,"enableInverseTextNormalization": False},"audio": [{"audioContent": str(data)}]}
             request_url = callbackurl
             #log.info(f'transformat == > {transformat}, audioformat==> {audioformat}, lang ==> {lang} punc ==> {punctiation}, audioContent ==> {data}')
+            log.info(f"logging request body {body}")
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body,verify=False)
             #return response instead of response_data

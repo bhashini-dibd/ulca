@@ -5,7 +5,7 @@ from utilities import UserUtils
 from flask import request, jsonify
 import config
 import logging
-from config import MAX_API_KEY
+from config import MAX_API_KEY, SECRET_KEY
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -181,20 +181,22 @@ class GetApiKey(Resource):
         if "userID" not in body.keys():
             return post_error("Data Missing", "users not found", None), 400
         user = body['userID']
-        userAPIKeys = UserUtils.get_user_api_keys(user)
-        if isinstance(userAPIKeys, list) and len(userAPIKeys) != 0:
+        appName = None
+        userAPIKeys = UserUtils.get_user_api_keys(user,appName)
+        #userAPIKeys.append({"userId": user})
+        if isinstance(userAPIKeys, list):
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
             return res.getresjson(), 200
         else:
-            return post_error("400", "User API Key is not available")
+            return post_error("400", "userID cannot be empty, please provide one.")
 
 class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
     def post(self): #userID and userApiKey mandatory.
         body = request.get_json()
         if "userID" not in body.keys(): 
-            return post_error("400", "userID not found", None), 400
+            return post_error("400", "userID not found", None), 400       
         if "ulcaApiKey" not in body.keys():
-            return post_error("400", "userApiKey not found", None), 400
+            return post_error("400", "ulcaApiKey not found", None), 400
         userid = body["userID"]
         userapikey = body["ulcaApiKey"]
         revokekey = UserUtils.revoke_userApiKey(userid, userapikey)
@@ -203,10 +205,6 @@ class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
             return res.getresjson(), 200
         else:
             return post_error("400", "Unable to revoke ulcaApiKey. Please check the userID and/or ulcaApiKey.")
-            res = CustomResponse(Status.SUCCESS_USER_APIKEY.value, "SUCCESS")
-            return res.getresjson(), 200
-        else:
-            return post_error("400", "Unable to revoke userApiKey. Please check the userID and/or userApiKey.")
 
 class GenerateApiKey(Resource):
     def post(self):
@@ -218,25 +216,127 @@ class GenerateApiKey(Resource):
        
         serviceProviderKey = []
         user = body["userID"]
-        appName = body["appName"]
+        checkAppName = UserUtils.check_appName(body["appName"])
+        if checkAppName:
+            return post_error("400", "appName cannot contain special chars and/or uppercase", None), 400
+        elif not checkAppName:
+            appName = body["appName"] 
+        user_api_keys, status = UserUtils.get_user_api_keys(user,appName)
+        if status == False:
+            if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
+                generatedapikey = UserUtils.generate_user_api_key()
+                UserUtils.insert_generated_user_api_key(user,appName,generatedapikey,serviceProviderKey)
+                res = CustomResponse(Status.SUCCESS_GENERATE_APIKEY.value, generatedapikey)
+                return res.getresjson(), 200
+            else:
+                return post_error("400", "Maximum Key Limit Reached", None), 400
+        
+        if status == True and "errorID" in user_api_keys.keys():
+            return post_error("400", user_api_keys['message'], None), 400
 
 
-        user_api_keys = UserUtils.get_user_api_keys(user)
-        if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
-            generatedapikey = UserUtils.generate_user_api_key()
-            UserUtils.insert_generated_user_api_key(user,appName,generatedapikey,serviceProviderKey)
-        if "userID" not in body.keys() and "appName" not in body.keys():
-            return post_error("400", "Missing userID and/or appName", None), 400
-        user = body["userID"]
-        appName = body["appName"]
+class ToggleDataTracking(Resource):
+    def post(self):
+        body = request.get_json()
+        #validation
+        if "userID" not in body.keys(): 
+            return post_error("400", "Please provide userID", None), 400
+        if "ulcaApiKey" not in body.keys():
+            return post_error("400", "Please provide ulcaApiKey", None), 400
 
-        user_api_keys = UserUtils.get_user_api_keys(user)
-        if isinstance(user_api_keys,list) and len(user_api_keys) < MAX_API_KEY:
-            generatedapikey = UserUtils.generate_user_api_key()
-            UserUtils.insert_generated_user_api_key(user,appName,generatedapikey)
-            res = CustomResponse(Status.SUCCESS_GENERATE_APIKEY.value, generatedapikey)
+class GenerateServiceProviderKey(Resource):
+    def post(self):
+        body = request.get_json()
+       
+        if "pipelineId" not in body.keys():
+            return post_error("400", "Please provide pipelineId", None), 400
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "ulcaApiKey" not in body.keys():
+            return post_error("400", "Please provide ulcaApiKey", None), 400
+        if "dataTracking" not in body.keys():
+            dataTracking = True
+        if "dataTracking" in body.keys():
+            if body['dataTracking'] == True:
+                dataTracking = True
+            elif body['dataTracking'] == False:
+                dataTracking = False
+
+
+        user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
+        pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
+        #log.info(f"user_document details {user_document}")
+        if isinstance(pipelineID,dict) and pipelineID:
+            masterList = []
+            if "serviceProvider" in pipelineID.keys():
+                serviceProviderName = pipelineID["serviceProvider"]["name"]
+            if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys():
+                serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+                masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+                masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+                masterList.append(masterkeyname)
+                masterList.append(masterkeyvalue)
+        elif pipelineID == None:
+            return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
+        if isinstance(user_document, list) and user_document:
+            #if "ulcaApiKey" in user_document.keys():
+            if not any(usr['ulcaApiKey'] == body['ulcaApiKey'] for usr in user_document):
+                return post_error("400", "ulcaApiKey does not exist. Please provide a valid one.", None), 400
+            for usr in user_document:
+                #log.info(f"usrrrrrrrrrrrrrrrrrrrrrrrrrr {usr}")
+                #if body["ulcaApiKey"] not in usr.values():
+                 #   return post_error("400", "ulcaApiKey does not exist for this user.")
+                if body["ulcaApiKey"] in usr.values():
+                    #log.info("first block")
+                    serviceProviderNameExists = False
+                    #Check if ServiceProviderName Exists?
+                    if "serviceProviderKeys" in usr.keys() and len(usr['serviceProviderKeys'])!=0: 
+                        for each_provider in usr['serviceProviderKeys']:
+                            if each_provider['serviceProviderName'] == serviceProviderName:
+                                serviceProviderNameExists = True
+                                break
+                    if serviceProviderNameExists == True:
+                        servProvKeyExists = {}
+                        servProvKeyExists["serviceProviderKeys"] = usr["serviceProviderKeys"]
+                        servProvKeyExists["message"] = "Service Provider Key already exists"
+                        return servProvKeyExists
+                    else:
+                        decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
+                        generatedSecretKeys = UserUtils.get_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys)
+                        addServiceKeys, servProvAdded = UserUtils.pushServiceProvider(generatedSecretKeys, body["ulcaApiKey"],serviceProviderName, dataTracking)
+                        if addServiceKeys["nModified"] == 1 and addServiceKeys["updatedExisting"] == True:
+                            servProvAdded["message"] = "Service Provider Key created"
+                        log.info(addServiceKeys)
+            return servProvAdded
+        elif user_document == None:
+            return post_error("400", "userID does not exist, please provide a valid one.", None), 400
+        
+            
+
+
+        
+class RemoveServiceProviderKey(Resource):
+    def post(self):
+        body = request.get_json()
+        if "serviceProviderName" not in body.keys():
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "ulcaApiKey" not in body.keys():
+            return post_error("400", "Please provide ulcaApiKey", None), 400
+
+        pullRecord = UserUtils.removeServiceProviders(body['userID'],body['ulcaApiKey'],body["serviceProviderName"])
+        if pullRecord['nModified'] == 1:
+            res = CustomResponse(Status.REMOVE_SERVICE_PROVIDER.value, "SUCCESS")
             return res.getresjson(), 200
-        elif isinstance(user_api_keys,dict) and "errorID" in user_api_keys.keys():
-            return user_api_keys
         else:
-            return post_error("400", "Maximum Key Limit Reached", None), 400
+            return post_error("400", "Unable to revoke service provider details, please check userID and/or ulcaApiKey and/or service provider Name ", None), 400
+                    
+        
+
+
+
+
+
+
+

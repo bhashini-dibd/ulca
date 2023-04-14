@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  title: ULCA - service schema
+  description: The documentation defines the model.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 1.0.0
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    TaskSequence:
+      required:
+        - task
+        - config
+      type: object
+      properties:
+        task:
+          $ref: "#/components/schemas/TaskSequenceList"
+        config:
+          $ref: "#/components/schemas/SequenceConfig"
+    SequenceConfig:
+      required:
+        - submitter
+      type: object
+      properties:
+        submitter:
+          type: string
+          description: Submitter Name
+          example: AI4Bharat
+    TaskSequences:
+      anyOf:
+        - $ref: "#/components/schemas/TranslationTask"
+        - $ref: "#/components/schemas/ASRTask"
+        - $ref: "#/components/schemas/TTSTask"
+      discriminator:
+        propertyName: taskType
+        mapping:
+          translation: "#/components/schemas/TranslationInference"
+          asr: "#/components/schemas/ASRInference"
+          tts: "#/components/schemas/TTSInference"
+
+    TaskSequenceList:
+      type: array
+      items:
+        $ref: "#/components/schemas/TaskSequences"
+    TranslationTask:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: "#/components/schemas/TranslationConfig"
+
+    ASRTask:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: "#/components/schemas/AudioConfig"
+
+    TTSTask:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: "#/components/schemas/TTSConfig"
+    TranslationConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+
+    TTSConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        gender:
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+
+    AudioConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair

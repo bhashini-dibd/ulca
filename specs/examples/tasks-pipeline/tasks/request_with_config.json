@@ -1,0 +1,32 @@
+{
+    "pipelineTasks" : [
+        {  
+            "taskType": "asr",
+            "config": {
+                "language" : {
+                    "sourceLanguage" : "en"
+                }
+            }
+        },
+        {
+            "taskType" : "translation",        
+            "config": {
+                "language" : {
+                    "sourceLanguage" : "en",
+                    "targetLanguage"  :"hi"
+                }
+            }
+        },
+        {  
+            "taskType": "tts",
+            "config": {
+                "language" : {
+                    "sourceLanguage" : "hi"
+                }
+            }
+        } 
+    ],
+    "pipelineRequestConfig" : {
+        "submitter" : "AI4Bharat"
+    }
+}

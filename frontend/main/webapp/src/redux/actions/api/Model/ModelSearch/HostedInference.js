@@ -71,6 +71,8 @@ export default class HostedInference extends API {
     } else if (this.task === "tts") {
       bodyData.input = [{ source: this.input }];
       bodyData.gender = this.gender;
+    }else if (this.task === "ner") {
+      bodyData.input = [{ source: this.input }];
     }else if (this.task === "transliteration") {
       bodyData.input = [{ source: this.input }];
     } else if (this.task === "txt-lang-detection") {

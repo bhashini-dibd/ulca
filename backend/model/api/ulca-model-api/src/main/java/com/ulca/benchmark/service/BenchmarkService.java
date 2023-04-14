@@ -305,10 +305,8 @@ public class BenchmarkService {
 			lpsentPair.setSourceLanguage(lp.getSourceLanguage());
 			lpsentPair.setTargetLanguage(lp.getTargetLanguage());
 			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(), lpsentPair);
-			log.info("List of Benchmarks in response"+list);
 
 			for (Benchmark bm : list) {
-
 				BenchmarkDto dto = new BenchmarkDto();
 				BeanUtils.copyProperties(bm, dto);
 				List<String> metricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());

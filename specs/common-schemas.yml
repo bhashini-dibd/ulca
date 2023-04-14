@@ -112,7 +112,7 @@ components:
       properties:
         name:
           maxLength: 50
-          minLength: 5
+          minLength: 3
           type: string
           description: Name of the Submitter
         oauthId:

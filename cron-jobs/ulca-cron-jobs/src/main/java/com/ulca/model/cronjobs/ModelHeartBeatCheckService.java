@@ -58,7 +58,9 @@ public class ModelHeartBeatCheckService {
 				if (inferenceAPIEndPoint != null && inferenceAPIEndPoint.getCallbackUrl() != null) {
 
 					if (!inferenceAPIEndPoint.getCallbackUrl().isBlank()
-							&& !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())) {
+							&& !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())
+							&& inferenceAPIEndPoint.getCallbackUrl().startsWith("wss")==false) {
+
 						checkedUrl.add(inferenceAPIEndPoint.getCallbackUrl());
 						String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 
@@ -185,6 +187,7 @@ public class ModelHeartBeatCheckService {
 						+ model.getModelId() + " reason :: " + e.getMessage());
 				e.printStackTrace();
 			}
+		
 		}
 		log.info("*******  ModelHeartBeatCheckService ::modelHeathStatusCheck -- Number of published models fetched ::" + fetchedModels.size());
 		log.info("*******  ModelHeartBeatCheckService ::modelHeathStatusCheck -- Number of models being status checked available/unavailable ::" + checkedModels.size());

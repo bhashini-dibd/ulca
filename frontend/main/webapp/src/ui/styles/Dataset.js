@@ -1083,6 +1083,21 @@ const DataSet = (theme) => ({
     borderRadius: "20%",
     padding: "15px",
     height: "fit-content",
+  },
+
+  myProfileActionBtn: {
+    borderRadius: "16px",
+    backgroundColor: "white",
+    boxShadow: "none",
+    color: "rgb(19, 157, 96)",
+    padding: "10px 20px",
+    fontSize: "1rem",
+    width: "fit-content",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "white",
+      boxShadow: "none",
+    },
   }
 });
 

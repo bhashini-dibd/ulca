@@ -1,0 +1,224 @@
+openapi: 3.0.0
+info:
+  title: ULCA - service schema
+  description: The documentation defines the model.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 1.0.0
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    TaskSequenceResponse:
+      required:
+        - config
+        - languages
+      type: object
+      properties:
+        languages:
+          $ref: "#/components/schemas/LanguagesList"
+        config:
+          $ref: "#/components/schemas/InferenceSchemaList"
+    LanguageSchema:
+      type: object
+      properties:
+        sourceLanguage:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        targetLanguage:
+          type: array
+          default:
+            - en
+          description: list of
+          items:
+            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+    InferenceSchema:
+      anyOf:
+        - $ref: "#/components/schemas/TranslationInference"
+        - $ref: "#/components/schemas/ASRInference"
+        - $ref: "#/components/schemas/TTSInference"
+      discriminator:
+        propertyName: taskType
+        mapping:
+          translation: "#/components/schemas/TranslationInference"
+          asr: "#/components/schemas/ASRInference"
+          tts: "#/components/schemas/TTSInference"
+
+    InferenceSchemaList:
+      type: array
+      items:
+        $ref: "#/components/schemas/InferenceSchema"
+    LanguagesList:
+      type: array
+      items:
+        $ref: "#/components/schemas/LanguageSchema"
+    TranslationInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: "#/components/schemas/TranslationConfig"
+
+    ASRInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: "#/components/schemas/AudioConfig"
+
+    TTSInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: "#/components/schemas/TTSConfig"
+
+    TranslationConfig:
+      required:
+        - language
+        - modelId
+      type: object
+      properties:
+        modelId:
+          type: integer
+          description: Unique identifier of model
+          example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+          $ref: "#/components/schemas/SupportedFormats"
+        outputFormat:
+          $ref: "#/components/schemas/SupportedFormats"
+
+    TTSConfig:
+      required:
+        - language
+        - modelId
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        gender:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        inputFormat:
+          $ref: "#/components/schemas/SupportedFormats"
+        outputFormat:
+          $ref: "#/components/schemas/SupportedFormats"
+    AudioConfig:
+      required:
+        - language
+        - modelId
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        audioFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        channel:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        bitsPerSample:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+        transcriptionFormat:
+          $ref: "#/components/schemas/TranscriptionFormat"
+        inputFormat:
+          $ref: "#/components/schemas/SupportedFormats"
+        outputFormat:
+          $ref: "#/components/schemas/SupportedFormats"
+        postProcessors:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
+        domain:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+        detailed:
+          type: boolean
+          description: to specify whether details are required in output like SNR, sampling rate
+        punctuation:
+          type: boolean
+          example: true
+        model:
+          type: string
+          enum:
+            - command_and_search
+            - phone_call
+            - video
+            - default
+        encoding:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+    TranscriptionFormat:
+      type: object
+      properties:
+        value:
+          type: string
+          description: format of ASR output
+          enum:
+            - srt
+            - transcript
+            - webvtt
+            - alternatives
+            - raw-text
+
+    TextFormat:
+      type: string
+      description: supported textual formats
+      enum:
+        - srt
+        - transcript
+        - webvtt
+        - alternatives
+        - raw-text
+
+    AudioFormat:
+      type: string
+      description: audio format of the audio file
+      example: flac
+      enum:
+        - wav
+        - pcm
+        - mp3
+        - flac
+        - sph
+    SupportedFormats:
+      anyOf:
+        - $ref: "#/components/schemas/AudioFormat"
+        - $ref: "#/components/schemas/TextFormat"
+        - $ref: "#/components/schemas/TextFormat"
+
+  securitySchemes:
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header

@@ -1,4 +1,5 @@
 import uuid
+from uuid import uuid4
 import time
 import re
 import bcrypt
@@ -17,8 +18,14 @@ from flask_mail import Mail, Message
 from app import mail
 from flask import render_template
 from bson import json_util
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION
+from bson.objectid import ObjectId
+from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION,SPECIAL_CHARS
+from Crypto.Cipher import AES
+import base64
+import sys
+import os
+
+aes_secret_key  =  "TjWnZr4u7xD*G-KaPdRgUkXp2s5v8"
 
 import logging
 
@@ -56,7 +63,19 @@ class UserUtils:
 #take timestamp epoch and add/generate uid based on this time. 38 character
 #by default apiKey will be 1. Maximum apiKey should be 5. if list has only 1 value, we should be able to call generateApiKey. If user has 5 apiKey already existed=>reached max apiKey
 
-   
+    @staticmethod
+    def check_appName(string):
+        FLAG = None
+        FLAG_ = None
+        for strr in string:
+            if strr.isdigit() or strr in SPECIAL_CHARS or strr.isupper():
+                FLAG = True
+            else:
+                FLAG_ = False
+        if FLAG:
+            return True
+        elif not FLAG_:
+            return False
 
     @staticmethod
     def validate_email_format(email):
@@ -591,32 +610,40 @@ class UserUtils:
 
 
     @staticmethod
-    def get_userAPI(userId):
+    def get_user_api_keys(userId,appName):
         try:
-            ulca_api_keys = []
             coll = db.get_db()[USR_MONGO_COLLECTION]
             response = coll.find_one({"userID": userId})
-            if isinstance(response,dict):
-                if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
-                    return response['apiKeyDetails'] #Return the list of user api keys
+            log.info("RESPONSE from DB : "+str(response),response)
+            #responseData = {"userId" : userId, "emailId": }
+            dupStatus = True
+            dupAppName = []
+            if appName == None:
+                if isinstance(response,dict):
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        return response['apiKeyDetails'] #Return the list of user api keys
+                    else:
+                        return [] #If user doesn't have any api keys
                 else:
-                    return [] #If user doesn't have any api keys
-            else:
-
-            apiKeys = coll.find({"userID": userId})
-            if apiKeys:
-                if "userApiKey" in ak.keys():
-                    if len(ak["userApiKey"]) >= max_api_key:
-                        return post_error("Maximum number of keys registered in ULCA, Please delete some to create new apiKeys",None)
-                    for ak in apiKeys:
-                        ulca_api_keys.append(ak["userApiKey"])
-                else : 
-                    return post_error("Couldn't find userApiKey",None)
-            if apiKeys.count() == 0: #return list of available ulca-api-keys
-                log.info("Not a valid userId")
-                return post_error("Not Valid","This userId address is not registered with ULCA",None)
-            
-            return ulca_api_keys
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None)
+            if appName != None:
+                if isinstance(response,dict):
+                    if not 'apiKeyDetails' in response.keys():
+                        return [],False
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        for appN in response["apiKeyDetails"]:
+                            dupAppName.append(appN["appName"])
+                        if appName in dupAppName:
+                            return post_error("Not Valid","This appName is already in use, please try by changing appName",None) , dupStatus
+                        elif appName not in dupAppName:
+                            dupStatus = False
+                            return response['apiKeyDetails'], dupStatus#,dupStatus #Return the list of user api keys
+                    else:
+                        return [], dupStatus #If user doesn't have any api keys
+                else:
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None), dupStatus
         except Exception as e:
             log.exception("Not a valid userId")
             return post_error("error processing ULCA userId:{}".format(str(e)),None)
@@ -636,23 +663,81 @@ class UserUtils:
     def revoke_userApiKey(userid, userapikey):
         collection = db.get_db()[USR_MONGO_COLLECTION]
         log.info(f"userapikey {userapikey}")
-        reoke = collection.find({"userID":userid})
-        for i in reoke:
-           log.info(i)
         revoke = collection.update({"userID":userid}, {"$pull":{"apiKeyDetails": {"ulcaApiKey" : userapikey.replace(" ","")}}})
-        log.info(revoke)
+        # log.info(revoke)
         return json.loads(json_util.dumps(revoke))
 
+
     @staticmethod
-    def revoke_userApiKey(userid, userapikey):
+    def get_userDoc(userID):
         collection = db.get_db()[USR_MONGO_COLLECTION]
+        userdoc = collection.find_one({"userID" : userID})
+        #log.info(f"userdoc  231231 {userdoc}")
+        if userdoc:
+            if "apiKeyDetails" in userdoc.keys():
+                apiKeyDeets = userdoc["apiKeyDetails"]
+            return apiKeyDeets , userdoc["email"]
+        elif not userdoc:
+            return None, None
 
-        revoke = collection.update({"userID":userid}, {"$pull":{"userApiKey": userapikey}})
-        log.info(f"revoke apiKEYS {revoke}")
-        if revoke["nMatched"] == 1 and revoke["nModified"] == 1:
-            return "successfully revoked apiKey"
-
-
+    @staticmethod
+    def get_pipelineId(pipelineID):
+        collections = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipeL = collections.find_one({"_id" : ObjectId(pipelineID)})
+        if pipeL:
+            return pipeL 
+        elif not pipeL:
+            return None
+    
+    @staticmethod
+    def decryptAes(secreKey,source):
+        """
+        Input encrypted bytes, return decrypted bytes, using iv and key
+        """
+        decryptedMasterKeysList = []
+        decryptedMasterKeysDict = {}
+        #log.info(source)
+        if source and isinstance(source,list):
+            for decrp in range(2):
                 
+                byte_array = base64.b64decode(source[decrp])
+                iv = byte_array[0:16] # extract the 16-byte initialization vector
+                messagebytes = byte_array[16:] # encrypted message is the bit after the iv
+                cipher = AES.new(secreKey.encode("UTF-8"), AES.MODE_CBC, iv )
+                decrypted_padded = cipher.decrypt(messagebytes)
+                last_byte = decrypted_padded[-1]
+                decrypted = decrypted_padded[0:-last_byte]
+                decryptedMasterKeysList.append(decrypted.decode("UTF-8"))
+                #decryptedMasterKeysList.append(decrypted.decode("UTF-8"))
+                #decryptedMasterKeys["value"] = decrypted.decode("UTF-8")
+            #log.info(f"decrrrrrrrrrrrrr {decryptedMasterKeysList}")
 
-        
+            decryptedMasterKeysDict[decryptedMasterKeysList[0]] = decryptedMasterKeysList[1]
+           # decryptedMasterKeysDict["value"] = 
+        return decryptedMasterKeysDict
+
+
+    @staticmethod
+    def get_service_provider_keys(email, appName,EndPointurl,decryptedValues):
+        body = {"emailId" : email, "appName" : appName}
+        log.info("Get Service Provider Key Api Call URL"+str(EndPointurl))
+        log.info("Get Service Provider Key Api Call Request"+str(body))
+        result = requests.post(url=EndPointurl, json=body, headers=decryptedValues)
+        log.info("Get Service Provider Key Api Call Response"+str(result.json()))
+        #log.info(result.json())
+        return result.json()
+
+    @staticmethod
+    def pushServiceProvider(generatedApiKeys,ulcaApiKey,userServiceProviderName, dataTracking):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        updateDoc = collections.update({"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$push":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":userServiceProviderName,"dataTracking":dataTracking,"inferenceApiKey":generatedApiKeys}}})
+        log.info("jsonified updated output",json.loads(json_util.dumps(updateDoc)))
+        servProvKe = {"serviceProviderKeys":[{"serviceProviderName":userServiceProviderName,"dataTracking": dataTracking,"inferenceApiKey":generatedApiKeys}]}
+        return json.loads(json_util.dumps(updateDoc)), servProvKe
+
+    @staticmethod
+    def removeServiceProviders(userID,ulcaApiKey,serviceProviderName):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        deleteDoc = collections.update({"userID":userID,"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$pull":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":serviceProviderName}}})
+        log.info(f"removeSeriveProviders    {json.loads(json_util.dumps(deleteDoc))}")
+        return json.loads(json_util.dumps(deleteDoc))
