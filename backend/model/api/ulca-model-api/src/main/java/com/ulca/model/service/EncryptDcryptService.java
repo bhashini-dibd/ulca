@@ -70,20 +70,4 @@ public class EncryptDcryptService {
 		return null;
 	}
 
-	
-	/*
-	 * public static void main(String[] args) { // TODO Auto-generated method stub
-	 * 
-	 * String key = "TjWnZr4u7xD*G-KaPdRgUkXp2s5v8ntu"; String message = "Parshant";
-	 * // either plaintext or encrypted String encryptedVal
-	 * ="VRqJ4fd2UIQ137zav1Bur/IJl6IACuoTM4kJU+NmCIubO/+b306AB1Brg07d9CKt0AuA/3/LgJaUe8Uth+NNQNLjoI72+M9ChKNS6Kqbr7qDh6SApJLCDBkjJhLdT3ET";
-	 * // // String encrypted =encrypt(message, key);
-	 * 
-	 * // System.out.println(encrypted);
-	 * 
-	 * System.out.println(decrypt(encryptedVal, key));
-	 * 
-	 * }
-	 */
-	 
 }

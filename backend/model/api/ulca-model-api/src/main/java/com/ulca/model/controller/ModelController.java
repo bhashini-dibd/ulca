@@ -152,13 +152,14 @@ public class ModelController {
 	 * log.info("******** Entry ModelController:: getModelsPipeline *******");
 	 * return modelService.getModelsPipeline(file, userId); }
 	 */
-	
+
 	@PostMapping("/getModelsPipeline")
-	public ObjectNode getModelsPipeline(@RequestHeader("userID") String userID,@RequestHeader("ulcaApiKey") String ulcaApiKey,@RequestBody String pipelineRequest) throws Exception {
+	public ObjectNode getModelsPipeline(@RequestHeader("userID") String userID,
+			@RequestHeader("ulcaApiKey") String ulcaApiKey, @RequestBody String pipelineRequest) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");
-		log.info("userID :: "+userID);
-		log.info("ulcaApiKey :: "+ulcaApiKey);
-		return modelService.getModelsPipeline(pipelineRequest,userID,ulcaApiKey);
+		log.info("userID :: " + userID);
+		log.info("ulcaApiKey :: " + ulcaApiKey);
+		return modelService.getModelsPipeline(pipelineRequest, userID, ulcaApiKey);
 	}
 
 }

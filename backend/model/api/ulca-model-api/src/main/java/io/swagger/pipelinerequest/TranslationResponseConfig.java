@@ -3,7 +3,6 @@ package io.swagger.pipelinerequest;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.Gender;
 import io.swagger.model.LanguagePair;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -14,12 +13,15 @@ import javax.validation.constraints.*;
  * TranslationResponseConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-06T10:58:36.709959799Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-24T05:43:51.218317839Z[GMT]")
 
 
 public class TranslationResponseConfig   {
   @JsonProperty("serviceId")
   private String serviceId = null;
+
+  @JsonProperty("modelId")
+  private String modelId = null;
 
   @JsonProperty("language")
   private LanguagePair language = null;
@@ -48,6 +50,26 @@ public class TranslationResponseConfig   {
 
   public void setServiceId(String serviceId) {
     this.serviceId = serviceId;
+  }
+
+  public TranslationResponseConfig modelId(String modelId) {
+    this.modelId = modelId;
+    return this;
+  }
+
+  /**
+   * Unique identifier of model
+   * @return modelId
+   **/
+  @Schema(example = "63c9586ea0e5e81614ff96a8", required = true, description = "Unique identifier of model")
+      @NotNull
+
+    public String getModelId() {
+    return modelId;
+  }
+
+  public void setModelId(String modelId) {
+    this.modelId = modelId;
   }
 
   public TranslationResponseConfig language(LanguagePair language) {
@@ -122,6 +144,7 @@ public class TranslationResponseConfig   {
     }
     TranslationResponseConfig translationResponseConfig = (TranslationResponseConfig) o;
     return Objects.equals(this.serviceId, translationResponseConfig.serviceId) &&
+        Objects.equals(this.modelId, translationResponseConfig.modelId) &&
         Objects.equals(this.language, translationResponseConfig.language) &&
         Objects.equals(this.inputFormat, translationResponseConfig.inputFormat) &&
         Objects.equals(this.outputFormat, translationResponseConfig.outputFormat);
@@ -129,7 +152,7 @@ public class TranslationResponseConfig   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, language, inputFormat, outputFormat);
+    return Objects.hash(serviceId, modelId, language, inputFormat, outputFormat);
   }
 
   @Override
@@ -138,6 +161,7 @@ public class TranslationResponseConfig   {
     sb.append("class TranslationResponseConfig {\n");
     
     sb.append("    serviceId: ").append(toIndentedString(serviceId)).append("\n");
+    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("    inputFormat: ").append(toIndentedString(inputFormat)).append("\n");
     sb.append("    outputFormat: ").append(toIndentedString(outputFormat)).append("\n");
