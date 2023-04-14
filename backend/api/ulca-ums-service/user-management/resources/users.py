@@ -314,7 +314,7 @@ class GenerateServiceProviderKey(Resource):
                         if addServiceKeys["nModified"] == 1 and addServiceKeys["updatedExisting"] == True:
                             servProvAdded["message"] = "Service Provider Key created"
                         log.info(addServiceKeys)
-            return [servProvAdded]
+            return servProvAdded
         elif user_document == None:
             return post_error("400", "userID does not exist, please provide a valid one.", None), 400
         
