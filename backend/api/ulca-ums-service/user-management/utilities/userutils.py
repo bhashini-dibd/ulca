@@ -671,7 +671,7 @@ class UserUtils:
     @staticmethod
     def get_userDoc(userID):
         collection = db.get_db()[USR_MONGO_COLLECTION]
-        userdoc = collection.find_one({"userID" : userID})
+        userdoc = collection.find_one({"userID" : userID})#, "apiKeyDetails.serviceProviderKeys.serviceProviderName" : serviceName })
         #log.info(f"userdoc  231231 {userdoc}")
         if userdoc:
             if "apiKeyDetails" in userdoc.keys():

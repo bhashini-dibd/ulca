@@ -2508,21 +2508,16 @@ public class ModelService {
 
 				log.info("responseJsonStr :: " + responseJsonStr);
 				JSONObject jsonObj = new JSONObject(responseJsonStr);
-				JSONArray arr = (JSONArray) jsonObj.get("serviceProviderKeys");
-				if(arr.length()>0) {
-				JSONObject obj = (JSONObject) arr.get(0);
-				JSONObject obj1 = (JSONObject) obj.get("inferenceApiKey");
+				JSONObject arr = (JSONObject) jsonObj.get("serviceProviderKeys");
+
+				JSONObject obj1 = (JSONObject) arr.get("inferenceApiKey");
 
 				name = (String) obj1.get("name");
 				value = (String) obj1.get("value");
 				
 				log.info("name :: "+name);
 				log.info("value :: "+value);
-				}else {
-					
-					throw new PipelineValidationException("Something went wrong!", HttpStatus.BAD_REQUEST);
 
-				}
 				}else if(httpResponse.code()==404) {
 					
 					throw new PipelineValidationException("Something went wrong!", HttpStatus.BAD_REQUEST);
