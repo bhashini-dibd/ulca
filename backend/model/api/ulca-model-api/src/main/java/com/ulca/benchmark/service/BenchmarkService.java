@@ -298,14 +298,14 @@ public class BenchmarkService {
 
 		ModelExtended model = modelDao.findByModelId(request.getModelId());
 		LanguagePairs lps = model.getLanguages();
-
+		log.info("List of Languages in Model"+lps);
 		for (LanguagePair lp : lps) {
-    
+
 			LanguagePair lpsentPair = new LanguagePair();
 			lpsentPair.setSourceLanguage(lp.getSourceLanguage());
 			lpsentPair.setTargetLanguage(lp.getTargetLanguage());
 			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(), lpsentPair);
-			
+
 			for (Benchmark bm : list) {
 				BenchmarkDto dto = new BenchmarkDto();
 				BeanUtils.copyProperties(bm, dto);

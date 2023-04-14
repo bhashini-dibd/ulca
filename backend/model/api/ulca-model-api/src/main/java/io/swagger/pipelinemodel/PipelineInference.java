@@ -3,7 +3,8 @@ package io.swagger.pipelinemodel;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-
+import io.swagger.model.Domain;
+import io.swagger.model.Submitter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -13,7 +14,7 @@ import javax.validation.constraints.*;
  * PipelineInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T06:06:14.793576134Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-16T05:12:20.169133522Z[GMT]")
 
 
 public class PipelineInference   {
@@ -32,8 +33,8 @@ public class PipelineInference   {
   @JsonProperty("refUrl")
   private String refUrl = null;
 
-  @JsonProperty("submitter")
-  private Submitter submitter = null;
+  @JsonProperty("serviceProvider")
+  private Submitter serviceProvider = null;
 
   @JsonProperty("inferenceEndPoint")
   private io.swagger.pipelinemodel.InferenceAPIEndPoint inferenceEndPoint = null;
@@ -68,7 +69,6 @@ public class PipelineInference   {
 	    this.apiEndPoints = apiEndPoints;
 	  }
   
-
   public PipelineInference name(String name) {
     this.name = name;
     return this;
@@ -170,25 +170,25 @@ public class PipelineInference   {
     this.refUrl = refUrl;
   }
 
-  public PipelineInference submitter(Submitter submitter) {
-    this.submitter = submitter;
+  public PipelineInference serviceProvider(Submitter serviceProvider) {
+    this.serviceProvider = serviceProvider;
     return this;
   }
 
   /**
-   * Get submitter
-   * @return submitter
+   * Get serviceProvider
+   * @return serviceProvider
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public Submitter getSubmitter() {
-    return submitter;
+    public Submitter getServiceProvider() {
+    return serviceProvider;
   }
 
-  public void setSubmitter(Submitter submitter) {
-    this.submitter = submitter;
+  public void setServiceProvider(Submitter serviceProvider) {
+    this.serviceProvider = serviceProvider;
   }
 
   public PipelineInference inferenceEndPoint(InferenceAPIEndPoint inferenceEndPoint) {
@@ -254,7 +254,6 @@ public class PipelineInference   {
     this.taskSpecifications = taskSpecifications;
   }
 
-
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -269,9 +268,10 @@ public class PipelineInference   {
         Objects.equals(this.description, pipelineInference.description) &&
         Objects.equals(this.domain, pipelineInference.domain) &&
         Objects.equals(this.refUrl, pipelineInference.refUrl) &&
-        Objects.equals(this.submitter, pipelineInference.submitter) &&
+        Objects.equals(this.serviceProvider, pipelineInference.serviceProvider) &&
         Objects.equals(this.inferenceEndPoint, pipelineInference.inferenceEndPoint) &&
         Objects.equals(this.supportedPipelines, pipelineInference.supportedPipelines) &&
+
         Objects.equals(this.taskSpecifications, pipelineInference.taskSpecifications)&&
         Objects.equals(this.apiEndPoints, pipelineInference.apiEndPoints);
 
@@ -279,7 +279,9 @@ public class PipelineInference   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, version, description, domain, refUrl, submitter, inferenceEndPoint, supportedPipelines, taskSpecifications,apiEndPoints);
+
+    return Objects.hash(name, version, description, serviceProvider, domain, refUrl, inferenceEndPoint, supportedPipelines, taskSpecifications, apiEndPoints);
+
   }
 
   @Override
@@ -292,7 +294,7 @@ public class PipelineInference   {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
     sb.append("    refUrl: ").append(toIndentedString(refUrl)).append("\n");
-    sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
+    sb.append("    serviceProvider: ").append(toIndentedString(serviceProvider)).append("\n");
     sb.append("    inferenceEndPoint: ").append(toIndentedString(inferenceEndPoint)).append("\n");
     sb.append("    supportedPipelines: ").append(toIndentedString(supportedPipelines)).append("\n");
     sb.append("    taskSpecifications: ").append(toIndentedString(taskSpecifications)).append("\n");

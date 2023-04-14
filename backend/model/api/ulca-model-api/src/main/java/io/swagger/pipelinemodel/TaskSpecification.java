@@ -3,7 +3,7 @@ package io.swagger.pipelinemodel;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.ModelTask;
+import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -13,56 +13,56 @@ import javax.validation.constraints.*;
  * TaskSpecification
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T06:06:14.793576134Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-16T05:12:20.169133522Z[GMT]")
 
 
 public class TaskSpecification   {
-  @JsonProperty("task")
-  private ModelTask task = null;
+  @JsonProperty("taskType")
+  private SupportedTasks taskType = null;
 
-  @JsonProperty("languages")
-  private LanguagesList languages = null;
+  @JsonProperty("taskConfig")
+  private ConfigList taskConfig = null;
 
-  public TaskSpecification task(ModelTask task) {
-    this.task = task;
+  public TaskSpecification taskType(SupportedTasks taskType) {
+    this.taskType = taskType;
     return this;
   }
 
   /**
-   * Get task
-   * @return task
+   * Get taskType
+   * @return taskType
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public ModelTask getTask() {
-    return task;
+    public SupportedTasks getTaskType() {
+    return taskType;
   }
 
-  public void setTask(ModelTask task) {
-    this.task = task;
+  public void setTaskType(SupportedTasks taskType) {
+    this.taskType = taskType;
   }
 
-  public TaskSpecification languages(LanguagesList languages) {
-    this.languages = languages;
+  public TaskSpecification taskConfig(ConfigList taskConfig) {
+    this.taskConfig = taskConfig;
     return this;
   }
 
   /**
-   * Get languages
-   * @return languages
+   * Get taskConfig
+   * @return taskConfig
    **/
   @Schema(required = true, description = "")
       @NotNull
 
     @Valid
-    public LanguagesList getLanguages() {
-    return languages;
+    public ConfigList getTaskConfig() {
+    return taskConfig;
   }
 
-  public void setLanguages(LanguagesList languages) {
-    this.languages = languages;
+  public void setTaskConfig(ConfigList taskConfig) {
+    this.taskConfig = taskConfig;
   }
 
 
@@ -75,13 +75,13 @@ public class TaskSpecification   {
       return false;
     }
     TaskSpecification taskSpecification = (TaskSpecification) o;
-    return Objects.equals(this.task, taskSpecification.task) &&
-        Objects.equals(this.languages, taskSpecification.languages);
+    return Objects.equals(this.taskType, taskSpecification.taskType) &&
+        Objects.equals(this.taskConfig, taskSpecification.taskConfig);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(task, languages);
+    return Objects.hash(taskType, taskConfig);
   }
 
   @Override
@@ -89,8 +89,8 @@ public class TaskSpecification   {
     StringBuilder sb = new StringBuilder();
     sb.append("class TaskSpecification {\n");
     
-    sb.append("    task: ").append(toIndentedString(task)).append("\n");
-    sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+    sb.append("    taskConfig: ").append(toIndentedString(taskConfig)).append("\n");
     sb.append("}");
     return sb.toString();
   }

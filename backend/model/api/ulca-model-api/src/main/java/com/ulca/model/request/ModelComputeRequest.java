@@ -1,8 +1,11 @@
 package com.ulca.model.request;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.model.Gender;
 import lombok.AllArgsConstructor;
@@ -27,5 +30,7 @@ public class ModelComputeRequest {
     public String audioUri;
     public byte[] audioContent;
     public String imageUri;
+    private BigDecimal speed;
+    private BigDecimal duration;
 	  
 }
