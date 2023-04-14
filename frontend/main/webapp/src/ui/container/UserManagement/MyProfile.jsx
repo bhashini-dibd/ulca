@@ -262,7 +262,7 @@ const MyProfile = (props) => {
               setModal(true);
             }}
             style={{
-              height: "37px",
+              height: "36px",
               textTransform: "capitalize",
               fontSize: "1rem",
             }}
@@ -553,7 +553,7 @@ const MyProfile = (props) => {
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
-      <Grid container direction="row" spacing={1}>
+      <Grid container direction="row" spacing={2}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h3" component="h2" align="center">
             App Integration Details
@@ -561,7 +561,7 @@ const MyProfile = (props) => {
         </Grid>
         <Typography
           variant="body"
-          style={{ margin: "20px 0px 10px 8px", fontSize: "16px" }}
+          style={{ margin: "30px 10px 12px", fontSize: "16px" , marginLeft:"auto"}}
         >
           User ID : {UserDetails.userID}
         </Typography>

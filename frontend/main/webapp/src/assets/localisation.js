@@ -146,7 +146,7 @@ const localization_EN_Data = {
   "button.Suggest an edit":"Suggest an edit",
   "lable.Addyourcomments":"Add your comments",
   "button.detect": "Detect",
-  "button.generate":"Generate Api Keys",
+  "button.generate":"Generate API Key",
 
 };
 
