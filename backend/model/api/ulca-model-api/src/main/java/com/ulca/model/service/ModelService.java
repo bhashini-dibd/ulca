@@ -94,6 +94,8 @@ import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelPipelineResponse;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.ModelStatusChangeResponse;
+import com.ulca.model.response.PipelineModelResponse;
+import com.ulca.model.response.PipelinesResponse;
 import com.ulca.model.response.UploadModelResponse;
 
 import io.netty.handler.codec.http.HttpRequest;
@@ -2892,5 +2894,39 @@ public class ModelService {
 	 * 
 	 * return pipelineRequest; }
 	 */
+	
+	
+	  public PipelinesResponse explorePipelines() {
+		  
+		 List<PipelineModel> pipelineModels= pipelineModelDao.findAll();
+		 int noOfPipelineModels =(int) pipelineModelDao.count();
+		 log.info("noOfPipelineModels ::::::"+noOfPipelineModels);
+		 List<PipelineModelResponse> pipelineResponse = new ArrayList<PipelineModelResponse>();
+		 for(PipelineModel pipelineModel : pipelineModels) {
+			 PipelineModelResponse pipelineModelResponse =new PipelineModelResponse();
+			 pipelineModelResponse.setPipelineId(pipelineModel.getPipelineModelId());
+			 pipelineModelResponse.setName(pipelineModel.getName());
+			 pipelineModelResponse.setDescription(pipelineModel.getDescription());
+			 pipelineModelResponse.setServiceProviderName(pipelineModel.getServiceProvider().getName());
+			 pipelineModelResponse.setSupportedTasks(pipelineModel.getSupportedPipelines());
+			 pipelineResponse.add(pipelineModelResponse);
+		 }
+		 
+		 log.info("***********pipelineResponse******************");
+		 log.info(pipelineResponse.toString());
+		 
+		 if(noOfPipelineModels==0) {
+ 
+			 throw new PipelineValidationException("Pipeline Models are not available!",
+						HttpStatus.BAD_REQUEST);
+		 }else {
+			  return new PipelinesResponse(pipelineResponse,noOfPipelineModels);
+
+			 
+		 }
+		 
+		 
+	  }
+	
 
 }
