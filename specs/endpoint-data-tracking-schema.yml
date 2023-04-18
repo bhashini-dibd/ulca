@@ -40,4 +40,4 @@ components:
         message:
           type: string
           description: A success message "SUCCESS" if or a failure message describing the error faced such as "Unknown error occoured".
-          example: API Key successfully deleted
+          example: SUCCESS
