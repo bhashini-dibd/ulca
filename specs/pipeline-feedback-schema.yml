@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.0
+  version: 1.2.0
 servers:
   - url: /ulca
 paths: {}
@@ -26,6 +26,8 @@ components:
           description: timestamp when feedback is provided
           format: date-time
           example: '2023-07-21T17:32:28Z'
+        pipelineFeedback:
+              $ref: '#/components/schemas/Feedback'
         taskFeedback:
           type: array
           description: list of
@@ -66,12 +68,15 @@ components:
       type: object
       properties:
         feedbackQuestion:
-          type: string
-          enum:
-            - how was the translation output?
-            - are you satisfied with ASR transcription quality
-          description: question to which feedback is provided
-          example: Rate the outpt quality in a scale of 5
+          anyOf:
+                - $ref: '#/components/schemas/PipelineFeedbackQuestions'
+                - $ref: '#/components/schemas/TranslationFeedbackQuestions'
+                - $ref: '#/components/schemas/AsrFeedbackQuestions'
+                - $ref: '#/components/schemas/TtsFeedbackQuestions'
+
+        isLiked:
+          type: boolean
+          description: indicates if user liked the output or not(Thumbs up/down flag)
         feedbackRating:
           type: integer
           description: rating provided to the feedback question in a scale of 5
@@ -80,3 +85,24 @@ components:
           type: string
           description: comment given on top of the rating
           example : The output generated is really impressive. Cheers to the model developers and crew!!
+    
+    PipelineFeedbackQuestions:
+          type: string
+          enum:
+            - Pipeline feedback question 1
+            - Pipeline feedback question 1
+    TranslationFeedbackQuestions:
+          type: string
+          enum:
+            - Translation feedback question 1
+            - Translation feedback question 2
+    AsrFeedbackQuestions:
+          type: string
+          enum:
+            - ASR feedback question 1
+            - ASR feedback question 2
+    TtsFeedbackQuestions:
+          type: string
+          enum:
+            - TTS feedback question 1
+            - TTS feedback question 2
