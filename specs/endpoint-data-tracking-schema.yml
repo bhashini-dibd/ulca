@@ -15,6 +15,7 @@ components:
       required:
         - emailId
         - appName
+        - dataTracking
       type: object
       properties:
         emailId:
@@ -34,10 +35,21 @@ components:
 
     DataTrackingToggleResponse:
       required:
+        - status
         - message
       type: object
-      properties:
+      properties: 
+        status:
+          type: string
+          enum:
+            - success
+            - failure
+          description: describes if endpoint hit is successful or not
+        dataTracking:
+          type: boolean
+          default: true
+          description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
         message:
           type: string
-          description: A success message "SUCCESS" if or a failure message describing the error faced such as "Unknown error occoured".
-          example: SUCCESS
+          description: A success message "request successful"  or a failure message describing the error faced, such as "Unknown error occoured".
+          example: "Unknown error occoured"
