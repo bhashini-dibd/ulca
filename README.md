@@ -1,7 +1,7 @@
 # NLTM Architecture
 
 
-![NLTM Architecture](https://raw.githubusercontent.com/ULCA-IN/ulca/develop/ulca-documentation/images/nltm_architecture.png)
+![NLTM Architecture](https://raw.githubusercontent.com/ULCA-IN/ulca/develop/ulca-documentation/images/nltm_architecture_2.png)
 
 ### Components  ###
 
