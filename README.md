@@ -63,6 +63,7 @@ Translation Model |  Model to translate a given sentence in one language into th
 ASR Model | Model to convert audio into respective transcript.
 TTS Model | Model to convert a text into respective audio.
 OCR Model | Model to convert a given image to text.
+NER Model | Model to recognize named entities from a given sentence.
 Transliteration Model |  Model to transliterate a given sentence in one language into another script.
 Txt-Language detection Model | Model to detect the language of a given text. 
 
