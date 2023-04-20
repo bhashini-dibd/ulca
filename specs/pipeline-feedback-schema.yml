@@ -27,7 +27,15 @@ components:
           format: date-time
           example: '2023-07-21T17:32:28Z'
         pipelineFeedback:
-              $ref: '#/components/schemas/Feedback'
+            type: object
+            required:
+             - feedback
+            properties:
+              feedback:
+                type: array
+                description : list of
+                items:
+                   $ref: '#/components/schemas/Feedback'
         taskFeedback:
           type: array
           description: list of
@@ -42,16 +50,26 @@ components:
         
     PipelineFeedbackResponse:
       required:
-        - output
+        - status
+        - message
       type: object
-      properties:
-        output:
+      properties: 
+        status:
           type: string
-          description: response string for feedback submission
-          example: feedback successfully submitted
+          enum:
+            - success
+            - failure
+          description: describes if endpoint hit is successful or not
+        message:
+          type: string
+          description: A success message "request successful"  or a failure message describing the error faced, such as "Unknown error occoured".
+          example: "Unknown error occoured"
           
     TaskFeedback:
       type: object
+      required:
+        - taskType
+        - feedback
       properties:
         taskType:
             $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
@@ -64,7 +82,6 @@ components:
     Feedback:
       required:
         - feedbackQuestion
-        - feedbackRating
       type: object
       properties:
         feedbackQuestion:
@@ -80,7 +97,8 @@ components:
         feedbackRating:
           type: integer
           description: rating provided to the feedback question in a scale of 5
-          example: 4
+          minimum: 1
+          maximum: 5
         feedbackComment:
           type: string
           description: comment given on top of the rating
