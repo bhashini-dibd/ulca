@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.8.0
+  version: 0.9.1
 servers:
   - url: /ulca
 paths: {}
@@ -72,7 +72,6 @@ components:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
         trainingDataset:
           $ref: '#/components/schemas/TrainingDataset'
-          
     InferenceAPIEndPoint:
       required:
         - callbackUrl
@@ -102,17 +101,34 @@ components:
           default: false
           description: specify true if the same callbackUrl is capable of handling multiple languages
         schema:
-          anyOf:
-            - $ref: '#/components/schemas/InferenceSchema'
-            - $ref: '#/components/schemas/InferenceSchemaArray'
+          # anyOf:
+          #   - $ref: '#/components/schemas/InferenceSchema'
+          #   - $ref: '#/components/schemas/InferenceSchemaArray'
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/TranslationInference'
+            - $ref: '#/components/schemas/TransliterationInference'
+            - $ref: '#/components/schemas/ASRInference'
+            - $ref: '#/components/schemas/TTSInference'
+            - $ref: '#/components/schemas/OCRInference'
+            - $ref: '#/components/schemas/TxtLangDetectionInference'
+            - $ref: '#/components/schemas/NerInference'
+          discriminator:
+            propertyName: taskType
+            mapping:
+              translation: '#/components/schemas/TranslationInference'
+              transliteration: '#/components/schemas/TransliterationInference'
+              asr: '#/components/schemas/ASRInference'
+              tts: '#/components/schemas/TTSInference'
+              ocr: '#/components/schemas/OCRInference'
+              txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
+              ner: '#/components/schemas/NerInference'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
         asyncApiDetails:
           $ref: '#/components/schemas/AsyncApiDetails'
-        
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
-      
     PipelineInferenceAPIEndPoint:
       required:
         - callbackUrl
@@ -156,42 +172,59 @@ components:
           default: false
           description: specify true if the same callbackUrl is capable of handling multiple languages
         schema:
-          anyOf:
-            - $ref: '#/components/schemas/InferenceSchema'
-            - $ref: '#/components/schemas/InferenceSchemaArray'
+          # anyOf:
+          #   - $ref: '#/components/schemas/InferenceSchema'
+          #   - $ref: '#/components/schemas/InferenceSchemaArray'
+            type: object
+            oneOf:
+              - $ref: '#/components/schemas/TranslationInference'
+              - $ref: '#/components/schemas/TransliterationInference'
+              - $ref: '#/components/schemas/ASRInference'
+              - $ref: '#/components/schemas/TTSInference'
+              - $ref: '#/components/schemas/OCRInference'
+              - $ref: '#/components/schemas/TxtLangDetectionInference'
+              - $ref: '#/components/schemas/NerInference'
+            discriminator:
+              propertyName: taskType
+              mapping:
+                translation: '#/components/schemas/TranslationInference'
+                transliteration: '#/components/schemas/TransliterationInference'
+                asr: '#/components/schemas/ASRInference'
+                tts: '#/components/schemas/TTSInference'
+                ocr: '#/components/schemas/OCRInference'
+                txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
+                ner: '#/components/schemas/NerInference'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
         asyncApiDetails:
           $ref: '#/components/schemas/AsyncApiDetails'
-        
-      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type      
-      
-    InferenceSchema:
-        oneOf:
-        - $ref: '#/components/schemas/TranslationInference'
-        - $ref: '#/components/schemas/TransliterationInference'
-        - $ref: '#/components/schemas/ASRInference'
-        - $ref: '#/components/schemas/TTSInference'
-        - $ref: '#/components/schemas/OCRInference'
-        - $ref: '#/components/schemas/TxtLangDetectionInference'
-        - $ref: '#/components/schemas/NerInference'
-        - $ref: '#/components/schemas/AudioLangDetectionInference'
-        discriminator:
-          propertyName: taskType
-          mapping:
-            translation: '#/components/schemas/TranslationInference'
-            transliteration: '#/components/schemas/TransliterationInference'
-            asr: '#/components/schemas/ASRInference'
-            tts: '#/components/schemas/TTSInference'
-            ocr: '#/components/schemas/OCRInference'
-            txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
-            ner: '#/components/schemas/NerInference'
-            audio-lang-detection: '#/components/schemas/AudioLangDetectionInference'
-    InferenceSchemaArray:
-          type: array
-          items:
-            $ref: '#/components/schemas/InferenceSchema'
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
+    # InferenceSchema:
+    #   oneOf:
+    #     - $ref: '#/components/schemas/TranslationInference'
+    #     - $ref: '#/components/schemas/TransliterationInference'
+    #     - $ref: '#/components/schemas/ASRInference'
+    #     - $ref: '#/components/schemas/TTSInference'
+    #     - $ref: '#/components/schemas/OCRInference'
+    #     - $ref: '#/components/schemas/TxtLangDetectionInference'
+    #     - $ref: '#/components/schemas/NerInference'
+    #     - $ref: '#/components/schemas/AudioLangDetectionInference'
+    #   discriminator:
+    #     propertyName: taskType
+    #     mapping:
+    #       translation: '#/components/schemas/TranslationInference'
+    #       transliteration: '#/components/schemas/TransliterationInference'
+    #       asr: '#/components/schemas/ASRInference'
+    #       tts: '#/components/schemas/TTSInference'
+    #       ocr: '#/components/schemas/OCRInference'
+    #       txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
+    #       ner: '#/components/schemas/NerInference'
+    #       audio-lang-detection: '#/components/schemas/AudioLangDetectionInference'
+    # InferenceSchemaArray:
+    #   type: array
+    #   items:
+    #     $ref: '#/components/schemas/InferenceSchema'
     AsyncApiDetails:
       required:
         - pollingUrl
@@ -376,6 +409,8 @@ components:
           $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/TranslationConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     TransliterationRequest:
       required:
         - input
@@ -396,6 +431,8 @@ components:
           $ref: '#/components/schemas/SentencesList'
         config:
           $ref: '#/components/schemas/TransliterationConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     TxtLangDetectionRequest:
       required:
         - input
@@ -416,6 +453,8 @@ components:
           $ref: '#/components/schemas/TxtLanguagesList'
         config:
           $ref: '#/components/schemas/LangDetectionConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     AudioLangDetectionRequest:
       required:
         - audio
@@ -436,6 +475,8 @@ components:
           $ref: '#/components/schemas/AudioLanguagesList'
         config:
           $ref: '#/components/schemas/LangDetectionConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     NerResponse:
       description: the response for NER.  Standard http status codes to be used.
       required:
@@ -446,6 +487,8 @@ components:
           $ref: '#/components/schemas/NerList'
         config:
           $ref: '#/components/schemas/TranslationConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     ASRInference:
       required:
         - taskType
@@ -457,18 +500,20 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
-        supportedInputAudioFormats:
-          type: array
-          default: [wav]
-          description: list of
-          items:
-            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
-        supportedOutputTextFormats:
-          type: array
-          description: list of
-          default: [transcript]
-          items:
-            $ref:  '#/components/schemas/TextFormat'
+        # supportedInputAudioFormats:
+        #   type: array
+        #   default:
+        #     - wav
+        #   description: list of
+        #   items:
+        #     $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        # supportedOutputTextFormats:
+        #   type: array
+        #   description: list of
+        #   default:
+        #     - transcript
+        #   items:
+        #     $ref: '#/components/schemas/TextFormat'
         request:
           $ref: '#/components/schemas/ASRRequest'
         response:
@@ -523,10 +568,13 @@ components:
           $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/TranslationConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     TTSInference:
       required:
         - taskType
         - modelProcessingType
+        - supportedVoices
         - request
       type: object
       properties:
@@ -534,18 +582,26 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
-        supportedInputTextFormats:
+        supportedVoices:
           type: array
           description: list of
-          default: [transcript]
+          example: ["male","female"]
           items:
-            $ref:  '#/components/schemas/TextFormat'
-        supportedOutputAudioFormats:
-          type: array
-          default: [wav]
-          description: list of
-          items:
-            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+            $ref: '#/components/schemas/VoiceTypes'
+        # supportedInputTextFormats:
+        #   type: array
+        #   description: list of
+        #   default:
+        #     - transcript
+        #   items:
+        #     $ref: '#/components/schemas/TextFormat'
+        # supportedOutputAudioFormats:
+        #   type: array
+        #   default:
+        #     - wav
+        #   description: list of
+        #   items:
+        #     $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         request:
           $ref: '#/components/schemas/TTSRequest'
         response:
@@ -589,7 +645,7 @@ components:
         input:
           $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/TTSConfig'
+          $ref: '#/components/schemas/TTSRequestConfig'
     TTSResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
@@ -599,7 +655,9 @@ components:
         audio:
           $ref: '#/components/schemas/AudioFiles'
         config:
-          $ref: '#/components/schemas/AudioConfig'
+          $ref: '#/components/schemas/TTSResponseConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     OCRInference:
       required:
         - taskType
@@ -656,6 +714,8 @@ components:
           $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/OCRConfig'
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     FileUploadRequest:
       type: object
       properties:
@@ -842,7 +902,7 @@ components:
           example: 4
     OCRConfig:
       required:
-        - language
+        - languages
       type: object
       properties:
         modelId:
@@ -866,9 +926,12 @@ components:
             - print
             - handwritten
             - scenetext
-        language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
-    TTSConfig:
+        languages:
+          type : array
+          description : list of
+          items:
+           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    TTSRequestConfig:
       required:
         - language
         - gender
@@ -882,14 +945,68 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         gender:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
-        inputFormat:
-          type: object
-          properties:
-            value:
-              $ref: '#/components/schemas/TextFormat'
+        # inputFormat:
+        #   type: object
+        #   properties:
+        #     value:
+        #       $ref: '#/components/schemas/TextFormat'
         audioFormat:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
-        
+        channel:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        bitsPerSample:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+        encoding:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+        speed:
+          type: number
+          description: optional field to specify the speed of audio
+          default: 1.0
+        duration:
+          type: number
+          description: optional field to specify the duration of audio in milliseconds
+          example: 300
+          
+    TTSResponseConfig:
+      required:
+        - language
+        - audioFormat
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        gender:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+        # inputFormat:
+        #   type: object
+        #   properties:
+        #     value:
+        #       $ref: '#/components/schemas/TextFormat'
+        audioFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        channel:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        bitsPerSample:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+        encoding:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+        speed:
+          type: number
+          description: optional field to specify the speed of audio
+          default: 1.0
+        duration:
+          type: number
+          description: optional field to specify the duration of audio in milliseconds
+          example: 300
+          
     AudioConfig:
       required:
         - language
@@ -934,7 +1051,7 @@ components:
             - default
         encoding:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
-
+       
     ImageFiles:
       type: array
       description: list of
@@ -1001,7 +1118,6 @@ components:
         bitsPerSample:
           type: integer
           description: bitsPerSample rate of audio
-    
     TextFormat:
       type: string
       description: supported textual formats
@@ -1010,7 +1126,13 @@ components:
         - transcript
         - webvtt
         - alternatives
-        
+    VoiceTypes:
+      type: string
+      description: supported types of voices
+      enum:
+        - male
+        - female
+    
   securitySchemes:
     authToken:
       type: apiKey

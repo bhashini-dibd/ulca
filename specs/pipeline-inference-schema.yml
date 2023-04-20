@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.0
+  version: 1.0.3
 servers:
   - url: /ulca
 paths: {}
@@ -18,7 +18,7 @@ components:
         - description
         - refUrl
         - domain
-        - submitter
+        - serviceProvider
         - inferenceEndPoint
         - supportedPipelines
         - taskSpecifications
@@ -50,27 +50,25 @@ components:
           type: string
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
-      
-        submitter:
+        serviceProvider:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
         supportedPipelines:
-          $ref: "#/components/schemas/ListOfPipelines"
+          $ref: '#/components/schemas/ListOfPipelines'
         taskSpecifications:
           $ref: '#/components/schemas/TaskSpecifications'
-    
+        apiEndPoints:
+          $ref: '#/components/schemas/ApiEndPoint'
     ListOfPipelines:
       type: array
-      items: 
-        $ref: "#/components/schemas/PipelineTaskSequence"
-      
+      items:
+        $ref: '#/components/schemas/PipelineTaskSequence'
     PipelineTaskSequence:
-        type: array
-        items:
-          anyOf: 
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
-
+      type: array
+      items:
+        anyOf: null
+        $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     InferenceAPIEndPoint:
       required:
         - callbackUrl
@@ -102,40 +100,72 @@ components:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
         asyncApiDetails:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/AsyncApiDetails'
-        
+          required:
+            - pollingUrl
+            - pollInterval
+          type: object
+          properties:
+            pollingUrl:
+              type: string
+              format: url
+              description: endpoint specified for polling in async calls
+            pollInterval:
+              type: integer
+              description: polling interval in millisec to check for status
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
-
     TaskSpecifications:
       type: array
-      items: 
-        $ref: "#/components/schemas/TaskSpecification"
-
+      items:
+        $ref: '#/components/schemas/TaskSpecification'
     TaskSpecification:
       required:
-        - task
-        - languages
+        - taskType
+        - taskConfig
       type: object
       properties:
-        task:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
-        languages:
-          $ref: '#/components/schemas/LanguagesList'
-
-    LanguagesList:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        taskConfig:
+          $ref: '#/components/schemas/ConfigList'
+    ConfigList:
       type: array
       items:
-        $ref: '#/components/schemas/LanguageSchema'
-
-    LanguageSchema:
+        $ref: '#/components/schemas/ConfigSchema'
+    ConfigSchema:
       required:
+        - modelId
+        - serviceId
         - sourceLanguage
       type: object
       properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        serviceId:
+          type: string
+          description: specific id for the service
+          example: ai4bharat/speech-to-speech-gpu--t4
         sourceLanguage:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
         targetLanguage:
-            $ref: >-
-              https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+    ApiEndPoint:
+      required:
+        - apiKeyUrl
+        - dataTrackingToggleUrl
+        - feedbackUrl
+      type: object
+      properties:
+        apiKeyUrl:
+          description: URL to generate api keys (using POST Method) and delete api keys (using DELETE method).
+          type: string
+          format: url
+        dataTrackingToggleUrl:
+          description: URL to toggle data logging
+          type: string
+          format: url
+        feedbackUrl:
+          description: URL to give feedback regarding pipeline
+          type: string
+          format: url

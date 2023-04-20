@@ -1,0 +1,55 @@
+openapi: 3.0.0
+info:
+  title: Data Tracking Schema
+  description: The document defines request format for data logging of models  
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 1.0.0
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    DataTrackingToggleRequest:
+      required:
+        - emailId
+        - appName
+        - dataTracking
+      type: object
+      properties:
+        emailId:
+          type: string
+          description: Email of the user for which api key is to be generated
+          example: ulca.ulca@gmail.com/bhashini-prod-android
+        appName:
+          type: string
+          description: App name mapped with ULCA api key of the user for which service api key is to be generated
+          example: bhashini-prod-android
+        dataTracking:
+          type: boolean
+          default: true
+          description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
+        
+
+
+    DataTrackingToggleResponse:
+      required:
+        - status
+        - message
+      type: object
+      properties: 
+        status:
+          type: string
+          enum:
+            - success
+            - failure
+          description: describes if endpoint hit is successful or not
+        dataTracking:
+          type: boolean
+          default: true
+          description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
+        message:
+          type: string
+          description: A success message "request successful"  or a failure message describing the error faced, such as "Unknown error occoured".
+          example: "Unknown error occoured"
