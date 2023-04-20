@@ -24,8 +24,6 @@ components:
         feedbackTimeStamp:
           type: string
           description: timestamp when feedback is provided
-          format: date-time
-          example: '2023-07-21T17:32:28Z'
         pipelineFeedback:
             type: object
             required:
