@@ -38,9 +38,14 @@ import com.ulca.model.response.PipelinesResponse;
 import com.ulca.model.response.UploadModelResponse;
 import com.ulca.model.service.ModelService;
 
+//import io.swagger.annotations.ApiResponses;
 import io.swagger.pipelinerequest.PipelineRequest;
 import io.swagger.pipelinerequest.PipelineResponse;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -62,15 +67,15 @@ public class ModelController {
 	}
 
 	@GetMapping("/getModel")
-	public ModelListResponseDto getModel(@RequestParam(required = true) String modelId) {
+	public ModelListResponseDto getModel(@RequestParam(required = true) @Schema(defaultValue = "abc") String modelId) {
 
 		log.info("******** Entry ModelController:: getModel *******");
 		return modelService.getModelByModelId(modelId);
 	}
 
 	@PostMapping("/upload")
-	public UploadModelResponse uploadModel(@RequestParam("file") MultipartFile file,
-			@RequestParam(required = true) String userId) throws Exception {
+	public UploadModelResponse uploadModel(@RequestParam("file") @Schema(defaultValue = "bcd") MultipartFile file,
+			@RequestParam(required = true) @Schema(defaultValue = "abc") String userId) throws Exception {
 		log.info("******** Entry ModelController:: uploadModel *******");
 		return modelService.uploadModel(file, userId);
 	}
@@ -162,8 +167,23 @@ public class ModelController {
 		log.info("ulcaApiKey :: " + ulcaApiKey);
 		return modelService.getModelsPipeline(pipelineRequest, userID, ulcaApiKey);
 	}
-      
-	
+
+	@Operation(summary = "Get All Pipelines")
+
+	@ApiResponses(value = {
+
+			@ApiResponse(responseCode = "200", description = "Get all submitted pipelines", content = {
+
+					@Content(mediaType = "application/json", schema = @Schema(implementation = PipelinesResponse.class)) }),
+
+			@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+
+			@ApiResponse(responseCode = "404", description = "No record found.", content = @Content)
+
+	}
+
+	)
+
 	@GetMapping("/explorePipelines")
 	public PipelinesResponse explorePipelines() {
 

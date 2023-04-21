@@ -2,6 +2,7 @@ package com.ulca.model.response;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -21,7 +22,9 @@ public class PipelinesResponse {
 	
 	//String message;
 	List<PipelineModelResponse> data;
-	int totalCount;
+	
+	@Schema( defaultValue = "1")
+    int totalCount;
 	
 	
 	
