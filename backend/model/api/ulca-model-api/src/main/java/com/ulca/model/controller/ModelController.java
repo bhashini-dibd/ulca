@@ -34,6 +34,7 @@ import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelPipelineResponse;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.ModelStatusChangeResponse;
+import com.ulca.model.response.PipelinesResponse;
 import com.ulca.model.response.UploadModelResponse;
 import com.ulca.model.service.ModelService;
 
@@ -161,5 +162,12 @@ public class ModelController {
 		log.info("ulcaApiKey :: " + ulcaApiKey);
 		return modelService.getModelsPipeline(pipelineRequest, userID, ulcaApiKey);
 	}
+      
+	
+	@GetMapping("/explorePipelines")
+	public PipelinesResponse explorePipelines() {
 
+		log.info("******** Entry ModelController:: explorePipelines *******");
+		return modelService.explorePipelines();
+	}
 }
