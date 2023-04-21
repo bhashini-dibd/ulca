@@ -28,7 +28,6 @@ components:
           example: bhashini-prod-android
         dataTracking:
           type: boolean
-          default: true
           description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
         
 
@@ -45,10 +44,7 @@ components:
             - success
             - failure
           description: describes if endpoint hit is successful or not
-        dataTracking:
-          type: boolean
-          default: true
-          description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
+       
         message:
           type: string
           description: A success message "request successful"  or a failure message describing the error faced, such as "Unknown error occoured".
