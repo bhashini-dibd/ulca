@@ -399,6 +399,14 @@
       "active": true,
       "whiteList": false,
       "description": "API to generate service provider api keys"
+    },
+    {
+      "id": "3c7e319d-7c69-43f4-b942-e84729c5aae3",
+      "uri": "/ulca/apis/v0/model/explorePipelines",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "Open API to retrieve pipeline details"
     }
   ]
 }
