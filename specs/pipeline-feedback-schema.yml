@@ -256,3 +256,9 @@ components:
           - $ref: '#/components/schemas/FeedbackTypeComment'
         discriminator:
           propertyName: feedbackType
+  securitySchemes:
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header
