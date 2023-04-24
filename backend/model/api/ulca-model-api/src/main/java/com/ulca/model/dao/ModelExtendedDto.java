@@ -4,23 +4,31 @@ package com.ulca.model.dao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class ModelExtendedDto extends ModelDto {
 	
+	@Schema(defaultValue = "bcd")
 	@JsonProperty("modelId")
 	private String modelId;
 	
+	@Schema(defaultValue = "bcd")
 	@JsonProperty("userId")
 	private String userId;
 	
+	@Schema(defaultValue = "546367727")
 	@JsonProperty("submittedOn")
 	private Long submittedOn;
 	
+	@Schema(defaultValue = "122333")
 	@JsonProperty("publishedOn")
 	private Long publishedOn;
 	
+	@Schema(defaultValue = "bcd")
 	@JsonProperty("status")
 	private String status;
 	
+	@Schema(defaultValue = "bcd")
 	@JsonProperty("unpublishReason")
 	private String unpublishReason;
 

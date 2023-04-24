@@ -20,16 +20,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class ModelDto {
 	
-
+	@Schema(defaultValue = "bcd")
 	  private String name = null;
 
-	
+	@Schema(defaultValue = "bcd")
 	  private String version = null;
 
 
+	@Schema(defaultValue = "bcd")
 	  private String description = null;
 
-
+	@Schema(defaultValue = "bcd")
 	  private String refUrl = null;
 
 
@@ -41,9 +42,8 @@ public class ModelDto {
 	
 	  private License license = null;
 
-	
+	  @Schema(defaultValue = "bcd")
 	  private String licenseUrl = null;
-
 
 	  private Domain domain = null;
 

@@ -9,9 +9,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UploadModelResponse {
-	@Schema( defaultValue = "parshant@tarento.com")
+	@Schema( defaultValue = "Model Saved Successfully")
      String message;
 	//ModelExtended data;
+	
+	@Schema(implementation = ModelExtended.class)
 	 Object data;
 	
 }

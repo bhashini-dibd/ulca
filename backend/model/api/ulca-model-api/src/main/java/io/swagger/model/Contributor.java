@@ -17,12 +17,14 @@ import javax.validation.constraints.*;
 
 
 public class Contributor   {
+	@Schema(defaultValue = "bcd")
   @JsonProperty("name")
   private String name = null;
 
   @JsonProperty("oauthId")
   private OAuthIdentity oauthId = null;
 
+  @Schema(defaultValue = "bcd")
   @JsonProperty("aboutMe")
   private String aboutMe = null;
 

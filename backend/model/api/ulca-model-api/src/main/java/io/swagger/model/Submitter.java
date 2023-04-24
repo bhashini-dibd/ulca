@@ -19,12 +19,15 @@ import javax.validation.constraints.*;
 
 
 public class Submitter   {
+	
+	@Schema(defaultValue = "bcd")
   @JsonProperty("name")
   private String name = null;
 
   @JsonProperty("oauthId")
   private OAuthIdentity oauthId = null;
 
+  @Schema(defaultValue = "bcd")
   @JsonProperty("aboutMe")
   private String aboutMe = null;
 

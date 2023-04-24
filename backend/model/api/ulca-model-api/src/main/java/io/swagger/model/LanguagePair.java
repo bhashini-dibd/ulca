@@ -19,7 +19,9 @@ import javax.validation.constraints.*;
 
 
 public class LanguagePair  implements OneOfSearchParamsParams {
+	
   @JsonProperty("sourceLanguageName")
+  @Schema(defaultValue = "bcd")
   private String sourceLanguageName = null;
 
   @JsonProperty("sourceLanguage")
@@ -27,7 +29,8 @@ public class LanguagePair  implements OneOfSearchParamsParams {
 
   @JsonProperty("sourceScriptCode")
   private SupportedScripts sourceScriptCode = null;
-
+  
+  @Schema(defaultValue = "bcd")
   @JsonProperty("targetLanguageName")
   private String targetLanguageName = null;
 

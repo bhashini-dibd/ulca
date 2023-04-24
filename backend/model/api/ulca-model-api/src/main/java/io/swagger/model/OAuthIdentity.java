@@ -17,9 +17,13 @@ import javax.validation.constraints.*;
 
 
 public class OAuthIdentity   {
+	
+	@Schema(defaultValue = "bcd")
   @JsonProperty("identifier")
   private String identifier = null;
 
+	
+	@Schema(defaultValue = "bcd")
   @JsonProperty("oauthId")
   private String oauthId = null;
 

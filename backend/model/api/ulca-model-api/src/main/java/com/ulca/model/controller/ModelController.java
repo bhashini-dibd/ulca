@@ -58,9 +58,9 @@ public class ModelController {
 	ModelService modelService;
 
 	@GetMapping("/listByUserId")
-	public ModelListByUserIdResponse listByUserId(@RequestParam String userId,
-			@RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage,
-			@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String name) {
+	public ModelListByUserIdResponse listByUserId(@RequestParam @Schema(defaultValue = "abc") String userId,
+			@RequestParam(required = false) @Schema(defaultValue = "1") Integer startPage, @RequestParam(required = false) @Schema(defaultValue = "1")Integer endPage,
+			@RequestParam(required = false)@Schema(defaultValue = "10") Integer pageSize, @RequestParam(required = false)@Schema(defaultValue = "xyz") String name) {
 
 		log.info("******** Entry ModelController:: listByUserId *******");
 		return modelService.modelListByUserId(userId, startPage, endPage, pageSize, name);
@@ -72,6 +72,27 @@ public class ModelController {
 		log.info("******** Entry ModelController:: getModel *******");
 		return modelService.getModelByModelId(modelId);
 	}
+
+	
+	
+	////UPLOAD MODELS
+	
+	
+	@Operation(summary = "Upload Model")
+
+	@ApiResponses(value = {
+
+			@ApiResponse(responseCode = "200", description = "Upload Model", content = {
+
+					@Content(mediaType = "application/json", schema = @Schema(implementation = UploadModelResponse.class)) }),
+
+			@ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+
+			@ApiResponse(responseCode = "404", description = "No record found.", content = @Content)
+
+	}
+
+	)
 
 	@PostMapping("/upload")
 	public UploadModelResponse uploadModel(@RequestParam("file") @Schema(defaultValue = "bcd") MultipartFile file,
@@ -150,14 +171,7 @@ public class ModelController {
 
 	}
 
-	/*
-	 * @PostMapping("/getModelsPipeline") public String
-	 * getModelsPipeline(@RequestParam("file") MultipartFile file,
-	 * 
-	 * @RequestParam(required = true) String userId) throws Exception {
-	 * log.info("******** Entry ModelController:: getModelsPipeline *******");
-	 * return modelService.getModelsPipeline(file, userId); }
-	 */
+	
 
 	@PostMapping("/getModelsPipeline")
 	public ObjectNode getModelsPipeline(@RequestHeader("userID") String userID,
@@ -168,6 +182,12 @@ public class ModelController {
 		return modelService.getModelsPipeline(pipelineRequest, userID, ulcaApiKey);
 	}
 
+	
+	
+	
+/// EXPLORE PIPELINES	
+	
+	
 	@Operation(summary = "Get All Pipelines")
 
 	@ApiResponses(value = {
