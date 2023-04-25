@@ -84,7 +84,10 @@ components:
                   - $ref: '#/components/schemas/FeedbackTypeRating'
                   - $ref: '#/components/schemas/FeedbackTypeComment'
                   - $ref: '#/components/schemas/FeedbackTypeThumbs'
-                  - $ref: '#/components/schemas/FeedbackTypeCheckBox'
+                  - $ref: '#/components/schemas/FeedbackTypeRatingList'
+                  - $ref: '#/components/schemas/FeedbackTypeCommentList'
+                  - $ref: '#/components/schemas/FeedbackTypeThumbsList'
+                  - $ref: '#/components/schemas/FeedbackTypeCheckBoxList'
                   # - $ref: '#/components/schemas/FeedbackTypeRadioButton'
                 discriminator:
                   propertyName: feedbackType
@@ -189,7 +192,7 @@ components:
         isLiked:
           type: boolean
           description: indicates if user liked the output or not(Thumbs up/down flag)
-    FeedbackTypeCheckBox:
+    FeedbackTypeCheckBoxList:
       type: object
       required:
         - feedbackType
@@ -211,6 +214,75 @@ components:
                isSelected:
                 type: string
                 description: indicates if user selected a particular checkbox or not
+    FeedbackTypeRatingList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        
+        # question:
+        #   type: string
+        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
+        ratingList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+               parameterName:
+                type: string
+               rating:
+                type: integer
+                description: rating provided to the feedback question in a scale of 5
+                minimum: 1
+                maximum: 5
+    FeedbackTypeCommentList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        
+        # question:
+        #   type: string
+        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
+        ratingList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+               parameterName:
+                type: string
+               comment:
+                type: string
+                description: comment given on top of the rating
+                example: The output generated is really impressive. Cheers to the model developers and crew!!
+    FeedbackTypeThumbsList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        
+        # question:
+        #   type: string
+        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
+        ratingList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+               parameterName:
+                type: string
+               isLiked:
+                type: boolean
+                description: indicates if user liked the output or not(Thumbs up/down flag)
     # FeedbackTypeRadioButton:
     #   type: object
     #   required:
@@ -238,8 +310,10 @@ components:
         - rating
         - comment
         - thumbs
-        - checkbox
-        - radiobutton
+        - rating-list
+        - comment-list
+        - thumbs-list
+        - checkbox-list
     Commonfeedback:
       type: array
       description: list of
