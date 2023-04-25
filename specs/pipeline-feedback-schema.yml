@@ -85,7 +85,7 @@ components:
                   - $ref: '#/components/schemas/FeedbackTypeComment'
                   - $ref: '#/components/schemas/FeedbackTypeThumbs'
                   - $ref: '#/components/schemas/FeedbackTypeCheckBox'
-                  - $ref: '#/components/schemas/FeedbackTypeRadioButton'
+                  # - $ref: '#/components/schemas/FeedbackTypeRadioButton'
                 discriminator:
                   propertyName: feedbackType
         pipelineInput:
@@ -208,30 +208,30 @@ components:
             properties:
                parameterName:
                 type: string
-               selectedValue:
-                type: string
-                description: indicates if user selected a particular checkbox or not
-    FeedbackTypeRadioButton:
-      type: object
-      required:
-        - feedbackType
-      properties:
-        feedbackType:
-          $ref: '#/components/schemas/FeedbackType'
-        # question:
-        #   type: string
-        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
-        radioButton:
-          type: array
-          description: list of
-          items:
-            type: object
-            properties:
-               name:
-                type: string
                isSelected:
                 type: string
                 description: indicates if user selected a particular checkbox or not
+    # FeedbackTypeRadioButton:
+    #   type: object
+    #   required:
+    #     - feedbackType
+    #   properties:
+    #     feedbackType:
+    #       $ref: '#/components/schemas/FeedbackType'
+    #     # question:
+    #     #   type: string
+    #     #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
+    #     radioButton:
+    #       type: array
+    #       description: list of
+    #       items:
+    #         type: object
+    #         properties:
+    #            name:
+    #             type: string
+    #            isSelected:
+    #             type: string
+    #             description: indicates if user selected a particular checkbox or not
     FeedbackType:
       type: string
       enum:
