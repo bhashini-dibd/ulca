@@ -203,7 +203,7 @@ components:
         # question:
         #   type: string
         #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
-        checkbox:
+        checkboxList:
           type: array
           description: list of
           items:
