@@ -123,8 +123,10 @@ public class ModelController {
 	}
 
 	@PostMapping("/tryMe")
-	public ModelComputeResponse tryMeOcrImageContent(@RequestParam("file") MultipartFile file,
-			@RequestParam(required = true) String modelId) throws Exception {
+	public ModelComputeResponse tryMeOcrImageContent(@RequestParam("file")	@Schema(defaultValue = "file")
+ MultipartFile file,
+			@RequestParam(required = true)	@Schema(defaultValue = "heyy6w627t2huuuuuuuss")
+ String modelId) throws Exception {
 		log.info("******** Entry ModelController:: tryMeOcrImageContent *******");
 		return modelService.tryMeOcrImageContent(file, modelId);
 	}
@@ -140,7 +142,8 @@ public class ModelController {
 	}
 
 	@GetMapping("/feedback/getByModelId")
-	public List<ModelFeedback> getModelFeedbackByModelId(@RequestParam(required = true) String modelId) {
+	public List<ModelFeedback> getModelFeedbackByModelId(@RequestParam(required = true)	@Schema(defaultValue = "633gtgwgsshshwy736372whysh")
+ String modelId) {
 		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
 		return modelService.getModelFeedbackByModelId(modelId);
 
