@@ -22,8 +22,9 @@ components:
           description: ID of the pipeline submitter
           example: AI4BharatID
         feedbackTimeStamp:
-          type: string
-          description: timestamp when feedback is provided
+          type: integer
+          format: int64
+          description: unix timestamp when feedback is provided
         pipelineFeedback:
           type: object
           required:
@@ -45,52 +46,55 @@ components:
               #   discriminator:
               #     propertyName: feedbackType
         taskFeedback:
-          type: object
-          required:
-            - taskType
-            - commonFeedback
-          properties:
-            taskType:
-              $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
-            commonFeedback:
-              $ref: '#/components/schemas/Commonfeedback'
-              # type: array
-              # description: list of
-              # items:
-              #   type: object
-              #   required:
-              #     - question
-              #   properties:
-              #     question:
-              #       type: string
-              #       description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
-              #   oneOf:
-              #     - $ref: '#/components/schemas/FeedbackTypeRating'
-              #     - $ref: '#/components/schemas/FeedbackTypeComment'
-              #   discriminator:
-              #     propertyName: feedbackType
-            granularFeedback:
-              type: array
-              description: list of
-              items:
-                type: object
-                required:
-                  - question
-                properties:
-                  question:
-                    type: string
-                    description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
-                oneOf:
-                  - $ref: '#/components/schemas/FeedbackTypeRating'
-                  - $ref: '#/components/schemas/FeedbackTypeComment'
-                  - $ref: '#/components/schemas/FeedbackTypeThumbs'
-                  - $ref: '#/components/schemas/FeedbackTypeRatingList'
-                  - $ref: '#/components/schemas/FeedbackTypeCommentList'
-                  - $ref: '#/components/schemas/FeedbackTypeThumbsList'
-                  - $ref: '#/components/schemas/FeedbackTypeCheckBoxList'
-                  # - $ref: '#/components/schemas/FeedbackTypeRadioButton'
-                discriminator:
-                  propertyName: feedbackType
+          type: array
+          description: list of
+          items:
+            type: object
+            required:
+              - taskType
+              - commonFeedback
+            properties:
+              taskType:
+                $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+              commonFeedback:
+                $ref: '#/components/schemas/Commonfeedback'
+                # type: array
+                # description: list of
+                # items:
+                #   type: object
+                #   required:
+                #     - question
+                #   properties:
+                #     question:
+                #       type: string
+                #       description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
+                #   oneOf:
+                #     - $ref: '#/components/schemas/FeedbackTypeRating'
+                #     - $ref: '#/components/schemas/FeedbackTypeComment'
+                #   discriminator:
+                #     propertyName: feedbackType
+              granularFeedback:
+                type: array
+                description: list of
+                items:
+                  type: object
+                  required:
+                    - question
+                  properties:
+                    question:
+                      type: string
+                      description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
+                  oneOf:
+                    - $ref: '#/components/schemas/FeedbackTypeRating'
+                    - $ref: '#/components/schemas/FeedbackTypeComment'
+                    - $ref: '#/components/schemas/FeedbackTypeThumbs'
+                    - $ref: '#/components/schemas/FeedbackTypeRatingList'
+                    - $ref: '#/components/schemas/FeedbackTypeCommentList'
+                    - $ref: '#/components/schemas/FeedbackTypeThumbsList'
+                    - $ref: '#/components/schemas/FeedbackTypeCheckBoxList'
+                    # - $ref: '#/components/schemas/FeedbackTypeRadioButton'
+                  discriminator:
+                    propertyName: feedbackType
         pipelineInput:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeRequest
         pipelineOutput:
@@ -212,7 +216,7 @@ components:
                parameterName:
                 type: string
                isSelected:
-                type: string
+                type: boolean
                 description: indicates if user selected a particular checkbox or not
     FeedbackTypeRatingList:
       type: object
@@ -302,7 +306,7 @@ components:
     #            name:
     #             type: string
     #            isSelected:
-    #             type: string
+    #             type: boolean
     #             description: indicates if user selected a particular checkbox or not
     FeedbackType:
       type: string
