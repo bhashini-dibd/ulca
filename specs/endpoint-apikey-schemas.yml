@@ -27,7 +27,7 @@ components:
           example: bhashini-prod-android
         dataTracking:
           type: boolean
-          default: false
+          default: true
           description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
         
 

@@ -154,6 +154,7 @@ components:
       required:
         - apiKeyUrl
         - dataTrackingToggleUrl
+        - feedbackUrl
       type: object
       properties:
         apiKeyUrl:
@@ -162,5 +163,9 @@ components:
           format: url
         dataTrackingToggleUrl:
           description: URL to toggle data logging
+          type: string
+          format: url
+        feedbackUrl:
+          description: URL to give feedback regarding pipeline
           type: string
           format: url
