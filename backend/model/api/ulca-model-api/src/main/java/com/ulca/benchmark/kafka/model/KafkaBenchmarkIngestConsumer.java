@@ -206,6 +206,7 @@ public class KafkaBenchmarkIngestConsumer {
 		
 		if(params.has("license")) {
 			License license = License.fromValue(params.getString("license"));
+			if(license!=null) {
 			benchmark.setLicense(license);		
 			if(license == License.CUSTOM_LICENSE) {
 				String licenseUrl = params.getString("licenseUrl");
@@ -215,7 +216,10 @@ public class KafkaBenchmarkIngestConsumer {
 					errorList.add("custom licenseUrl field should be present");
 				}
 			}
-			
+			}else {
+				errorList.add("license should be into supported license list !");
+
+			}
 		}else {
 			errorList.add("license field should be present");
 		}
