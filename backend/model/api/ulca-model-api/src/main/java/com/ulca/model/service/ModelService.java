@@ -62,6 +62,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.util.DomainEnum;
 import com.ulca.benchmark.util.ModelConstants;
 import com.ulca.model.dao.InferenceAPIEndPointDto;
 import com.ulca.model.dao.ModelDao;
@@ -101,6 +102,7 @@ import com.ulca.model.response.UploadModelResponse;
 import io.netty.handler.codec.http.HttpRequest;
 import io.swagger.model.ASRInference;
 import io.swagger.model.AsyncApiDetails;
+import io.swagger.model.Domain;
 import io.swagger.model.ImageFormat;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
@@ -683,7 +685,9 @@ public class ModelService {
 	}
 
 	private Boolean validateModel(ModelExtended model) throws ModelValidationException {
-
+          
+		log.info("#############Entry validate model##############");		
+		
 		if (model.getName() == null || model.getName().isBlank())
 			throw new ModelValidationException("name is required field");
 
@@ -711,9 +715,21 @@ public class ModelService {
 				throw new ModelValidationException("custom licenseUrl is required field");
 		}
 
-		if (model.getDomain() == null)
+		if (model.getDomain() == null) {
 			throw new ModelValidationException("domain is required field");
-
+		} else {
+		Domain domain=	model.getDomain();
+			for (String domainName : domain) {
+				    
+                      
+                      if(DomainEnum.fromValue(domainName)==null) {
+                    	  
+      					throw new ModelValidationException(domainName + " is not exist in supported domain list !");
+ 
+                      }
+                      
+                  }
+		}
 		if (model.getSubmitter() == null)
 			throw new ModelValidationException("submitter is required field");
 
@@ -735,6 +751,8 @@ public class ModelService {
 
 		if (model.getTrainingDataset() == null)
 			throw new ModelValidationException("trainingDataset is required field");
+		
+		log.info("#############Exit validate model##############");		
 
 		return true;
 	}
@@ -750,8 +768,21 @@ public class ModelService {
 		if (model.getDescription() == null || model.getDescription().isBlank())
 			throw new ModelValidationException("description is required field");
 
-		if (model.getDomain() == null)
+		if (model.getDomain() == null) {
 			throw new ModelValidationException("domain is required field");
+		} else {
+		Domain domain=	model.getDomain();
+			for (String domainName : domain) {
+				    
+                      
+                      if(DomainEnum.fromValue(domainName)==null) {
+                    	  
+      					throw new ModelValidationException(domainName + " is not exist in supported domain list !");
+ 
+                      }
+                      
+                  }
+		}
 
 		if (model.getServiceProvider() == null)
 			throw new ModelValidationException("submitter is required field");
@@ -2244,13 +2275,11 @@ public class ModelService {
 									if (taskSpecification.getTaskType().name().equals("TTS")) {
 
 										for (ConfigSchema configSchema : taskSpecification.getTaskConfig()) {
-											//targetLang
-											//if (configSchema.getSourceLanguage()
-													//.equals(firstTaskSchema.getSourceLanguage())) {
+											// targetLang
+											// if (configSchema.getSourceLanguage()
+											// .equals(firstTaskSchema.getSourceLanguage())) {
 
-														
-														if (configSchema.getSourceLanguage()
-																.equals(sourceLang)) {
+											if (configSchema.getSourceLanguage().equals(sourceLang)) {
 												ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 												log.info("Model Name :: " + model.getName());
 												LanguagePairs langPair = model.getLanguages();
@@ -2466,8 +2495,8 @@ public class ModelService {
 		log.info("++++++++++++++++Entry to validate User Details+++++++++++++++");
 
 		TranslationTaskInferenceInferenceApiKey infKey = new TranslationTaskInferenceInferenceApiKey();
-		String name=null;
-		String value= null;
+		String name = null;
+		String value = null;
 		JSONObject data = new JSONObject();
 		data.put("userID", userID);
 		data.put("ulcaApiKey", ulcaApiKey);
@@ -2501,11 +2530,8 @@ public class ModelService {
 			 * 
 			 * }
 			 */
-			
-			
-		
-			
-			if (httpResponse.code()==200) {
+
+			if (httpResponse.code() == 200) {
 				responseJsonStr = httpResponse.body().string();
 
 				log.info("responseJsonStr :: " + responseJsonStr);
@@ -2516,28 +2542,24 @@ public class ModelService {
 
 				name = (String) obj1.get("name");
 				value = (String) obj1.get("value");
-				
-				log.info("name :: "+name);
-				log.info("value :: "+value);
 
-				}else if(httpResponse.code()==404) {
-					
-					throw new PipelineValidationException("Something went wrong!", HttpStatus.BAD_REQUEST);
+				log.info("name :: " + name);
+				log.info("value :: " + value);
 
-					
-				}else{
+			} else if (httpResponse.code() == 404) {
+
+				throw new PipelineValidationException("Something went wrong!", HttpStatus.BAD_REQUEST);
+
+			} else {
 				responseJsonStr = httpResponse.body().string();
 
 				log.info("responseJsonStr :: " + responseJsonStr);
 				JSONObject jsonObj = new JSONObject(responseJsonStr);
 				String message = jsonObj.getString("message");
-				log.info("message :: "+message);
+				log.info("message :: " + message);
 				throw new PipelineValidationException(message, HttpStatus.BAD_REQUEST);
 
-				
 			}
-			
-			
 
 			if (name == null || value == null) {
 				throw new PipelineValidationException("Ulca Api Key does not exist!", HttpStatus.BAD_REQUEST);
@@ -2546,13 +2568,10 @@ public class ModelService {
 
 			infKey.setName(name);
 			infKey.setValue(value);
-			
-			
-			
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 			throw new PipelineValidationException(e.getMessage(), HttpStatus.BAD_REQUEST);
 
 		}
@@ -2607,7 +2626,6 @@ public class ModelService {
 		 * }
 		 */
 		log.info("++++++++++++++++Exit to validate User Details+++++++++++++++");
-
 
 		return infKey;
 	}
@@ -2894,39 +2912,34 @@ public class ModelService {
 	 * 
 	 * return pipelineRequest; }
 	 */
-	
-	
-	  public PipelinesResponse explorePipelines() {
-		  
-		 List<PipelineModel> pipelineModels= pipelineModelDao.findAll();
-		 int noOfPipelineModels =(int) pipelineModelDao.count();
-		 log.info("noOfPipelineModels ::::::"+noOfPipelineModels);
-		 List<PipelineModelResponse> pipelineResponse = new ArrayList<PipelineModelResponse>();
-		 for(PipelineModel pipelineModel : pipelineModels) {
-			 PipelineModelResponse pipelineModelResponse =new PipelineModelResponse();
-			 pipelineModelResponse.setPipelineId(pipelineModel.getPipelineModelId());
-			 pipelineModelResponse.setName(pipelineModel.getName());
-			 pipelineModelResponse.setDescription(pipelineModel.getDescription());
-			 pipelineModelResponse.setServiceProviderName(pipelineModel.getServiceProvider().getName());
-			 pipelineModelResponse.setSupportedTasks(pipelineModel.getSupportedPipelines());
-			 pipelineResponse.add(pipelineModelResponse);
-		 }
-		 
-		 log.info("***********pipelineResponse******************");
-		 log.info(pipelineResponse.toString());
-		 
-		 if(noOfPipelineModels==0) {
- 
-			 throw new PipelineValidationException("Pipeline Models are not available!",
-						HttpStatus.BAD_REQUEST);
-		 }else {
-			  return new PipelinesResponse(pipelineResponse,noOfPipelineModels);
 
-			 
-		 }
-		 
-		 
-	  }
-	
+	public PipelinesResponse explorePipelines() {
+
+		List<PipelineModel> pipelineModels = pipelineModelDao.findAll();
+		int noOfPipelineModels = (int) pipelineModelDao.count();
+		log.info("noOfPipelineModels ::::::" + noOfPipelineModels);
+		List<PipelineModelResponse> pipelineResponse = new ArrayList<PipelineModelResponse>();
+		for (PipelineModel pipelineModel : pipelineModels) {
+			PipelineModelResponse pipelineModelResponse = new PipelineModelResponse();
+			pipelineModelResponse.setPipelineId(pipelineModel.getPipelineModelId());
+			pipelineModelResponse.setName(pipelineModel.getName());
+			pipelineModelResponse.setDescription(pipelineModel.getDescription());
+			pipelineModelResponse.setServiceProviderName(pipelineModel.getServiceProvider().getName());
+			pipelineModelResponse.setSupportedTasks(pipelineModel.getSupportedPipelines());
+			pipelineResponse.add(pipelineModelResponse);
+		}
+
+		log.info("***********pipelineResponse******************");
+		log.info(pipelineResponse.toString());
+
+		if (noOfPipelineModels == 0) {
+
+			throw new PipelineValidationException("Pipeline Models are not available!", HttpStatus.BAD_REQUEST);
+		} else {
+			return new PipelinesResponse(pipelineResponse, noOfPipelineModels);
+
+		}
+
+	}
 
 }
