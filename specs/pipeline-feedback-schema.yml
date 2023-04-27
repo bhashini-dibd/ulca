@@ -1,7 +1,9 @@
 openapi: 3.0.0
 info:
   title: Pipeline feedback schema
-  description: The document defines request and response to collect feedback for a pipeline submitted to ULCA
+  description: >-
+    The document defines request and response to collect feedback for a pipeline
+    submitted to ULCA
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
@@ -32,19 +34,6 @@ components:
           properties:
             commonFeedback:
               $ref: '#/components/schemas/Commonfeedback'
-              # type: array
-              # description: list of
-              # items:
-              #   type: object
-              #   properties:
-              #     question:
-              #       type: string
-              #       description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
-              #   oneOf:
-              #     - $ref: '#/components/schemas/FeedbackTypeRating'
-              #     - $ref: '#/components/schemas/FeedbackTypeComment'
-              #   discriminator:
-              #     propertyName: feedbackType
         taskFeedback:
           type: array
           description: list of
@@ -55,24 +44,10 @@ components:
               - commonFeedback
             properties:
               taskType:
-                $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+                $ref: >-
+                  https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
               commonFeedback:
                 $ref: '#/components/schemas/Commonfeedback'
-                # type: array
-                # description: list of
-                # items:
-                #   type: object
-                #   required:
-                #     - question
-                #   properties:
-                #     question:
-                #       type: string
-                #       description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
-                #   oneOf:
-                #     - $ref: '#/components/schemas/FeedbackTypeRating'
-                #     - $ref: '#/components/schemas/FeedbackTypeComment'
-                #   discriminator:
-                #     propertyName: feedbackType
               granularFeedback:
                 type: array
                 description: list of
@@ -83,7 +58,10 @@ components:
                   properties:
                     question:
                       type: string
-                      description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
+                      description: >-
+                        a question from the list of predefined questions. its
+                        context specific. list of predefined questions are
+                        available - `here`
                   oneOf:
                     - $ref: '#/components/schemas/FeedbackTypeRating'
                     - $ref: '#/components/schemas/FeedbackTypeComment'
@@ -92,15 +70,17 @@ components:
                     - $ref: '#/components/schemas/FeedbackTypeCommentList'
                     - $ref: '#/components/schemas/FeedbackTypeThumbsList'
                     - $ref: '#/components/schemas/FeedbackTypeCheckBoxList'
-                    # - $ref: '#/components/schemas/FeedbackTypeRadioButton'
                   discriminator:
                     propertyName: feedbackType
         pipelineInput:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeRequest
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeRequest
         pipelineOutput:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
         suggestedPipelineOutput:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
     PipelineFeedbackResponse:
       required:
         - status
@@ -115,42 +95,10 @@ components:
           description: describes if endpoint hit is successful or not
         message:
           type: string
-          description: A success message "request successful"  or a failure message describing the error faced, such as "Unknown error occoured".
+          description: >-
+            A success message "request successful"  or a failure message
+            describing the error faced, such as "Unknown error occoured".
           example: Unknown error occoured
-    # TaskFeedback:
-    #   type: object
-    #   required:
-    #     - taskType
-    #     - feedback
-    #   properties:
-    #     taskType:
-    #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
-    #     commonFeedback:
-    #       type: array
-    #       description: list of
-    #       items:
-    #         $ref: '#/components/schemas/Feedback'
-    # Feedback:
-    #   required:
-    #     - question
-    #   type: object
-    #   properties:
-    #     question:
-    #       type: string
-    #       description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
-    #     isLiked:
-    #       type: boolean
-    #       description: indicates if user liked the output or not(Thumbs up/down flag)
-    #     feedbackRating:
-    #       type: integer
-    #       description: rating provided to the feedback question in a scale of 5
-    #       minimum: 1
-    #       maximum: 5
-    #     feedbackComment:
-    #       type: string
-    #       description: comment given on top of the rating
-    #       example: The output generated is really impressive. Cheers to the model developers and crew!!
-          
     FeedbackTypeRating:
       type: object
       required:
@@ -158,10 +106,6 @@ components:
       properties:
         feedbackType:
           $ref: '#/components/schemas/FeedbackType'
-        
-        # question:
-        #   type: string
-        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
         rating:
           type: integer
           description: rating provided to the feedback question in a scale of 5
@@ -174,14 +118,12 @@ components:
       properties:
         feedbackType:
           $ref: '#/components/schemas/FeedbackType'
-        
-        # question:
-        #   type: string
-        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
         comment:
           type: string
           description: comment given on top of the rating
-          example: The output generated is really impressive. Cheers to the model developers and crew!!
+          example: >-
+            The output generated is really impressive. Cheers to the model
+            developers and crew!!
     FeedbackTypeThumbs:
       type: object
       required:
@@ -189,10 +131,6 @@ components:
       properties:
         feedbackType:
           $ref: '#/components/schemas/FeedbackType'
-        
-        # question:
-        #   type: string
-        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
         isLiked:
           type: boolean
           description: indicates if user liked the output or not(Thumbs up/down flag)
@@ -203,19 +141,15 @@ components:
       properties:
         feedbackType:
           $ref: '#/components/schemas/FeedbackType'
-        
-        # question:
-        #   type: string
-        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
         checkboxList:
           type: array
           description: list of
           items:
             type: object
             properties:
-               parameterName:
+              parameterName:
                 type: string
-               isSelected:
+              isSelected:
                 type: boolean
                 description: indicates if user selected a particular checkbox or not
     FeedbackTypeRatingList:
@@ -225,19 +159,15 @@ components:
       properties:
         feedbackType:
           $ref: '#/components/schemas/FeedbackType'
-        
-        # question:
-        #   type: string
-        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
         ratingList:
           type: array
           description: list of
           items:
             type: object
             properties:
-               parameterName:
+              parameterName:
                 type: string
-               rating:
+              rating:
                 type: integer
                 description: rating provided to the feedback question in a scale of 5
                 minimum: 1
@@ -249,22 +179,20 @@ components:
       properties:
         feedbackType:
           $ref: '#/components/schemas/FeedbackType'
-        
-        # question:
-        #   type: string
-        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
         commentList:
           type: array
           description: list of
           items:
             type: object
             properties:
-               parameterName:
+              parameterName:
                 type: string
-               comment:
+              comment:
                 type: string
                 description: comment given on top of the rating
-                example: The output generated is really impressive. Cheers to the model developers and crew!!
+                example: >-
+                  The output generated is really impressive. Cheers to the model
+                  developers and crew!!
     FeedbackTypeThumbsList:
       type: object
       required:
@@ -272,42 +200,17 @@ components:
       properties:
         feedbackType:
           $ref: '#/components/schemas/FeedbackType'
-        
-        # question:
-        #   type: string
-        #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
         thumbsList:
           type: array
           description: list of
           items:
             type: object
             properties:
-               parameterName:
+              parameterName:
                 type: string
-               isLiked:
+              isLiked:
                 type: boolean
                 description: indicates if user liked the output or not(Thumbs up/down flag)
-    # FeedbackTypeRadioButton:
-    #   type: object
-    #   required:
-    #     - feedbackType
-    #   properties:
-    #     feedbackType:
-    #       $ref: '#/components/schemas/FeedbackType'
-    #     # question:
-    #     #   type: string
-    #     #   description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
-    #     radioButton:
-    #       type: array
-    #       description: list of
-    #       items:
-    #         type: object
-    #         properties:
-    #            name:
-    #             type: string
-    #            isSelected:
-    #             type: boolean
-    #             description: indicates if user selected a particular checkbox or not
     FeedbackType:
       type: string
       enum:
@@ -328,7 +231,9 @@ components:
         properties:
           question:
             type: string
-            description: a question from the list of predefined questions. its context specific. list of predefined questions are available - `here`
+            description: >-
+              a question from the list of predefined questions. its context
+              specific. list of predefined questions are available - `here`
         oneOf:
           - $ref: '#/components/schemas/FeedbackTypeRating'
           - $ref: '#/components/schemas/FeedbackTypeComment'

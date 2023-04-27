@@ -337,3 +337,9 @@ components:
           type: boolean
           default: true
           description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
+  securitySchemes:
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header
