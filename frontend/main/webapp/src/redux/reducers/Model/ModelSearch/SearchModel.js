@@ -1,5 +1,5 @@
 import C from "../../../actions/constants";
-import { getLanguageName } from "../../../../utils/getLabel";
+import { getLanguageName , FilterByDomain} from "../../../../utils/getLabel";
 
 const initialState = {
   responseData: [],
@@ -92,22 +92,40 @@ const getFilterValue = (payload, data) => {
   return data;
 };
 
+// const getDomainDetails = (data) => {
+//   if (data.length === 1) {
+//     return data[0];
+//   } else {
+//     let result = "";
+//     data.length > 1 &&
+//       data.forEach((element, i) => {
+//         if (i !== data.length) {
+//           result = result + element + "|";
+//         } else {
+//           result = result + element;
+//         }
+//       });
+//     return result;
+//   }
+// };
 const getDomainDetails = (data) => {
   if (data.length === 1) {
-    return data[0];
-  } else {
+   return  FilterByDomain(data)[0].label
+    } else {
     let result = "";
     data.length > 1 &&
       data.forEach((element, i) => {
+        //console.log("checkkk",element)
         if (i !== data.length) {
-          result = result + element + "|";
+          result = result +  FilterByDomain([element])[0].label + "|";
         } else {
-          result = result + element;
+          result = result + FilterByDomain([element])[0].label;
         }
       });
     return result;
   }
 };
+
 
 const getClearFilter = (data) => {
   data.filteredData = data.responseData;

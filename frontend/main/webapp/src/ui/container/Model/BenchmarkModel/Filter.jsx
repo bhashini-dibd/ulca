@@ -126,6 +126,7 @@ const FilterList = (props) => {
             </Typography>
             <FormGroup>
               {filter.domainFilter.map((type) => {
+                // console.log("type=====>", type[0].toUpperCase() + type.slice(1));
                 return (
                   <FormControlLabel
                     control={

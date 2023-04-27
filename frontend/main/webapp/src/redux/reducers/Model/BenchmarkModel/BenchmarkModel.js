@@ -1,5 +1,6 @@
 import C from "../../../actions/constants";
-import { getLanguageName } from "../../../../utils/getLabel";
+import { getLanguageName , FilterByDomain} from "../../../../utils/getLabel";
+
 
 const initialState = {
   responseData: [],
@@ -68,18 +69,22 @@ const getFilterValue = (payload, data) => {
 
 const getDomainDetails = (data) => {
   if (data.length === 1) {
-    return data[0];
-  } else {
-    let result = "";
-    data.length > 1 &&
-      data.forEach((element, i) => {
-        if (i !== data.length) {
-          result = result + element + "|";
-        } else {
-          result = result + element;
-        }
-      });
-    return result;
+    //console.log("checkkk",FilterByDomain(data)[0].label)
+    // return data[0];
+   return  FilterByDomain(data)[0].label
+    } else {
+    // let result = "";
+    // data.length > 1 &&
+    //   data.forEach((element, i) => {
+    //     console.log("checkkk",element)
+    //     if (i < data.length-1) {
+    //       result = result +  FilterByDomain([element])[0].label + "|";
+    //     } else {
+    //       result = result + FilterByDomain([element])[0].label;
+    //     }
+    //   });
+    // return result;
+    return "Multiple"
   }
 };
 
