@@ -19,6 +19,10 @@ class Status(enum.Enum):
     SUCCESS_GENERATE_APIKEY =   {"message" : "UserApiKey generated successfully"}
     SUCCESS_FOUND_APIKEY    =   {"message" : "ApiKey found successfully"}
     REMOVE_SERVICE_PROVIDER =   {"message" : "Service provider Details successfully removed."}
+    TOGGLED_DATA_SUCCESS    =   {"message" : "DataTracking toggled successfully."}
+    TOGGLED_DATA_EXISTS_SUCCESS = {"message" : "DataTracking is updated accordingly."}
+
+
 
 
    

@@ -741,3 +741,20 @@ class UserUtils:
         deleteDoc = collections.update({"userID":userID,"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$pull":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":serviceProviderName}}})
         log.info(f"removeSeriveProviders    {json.loads(json_util.dumps(deleteDoc))}")
         return json.loads(json_util.dumps(deleteDoc))
+
+    @staticmethod
+    def toggleDataTrackingKey(userID, ulcaApiKey, serviceProviderName, dataTrackingBool):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        log.info(f"dataTracking boolen {type(dataTrackingBool)}")
+#{"userID":userID,"apiKeyDetails.ulcaApiKey":ulcaApiKey,"apiKeyDetails.serviceProviderKeys.serviceProviderName":"AI4BharatDummy"},{$set:{"apiKeyDetails.$[].serviceProviderKeys.$[elem].serviceProviderName":"testedAI4BharatDummy"}},{"arrayFilters":[{"elem.serviceProviderName":"AI4BharatDummy"}]}
+        toggle = collections.update({"userID":userID,"apiKeyDetails.ulcaApiKey" : ulcaApiKey,"apiKeyDetails.serviceProviderKeys.serviceProviderName":serviceProviderName},{"$set":{"apiKeyDetails.$[].serviceProviderKeys.$[elem].dataTracking":dataTrackingBool}},{"arrayFilters":[{"elem.dataTracking":dataTrackingBool}]},upsert=True)
+        log.info(f"removeSeriveProviders    {json.loads(json_util.dumps(toggle))}") 
+        return json.loads(json_util.dumps(toggle))
+    
+    @staticmethod
+    def getDataTrackingKey(userID, ulcaApiKey):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        record = collections.find({"userID":userID, "apiKeyDetails.ulcaApiKey": ulcaApiKey})
+        for rec in record:
+            log.info(f"record output if dataTracking {rec}")
+        return rec

@@ -114,7 +114,7 @@ class SearchUsers(Resource):
                 log.info("No users matching the search criterias")
                 res = CustomResponse(Status.EMPTY_USR_SEARCH.value, None)
                 return res.getresjson(), 200
-            res = CustomResponse(Status.SUCCESS_USR_SEARCH.value, result[0],result[1])
+            res = CustomResponse(Status.SUCCESS_USR_SEARCH.value, result)
             return res.getresjson(), 200
         except Exception as e:
             log.exception("Exception while searching user records: " +str(e))
@@ -245,8 +245,47 @@ class ToggleDataTracking(Resource):
             return post_error("400", "Please provide ulcaApiKey", None), 400
         if "dataTracking" not in body.keys():
             return post_error("400", "Please provide dataTracking", None), 400
-        if "ServiceProviderKey" not in body.keys():
-            return post_error("400", "Please provide ServiceProviderKey", None), 400
+        if "serviceProviderName" not in body.keys():
+            return post_error("400", "Please provide ServiceProviderName", None), 400
+
+        if body["dataTracking"]:
+            bool = body["dataTracking"].lower()
+            if bool == "false" :
+                booled = False
+            if bool == "true":
+                booled = True
+            
+            
+        #userID, ulcaApiKey, dataTracking, serviceProviderName = body["userID"], body["ulcaApiKey"], body["dataTracking"], body["serviceProviderName"]
+        dataRecord = UserUtils.getDataTrackingKey(body["userID"], body["ulcaApiKey"])
+        log.info(f'dataRecord and shit {dataRecord["apiKeyDetails"][0]["serviceProviderKeys"]}')
+        #check dataTrack bool
+
+        for rec in dataRecord["apiKeyDetails"][0]["serviceProviderKeys"]:
+            if rec["serviceProviderName"] == body["serviceProviderName"]:
+                if rec["dataTracking"] == body["dataTracking"]:
+                    res = CustomResponse(Status.TOGGLED_DATA_SUCCESS.value, "SUCCESS")
+                    return res.getresjson(), 200
+                elif rec["dataTracking"] != body["serviceProviderName"]:
+                    toggledBool = UserUtils.toggleDataTrackingKey(body["userID"], body["ulcaApiKey"], body["serviceProviderName"], booled)
+
+
+
+
+
+
+
+        #------------------------------------------------------
+        #toggledBool = UserUtils.toggleDataTrackingKey(body["userID"], body["ulcaApiKey"], body["serviceProviderName"], booled)
+        if isinstance(toggledBool, dict) and toggledBool["nModified"] == 1 :
+            res = CustomResponse(Status.TOGGLED_DATA_SUCCESS.value, "SUCCESS")
+            return res.getresjson(), 200
+        elif isinstance(toggledBool, dict) and toggledBool["nModified"] == 0  and toggledBool["updatedExisting"] == True:
+            res = CustomResponse(Status.TOGGLED_DATA_EXISTS_SUCCESS.value, "SUCCESS")
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "Unable to toggle dataTracking. Please check userID and/or ulcaApiKey and/or serviceProviderName and try again.", None), 400
+
 
 
 
