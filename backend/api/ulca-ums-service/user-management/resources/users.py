@@ -235,62 +235,6 @@ class GenerateApiKey(Resource):
             return post_error("400", user_api_keys['message'], None), 400
 
 
-class ToggleDataTracking(Resource):
-    def post(self):
-        body = request.get_json()
-        #validation
-        if "userID" not in body.keys(): 
-            return post_error("400", "Please provide userID", None), 400
-        if "ulcaApiKey" not in body.keys():
-            return post_error("400", "Please provide ulcaApiKey", None), 400
-        if "dataTracking" not in body.keys():
-            return post_error("400", "Please provide dataTracking", None), 400
-        if "serviceProviderName" not in body.keys():
-            return post_error("400", "Please provide ServiceProviderName", None), 400
-
-        if body["dataTracking"]:
-            bool = body["dataTracking"].lower()
-            if bool == "false" :
-                booled = False
-            if bool == "true":
-                booled = True
-            
-            
-        #userID, ulcaApiKey, dataTracking, serviceProviderName = body["userID"], body["ulcaApiKey"], body["dataTracking"], body["serviceProviderName"]
-        dataRecord = UserUtils.getDataTrackingKey(body["userID"], body["ulcaApiKey"])
-        log.info(f'dataRecord and shit {dataRecord["apiKeyDetails"][0]["serviceProviderKeys"]}')
-        #check dataTrack bool
-
-        for rec in dataRecord["apiKeyDetails"][0]["serviceProviderKeys"]:
-            if rec["serviceProviderName"] == body["serviceProviderName"]:
-                if rec["dataTracking"] == body["dataTracking"]:
-                    res = CustomResponse(Status.TOGGLED_DATA_SUCCESS.value, "SUCCESS")
-                    return res.getresjson(), 200
-                elif rec["dataTracking"] != body["serviceProviderName"]:
-                    toggledBool = UserUtils.toggleDataTrackingKey(body["userID"], body["ulcaApiKey"], body["serviceProviderName"], booled)
-
-
-
-
-
-
-
-        #------------------------------------------------------
-        #toggledBool = UserUtils.toggleDataTrackingKey(body["userID"], body["ulcaApiKey"], body["serviceProviderName"], booled)
-        if isinstance(toggledBool, dict) and toggledBool["nModified"] == 1 :
-            res = CustomResponse(Status.TOGGLED_DATA_SUCCESS.value, "SUCCESS")
-            return res.getresjson(), 200
-        elif isinstance(toggledBool, dict) and toggledBool["nModified"] == 0  and toggledBool["updatedExisting"] == True:
-            res = CustomResponse(Status.TOGGLED_DATA_EXISTS_SUCCESS.value, "SUCCESS")
-            return res.getresjson(), 200
-        else:
-            return post_error("400", "Unable to toggle dataTracking. Please check userID and/or ulcaApiKey and/or serviceProviderName and try again.", None), 400
-
-
-
-
-
-
 
 
 class GenerateServiceProviderKey(Resource):
