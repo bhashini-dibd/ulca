@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api
-from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, ToggleDataTracking, GenerateServiceProviderKey, RemoveServiceProviderKey
+from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey
 
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
