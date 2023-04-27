@@ -707,13 +707,23 @@ public class ModelService {
 			}
 		}
 
-		if (model.getLicense() == null)
-			throw new ModelValidationException("license is required field");
+		if (model.getLicense()== null)
+			throw new ModelValidationException("license is not available or it is not from supported licence list!");
+	
+			
+			if (model.getLicense() == License.CUSTOM_LICENSE) {
+				
+				if(model.getLicenseUrl()==null)
+					throw new ModelValidationException("custom licenseUrl is required field");
 
-		if (model.getLicense() == License.CUSTOM_LICENSE) {
-			if (model.getLicenseUrl().isBlank())
-				throw new ModelValidationException("custom licenseUrl is required field");
-		}
+				if (model.getLicenseUrl().isBlank())
+					throw new ModelValidationException("custom licenseUrl should not be blank!");
+			}
+			
+			
+		
+
+		
 
 		if (model.getDomain() == null) {
 			throw new ModelValidationException("domain is required field");
