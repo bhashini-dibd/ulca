@@ -741,3 +741,13 @@ class UserUtils:
         deleteDoc = collections.update({"userID":userID,"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$pull":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":serviceProviderName}}})
         log.info(f"removeSeriveProviders    {json.loads(json_util.dumps(deleteDoc))}")
         return json.loads(json_util.dumps(deleteDoc))
+
+   
+    
+    @staticmethod
+    def getDataTrackingKey(userID, ulcaApiKey):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        record = collections.find({"userID":userID, "apiKeyDetails.ulcaApiKey": ulcaApiKey})
+        for rec in record:
+            log.info(f"record output if dataTracking {rec}")
+        return rec
