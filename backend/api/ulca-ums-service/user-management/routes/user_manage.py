@@ -45,9 +45,9 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     GenerateApiKey, "/v1/users/generateApiKey"
 )
 
-Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
-    ToggleDataTracking, "/v1/users/dataTrackingToggle"
-)
+# Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+#     ToggleDataTracking, "/v1/users/dataTrackingToggle"
+# )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     GenerateServiceProviderKey, "/v1/users/generateServiceProviderKey"
