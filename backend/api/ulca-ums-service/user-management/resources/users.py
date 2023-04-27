@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from repositories import UserManagementRepositories
-from models import CustomResponse, Status, post_error
+from models import CustomResponse,SearchCustomResponse, Status, post_error
 from utilities import UserUtils
 from flask import request, jsonify
 import config
@@ -114,7 +114,7 @@ class SearchUsers(Resource):
                 log.info("No users matching the search criterias")
                 res = CustomResponse(Status.EMPTY_USR_SEARCH.value, None)
                 return res.getresjson(), 200
-            res = CustomResponse(Status.SUCCESS_USR_SEARCH.value, result)
+            res = SearchCustomResponse(Status.SUCCESS_USR_SEARCH.value, result[0],result[1])
             return res.getresjson(), 200
         except Exception as e:
             log.exception("Exception while searching user records: " +str(e))
