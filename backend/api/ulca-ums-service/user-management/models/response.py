@@ -25,6 +25,19 @@ class CustomResponse:
     def getresjson(self):
         return self.statuscode
 
+class SearchCustomResponse:
+
+    def __init__(self, statuscode, data,count):
+        self.statuscode = statuscode
+        self.statuscode['data'] = data
+        self.statuscode['count'] = count
+
+    def getres(self):
+        return jsonify(self.statuscode)
+
+    def getresjson(self):
+        return self.statuscode
+
 
 
     
