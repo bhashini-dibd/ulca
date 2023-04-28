@@ -35,6 +35,8 @@ import TableRow from "@material-ui/core/TableRow";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import getSearchedValue from "../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
+import ServiceProviderDialog from "../../components/common/ServiceProviderDialog";
+import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/RemoveServiceProviderKey";
 
 const MyProfile = (props) => {
   const { classes } = props;
@@ -53,6 +55,8 @@ const MyProfile = (props) => {
   const [UlcaApiKey, setUlcaApiKey] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [openServiceProviderDialog, setOpenServiceProviderDialog] = useState(false);
+  const[serviceProviderName,setServiceProviderName] = useState("")
 
   const handlecChangeAddName = (e) => {
     setAppName(e.target.value);
@@ -61,6 +65,7 @@ const MyProfile = (props) => {
     setModal(false);
     setAppName("");
     setOpen(false);
+    setOpenServiceProviderDialog(false)
   };
 
   const onKeyDown = (event) => {
@@ -70,7 +75,8 @@ const MyProfile = (props) => {
   };
 
   const UserDetails = JSON.parse(localStorage.getItem("userDetails"));
-
+console.log(UserDetails.userID
+  ,"UserDetails")
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -186,6 +192,47 @@ const MyProfile = (props) => {
       }
     });
   };
+  const handleSubmitServiceProviderKey = (serviceProviderName,ulcaApiKey) =>{
+    setOpenServiceProviderDialog(true);
+    setServiceProviderName(serviceProviderName)
+    setUlcaApiKey(ulcaApiKey)
+    
+  }
+
+  const handleRemoveServiceProviderKey = async () =>{
+ const data = {
+  userID : UserDetails.userID,
+  ulcaApiKey : UlcaApiKey,
+  serviceProviderName : serviceProviderName,
+ }
+    setLoading(true);
+    const apiObj = new removeServiceProviderKeyAPI(UlcaApiKey,serviceProviderName);
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+
+    const resp = await res.json();
+    if (res.ok) {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "success",
+      });
+      setLoading(false);
+      await getApiKeysCall();
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+
+      setLoading(false);
+    }
+    setOpenServiceProviderDialog(false);
+  }
 
   const fetchHeaderButton = () => {
     return (
@@ -509,7 +556,7 @@ const MyProfile = (props) => {
                                 <Button
                                   variant="contained"
                                   className={classes.myProfileActionBtn}
-                                  disabled
+                                  onClick={()=>handleSubmitServiceProviderKey(row?.serviceProviderName,rowData[1])}
                                   style={{
                                     color: "red",
                                     textAlign: "center",
@@ -623,6 +670,15 @@ const MyProfile = (props) => {
           open={open}
           handleClose={handleClose}
           submit={() => revokeApiKeyCall()}
+        />
+      )}
+
+
+      {openServiceProviderDialog && (
+        <ServiceProviderDialog
+          open={openServiceProviderDialog}
+          handleClose={handleClose}
+          submit={() => handleRemoveServiceProviderKey()}
         />
       )}
 

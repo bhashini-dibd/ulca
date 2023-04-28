@@ -39,6 +39,8 @@ const endpoints = {
   generateApiKey:"/ulca/user-mgmt/v1/users/generateApiKey",
   getApiKeys: "/ulca/user-mgmt/v1/users/getApiKeys",
   revokeApiKey: "/ulca/user-mgmt/v1/users/revokeApiKey",
+  removeServiceProviderKey:"/ulca/user-mgmt/v1/users/removeServiceProviderKey"
+  
 };
 
 export default endpoints;
