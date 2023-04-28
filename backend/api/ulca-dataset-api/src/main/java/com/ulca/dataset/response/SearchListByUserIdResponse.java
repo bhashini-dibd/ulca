@@ -17,11 +17,13 @@ public class SearchListByUserIdResponse {
 	int count;
 	Integer startPage;
 	Integer endPage;
-	public SearchListByUserIdResponse(String message, List<SearchListByUserIdResponseDto> data, Integer startPage, Integer endPage) {
+	int totalCount;
+	public SearchListByUserIdResponse(String message, List<SearchListByUserIdResponseDto> data, Integer startPage, Integer endPage,int totalCount) {
 		super();
 		this.message = message;
 		this.data = data;
 		this.count = data.size();
+		this.totalCount=totalCount;
 		if(startPage != null) {
 			this.startPage = startPage;
 			

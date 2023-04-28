@@ -332,8 +332,29 @@ public class DatasetService {
 				}
 		}
 		
+		
+		//Start Get Total count
+		int totalCount=0;
+		List<ProcessTracker> processTrackerList = processTrackerDao.findByUserIdAndServiceRequestTypeAndServiceRequestAction(userId,ServiceRequestTypeEnum.dataset,ServiceRequestActionEnum.search);
+		for (ProcessTracker processTracker : processTrackerList) {
+			
+			
+			if (processTracker.getSearchCriterion() != null) {
+				
+				totalCount=totalCount+1;
+			}
+		}
+		
+		//End Get Total count
+		
+		log.info("startPage :: "+startPage);
+		log.info("endPage :: "+endPage);
+
+		log.info("totalCount :: "+totalCount);
+        log.info("search list size :: "+searchList.size());
+		
 		String msg = "Search List";
-		SearchListByUserIdResponse response = new SearchListByUserIdResponse( msg, searchList) ;
+		SearchListByUserIdResponse response = new SearchListByUserIdResponse( msg, searchList,startPage ,endPage,totalCount ) ;
 
 		log.info("******** Exit DatasetService:: searchListByUserIdPagination *******" );
 		return response;
