@@ -1,0 +1,201 @@
+openapi: 3.0.0
+info:
+  title: Pipeline feedback schema
+  description: >-
+    The document defines request and response to collect feedback questions
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 1.0.0
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    FeedbackQuestionsRequest:
+      required:
+        - feedbackLanguage
+      type: object
+      properties:
+        feedbackLanguage:
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'
+        supportedTasks:
+          type: array
+          description : list of
+          items:
+            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks'
+        
+        
+    FeedbackQuestionsResponse:
+      required:
+        - feedbackLanguage
+      type: object
+      properties:
+        feedbackLanguage:
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'   
+        pipelineFeedback:
+          type: object
+          required:
+            - commonFeedback
+          properties:
+            commonFeedback:
+              $ref: '#/components/schemas/Commonfeedback'
+        taskFeedback:
+          type: array
+          description: list of
+          items:
+            type: object
+            required:
+              - taskType
+              - commonFeedback
+            properties:
+              taskType:
+                $ref: >-
+                  https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+              commonFeedback:
+                $ref: '#/components/schemas/Commonfeedback'
+              granularFeedback:
+                type: array
+                description: list of
+                items:
+                  type: object
+                  required:
+                    - question
+                  properties:
+                    question:
+                      type: string
+                      description: >-
+                        a question from the list of predefined questions. its
+                        context specific. list of predefined questions are
+                        available - `here`
+                  oneOf:
+                    - $ref: '#/components/schemas/FeedbackTypeRating'
+                    - $ref: '#/components/schemas/FeedbackTypeComment'
+                    - $ref: '#/components/schemas/FeedbackTypeThumbs'
+                    - $ref: '#/components/schemas/FeedbackTypeRatingList'
+                    - $ref: '#/components/schemas/FeedbackTypeCommentList'
+                    - $ref: '#/components/schemas/FeedbackTypeThumbsList'
+                    - $ref: '#/components/schemas/FeedbackTypeCheckBoxList'
+                  discriminator:
+                    propertyName: feedbackType
+  
+    FeedbackTypeRating:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+    FeedbackTypeComment:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+    FeedbackTypeThumbs:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+       
+    FeedbackTypeCheckBoxList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        checkboxList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+              parameterName:
+                type: string
+              
+    FeedbackTypeRatingList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        ratingList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+              parameterName:
+                type: string
+             
+    FeedbackTypeCommentList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        commentList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+              parameterName:
+                type: string
+            
+    FeedbackTypeThumbsList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        thumbsList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+              parameterName:
+                type: string
+             
+    FeedbackType:
+      type: string
+      enum:
+        - rating
+        - comment
+        - thumbs
+        - rating-list
+        - comment-list
+        - thumbs-list
+        - checkbox-list
+    Commonfeedback:
+      type: array
+      description: list of
+      items:
+        type: object
+        required:
+          - question
+        properties:
+          question:
+            type: string
+            description: >-
+              a question from the list of predefined questions. its context
+              specific. list of predefined questions are available - `here`
+        oneOf:
+          - $ref: '#/components/schemas/FeedbackTypeRating'
+          - $ref: '#/components/schemas/FeedbackTypeComment'
+        discriminator:
+          propertyName: feedbackType
+  securitySchemes:
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header
