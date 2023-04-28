@@ -46,6 +46,10 @@ apikey_expiry       =   config.USER_API_KEY_EXPIRY
 role_codes          =   []
 role_details        =   []
 
+class OutboxEmptyException(Exception):
+    "Unable to send verification mail. Please try again later"
+    pass
+
 class UserUtils:
 
     @staticmethod
@@ -582,8 +586,12 @@ class UserUtils:
             try:
                 msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
                 msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
-                mail.send(msg)
-                log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
+                with mail.record_messages() as outbox:
+                    mail.send(msg)
+                    log.info("Email outbox size {outboxLength} and subject {emailSubject}".format(outboxLength=len(outbox),emailSubject=outbox[0].subject))
+                    if len(outbox) < 1:
+                        raise OutboxEmptyException
+                    log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
             except Exception as e:
                 log.exception("Exception while generating email notification | {}".format(str(e)))
                 return post_error("Exception while generating email notification","Exception occurred:{}".format(str(e)),None)
