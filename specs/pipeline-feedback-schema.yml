@@ -16,6 +16,7 @@ components:
     PipelineFeedbackRequest:
       required:
         - pipelineId
+        - feedbackLanguage
         - pipelineInput
       type: object
       properties:
@@ -27,6 +28,9 @@ components:
           type: integer
           format: int64
           description: unix timestamp when feedback is provided
+        feedbackLanguage:
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'
+          
         pipelineFeedback:
           type: object
           required:
