@@ -123,7 +123,7 @@ public class AsrBenchmark {
 			ASRInference asrInference = (ASRInference) schema;
 
 			   ASRRequest aSrRequest=asrInference.getRequest();
-			
+			   aSrRequest.setAudio(audioFiles);
 			
 				String resultText = okHttpClientService.asrCompute(inferenceAPIEndPoint, aSrRequest);
 
