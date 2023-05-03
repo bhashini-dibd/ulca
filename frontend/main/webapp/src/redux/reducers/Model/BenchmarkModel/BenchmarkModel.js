@@ -1,6 +1,6 @@
 import C from "../../../actions/constants";
 import { getLanguageName , FilterByDomain} from "../../../../utils/getLabel";
-
+import store from '../../../store/store';
 
 const initialState = {
   responseData: [],
@@ -68,26 +68,27 @@ const getFilterValue = (payload, data) => {
 };
 
 const getDomainDetails = (data) => {
-  // console.log("checkkk123", data)
-  if (data.length === 1) {
-   // console.log(data.length)
-  //console.log("checkkk",FilterByDomain(data)[0].label)
-    // return data[0];
-   return  FilterByDomain(data)[0].label
-    } else {
-    // let result = "";
-    // data.length > 1 &&
-    //   data.forEach((element, i) => {
-    //     console.log("checkkk",element)
-    //     if (i < data.length-1) {
-    //       result = result +  FilterByDomain([element])[0].label + "|";
-    //     } else {
-    //       result = result + FilterByDomain([element])[0].label;
-    //     }
-    //   });
-    // return result;
-    return "Multiple"
-  }
+  // // console.log("checkkk123", data)
+  // if (data.length === 1) {
+  //  // console.log(data.length)
+  // //console.log("checkkk",FilterByDomain(data)[0].label)
+  //   // return data[0];
+  //  return  FilterByDomain(data)[0].label
+  //   } else {
+  //   // let result = "";
+  //   // data.length > 1 &&
+  //   //   data.forEach((element, i) => {
+  //   //     console.log("checkkk",element)
+  //   //     if (i < data.length-1) {
+  //   //       result = result +  FilterByDomain([element])[0].label + "|";
+  //   //     } else {
+  //   //       result = result + FilterByDomain([element])[0].label;
+  //   //     }
+  //   //   });
+  //   // return result;
+  //   return "Multiple"
+  // }
+  return data;
 };
 
 const getClearFilter = (data) => {
@@ -187,7 +188,7 @@ const getSearchedList = (state, searchValue) => {
       if (searchKey.indexOf(key) > -1) {
         if (
           state.responseData[i][key] !== null &&
-          state.responseData[i][key]
+          state.responseData[i][key][0]
             .toLowerCase()
             .includes(searchValue.toLowerCase())
         ) {

@@ -9,9 +9,11 @@ import {
 import React from "react";
 import {  useLocation } from 'react-router-dom';
 import { getCamelCase } from "../../../utils/util";
+import { useSelector } from "react-redux";
 const CardComponent = (props) => {
   const { classes, data, index } = props;
   const location = useLocation();
+  const { domains } = useSelector((state) => state.getMasterData);
  // console.log("location", location)
   const renderPublishedOn = (data) => {
     if (data.publishedOn)
@@ -64,8 +66,11 @@ const CardComponent = (props) => {
     );
   };
 
+  const filterDomain = (code) =>{
+      return domains?.filter(domain=>domain.code === code)?.[0]?.label;
+  }
+
   const renderDomain = (data) => {
-    // console.log("hiiiiii",FilterByDomain([data.domain]), data.domain)
     return (
       <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
         <Typography
@@ -76,8 +81,7 @@ const CardComponent = (props) => {
           Domain
         </Typography>
         <Typography variant="body2" style={{ color: "#ffffff" }}>
-          {/* {FilterByDomain([data.domain])[0].label} */}
-          {data.domain}
+          {data?.domain.length === 1 ? filterDomain(data.domain[0]) : "Multiple"}
         </Typography>
       </Grid>
     );

@@ -62,6 +62,7 @@ const SearchModelDetail = (props) => {
   const params = useParams();
   const benchmarkId = params.benchmarkId;
   const data = useSelector((state) => state.benchmarkDetails);
+  const { domains } = useSelector(state=>state.getMasterData);
   const dispatch = useDispatch();
   useEffect(() => {
     const apiObj = new BenchmarkDetails(benchmarkId);
@@ -89,6 +90,23 @@ const SearchModelDetail = (props) => {
   useEffect(() => {
     setMetric(metricArray[0]);
   }, [metricArray]);
+
+  const filterDomain = (code) => {
+    return domains?.filter((domain) => domain.code === code)?.[0]?.label;
+  };
+
+  const joinMultipleDomain = (incomingDomains)=>{
+    const domain = incomingDomains.map(domain=>{
+      let result;
+      domains.forEach(d=>{
+       if(d.code === domain){
+         result = d.label
+       }
+      });
+      return result;
+    });
+    return domain.join(",");
+  }
 
   const description = [
     {
