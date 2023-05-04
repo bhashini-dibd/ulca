@@ -1,0 +1,247 @@
+openapi: 3.0.0
+info:
+  title: Pipeline feedback schema
+  description: >-
+    The document defines request and response to collect feedback for a pipeline
+    submitted to ULCA
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 2.0.0
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    PipelineFeedbackRequest:
+      required:
+        - pipelineId
+        - pipelineInput
+      type: object
+      properties:
+        pipelineId:
+          type: string
+          description: ID of the pipeline submitter
+          example: AI4BharatID
+        feedbackTimeStamp:
+          type: integer
+          format: int64
+          description: unix timestamp when feedback is provided
+        pipelineFeedback:
+          type: object
+          required:
+            - commonFeedback
+          properties:
+            commonFeedback:
+              $ref: '#/components/schemas/Commonfeedback'
+        taskFeedback:
+          type: array
+          description: list of
+          items:
+            type: object
+            required:
+              - taskType
+              - commonFeedback
+            properties:
+              taskType:
+                $ref: >-
+                  https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+              commonFeedback:
+                $ref: '#/components/schemas/Commonfeedback'
+              granularFeedback:
+                type: array
+                description: list of
+                items:
+                  type: object
+                  required:
+                    - question
+                  properties:
+                    question:
+                      type: string
+                      description: >-
+                        a question from the list of predefined questions. its
+                        context specific. list of predefined questions are
+                        available - `here`
+                  oneOf:
+                    - $ref: '#/components/schemas/FeedbackTypeRating'
+                    - $ref: '#/components/schemas/FeedbackTypeComment'
+                    - $ref: '#/components/schemas/FeedbackTypeThumbs'
+                    - $ref: '#/components/schemas/FeedbackTypeRatingList'
+                    - $ref: '#/components/schemas/FeedbackTypeCommentList'
+                    - $ref: '#/components/schemas/FeedbackTypeThumbsList'
+                    - $ref: '#/components/schemas/FeedbackTypeCheckBoxList'
+                  discriminator:
+                    propertyName: feedbackType
+        pipelineInput:
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeRequest
+        pipelineOutput:
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
+        suggestedPipelineOutput:
+          $ref: >-
+            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
+    PipelineFeedbackResponse:
+      required:
+        - status
+        - message
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - success
+            - failure
+          description: describes if endpoint hit is successful or not
+        message:
+          type: string
+          description: >-
+            A success message "request successful"  or a failure message
+            describing the error faced, such as "Unknown error occoured".
+          example: Unknown error occoured
+    FeedbackTypeRating:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        rating:
+          type: integer
+          description: rating provided to the feedback question in a scale of 5
+          minimum: 1
+          maximum: 5
+    FeedbackTypeComment:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        comment:
+          type: string
+          description: comment given on top of the rating
+          example: >-
+            The output generated is really impressive. Cheers to the model
+            developers and crew!!
+    FeedbackTypeThumbs:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        isLiked:
+          type: boolean
+          description: indicates if user liked the output or not(Thumbs up/down flag)
+    FeedbackTypeCheckBoxList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        checkboxList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+              parameterName:
+                type: string
+              isSelected:
+                type: boolean
+                description: indicates if user selected a particular checkbox or not
+    FeedbackTypeRatingList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        ratingList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+              parameterName:
+                type: string
+              rating:
+                type: integer
+                description: rating provided to the feedback question in a scale of 5
+                minimum: 1
+                maximum: 5
+    FeedbackTypeCommentList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        commentList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+              parameterName:
+                type: string
+              comment:
+                type: string
+                description: comment given on top of the rating
+                example: >-
+                  The output generated is really impressive. Cheers to the model
+                  developers and crew!!
+    FeedbackTypeThumbsList:
+      type: object
+      required:
+        - feedbackType
+      properties:
+        feedbackType:
+          $ref: '#/components/schemas/FeedbackType'
+        thumbsList:
+          type: array
+          description: list of
+          items:
+            type: object
+            properties:
+              parameterName:
+                type: string
+              isLiked:
+                type: boolean
+                description: indicates if user liked the output or not(Thumbs up/down flag)
+    FeedbackType:
+      type: string
+      enum:
+        - rating
+        - comment
+        - thumbs
+        - rating-list
+        - comment-list
+        - thumbs-list
+        - checkbox-list
+    Commonfeedback:
+      type: array
+      description: list of
+      items:
+        type: object
+        required:
+          - question
+        properties:
+          question:
+            type: string
+            description: >-
+              a question from the list of predefined questions. its context
+              specific. list of predefined questions are available - `here`
+        oneOf:
+          - $ref: '#/components/schemas/FeedbackTypeRating'
+          - $ref: '#/components/schemas/FeedbackTypeComment'
+        discriminator:
+          propertyName: feedbackType
+  securitySchemes:
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header

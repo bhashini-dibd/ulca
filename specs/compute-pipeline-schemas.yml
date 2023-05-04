@@ -22,14 +22,19 @@ components:
           $ref: "#/components/schemas/PipelineRequestList"
         inputData:
           $ref: "#/components/schemas/PipelineInputList"
+        controlConfig:
+          $ref: "#/components/schemas/ControlConfig"
 
     PipelineComputeResponse:
       required:
         - pipelineResponse
+        - controlConfig
       type: object
       properties:
         pipelineResponse:
           $ref: "#/components/schemas/ResponseList"
+        controlConfig:
+          $ref: "#/components/schemas/ControlConfig"
 
     TaskRequestConfig:
       anyOf:
@@ -134,11 +139,12 @@ components:
     TranslationConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: integer
-          description: Unique identifier of model
+          description: Unique identifier of service
           example: 103
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
@@ -150,11 +156,12 @@ components:
     TTSConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: string
-          description: Unique identifier of model
+          description: Unique identifier of service
           example: 103
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
@@ -170,11 +177,12 @@ components:
     AudioConfig:
       required:
         - language
+        - serviceId
       type: object
       properties:
-        modelId:
+        serviceId:
           type: string
-          description: Unique identifier of model
+          description: Unique identifier of service
           example: 103
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
@@ -318,3 +326,20 @@ components:
           $ref: "#/components/schemas/AudioFiles"
         config:
           $ref: "#/components/schemas/AudioConfig"
+          
+    ControlConfig:
+      description: generic settings related to pipeline
+      required:
+        - dataTracking
+      type: object
+      properties:
+        dataTracking:
+          type: boolean
+          default: true
+          description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
+  securitySchemes:
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header
