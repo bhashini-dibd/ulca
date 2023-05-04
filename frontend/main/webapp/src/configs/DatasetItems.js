@@ -120,7 +120,7 @@ export const FilterBy = {
       label: "Web Scrapping Ocr",
     },
   ],
-
+  
   domain: [
     {
       value: "agriculture",
@@ -157,6 +157,86 @@ export const FilterBy = {
     {
       value:"parliamentary",
       label:"Parliamentary"
+    },
+    {
+      value: "government-press-release",
+      label: "Government Press Release",
+    },
+    {
+      value: "financial",
+      label: "Financial",
+    },
+    {
+      value: "movies",
+      label: "Movies",
+    },
+    {
+      value: "subtitles",
+      label: "Subtitles",
+    },
+    {
+      value: "sports",
+      label: "Sports",
+    },
+    {
+      value: "technology",
+      label: "Technology",
+    },
+    {
+      value: "lifestyle",
+      label: "Lifestyle",
+    },
+    {
+      value: "entertainment",
+      label: "Entertainment",
+    },
+    {
+      value: "art-and-culture",
+      label: "Art and Culture",
+    },
+    {
+      value: "economy",
+      label: "Economy",
+    },
+    {
+      value: "history",
+      label: "History",
+    },
+    {
+      value: "philosophy",
+      label: "Philosophy",
+    },
+    {
+      value: "religion",
+      label: "Religion",
+    },
+    {
+      value: "national-security-and-defence",
+      label: "National Security and Defence",
+    },
+    {
+      value: "literature",
+      label: "Literature",
+    },
+    {
+      value: "geography",
+      label: "Geography",
+    },
+    {
+      value:"websites",
+      label:"Websites"
+    },
+    {
+      value:"science",
+      label:"Science"
+    },
+    {
+     value: "stories",
+     label:"Stories"
+    },
+    {
+      value: "wikipedia",
+      label: "Wikipedia"
     }
   ],
 };

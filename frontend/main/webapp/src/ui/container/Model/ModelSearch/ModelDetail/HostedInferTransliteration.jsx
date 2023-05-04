@@ -89,7 +89,7 @@ function HostedInferTransliteration(props) {
         " ",
         currentCurserPosition - 1
       );
-      console.log("reachable..... 72", startingPositionOfWord);
+     // console.log("reachable..... 72", startingPositionOfWord);
     } else {
       startingPositionOfWord = inputValue.lastIndexOf(
         " ",
@@ -108,7 +108,7 @@ function HostedInferTransliteration(props) {
       if (startingPositionOfWord == -1) {
         activeWord = inputValue.split(" ")[0];
       }
-      console.log("activeWord ======= ", activeWord);
+    //  console.log("activeWord ======= ", activeWord);
       // inputRef.current.selectionStart = currentCurserPosition;
       // setTimeout(() => {
       if (shouldFetchData) {
