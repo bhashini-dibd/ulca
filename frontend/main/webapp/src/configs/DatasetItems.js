@@ -233,6 +233,10 @@ export const FilterBy = {
     {
      value: "stories",
      label:"Stories"
+    },
+    {
+      value: "wikipedia",
+      label: "Wikipedia"
     }
   ],
 };

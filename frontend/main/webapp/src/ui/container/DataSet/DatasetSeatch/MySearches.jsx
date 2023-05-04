@@ -38,7 +38,7 @@ const MySearches = (props) => {
     MySearchListApi();
   }, []);
   const MySearchListApi = () => {
-    const userObj = new MySearchReport();
+    const userObj = new MySearchReport(PageInfo.page+1);
     dispatch(APITransport(userObj));
   };
 
@@ -82,6 +82,7 @@ const MySearches = (props) => {
   const processTableClickedNextOrPrevious = (page, sortOrder) => {
     dispatch(PageChange(page, C.SEARCH_PAGE_NO));
     setPage(page);
+    MySearchListApi();
   };
   const handleShowFilter = (event) => {
     setAnchorEl(event.currentTarget);
@@ -226,13 +227,14 @@ const MySearches = (props) => {
     filterType: "checkbox",
     download: false,
     print: false,
-    rowsPerPageOptions: [10, 25, 50, 100],
+    rowsPerPageOptions: [],
     rowsPerPage: PageInfo.count,
     filter: false,
     page: PageInfo.page,
     viewColumns: false,
     selectableRows: "none",
     search: false,
+    count: detailedReport.totalCount,
     onTableChange: (action, tableState) => {
       switch (action) {
         case "changePage":
