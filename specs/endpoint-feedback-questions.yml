@@ -1,12 +1,12 @@
 openapi: 3.0.0
 info:
-  title: Pipeline feedback schema
+  title: Endpoint schema to recieve feedback-questions
   description: >-
     The document defines request and response to collect feedback questions
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.0
+  version: 1.1.0
 servers:
   - url: /ulca
 paths: {}
@@ -61,6 +61,7 @@ components:
                   type: object
                   required:
                     - question
+                    - supportedFeedbackTypes
                   properties:
                     question:
                       type: string
@@ -68,103 +69,25 @@ components:
                         a question from the list of predefined questions. its
                         context specific. list of predefined questions are
                         available - `here`
-                  oneOf:
-                    - $ref: '#/components/schemas/FeedbackTypeRating'
-                    - $ref: '#/components/schemas/FeedbackTypeComment'
-                    - $ref: '#/components/schemas/FeedbackTypeThumbs'
-                    - $ref: '#/components/schemas/FeedbackTypeRatingList'
-                    - $ref: '#/components/schemas/FeedbackTypeCommentList'
-                    - $ref: '#/components/schemas/FeedbackTypeThumbsList'
-                    - $ref: '#/components/schemas/FeedbackTypeCheckBoxList'
-                  discriminator:
-                    propertyName: feedbackType
+                    supportedFeedbackTypes:
+                      type: array
+                      description : list of
+                      items:
+                        $ref: '#/components/schemas/FeedbackType'
+                    
+                    parameters:
+                      type: array
+                      description : list of 
+                      example : ["accuracy, fluency"]
+                      items:
+                        $ref: '#/components/schemas/Parameters'
+                        
+      
   
-    FeedbackTypeRating:
-      type: object
-      required:
-        - feedbackType
-      properties:
-        feedbackType:
-          $ref: '#/components/schemas/FeedbackType'
-    FeedbackTypeComment:
-      type: object
-      required:
-        - feedbackType
-      properties:
-        feedbackType:
-          $ref: '#/components/schemas/FeedbackType'
-    FeedbackTypeThumbs:
-      type: object
-      required:
-        - feedbackType
-      properties:
-        feedbackType:
-          $ref: '#/components/schemas/FeedbackType'
-       
-    FeedbackTypeCheckBoxList:
-      type: object
-      required:
-        - feedbackType
-      properties:
-        feedbackType:
-          $ref: '#/components/schemas/FeedbackType'
-        checkboxList:
-          type: array
-          description: list of
-          items:
-            type: object
-            properties:
-              parameterName:
-                type: string
-              
-    FeedbackTypeRatingList:
-      type: object
-      required:
-        - feedbackType
-      properties:
-        feedbackType:
-          $ref: '#/components/schemas/FeedbackType'
-        ratingList:
-          type: array
-          description: list of
-          items:
-            type: object
-            properties:
-              parameterName:
-                type: string
-             
-    FeedbackTypeCommentList:
-      type: object
-      required:
-        - feedbackType
-      properties:
-        feedbackType:
-          $ref: '#/components/schemas/FeedbackType'
-        commentList:
-          type: array
-          description: list of
-          items:
-            type: object
-            properties:
-              parameterName:
-                type: string
-            
-    FeedbackTypeThumbsList:
-      type: object
-      required:
-        - feedbackType
-      properties:
-        feedbackType:
-          $ref: '#/components/schemas/FeedbackType'
-        thumbsList:
-          type: array
-          description: list of
-          items:
-            type: object
-            properties:
-              parameterName:
-                type: string
-             
+    Parameters:
+      type: string
+      description: redefined parameters, as defined in the example `here`
+      
     FeedbackType:
       type: string
       enum:
@@ -188,11 +111,12 @@ components:
             description: >-
               a question from the list of predefined questions. its context
               specific. list of predefined questions are available - `here`
-        oneOf:
-          - $ref: '#/components/schemas/FeedbackTypeRating'
-          - $ref: '#/components/schemas/FeedbackTypeComment'
-        discriminator:
-          propertyName: feedbackType
+          supportedFeedbackTypes:
+            type: array
+            description : list of
+            items:
+              $ref: '#/components/schemas/FeedbackType'
+              
   securitySchemes:
     authToken:
       type: apiKey
