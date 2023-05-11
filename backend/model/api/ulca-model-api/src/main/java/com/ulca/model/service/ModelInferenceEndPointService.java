@@ -771,7 +771,7 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
 			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
 			TransliterationRequest request = transliterationInference.getRequest();
-
+             
 			List<Input> input = compute.getInput();
 			Sentences sentences = new Sentences();
 			for (Input ip : input) {
@@ -783,7 +783,7 @@ public class ModelInferenceEndPointService {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
-
+             log.info("request :: "+requestJson.toString());
 			//OkHttpClient client = new OkHttpClient();
 			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
                     .writeTimeout(60, TimeUnit.SECONDS)
@@ -792,12 +792,16 @@ public class ModelInferenceEndPointService {
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
              
+			log.info("Request Body :: "+body);
+			
             Request httpRequest =checkInferenceApiKeyValueAtCompute(inferenceAPIEndPoint,body);
 	
 			
-			
+			log.info("httpRequest :: "+httpRequest);
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			log.info("httpResponse :: "+httpResponse);
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
 				log.info(httpResponse.toString());
@@ -807,7 +811,7 @@ public class ModelInferenceEndPointService {
 			}
 
 			String responseJsonStr = httpResponse.body().string();
-
+          log.info("responseJson :: "+responseJsonStr.toString());
 			try {
 				TransliterationResponse transliterationResponse = objectMapper.readValue(responseJsonStr,
 						TransliterationResponse.class);
