@@ -1,0 +1,18 @@
+{
+    "pipeLineFeedbackQns" : [
+        {
+            "code" : "en",
+            "label" : "EN",
+            "active" : true,
+            "commonFeedback" : {
+                "question":"Are you satisfied with the pipeline so far?",
+                "supportedFeedbackTypes":["rating","thumbs","comment"]
+            },
+        "values" : {
+            "master" : "/taskFeedbackQns.json",
+            "jsonPath": "$.taskFeedbackQns"
+        }
+        }
+    ],
+    "relatedMaster" : true
+}
