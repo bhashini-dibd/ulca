@@ -994,7 +994,7 @@ public class ModelService {
 		ModelExtended modelObj = modelDao.findById(modelId).get();
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 
-		return modelInferenceEndPointService.compute(inferenceAPIEndPoint, compute);
+		return modelInferenceEndPointService.compute(modelObj, compute);
 	}
 
 	public ModelComputeResponse tryMeOcrImageContent(MultipartFile file, String modelId) throws Exception {

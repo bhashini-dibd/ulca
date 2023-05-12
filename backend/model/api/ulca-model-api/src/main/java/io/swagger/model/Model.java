@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
  * Model
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-11T12:21:45.383626560Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-05-12T09:12:19.052426607Z[GMT]")
 
 
 public class Model   {
@@ -40,6 +40,9 @@ public class Model   {
 //this has been manually modified to support list of LanguagePair
  @JsonProperty("languages")
  private LanguagePairs languages = null;
+
+  @JsonProperty("isLangDetectionEnabled")
+  private Boolean isLangDetectionEnabled = false;
 
   @JsonProperty("isMultilingual")
   private Boolean isMultilingual = false;
@@ -162,7 +165,7 @@ public class Model   {
     this.task = task;
   }
 
-  public Model languages(AllOfModelLanguages languages) {
+  public Model languages(LanguagePairs languages) {
     this.languages = languages;
     return this;
   }
@@ -180,6 +183,25 @@ public class Model   {
 
   public void setLanguages(LanguagePairs languages) {
     this.languages = languages;
+  }
+
+  public Model isLangDetectionEnabled(Boolean isLangDetectionEnabled) {
+    this.isLangDetectionEnabled = isLangDetectionEnabled;
+    return this;
+  }
+
+  /**
+   * specify true if the same model is capable of detecting languages automatically without passing any additional parameters
+   * @return isLangDetectionEnabled
+   **/
+  @Schema(description = "specify true if the same model is capable of detecting languages automatically without passing any additional parameters")
+  
+    public Boolean isIsLangDetectionEnabled() {
+    return isLangDetectionEnabled;
+  }
+
+  public void setIsLangDetectionEnabled(Boolean isLangDetectionEnabled) {
+    this.isLangDetectionEnabled = isLangDetectionEnabled;
   }
 
   public Model isMultilingual(Boolean isMultilingual) {
@@ -341,6 +363,7 @@ public class Model   {
         Objects.equals(this.refUrl, model.refUrl) &&
         Objects.equals(this.task, model.task) &&
         Objects.equals(this.languages, model.languages) &&
+        Objects.equals(this.isLangDetectionEnabled, model.isLangDetectionEnabled) &&
         Objects.equals(this.isMultilingual, model.isMultilingual) &&
         Objects.equals(this.license, model.license) &&
         Objects.equals(this.licenseUrl, model.licenseUrl) &&
@@ -352,7 +375,7 @@ public class Model   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, version, description, refUrl, task, languages, isMultilingual, license, licenseUrl, domain, submitter, inferenceEndPoint, trainingDataset);
+    return Objects.hash(name, version, description, refUrl, task, languages, isLangDetectionEnabled, isMultilingual, license, licenseUrl, domain, submitter, inferenceEndPoint, trainingDataset);
   }
 
   @Override
@@ -366,6 +389,7 @@ public class Model   {
     sb.append("    refUrl: ").append(toIndentedString(refUrl)).append("\n");
     sb.append("    task: ").append(toIndentedString(task)).append("\n");
     sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
+    sb.append("    isLangDetectionEnabled: ").append(toIndentedString(isLangDetectionEnabled)).append("\n");
     sb.append("    isMultilingual: ").append(toIndentedString(isMultilingual)).append("\n");
     sb.append("    license: ").append(toIndentedString(license)).append("\n");
     sb.append("    licenseUrl: ").append(toIndentedString(licenseUrl)).append("\n");
