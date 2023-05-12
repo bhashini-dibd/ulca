@@ -423,7 +423,7 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch feedback pipeline questions"
-    },
+    }
   ]
 }
 
