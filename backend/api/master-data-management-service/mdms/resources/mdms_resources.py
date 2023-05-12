@@ -3,9 +3,12 @@ from flask import request
 import logging
 from utilities import post_error,CustomResponse,Status
 from services import MasterDataServices
+import config
+from utilities import post_error, MdUtils
+
 
 log = logging.getLogger('file')
-
+utils       =   MdUtils()
 mdserve = MasterDataServices()
 
 class MasterDataResource(Resource):
@@ -69,3 +72,30 @@ class CacheBustResource(Resource):
             log.error(f"Request to mdms for cache bust failed due to  {e}")
             return post_error("Service Exception on CacheBustResource",f"Exception occurred:{e}"), 400
 
+
+class PipeLineFeedBack(Resource):
+    def post(self):
+        body = request.get_json() 
+        log.info(f"request for feedback received.")
+        add_pipeFeed = []
+        git_file_location   =   f"{config.git_folder_prefix}/{config.masPipe}.json"
+        get_pipe = utils.read_from_git(git_file_location) #dict
+        if get_pipe and isinstance(get_pipe,dict) and 'taskFeedback' in get_pipe.keys():
+            for task in get_pipe['taskFeedback']:
+                if task['taskType'] in body['supportedTasks']:
+                    add_pipeFeed.append(task)
+        
+        return add_pipeFeed
+
+            
+
+
+        #         log.info(f"somethign {q_res['taskFeedback']}")
+        #         for task in q_res['taskFeedback']:
+        #             log.info(f"tsasssks feedddd {task}")
+        #             if task['taskType'] in body["supportedTasks"]:
+        #                 add_pipeFeed.append(task)
+        #                 return add_pipeFeed
+
+
+        
