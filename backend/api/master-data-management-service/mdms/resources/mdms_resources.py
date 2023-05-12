@@ -77,16 +77,24 @@ class PipeLineFeedBack(Resource):
     def post(self):
         body = request.get_json() 
         log.info(f"request for feedback received.")
-        add_pipeFeed = []
-        git_file_location   =   f"{config.git_folder_prefix}/{config.masPipe}.json"
-        get_pipe = utils.read_from_git(git_file_location) #dict
-        if get_pipe and isinstance(get_pipe,dict) and 'taskFeedback' in get_pipe.keys():
-            for task in get_pipe['taskFeedback']:
-                if task['taskType'] in body['supportedTasks']:
-                    add_pipeFeed.append(task)
-        
-        return add_pipeFeed
-
+        add_pipeFeed = {}
+        add_tasktype = []
+        if not body['feedbackLanguage'] or not body['supportedTasks']:
+            return post_error("something wrong with the feedbackLanguage and supportedTasks ",f"Exception occurred:{e}"), 400
+        try:
+            git_file_location   =   f"{config.git_folder_prefix}/{config.masPipe}.json"
+            get_pipe = utils.read_from_git(git_file_location) #dict
+            if get_pipe and isinstance(get_pipe,dict) and 'taskFeedback' in get_pipe.keys():
+                for task in get_pipe['taskFeedback']:
+                    if task['taskType'] in body['supportedTasks']:
+                        add_tasktype.append(task)
+                        add_pipeFeed['feedbackLanguage'], add_pipeFeed['pipelineFeedback'], add_pipeFeed['taskFeedback'] = body['feedbackLanguage'],get_pipe['pipelineFeedback'], add_tasktype         
+                return add_pipeFeed
+            else:
+                return post_error("Could not get Pipeline Questions from Git",f"Exception occurred:{e}"), 400
+        except Exception as e:
+            log.error(f"Request to mdms for pipeline Question failed due to {e}")
+            return post_error("Service Exception on Pipeline Questions",f"Exception occurred:{e}"), 400
             
 
 
