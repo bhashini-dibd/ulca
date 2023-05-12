@@ -415,7 +415,15 @@
       "active": true,
       "whiteList": true,
       "description": "Open API to retrieve pipeline details"
-    }
+    },
+    {
+      "id": "1d42e5b8-e29d-4314-99b5-64b2ae5a2591",
+      "uri": "/ulca/mdms/v0/pipelineQuestions",
+      "module": "MDMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch feedback pipeline questions"
+    },
   ]
 }
 
