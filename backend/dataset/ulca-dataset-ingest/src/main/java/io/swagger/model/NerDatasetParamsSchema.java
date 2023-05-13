@@ -3,7 +3,6 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.DatasetCommonParamsSchema;
 import io.swagger.model.DatasetType;
 import io.swagger.model.Domain;
@@ -12,6 +11,7 @@ import io.swagger.model.License;
 import io.swagger.model.NerDatasetCollectionMethod;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
+import io.swagger.model.SupportedTagsFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -21,62 +21,79 @@ import javax.validation.constraints.*;
  * NerDatasetParamsSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-11T16:18:51.317347392Z[GMT]")
 
 
 public class NerDatasetParamsSchema extends DatasetCommonParamsSchema implements OneOfDatasetParamsSchemaParams {
-  /**
-   * The accepted standard based on which NER tags are labelled in the dataset.
-   */
-  public enum TagsFormatEnum {
-    CONLL_2003("CoNLL-2003");
-
-    private String value;
-
-    TagsFormatEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TagsFormatEnum fromValue(String text) {
-      for (TagsFormatEnum b : TagsFormatEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("tagsFormat")
-  private TagsFormatEnum tagsFormat = null;
+  private SupportedTagsFormat tagsFormat = null;
+
+  @JsonProperty("isStopwordsRemoved")
+  private Boolean isStopwordsRemoved = false;
+
+  @JsonProperty("formatDescription")
+  private String formatDescription = null;
 
   @JsonProperty("collectionMethod")
   private NerDatasetCollectionMethod collectionMethod = null;
 
-  public NerDatasetParamsSchema tagsFormat(TagsFormatEnum tagsFormat) {
+  public NerDatasetParamsSchema tagsFormat(SupportedTagsFormat tagsFormat) {
     this.tagsFormat = tagsFormat;
     return this;
   }
 
   /**
-   * The accepted standard based on which NER tags are labelled in the dataset.
+   * Get tagsFormat
    * @return tagsFormat
    **/
-  @Schema(required = true, description = "The accepted standard based on which NER tags are labelled in the dataset.")
+  @Schema(required = true, description = "")
       @NotNull
 
-    public TagsFormatEnum getTagsFormat() {
+    @Valid
+    public SupportedTagsFormat getTagsFormat() {
     return tagsFormat;
   }
 
-  public void setTagsFormat(TagsFormatEnum tagsFormat) {
+  public void setTagsFormat(SupportedTagsFormat tagsFormat) {
     this.tagsFormat = tagsFormat;
+  }
+
+  public NerDatasetParamsSchema isStopwordsRemoved(Boolean isStopwordsRemoved) {
+    this.isStopwordsRemoved = isStopwordsRemoved;
+    return this;
+  }
+
+  /**
+   * Expects if provided ner list contains stopwords or not
+   * @return isStopwordsRemoved
+   **/
+  @Schema(example = "false", description = "Expects if provided ner list contains stopwords or not")
+  
+    public Boolean isIsStopwordsRemoved() {
+    return isStopwordsRemoved;
+  }
+
+  public void setIsStopwordsRemoved(Boolean isStopwordsRemoved) {
+    this.isStopwordsRemoved = isStopwordsRemoved;
+  }
+
+  public NerDatasetParamsSchema formatDescription(String formatDescription) {
+    this.formatDescription = formatDescription;
+    return this;
+  }
+
+  /**
+   * any description about the particular format of dataset. or about the tags used in it.
+   * @return formatDescription
+   **/
+  @Schema(description = "any description about the particular format of dataset. or about the tags used in it.")
+  
+    public String getFormatDescription() {
+    return formatDescription;
+  }
+
+  public void setFormatDescription(String formatDescription) {
+    this.formatDescription = formatDescription;
   }
 
   public NerDatasetParamsSchema collectionMethod(NerDatasetCollectionMethod collectionMethod) {
@@ -110,13 +127,15 @@ public class NerDatasetParamsSchema extends DatasetCommonParamsSchema implements
     }
     NerDatasetParamsSchema nerDatasetParamsSchema = (NerDatasetParamsSchema) o;
     return Objects.equals(this.tagsFormat, nerDatasetParamsSchema.tagsFormat) &&
+        Objects.equals(this.isStopwordsRemoved, nerDatasetParamsSchema.isStopwordsRemoved) &&
+        Objects.equals(this.formatDescription, nerDatasetParamsSchema.formatDescription) &&
         Objects.equals(this.collectionMethod, nerDatasetParamsSchema.collectionMethod) &&
         super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tagsFormat, collectionMethod, super.hashCode());
+    return Objects.hash(tagsFormat, isStopwordsRemoved, formatDescription, collectionMethod, super.hashCode());
   }
 
   @Override
@@ -125,6 +144,8 @@ public class NerDatasetParamsSchema extends DatasetCommonParamsSchema implements
     sb.append("class NerDatasetParamsSchema {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    tagsFormat: ").append(toIndentedString(tagsFormat)).append("\n");
+    sb.append("    isStopwordsRemoved: ").append(toIndentedString(isStopwordsRemoved)).append("\n");
+    sb.append("    formatDescription: ").append(toIndentedString(formatDescription)).append("\n");
     sb.append("    collectionMethod: ").append(toIndentedString(collectionMethod)).append("\n");
     sb.append("}");
     return sb.toString();
