@@ -13,7 +13,7 @@ components:
   schemas:
     LanguagePair:
       required:
-        - sourceLanguage
+        - targetLanguage
       type: object
       properties:
         sourceLanguageName:

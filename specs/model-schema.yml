@@ -867,7 +867,7 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/common-schemas.yml#/components/schemas/LanguagePair
     TransliterationConfig:
       required:
         - language
