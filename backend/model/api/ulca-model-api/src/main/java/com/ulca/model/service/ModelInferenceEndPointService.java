@@ -26,6 +26,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.util.FileUtility;
+import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
@@ -47,6 +48,8 @@ import io.swagger.model.ImageFile;
 import io.swagger.model.ImageFiles;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
+import io.swagger.model.LanguagePair;
+import io.swagger.model.LanguagePairs;
 import io.swagger.model.NerResponse;
 import io.swagger.model.OCRRequest;
 import io.swagger.model.OCRResponse;
@@ -465,11 +468,11 @@ public class ModelInferenceEndPointService {
 
 	}
 
-	public ModelComputeResponse computeAsyncModel(InferenceAPIEndPoint inferenceAPIEndPoint,
+	public ModelComputeResponse computeAsyncModel(ModelExtended model,
 			ModelComputeRequest compute)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, InterruptedException {
 		ModelComputeResponse response = new ModelComputeResponseTranslation();
-
+       InferenceAPIEndPoint inferenceAPIEndPoint=  model.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
 		String pollingUrl = asyncApiDetails.getPollingUrl();
@@ -545,23 +548,25 @@ public class ModelInferenceEndPointService {
 		return response;
 	}
 
-	public ModelComputeResponse compute(InferenceAPIEndPoint inferenceAPIEndPoint, ModelComputeRequest computeRequest)
+	public ModelComputeResponse compute(ModelExtended model, ModelComputeRequest computeRequest)
 
 			throws Exception {
 
-		if (inferenceAPIEndPoint.isIsSyncApi() != null && !inferenceAPIEndPoint.isIsSyncApi()) {
-			return computeAsyncModel(inferenceAPIEndPoint, computeRequest);
+		if (model.getInferenceEndPoint().isIsSyncApi() != null && !model.getInferenceEndPoint().isIsSyncApi()) {
+			return computeAsyncModel(model, computeRequest);
 
 		} else {
-			return computeSyncModel(inferenceAPIEndPoint, computeRequest);
+			return computeSyncModel(model, computeRequest);
 		}
 
 	}
 
-	public ModelComputeResponse computeSyncModel(InferenceAPIEndPoint inferenceAPIEndPoint, ModelComputeRequest compute)
+	public ModelComputeResponse computeSyncModel(ModelExtended model, ModelComputeRequest compute)
 
 			throws Exception {
-
+		
+		         InferenceAPIEndPoint inferenceAPIEndPoint =model.getInferenceEndPoint();
+      
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
@@ -637,15 +642,43 @@ public class ModelInferenceEndPointService {
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
-
+             
 			ImageFiles imageFiles = new ImageFiles();
 			ImageFile imageFile = new ImageFile();
 			imageFile.setImageUri(compute.getImageUri());
 			imageFiles.add(imageFile);
-
 			OCRRequest request = ocrInference.getRequest();
-			request.setImage(imageFiles);
+		      LanguagePairs langs =		model.getLanguages();
 
+			if(model.isIsLangDetectionEnabled()==null) {
+				
+		      request.getConfig().setLanguages(langs);
+		      
+			}else if(model.isIsLangDetectionEnabled()!=null ) {
+				      
+				if(!model.isIsLangDetectionEnabled()) {
+				      request.getConfig().setLanguages(langs);
+
+					
+				}else {
+					
+					LanguagePairs langs1 = new LanguagePairs();
+					request.getConfig().setLanguages(langs1);
+				}
+				
+				
+				
+			}
+			
+			
+			
+			
+			request.setImage(imageFiles);
+			
+			
+			
+             log.info(request.getConfig().getLanguages().toString());
+         
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
