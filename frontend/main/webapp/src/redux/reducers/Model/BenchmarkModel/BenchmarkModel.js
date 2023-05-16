@@ -68,7 +68,7 @@ const getFilterValue = (payload, data) => {
 };
 
 const getDomainDetails = (data) => {
-  // console.log("checkkk123", data)
+  /// console.log("checkkk123", data)
   if (data.length === 1) {
    // console.log(data.length)
   //console.log("checkkk",FilterByDomain(data)[0].label)
