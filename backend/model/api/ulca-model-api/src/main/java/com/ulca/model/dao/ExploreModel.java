@@ -1,5 +1,9 @@
 package com.ulca.model.dao;
 
+import io.swagger.model.Domain;
+import io.swagger.model.License;
+import io.swagger.model.ModelTask;
+
 public class ExploreModel {
     
 	private String modelId;
@@ -7,9 +11,9 @@ public class ExploreModel {
 	private String userId;
 	private String version;
 	private String description;
-	private String taskType;
-	private String domain;
-	private String license ;
+	private ModelTask task;
+	private Domain domain;
+	private License license ;
 	private String status;
 	private Long submittedOn;
 	public String getModelId() {
@@ -42,22 +46,22 @@ public class ExploreModel {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getTaskType() {
-		return taskType;
+	public ModelTask getTask() {
+		return task;
 	}
-	public void setTaskType(String taskType) {
-		this.taskType = taskType;
+	public void setTask(ModelTask task) {
+		this.task = task;
 	}
-	public String getDomain() {
+	public Domain getDomain() {
 		return domain;
 	}
-	public void setDomain(String domain) {
+	public void setDomain(Domain domain) {
 		this.domain = domain;
 	}
-	public String getLicense() {
+	public License getLicense() {
 		return license;
 	}
-	public void setLicense(String license) {
+	public void setLicense(License license) {
 		this.license = license;
 	}
 	public String getStatus() {
@@ -72,15 +76,15 @@ public class ExploreModel {
 	public void setSubmittedOn(Long submittedOn) {
 		this.submittedOn = submittedOn;
 	}
-	
 	@Override
 	public String toString() {
 		return "ExploreModel [modelId=" + modelId + ", name=" + name + ", userId=" + userId + ", version=" + version
-				+ ", description=" + description + ", taskType=" + taskType + ", domain=" + domain + ", license="
-				+ license + ", status=" + status + ", submittedOn=" + submittedOn + "]";
+				+ ", description=" + description + ", task=" + task + ", domain=" + domain + ", license=" + license
+				+ ", status=" + status + ", submittedOn=" + submittedOn + "]";
 	}
-    
 	
+	
+
 	
 	
 	
