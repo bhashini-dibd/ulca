@@ -257,7 +257,7 @@ class GenerateServiceProviderKey(Resource):
 
 
         if "serviceProviderName" in body.keys():
-            pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["pipelineId"]) #ULCA-PROCESS-TRACKER
+            pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"]) #ULCA-PROCESS-TRACKER
         else:
             pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
         #log.info(f"user_document details {user_document}")
