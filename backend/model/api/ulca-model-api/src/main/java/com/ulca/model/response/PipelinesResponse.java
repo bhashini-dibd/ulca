@@ -20,7 +20,7 @@ public class PipelinesResponse {
 
 	
 	//String message;
-	List<PipelineModelResponse> data;
+	Object data;
 	int totalCount;
 	
 	

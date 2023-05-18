@@ -165,9 +165,9 @@ public class ModelController {
       
 	
 	@GetMapping("/explorePipelines")
-	public PipelinesResponse explorePipelines() {
+	public PipelinesResponse explorePipelines(@RequestParam(required = false) String serviceProviderName) {
 
 		log.info("******** Entry ModelController:: explorePipelines *******");
-		return modelService.explorePipelines();
+		return modelService.explorePipelines(serviceProviderName);
 	}
 }

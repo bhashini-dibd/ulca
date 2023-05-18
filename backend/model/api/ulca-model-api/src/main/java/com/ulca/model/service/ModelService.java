@@ -2923,12 +2923,14 @@ public class ModelService {
 	 * return pipelineRequest; }
 	 */
 
-	public PipelinesResponse explorePipelines() {
+	public PipelinesResponse explorePipelines(String serviceProviderName) {
 
 		List<PipelineModel> pipelineModels = pipelineModelDao.findAll();
 		int noOfPipelineModels = (int) pipelineModelDao.count();
 		log.info("noOfPipelineModels ::::::" + noOfPipelineModels);
 		List<PipelineModelResponse> pipelineResponse = new ArrayList<PipelineModelResponse>();
+		List<String> serviceProviderList = new ArrayList<String>();
+
 		for (PipelineModel pipelineModel : pipelineModels) {
 			PipelineModelResponse pipelineModelResponse = new PipelineModelResponse();
 			pipelineModelResponse.setPipelineId(pipelineModel.getPipelineModelId());
@@ -2937,6 +2939,7 @@ public class ModelService {
 			pipelineModelResponse.setServiceProviderName(pipelineModel.getServiceProvider().getName());
 			pipelineModelResponse.setSupportedTasks(pipelineModel.getSupportedPipelines());
 			pipelineResponse.add(pipelineModelResponse);
+			serviceProviderList.add(pipelineModel.getServiceProvider().getName());
 		}
 
 		log.info("***********pipelineResponse******************");
@@ -2946,8 +2949,19 @@ public class ModelService {
 
 			throw new PipelineValidationException("Pipeline Models are not available!", HttpStatus.BAD_REQUEST);
 		} else {
-			return new PipelinesResponse(pipelineResponse, noOfPipelineModels);
+			
+			
+			if(serviceProviderName!=null) {
+				
+				if(serviceProviderName.equals("true")) {
+				return new PipelinesResponse(serviceProviderList, noOfPipelineModels);
+				}else {
+					return new PipelinesResponse(pipelineResponse, noOfPipelineModels);
 
+				}
+			}else {
+			return new PipelinesResponse(pipelineResponse, noOfPipelineModels);
+			}
 		}
 
 	}
