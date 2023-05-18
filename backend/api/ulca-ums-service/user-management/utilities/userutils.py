@@ -700,7 +700,7 @@ class UserUtils:
     @staticmethod
     def get_pipelineIdbyServiceProviderName(serviceProviderName):
         collections = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
-        pipeL = collections.find_one({"serviceProviderName" : serviceProviderName})
+        pipeL = collections.find_one({"serviceprovider.name" : serviceProviderName})
         if pipeL:
             return pipeL 
         elif not pipeL:
