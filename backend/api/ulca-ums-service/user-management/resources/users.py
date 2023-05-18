@@ -241,7 +241,7 @@ class GenerateServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
        
-        if "pipelineId" not in body.keys() or "serviceProviderName" not in body.keys():
+        if "pipelineId" not in body.keys() and "serviceProviderName" not in body.keys():
             return post_error("400", "Please provide pipelineId or serviceProviderName", None), 400
         if "userID" not in body.keys():
             return post_error("400", "Please provide userID", None), 400
