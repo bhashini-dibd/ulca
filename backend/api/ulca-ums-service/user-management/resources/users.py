@@ -241,8 +241,8 @@ class GenerateServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
        
-        if "pipelineId" not in body.keys():
-            return post_error("400", "Please provide pipelineId", None), 400
+        if "pipelineId" not in body.keys() or "serviceProviderName" not in body.keys():
+            return post_error("400", "Please provide pipelineId or serviceProviderName", None), 400
         if "userID" not in body.keys():
             return post_error("400", "Please provide userID", None), 400
         if "ulcaApiKey" not in body.keys():
@@ -256,8 +256,10 @@ class GenerateServiceProviderKey(Resource):
                 dataTracking = False
 
 
-        
-        pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
+        if "serviceProviderName" in body.keys():
+            pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["pipelineId"]) #ULCA-PROCESS-TRACKER
+        else:
+            pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
         #log.info(f"user_document details {user_document}")
         if isinstance(pipelineID,dict) and pipelineID:
             masterList = []

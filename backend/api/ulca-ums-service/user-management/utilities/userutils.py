@@ -696,7 +696,16 @@ class UserUtils:
             return pipeL 
         elif not pipeL:
             return None
-    
+    #Get pipelineId based on serviceProviderName
+    @staticmethod
+    def get_pipelineIdbyServiceProviderName(serviceProviderName):
+        collections = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipeL = collections.find_one({"serviceProviderName" : serviceProviderName})
+        if pipeL:
+            return pipeL 
+        elif not pipeL:
+            return None
+
     @staticmethod
     def decryptAes(secreKey,source):
         """
