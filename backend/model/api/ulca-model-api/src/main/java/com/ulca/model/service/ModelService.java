@@ -1006,7 +1006,7 @@ public class ModelService {
 		// String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
-		ModelComputeResponse response = modelInferenceEndPointService.compute(inferenceAPIEndPoint, schema,
+		ModelComputeResponse response = modelInferenceEndPointService.compute(modelObj, schema,
 				imageFilePath);
 
 		return response;
