@@ -1,79 +1,79 @@
 {
-    "pipelineId" : "64392f96daac500b55c543cd",
-    "feedbackTimeStamp" : "1682408572",
-    "feedbackLanguage" : "en",
-    "pipelineFeedback" : {
-        "commonFeedback" : [
+    "pipelineId": "64392f96daac500b55c543cd",
+    "feedbackTimeStamp": "1682408572",
+    "feedbackLanguage": "en",
+    "pipelineFeedback": {
+        "commonFeedback": [
             {
-                "question" : "Are you satisfied with the pipeline so far?",
-                "feedbackType" : "comment",
-                "comment" : "The output generated is really impressive. Cheers to the model developers and crew!!"
+                "question": "Are you satisfied with the pipeline so far?",
+                "feedbackType": "comment",
+                "comment": "The output generated is really impressive. Cheers to the model developers and crew!!"
             }
         ]
     },
-    "taskFeedback" : [
+    "taskFeedback": [
         {
-            "taskType" : "asr",
-            "commonFeedback" : [
+            "taskType": "asr",
+            "commonFeedback": [
                 {
-                    "question" : "Are you satisfied with the ASR response so far?",
-                    "feedbackType" : "comment",
-                    "comment" : "The output generated is really impressive. Cheers to the model developers and crew!!"
+                    "question": "Are you satisfied with the ASR response so far?",
+                    "feedbackType": "comment",
+                    "comment": "The output generated is really impressive. Cheers to the model developers and crew!!"
                 }
             ],
-            "granularFeedback" : [
+            "granularFeedback": [
                 {
-                    "question" : "What are the areas where ASR should improve upon?",
-                    "feedbackType" : "rating-list",
+                    "question": "What are the areas where ASR should improve upon?",
+                    "feedbackType": "rating-list",
                     "ratingList": [
                         {
-                            "parameterName" : "accuracy",
-                            "rating" : 1
+                            "parameterName": "accuracy",
+                            "rating": 1
                         },
                         {
-                            "parameterName" : "speed",
-                            "rating" : 5
+                            "parameterName": "speed",
+                            "rating": 5
                         },
                         {
-                            "parameterName" : "readability",
-                            "rating" : 5
+                            "parameterName": "readability",
+                            "rating": 5
                         }
                     ]
                 }
             ]
         },
         {
-            "taskType" : "translation",
-            "commonFeedback" : [
+            "taskType": "translation",
+            "commonFeedback": [
                 {
-                    "question" : "Are you satisfied with the Translation response so far?",
-                    "feedbackType" : "comment",
-                    "comment" : "The output generated is really impressive. Cheers to the model developers and crew!!"
+                    "question": "Are you satisfied with the Translation response so far?",
+                    "feedbackType": "comment",
+                    "comment": "The output generated is really impressive. Cheers to the model developers and crew!!"
                 }
             ],
-            "granularFeedback" : [
+            "granularFeedback": [
                 {
-                    "question" : "What are the areas where ASR should improve upon?",
-                    "feedbackType" : "rating-list",
+                    "question": "What are the areas where ASR should improve upon?",
+                    "feedbackType": "rating-list",
                     "ratingList": [
                         {
-                            "parameterName" : "accuracy",
-                            "rating" : 1
+                            "parameterName": "accuracy",
+                            "rating": 1
                         },
                         {
-                            "parameterName" : "speed",
-                            "rating" : 5
+                            "parameterName": "speed",
+                            "rating": 5
                         },
                         {
-                            "parameterName" : "readability",
-                            "rating" : 5
+                            "parameterName": "readability",
+                            "rating": 5
                         }
                     ]
                 }
             ]
         }
     ],
-    "pipelineInput" : {
+    "pipelineInput": {
         "pipelineTasks": [
             {
                 "taskType": "translation",
@@ -86,15 +86,17 @@
                 }
             }
         ],
-        "inputData": {
-            "input": [
-                {
-                    "source": "Page 58 of 144 [Writ A No.– 13156 of 2020 along with."
-                }
-            ]
-        }
+        "inputData": [
+            {
+                "input": [
+                    {
+                        "source": "Page 58 of 144 [Writ A No.– 13156 of 2020 along with."
+                    }
+                ]
+            }
+        ]
     },
-    "pipelineOutput" : {
+    "pipelineOutput": {
         "pipelineResponse": [
             {
                 "taskType": "translation",
@@ -109,7 +111,7 @@
             }
         ]
     },
-    "suggestedPipelineOutput" : {
+    "suggestedPipelineOutput": {
         "pipelineResponse": [
             {
                 "taskType": "translation",

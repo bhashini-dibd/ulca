@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.3
+  version: 1.0.4
 servers:
   - url: /ulca
 paths: {}
@@ -52,14 +52,24 @@ components:
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
         serviceProvider:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
-        inferenceEndPoint:
-          $ref: '#/components/schemas/InferenceAPIEndPoint'
+        # inferenceEndPoint:
+        #   $ref: '#/components/schemas/InferenceAPIEndPoint'
         supportedPipelines:
           $ref: '#/components/schemas/ListOfPipelines'
         taskSpecifications:
           $ref: '#/components/schemas/TaskSpecifications'
         apiEndPoints:
           $ref: '#/components/schemas/ApiEndPoint'
+      anyOf:  
+        - properties:
+           inferenceEndPoint:
+            $ref: '#/components/schemas/InferenceAPIEndPoint'
+          required: [inferenceEndPoint] 
+        - properties:
+           inferenceSocketEndPoint:
+            $ref: '#/components/schemas/InferenceAPIEndPoint'
+          required: [inferenceSocketEndPoint] 
+
     ListOfPipelines:
       type: array
       items:
