@@ -991,9 +991,11 @@ public class ModelInferenceEndPointService {
 	/*
 	 * compute for OCR model
 	 */
-	public ModelComputeResponse compute(InferenceAPIEndPoint inferenceAPIEndPoint, OneOfInferenceAPIEndPointSchema schema, String imagePath) {
+	public ModelComputeResponse compute(ModelExtended model, OneOfInferenceAPIEndPointSchema schema, String imagePath) {
 
 		try {
+			InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
+			
 			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 			ModelComputeResponse response = new ModelComputeResponseOCR();
 
@@ -1008,6 +1010,36 @@ public class ModelInferenceEndPointService {
 			imageFiles.add(imageFile);
 
 			OCRRequest request = ocrInference.getRequest();
+			
+			
+			
+			  LanguagePairs langs =		model.getLanguages();
+
+				if(model.isIsLangDetectionEnabled()==null) {
+					
+			      request.getConfig().setLanguages(langs);
+			      
+				}else if(model.isIsLangDetectionEnabled()!=null ) {
+					      
+					if(!model.isIsLangDetectionEnabled()) {
+					      request.getConfig().setLanguages(langs);
+
+						
+					}else {
+						
+						LanguagePairs langs1 = new LanguagePairs();
+						request.getConfig().setLanguages(langs1);
+					}
+					
+					
+					
+				}
+				
+				
+			
+			
+			
+			
 			request.setImage(imageFiles);
 
 			ObjectMapper objectMapper = new ObjectMapper();
