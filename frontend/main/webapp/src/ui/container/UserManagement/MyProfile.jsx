@@ -37,6 +37,7 @@ import TableBody from "@material-ui/core/TableBody";
 import getSearchedValue from "../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
 import ServiceProviderDialog from "../../components/common/ServiceProviderDialog";
 import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/RemoveServiceProviderKey";
+import GenerateServiceProviderNameAPI from "../../../redux/actions/api/UserManagement/GetServiceProviderName";
 
 const MyProfile = (props) => {
   const { classes } = props;
@@ -145,8 +146,19 @@ console.log(UserDetails.userID
     }
   };
 
+  const getServiceProviderName = async ()=>{
+      const apiObj = new GenerateServiceProviderNameAPI();
+      dispatch(APITransport(apiObj));
+  }
+
   useEffect(() => {
-    getApiKeysCall();
+    
+    const getApiKeyInfo = async ()=>{
+      await getServiceProviderName();
+      await getApiKeysCall();
+    }
+
+    getApiKeyInfo();
   }, []);
 
   const revokeApiKeyCall = async () => {

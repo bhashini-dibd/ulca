@@ -31,6 +31,7 @@ import getBulkModelSearch from "../reducers/Model/ModelSearch/SpeechToSpeech";
 import datasetMetrics from "../reducers/DataSet/DatasetMetrics/GetReportData";
 import getTransliterationText from '../reducers/Model/ModelSearch/GetTransliterationText';
 import getModelHealthCheckStatus from './Model/ModelView/ModalStatusCheck';
+import getServiceProviderName from './UserManagement/GetServiceProviderName';
 
 const index = {
   apiStatus,
@@ -65,7 +66,8 @@ const index = {
   getBulkModelSearch,
   datasetMetrics,
   getTransliterationText,
-  getModelHealthCheckStatus
+  getModelHealthCheckStatus,
+  getServiceProviderName
 };
 
 export default index;
