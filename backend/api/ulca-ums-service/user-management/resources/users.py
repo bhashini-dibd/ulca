@@ -300,6 +300,8 @@ class GenerateServiceProviderKey(Resource):
                         if addServiceKeys["nModified"] == 1 and addServiceKeys["updatedExisting"] == True:
                             returnServiceProviderKey["message"] = "Service Provider Key created"
                         log.info(addServiceKeys)
+            if "ulcaApiKey" in body.keys():
+                returnServiceProviderKey['ulcaApiKey'] = body["ulcaApiKey"]
             return returnServiceProviderKey
         elif user_document == None:
             return post_error("400", "userID does not exist, please provide a valid one.", None), 400
