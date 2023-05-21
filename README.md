@@ -1,5 +1,6 @@
 # NLTM Architecture
 
+Following is the proposed architecture for Bhashini
 
 ![NLTM Architecture](https://raw.githubusercontent.com/ULCA-IN/ulca/develop/ulca-documentation/images/nltm_architecture_2.png)
 
