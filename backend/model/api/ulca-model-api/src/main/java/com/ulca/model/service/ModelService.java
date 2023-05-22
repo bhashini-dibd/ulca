@@ -1143,33 +1143,69 @@ public class ModelService {
 
 	public GetTransliterationModelIdResponse getTransliterationModelId(String sourceLanguage, String targetLanguage) {
 
-		ModelExtended model = new ModelExtended();
+//		ModelExtended model = new ModelExtended();
+//
+//		ModelTask modelTask = new ModelTask();
+//		modelTask.setType(SupportedTasks.TRANSLITERATION);
+//		model.setTask(modelTask);
+//
+//		LanguagePairs lprs = new LanguagePairs();
+//		LanguagePair lp = new LanguagePair();
+//		lp.setSourceLanguage(SupportedLanguages.fromValue(sourceLanguage));
+//		if (targetLanguage != null && !targetLanguage.isBlank()) {
+//			lp.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
+//		}
+//		lprs.add(lp);
+//		model.setLanguages(lprs);
+//
+//		Submitter submitter = new Submitter();
+//		submitter.setName("AI4Bharat");
+//		model.setSubmitter(submitter);
+//
+//		/*
+//		 * seach only published model
+//		 */
+//		model.setStatus("published");
+//        
+//		Example<ModelExtended> example = Example.of(model);
+//		
+//		log.info("examples :: "+example.toString());
+//		List<ModelExtended> list = modelDao.findAll(example);
+		
+		Query dynamicQuery = new Query();
 
-		ModelTask modelTask = new ModelTask();
-		modelTask.setType(SupportedTasks.TRANSLITERATION);
-		model.setTask(modelTask);
+		
+			Criteria taskTypeCriteria = Criteria.where("task.type").is(SupportedTasks.TRANSLITERATION);
+			dynamicQuery.addCriteria(taskTypeCriteria);
+		
 
-		LanguagePairs lprs = new LanguagePairs();
-		LanguagePair lp = new LanguagePair();
-		lp.setSourceLanguage(SupportedLanguages.fromValue(sourceLanguage));
-		if (targetLanguage != null && !targetLanguage.isBlank()) {
-			lp.setTargetLanguage(SupportedLanguages.fromValue(targetLanguage));
-		}
-		lprs.add(lp);
-		model.setLanguages(lprs);
+	
+			Criteria srcLangCriteria = Criteria.where("languages.0.sourceLanguage")
+					.is(SupportedLanguages.fromValue(sourceLanguage));
+			dynamicQuery.addCriteria(srcLangCriteria);
+		
 
-		Submitter submitter = new Submitter();
-		submitter.setName("AI4Bharat");
-		model.setSubmitter(submitter);
+		
+			Criteria tgtLangCriteria = Criteria.where("languages.0.targetLanguage")
+					.is(SupportedLanguages.fromValue(targetLanguage));
+			dynamicQuery.addCriteria(tgtLangCriteria);
+		
 
-		/*
-		 * seach only published model
-		 */
-		model.setStatus("published");
 
-		Example<ModelExtended> example = Example.of(model);
-		List<ModelExtended> list = modelDao.findAll(example);
+		
+			Criteria submitterCriteria = Criteria.where("submitter.name").is("AI4Bharat");
+			dynamicQuery.addCriteria(submitterCriteria);
+		
 
+		
+
+		Criteria statusCriteria = Criteria.where("status").is("published");
+		dynamicQuery.addCriteria(statusCriteria);
+
+		log.info("dynamicQuery : " + dynamicQuery.toString());
+
+		List<ModelExtended> list = mongoTemplate.find(dynamicQuery, ModelExtended.class);
+	
 		if (list != null && list.size() > 0) {
 			GetTransliterationModelIdResponse response = new GetTransliterationModelIdResponse();
 			ModelExtended obj = list.get(0);
@@ -1179,7 +1215,6 @@ public class ModelService {
 
 		return null;
 	}
-
 	public ModelFeedback setInputOutput(ModelFeedbackSubmitRequest request, ModelFeedback feedback) throws IOException {
 
 		MultipartFile inputFile = request.getMultipartInput();
