@@ -86,15 +86,13 @@
                 }
             }
         ],
-        "inputData": [
-            {
-                "input": [
-                    {
-                        "source": "Page 58 of 144 [Writ A No.– 13156 of 2020 along with."
-                    }
-                ]
-            }
-        ]
+        "inputData": {
+            "input": [
+                {
+                    "source": "Page 58 of 144 [Writ A No.– 13156 of 2020 along with."
+                }
+            ]
+        }
     },
     "pipelineOutput": {
         "pipelineResponse": [

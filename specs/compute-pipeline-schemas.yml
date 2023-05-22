@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.0
+  version: 1.0.1
 servers:
   - url: /ulca
 paths: {}
@@ -21,7 +21,7 @@ components:
         pipelineTasks:
           $ref: "#/components/schemas/PipelineRequestList"
         inputData:
-          $ref: "#/components/schemas/PipelineInputList"
+          $ref: "#/components/schemas/PipelineInput"
         controlConfig:
           $ref: "#/components/schemas/ControlConfig"
 
@@ -53,10 +53,10 @@ components:
       items:
         $ref: "#/components/schemas/TaskRequestConfig"
 
-    PipelineInputList:
-      type: array
-      items:
-        $ref: "#/components/schemas/PipelineInput"
+    # PipelineInputList:
+    #   type: array
+    #   items:
+    #     $ref: "#/components/schemas/PipelineInput"
 
 
     TranslationRequestInput:
