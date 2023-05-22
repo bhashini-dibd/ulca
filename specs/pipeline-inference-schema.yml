@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.3
+  version: 1.0.4
 servers:
   - url: /ulca
 paths: {}
@@ -60,6 +60,16 @@ components:
           $ref: '#/components/schemas/TaskSpecifications'
         apiEndPoints:
           $ref: '#/components/schemas/ApiEndPoint'
+      # anyOf:  
+      #   - properties:
+      #      inferenceEndPoint:
+      #       $ref: '#/components/schemas/InferenceAPIEndPoint'
+      #     required: [inferenceEndPoint] 
+      #   - properties:
+      #      inferenceSocketEndPoint:
+      #       $ref: '#/components/schemas/InferenceAPIEndPoint'
+      #     required: [inferenceSocketEndPoint] 
+
     ListOfPipelines:
       type: array
       items:
