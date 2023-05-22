@@ -9,6 +9,7 @@ from config import MAX_API_KEY, SECRET_KEY
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
+list_of_service_providers = ["AI4Bharat","MeitY"]
 
 class CreateUsers(Resource):
 
@@ -189,6 +190,32 @@ class GetApiKey(Resource):
             return res.getresjson(), 200
         else:
             return post_error("400", "userID cannot be empty, please provide one.")
+
+class GetApiKeysForProfile(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys():
+            return post_error("Data Missing", "users not found", None), 400
+        user = body['userID']
+        appName = None
+        userAPIKeys = UserUtils.get_user_api_keys(user,appName)
+        print("API KEYS:",userAPIKeys)
+        for i in range(0,len(userAPIKeys)):
+            if "serviceProviderKeys" in userAPIKeys[i].keys():
+                print("EACH KEY")
+                existing_names = []
+                for existing_keys in userAPIKeys[i]["serviceProviderKeys"]:
+                        existing_names.append(existing_keys["serviceProviderName"])
+                for final_list_name in list_of_service_providers:
+                    if final_list_name not in existing_names:
+                        userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":final_list_name})
+        #userAPIKeys.append({"userId": user})
+        if isinstance(userAPIKeys, list):
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "userID cannot be empty, please provide one.")
+
 
 class RevokeApiKey(Resource): #perform deletion of the userAPIKey from UserID
     def post(self): #userID and userApiKey mandatory.
