@@ -25,6 +25,7 @@ components:
       required:
         - pipelineResponseConfig
         - languages
+        - pipelineInferenceAPIEndPoint
       type: object
       properties:
         languages:
@@ -40,15 +41,17 @@ components:
           description: URL to give feedback regarding pipeline
           type: string
           format: url
-      anyOf:  
-        - properties:
-           pipelineInferenceAPIEndPoint:
-            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
-          required: [pipelineInferenceAPIEndPoint] 
-        - properties:
-           pipelineInferenceSocketEndPoint:
-            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
-          required: [pipelineInferenceSocketEndPoint] 
+        pipelineInferenceAPIEndPoint:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      # anyOf:  
+      #   - properties:
+      #      pipelineInferenceAPIEndPoint:
+      #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      #     required: [pipelineInferenceAPIEndPoint] 
+      #   - properties:
+      #      pipelineInferenceSocketEndPoint:
+      #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      #     required: [pipelineInferenceSocketEndPoint] 
     PipelineConfig:
       required:
         - pipelineId
