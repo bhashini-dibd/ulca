@@ -489,6 +489,26 @@
         "role": "BENCHMARK-DATASET-CONTRIBUTOR",
         "actionID": "5ed50c75-0606-4f0f-8ab1-3f3df6350a6a",
         "active": true
+      },
+      {
+        "role": "ADMIN",
+        "actionID": "d924225e-7a0e-4fb6-80dd-491f1355f33d",
+        "active": true
+      },
+      {
+        "role": "CONTRIBUTOR-USER",
+        "actionID": "d924225e-7a0e-4fb6-80dd-491f1355f33d",
+        "active": true
+      },
+      {
+        "role": "MODEL-ONLY-USER",
+        "actionID": "d924225e-7a0e-4fb6-80dd-491f1355f33d",
+        "active": true
+      },
+      {
+        "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+        "actionID": "d924225e-7a0e-4fb6-80dd-491f1355f33d",
+        "active": true
       }
     ]
   }
