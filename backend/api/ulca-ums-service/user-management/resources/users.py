@@ -355,7 +355,34 @@ class RemoveServiceProviderKey(Resource):
             return post_error("400", "Unable to revoke service provider details, please check userID and/or ulcaApiKey and/or service provider Name ", None), 400
                     
         
+class ToggleDataTracking(Resource):
+    def post(self):
+        body = request.get_json()
+        if "serviceProviderName" not in body.keys():
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "ulcaApiKey" not in body.keys():
+            return post_error("400", "Please provide ulcaApiKey", None), 400
+        if "dataTracking" not in body.keys():
+            return post_error("400", "Please provide value for dataTracking", None), 400
+        
+        boole = body['dataTracking'].lower()
+        if boole == 'false':
+            boole = False
+        elif boole == 'true':
+            boole = True 
+        
+        
+        toggled_matched, toggle_modified = UserUtils.updateDataTrackingValuePull(body['userID'], body['ulcaApiKey'], body['serviceProviderName'], boole)
+        if toggle_modified == 1:
+            res = CustomResponse(Status.TOGGLED_DATA_SUCCESS.value, "SUCCESS")
+            return res.getresjson(), 200
+        elif toggle_modified == 0 and toggled_matched == 1:
+            return post_error("400", "DataTracking already updated.", None), 400
 
+
+        
 
 
 

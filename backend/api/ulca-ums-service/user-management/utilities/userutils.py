@@ -759,7 +759,18 @@ class UserUtils:
         log.info(f"removeSeriveProviders    {json.loads(json_util.dumps(deleteDoc))}")
         return json.loads(json_util.dumps(deleteDoc))
 
-   
+    @staticmethod
+    def updateDataTrackingValuePull(userID, ulcaApiKey, serviceProviderName, dataTrackingVal):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        query_to_update = {"userID":userID,"apiKeyDetails.ulcaApiKey":ulcaApiKey,"apiKeyDetails.serviceProviderKeys.serviceProviderName":serviceProviderName}
+        update = {"$set":{"apiKeyDetails.$[].serviceProviderKeys.$[elem].dataTracking": dataTrackingVal}}
+        array_filters = [{"elem.serviceProviderName": serviceProviderName}]
+        collectUpdate = collections.update_one(query_to_update, update, array_filters= array_filters)
+        log.info(f"collectionsUpdated   {collectUpdate.matched_count}")
+        return collectUpdate.matched_count, collectUpdate.modified_count
+
+
+
     
     @staticmethod
     def getDataTrackingKey(userID, ulcaApiKey):
