@@ -163,18 +163,14 @@ components:
     ApiEndPoint:
       required:
         - apiKeyUrl
-        - dataTrackingToggleUrl
         - feedbackUrl
       type: object
       properties:
         apiKeyUrl:
-          description: URL to generate api keys (using POST Method) and delete api keys (using DELETE method).
+          description: URL to generate api keys (using POST Method) , delete api keys (using DELETE method) and toggle data logging( using PATCH Method).
           type: string
           format: url
-        dataTrackingToggleUrl:
-          description: URL to toggle data logging (using POST Method)
-          type: string
-          format: url
+ 
         feedbackUrl:
           description: URL to give feedback regarding pipeline (using POST Method)
           type: string

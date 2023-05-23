@@ -33,10 +33,6 @@ components:
         pipelineResponseConfig:
           $ref: '#/components/schemas/TaskSchemaList'
         
-        dataTrackingToggleUrl:
-          description: URL to toggle data logging
-          type: string
-          format: url
         feedbackUrl:
           description: URL to give feedback regarding pipeline
           type: string
