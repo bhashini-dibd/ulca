@@ -7,7 +7,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 2.0.0
+  version: 2.0.1
 servers:
   - url: /ulca
 paths: {}
@@ -80,11 +80,20 @@ components:
           $ref: >-
             https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeRequest
         pipelineOutput:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
+          required:
+            - pipelineResponse
+          type: object
+          properties:
+            pipelineResponse:
+              $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/ResponseList"
+            
         suggestedPipelineOutput:
-          $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeResponse
+          required:
+            - pipelineResponse
+          type: object
+          properties:
+            pipelineResponse:
+              $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/ResponseList"
     PipelineFeedbackResponse:
       required:
         - status
