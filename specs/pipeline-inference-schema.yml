@@ -172,10 +172,10 @@ components:
           type: string
           format: url
         dataTrackingToggleUrl:
-          description: URL to toggle data logging
+          description: URL to toggle data logging (using POST Method)
           type: string
           format: url
         feedbackUrl:
-          description: URL to give feedback regarding pipeline
+          description: URL to give feedback regarding pipeline (using POST Method)
           type: string
           format: url
