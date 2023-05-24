@@ -1,12 +1,21 @@
 import API from "../../api";
 import ENDPOINTS from "../../../../configs/apiendpoints";
 import md5 from "md5";
+import C from "../../constants";
 
 export default class FetchApiKeysAPI extends API {
   constructor(timeout = 2000) {
     super("POST", timeout, false);
+    this.type = C.GET_API_KEYS;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getApiKeys}`;
+  }
+
+  processResponse(res) {
+    super.processResponse(res);
+    if (res) {
+      this.report = res.data;
+    }
   }
 
   apiEndPoint() {
@@ -36,6 +45,6 @@ export default class FetchApiKeysAPI extends API {
   }
 
   getPayload() {
-    return this.credentials;
+    return this.report;
   }
 }

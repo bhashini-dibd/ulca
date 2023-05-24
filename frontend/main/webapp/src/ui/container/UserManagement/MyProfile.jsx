@@ -21,7 +21,7 @@ import { Cached } from "@material-ui/icons";
 import DataSet from "../../styles/Dataset";
 import Modal from "../../components/common/Modal";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import GenerateAPI from "../../../redux/actions/api/UserManagement/GenerateApiKey";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
@@ -41,6 +41,9 @@ import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManageme
 const MyProfile = (props) => {
   const { classes } = props;
   const dispatch = useDispatch();
+
+  const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
+
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [snackbar, setSnackbarInfo] = useState({
@@ -57,6 +60,12 @@ const MyProfile = (props) => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [openServiceProviderDialog, setOpenServiceProviderDialog] = useState(false);
   const[serviceProviderName,setServiceProviderName] = useState("")
+
+  useEffect(() => {
+    if(apiKeys) {
+      setTableData(apiKeys);
+    }
+  }, [apiKeys])
 
   const handlecChangeAddName = (e) => {
     setAppName(e.target.value);
@@ -123,26 +132,8 @@ console.log(UserDetails.userID
   };
 
   const getApiKeysCall = async () => {
-    setLoading(true);
     const apiObj = new FetchApiKeysAPI();
-    const res = await fetch(apiObj.apiEndPoint(), {
-      method: "POST",
-      headers: apiObj.getHeaders().headers,
-      body: JSON.stringify(apiObj.getBody()),
-    });
-
-    const resp = await res.json();
-    if (res.ok) {
-      setTableData(resp?.data);
-      setLoading(false);
-    } else {
-      setSnackbarInfo({
-        open: true,
-        message: resp?.message,
-        variant: "error",
-      });
-      setLoading(false);
-    }
+    dispatch(APITransport(apiObj));
   };
 
   useEffect(() => {
