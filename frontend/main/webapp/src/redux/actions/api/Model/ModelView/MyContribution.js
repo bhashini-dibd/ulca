@@ -9,8 +9,7 @@ export default class MyContribution extends API {
         this.type = C.GET_MODEL_CONTRIBUTION_LIST;
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getModelContributionList}`;
-        this.startPage = startPage;
-        this.endPage = endPage;
+       
     }
 
     toString() {
@@ -25,7 +24,7 @@ export default class MyContribution extends API {
     }
 
     apiEndPoint() {
-        let url = `${this.endpoint}?userId=${this.user_id}&startPage=${this.startPage}&endPage=${this.endPage}` 
+        let url = `${this.endpoint}?userId=${this.user_id}` 
         return url;
     }
 
