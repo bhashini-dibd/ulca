@@ -3,7 +3,7 @@ import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from 'md5';
 export default class MyContribution extends API {
-    constructor(file_name, user_id, startPage, endPage, timeout = 200000) {
+    constructor(file_name, user_id,  timeout = 200000) {
         super("GET", timeout, false);
         this.user_id = JSON.parse(localStorage.getItem('userDetails')).userID
         this.type = C.GET_MODEL_CONTRIBUTION_LIST;
