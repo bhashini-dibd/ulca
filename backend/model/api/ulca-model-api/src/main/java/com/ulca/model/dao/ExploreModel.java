@@ -10,7 +10,6 @@ public class ExploreModel {
 	private String name ;
 	private String userId;
 	private String version;
-	private String description;
 	private ModelTask task;
 	private Domain domain;
 	private License license ;
@@ -40,12 +39,7 @@ public class ExploreModel {
 	public void setVersion(String version) {
 		this.version = version;
 	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	
 	public ModelTask getTask() {
 		return task;
 	}
@@ -79,7 +73,7 @@ public class ExploreModel {
 	@Override
 	public String toString() {
 		return "ExploreModel [modelId=" + modelId + ", name=" + name + ", userId=" + userId + ", version=" + version
-				+ ", description=" + description + ", task=" + task + ", domain=" + domain + ", license=" + license
+				+ " task=" + task + ", domain=" + domain + ", license=" + license
 				+ ", status=" + status + ", submittedOn=" + submittedOn + "]";
 	}
 	
