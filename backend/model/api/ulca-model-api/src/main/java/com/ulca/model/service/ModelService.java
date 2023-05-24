@@ -64,6 +64,7 @@ import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.util.DomainEnum;
 import com.ulca.benchmark.util.ModelConstants;
+import com.ulca.model.dao.ExploreModel;
 import com.ulca.model.dao.InferenceAPIEndPointDto;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
@@ -92,6 +93,7 @@ import com.ulca.model.response.ModelFeedbackSubmitResponse;
 import com.ulca.model.response.ModelHealthStatusResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
+import com.ulca.model.response.ModelListResponseUserId;
 import com.ulca.model.response.ModelPipelineResponse;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.ModelStatusChangeResponse;
@@ -288,26 +290,31 @@ public class ModelService {
 			}
 		}
 
-		List<ModelListResponseDto> modelDtoList = new ArrayList<ModelListResponseDto>();
+	//	List<ModelListResponseDto> modelDtoList = new ArrayList<ModelListResponseDto>();
+		
+		List<ModelListResponseUserId> modelDtoList = new ArrayList<ModelListResponseUserId>();
+
 		for (ModelExtended model : list) {
 			// changes
-			ModelExtendedDto modelExtendedDto = new ModelExtendedDto();
-			BeanUtils.copyProperties(model, modelExtendedDto);
-			InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
-			InferenceAPIEndPointDto inferenceAPIEndPointDto = new InferenceAPIEndPointDto();
-
-			BeanUtils.copyProperties(inferenceAPIEndPoint, inferenceAPIEndPointDto);
-
-			modelExtendedDto.setInferenceEndPoint(inferenceAPIEndPointDto);
-
-			ModelListResponseDto modelDto = new ModelListResponseDto();
+			 ExploreModel mycontrib = new ExploreModel();
+		    BeanUtils.copyProperties(model, mycontrib);
+           			/*
+			 * ModelExtendedDto modelExtendedDto = new ModelExtendedDto();
+			 * BeanUtils.copyProperties(model, modelExtendedDto); InferenceAPIEndPoint
+			 * inferenceAPIEndPoint = model.getInferenceEndPoint(); InferenceAPIEndPointDto
+			 * inferenceAPIEndPointDto = new InferenceAPIEndPointDto();
+			 * BeanUtils.copyProperties(inferenceAPIEndPoint, inferenceAPIEndPointDto);
+			 * modelExtendedDto.setInferenceEndPoint(inferenceAPIEndPointDto);
+			 */
+			//ModelListResponseDto modelDto = new ModelListResponseDto();
+            ModelListResponseUserId modelDto = new ModelListResponseUserId();
 			// BeanUtils.copyProperties(model, modelDto);
-			BeanUtils.copyProperties(modelExtendedDto, modelDto);
+			BeanUtils.copyProperties(mycontrib, modelDto);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
 			modelDtoList.add(modelDto);
 		}
-		modelDtoList.sort(Comparator.comparing(ModelListResponseDto::getSubmittedOn).reversed());
+		modelDtoList.sort(Comparator.comparing(ModelListResponseUserId::getSubmittedOn).reversed());
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size(), count);
 	}
 
