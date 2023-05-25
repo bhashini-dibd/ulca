@@ -96,6 +96,12 @@ const ContributionList = (props) => {
   });
 
   useEffect(() => {
+    if(myContributionReport.filteredData.length >0){
+      setLoading(false);
+    }   
+  },[myContributionReport]);
+
+  useEffect(() => {
     if (!refHook.current) {
       MyContributionListApi();
       refHook.current = true;
@@ -157,6 +163,7 @@ const ContributionList = (props) => {
 
   const MyContributionListApi = async () => {
     dispatch(ClearReport());
+    setLoading(true)
     const userObj = new MyContributionList(
       "SAVE",
       "A_FBTTR-VWSge-1619075981554",
@@ -698,12 +705,21 @@ const ContributionList = (props) => {
     // },
     //     onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
+    displaySelectToolbar: false,
+    fixedHeader: false,
+    filterType: "checkbox",
+    download: false,
+    print: false,
+    rowsPerPageOptions: [10, 25, 50, 100],
+    // rowsPerPage: PageInfo.count,
+    filter: false,
+    // page: PageInfo.page,
+    viewColumns: false,
+    selectableRows: "none",
     search: false,
+    jumpToPage: true,
     filter: false,
     displaySelectToolbar: false,
-    filterType: "checkbox",
-    fixedHeader: false,
-    download: false,
     expandableRows: true,
     onRowExpansionChange: (
       currentRowsExpanded,
@@ -739,26 +755,26 @@ const ContributionList = (props) => {
         );
       }
     },
-    print: false,
-    viewColumns: false,
-    rowsPerPageOptions: [10, 25, 50, 100],
-    rowsPerPageOptions: false,
-    selectableRows: "none",
-    page: PageInfo.page,
-    count: totalCount,
-    serverSide: true,
-    // onTableChange: (action, tableState) => {
-    //   switch (action) {
-    //     case "changePage":
-    //       MyContributionListApi(`${tableState.page+1}`, `${tableState.page+1}`)
-    //       processTableClickedNextOrPrevious("", tableState.page);
-    //       break;
-    //     case "changeRowsPerPage":
-    //       rowChange(tableState.rowsPerPage);
-    //       break;
-    //     default:
-    //   }
-    // },
+    // print: false,
+    // viewColumns: false,
+    // rowsPerPageOptions: [10, 25, 50, 100],
+    // selectableRows: "none",
+    // // page: PageInfo.page,
+    // // count: totalCount,
+    // serverSide: true,
+    // jumpToPage: true,
+    // // onTableChange: (action, tableState) => {
+    // //   switch (action) {
+    // //     case "changePage":
+    // //       MyContributionListApi(`${tableState.page+1}`, `${tableState.page+1}`)
+    // //       processTableClickedNextOrPrevious("", tableState.page);
+    // //       break;
+    // //     case "changeRowsPerPage":
+    // //       rowChange(tableState.rowsPerPage);
+    // //       break;
+    // //     default:
+    // //   }
+    // // },
   };
 
   const handleCheckboxClick = (value, prop) => {

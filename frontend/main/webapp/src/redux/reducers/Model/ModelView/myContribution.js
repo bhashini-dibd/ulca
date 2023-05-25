@@ -114,7 +114,6 @@ const getContributionList = (state, payload) => {
   let filter = { status: [], task: [], domain: [], license: [] };
   let refreshStatus = false;
   payload?.data?.forEach((element) => {
-
         responseData.push({
       benchmarkPerformance: convertDate(element?.benchmarkPerformance),
       version: element.version ? element.version : "v1.0",
