@@ -185,6 +185,7 @@ public class DatasetService {
 
 
 		List<DatasetListByUserIdResponseDto> datasetDtoList = new ArrayList<DatasetListByUserIdResponseDto>();
+		if(!list.isEmpty()) {
 		for (Dataset dataset : list) {
 			ProcessTracker processTracker = processTrackerDao.findByDatasetId(dataset.getDatasetId()).get(0);
 			String serviceRequestNumber = processTracker.getServiceRequestNumber();
@@ -214,6 +215,7 @@ public class DatasetService {
 			}
 
 		}
+	}
 		log.info("******** Exit DatasetService:: datasetListByUserId *******");
 
 
