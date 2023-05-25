@@ -145,6 +145,7 @@ public class DatasetService {
 		log.info("******** Entry DatasetService:: datasetListByUserId *******");
 		DatasetListByUserIdResponse response = null;
 		Integer count = datasetDao.countBySubmitterId(userId);
+		log.info("Number of datatsets :: "+count);
 		List<Dataset> list = new ArrayList<Dataset>();
 		if (startPage != null) {
 			int startPg = startPage - 1;
@@ -182,7 +183,8 @@ public class DatasetService {
 
 			}
 		}
-
+         
+		log.info("list of datasets :: "+list);
 
 		List<DatasetListByUserIdResponseDto> datasetDtoList = new ArrayList<DatasetListByUserIdResponseDto>();
 		if(!list.isEmpty()) {
