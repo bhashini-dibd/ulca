@@ -11,13 +11,16 @@ import javax.validation.constraints.*;
 /**
  * ApiEndPoint
  */
-
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-23T09:19:31.692607590Z[GMT]")
+@Validated
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-05-23T08:33:27.472254079Z[GMT]")
 
 
 public class ApiEndPoint   {
   @JsonProperty("apiKeyUrl")
   private String apiKeyUrl = null;
+
+  @JsonProperty("feedbackUrl")
+  private String feedbackUrl = null;
 
   public ApiEndPoint apiKeyUrl(String apiKeyUrl) {
     this.apiKeyUrl = apiKeyUrl;
@@ -25,10 +28,10 @@ public class ApiEndPoint   {
   }
 
   /**
-   * URL to generate api keys (using POST Method) and delete api keys (using DELETE method).
+   * URL to generate api keys (using POST Method) , delete api keys (using DELETE method) and toggle data logging( using PATCH Method).
    * @return apiKeyUrl
    **/
-  @Schema(required = true, description = "URL to generate api keys (using POST Method) and delete api keys (using DELETE method).")
+  @Schema(required = true, description = "URL to generate api keys (using POST Method) , delete api keys (using DELETE method) and toggle data logging( using PATCH Method).")
       @NotNull
 
     public String getApiKeyUrl() {
@@ -37,6 +40,26 @@ public class ApiEndPoint   {
 
   public void setApiKeyUrl(String apiKeyUrl) {
     this.apiKeyUrl = apiKeyUrl;
+  }
+
+  public ApiEndPoint feedbackUrl(String feedbackUrl) {
+    this.feedbackUrl = feedbackUrl;
+    return this;
+  }
+
+  /**
+   * URL to give feedback regarding pipeline (using POST Method)
+   * @return feedbackUrl
+   **/
+  @Schema(required = true, description = "URL to give feedback regarding pipeline (using POST Method)")
+      @NotNull
+
+    public String getFeedbackUrl() {
+    return feedbackUrl;
+  }
+
+  public void setFeedbackUrl(String feedbackUrl) {
+    this.feedbackUrl = feedbackUrl;
   }
 
 
@@ -49,12 +72,13 @@ public class ApiEndPoint   {
       return false;
     }
     ApiEndPoint apiEndPoint = (ApiEndPoint) o;
-    return Objects.equals(this.apiKeyUrl, apiEndPoint.apiKeyUrl);
+    return Objects.equals(this.apiKeyUrl, apiEndPoint.apiKeyUrl) &&
+        Objects.equals(this.feedbackUrl, apiEndPoint.feedbackUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(apiKeyUrl);
+    return Objects.hash(apiKeyUrl, feedbackUrl);
   }
 
   @Override
@@ -63,6 +87,7 @@ public class ApiEndPoint   {
     sb.append("class ApiEndPoint {\n");
     
     sb.append("    apiKeyUrl: ").append(toIndentedString(apiKeyUrl)).append("\n");
+    sb.append("    feedbackUrl: ").append(toIndentedString(feedbackUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }
