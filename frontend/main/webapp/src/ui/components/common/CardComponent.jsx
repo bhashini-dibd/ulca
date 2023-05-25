@@ -86,7 +86,7 @@ const CardComponent = (props) => {
   const renderSourceLanguage = (data) => {
     if (data.source) {
       return (
-        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+        <Grid item  xs={3} sm={3} md={3} lg={4} xl={4}>
           <Typography
             variant="caption"
             style={{ color: "#ffffff", opacity: "0.6" }}
@@ -106,7 +106,7 @@ const CardComponent = (props) => {
   const renderTargetLanguage = (data) => {
     if (data.task === "translation" || data.task === "transliteration")
       return (
-        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+        <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
           <Typography
             variant="caption"
             style={{ color: "#ffffff", opacity: "0.6" }}
@@ -133,7 +133,7 @@ const CardComponent = (props) => {
         },
       } = data;
       return (
-        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+        <Grid item  xs={3} sm={3} md={3} lg={4} xl={4}>
           <Typography
             variant="caption"
             style={{ color: "#ffffff", opacity: "0.6" }}

@@ -126,6 +126,15 @@ const getDomainDetails = (data) => {
   }
 };
 
+const getSourceDetails = (data) => {
+  let label = "";
+  if (data.length > 0 && data.length <= 1) {
+    label = getLanguageName(data[0].sourceLanguage)
+   return  label
+    } else {
+    return "Multiple"
+  }
+};
 
 const getClearFilter = (data) => {
   data.filteredData = data.responseData;
@@ -144,8 +153,7 @@ const getContributionList = (state, payload) => {
   payload.forEach((element) => {
     let sLanguage =
       element.languages?.length > 0 &&
-      element.languages[0].sourceLanguage &&
-      getLanguageName(element.languages[0].sourceLanguage);
+      getSourceDetails(element.languages);
     let tLanguage =
       element.languages &&
       element.languages.length > 0 &&
@@ -168,8 +176,8 @@ const getContributionList = (state, payload) => {
       language: lang,
       refUrl: element.refUrl ? element.refUrl : "NA",
       inferenceEndPoint: element.inferenceEndPoint,
-      source:
-        element.languages?.length > 0 && element.languages[0].sourceLanguage,
+      source: sLanguage,
+        // element.languages?.length > 0 && element.languages[0].sourceLanguage,
       target:
         element.languages &&
         element.languages.length > 0 &&
