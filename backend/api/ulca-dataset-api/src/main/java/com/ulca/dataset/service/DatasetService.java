@@ -153,8 +153,11 @@ public class DatasetService {
 				Pageable paging = null;
 				if (pgSize != null) {
 					paging = PageRequest.of(i, pgSize, Sort.by("createdOn").descending());
+					log.info("paging :: "+paging);
 				} else {
 					paging = PageRequest.of(i, PAGE_SIZE, Sort.by("createdOn").descending());
+					log.info("paging :: "+paging);
+
 				}
 				Page<Dataset> datasetList = null;
 				if (name != null) {
@@ -162,11 +165,15 @@ public class DatasetService {
 					dataset.setSubmitterId(userId);
 					dataset.setDatasetName(name);
 					Example<Dataset> example = Example.of(dataset);
-
+                    log.info("example :: "+example);
 					datasetList = datasetDao.findAll(example, paging);
+					log.info("datasetList :: "+datasetList);
 					count = datasetDao.countBySubmitterIdAndDatasetName(userId, name);
+					log.info("count :: "+count);
 				} else {
 					datasetList = datasetDao.findBySubmitterId(userId, paging);
+					log.info("datasetList :: "+datasetList);
+
 				}
 				list.addAll(datasetList.toList());
 			}
@@ -189,9 +196,14 @@ public class DatasetService {
 		List<DatasetListByUserIdResponseDto> datasetDtoList = new ArrayList<DatasetListByUserIdResponseDto>();
 		if(!list.isEmpty()) {
 		for (Dataset dataset : list) {
+			log.info("dataset name :: "+dataset.getDatasetName());
 			ProcessTracker processTracker = processTrackerDao.findByDatasetId(dataset.getDatasetId()).get(0);
+			log.info("processTracker :: "+processTracker);
 			String serviceRequestNumber = processTracker.getServiceRequestNumber();
+			log.info("serviceRequestNumber :: "+serviceRequestNumber);
+			
 			String status = processTracker.getStatus();
+			log.info("status :: "+status);
 			if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
 				datasetDtoList.add(new DatasetListByUserIdResponseDto(dataset.getDatasetId(), serviceRequestNumber,
 						dataset.getDatasetName(), dataset.getDatasetType(), dataset.getCreatedOn(), status));
