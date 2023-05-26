@@ -3,7 +3,6 @@ package io.swagger.pipelinerequest;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +13,8 @@ import javax.validation.constraints.*;
  * PipelineResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T08:00:21.046011704Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-05-23T08:32:37.321654139Z[GMT]")
+
 
 public class PipelineResponse   {
   @JsonProperty("languages")
@@ -22,6 +22,9 @@ public class PipelineResponse   {
 
   @JsonProperty("pipelineResponseConfig")
   private TaskSchemaList pipelineResponseConfig = null;
+
+  @JsonProperty("feedbackUrl")
+  private String feedbackUrl = null;
 
   @JsonProperty("pipelineInferenceAPIEndPoint")
   private PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = null;
@@ -68,6 +71,25 @@ public class PipelineResponse   {
     this.pipelineResponseConfig = pipelineResponseConfig;
   }
 
+  public PipelineResponse feedbackUrl(String feedbackUrl) {
+    this.feedbackUrl = feedbackUrl;
+    return this;
+  }
+
+  /**
+   * URL to give feedback regarding pipeline
+   * @return feedbackUrl
+   **/
+  @Schema(description = "URL to give feedback regarding pipeline")
+  
+    public String getFeedbackUrl() {
+    return feedbackUrl;
+  }
+
+  public void setFeedbackUrl(String feedbackUrl) {
+    this.feedbackUrl = feedbackUrl;
+  }
+
   public PipelineResponse pipelineInferenceAPIEndPoint(PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint) {
     this.pipelineInferenceAPIEndPoint = pipelineInferenceAPIEndPoint;
     return this;
@@ -101,12 +123,13 @@ public class PipelineResponse   {
     PipelineResponse pipelineResponse = (PipelineResponse) o;
     return Objects.equals(this.languages, pipelineResponse.languages) &&
         Objects.equals(this.pipelineResponseConfig, pipelineResponse.pipelineResponseConfig) &&
+        Objects.equals(this.feedbackUrl, pipelineResponse.feedbackUrl) &&
         Objects.equals(this.pipelineInferenceAPIEndPoint, pipelineResponse.pipelineInferenceAPIEndPoint);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(languages, pipelineResponseConfig, pipelineInferenceAPIEndPoint);
+    return Objects.hash(languages, pipelineResponseConfig, feedbackUrl, pipelineInferenceAPIEndPoint);
   }
 
   @Override
@@ -116,6 +139,7 @@ public class PipelineResponse   {
     
     sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
     sb.append("    pipelineResponseConfig: ").append(toIndentedString(pipelineResponseConfig)).append("\n");
+    sb.append("    feedbackUrl: ").append(toIndentedString(feedbackUrl)).append("\n");
     sb.append("    pipelineInferenceAPIEndPoint: ").append(toIndentedString(pipelineInferenceAPIEndPoint)).append("\n");
     sb.append("}");
     return sb.toString();
