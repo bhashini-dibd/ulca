@@ -2,7 +2,7 @@ import os
 import time
 
 #CROSS_MODULE_COMMON_CONFIGS
-MONGO_SERVER_HOST   =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb://localhost:27017')#,localhost:27018/?replicaSet=foo
+MONGO_SERVER_HOST   =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb+srv://notifiertester12:HllDIBKyjwFObCrQ@cluster0.ntslk7r.mongodb.net/test')#,localhost:27018/?replicaSet=foo
 
 #MODULE-SPECIFIC-CONFIGS
 
@@ -16,11 +16,12 @@ ENABLE_CORS =   False
 #mongodb-configs
 MONGO_DB_SCHEMA                 =   os.environ.get('UMS_MONGO_IDENTIFIER', 'ulca-user-management')
 MONGO_PROCESS_DB_SCHEMA         =   os.environ.get('ULCA_PROCESS_IDENTIFIER', 'ulca-process-tracker')
-USR_MONGO_COLLECTION            =   os.environ.get('UMS_USR_COLLECTION', 'ulca-users')
+USR_MONGO_COLLECTION            =   os.environ.get('UMS_USR_COLLECTION', 'ulca-user')
 USR_KEY_MONGO_COLLECTION        =   os.environ.get('UMS_USR_KEY_COLLECTION', 'ulca-user-keys')
 USR_TEMP_TOKEN_MONGO_COLLECTION =   os.environ.get('UMS_USR_TEMP_TOKEN_COLLECTION', 'ulca-user-tokens')
 USR_ORG_MONGO_COLLECTION        =   os.environ.get('UMS_ORG_COLLECTION', 'organization')
 USR_MONGO_PROCESS_COLLECTION    =   os.environ.get('ULCA_PROCESS_COLLECTION', 'pipeline-model')
+AES_SECRET_KEY                  =   os.environ.get('AES_SECRET_KEY_FOR_UMS', 'secretKey')
 
  
 #common-variables
@@ -59,3 +60,5 @@ USER_API_KEY_EXPIRY     =   os.environ.get('ULCA_API_KEY_EXP_DAYS',30)
 #React-app base url
 BASE_URL                =   os.environ.get('ULCA_REACT_APP_BASE_URL','https://dev.ulcacontrib.org/')
 RESET_PWD_ENDPOINT      =   os.environ.get('ULCA_RESET_PWD_ENDPOINT','user/reset-password/')
+#dhruva data toggle patch request
+PATCH_URL               =   "https://api.dhruva.ai4bharat.org/auth/api-key/ulca"

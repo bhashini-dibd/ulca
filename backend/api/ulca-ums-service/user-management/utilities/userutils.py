@@ -725,12 +725,8 @@ class UserUtils:
                 last_byte = decrypted_padded[-1]
                 decrypted = decrypted_padded[0:-last_byte]
                 decryptedMasterKeysList.append(decrypted.decode("UTF-8"))
-                #decryptedMasterKeysList.append(decrypted.decode("UTF-8"))
-                #decryptedMasterKeys["value"] = decrypted.decode("UTF-8")
-            #log.info(f"decrrrrrrrrrrrrr {decryptedMasterKeysList}")
 
             decryptedMasterKeysDict[decryptedMasterKeysList[0]] = decryptedMasterKeysList[1]
-           # decryptedMasterKeysDict["value"] = 
         return decryptedMasterKeysDict
 
 
@@ -770,8 +766,23 @@ class UserUtils:
         return collectUpdate.matched_count, collectUpdate.modified_count
 
 
+    @staticmethod
+    def getUserEmail(userID, ulcaAK):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        email = collections.find_one({"userID":userID})
+        if len(email['apiKeyDetails']) > 1:
+            for appName in email['apiKeyDetails']:
+                if appName['ulcaApiKey'] == ulcaAK:
+                    ulcaAppN = appName['appName']
+        return email['email'], ulcaAppN
 
-    
+    @staticmethod
+    def getPipelinefromSrvcPN(spn):
+        collection = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipeline = collection.find_one({"serviceProvider.name":spn})
+        return pipeline
+
+
     @staticmethod
     def getDataTrackingKey(userID, ulcaApiKey):
         collections = db.get_db()[USR_MONGO_COLLECTION]

@@ -5,7 +5,8 @@ from utilities import UserUtils
 from flask import request, jsonify
 import config
 import logging
-from config import MAX_API_KEY, SECRET_KEY
+import requests
+from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -372,15 +373,36 @@ class ToggleDataTracking(Resource):
             boole = False
         elif boole == 'true':
             boole = True 
-        
-        
-        toggled_matched, toggle_modified = UserUtils.updateDataTrackingValuePull(body['userID'], body['ulcaApiKey'], body['serviceProviderName'], boole)
-        if toggle_modified == 1:
-            res = CustomResponse(Status.TOGGLED_DATA_SUCCESS.value, "SUCCESS")
-            return res.getresjson(), 200
-        elif toggle_modified == 0 and toggled_matched == 1:
-            return post_error("400", "DataTracking already updated.", None), 400
+        #get email from userID, appName from unique ulcaApiKey, masterKeyDetails for headers auth fropm pipeLine, apiKeyUrl from pipeline.
+        #ONly success result from patch request needs to be sent to frontEnd.
+        #getEmail from userID
+        userEmail, appName_ = UserUtils.getUserEmail(body['userID'],body['ulcaApiKey'])
+        pipeline_doc = UserUtils.getPipelinefromSrvcPN(body['serviceProviderName'])
+        pipeline_masterkeys = []#dict for headers
+        pipeline_masterkeys.append(pipeline_doc['inferenceEndPoint']['masterApiKey']['name'])
+        pipeline_masterkeys.append(pipeline_doc['inferenceEndPoint']['masterApiKey']['value'])
+        decrypt_headers = {"authorization":"bGv7gMOfQqTDfTuejeC7qoRW-AAauUUtdyYtWYXj9IODibnd8dpuwb-Ap9yIHSoA"}
+        #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,pipeline_masterkeys)
+        #req_body = {"emailId" : userEmail, "appName" :  appName_,'dataTracking' : boole}
+        req_body = {
+    "emailId" : "rathan.muralidhar@tarento.com",
+    "appName": "appv",
+    "dataTracking": False
+}
+        patch_req = requests.patch(url = PATCH_URL, headers=decrypt_headers, json=req_body)
+        log.info(decrypt_headers)
+        log.info((patch_req.json()['status']))
+        if (patch_req.json()['status']) == 'success':
 
+            toggled_matched, toggle_modified = UserUtils.updateDataTrackingValuePull(body['userID'], body['ulcaApiKey'], body['serviceProviderName'], boole)
+            if toggle_modified == 1:
+
+                res = CustomResponse(Status.TOGGLED_DATA_SUCCESS.value, "SUCCESS")
+                return res.getresjson(), 200
+            elif toggle_modified == 0 and toggled_matched == 1:
+                return post_error("400", "DataTracking already updated.", None), 400
+        elif 'success' not in patch_req.json().keys():
+            return post_error("400", "Unable to toggle Data Tracking at the moment, please try again", None), 40000000000000000004
 
         
 
