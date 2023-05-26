@@ -331,8 +331,44 @@ public class ModelService {
 			BeanUtils.copyProperties(model, modelExtendedDto);
 
 			InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
+			OneOfInferenceAPIEndPointSchema schema = model.getInferenceEndPoint().getSchema();
+
 			InferenceAPIEndPointDto dto = new InferenceAPIEndPointDto();
 			BeanUtils.copyProperties(inferenceAPIEndPoint, dto);
+			
+			///   STREAMING 
+			
+
+			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
+					|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
+				if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+					ASRInference asrInference = (ASRInference) schema;
+					if (!asrInference.getModelProcessingType().getType()
+							.equals(ModelProcessingType.TypeEnum.STREAMING)) {
+						
+						dto.setCallbackUrl("");
+					}
+				} else {
+					TTSInference ttsInference = (TTSInference) schema;
+
+					if (!ttsInference.getModelProcessingType().getType()
+							.equals(ModelProcessingType.TypeEnum.STREAMING)) {
+						
+						dto.setCallbackUrl("");
+					}
+				}
+			}else {
+				
+				dto.setCallbackUrl("");
+
+			}
+	
+			
+			////STREAMING END
+			
+			
+			
+			
 			modelExtendedDto.setInferenceEndPoint(dto);
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(modelExtendedDto, modelDto);
@@ -977,6 +1013,7 @@ public class ModelService {
 			InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 			InferenceAPIEndPointDto dto = new InferenceAPIEndPointDto();
 			BeanUtils.copyProperties(inferenceAPIEndPoint, dto);
+			dto.setCallbackUrl("");
 			modelExtendedDto.setInferenceEndPoint(dto);
 			modelDtoList.add(modelExtendedDto);
 		}
@@ -1322,8 +1359,9 @@ public class ModelService {
 
 		PipelineResponse pipelineResponse = new PipelineResponse();
 		/// Ulca ApiKey Part
+		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
 
-		PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
+        PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
 		pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
 		pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
 		pipelineInferenceAPIEndPoint
