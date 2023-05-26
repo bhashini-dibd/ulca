@@ -366,43 +366,38 @@ class ToggleDataTracking(Resource):
         if "ulcaApiKey" not in body.keys():
             return post_error("400", "Please provide ulcaApiKey", None), 400
         if "dataTracking" not in body.keys():
-            return post_error("400", "Please provide value for dataTracking", None), 400
-        
-        boole = body['dataTracking'].lower()
-        if boole == 'false':
-            boole = False
-        elif boole == 'true':
-            boole = True 
+            return post_error("400", "Please provide value for dataTracking", None), 400  
+        if isinstance(body['dataTracking'], bool):
+            boole = body['dataTracking']
+        else:
+            return post_error("400", "Please provide Boolean", None), 400
+
         #get email from userID, appName from unique ulcaApiKey, masterKeyDetails for headers auth fropm pipeLine, apiKeyUrl from pipeline.
         #ONly success result from patch request needs to be sent to frontEnd.
         #getEmail from userID
         userEmail, appName_ = UserUtils.getUserEmail(body['userID'],body['ulcaApiKey'])
+        if not userEmail or not appName_:
+           return post_error("400", "Error in fetching Details, please check the userID and ulcaApiKey", None), 400
         pipeline_doc = UserUtils.getPipelinefromSrvcPN(body['serviceProviderName'])
+        if not pipeline_doc and not isinstance(pipeline_doc,dict):
+            return post_error("400", "Please check the Service Provider Name", None), 400
         pipeline_masterkeys = []#dict for headers
         pipeline_masterkeys.append(pipeline_doc['inferenceEndPoint']['masterApiKey']['name'])
         pipeline_masterkeys.append(pipeline_doc['inferenceEndPoint']['masterApiKey']['value'])
-        decrypt_headers = {"authorization":"bGv7gMOfQqTDfTuejeC7qoRW-AAauUUtdyYtWYXj9IODibnd8dpuwb-Ap9yIHSoA"}
-        #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,pipeline_masterkeys)
-        #req_body = {"emailId" : userEmail, "appName" :  appName_,'dataTracking' : boole}
-        req_body = {
-    "emailId" : "rathan.muralidhar@tarento.com",
-    "appName": "appv",
-    "dataTracking": False
-}
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,pipeline_masterkeys)
+        req_body = {"emailId" : userEmail, "appName" :  appName_,'dataTracking' : boole}
         patch_req = requests.patch(url = PATCH_URL, headers=decrypt_headers, json=req_body)
-        log.info(decrypt_headers)
-        log.info((patch_req.json()['status']))
         if (patch_req.json()['status']) == 'success':
-
             toggled_matched, toggle_modified = UserUtils.updateDataTrackingValuePull(body['userID'], body['ulcaApiKey'], body['serviceProviderName'], boole)
             if toggle_modified == 1:
-
                 res = CustomResponse(Status.TOGGLED_DATA_SUCCESS.value, "SUCCESS")
                 return res.getresjson(), 200
             elif toggle_modified == 0 and toggled_matched == 1:
-                return post_error("400", "DataTracking already updated.", None), 400
+                res = CustomResponse(Status.TOGGLED_DATA_SUCCESS.value, "SUCCESS")
+                return res.getresjson(), 200
+
         elif 'success' not in patch_req.json().keys():
-            return post_error("400", "Unable to toggle Data Tracking at the moment, please try again", None), 40000000000000000004
+            return post_error("400", "Unable to toggle Data Tracking at the moment, please try again", None), 400
 
         
 
