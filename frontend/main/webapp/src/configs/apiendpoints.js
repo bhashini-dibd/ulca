@@ -37,9 +37,10 @@ const endpoints = {
   getModelHealthStatus: "/ulca/apis/v0/model/getModelHealthStatus",
   getTransliterationModelId:"/ulca/apis/v0/model/getTransliterationModelId",
   generateApiKey:"/ulca/user-mgmt/v1/users/generateApiKey",
-  getApiKeys: "/ulca/user-mgmt/v1/users/getApiKeys",
+  getApiKeys: "/ulca/user-mgmt/v1/users/getApiKeysForProfile",
   revokeApiKey: "/ulca/user-mgmt/v1/users/revokeApiKey",
-  removeServiceProviderKey:"/ulca/user-mgmt/v1/users/removeServiceProviderKey"
+  removeServiceProviderKey:"/ulca/user-mgmt/v1/users/removeServiceProviderKey",
+  generateServiceProviderKey:"/ulca/user-mgmt/v1/users/generateServiceProviderKey",
   
 };
 

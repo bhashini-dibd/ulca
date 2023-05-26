@@ -1107,7 +1107,17 @@ const DataSet = (theme) => ({
       backgroundColor: "white",
       boxShadow: "none",
     },
-  }
+  },
+  myProfileGenerateButton: {
+    borderRadius: "16px",
+    boxShadow: "none",
+    padding: "10px 20px",
+    fontSize: "1rem",
+    width: "fit-content",
+    height:"36px",
+    cursor: "pointer",
+    textTransform: "none",
+  },
 });
 
 export default DataSet;

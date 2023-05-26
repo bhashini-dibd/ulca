@@ -37,6 +37,7 @@ import TableBody from "@material-ui/core/TableBody";
 import getSearchedValue from "../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
 import ServiceProviderDialog from "../../components/common/ServiceProviderDialog";
 import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/RemoveServiceProviderKey";
+import GenerateServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/GenerateServiceProviderKey";
 
 const MyProfile = (props) => {
   const { classes } = props;
@@ -84,8 +85,7 @@ const MyProfile = (props) => {
   };
 
   const UserDetails = JSON.parse(localStorage.getItem("userDetails"));
-console.log(UserDetails.userID
-  ,"UserDetails")
+
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -475,6 +475,32 @@ console.log(UserDetails.userID
     },
   ];
 
+  const handleGenerateInferenceAPIKey = async (providerName, ulcaKey) => {
+    const apiObj = new GenerateServiceProviderKeyAPI(ulcaKey, providerName);
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+
+    const resp = await res.json();
+
+    if (res.ok) {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "success",
+      });
+      await getApiKeysCall();
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+    }
+  };
+
   const data =
     tableData && tableData.length > 0
       ? pageSearch().map((el, i) => {
@@ -538,24 +564,45 @@ console.log(UserDetails.userID
                             >
                               <TableCell>{row?.serviceProviderName}</TableCell>
                               <TableCell>
-                                {row?.inferenceApiKey?.name}
+                                {row?.inferenceApiKey?.name ?? "-"}
                               </TableCell>
                               <TableCell>
-                                {row?.inferenceApiKey?.value}
+                                {row?.inferenceApiKey?.value ?? "-"}
                               </TableCell>
                               <TableCell>
-                                <Button
-                                  variant="contained"
-                                  className={classes.myProfileActionBtn}
-                                  onClick={()=>handleSubmitServiceProviderKey(row?.serviceProviderName,rowData[1])}
-                                  style={{
-                                    color: "red",
-                                    textAlign: "center",
-                                    textTransform: "capitalize",
-                                  }}
-                                >
-                                  Revoke
-                                </Button>
+                                {row?.inferenceApiKey?.value ? (
+                                  <Button
+                                    variant="contained"
+                                    className={classes.myProfileActionBtn}
+                                    onClick={() =>
+                                      handleSubmitServiceProviderKey(
+                                        row?.serviceProviderName,
+                                        rowData[1]
+                                      )
+                                    }
+                                    style={{
+                                      color: "red",
+                                      textAlign: "center",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
+                                    Revoke
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    color="primary"
+                                    variant="contained"
+                                    className={classes.myProfileGenerateButton}
+                                    onClick={() =>
+                                      handleGenerateInferenceAPIKey(
+                                        row?.serviceProviderName,
+                                        rowData[1]
+                                      )
+                                    }
+                                  >
+                                    Generate
+                                  </Button>
+                                )}
                               </TableCell>
                             </TableRow>
                           );
