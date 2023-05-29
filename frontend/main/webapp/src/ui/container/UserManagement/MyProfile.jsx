@@ -61,6 +61,7 @@ const MyProfile = (props) => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [openServiceProviderDialog, setOpenServiceProviderDialog] = useState(false);
   const[serviceProviderName,setServiceProviderName] = useState("")
+  const [expandableRow, setExpandableRow] = useState([]);
 
   useEffect(() => {
     if(apiKeys) {
@@ -484,7 +485,6 @@ const MyProfile = (props) => {
     });
 
     const resp = await res.json();
-
     if (res.ok) {
       setSnackbarInfo({
         open: true,
@@ -507,6 +507,15 @@ const MyProfile = (props) => {
           return [el.appName, el.ulcaApiKey, el.serviceProviderKeys];
         })
       : [];
+
+  const handleRowExpand = (_currentRow, allRow) => {
+    let temp = [];
+    allRow.forEach((element) => {
+      temp.push(element.dataIndex);
+    });
+
+    setExpandableRow(temp);
+  };
 
   const options = {
     textLabels: {
@@ -535,6 +544,10 @@ const MyProfile = (props) => {
     expandableRowsHeader: true,
     displaySelectToolbar: false,
     disableToolbarSelect: "none",
+    onRowExpansionChange: (currentRowsExpanded, allRowsExpanded) => {
+      handleRowExpand(currentRowsExpanded, allRowsExpanded);
+    },
+    rowsExpanded: expandableRow,
     renderExpandableRow: (rowData, rowMeta) => {
       const data = rowData[2];
       if (data?.length)
@@ -546,10 +559,18 @@ const MyProfile = (props) => {
                   <Box style={{ margin: "0 80px" }}>
                     <Table size="small" aria-label="purchases">
                       <TableHead style={{ height: "60px" }}>
-                        <TableCell>Service Provider Name</TableCell>
-                        <TableCell>Inference API Key Name</TableCell>
-                        <TableCell>Inference API Key Value</TableCell>
-                        <TableCell style={{ paddingLeft: "40px" }}>
+                        <TableCell style={{ whiteSpace: "nowrap" }}>
+                          Service Provider Name
+                        </TableCell>
+                        <TableCell style={{ whiteSpace: "nowrap" }}>
+                          Inference API Key Name
+                        </TableCell>
+                        <TableCell style={{ width: "60%" }}>
+                          Inference API Key Value
+                        </TableCell>
+                        <TableCell
+                          style={{ paddingLeft: "50px", width: "15%" }}
+                        >
                           Action
                         </TableCell>
                       </TableHead>
@@ -562,14 +583,16 @@ const MyProfile = (props) => {
                               }}
                               key={i}
                             >
-                              <TableCell>{row?.serviceProviderName}</TableCell>
-                              <TableCell>
+                              <TableCell style={{ width: "18%" }}>
+                                {row?.serviceProviderName}
+                              </TableCell>
+                              <TableCell style={{ width: "19%" }}>
                                 {row?.inferenceApiKey?.name ?? "-"}
                               </TableCell>
-                              <TableCell>
+                              <TableCell style={{ width: "60%" }}>
                                 {row?.inferenceApiKey?.value ?? "-"}
                               </TableCell>
-                              <TableCell>
+                              <TableCell style={{ width: "15%" }}>
                                 {row?.inferenceApiKey?.value ? (
                                   <Button
                                     variant="contained"
@@ -581,6 +604,8 @@ const MyProfile = (props) => {
                                       )
                                     }
                                     style={{
+                                      height: "30px",
+                                      margin: "5px",
                                       color: "red",
                                       textAlign: "center",
                                       textTransform: "capitalize",
@@ -613,7 +638,6 @@ const MyProfile = (props) => {
                 </>
               </TableCell>
             </TableRow>
-            <TableRow className={classes.tableRow}></TableRow>
           </>
         );
       return <></>;
