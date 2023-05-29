@@ -203,7 +203,6 @@ class GetApiKeysForProfile(Resource):
         print("API KEYS:",userAPIKeys)
         for i in range(0,len(userAPIKeys)):
             if "serviceProviderKeys" in userAPIKeys[i].keys():
-                print("EACH KEY")
                 existing_names = []
                 for existing_keys in userAPIKeys[i]["serviceProviderKeys"]:
                         existing_names.append(existing_keys["serviceProviderName"])
@@ -303,6 +302,7 @@ class GenerateServiceProviderKey(Resource):
             return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
         user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
         if isinstance(user_document, list) and user_document:
+            log.info("DETAILS:",user_document,body)
             if not any(usr['ulcaApiKey'] == body['ulcaApiKey'] for usr in user_document):
                 return post_error("400", "ulcaApiKey does not exist. Please provide a valid one.", None), 400
             for usr in user_document:
