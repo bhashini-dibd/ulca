@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,5 +86,14 @@ public class DatasetController {
 		
 		log.info("******** Entry DatasetController:: searchListByUserId *******");
 		return datasetService.searchListByUserId(userId, startPage, endPage);
+	}
+	
+	@GetMapping("/searchDataset")
+	public DatasetListByUserIdResponse datasetListByString(@RequestParam String userId,
+			@RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage,
+			@RequestParam(required = false) Integer pageSize,@RequestParam String name) {
+
+		log.info("******** Entry DatasetController:: listByUserId *******");
+		return datasetService.datasetListByString(userId, startPage, endPage, pageSize, name);
 	}
 }

@@ -236,6 +236,107 @@ public class DatasetService {
 		datasetDtoList.sort(Comparator.comparing(DatasetListByUserIdResponseDto::getSubmittedOn).reversed());
 		return new DatasetListByUserIdResponse("Dataset List By userId", datasetDtoList, startPage, endPage, count);
 	}
+	
+	
+	public DatasetListByUserIdResponse datasetListByString(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
+		log.info("******** Entry DatasetService:: datasetListByUserId *******");
+		DatasetListByUserIdResponse response = null;
+		Integer count = datasetDao.countBySubmitterId(userId);
+		log.info("Number of datatsets :: "+count);
+		List<Dataset> list = new ArrayList<Dataset>();
+		if (startPage != null) {
+			int startPg = startPage - 1;
+			for (int i = startPg; i < endPage; i++) {
+				Pageable paging = null;
+				if (pgSize != null) {
+					paging = PageRequest.of(i, pgSize, Sort.by("createdOn").descending());
+					log.info("paging :: "+paging);
+				} else {
+					paging = PageRequest.of(i, PAGE_SIZE, Sort.by("createdOn").descending());
+					log.info("paging :: "+paging);
+
+				}
+				Page<Dataset> datasetList = null;
+				if (name != null) {
+					Dataset dataset = new Dataset();
+					dataset.setSubmitterId(userId);
+					dataset.setDatasetName(name);
+					Example<Dataset> example = Example.of(dataset);
+                    log.info("example :: "+example);
+					datasetList = datasetDao.findAll(example, paging);
+					log.info("datasetList :: "+datasetList);
+					count = datasetDao.countBySubmitterIdAndDatasetName(userId, name);
+					log.info("count :: "+count);
+				} else {
+					datasetList = datasetDao.findBySubmitterId(userId, paging);
+					log.info("datasetList :: "+datasetList);
+
+				}
+				list.addAll(datasetList.toList());
+			}
+		} else {
+			if (name != null) {
+				Dataset dataset = new Dataset();
+				dataset.setSubmitterId(userId);
+				dataset.setDatasetName(name);
+				Example<Dataset> example = Example.of(dataset);
+				list = datasetDao.findAll(example);
+				count = list.size();
+			} else {
+				list = datasetDao.findBySubmitterId(userId);
+
+			}
+		}
+         
+		log.info("list of datasets :: "+list);
+
+		List<DatasetListByUserIdResponseDto> datasetDtoList = new ArrayList<DatasetListByUserIdResponseDto>();
+		if(!list.isEmpty()) {
+		for (Dataset dataset : list) {
+			log.info("dataset name :: "+dataset.getDatasetName());
+			ProcessTracker processTracker = processTrackerDao.findByDatasetId(dataset.getDatasetId()).get(0);
+			log.info("processTracker :: "+processTracker);
+			String serviceRequestNumber = processTracker.getServiceRequestNumber();
+			log.info("serviceRequestNumber :: "+serviceRequestNumber);
+			
+			String status = processTracker.getStatus();
+			log.info("status :: "+status);
+			if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
+				datasetDtoList.add(new DatasetListByUserIdResponseDto(dataset.getDatasetId(), serviceRequestNumber,
+						dataset.getDatasetName(), dataset.getDatasetType(), dataset.getCreatedOn(), status));
+			} else  {
+
+				List<TaskTracker> taskTrackerList = taskTrackerDao
+						.findAllByServiceRequestNumber(serviceRequestNumber);
+
+				HashMap<String, String> map = new HashMap<String, String>();
+				for (TaskTracker tTracker : taskTrackerList) {
+					map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
+				}
+				if(map.containsValue(TaskTracker.StatusEnum.failed.toString())) {
+					status = ProcessTracker.StatusEnum.failed.toString();
+				}else if(map.containsValue(ProcessTracker.StatusEnum.inprogress.toString())) {
+					status = ProcessTracker.StatusEnum.inprogress.toString();
+				}else if (map.containsKey(TaskTracker.ToolEnum.publish.toString())) {
+					status = map.get(TaskTracker.ToolEnum.publish.toString());
+				}
+
+				datasetDtoList.add(new DatasetListByUserIdResponseDto(dataset.getDatasetId(), serviceRequestNumber,
+						dataset.getDatasetName(), dataset.getDatasetType(), dataset.getCreatedOn(), status));
+			}
+
+		}
+	}
+		log.info("******** Exit DatasetService:: datasetListByUserId *******");
+
+
+		datasetDtoList.sort(Comparator.comparing(DatasetListByUserIdResponseDto::getSubmittedOn).reversed());
+		return new DatasetListByUserIdResponse("Dataset List By userId", datasetDtoList, startPage, endPage, count);
+	}
+	
+	
+	
+	
 		public DatasetByIdResponse datasetById(String datasetId) {
 
 		Map<String, ArrayList<TaskTracker>> map = new HashMap<String, ArrayList<TaskTracker>>();
