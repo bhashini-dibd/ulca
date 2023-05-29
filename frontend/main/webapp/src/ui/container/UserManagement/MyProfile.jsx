@@ -462,7 +462,7 @@ const MyProfile = (props) => {
               variant="contained"
               className={classes.myProfileActionBtn}
               onClick={() => handleDialogSubmit(tableMeta.rowData[1])}
-              style={{ color: "red", textTransform: "capitalize" }}
+              style={{ textTransform: "capitalize" }}
             >
               {loading ? (
                 <CircularProgress color="primary" size={20} />
@@ -606,7 +606,6 @@ const MyProfile = (props) => {
                                     style={{
                                       height: "30px",
                                       margin: "5px",
-                                      color: "red",
                                       textAlign: "center",
                                       textTransform: "capitalize",
                                     }}
