@@ -239,7 +239,17 @@ public class DatasetService {
 	
 	
 	public DatasetListByUserIdResponse datasetListByString(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
-		log.info("******** Entry DatasetService:: datasetListByUserId *******");
+		log.info("******** Entry DatasetService:: datasetListByString *******");
+		
+		
+		///Searching code start
+		
+		Query query = new Query();
+		query.addCriteria(Criteria.where("name").regex("c$"));
+		List<User> users = mongoTemplate.find(query, User.class);
+		
+		
+		// Searching code end
 		DatasetListByUserIdResponse response = null;
 		Integer count = datasetDao.countBySubmitterId(userId);
 		log.info("Number of datatsets :: "+count);
