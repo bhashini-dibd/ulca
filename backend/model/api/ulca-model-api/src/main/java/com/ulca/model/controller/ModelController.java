@@ -170,4 +170,12 @@ public class ModelController {
 		log.info("******** Entry ModelController:: explorePipelines *******");
 		return modelService.explorePipelines(serviceProviderName);
 	}
+	
+	@GetMapping("/searchModelByName")
+	public ModelListByUserIdResponse searchModelByName(@RequestParam String userId, @RequestParam(required = false) String name) {
+
+		log.info("******** Entry ModelController:: listByUserId *******");
+		return modelService.searchModelByName(userId, name);
+	}
+
 }

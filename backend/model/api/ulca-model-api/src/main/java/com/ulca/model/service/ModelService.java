@@ -318,6 +318,46 @@ public class ModelService {
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size(), count);
 	}
 
+	
+
+	public ModelListByUserIdResponse searchModelByName(String userId, String name) {
+		log.info("******** Entry ModelService:: searchModelByName *******");
+		Query query = new Query();
+		query.addCriteria(Criteria.where("userId").in(userId));
+		query.addCriteria(Criteria.where("name").regex(name));
+		List<ModelExtended> list = mongoTemplate.find(query, ModelExtended.class);
+        int count = list.size();
+        log.info("count :: "+count);
+	//	List<ModelListResponseDto> modelDtoList = new ArrayList<ModelListResponseDto>();
+		
+		List<ModelListResponseUserId> modelDtoList = new ArrayList<ModelListResponseUserId>();
+
+		for (ModelExtended model : list) {
+			// changes
+			 ExploreModel mycontrib = new ExploreModel();
+		    BeanUtils.copyProperties(model, mycontrib);
+           			/*
+			 * ModelExtendedDto modelExtendedDto = new ModelExtendedDto();
+			 * BeanUtils.copyProperties(model, modelExtendedDto); InferenceAPIEndPoint
+			 * inferenceAPIEndPoint = model.getInferenceEndPoint(); InferenceAPIEndPointDto
+			 * inferenceAPIEndPointDto = new InferenceAPIEndPointDto();
+			 * BeanUtils.copyProperties(inferenceAPIEndPoint, inferenceAPIEndPointDto);
+			 * modelExtendedDto.setInferenceEndPoint(inferenceAPIEndPointDto);
+			 */
+			//ModelListResponseDto modelDto = new ModelListResponseDto();
+            ModelListResponseUserId modelDto = new ModelListResponseUserId();
+			// BeanUtils.copyProperties(model, modelDto);
+			BeanUtils.copyProperties(mycontrib, modelDto);
+			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
+			modelDto.setBenchmarkPerformance(benchmarkProcess);
+			modelDtoList.add(modelDto);
+		}
+		modelDtoList.sort(Comparator.comparing(ModelListResponseUserId::getSubmittedOn).reversed());
+		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size(), count);
+	}
+
+	
+	
 	public ModelListResponseDto getModelByModelId(String modelId) {
 		log.info("******** Entry ModelService:: getModelDescription *******");
 		Optional<ModelExtended> result = modelDao.findById(modelId);
