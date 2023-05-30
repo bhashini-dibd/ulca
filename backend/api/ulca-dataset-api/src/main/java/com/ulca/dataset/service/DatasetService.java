@@ -255,7 +255,7 @@ public class DatasetService {
 		List<Dataset> list = mongoTemplate.find(query, Dataset.class);
 		int count = list.size();
 		log.info("size :: " + count);
-		log.info("datasets :: " + list);
+		//log.info("datasets :: " + list);
 		
 		// Searching code end
 
