@@ -1,5 +1,7 @@
 package com.ulca.dataset.controller;
 
+import java.util.ArrayList;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,10 +92,9 @@ public class DatasetController {
 	
 	@GetMapping("/searchDataset")
 	public DatasetListByUserIdResponse datasetListByString(@RequestParam String userId,
-			@RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage,
-			@RequestParam(required = false) Integer pageSize,@RequestParam String name) {
+			 @RequestParam(required = false) String name) {
 
 		log.info("******** Entry DatasetController:: listByUserId *******");
-		return datasetService.datasetListByString(userId, startPage, endPage, pageSize, name);
+		return datasetService.datasetListByString(userId, name);
 	}
 }
