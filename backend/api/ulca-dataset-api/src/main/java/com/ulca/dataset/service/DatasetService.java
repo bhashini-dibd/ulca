@@ -265,16 +265,12 @@ public class DatasetService {
 		log.info("list of datasets :: " + list);
 
 		List<DatasetListByUserIdResponseDto> datasetDtoList = new ArrayList<DatasetListByUserIdResponseDto>();
-		if (!list.isEmpty()) {
+	
 			for (Dataset dataset : list) {
-				log.info("dataset name :: " + dataset.getDatasetName());
 				ProcessTracker processTracker = processTrackerDao.findByDatasetId(dataset.getDatasetId()).get(0);
-				log.info("processTracker :: " + processTracker);
 				String serviceRequestNumber = processTracker.getServiceRequestNumber();
-				log.info("serviceRequestNumber :: " + serviceRequestNumber);
 
 				String status = processTracker.getStatus();
-				log.info("status :: " + status);
 				if (status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString())
 						|| status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
 					datasetDtoList.add(new DatasetListByUserIdResponseDto(dataset.getDatasetId(), serviceRequestNumber,
@@ -301,9 +297,9 @@ public class DatasetService {
 				}
 
 			}
-		}
+		
 
-		 log.info("******** Exit DatasetService:: datasetListByUserId *******");
+		 log.info("******** Exit DatasetService:: datasetListByString *******");
 
 		datasetDtoList.sort(Comparator.comparing(DatasetListByUserIdResponseDto::getSubmittedOn).reversed());
 		 return new DatasetListByUserIdResponse("Dataset List By userId",

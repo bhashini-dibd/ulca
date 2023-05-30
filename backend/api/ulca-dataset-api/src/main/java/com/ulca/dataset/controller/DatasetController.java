@@ -94,7 +94,7 @@ public class DatasetController {
 	public DatasetListByUserIdResponse datasetListByString(@RequestParam String userId,
 			 @RequestParam(required = false) String name) {
 
-		log.info("******** Entry DatasetController:: listByUserId *******");
+		log.info("******** Entry DatasetController:: datasetListByString *******");
 		return datasetService.datasetListByString(userId, name);
 	}
 }
