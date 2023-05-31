@@ -107,4 +107,11 @@ public class BenchmarkController {
 		
 		return new ResponseEntity<>(response, HttpStatus.OK); 
 	}
+	
+	@GetMapping("/searchByName")
+	public BenchmarkListByUserIdResponse searchByName(@RequestParam String userId,@RequestParam String name) {
+		log.info("******** Entry BenchMarkController:: searchByName *******");
+
+		return benchmarkService.searchByName(userId,name);
+	}
 }

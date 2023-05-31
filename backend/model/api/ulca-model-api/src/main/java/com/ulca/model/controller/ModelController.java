@@ -171,11 +171,11 @@ public class ModelController {
 		return modelService.explorePipelines(serviceProviderName);
 	}
 	
-	@GetMapping("/searchModelByName")
-	public ModelListByUserIdResponse searchModelByName(@RequestParam String userId, @RequestParam(required = false) String name) {
+	@GetMapping("/searchByName")
+	public ModelListByUserIdResponse searchByName(@RequestParam String userId, @RequestParam(required = false) String name) {
 
-		log.info("******** Entry ModelController:: listByUserId *******");
-		return modelService.searchModelByName(userId, name);
+		log.info("******** Entry ModelController:: searchByName *******");
+		return modelService.searchByName(userId, name);
 	}
 
 }

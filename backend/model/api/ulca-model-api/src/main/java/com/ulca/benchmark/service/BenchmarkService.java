@@ -18,6 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +95,10 @@ public class BenchmarkService {
 	@Autowired
 	ModelConstants modelConstants;
 
+	@Autowired
+	MongoTemplate mongoTemplate;
+	
+	
 	public BenchmarkSubmitResponse submitBenchmark(BenchmarkSubmitRequest request)
 			throws RequestParamValidationException {
 
@@ -532,5 +539,22 @@ public class BenchmarkService {
 
 		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size(),count);
 	}
+	
+	public BenchmarkListByUserIdResponse searchByName(String userId,String name) {
+		log.info("******** Entry BenchmarkService:: searchByName *******");
+
+		Query query = new Query();
+		query.addCriteria(Criteria.where("userId").in(userId));
+		query.addCriteria(Criteria.where("name").regex(name));
+		List<Benchmark> list = mongoTemplate.find(query, Benchmark.class);
+        int count = list.size();
+        log.info("count :: "+count);
+		list.sort(Comparator.comparing(Benchmark::getSubmittedOn).reversed());
+
+		log.info("******** Exit BenchmarkService:: searchByName *******");
+
+		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size(),count);
+	}
+
 
 }

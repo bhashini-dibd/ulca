@@ -320,7 +320,7 @@ public class ModelService {
 
 	
 
-	public ModelListByUserIdResponse searchModelByName(String userId, String name) {
+	public ModelListByUserIdResponse searchByName(String userId, String name) {
 		log.info("******** Entry ModelService:: searchModelByName *******");
 		Query query = new Query();
 		query.addCriteria(Criteria.where("userId").in(userId));
