@@ -144,7 +144,7 @@ public class ModelInferenceEndPointService {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
-
+            log.info("requestJson :: "+requestJson);
 			// OkHttpClient client = new OkHttpClient();
 			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
 
@@ -162,6 +162,8 @@ public class ModelInferenceEndPointService {
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
 			String responseJsonStr = httpResponse.body().string();
+			
+			log.info("responseJsonStr :: "+responseJsonStr);
 			OCRResponse response = objectMapper.readValue(responseJsonStr, OCRResponse.class);
 			ocrInference.setResponse(response);
 			schema = ocrInference;
