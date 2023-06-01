@@ -1,0 +1,69 @@
+{
+    "name": "OpenAI Whisper ASR Batch - English (medium.en)",
+    "version": "v1.0",
+    "description": "Whisper is a general-purpose speech recognition model (769M parameters), released by OpenAI. It is trained on a large dataset of diverse audio and is also a multi-task model that can perform multilingual speech recognition as well as speech translation and language identification.",
+    "refUrl": "https://github.com/openai/whisper",
+    "task": {
+        "type": "asr"
+    },
+    "languages": [
+        {
+            "sourceLanguage": "en"
+        }
+    ],
+    "license": "mit",
+    "domain": [
+        "general"
+    ],
+    "submitter": {
+        "name": "OpenAI",
+        "team": [
+            {
+                "name": "Alec Radford"
+            },
+            {
+                "name": "Jong Wook Kim"
+            },
+            {
+                "name": "Tao Xu"
+            },
+            {
+                "name": "Greg Brockman"
+            },
+            {
+                "name": "Christine McLeavey"
+            },
+            {
+                "name": "Ilya Sutskever"
+            }
+        ]
+    },
+    "inferenceEndPoint": {
+        "callbackUrl": "https://api.dhruva.ai4bharat.org/services/inference/asr?serviceId=ai4bharat/whisper-medium-en--gpu--t4",
+        "schema": {
+            "taskType": "asr",
+            "modelProcessingType": {
+                "type": "batch"
+            },
+            "request": {
+                "audio": [
+                    {
+                        "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_english.wav"
+                    }
+                ],
+                "config": {
+                    "audioFormat": "wav",
+                    "transcriptionFormat": {
+                        "value": "transcript"
+                    },
+                    "language": {
+                        "sourceLanguage": "en"
+                    }
+                }
+            }
+        }
+    },
+    "trainingDataset": {
+        "description": "Trained on (undisclosed) large-scale datasets crawled from the Internet."
+    }
+}

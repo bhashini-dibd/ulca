@@ -479,6 +479,7 @@ const DataSet = (theme) => ({
     },
   },
   mainTitle: { marginTop: "33px", marginLeft: "38px" },
+  mainTitleBenchmark:{marginLeft: "38px", flexBasis:"85%"},
   backButton: {
     boxShadow: "none",
     padding: "0",
@@ -1084,7 +1085,14 @@ const DataSet = (theme) => ({
     padding: "15px",
     height: "fit-content",
   },
+  downloadBenchmark:{
+  //  float: "right",
+    backgroundColor: "#FD7F23",
+    '&:hover': {
+      backgroundColor: "#FD7F23"
 
+    },
+  },
   myProfileActionBtn: {
     borderRadius: "16px",
     backgroundColor: "white",
@@ -1093,6 +1101,7 @@ const DataSet = (theme) => ({
     padding: "10px 20px",
     fontSize: "1rem",
     width: "fit-content",
+    height:"36px",
     cursor: "pointer",
     "&:hover": {
       backgroundColor: "white",

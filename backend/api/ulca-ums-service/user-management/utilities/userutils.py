@@ -46,6 +46,10 @@ apikey_expiry       =   config.USER_API_KEY_EXPIRY
 role_codes          =   []
 role_details        =   []
 
+class OutboxEmptyException(Exception):
+    "Unable to send verification mail. Please try again later"
+    pass
+
 class UserUtils:
 
     @staticmethod
@@ -582,8 +586,12 @@ class UserUtils:
             try:
                 msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
                 msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
-                mail.send(msg)
-                log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
+                with mail.record_messages() as outbox:
+                    mail.send(msg)
+                    log.info("Email outbox size {outboxLength} and subject {emailSubject}".format(outboxLength=len(outbox),emailSubject=outbox[0].subject))
+                    if len(outbox) < 1:
+                        raise OutboxEmptyException
+                    log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
             except Exception as e:
                 log.exception("Exception while generating email notification | {}".format(str(e)))
                 return post_error("Exception while generating email notification","Exception occurred:{}".format(str(e)),None)
@@ -671,7 +679,7 @@ class UserUtils:
     @staticmethod
     def get_userDoc(userID):
         collection = db.get_db()[USR_MONGO_COLLECTION]
-        userdoc = collection.find_one({"userID" : userID})
+        userdoc = collection.find_one({"userID" : userID})#, "apiKeyDetails.serviceProviderKeys.serviceProviderName" : serviceName })
         #log.info(f"userdoc  231231 {userdoc}")
         if userdoc:
             if "apiKeyDetails" in userdoc.keys():
@@ -718,8 +726,8 @@ class UserUtils:
 
 
     @staticmethod
-    def get_service_provider_keys(email, appName,EndPointurl,decryptedValues):
-        body = {"emailId" : email, "appName" : appName}
+    def get_service_provider_keys(email, appName,EndPointurl,decryptedValues, dataTracking):
+        body = {"emailId" : email, "appName" : appName, "dataTracking": dataTracking}
         log.info("Get Service Provider Key Api Call URL"+str(EndPointurl))
         log.info("Get Service Provider Key Api Call Request"+str(body))
         result = requests.post(url=EndPointurl, json=body, headers=decryptedValues)
@@ -741,3 +749,13 @@ class UserUtils:
         deleteDoc = collections.update({"userID":userID,"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$pull":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":serviceProviderName}}})
         log.info(f"removeSeriveProviders    {json.loads(json_util.dumps(deleteDoc))}")
         return json.loads(json_util.dumps(deleteDoc))
+
+   
+    
+    @staticmethod
+    def getDataTrackingKey(userID, ulcaApiKey):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        record = collections.find({"userID":userID, "apiKeyDetails.ulcaApiKey": ulcaApiKey})
+        for rec in record:
+            log.info(f"record output if dataTracking {rec}")
+        return rec

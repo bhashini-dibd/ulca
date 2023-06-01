@@ -317,7 +317,6 @@ public class ModelService {
 		modelDtoList.sort(Comparator.comparing(ModelListResponseUserId::getSubmittedOn).reversed());
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size(), count);
 	}
-
 	public ModelListResponseDto getModelByModelId(String modelId) {
 		log.info("******** Entry ModelService:: getModelDescription *******");
 		Optional<ModelExtended> result = modelDao.findById(modelId);
@@ -1228,8 +1227,6 @@ public class ModelService {
 					.is(SupportedLanguages.fromValue(sourceLanguage));
 			dynamicQuery.addCriteria(srcLangCriteria);
 		
-
-		
 			Criteria tgtLangCriteria = Criteria.where("languages.0.targetLanguage")
 					.is(SupportedLanguages.fromValue(targetLanguage));
 			dynamicQuery.addCriteria(tgtLangCriteria);
@@ -1239,8 +1236,6 @@ public class ModelService {
 		
 			Criteria submitterCriteria = Criteria.where("submitter.name").is("AI4Bharat");
 			dynamicQuery.addCriteria(submitterCriteria);
-		
-
 		
 
 		Criteria statusCriteria = Criteria.where("status").is("published");
@@ -1259,7 +1254,6 @@ public class ModelService {
 
 		return null;
 	}
-
 	public ModelFeedback setInputOutput(ModelFeedbackSubmitRequest request, ModelFeedback feedback) throws IOException {
 
 		MultipartFile inputFile = request.getMultipartInput();

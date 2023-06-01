@@ -1,0 +1,1060 @@
+{
+    "name": "AI4Bharat Dhruva Speech-to-speech pipeline",
+    "version": "v1.0",
+    "description": "Task-pipelining for AI services hosted on AI4Bharat's Dhruva instance",
+    "refUrl": "xxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "domain": [
+        "general"
+    ],
+    "inferenceEndPoint": {
+        "callbackUrl": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "masterApiKey": {
+            "name": "xxxxxxxxxxxxxxxxxxx",
+            "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        "isMultilingualEnabled": true,
+        "isSyncApi": true
+    },
+    "apiEndPoints": {
+        "apiKeyUrl": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    "supportedPipelines": [
+        [
+            "asr"
+        ],
+        [
+            "asr",
+            "translation"
+        ],
+        [
+            "asr",
+            "translation",
+            "tts"
+        ],
+        [
+            "translation"
+        ],
+        [
+            "translation",
+            "tts"
+        ],
+        [
+            "tts"
+        ]
+    ],
+    "taskSpecifications": [
+        {
+            "taskType": "asr",
+            "taskConfig": [
+                {
+                    "sourceLanguage": "bn",
+                    "modelId": "6411746956e9de23f65b5426",
+                    "serviceId": "ai4bharat/conformer-multilingual-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "modelId": "63ee09c3b95268521c70cd7c",
+                    "serviceId": "ai4bharat/conformer-en-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "modelId": "6411746056e9de23f65b5425",
+                    "serviceId": "ai4bharat/conformer-multilingual-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "modelId": "64117455b1463435d2fbaec4",
+                    "serviceId": "ai4bharat/conformer-multilingual-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "modelId": "641174a356e9de23f65b5429",
+                    "serviceId": "ai4bharat/conformer-multilingual-dravidian-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "modelId": "6411749856e9de23f65b5428",
+                    "serviceId": "ai4bharat/conformer-multilingual-dravidian-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "modelId": "6411744b56e9de23f65b5424",
+                    "serviceId": "ai4bharat/conformer-multilingual-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "modelId": "64117440b1463435d2fbaec3",
+                    "serviceId": "ai4bharat/conformer-multilingual-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "modelId": "6411743456e9de23f65b5423",
+                    "serviceId": "ai4bharat/conformer-multilingual-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "sa",
+                    "modelId": "6411742856e9de23f65b5422",
+                    "serviceId": "ai4bharat/conformer-multilingual-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "modelId": "641174ad56e9de23f65b542a",
+                    "serviceId": "ai4bharat/conformer-multilingual-dravidian-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "modelId": "6411748db1463435d2fbaec5",
+                    "serviceId": "ai4bharat/conformer-multilingual-dravidian-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ur",
+                    "modelId": "6411741c56e9de23f65b5421",
+                    "serviceId": "ai4bharat/conformer-multilingual-indo_aryan-gpu--t4"
+                }
+            ]
+        },
+        {
+            "taskType": "translation",
+            "taskConfig": [
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "as",
+                    "modelId": "6110f7ce014fa35d5e767c3c",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "bn",
+                    "modelId": "6110f7da014fa35d5e767c3d",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "gu",
+                    "modelId": "6110f7e9014fa35d5e767c3e",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "hi",
+                    "modelId": "6110f7f7014fa35d5e767c3f",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "kn",
+                    "modelId": "6110f814014fa35d5e767c41",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "ml",
+                    "modelId": "6110f857014fa35d5e767c42",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "mr",
+                    "modelId": "6110f864014fa35d5e767c43",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "or",
+                    "modelId": "6110f871014fa35d5e767c44",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "pa",
+                    "modelId": "6110f87d014fa35d5e767c45",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "ta",
+                    "modelId": "610cfe8b014fa35d5e767c35",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "targetLanguage": "te",
+                    "modelId": "6110f89b014fa35d5e767c46",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "en",
+                    "modelId": "6110f79b014fa35d5e767c3a",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "en",
+                    "modelId": "6110f7bc014fa35d5e767c3b",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "en",
+                    "modelId": "6110f8a9014fa35d5e767c47",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "en",
+                    "modelId": "6110f8b7014fa35d5e767c48",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "en",
+                    "modelId": "6110f8c9014fa35d5e767c49",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "en",
+                    "modelId": "6110f8d8014fa35d5e767c4a",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "en",
+                    "modelId": "6110f8e6014fa35d5e767c4b",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "en",
+                    "modelId": "6110f8f6014fa35d5e767c4c",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "en",
+                    "modelId": "6110f903014fa35d5e767c4d",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "en",
+                    "modelId": "6110f917014fa35d5e767c4e",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "en",
+                    "modelId": "6110f924014fa35d5e767c4f",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "bn",
+                    "modelId": "641476ba40abd176d64c3f8d",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "gu",
+                    "modelId": "641476b340abd176d64c3f8c",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "hi",
+                    "modelId": "6414766491b91a068ea56560",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "kn",
+                    "modelId": "6414765b91b91a068ea5655f",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "ml",
+                    "modelId": "6414765540abd176d64c3f8b",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "mr",
+                    "modelId": "6414764e40abd176d64c3f8a",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "or",
+                    "modelId": "6414764940abd176d64c3f89",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "pa",
+                    "modelId": "6414764440abd176d64c3f88",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "ta",
+                    "modelId": "6414763f91b91a068ea5655e",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "as",
+                    "targetLanguage": "te",
+                    "modelId": "6414763991b91a068ea5655d",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "as",
+                    "modelId": "6214b148751fc8007d24084c",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "gu",
+                    "modelId": "6214b1407c69fa1fc5bba7d0",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "hi",
+                    "modelId": "6214b135751fc8007d24084b",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "kn",
+                    "modelId": "6214b12b7c69fa1fc5bba7cf",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "ml",
+                    "modelId": "6214b1227c69fa1fc5bba7ce",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "mr",
+                    "modelId": "6214b1197c69fa1fc5bba7cd",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "or",
+                    "modelId": "6214b10e7c69fa1fc5bba7cc",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "pa",
+                    "modelId": "6214b103751fc8007d24084a",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "ta",
+                    "modelId": "6214b0f8751fc8007d240849",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "targetLanguage": "te",
+                    "modelId": "6214b14f751fc8007d24084d",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "as",
+                    "modelId": "640af35ccbc95b07f6373416",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "bn",
+                    "modelId": "62023eeb3fc51c3fe32b8c5b",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "hi",
+                    "modelId": "62023ee43fc51c3fe32b8c5a",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "kn",
+                    "modelId": "62023eb63fc51c3fe32b8c59",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "ml",
+                    "modelId": "62023eaebedccf5280e4eb24",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "mr",
+                    "modelId": "62023ea6bedccf5280e4eb23",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "or",
+                    "modelId": "62023e9f3fc51c3fe32b8c58",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "pa",
+                    "modelId": "62023e983fc51c3fe32b8c57",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "ta",
+                    "modelId": "62023e903fc51c3fe32b8c56",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "targetLanguage": "te",
+                    "modelId": "62023ef3bedccf5280e4eb25",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "as",
+                    "modelId": "62023b443fc51c3fe32b8c55",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "bn",
+                    "modelId": "62023b39bedccf5280e4eb21",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "gu",
+                    "modelId": "62023b313fc51c3fe32b8c54",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "kn",
+                    "modelId": "62023b283fc51c3fe32b8c53",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "ml",
+                    "modelId": "62023b20bedccf5280e4eb20",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "mr",
+                    "modelId": "62023b183fc51c3fe32b8c52",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "or",
+                    "modelId": "62023b113fc51c3fe32b8c51",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "pa",
+                    "modelId": "62023b0a3fc51c3fe32b8c50",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "ta",
+                    "modelId": "62023afe3fc51c3fe32b8c4f",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "targetLanguage": "te",
+                    "modelId": "62023b5abedccf5280e4eb22",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "as",
+                    "modelId": "620238e0bedccf5280e4eb1f",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "bn",
+                    "modelId": "620238d73fc51c3fe32b8c4d",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "gu",
+                    "modelId": "620238d03fc51c3fe32b8c4c",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "hi",
+                    "modelId": "620238c4bedccf5280e4eb1e",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "ml",
+                    "modelId": "620238bdbedccf5280e4eb1d",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "mr",
+                    "modelId": "620238b4bedccf5280e4eb1c",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "or",
+                    "modelId": "620238adbedccf5280e4eb1b",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "pa",
+                    "modelId": "620238a6bedccf5280e4eb1a",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "ta",
+                    "modelId": "6202389dbedccf5280e4eb19",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "targetLanguage": "te",
+                    "modelId": "620238f13fc51c3fe32b8c4e",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "as",
+                    "modelId": "620218353fc51c3fe32b8c4b",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "bn",
+                    "modelId": "6202182abedccf5280e4eb17",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "gu",
+                    "modelId": "6202181fbedccf5280e4eb16",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "hi",
+                    "modelId": "62021813bedccf5280e4eb15",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "kn",
+                    "modelId": "6202180abedccf5280e4eb14",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "mr",
+                    "modelId": "620217a33fc51c3fe32b8c4a",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "or",
+                    "modelId": "62021778bedccf5280e4eb13",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "pa",
+                    "modelId": "620217703fc51c3fe32b8c49",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "ta",
+                    "modelId": "620217663fc51c3fe32b8c48",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "targetLanguage": "te",
+                    "modelId": "62021850bedccf5280e4eb18",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "as",
+                    "modelId": "620214113fc51c3fe32b8c46",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "bn",
+                    "modelId": "62021403bedccf5280e4eb12",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "gu",
+                    "modelId": "620213f7bedccf5280e4eb11",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "hi",
+                    "modelId": "620213ecbedccf5280e4eb10",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "kn",
+                    "modelId": "620213debedccf5280e4eb0f",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "ml",
+                    "modelId": "620213d4bedccf5280e4eb0e",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "or",
+                    "modelId": "620213cbbedccf5280e4eb0d",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "pa",
+                    "modelId": "620213c23fc51c3fe32b8c45",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "ta",
+                    "modelId": "620213b83fc51c3fe32b8c44",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "targetLanguage": "te",
+                    "modelId": "6202143e3fc51c3fe32b8c47",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "as",
+                    "modelId": "6201ebd9550d544fe3d2423a",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "bn",
+                    "modelId": "6201ebc3550d544fe3d24239",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "gu",
+                    "modelId": "6201ebbc3d4a425829c751c7",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "hi",
+                    "modelId": "6201ebb1550d544fe3d24238",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "kn",
+                    "modelId": "6201eba9550d544fe3d24237",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "ml",
+                    "modelId": "6201eba13d4a425829c751c6",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "mr",
+                    "modelId": "6201eb973d4a425829c751c5",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "pa",
+                    "modelId": "6201eb903d4a425829c751c4",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "ta",
+                    "modelId": "6201eb873d4a425829c751c3",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "targetLanguage": "te",
+                    "modelId": "6201ec1c550d544fe3d2423b",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "as",
+                    "modelId": "6201e4aa550d544fe3d24236",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "bn",
+                    "modelId": "6201e49b3d4a425829c751c1",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "gu",
+                    "modelId": "6201e48a3d4a425829c751c0",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "hi",
+                    "modelId": "6201e469550d544fe3d24235",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "kn",
+                    "modelId": "6201e45f550d544fe3d24234",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "ml",
+                    "modelId": "6201e456550d544fe3d24233",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "mr",
+                    "modelId": "6201e4453d4a425829c751bf",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "or",
+                    "modelId": "6201e43e550d544fe3d24232",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "ta",
+                    "modelId": "6201e4363d4a425829c751be",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "targetLanguage": "te",
+                    "modelId": "6201e4b83d4a425829c751c2",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "as",
+                    "modelId": "62014a553d4a425829c751b9",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "bn",
+                    "modelId": "62014a33550d544fe3d2422b",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "gu",
+                    "modelId": "62014a0e3d4a425829c751b8",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "hi",
+                    "modelId": "620147753d4a425829c751b7",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "kn",
+                    "modelId": "6201473a550d544fe3d2422a",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "ml",
+                    "modelId": "6201423c3d4a425829c751b6",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "mr",
+                    "modelId": "620141fb3d4a425829c751b5",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "or",
+                    "modelId": "620141b3550d544fe3d24229",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "pa",
+                    "modelId": "620141353d4a425829c751b4",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "targetLanguage": "te",
+                    "modelId": "62013b8a550d544fe3d24228",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "as",
+                    "modelId": "6201dd62550d544fe3d24231",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "bn",
+                    "modelId": "6201dcb33d4a425829c751ba",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "gu",
+                    "modelId": "6201dcbf550d544fe3d2422d",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "hi",
+                    "modelId": "6201dcc63d4a425829c751bb",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "kn",
+                    "modelId": "6201dccf550d544fe3d2422e",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "ml",
+                    "modelId": "6201dcda3d4a425829c751bc",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "mr",
+                    "modelId": "6201dcef550d544fe3d2422f",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "or",
+                    "modelId": "6201dcfb3d4a425829c751bd",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "pa",
+                    "modelId": "6201dc5c550d544fe3d2422c",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "targetLanguage": "ta",
+                    "modelId": "6201dd03550d544fe3d24230",
+                    "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4"
+                }
+            ]
+        },
+        {
+            "taskType": "tts",
+            "taskConfig": [
+                {
+                    "sourceLanguage": "as",
+                    "modelId": "6348db0bfd966563f61bc2c0",
+                    "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "bn",
+                    "modelId": "636e60e586369150cb00432a",
+                    "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "brx",
+                    "modelId": "636e60ebff7cd87a3f7e0ff4",
+                    "serviceId": "ai4bharat/indic-tts-coqui-misc-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "en",
+                    "modelId": "63f7384c2ff3ab138f88c64e",
+                    "serviceId": "ai4bharat/indic-tts-coqui-misc-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "gu",
+                    "modelId": "636e60ef86369150cb00432b",
+                    "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "hi",
+                    "modelId": "633c021bfb796d5e100d4ff9",
+                    "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "kn",
+                    "modelId": "636e60f486369150cb00432c",
+                    "serviceId": "ai4bharat/indic-tts-coqui-dravidian-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ml",
+                    "modelId": "636e60f986369150cb00432d",
+                    "serviceId": "ai4bharat/indic-tts-coqui-dravidian-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mni",
+                    "modelId": "636e60feff7cd87a3f7e0ff5",
+                    "serviceId": "ai4bharat/indic-tts-coqui-misc-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "mr",
+                    "modelId": "636e6103ff7cd87a3f7e0ff6",
+                    "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "or",
+                    "modelId": "6348db26fd966563f61bc2c2",
+                    "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "pa",
+                    "modelId": "63905c2bff7cd87a3f7e1022",
+                    "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "raj",
+                    "modelId": "6348db2cfb796d5e100d4ffd",
+                    "serviceId": "ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "ta",
+                    "modelId": "6348db32fd966563f61bc2c3",
+                    "serviceId": "ai4bharat/indic-tts-coqui-dravidian-gpu--t4"
+                },
+                {
+                    "sourceLanguage": "te",
+                    "modelId": "6348db37fb796d5e100d4ffe",
+                    "serviceId": "ai4bharat/indic-tts-coqui-dravidian-gpu--t4"
+                }
+            ]
+        }
+    ],
+    "serviceProvider": {
+        "name": "AI4Bharat",
+        "aboutMe": "AI4Bhārat is a research center at IIT-Madras, working on Artificial Intelligence for languages of Bhārat.",
+        "oauthId": {
+            "oauthId": "ai4bharat@cse.iitm.ac.in",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Abhigyan Raman",
+                "oauthId": {
+                    "oauthId": "ramanabhigyan@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Ashwin Srinivasan",
+                "oauthId": {
+                    "oauthId": "14.ash.win.96@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Gokul NC",
+                "oauthId": {
+                    "oauthId": "gokulnc.ai4bharat@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Nikhil Narasimhan",
+                "oauthId": {
+                    "oauthId": "nikhil.narasimhan99@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Rugved Somwanshi",
+                "oauthId": {
+                    "oauthId": "rugvedsomwanshi007@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Suhaas Doddapaneni",
+                "oauthId": {
+                    "oauthId": "suhaasd13@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Umashankar Kumaravelan",
+                "oauthId": {
+                    "oauthId": "umashanks99@gmail.com",
+                    "provider": "google"
+                }
+            },
+            {
+                "name": "Yash Kale",
+                "oauthId": {
+                    "oauthId": "yashkaleit@gmail.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    }
+}

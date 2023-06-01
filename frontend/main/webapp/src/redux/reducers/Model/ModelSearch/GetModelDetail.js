@@ -15,8 +15,10 @@ const initialState = {
 };
 
 const getModelDetails = (payload) => {
+  const srcValue =  payload.languages.map((elements)=>getLanguageName(elements.sourceLanguage))
   const target = payload["languages"] && payload["languages"][0]?.["targetLanguage"];
-  const source = payload["languages"] && payload["languages"][0]?.["sourceLanguage"];
+  const source = payload["languages"] && payload["languages"].length == 1 ? payload["languages"][0]?.["sourceLanguage"] : srcValue.toString();
+ // const source = payload["languages"] && payload["languages"][0]?.["sourceLanguage"];
   const {inferenceEndPoint:{schema}} = payload;
   switch(payload['task']['type']){
     case 'asr':

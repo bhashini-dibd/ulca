@@ -123,13 +123,11 @@ public class ModelInferenceEndPointService {
 					
 				}
 				
-				
-				
-				
-				
-				
 
 			} catch (SSLException e) {
+				e.printStackTrace();
+			}
+			catch(Exception e) {
 				e.printStackTrace();
 			}
 
