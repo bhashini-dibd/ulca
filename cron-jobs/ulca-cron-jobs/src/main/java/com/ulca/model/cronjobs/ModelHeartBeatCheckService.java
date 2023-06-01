@@ -92,8 +92,8 @@ public class ModelHeartBeatCheckService {
 	}
 
 	//@Scheduled(cron = "0 0 */1 * * ?")
-	@Scheduled(cron = "0 0 */10 * * * ?")
-     public void modelHeathStatusCheck() {
+    @Scheduled(cron = "0 0/10 * * * *")     
+    public void modelHeathStatusCheck() {
 
 		log.info("*******  start ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");
 
