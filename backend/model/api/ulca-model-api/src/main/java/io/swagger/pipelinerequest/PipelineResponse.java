@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  * PipelineResponse
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-05-23T08:32:37.321654139Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-06-02T05:23:09.392636488Z[GMT]")
 
 
 public class PipelineResponse   {
@@ -28,6 +28,9 @@ public class PipelineResponse   {
 
   @JsonProperty("pipelineInferenceAPIEndPoint")
   private PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = null;
+
+  @JsonProperty("pipelineInferenceSocketEndPoint")
+  private PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint = null;
 
   public PipelineResponse languages(LanguagesList languages) {
     this.languages = languages;
@@ -99,9 +102,8 @@ public class PipelineResponse   {
    * Get pipelineInferenceAPIEndPoint
    * @return pipelineInferenceAPIEndPoint
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
     public PipelineInferenceAPIEndPoint getPipelineInferenceAPIEndPoint() {
     return pipelineInferenceAPIEndPoint;
@@ -109,6 +111,26 @@ public class PipelineResponse   {
 
   public void setPipelineInferenceAPIEndPoint(PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint) {
     this.pipelineInferenceAPIEndPoint = pipelineInferenceAPIEndPoint;
+  }
+
+  public PipelineResponse pipelineInferenceSocketEndPoint(PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint) {
+    this.pipelineInferenceSocketEndPoint = pipelineInferenceSocketEndPoint;
+    return this;
+  }
+
+  /**
+   * Get pipelineInferenceSocketEndPoint
+   * @return pipelineInferenceSocketEndPoint
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public PipelineInferenceAPIEndPoint getPipelineInferenceSocketEndPoint() {
+    return pipelineInferenceSocketEndPoint;
+  }
+
+  public void setPipelineInferenceSocketEndPoint(PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint) {
+    this.pipelineInferenceSocketEndPoint = pipelineInferenceSocketEndPoint;
   }
 
 
@@ -124,12 +146,13 @@ public class PipelineResponse   {
     return Objects.equals(this.languages, pipelineResponse.languages) &&
         Objects.equals(this.pipelineResponseConfig, pipelineResponse.pipelineResponseConfig) &&
         Objects.equals(this.feedbackUrl, pipelineResponse.feedbackUrl) &&
-        Objects.equals(this.pipelineInferenceAPIEndPoint, pipelineResponse.pipelineInferenceAPIEndPoint);
+        Objects.equals(this.pipelineInferenceAPIEndPoint, pipelineResponse.pipelineInferenceAPIEndPoint) &&
+        Objects.equals(this.pipelineInferenceSocketEndPoint, pipelineResponse.pipelineInferenceSocketEndPoint);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(languages, pipelineResponseConfig, feedbackUrl, pipelineInferenceAPIEndPoint);
+    return Objects.hash(languages, pipelineResponseConfig, feedbackUrl, pipelineInferenceAPIEndPoint, pipelineInferenceSocketEndPoint);
   }
 
   @Override
@@ -141,6 +164,7 @@ public class PipelineResponse   {
     sb.append("    pipelineResponseConfig: ").append(toIndentedString(pipelineResponseConfig)).append("\n");
     sb.append("    feedbackUrl: ").append(toIndentedString(feedbackUrl)).append("\n");
     sb.append("    pipelineInferenceAPIEndPoint: ").append(toIndentedString(pipelineInferenceAPIEndPoint)).append("\n");
+    sb.append("    pipelineInferenceSocketEndPoint: ").append(toIndentedString(pipelineInferenceSocketEndPoint)).append("\n");
     sb.append("}");
     return sb.toString();
   }
