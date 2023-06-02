@@ -51,23 +51,25 @@ components:
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
         serviceProvider:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
-        # inferenceEndPoint:
-        #   $ref: '#/components/schemas/InferenceAPIEndPoint'
+        inferenceEndPoint:
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
+        inferenceSocketEndPoint:
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
         supportedPipelines:
           $ref: '#/components/schemas/ListOfPipelines'
         taskSpecifications:
           $ref: '#/components/schemas/TaskSpecifications'
         apiEndPoints:
           $ref: '#/components/schemas/ApiEndPoint'
-      anyOf:  
-        - properties:
-           inferenceEndPoint:
-            $ref: '#/components/schemas/InferenceAPIEndPoint'
-          required: [inferenceEndPoint] 
-        - properties:
-           inferenceSocketEndPoint:
-            $ref: '#/components/schemas/InferenceAPIEndPoint'
-          required: [inferenceSocketEndPoint] 
+      # anyOf:  
+      #   - properties:
+      #      inferenceEndPoint:
+      #       $ref: '#/components/schemas/InferenceAPIEndPoint'
+      #     required: [inferenceEndPoint] 
+      #   - properties:
+      #      inferenceSocketEndPoint:
+      #       $ref: '#/components/schemas/InferenceAPIEndPoint'
+      #     required: [inferenceSocketEndPoint] 
 
     ListOfPipelines:
       type: array
@@ -121,7 +123,7 @@ components:
             pollInterval:
               type: integer
               description: polling interval in millisec to check for status
-      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type. `NOTE:` Either of inferenceEndPoint or inferenceSocketEndPoint is is mandatory at submission time
     TaskSpecifications:
       type: array
       items:
