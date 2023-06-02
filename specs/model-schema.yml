@@ -203,7 +203,7 @@ components:
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
         asyncApiDetails:
           $ref: '#/components/schemas/AsyncApiDetails'
-      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type. `NOTE: ` Either of pipelineInferenceAPIEndPoint or pipelineInferenceSocketEndPoint is mandatory 
     # InferenceSchema:
     #   oneOf:
     #     - $ref: '#/components/schemas/TranslationInference'

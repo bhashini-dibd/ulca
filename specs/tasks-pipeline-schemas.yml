@@ -25,7 +25,6 @@ components:
       required:
         - pipelineResponseConfig
         - languages
-        - pipelineInferenceAPIEndPoint
       type: object
       properties:
         languages:
