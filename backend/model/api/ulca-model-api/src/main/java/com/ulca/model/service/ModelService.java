@@ -518,7 +518,10 @@ public class ModelService {
 
 				pipelineModelObj.setUserId(userId);
 				pipelineModelObj.setSubmittedOn(Instant.now().toEpochMilli());
-
+                
+				
+				if(pipelineModelObj.getInferenceEndPoint()!=null) {
+				
 				io.swagger.pipelinemodel.InferenceAPIEndPoint inferenceAPIEndPoint = pipelineModelObj
 						.getInferenceEndPoint();
 
@@ -547,6 +550,41 @@ public class ModelService {
 
 					}
 				}
+			}
+				
+				
+				if(pipelineModelObj.getInferenceSocketEndPoint()!=null) {
+					
+					io.swagger.pipelinemodel.InferenceAPIEndPoint inferenceSocketEndPoint = pipelineModelObj
+							.getInferenceSocketEndPoint();
+
+					if (inferenceSocketEndPoint.getMasterApiKey() != null) {
+						InferenceAPIEndPointMasterApiKey pipelineInferenceMasterApiKey = inferenceSocketEndPoint
+								.getMasterApiKey();
+						if (pipelineInferenceMasterApiKey.getValue() != null
+								&& !pipelineInferenceMasterApiKey.getValue().isEmpty()) {
+							log.info("SecretKey :: " + SECRET_KEY);
+							String originalApiKeyName = pipelineInferenceMasterApiKey.getName();
+							log.info("originalApiKeyName :: " + originalApiKeyName);
+							String originalApiKeyValue = pipelineInferenceMasterApiKey.getValue();
+							log.info("originalApiKeyValue :: " + originalApiKeyValue);
+							// String encryptedApiKeyName = Aes256.encrypt(originalApiKeyName, SECRET_KEY);
+							String encryptedApiKeyName = EncryptDcryptService.encrypt(originalApiKeyName, SECRET_KEY);
+
+							log.info("encryptedApiKeyName :: " + encryptedApiKeyName);
+							// String encryptedApiKeyValue = Aes256.encrypt(originalApiKeyValue,
+							// SECRET_KEY);
+							String encryptedApiKeyValue = EncryptDcryptService.encrypt(originalApiKeyValue, SECRET_KEY);
+
+							log.info("encryptedApiKeyValue :: " + encryptedApiKeyValue);
+							pipelineInferenceMasterApiKey.setName(encryptedApiKeyName);
+							pipelineInferenceMasterApiKey.setValue(encryptedApiKeyValue);
+							pipelineModelObj.getInferenceSocketEndPoint().setMasterApiKey(pipelineInferenceMasterApiKey);
+
+						}
+					}
+				}
+				
 
 			}
 
@@ -838,9 +876,12 @@ public class ModelService {
 
 		if (model.getServiceProvider() == null)
 			throw new ModelValidationException("submitter is required field");
-
-		if (model.getInferenceEndPoint() == null)
-			throw new ModelValidationException("inferenceEndPoint is required field");
+////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		if(model.getInferenceEndPoint()!=null || model.getInferenceSocketEndPoint()!=null) {
+		
+		
+		if (model.getInferenceEndPoint() != null) {
 
 		io.swagger.pipelinemodel.InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 
@@ -854,7 +895,33 @@ public class ModelService {
 				throw new ModelValidationException("callbackUrl is required field for sync model");
 			}
 		}
+		
+		}
+		
+		
+		if (model.getInferenceSocketEndPoint() != null) {
 
+			io.swagger.pipelinemodel.InferenceAPIEndPoint inferenceSocketEndPoint = model.getInferenceSocketEndPoint();
+
+			if (inferenceSocketEndPoint.isIsSyncApi() != null && !inferenceSocketEndPoint.isIsSyncApi()) {
+				AsyncApiDetails asyncApiDetails = inferenceSocketEndPoint.getAsyncApiDetails();
+				if (asyncApiDetails.getPollingUrl().isBlank()) {
+					throw new ModelValidationException("PollingUrl is required field for async model");
+				}
+			} else {
+				if (inferenceSocketEndPoint.getCallbackUrl().isBlank()) {
+					throw new ModelValidationException("callbackUrl is required field for sync model");
+				}
+			}
+			
+			}
+		
+		}else {
+			throw new ModelValidationException("InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!");
+
+			
+		}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if (model.getSupportedPipelines() == null || model.getSupportedPipelines().isEmpty())
 			throw new ModelValidationException("supported pipelines  is required field");
 
@@ -1035,9 +1102,9 @@ public class ModelService {
 
 		String modelId = compute.getModelId();
 		ModelExtended modelObj = modelDao.findById(modelId).get();
-		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
+		//InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 
-		return modelInferenceEndPointService.compute(inferenceAPIEndPoint, compute);
+		return modelInferenceEndPointService.compute(modelObj, compute);
 	}
 
 	public ModelComputeResponse tryMeOcrImageContent(MultipartFile file, String modelId) throws Exception {
@@ -1049,7 +1116,7 @@ public class ModelService {
 		// String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
-		ModelComputeResponse response = modelInferenceEndPointService.compute(inferenceAPIEndPoint, schema,
+		ModelComputeResponse response = modelInferenceEndPointService.compute(modelObj, schema,
 				imageFilePath);
 
 		return response;
@@ -1227,8 +1294,6 @@ public class ModelService {
 					.is(SupportedLanguages.fromValue(sourceLanguage));
 			dynamicQuery.addCriteria(srcLangCriteria);
 		
-
-		
 			Criteria tgtLangCriteria = Criteria.where("languages.0.targetLanguage")
 					.is(SupportedLanguages.fromValue(targetLanguage));
 			dynamicQuery.addCriteria(tgtLangCriteria);
@@ -1238,8 +1303,6 @@ public class ModelService {
 		
 			Criteria submitterCriteria = Criteria.where("submitter.name").is("AI4Bharat");
 			dynamicQuery.addCriteria(submitterCriteria);
-		
-
 		
 
 		Criteria statusCriteria = Criteria.where("status").is("published");
@@ -1359,21 +1422,48 @@ public class ModelService {
 
 		PipelineResponse pipelineResponse = new PipelineResponse();
 		/// Ulca ApiKey Part
-		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
-
-        PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
+		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());	
+		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
+				ulcaApiKey, pipelineModel.getPipelineModelId());
+		
+		if(pipelineModel.getInferenceEndPoint()!=null || pipelineModel.getInferenceSocketEndPoint()!=null) {
+		
+		if(pipelineModel.getInferenceEndPoint()!=null) {
+		
+		PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
 		pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
 		pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
 		pipelineInferenceAPIEndPoint
 				.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
 		pipelineInferenceAPIEndPoint.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
+		pipelineInferenceAPIEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
 
+		pipelineResponse.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
+		}
+		
+		if(pipelineModel.getInferenceSocketEndPoint()!=null) {
+			
+			PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint = new PipelineInferenceAPIEndPoint();
+			pipelineInferenceSocketEndPoint.setCallbackUrl(pipelineModel.getInferenceSocketEndPoint().getCallbackUrl());
+			pipelineInferenceSocketEndPoint.setIsSyncApi(pipelineModel.getInferenceSocketEndPoint().isIsSyncApi());
+			pipelineInferenceSocketEndPoint
+					.setIsMultilingualEnabled(pipelineModel.getInferenceSocketEndPoint().isIsMultilingualEnabled());
+			pipelineInferenceSocketEndPoint.setAsyncApiDetails(pipelineModel.getInferenceSocketEndPoint().getAsyncApiDetails());
+			pipelineInferenceSocketEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
+
+			pipelineResponse.setPipelineInferenceSocketEndPoint(pipelineInferenceSocketEndPoint);
+			}
+	}else {
+		
+		throw new PipelineValidationException("InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
+				HttpStatus.BAD_REQUEST);
+	}
+		
 		// TranslationTaskInferenceInferenceApiKey
 		// translationTaskInferenceInferenceApiKey = new
 		// TranslationTaskInferenceInferenceApiKey();
 
-		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
-				ulcaApiKey, pipelineModel.getPipelineModelId());
+	
 
 		/*
 		 * String dbUserId = userId;
@@ -1406,9 +1496,7 @@ public class ModelService {
 		 * 
 		 * }
 		 */
-		pipelineInferenceAPIEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
-
-		pipelineResponse.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
+		
 
 		ArrayList<LanguagesList> languagesArrayList = new ArrayList<LanguagesList>();
 		pipelineResponse.getLanguages();
@@ -3002,12 +3090,14 @@ public class ModelService {
 	 * return pipelineRequest; }
 	 */
 
-	public PipelinesResponse explorePipelines() {
+	public PipelinesResponse explorePipelines(String serviceProviderName) {
 
 		List<PipelineModel> pipelineModels = pipelineModelDao.findAll();
 		int noOfPipelineModels = (int) pipelineModelDao.count();
 		log.info("noOfPipelineModels ::::::" + noOfPipelineModels);
 		List<PipelineModelResponse> pipelineResponse = new ArrayList<PipelineModelResponse>();
+		List<String> serviceProviderList = new ArrayList<String>();
+
 		for (PipelineModel pipelineModel : pipelineModels) {
 			PipelineModelResponse pipelineModelResponse = new PipelineModelResponse();
 			pipelineModelResponse.setPipelineId(pipelineModel.getPipelineModelId());
@@ -3016,6 +3106,7 @@ public class ModelService {
 			pipelineModelResponse.setServiceProviderName(pipelineModel.getServiceProvider().getName());
 			pipelineModelResponse.setSupportedTasks(pipelineModel.getSupportedPipelines());
 			pipelineResponse.add(pipelineModelResponse);
+			serviceProviderList.add(pipelineModel.getServiceProvider().getName());
 		}
 
 		log.info("***********pipelineResponse******************");
@@ -3025,8 +3116,19 @@ public class ModelService {
 
 			throw new PipelineValidationException("Pipeline Models are not available!", HttpStatus.BAD_REQUEST);
 		} else {
-			return new PipelinesResponse(pipelineResponse, noOfPipelineModels);
+			
+			
+			if(serviceProviderName!=null) {
+				
+				if(serviceProviderName.equals("true")) {
+				return new PipelinesResponse(serviceProviderList, noOfPipelineModels);
+				}else {
+					return new PipelinesResponse(pipelineResponse, noOfPipelineModels);
 
+				}
+			}else {
+			return new PipelinesResponse(pipelineResponse, noOfPipelineModels);
+			}
 		}
 
 	}

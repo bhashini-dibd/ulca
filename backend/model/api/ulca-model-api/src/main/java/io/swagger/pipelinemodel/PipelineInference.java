@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * PipelineInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-16T05:12:20.169133522Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-06-02T05:22:26.036588556Z[GMT]")
 
 
 public class PipelineInference   {
@@ -37,38 +37,20 @@ public class PipelineInference   {
   private Submitter serviceProvider = null;
 
   @JsonProperty("inferenceEndPoint")
-  private io.swagger.pipelinemodel.InferenceAPIEndPoint inferenceEndPoint = null;
+  private InferenceAPIEndPoint inferenceEndPoint = null;
+
+  @JsonProperty("inferenceSocketEndPoint")
+  private InferenceAPIEndPoint inferenceSocketEndPoint = null;
 
   @JsonProperty("supportedPipelines")
   private ListOfPipelines supportedPipelines = null;
 
   @JsonProperty("taskSpecifications")
   private TaskSpecifications taskSpecifications = null;
-  
+
   @JsonProperty("apiEndPoints")
   private ApiEndPoint apiEndPoints = null;
-  
-  
-  public PipelineInference apiEndPoints(ApiEndPoint apiEndPoints) {
-	    this.apiEndPoints = apiEndPoints;
-	    return this;
-	  }
 
-	  /**
-	   * Get apiEndPoints
-	   * @return apiEndPoints
-	   **/
-	  @Schema(description = "")
-	  
-	    @Valid
-	    public ApiEndPoint getApiEndPoints() {
-	    return apiEndPoints;
-	  }
-
-	  public void setApiEndPoints(ApiEndPoint apiEndPoints) {
-	    this.apiEndPoints = apiEndPoints;
-	  }
-  
   public PipelineInference name(String name) {
     this.name = name;
     return this;
@@ -200,9 +182,8 @@ public class PipelineInference   {
    * Get inferenceEndPoint
    * @return inferenceEndPoint
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
     public InferenceAPIEndPoint getInferenceEndPoint() {
     return inferenceEndPoint;
@@ -210,6 +191,26 @@ public class PipelineInference   {
 
   public void setInferenceEndPoint(InferenceAPIEndPoint inferenceEndPoint) {
     this.inferenceEndPoint = inferenceEndPoint;
+  }
+
+  public PipelineInference inferenceSocketEndPoint(InferenceAPIEndPoint inferenceSocketEndPoint) {
+    this.inferenceSocketEndPoint = inferenceSocketEndPoint;
+    return this;
+  }
+
+  /**
+   * Get inferenceSocketEndPoint
+   * @return inferenceSocketEndPoint
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public InferenceAPIEndPoint getInferenceSocketEndPoint() {
+    return inferenceSocketEndPoint;
+  }
+
+  public void setInferenceSocketEndPoint(InferenceAPIEndPoint inferenceSocketEndPoint) {
+    this.inferenceSocketEndPoint = inferenceSocketEndPoint;
   }
 
   public PipelineInference supportedPipelines(ListOfPipelines supportedPipelines) {
@@ -254,6 +255,27 @@ public class PipelineInference   {
     this.taskSpecifications = taskSpecifications;
   }
 
+  public PipelineInference apiEndPoints(ApiEndPoint apiEndPoints) {
+    this.apiEndPoints = apiEndPoints;
+    return this;
+  }
+
+  /**
+   * Get apiEndPoints
+   * @return apiEndPoints
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public ApiEndPoint getApiEndPoints() {
+    return apiEndPoints;
+  }
+
+  public void setApiEndPoints(ApiEndPoint apiEndPoints) {
+    this.apiEndPoints = apiEndPoints;
+  }
+
+
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -270,18 +292,15 @@ public class PipelineInference   {
         Objects.equals(this.refUrl, pipelineInference.refUrl) &&
         Objects.equals(this.serviceProvider, pipelineInference.serviceProvider) &&
         Objects.equals(this.inferenceEndPoint, pipelineInference.inferenceEndPoint) &&
+        Objects.equals(this.inferenceSocketEndPoint, pipelineInference.inferenceSocketEndPoint) &&
         Objects.equals(this.supportedPipelines, pipelineInference.supportedPipelines) &&
-
-        Objects.equals(this.taskSpecifications, pipelineInference.taskSpecifications)&&
+        Objects.equals(this.taskSpecifications, pipelineInference.taskSpecifications) &&
         Objects.equals(this.apiEndPoints, pipelineInference.apiEndPoints);
-
   }
 
   @Override
   public int hashCode() {
-
-    return Objects.hash(name, version, description, serviceProvider, domain, refUrl, inferenceEndPoint, supportedPipelines, taskSpecifications, apiEndPoints);
-
+    return Objects.hash(name, version, description, domain, refUrl, serviceProvider, inferenceEndPoint, inferenceSocketEndPoint, supportedPipelines, taskSpecifications, apiEndPoints);
   }
 
   @Override
@@ -296,6 +315,7 @@ public class PipelineInference   {
     sb.append("    refUrl: ").append(toIndentedString(refUrl)).append("\n");
     sb.append("    serviceProvider: ").append(toIndentedString(serviceProvider)).append("\n");
     sb.append("    inferenceEndPoint: ").append(toIndentedString(inferenceEndPoint)).append("\n");
+    sb.append("    inferenceSocketEndPoint: ").append(toIndentedString(inferenceSocketEndPoint)).append("\n");
     sb.append("    supportedPipelines: ").append(toIndentedString(supportedPipelines)).append("\n");
     sb.append("    taskSpecifications: ").append(toIndentedString(taskSpecifications)).append("\n");
     sb.append("    apiEndPoints: ").append(toIndentedString(apiEndPoints)).append("\n");
