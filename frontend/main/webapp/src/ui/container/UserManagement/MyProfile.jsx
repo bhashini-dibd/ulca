@@ -21,7 +21,7 @@ import { Cached } from "@material-ui/icons";
 import DataSet from "../../styles/Dataset";
 import Modal from "../../components/common/Modal";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import GenerateAPI from "../../../redux/actions/api/UserManagement/GenerateApiKey";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
@@ -37,10 +37,14 @@ import TableBody from "@material-ui/core/TableBody";
 import getSearchedValue from "../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
 import ServiceProviderDialog from "../../components/common/ServiceProviderDialog";
 import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/RemoveServiceProviderKey";
+import GenerateServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/GenerateServiceProviderKey";
 
 const MyProfile = (props) => {
   const { classes } = props;
   const dispatch = useDispatch();
+
+  const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
+
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [snackbar, setSnackbarInfo] = useState({
@@ -57,6 +61,13 @@ const MyProfile = (props) => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [openServiceProviderDialog, setOpenServiceProviderDialog] = useState(false);
   const[serviceProviderName,setServiceProviderName] = useState("")
+  const [expandableRow, setExpandableRow] = useState([]);
+
+  useEffect(() => {
+    if(apiKeys) {
+      setTableData(apiKeys);
+    }
+  }, [apiKeys])
 
   const handlecChangeAddName = (e) => {
     setAppName(e.target.value);
@@ -75,8 +86,7 @@ const MyProfile = (props) => {
   };
 
   const UserDetails = JSON.parse(localStorage.getItem("userDetails"));
-console.log(UserDetails.userID
-  ,"UserDetails")
+
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -123,26 +133,8 @@ console.log(UserDetails.userID
   };
 
   const getApiKeysCall = async () => {
-    setLoading(true);
     const apiObj = new FetchApiKeysAPI();
-    const res = await fetch(apiObj.apiEndPoint(), {
-      method: "POST",
-      headers: apiObj.getHeaders().headers,
-      body: JSON.stringify(apiObj.getBody()),
-    });
-
-    const resp = await res.json();
-    if (res.ok) {
-      setTableData(resp?.data);
-      setLoading(false);
-    } else {
-      setSnackbarInfo({
-        open: true,
-        message: resp?.message,
-        variant: "error",
-      });
-      setLoading(false);
-    }
+    dispatch(APITransport(apiObj));
   };
 
   useEffect(() => {
@@ -470,7 +462,7 @@ console.log(UserDetails.userID
               variant="contained"
               className={classes.myProfileActionBtn}
               onClick={() => handleDialogSubmit(tableMeta.rowData[1])}
-              style={{ color: "red", textTransform: "capitalize" }}
+              style={{ textTransform: "capitalize" }}
             >
               {loading ? (
                 <CircularProgress color="primary" size={20} />
@@ -484,12 +476,46 @@ console.log(UserDetails.userID
     },
   ];
 
+  const handleGenerateInferenceAPIKey = async (providerName, ulcaKey) => {
+    const apiObj = new GenerateServiceProviderKeyAPI(ulcaKey, providerName);
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+
+    const resp = await res.json();
+    if (res.ok) {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "success",
+      });
+      await getApiKeysCall();
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+    }
+  };
+
   const data =
     tableData && tableData.length > 0
       ? pageSearch().map((el, i) => {
           return [el.appName, el.ulcaApiKey, el.serviceProviderKeys];
         })
       : [];
+
+  const handleRowExpand = (_currentRow, allRow) => {
+    let temp = [];
+    allRow.forEach((element) => {
+      temp.push(element.dataIndex);
+    });
+
+    setExpandableRow(temp);
+  };
 
   const options = {
     textLabels: {
@@ -518,6 +544,10 @@ console.log(UserDetails.userID
     expandableRowsHeader: true,
     displaySelectToolbar: false,
     disableToolbarSelect: "none",
+    onRowExpansionChange: (currentRowsExpanded, allRowsExpanded) => {
+      handleRowExpand(currentRowsExpanded, allRowsExpanded);
+    },
+    rowsExpanded: expandableRow,
     renderExpandableRow: (rowData, rowMeta) => {
       const data = rowData[2];
       if (data?.length)
@@ -529,10 +559,18 @@ console.log(UserDetails.userID
                   <Box style={{ margin: "0 80px" }}>
                     <Table size="small" aria-label="purchases">
                       <TableHead style={{ height: "60px" }}>
-                        <TableCell>Service Provider Name</TableCell>
-                        <TableCell>Inference API Key Name</TableCell>
-                        <TableCell>Inference API Key Value</TableCell>
-                        <TableCell style={{ paddingLeft: "40px" }}>
+                        <TableCell style={{ whiteSpace: "nowrap" }}>
+                          Service Provider Name
+                        </TableCell>
+                        <TableCell style={{ whiteSpace: "nowrap" }}>
+                          Inference API Key Name
+                        </TableCell>
+                        <TableCell style={{ width: "60%" }}>
+                          Inference API Key Value
+                        </TableCell>
+                        <TableCell
+                          style={{ paddingLeft: "50px", width: "15%" }}
+                        >
                           Action
                         </TableCell>
                       </TableHead>
@@ -545,26 +583,50 @@ console.log(UserDetails.userID
                               }}
                               key={i}
                             >
-                              <TableCell>{row?.serviceProviderName}</TableCell>
-                              <TableCell>
-                                {row?.inferenceApiKey?.name}
+                              <TableCell style={{ width: "18%" }}>
+                                {row?.serviceProviderName}
                               </TableCell>
-                              <TableCell>
-                                {row?.inferenceApiKey?.value}
+                              <TableCell style={{ width: "19%" }}>
+                                {row?.inferenceApiKey?.name ?? "-"}
                               </TableCell>
-                              <TableCell>
-                                <Button
-                                  variant="contained"
-                                  className={classes.myProfileActionBtn}
-                                  onClick={()=>handleSubmitServiceProviderKey(row?.serviceProviderName,rowData[1])}
-                                  style={{
-                                    color: "red",
-                                    textAlign: "center",
-                                    textTransform: "capitalize",
-                                  }}
-                                >
-                                  Revoke
-                                </Button>
+                              <TableCell style={{ width: "60%" }}>
+                                {row?.inferenceApiKey?.value ?? "-"}
+                              </TableCell>
+                              <TableCell style={{ width: "15%" }}>
+                                {row?.inferenceApiKey?.value ? (
+                                  <Button
+                                    variant="contained"
+                                    className={classes.myProfileActionBtn}
+                                    onClick={() =>
+                                      handleSubmitServiceProviderKey(
+                                        row?.serviceProviderName,
+                                        rowData[1]
+                                      )
+                                    }
+                                    style={{
+                                      height: "30px",
+                                      margin: "5px",
+                                      textAlign: "center",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
+                                    Revoke
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    color="primary"
+                                    variant="contained"
+                                    className={classes.myProfileGenerateButton}
+                                    onClick={() =>
+                                      handleGenerateInferenceAPIKey(
+                                        row?.serviceProviderName,
+                                        rowData[1]
+                                      )
+                                    }
+                                  >
+                                    Generate
+                                  </Button>
+                                )}
                               </TableCell>
                             </TableRow>
                           );
@@ -575,7 +637,6 @@ console.log(UserDetails.userID
                 </>
               </TableCell>
             </TableRow>
-            <TableRow className={classes.tableRow}></TableRow>
           </>
         );
       return <></>;

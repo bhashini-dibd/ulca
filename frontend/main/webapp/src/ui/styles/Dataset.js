@@ -1095,19 +1095,33 @@ const DataSet = (theme) => ({
   },
   myProfileActionBtn: {
     borderRadius: "16px",
-    backgroundColor: "white",
+    // backgroundColor: "white",
+    backgroundColor: "rgb(211, 47, 47)",
     boxShadow: "none",
-    color: "rgb(19, 157, 96)",
-    padding: "10px 20px",
+    // color: "rgb(19, 157, 96)",
+    color: "#fff",
+    padding: "10px 25px",
     fontSize: "1rem",
     width: "fit-content",
     height:"36px",
     cursor: "pointer",
     "&:hover": {
-      backgroundColor: "white",
+      // backgroundColor: "white",
+      backgroundColor: "rgb(211, 47, 47)",
       boxShadow: "none",
     },
-  }
+  },
+  myProfileGenerateButton: {
+    borderRadius: "16px",
+    margin: "5px",
+    boxShadow: "none",
+    padding: "10px 20px",
+    fontSize: "1rem",
+    width: "fit-content",
+    height:"30px",
+    cursor: "pointer",
+    textTransform: "none",
+  },
 });
 
 export default DataSet;
