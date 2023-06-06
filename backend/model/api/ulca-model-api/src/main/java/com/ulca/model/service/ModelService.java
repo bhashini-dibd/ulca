@@ -2402,6 +2402,7 @@ public class ModelService {
 							// Do Mongo Query for targetLangListCopy
 							Boolean modelExists = false;
 							for (TTSResponseConfig each_task : ttsInference.getConfig()) {
+								log.info("each_task :: "+each_task.toString());
 								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang)) {
 									modelExists = true;
 									break;
