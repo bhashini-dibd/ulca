@@ -1415,7 +1415,7 @@ public class ModelService {
 		 */
 		PipelineModel pipelineModel = pipelineModelDao
 				.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
-
+       log.info("pipeline-model :: "+pipelineModel.toString());
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
 		// ArrayList<String> pipelineTaskSequence = new ArrayList<String>();
@@ -1429,7 +1429,7 @@ public class ModelService {
 		if(pipelineModel.getInferenceEndPoint()!=null || pipelineModel.getInferenceSocketEndPoint()!=null) {
 		
 		if(pipelineModel.getInferenceEndPoint()!=null) {
-		
+		log.info("pipelineModel.getInferenceEndPoint() :: "+pipelineModel.getInferenceEndPoint().toString());
 		PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
 		pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
 		pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
@@ -1442,7 +1442,7 @@ public class ModelService {
 		}
 		
 		if(pipelineModel.getInferenceSocketEndPoint()!=null) {
-			
+			log.info("pipelineModel.getInferenceSocketEndPoint() :: "+pipelineModel.getInferenceSocketEndPoint().toString());
 			PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint = new PipelineInferenceAPIEndPoint();
 			pipelineInferenceSocketEndPoint.setCallbackUrl(pipelineModel.getInferenceSocketEndPoint().getCallbackUrl());
 			pipelineInferenceSocketEndPoint.setIsSyncApi(pipelineModel.getInferenceSocketEndPoint().isIsSyncApi());
@@ -2401,9 +2401,9 @@ public class ModelService {
 							// Do Mongo Query for targetLangListCopy
 							// Do Mongo Query for targetLangListCopy
 							Boolean modelExists = false;
-							log.info("ttsInference.getConfig() :: "+ttsInference.getConfig());
+							//log.info("ttsInference.getConfig() :: "+ttsInference.getConfig());
 							for (TTSResponseConfig each_task : ttsInference.getConfig()) {
-								log.info("each_task :: "+each_task.toString());
+								//log.info("each_task :: "+each_task.toString());
 								if(each_task.getLanguage()!=null) {
 								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang)) {
 									modelExists = true;
