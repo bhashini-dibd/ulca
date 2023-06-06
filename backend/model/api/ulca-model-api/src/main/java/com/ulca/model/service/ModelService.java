@@ -2008,7 +2008,8 @@ public class ModelService {
 
 						}
 
-						asrInference.addConfigItem(asrResponseConfig);
+						if(asrResponseConfig.getLanguage()!=null)
+							asrInference.addConfigItem(asrResponseConfig);
 
 						/*
 						 * ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
@@ -2103,9 +2104,8 @@ public class ModelService {
 								}
 
 							}
-
-							translationInference.addConfigItem(translationResponseConfig);
-
+							if(translationResponseConfig.getLanguage()!=null)
+								translationInference.addConfigItem(translationResponseConfig);
 						}
 
 					}
@@ -2187,8 +2187,8 @@ public class ModelService {
 							}
 
 						}
-
-						ttsInference.addConfigItem(ttsResponseConfig);
+						if(ttsResponseConfig.getLanguage()!=null)
+							ttsInference.addConfigItem(ttsResponseConfig);
 
 					}
 				}
@@ -2299,8 +2299,8 @@ public class ModelService {
 									}
 
 								}
-
-								asrInference.addConfigItem(asrResponseConfig);
+								if(asrResponseConfig.getLanguage()!=null)
+									asrInference.addConfigItem(asrResponseConfig);
 
 							}
 						}
@@ -2388,9 +2388,8 @@ public class ModelService {
 										}
 
 									}
-
-									translationInference.addConfigItem(translationResponseConfig);
-
+									if(translationResponseConfig.getLanguage()!=null)
+										translationInference.addConfigItem(translationResponseConfig);
 								}
 
 							}
@@ -2479,8 +2478,8 @@ public class ModelService {
 									}
 
 								}
-
-								ttsInference.addConfigItem(ttsResponseConfig);
+								if(ttsResponseConfig.getLanguage()!=null)
+									ttsInference.addConfigItem(ttsResponseConfig);
 							}
 						}
 
