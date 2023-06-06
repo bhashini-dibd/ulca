@@ -632,8 +632,8 @@ const MyProfile = (props) => {
                         <TableCell style={{ width: "60%" }}>
                           Inference API Key Value
                         </TableCell>
-                        <TableCell style={{ width: "60%" }}>
-                          DataTracking
+                        <TableCell style={{ whiteSpace: "nowrap" }}>
+                          Data Tracking
                         </TableCell>
                         <TableCell
                           style={{ paddingLeft: "50px", width: "15%" }}
