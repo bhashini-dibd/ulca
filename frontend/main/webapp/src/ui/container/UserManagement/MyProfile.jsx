@@ -10,6 +10,7 @@ import {
   TextField,
   TableCell,
   Table,
+  Switch,
 } from "@material-ui/core";
 import Search from "../../components/Datasets&Model/Search";
 import { MuiThemeProvider } from "@material-ui/core/styles";
@@ -20,7 +21,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import { Cached } from "@material-ui/icons";
 import DataSet from "../../styles/Dataset";
 import Modal from "../../components/common/Modal";
-import { useEffect, useState } from "react";
+import { useEffect,  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import GenerateAPI from "../../../redux/actions/api/UserManagement/GenerateApiKey";
@@ -38,6 +39,65 @@ import getSearchedValue from "../../../redux/actions/api/DataSet/DatasetSearch/G
 import ServiceProviderDialog from "../../components/common/ServiceProviderDialog";
 import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/RemoveServiceProviderKey";
 import GenerateServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/GenerateServiceProviderKey";
+import DataTrackingToggleAPI from "../../../redux/actions/api/UserManagement/DataTrackingToggle";
+
+const SwitchCases = ({
+  dataTrackingValue,
+  setSnackbarInfo,
+  setLoading,
+  serviceProviderName,
+  Ulcakey,
+}) => {
+  const [checked, setChecked] = useState(dataTrackingValue);
+  useEffect(() => {
+    setChecked(dataTrackingValue);
+  }, [dataTrackingValue]);
+
+  const handleChangedataTrackingToggle = async (event) => {
+    setChecked((pre) => !pre);
+    setLoading(true);
+    const apiObj = new DataTrackingToggleAPI(
+      Ulcakey,
+      serviceProviderName,
+      event.target.checked
+    );
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+
+    const resp = await res.json();
+    if (res.ok) {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "success",
+      });
+      setLoading(false);
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Switch
+        size="small"
+        color="primary"
+        checked={checked}
+        onChange={handleChangedataTrackingToggle}
+        inputProps={{ "aria-label": "Switch demo" }}
+      />
+    </>
+  );
+};
 
 const MyProfile = (props) => {
   const { classes } = props;
@@ -59,15 +119,17 @@ const MyProfile = (props) => {
   const [UlcaApiKey, setUlcaApiKey] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  const [openServiceProviderDialog, setOpenServiceProviderDialog] = useState(false);
-  const[serviceProviderName,setServiceProviderName] = useState("")
+  const [openServiceProviderDialog, setOpenServiceProviderDialog] =
+    useState(false);
+  const [serviceProviderName, setServiceProviderName] = useState("");
   const [expandableRow, setExpandableRow] = useState([]);
 
+
   useEffect(() => {
-    if(apiKeys) {
+    if (apiKeys) {
       setTableData(apiKeys);
     }
-  }, [apiKeys])
+  }, [apiKeys]);
 
   const handlecChangeAddName = (e) => {
     setAppName(e.target.value);
@@ -76,7 +138,7 @@ const MyProfile = (props) => {
     setModal(false);
     setAppName("");
     setOpen(false);
-    setOpenServiceProviderDialog(false)
+    setOpenServiceProviderDialog(false);
   };
 
   const onKeyDown = (event) => {
@@ -184,21 +246,23 @@ const MyProfile = (props) => {
       }
     });
   };
-  const handleSubmitServiceProviderKey = (serviceProviderName,ulcaApiKey) =>{
+  const handleSubmitServiceProviderKey = (serviceProviderName, ulcaApiKey) => {
     setOpenServiceProviderDialog(true);
-    setServiceProviderName(serviceProviderName)
-    setUlcaApiKey(ulcaApiKey)
-    
-  }
+    setServiceProviderName(serviceProviderName);
+    setUlcaApiKey(ulcaApiKey);
+  };
 
-  const handleRemoveServiceProviderKey = async () =>{
- const data = {
-  userID : UserDetails.userID,
-  ulcaApiKey : UlcaApiKey,
-  serviceProviderName : serviceProviderName,
- }
+  const handleRemoveServiceProviderKey = async () => {
+    const data = {
+      userID: UserDetails.userID,
+      ulcaApiKey: UlcaApiKey,
+      serviceProviderName: serviceProviderName,
+    };
     setLoading(true);
-    const apiObj = new removeServiceProviderKeyAPI(UlcaApiKey,serviceProviderName);
+    const apiObj = new removeServiceProviderKeyAPI(
+      UlcaApiKey,
+      serviceProviderName
+    );
     const res = await fetch(apiObj.apiEndPoint(), {
       method: "POST",
       headers: apiObj.getHeaders().headers,
@@ -224,7 +288,7 @@ const MyProfile = (props) => {
       setLoading(false);
     }
     setOpenServiceProviderDialog(false);
-  }
+  };
 
   const fetchHeaderButton = () => {
     return (
@@ -568,6 +632,9 @@ const MyProfile = (props) => {
                         <TableCell style={{ width: "60%" }}>
                           Inference API Key Value
                         </TableCell>
+                        <TableCell style={{ width: "60%" }}>
+                          DataTracking
+                        </TableCell>
                         <TableCell
                           style={{ paddingLeft: "50px", width: "15%" }}
                         >
@@ -591,6 +658,25 @@ const MyProfile = (props) => {
                               </TableCell>
                               <TableCell style={{ width: "60%" }}>
                                 {row?.inferenceApiKey?.value ?? "-"}
+                              </TableCell>
+                              <TableCell style={{ width: "60%" }}>
+                                {row?.inferenceApiKey?.value ? (
+                                  <SwitchCases
+                                    dataTrackingValue={row?.dataTracking}
+                                    setLoading={setLoading}
+                                    setSnackbarInfo={setSnackbarInfo}
+                                    serviceProviderName={
+                                      row?.serviceProviderName
+                                    }
+                                    Ulcakey={rowData[1]}
+                                  />
+                                ) : (
+                                  <Switch
+                                    disabled
+                                    size="small"
+                                    inputProps={{ "aria-label": "Switch demo" }}
+                                  />
+                                )}
                               </TableCell>
                               <TableCell style={{ width: "15%" }}>
                                 {row?.inferenceApiKey?.value ? (
@@ -669,7 +755,11 @@ const MyProfile = (props) => {
         </Grid>
         <Typography
           variant="body"
-          style={{ margin: "30px 10px 12px", fontSize: "16px" , marginLeft:"auto"}}
+          style={{
+            margin: "30px 10px 12px",
+            fontSize: "16px",
+            marginLeft: "auto",
+          }}
         >
           User ID : {UserDetails.userID}
         </Typography>
@@ -733,7 +823,6 @@ const MyProfile = (props) => {
           submit={() => revokeApiKeyCall()}
         />
       )}
-
 
       {openServiceProviderDialog && (
         <ServiceProviderDialog
