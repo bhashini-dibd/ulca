@@ -2404,9 +2404,11 @@ public class ModelService {
 							log.info("ttsInference.getConfig() :: "+ttsInference.getConfig());
 							for (TTSResponseConfig each_task : ttsInference.getConfig()) {
 								log.info("each_task :: "+each_task.toString());
+								if(each_task.getLanguage()!=null) {
 								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang)) {
 									modelExists = true;
 									break;
+								}
 								}
 							}
 							if (modelExists == false) {
