@@ -1398,6 +1398,7 @@ public class ModelService {
 			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax",
 					HttpStatus.BAD_REQUEST);
 		}
+		//SCRIPTSTODO: Validate if script code exist or not.
 
 		// Make query and find pipeline model with the submitter name
 
@@ -1497,7 +1498,8 @@ public class ModelService {
 		 * }
 		 */
 		
-
+		//SCRIPTSTODO: Enter targetLanguage as TargetLanguage|TargetLanguageScriptCode
+		//SCRIPTSTODO: Enter sourceLanguage as SourceLanguage|SourceLanguageScriptCode
 		ArrayList<LanguagesList> languagesArrayList = new ArrayList<LanguagesList>();
 		pipelineResponse.getLanguages();
 		TaskSpecifications pipelineTaskSpecifications = pipelineModel.getTaskSpecifications();
@@ -2086,7 +2088,6 @@ public class ModelService {
 									for (ConfigSchema configSchema : taskSpecification.getTaskConfig()) {
 										if (configSchema.getSourceLanguage().equals(firstTaskSchema.getSourceLanguage())
 												&& configSchema.getTargetLanguage().equals(targetLang)) {
-
 											ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 											log.info("Model Name :: " + model.getName());
 											LanguagePairs langPair = model.getLanguages();
@@ -2675,6 +2676,15 @@ public class ModelService {
 		log.info("++++++++++++++++Entry to validate User Details+++++++++++++++");
 
 		TranslationTaskInferenceInferenceApiKey infKey = new TranslationTaskInferenceInferenceApiKey();
+
+		//COMMENT BEFORE PUSH
+		infKey.setName("name");
+		infKey.setValue("value");
+		return infKey;
+
+		//UNCOMMENT BEFORE PUSH
+		/* 
+
 		String name = null;
 		String value = null;
 		JSONObject data = new JSONObject();
@@ -2682,7 +2692,6 @@ public class ModelService {
 		data.put("ulcaApiKey", ulcaApiKey);
 		data.put("pipelineId", pipelineModelId);
 
-		// String requestUrl = ulca_ums_host + "/ulca/user-mgmt/v1/users/getApiKeys";
 		String requestUrl = ulca_ums_host + "/ulca/user-mgmt/v1/users/generateServiceProviderKey";
 
 		log.info("requestUrl :: " + requestUrl);
@@ -2701,15 +2710,6 @@ public class ModelService {
 
 			Response httpResponse = client.newCall(httpRequest).execute();
 
-			/*
-			 * if (httpResponse.code() < 200 || httpResponse.code() > 204) {
-			 * 
-			 * log.info(httpResponse.toString()); throw new
-			 * PipelineValidationException("Ulca Api Key does not exist!",
-			 * HttpStatus.BAD_REQUEST);
-			 * 
-			 * }
-			 */
 
 			if (httpResponse.code() == 200) {
 				responseJsonStr = httpResponse.body().string();
@@ -2756,58 +2756,10 @@ public class ModelService {
 
 		}
 
-		// JSONObject json = (JSONObject) JsonParser.parseString(responseJsonStr);
-		// log.info("OBJECT :: "+json);
-		// String responseJsonStr = "{\"message\": \"UserApiKey found successfully\",
-		// \"data\": [{\"appName\": \"Bhashaverse - android - prod\", \"ulcaApiKey\":
-		// \"apikey1\", \"serviceProviderKeys\": [{\"serviceProviderName\": \"Dhruva\",
-		// \"inferenceApiKey\": {\"name\": \"Authorization\", \"value\":
-		// \"b4be0986-dfa2-4ca0-8945-ce6e05ac713b\"}}]}, {\"appName\": \"Bhashaverse -
-		// iOS - prod\", \"ulcaApiKey\": \"35764737a9-3a15-4e9c-ad95-c7b69fe22qqq\",
-		// \"serviceProviderKeys\": [{\"serviceProviderName\": \"Dhruva\",
-		// \"inferenceApiKey\": {\"name\": \"Authorization\", \"value\":
-		// \"e294b2b0-272c-4d8c-adb7-8d0f6cefe523\"}}]}]}";
-
-		/*
-		 * log.info("responseJsonStr ::" + responseJsonStr); JSONObject jsonObj1 = new
-		 * JSONObject(responseJsonStr);
-		 * 
-		 * String name = null; String value = null; if (!jsonObj1.isNull("data")) {
-		 * 
-		 * JSONObject jsonObj = new JSONObject(responseJsonStr); JSONArray arr =
-		 * (JSONArray) jsonObj.get("data"); log.info("JSONArray :: " + arr.toString());
-		 * log.info("length ::" + arr.length());
-		 * 
-		 * for (int i = 0; i < arr.length(); i++) { JSONObject obj1 = (JSONObject)
-		 * arr.get(i);
-		 * 
-		 * 
-		 * log.info("obj1 :: " + obj1.toString());
-		 * 
-		 * if (obj1.get("ulcaApiKey").equals(ulcaApiKey)) {
-		 * 
-		 * JSONArray arr1 = (JSONArray) obj1.get("serviceProviderKeys");
-		 * 
-		 * JSONObject obj2 = (JSONObject) arr1.get(0);
-		 * 
-		 * JSONObject obj3 = (JSONObject) obj2.get("inferenceApiKey");
-		 * 
-		 * name = (String) obj3.get("name"); value = (String) obj3.get("value");
-		 * 
-		 * log.info("name :: " + name); log.info("value :: " + value);
-		 * 
-		 * break;
-		 * 
-		 * } } } else {
-		 * 
-		 * throw new PipelineValidationException("User ID does not exist!",
-		 * HttpStatus.BAD_REQUEST);
-		 * 
-		 * }
-		 */
 		log.info("++++++++++++++++Exit to validate User Details+++++++++++++++");
 
 		return infKey;
+		*/
 	}
 
 	/*
