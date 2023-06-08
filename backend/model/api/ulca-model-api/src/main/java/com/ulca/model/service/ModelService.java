@@ -120,6 +120,7 @@ import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.SupportedTasks;
 import io.swagger.model.Submitter;
 import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedScripts;
 import io.swagger.model.TTSInference;
 import io.swagger.model.TranslationInference;
 import io.swagger.model.TranslationResponse;
@@ -1415,7 +1416,7 @@ public class ModelService {
 		 */
 		PipelineModel pipelineModel = pipelineModelDao
 				.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
-       log.info("pipeline-model :: "+pipelineModel.toString());
+     //  log.info("pipeline-model :: "+pipelineModel.toString());
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
 		// ArrayList<String> pipelineTaskSequence = new ArrayList<String>();
@@ -1429,7 +1430,7 @@ public class ModelService {
 		if(pipelineModel.getInferenceEndPoint()!=null || pipelineModel.getInferenceSocketEndPoint()!=null) {
 		
 		if(pipelineModel.getInferenceEndPoint()!=null) {
-		log.info("pipelineModel.getInferenceEndPoint() :: "+pipelineModel.getInferenceEndPoint().toString());
+		//log.info("pipelineModel.getInferenceEndPoint() :: "+pipelineModel.getInferenceEndPoint().toString());
 		PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
 		pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
 		pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
@@ -1442,7 +1443,7 @@ public class ModelService {
 		}
 		
 		if(pipelineModel.getInferenceSocketEndPoint()!=null) {
-			log.info("pipelineModel.getInferenceSocketEndPoint() :: "+pipelineModel.getInferenceSocketEndPoint().toString());
+			//log.info("pipelineModel.getInferenceSocketEndPoint() :: "+pipelineModel.getInferenceSocketEndPoint().toString());
 			PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint = new PipelineInferenceAPIEndPoint();
 			pipelineInferenceSocketEndPoint.setCallbackUrl(pipelineModel.getInferenceSocketEndPoint().getCallbackUrl());
 			pipelineInferenceSocketEndPoint.setIsSyncApi(pipelineModel.getInferenceSocketEndPoint().isIsSyncApi());
@@ -2505,7 +2506,7 @@ public class ModelService {
 
 		if (pipelineTasks.size() != countResponseConfigs) {
 			log.info("SHOULD RETURN ERROR");
-			throw new PipelineValidationException("Sequence of languages not supported", HttpStatus.BAD_REQUEST);
+		throw new PipelineValidationException("Sequence of languages not supported", HttpStatus.BAD_REQUEST);
 
 		}
 
@@ -2675,8 +2676,11 @@ public class ModelService {
 		log.info("++++++++++++++++Entry to validate User Details+++++++++++++++");
 
 		TranslationTaskInferenceInferenceApiKey infKey = new TranslationTaskInferenceInferenceApiKey();
-		String name = null;
-		String value = null;
+		String name = "name";
+		String value = "value";
+		infKey.setName(name);
+		infKey.setValue(value);
+/*		
 		JSONObject data = new JSONObject();
 		data.put("userID", userID);
 		data.put("ulcaApiKey", ulcaApiKey);
@@ -2701,15 +2705,7 @@ public class ModelService {
 
 			Response httpResponse = client.newCall(httpRequest).execute();
 
-			/*
-			 * if (httpResponse.code() < 200 || httpResponse.code() > 204) {
-			 * 
-			 * log.info(httpResponse.toString()); throw new
-			 * PipelineValidationException("Ulca Api Key does not exist!",
-			 * HttpStatus.BAD_REQUEST);
-			 * 
-			 * }
-			 */
+		
 
 			if (httpResponse.code() == 200) {
 				responseJsonStr = httpResponse.body().string();
@@ -2755,56 +2751,9 @@ public class ModelService {
 			throw new PipelineValidationException(e.getMessage(), HttpStatus.BAD_REQUEST);
 
 		}
+	
+	*/
 
-		// JSONObject json = (JSONObject) JsonParser.parseString(responseJsonStr);
-		// log.info("OBJECT :: "+json);
-		// String responseJsonStr = "{\"message\": \"UserApiKey found successfully\",
-		// \"data\": [{\"appName\": \"Bhashaverse - android - prod\", \"ulcaApiKey\":
-		// \"apikey1\", \"serviceProviderKeys\": [{\"serviceProviderName\": \"Dhruva\",
-		// \"inferenceApiKey\": {\"name\": \"Authorization\", \"value\":
-		// \"b4be0986-dfa2-4ca0-8945-ce6e05ac713b\"}}]}, {\"appName\": \"Bhashaverse -
-		// iOS - prod\", \"ulcaApiKey\": \"35764737a9-3a15-4e9c-ad95-c7b69fe22qqq\",
-		// \"serviceProviderKeys\": [{\"serviceProviderName\": \"Dhruva\",
-		// \"inferenceApiKey\": {\"name\": \"Authorization\", \"value\":
-		// \"e294b2b0-272c-4d8c-adb7-8d0f6cefe523\"}}]}]}";
-
-		/*
-		 * log.info("responseJsonStr ::" + responseJsonStr); JSONObject jsonObj1 = new
-		 * JSONObject(responseJsonStr);
-		 * 
-		 * String name = null; String value = null; if (!jsonObj1.isNull("data")) {
-		 * 
-		 * JSONObject jsonObj = new JSONObject(responseJsonStr); JSONArray arr =
-		 * (JSONArray) jsonObj.get("data"); log.info("JSONArray :: " + arr.toString());
-		 * log.info("length ::" + arr.length());
-		 * 
-		 * for (int i = 0; i < arr.length(); i++) { JSONObject obj1 = (JSONObject)
-		 * arr.get(i);
-		 * 
-		 * 
-		 * log.info("obj1 :: " + obj1.toString());
-		 * 
-		 * if (obj1.get("ulcaApiKey").equals(ulcaApiKey)) {
-		 * 
-		 * JSONArray arr1 = (JSONArray) obj1.get("serviceProviderKeys");
-		 * 
-		 * JSONObject obj2 = (JSONObject) arr1.get(0);
-		 * 
-		 * JSONObject obj3 = (JSONObject) obj2.get("inferenceApiKey");
-		 * 
-		 * name = (String) obj3.get("name"); value = (String) obj3.get("value");
-		 * 
-		 * log.info("name :: " + name); log.info("value :: " + value);
-		 * 
-		 * break;
-		 * 
-		 * } } } else {
-		 * 
-		 * throw new PipelineValidationException("User ID does not exist!",
-		 * HttpStatus.BAD_REQUEST);
-		 * 
-		 * }
-		 */
 		log.info("++++++++++++++++Exit to validate User Details+++++++++++++++");
 
 		return infKey;
@@ -2875,6 +2824,38 @@ public class ModelService {
 				throw new PipelineValidationException("TaskType is not valid !", HttpStatus.BAD_REQUEST);
 
 			}
+			
+			if(!jo1.isNull("config")) {
+				
+				JSONObject jo2 = (JSONObject) jo1.get("config");
+				
+				JSONObject jo3 = (JSONObject) jo2.get("language");
+				if(!jo3.isNull("sourceScriptCode")) {
+				      
+				
+				  String sourceScriptCode = (String) jo3.getString("sourceScriptCode");
+				  log.info("sourceScriptCode :: "+sourceScriptCode);
+				  if(SupportedScripts.fromValue(sourceScriptCode)==null) {
+					  
+						throw new PipelineValidationException(sourceScriptCode +" SourceScriptCode  is not supported ! ", HttpStatus.BAD_REQUEST);
+  
+				  }
+
+				}
+                if(!jo3.isNull("targetScriptCode")) {
+  				  String targetScriptCode = (String) jo3.getString("targetScriptCode");
+  				  
+				  log.info("targetScriptCode :: "+targetScriptCode);
+                   if(SupportedScripts.fromValue(targetScriptCode)==null) {
+						throw new PipelineValidationException(targetScriptCode+" TargetScriptCode  is not supported !", HttpStatus.BAD_REQUEST);
+  
+					  
+				  }
+
+				}
+
+			}
+			
 		}
 
 		PipelineRequest pipelineRequest = null;
@@ -2891,6 +2872,46 @@ public class ModelService {
 		log.info("pipelineRequest :: " + pipelineRequest.toString());
 		return pipelineRequest;
 	}
+	
+	
+	public PipelineRequest validateScriptCode(String jsonRequest) {
+
+		ObjectMapper om = new ObjectMapper();
+		JSONObject jo = om.convertValue(jsonRequest, JSONObject.class);
+		log.info("jo :: " + jo.toString());
+		String[] taskArray = { "translation", "asr", "tts" };
+		List<String> taskList = Arrays.asList(taskArray);
+		JSONArray ja = (JSONArray) jo.get("pipelineTasks");
+		if (ja.length() < 1) {
+
+			throw new PipelineValidationException("TaskType is not available", HttpStatus.BAD_REQUEST);
+
+		}
+
+		for (int i = 0; i < ja.length(); i++) {
+			JSONObject jo1 = (JSONObject) ja.get(i);
+			if (jo1.isNull("taskType") || !taskList.contains(jo1.get("taskType"))) {
+				throw new PipelineValidationException("TaskType is not valid !", HttpStatus.BAD_REQUEST);
+
+			}
+		}
+
+		PipelineRequest pipelineRequest = null;
+		try {
+			pipelineRequest = om.readValue(jsonRequest, PipelineRequest.class);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		log.info("pipelineRequest :: " + pipelineRequest.toString());
+		return pipelineRequest;
+	}
+
+	
 
 	public PipelineRequest checkLanguageSequence(PipelineRequest pipelineRequest) {
 		PipelineTasks pipelineTasks = pipelineRequest.getPipelineTasks();
