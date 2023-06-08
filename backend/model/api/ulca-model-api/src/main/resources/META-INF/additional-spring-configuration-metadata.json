@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "kafka.ulca.bootstrap.server.host",
+  "type": "java.lang.String",
+  "description": "A description for 'kafka.ulca.bootstrap.server.host'"
+}]}
