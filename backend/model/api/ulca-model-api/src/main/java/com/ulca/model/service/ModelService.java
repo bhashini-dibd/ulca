@@ -1588,13 +1588,12 @@ public class ModelService {
 				ASRRequestConfig asrRequestConfig = asrTask.getConfig();
 				LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
 				LanguagePair languagePair = asrRequestConfig.getLanguage();
-				{
-					log.info("CODE HERE");
-					firstTaskLanguageSchema.setSourceLanguage(
-							SupportedLanguages.fromValue(languagePair.getSourceLanguage().toString().toLowerCase()));
-				}
-				firstTaskLanguageSchema.addTargetLanguageListItem(
-						SupportedLanguages.fromValue(languagePair.getSourceLanguage().toString().toLowerCase()));
+				log.info("CODE HERE");
+				LanguagePair lp = new LanguagePair();
+				lp.setSourceLanguage(languagePair.getSourceLanguage());
+				lp.setSourceScriptCode(languagePair.getSourceScriptCode());
+				firstTaskLanguageSchema.setSourceLanguage(lp);
+				firstTaskLanguageSchema.addTargetLanguageListItem(lp);
 
 				firstTaskLanguageList.add(firstTaskLanguageSchema);
 			}
@@ -1609,19 +1608,31 @@ public class ModelService {
 							boolean sourceLangExists = false;
 							for (LanguageSchema eachStoredFirstTaskSchema : firstTaskLanguageList) {
 								// if that source language exists within our stored first task schema
-								if (eachStoredFirstTaskSchema.getSourceLanguage() != null && eachStoredFirstTaskSchema
-										.getSourceLanguage().equals(specLanguageSchema.getSourceLanguage())) {
+								if (eachStoredFirstTaskSchema.getSourceLanguage() != null &&
+									eachStoredFirstTaskSchema.getSourceLanguage().getSourceLanguage() != null && 
+									eachStoredFirstTaskSchema.getSourceLanguage().getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()) &&
+									eachStoredFirstTaskSchema.getSourceLanguage().getSourceScriptCode() != null &&
+									eachStoredFirstTaskSchema.getSourceLanguage().getSourceScriptCode().equals(specLanguageSchema.getSourceScriptCode())
+									) 
+								{
+									LanguagePair lp = new LanguagePair();
+									lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+									lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
 									eachStoredFirstTaskSchema
-											.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));
-									sourceLangExists = true;
+											.addTargetLanguageListItem(lp);
+									sourceLangExists = true;								
 								}
 							}
 							if (sourceLangExists == false) {
-								firstTaskLanguageSchema.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								LanguagePair lp = new LanguagePair();
+								lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
+								firstTaskLanguageSchema.setSourceLanguage(lp);
 								firstTaskLanguageSchema
-										.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));
+										.addTargetLanguageListItem(lp);
 								firstTaskLanguageList.add(firstTaskLanguageSchema);
 							}
+
 						}
 					}
 				}
@@ -1663,17 +1674,24 @@ public class ModelService {
 									eachStoredFirstTaskSchema.getSourceLanguage().getSourceLanguage() != null && 
 									eachStoredFirstTaskSchema.getSourceLanguage().getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()) &&
 									eachStoredFirstTaskSchema.getSourceLanguage().getSourceScriptCode() != null &&
-									eachStoredFirstTaskSchema.getSourceLanguage().getSourceScriptCode().equals(specLanguageSchema.get)
-									) {
+									eachStoredFirstTaskSchema.getSourceLanguage().getSourceScriptCode().equals(specLanguageSchema.getSourceScriptCode())
+									) 
+								{
+									LanguagePair lp = new LanguagePair();
+									lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+									lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
 									eachStoredFirstTaskSchema
-											.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));
-									sourceLangExists = true;
+											.addTargetLanguageListItem(lp);
+									sourceLangExists = true;								
 								}
 							}
 							if (sourceLangExists == false) {
-								firstTaskLanguageSchema.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								LanguagePair lp = new LanguagePair();
+								lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+								lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
+								firstTaskLanguageSchema.setSourceLanguage(lp);
 								firstTaskLanguageSchema
-										.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));
+										.addTargetLanguageListItem(lp);
 								firstTaskLanguageList.add(firstTaskLanguageSchema);
 							}
 						}
