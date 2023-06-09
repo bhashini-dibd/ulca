@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.4
+  version: 1.0.5
 servers:
   - url: /ulca
 paths: {}
@@ -61,16 +61,6 @@ components:
           $ref: '#/components/schemas/TaskSpecifications'
         apiEndPoints:
           $ref: '#/components/schemas/ApiEndPoint'
-      # anyOf:  
-      #   - properties:
-      #      inferenceEndPoint:
-      #       $ref: '#/components/schemas/InferenceAPIEndPoint'
-      #     required: [inferenceEndPoint] 
-      #   - properties:
-      #      inferenceSocketEndPoint:
-      #       $ref: '#/components/schemas/InferenceAPIEndPoint'
-      #     required: [inferenceSocketEndPoint] 
-
     ListOfPipelines:
       type: array
       items:
@@ -161,6 +151,10 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
         targetLanguage:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        sourceScriptCode:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
+        targetScriptCode:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
     ApiEndPoint:
       required:
         - apiKeyUrl
@@ -171,7 +165,6 @@ components:
           description: URL to generate api keys (using POST Method) , delete api keys (using DELETE method) and toggle data logging( using PATCH Method).
           type: string
           format: url
- 
         feedbackUrl:
           description: URL to give feedback regarding pipeline (using POST Method)
           type: string
