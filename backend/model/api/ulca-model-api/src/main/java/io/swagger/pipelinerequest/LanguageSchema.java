@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.model.SupportedLanguages;
+import io.swagger.model.LanguagePair;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +24,16 @@ import javax.validation.constraints.*;
 
 public class LanguageSchema   {
   @JsonProperty("sourceLanguage")
-  private SupportedLanguages sourceLanguage = null;
+  private LanguagePair sourceLanguage = null;
+
+  //sourceScriptCode
 
   @JsonProperty("targetLanguageList")
   @Valid
-  private List<SupportedLanguages> targetLanguageList = null;
+  private List<LanguagePair> targetLanguageList = null;
+  //List of Language Pairs
 
-  public LanguageSchema sourceLanguage(SupportedLanguages sourceLanguage) {
+  public LanguageSchema sourceLanguage(LanguagePair sourceLanguage) {
     this.sourceLanguage = sourceLanguage;
     return this;
   }
@@ -41,22 +45,22 @@ public class LanguageSchema   {
   @Schema(description = "")
   
     @Valid
-    public SupportedLanguages getSourceLanguage() {
+    public LanguagePair getSourceLanguage() {
     return sourceLanguage;
   }
 
-  public void setSourceLanguage(SupportedLanguages sourceLanguage) {
+  public void setSourceLanguage(LanguagePair sourceLanguage) {
     this.sourceLanguage = sourceLanguage;
   }
 
-  public LanguageSchema targetLanguageList(List<SupportedLanguages> targetLanguageList) {
+  public LanguageSchema targetLanguageList(List<LanguagePair> targetLanguageList) {
     this.targetLanguageList = targetLanguageList;
     return this;
   }
 
-  public LanguageSchema addTargetLanguageListItem(SupportedLanguages targetLanguageListItem) {
+  public LanguageSchema addTargetLanguageListItem(LanguagePair targetLanguageListItem) {
     if (this.targetLanguageList == null) {
-      this.targetLanguageList = new ArrayList<SupportedLanguages>();
+      this.targetLanguageList = new ArrayList<LanguagePair>();
     }
     this.targetLanguageList.add(targetLanguageListItem);
     return this;
@@ -68,11 +72,11 @@ public class LanguageSchema   {
    **/
   @Schema(description = "list of")
       @Valid
-    public List<SupportedLanguages> getTargetLanguageList() {
+    public List<LanguagePair> getTargetLanguageList() {
     return targetLanguageList;
   }
 
-  public void setTargetLanguageList(List<SupportedLanguages> targetLanguageList) {
+  public void setTargetLanguageList(List<LanguagePair> targetLanguageList) {
     this.targetLanguageList = targetLanguageList;
   }
 

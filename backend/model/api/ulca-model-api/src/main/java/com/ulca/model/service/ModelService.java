@@ -1641,12 +1641,11 @@ public class ModelService {
 				LanguagePair languagePair = ttsRequestTask.getLanguage();
 				{
 					firstTaskLanguageSchema.setSourceLanguage(
-							SupportedLanguages.fromValue(languagePair.getSourceLanguage().toString().toLowerCase()));
+						languagePair);
 				}
 				// targetLanguages.clear();
 				firstTaskLanguageSchema.addTargetLanguageListItem(
-						SupportedLanguages.fromValue(languagePair.getSourceLanguage().toString().toLowerCase()));
-
+					languagePair);
 				firstTaskLanguageList.add(firstTaskLanguageSchema);
 			}
 			// If task doesn't have languages
@@ -1656,12 +1655,16 @@ public class ModelService {
 						io.swagger.pipelinemodel.ConfigList firstTaskLanguages = firstTaskSpec.getTaskConfig();
 						for (io.swagger.pipelinemodel.ConfigSchema specLanguageSchema : firstTaskLanguages) {
 							LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
-							// Go through each spec within submitted model
+							// Go through each spec within submitted model (Task config)
 							boolean sourceLangExists = false;
 							for (LanguageSchema eachStoredFirstTaskSchema : firstTaskLanguageList) {
 								// if that source language exists within our stored first task schema
-								if (eachStoredFirstTaskSchema.getSourceLanguage() != null && eachStoredFirstTaskSchema
-										.getSourceLanguage().equals(specLanguageSchema.getSourceLanguage())) {
+								if (eachStoredFirstTaskSchema.getSourceLanguage() != null &&
+									eachStoredFirstTaskSchema.getSourceLanguage().getSourceLanguage() != null && 
+									eachStoredFirstTaskSchema.getSourceLanguage().getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()) &&
+									eachStoredFirstTaskSchema.getSourceLanguage().getSourceScriptCode() != null &&
+									eachStoredFirstTaskSchema.getSourceLanguage().getSourceScriptCode().equals(specLanguageSchema.get)
+									) {
 									eachStoredFirstTaskSchema
 											.addTargetLanguageListItem((specLanguageSchema.getSourceLanguage()));
 									sourceLangExists = true;
