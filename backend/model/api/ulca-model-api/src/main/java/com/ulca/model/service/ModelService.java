@@ -1623,9 +1623,6 @@ public class ModelService {
 			}
 
 		} else if (task == "asr") {
-			// TranslationTaskInference translationTaskInference = new
-			// TranslationTaskInference();
-			// translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
 
 			ASRTask asrTask = (ASRTask) pipelineTask;
 			// If task has languages
@@ -1662,10 +1659,6 @@ public class ModelService {
 			}
 
 		} else if (task == "tts") {
-			// TranslationTaskInference translationTaskInference = new
-			// TranslationTaskInference();
-			// translationTaskInference.setTaskType(SupportedTasks.fromValue(task));
-
 			TTSTask ttsTask = (TTSTask) pipelineTask;
 			// If config and source language is entered by user
 			if (ttsTask.getConfig() != null && ttsTask.getConfig().getLanguage() != null
@@ -1678,19 +1671,14 @@ public class ModelService {
 						{
 							if(specLanguageSchema.getSourceLanguage() == ttsTask.getConfig().getLanguage().getSourceLanguage())
 							{
-								log.info("EACH SPEC LANGUAGE SCHEMA::"+specLanguageSchema);
 								LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
 								LanguagePair tempLangPair = new LanguagePair();
 								tempLangPair.setSourceLanguage(specLanguageSchema.getSourceLanguage());
 								tempLangPair.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
-								//languagePair.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
 								firstTaskLanguageSchema.setSourceLanguage(
 									tempLangPair);
-								// targetLanguages.clear();
 								firstTaskLanguageSchema.addTargetLanguageListItem(tempLangPair);
-								log.info("FIRSTTASKLANGUAGESCHEMA ::"+firstTaskLanguageSchema.toString());
 								firstTaskLanguageList.add(firstTaskLanguageSchema);
-								log.info("FIRSTTASKLANGUAGELIST ::"+firstTaskLanguageList.toString());
 							}
 						}
 					}
