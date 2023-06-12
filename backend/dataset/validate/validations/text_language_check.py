@@ -37,7 +37,7 @@ class TextLanguageCheck(BaseValidator):
 
             for text, lang in zip(text_list, lang_list):
                 # Skipping for few languages as the current model doesnt support them
-                if lang in ['brx', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt', 'sd','unknown','mixed']:
+                if lang in ['brx', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt', 'sd','unknown','mixed', 'ks', 'gom']:
                     continue
                 #workaround to fix en language check for glossary dataset
                 if request["datasetType"] == dataset_type_glossary and lang == 'en':
