@@ -38,7 +38,7 @@ class AudioMetadataCheck(BaseValidator):
                     if os.path.exists(audio_file) and os.path.isfile(audio_file):
                         #temp logic for m4a
                         log.info(f'fileLocation: {audio_file}')
-                        if audio_file.split('.')[-1] != 'm4a':
+                        if audio_file.split('.')[-1].strip() == 'm4a':
                             myaudio = AudioSegment.from_file(audio_file)
                         else:
                             metadata = audio_metadata.load(audio_file)
@@ -60,7 +60,7 @@ class AudioMetadataCheck(BaseValidator):
                     request['record']['durationInSeconds'] = (end_t-start_t).total_seconds()
                 else:
                     #temp logic for m4a
-                    if audio_file.split('.')[-1] == 'm4a':
+                    if audio_file.split('.')[-1].strip() == 'm4a':
                         request['record']['durationInSeconds'] = myaudio.duration_seconds
                     else:
                         request['record']['durationInSeconds'] = metadata.streaminfo.duration

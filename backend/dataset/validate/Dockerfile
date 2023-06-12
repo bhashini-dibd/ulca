@@ -6,7 +6,7 @@ WORKDIR /app
 #RUN chmod +x /usr/bin/install-pkg.sh
 #CMD ["/usr/bin/install-pkg.sh"]
 #RUN echo uconv -V
-# RUN apt-get update -y && apt-get install -y ffmpeg
+RUN apt-get update -y && apt-get install -y ffmpeg
 RUN pip3 install -r requirements.txt
 RUN polyglot download transliteration2.hi
 COPY start.sh /usr/bin/start.sh
