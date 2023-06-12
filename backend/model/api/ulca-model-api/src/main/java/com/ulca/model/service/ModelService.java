@@ -1601,102 +1601,22 @@ public class ModelService {
 			}
 			else if(translationTask.getConfig() == null) 
 			{
-				TranslationRequestConfig translationRequestConfig = translationTask.getConfig();
-					for(ConfigSchema eachConfig : firstTaskLanguages)
-					{
-							LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
-							LanguagePair lp = new LanguagePair();
-							lp.setSourceLanguage(eachConfig.getSourceLanguage());
-							lp.setSourceScriptCode(eachConfig.getSourceScriptCode());
-							lp.setTargetLanguage(eachConfig.getTargetLanguage());
-							lp.setTargetScriptCode(eachConfig.getTargetScriptCode());		
-							firstTaskLanguageSchema.setSourceLanguage(lp);
-							firstTaskLanguageSchema.addTargetLanguageListItem(lp);
-							firstTaskLanguageList.add(firstTaskLanguageSchema);							
-					}
+				//TranslationRequestConfig translationRequestConfig = translationTask.getConfig();
+				for(ConfigSchema eachConfig : firstTaskLanguages)
+				{
+						LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+						LanguagePair lp = new LanguagePair();
+						lp.setSourceLanguage(eachConfig.getSourceLanguage());
+						lp.setSourceScriptCode(eachConfig.getSourceScriptCode());
+						lp.setTargetLanguage(eachConfig.getTargetLanguage());
+						lp.setTargetScriptCode(eachConfig.getTargetScriptCode());		
+						firstTaskLanguageSchema.setSourceLanguage(lp);
+						firstTaskLanguageSchema.addTargetLanguageListItem(lp);
+						firstTaskLanguageList.add(firstTaskLanguageSchema);							
+				}
 			}
 		}
-			// 	if (languagePair.getTargetLanguage() != null) {
-			// 		LanguagePair lp = new LanguagePair();
-			// 		lp.setSourceLanguage(languagePair.getTargetLanguage());
-			// 		lp.setSourceScriptCode(languagePair.getTargetScriptCode());
-			// 		firstTaskLanguageSchema.setSourceLanguage(lp);
-			// 		firstTaskLanguageSchema.addTargetLanguageListItem(lp);
-			// 	} else {
-			// 		for (TaskSpecification firstTaskSpec : pipelineTaskSpecifications) {
-			// 			if (firstTaskSpec.getTaskType().toString() == task) {
-			// 				io.swagger.pipelinemodel.ConfigList firstTaskLanguages = firstTaskSpec.getTaskConfig();
-			// 				for (io.swagger.pipelinemodel.ConfigSchema specLanguageSchema : firstTaskLanguages) {
-			// 					if (specLanguageSchema.getSourceLanguage().equals(languagePair.getSourceLanguage())) {
-
-			// 					/////////////////////////////////////////////////
-									
-			// 						LanguagePair lp = new LanguagePair();
-			// 						lp.setSourceLanguage(languagePair.getTargetLanguage());
-			// 						lp.setSourceScriptCode(languagePair.getTargetScriptCode());
-			// 						firstTaskLanguageSchema.setSourceLanguage(lp);
-									
-			// 					////////////////////////////////////////////////////////	
-									
-									
-			// 						firstTaskLanguageSchema.addTargetLanguageListItem(lp);
-
-			// 					}
-
-			// 				}
-			// 			}
-			// 		}
-
-			// 	}
-			// 	firstTaskLanguageList.add(firstTaskLanguageSchema);
-			// }
-			// // If task doesn't have languages
-			// else {
-			// 	for (TaskSpecification firstTaskSpec : pipelineTaskSpecifications) {
-			// 		if (firstTaskSpec.getTaskType().toString() == task) {
-			// 			io.swagger.pipelinemodel.ConfigList firstTaskLanguages = firstTaskSpec.getTaskConfig();
-			// 			for (io.swagger.pipelinemodel.ConfigSchema specLanguageSchema : firstTaskLanguages) {
-			// 				LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
-			// 				// Go through each spec within submitted model
-			// 				boolean sourceLangExists = false;
-			// 				for (LanguageSchema eachStoredFirstTaskSchema : firstTaskLanguageList) {
-			// 					// if that source language exists within our stored first task schema
-			// 					if (eachStoredFirstTaskSchema.getSourceLanguage() != null &&
-			// 							eachStoredFirstTaskSchema.getSourceLanguage().getSourceLanguage() != null && 
-			// 							eachStoredFirstTaskSchema.getSourceLanguage().getSourceLanguage().equals(specLanguageSchema.getSourceLanguage()) &&
-			// 							eachStoredFirstTaskSchema.getSourceLanguage().getSourceScriptCode() != null &&
-			// 							eachStoredFirstTaskSchema.getSourceLanguage().getSourceScriptCode().equals(specLanguageSchema.getSourceScriptCode())
-			// 							)  {
-									
-			// 						LanguagePair lp = new LanguagePair();
-			// 						lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
-			// 						lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
-			// 						eachStoredFirstTaskSchema
-			// 								.addTargetLanguageListItem(lp);
-			// 						sourceLangExists = true;
-			// 					}
-			// 				}
-			// 				/*
-			// 				 * if (sourceLangExists == false) {
-			// 				 * firstTaskLanguageSchema.setSourceLanguage(specLanguageSchema.
-			// 				 * getSourceLanguage()); firstTaskLanguageSchema
-			// 				 * .addTargetLanguageListItem((specLanguageSchema.getTargetLanguage()));
-			// 				 * firstTaskLanguageList.add(firstTaskLanguageSchema); }
-			// 				 */
-			// 				if (sourceLangExists == false) {
-			// 					LanguagePair lp = new LanguagePair();
-			// 					lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
-			// 					lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
-			// 					firstTaskLanguageSchema.setSourceLanguage(lp);
-			// 					firstTaskLanguageSchema
-			// 							.addTargetLanguageListItem(lp);
-			// 					firstTaskLanguageList.add(firstTaskLanguageSchema);
-			// 				}
-			// 			}
-			// 		}
-			// 	}
-			// }
-
+		
 		else if (task == "asr") {
 
 			ASRTask asrTask = (ASRTask) pipelineTask;
