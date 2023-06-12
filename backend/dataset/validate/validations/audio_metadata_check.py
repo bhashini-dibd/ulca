@@ -7,6 +7,7 @@ import audio_metadata
 from word2number import w2n
 from datetime import timedelta
 import os
+from pydub import AudioSegment
 
 class AudioMetadataCheck(BaseValidator):
     """
@@ -33,7 +34,8 @@ class AudioMetadataCheck(BaseValidator):
                     return {"message": "The audio file is unplayable, the filesize is 0 bytes", "code": "ZERO_BYTES_FILE", "status": "FAILED"}
 
                 try:
-                    if os.path.exists(audio_file) and os.path.isfile(audio_file):
+                    #temp logic for m4a
+                    if os.path.exists(audio_file) and os.path.isfile(audio_file) and audio_file.split('.')[-1] != 'm4a':
                         metadata = audio_metadata.load(audio_file)
                     else:
                         log.info('The audio file does not exist in file store')
@@ -52,7 +54,12 @@ class AudioMetadataCheck(BaseValidator):
                     end_t = timedelta(hours=int(h), minutes=int(m), seconds=float(s))
                     request['record']['durationInSeconds'] = (end_t-start_t).total_seconds()
                 else:
-                    request['record']['durationInSeconds'] = metadata.streaminfo.duration
+                    #temp logic for m4a
+                    if audio_file.split('.')[-1] == 'm4a':
+                        myaudio = AudioSegment.from_file(audio_file)
+                        request['record']['durationInSeconds'] = myaudio.duration_seconds
+                    else:
+                        request['record']['durationInSeconds'] = metadata.streaminfo.duration
 
 
                 if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
