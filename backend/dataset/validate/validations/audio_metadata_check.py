@@ -37,6 +37,7 @@ class AudioMetadataCheck(BaseValidator):
                     
                     if os.path.exists(audio_file) and os.path.isfile(audio_file):
                         #temp logic for m4a
+                        log.info(f'fileLocation: {audio_file}')
                         if audio_file.split('.')[-1] != 'm4a':
                             myaudio = AudioSegment.from_file(audio_file)
                         else:
