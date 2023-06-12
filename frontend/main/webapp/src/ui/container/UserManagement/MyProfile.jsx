@@ -621,7 +621,7 @@ const MyProfile = (props) => {
             <TableRow>
               <TableCell colSpan={5}>
                 <>
-                  <Box style={{ margin: "0 80px" }}>
+                  <Box  style={{margin: "0 80px", width:"86%"}}>
                     <Table size="small" aria-label="purchases">
                       <TableHead style={{ height: "60px" }}>
                         <TableCell style={{ whiteSpace: "nowrap" }}>
