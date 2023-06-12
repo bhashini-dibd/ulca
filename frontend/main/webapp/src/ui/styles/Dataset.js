@@ -1111,6 +1111,7 @@ const DataSet = (theme) => ({
       boxShadow: "none",
     },
   },
+  
   myProfileGenerateButton: {
     borderRadius: "16px",
     margin: "5px",
