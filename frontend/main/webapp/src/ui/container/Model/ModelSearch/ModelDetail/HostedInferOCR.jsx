@@ -25,7 +25,7 @@ import {
 
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import OCRModal from "./OCRModal";
 import { translate } from "../../../../../assets/localisation";
 import OCRFileUpload from "../../../../../redux/actions/api/Model/ModelSearch/FileUpload";
@@ -248,6 +248,12 @@ const HostedInferASR = (props) => {
   const handleOnChange = (e) => {
     setSuggestEditValues(e.target.value)
   }
+
+  useEffect(() => {
+    if (url == "") {
+      setTarget("")
+    }
+  }, [url])
 
   return (
     <>

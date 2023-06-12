@@ -41,6 +41,8 @@ const AudioRecord = (props) => {
 
   const modelProcessingType = useSelector((state) => state.getModelDetails.inferenceEndPoint.schema.modelProcessingType.type);
   const streamingEndPoint = inferenceEndPoint.callbackUrl
+  //const streamingEndPoint = inferenceEndPoint.schema.request.audio[0].audioUri;
+
   
   const languageArr = languages.filter((lang) => lang.label === language);
   const languageCode = languageArr.length ? languageArr[0].code : "";
