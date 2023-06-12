@@ -34,9 +34,13 @@ class AudioMetadataCheck(BaseValidator):
                     return {"message": "The audio file is unplayable, the filesize is 0 bytes", "code": "ZERO_BYTES_FILE", "status": "FAILED"}
 
                 try:
-                    #temp logic for m4a
-                    if os.path.exists(audio_file) and os.path.isfile(audio_file) and audio_file.split('.')[-1] != 'm4a':
-                        metadata = audio_metadata.load(audio_file)
+                    
+                    if os.path.exists(audio_file) and os.path.isfile(audio_file):
+                        #temp logic for m4a
+                        if audio_file.split('.')[-1] != 'm4a':
+                            myaudio = AudioSegment.from_file(audio_file)
+                        else:
+                            metadata = audio_metadata.load(audio_file)
                     else:
                         log.info('The audio file does not exist in file store')
                         return {"message": "Exception while executing Audio metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
@@ -56,7 +60,6 @@ class AudioMetadataCheck(BaseValidator):
                 else:
                     #temp logic for m4a
                     if audio_file.split('.')[-1] == 'm4a':
-                        myaudio = AudioSegment.from_file(audio_file)
                         request['record']['durationInSeconds'] = myaudio.duration_seconds
                     else:
                         request['record']['durationInSeconds'] = metadata.streaminfo.duration
