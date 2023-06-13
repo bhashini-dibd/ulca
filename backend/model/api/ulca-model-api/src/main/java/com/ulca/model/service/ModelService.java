@@ -2055,14 +2055,23 @@ public class ModelService {
 			log.info("FIRST Task Source Languages ::" + firstTaskSchema.getSourceLanguage());
 			LanguageSchema pipelineSchema = new LanguageSchema();
 			pipelineSchema.setSourceLanguage(firstTaskSchema.getSourceLanguage());
-			List<SupportedLanguages> targetLangList = new ArrayList<SupportedLanguages>();
-			List<SupportedLanguages> targetLangListCopy = new ArrayList<SupportedLanguages>();
+			//PARSHANT
+		//	List<SupportedLanguages> targetLangList = new ArrayList<SupportedLanguages>();
+		//	List<SupportedLanguages> targetLangListCopy = new ArrayList<SupportedLanguages>();
+			List<LanguagePair> targetLangList = new ArrayList<LanguagePair>();
+			List<LanguagePair> targetLangListCopy = new ArrayList<LanguagePair>();
+			
 			if (firstTaskSchema.getTargetLanguageList() != null) {
 				log.info("FIRST Task Target Languages :: " + firstTaskSchema.getTargetLanguageList());
 
 				for (LanguagePair lp : firstTaskSchema.getTargetLanguageList()) {
-					targetLangList.add(lp.getTargetLanguage());
-					targetLangListCopy.add(lp.getTargetLanguage());
+					
+					//PARSHANT
+					//targetLangList.add(lp.getTargetLanguage());
+					//targetLangListCopy.add(lp.getTargetLanguage());
+					
+					targetLangList.add(lp);
+					targetLangListCopy.add(lp);
 				}
 
 
@@ -2073,8 +2082,13 @@ public class ModelService {
 			int currentTaskIndex = 1;
 			while (currentTaskIndex < taskLength) {
 				for (int i = 0; i < targetLangSize; i++) {
-					SupportedLanguages targetLanguage = targetLangList.get(0); // refers to prev. target language task
-																				// list
+					
+					//PARSHANT
+					//SupportedLanguages targetLanguage = targetLangList.get(0);
+					
+					LanguagePair targetLanguage = targetLangList.get(0);	
+					// refers to prev. target language task
+					// list
 					targetLangList.remove(0);
 					LanguagesList currentLangList = languagesArrayList.get(currentTaskIndex);
 					for (LanguageSchema curLangSchema : currentLangList) {
@@ -2082,10 +2096,16 @@ public class ModelService {
 						if (targetLanguage.equals(curLangSchema.getSourceLanguage())) {
 							if (curLangSchema.getTargetLanguageList() != null) {
 								for (LanguagePair lp : curLangSchema.getTargetLanguageList()) {
-									targetLangList.add(lp.getTargetLanguage());
+									//PARSHANT
+									//targetLangList.add(lp.getTargetLanguage());
+									targetLangList.add(lp);
+
 								}
 							} else
-								targetLangList.add(curLangSchema.getSourceLanguage().getSourceLanguage());
+								//PARSHANT
+								//targetLangList.add(curLangSchema.getSourceLanguage().getSourceLanguage());
+								targetLangList.add(curLangSchema.getSourceLanguage());
+
 						}
 						tempLanguageSchema.setSourceLanguage(curLangSchema.getSourceLanguage());
 						tempLanguageSchema.setTargetLanguageList(curLangSchema.getTargetLanguageList());
@@ -2205,7 +2225,10 @@ public class ModelService {
 						}
 					}
 					if (modelExists == false) {
-						for (SupportedLanguages targetLang : firstTaskSchema.getTargetLanguageList()) {
+						//PARSHANT
+					//	for (SupportedLanguages targetLang : firstTaskSchema.getTargetLanguageList()) {
+							for (LanguagePair targetLang : firstTaskSchema.getTargetLanguageList()) {
+
 
 							/*
 							 * Query dynamicQuery = new Query();
@@ -2366,10 +2389,18 @@ public class ModelService {
 
 				while (currentTaskIndex < taskLength) {
 					for (int i = 0; i < targetLangSizeCopy; i++) {
-						SupportedLanguages sourceLang = targetLangListCopy.get(0);
+						//PARSHANT
+						//SupportedLanguages sourceLang = targetLangListCopy.get(0);
+						LanguagePair sourceLang = targetLangListCopy.get(0);
+
 						log.info("CURRENT TASK " + currentTaskIndex + " SOURCE LANGUAGE :: "
 								+ targetLangListCopy.get(0));
-						SupportedLanguages targetLanguage = targetLangListCopy.get(0); // refers to prev. target
+						//PARSHANT
+						//SupportedLanguages targetLanguage = targetLangListCopy.get(0); 
+						LanguagePair targetLanguage = targetLangListCopy.get(0); 
+
+						
+						// refers to prev. target
 																						// language task list
 						targetLangListCopy.remove(0);
 						LanguagesList currentLangList = languagesArrayList.get(currentTaskIndex);
@@ -2377,7 +2408,10 @@ public class ModelService {
 							LanguageSchema tempLanguageSchema = new LanguageSchema();
 							if (targetLanguage.equals(curLangSchema.getSourceLanguage())) {
 								if (curLangSchema.getTargetLanguageList() != null) {
-									for (SupportedLanguages targLang : curLangSchema.getTargetLanguageList()) {
+									//PARSHANT
+									//for (SupportedLanguages targLang : curLangSchema.getTargetLanguageList()) {
+									for (LanguagePair targLang : curLangSchema.getTargetLanguageList()) {
+
 										targetLangListCopy.add(targLang);
 									}
 								} else
@@ -2388,7 +2422,11 @@ public class ModelService {
 						}
 						log.info("CURRENT TASK " + pipelineTasks.get(currentTaskIndex).getTaskType() + " "
 								+ currentTaskIndex + " TARGET LANGUAGE :: " + targetLangListCopy);
-						List<SupportedLanguages> targetLanguageList = targetLangListCopy;
+						//PARSHANT
+						//List<SupportedLanguages> targetLanguageList = targetLangListCopy;
+                        List<LanguagePair> targetLanguageList = targetLangListCopy;
+                        
+                        
 						// Add pipelineModels by searching within Mongo via here.
 
 						// FOR EACH TASK TYPE: CALL MONGO QUERIES FOR SOURCELANG AND TARGETLANGUAGELIST
@@ -2489,7 +2527,10 @@ public class ModelService {
 								}
 							}
 							if (modelExists == false) {
-								for (SupportedLanguages targetLang : targetLanguageList) {
+								//PARSHANT 
+								//for (SupportedLanguages targetLang : targetLanguageList) {
+									for (LanguagePair targetLang : targetLanguageList) {
+
 									/*
 									 * Query dynamicQuery = new Query();
 									 * 
