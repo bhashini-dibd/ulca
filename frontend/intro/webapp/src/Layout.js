@@ -8,7 +8,7 @@ import ProjectVaani from "./components/ProjectVaani";
 
 function App(props) {
   const componentObj = [
-    { component: <ProjectVaani />},
+    // { component: <ProjectVaani />},
     { component: <Dataset /> },
     { component: <Model /> },
     { component: <Benchmark /> },
