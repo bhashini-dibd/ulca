@@ -3,7 +3,6 @@ from configs.configs import dataset_type_asr, dataset_type_asr_unlabeled, datase
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
-import audio_metadata
 from word2number import w2n
 from datetime import timedelta
 import os
@@ -36,12 +35,7 @@ class AudioMetadataCheck(BaseValidator):
                 try:
                     
                     if os.path.exists(audio_file) and os.path.isfile(audio_file):
-                        #temp logic for m4a
-                        log.info(f'fileLocation: {audio_file}')
-                        if audio_file.split('.')[-1].strip() == 'm4a':
-                            myaudio = AudioSegment.from_file(audio_file)
-                        else:
-                            metadata = audio_metadata.load(audio_file)
+                            metadata = AudioSegment.from_file(audio_file)
                     else:
                         log.info('The audio file does not exist in file store')
                         return {"message": "Exception while executing Audio metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
@@ -59,20 +53,16 @@ class AudioMetadataCheck(BaseValidator):
                     end_t = timedelta(hours=int(h), minutes=int(m), seconds=float(s))
                     request['record']['durationInSeconds'] = (end_t-start_t).total_seconds()
                 else:
-                    #temp logic for m4a
-                    if audio_file.split('.')[-1].strip() == 'm4a':
-                        request['record']['durationInSeconds'] = myaudio.duration_seconds
-                    else:
-                        request['record']['durationInSeconds'] = metadata.streaminfo.duration
+                    request['record']['durationInSeconds'] = metadata.duration_seconds
 
 
                 if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
-                    if metadata.streaminfo.sample_rate != request['record']['samplingRate']*1000:
-                        error_message = 'Sampling rate does not match the specified value: Expected Value - ' + str(metadata.streaminfo.sample_rate/1000) + ', Specified Value - ' + str(request['record']['samplingRate'])
+                    if metadata.frame_rate != request['record']['samplingRate']*1000:
+                        error_message = 'Sampling rate does not match the specified value: Expected Value - ' + str(metadata.frame_rate/1000) + ', Specified Value - ' + str(request['record']['samplingRate'])
                         return {"message": error_message, "code": "INCORRECT_SAMPLING_RATE", "status": "FAILED"}
                 if 'bitsPerSample' in request['record'].keys() and request['record']['bitsPerSample'] != None:
-                    if metadata.filepath.split('.')[-1] != 'mp3' and metadata.streaminfo.bit_depth != w2n.word_to_num(request['record']['bitsPerSample']):
-                        error_message = 'Bits per sample does not match the specified value: Expected Value - ' + str(metadata.streaminfo.bit_depth) + ', Specified Value - ' + str(request['record']['bitsPerSample'])
+                    if metadata.sample_width * 8 != w2n.word_to_num(request['record']['bitsPerSample']):
+                        error_message = 'Bits per sample does not match the specified value: Expected Value - ' + str(metadata.sample_width * 8) + ', Specified Value - ' + str(request['record']['bitsPerSample'])
                         return {"message": error_message, "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
 
 
