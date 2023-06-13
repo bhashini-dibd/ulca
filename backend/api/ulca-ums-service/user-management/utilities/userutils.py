@@ -730,7 +730,7 @@ class UserUtils:
 
     @staticmethod
     def get_service_provider_keys(email, appName,EndPointurl,decryptedValues, dataTracking):
-        body = {"emailId" : email, "appName" : appName, "dataTracking": dataTracking}
+        body = {"emailId" : email.lower(), "appName" : appName, "dataTracking": dataTracking}
         log.info("Get Service Provider Key Api Call URL"+str(EndPointurl))
         log.info("Get Service Provider Key Api Call Request"+str(body))
         result = requests.post(url=EndPointurl, json=body, headers=decryptedValues)
