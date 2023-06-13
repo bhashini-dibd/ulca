@@ -1526,7 +1526,9 @@ public class ModelService {
 				TranslationRequestConfig translationRequestConfig = translationTask.getConfig();
 				LanguagePair languagePair = translationRequestConfig.getLanguage();
 				//Given user has specified source and target language within json body
-				if (languagePair.getSourceLanguage() != null && languagePair.getTargetLanguage() != null) {
+				log.info("INSIDE TRANSLATION ::"+languagePair.toString());
+				if (languagePair.getSourceLanguage() != null && languagePair.getTargetLanguage() != null) 
+				{
 					for(ConfigSchema eachConfig : firstTaskLanguages)
 					{
 						LanguageSchema firstTaskLanguageSchema = new LanguageSchema();					
@@ -1570,8 +1572,18 @@ public class ModelService {
 								firstTaskLanguageList.add(firstTaskLanguageSchema);
 							}
 						}
-						//Given user has entered only source language 
-						else if(eachConfig.getSourceLanguage() == languagePair.getSourceLanguage() && languagePair.getTargetLanguage() == null)
+					}
+				}
+				//Given user has entered only source language 
+				else if (languagePair.getSourceLanguage() != null && languagePair.getTargetLanguage() == null) 
+				{
+					for(ConfigSchema eachConfig : firstTaskLanguages)
+					{
+						LanguageSchema firstTaskLanguageSchema = new LanguageSchema();					
+						LanguagePair lp = new LanguagePair();
+						lp.setSourceLanguage(languagePair.getSourceLanguage());
+
+						if(eachConfig.getSourceLanguage() == languagePair.getSourceLanguage() && languagePair.getTargetLanguage() == null)
 						{
 							//If user has entered source script codes
 							if(languagePair.getSourceScriptCode()!=null && languagePair.getSourceScriptCode() == eachConfig.getSourceScriptCode())
@@ -1584,8 +1596,9 @@ public class ModelService {
 								firstTaskLanguageList.add(firstTaskLanguageSchema);							
 							}
 							//If user has not entered source script codes
-							else if(languagePair.getSourceScriptCode()==null)
+							else if(languagePair.getSourceScriptCode() == null)
 							{
+								log.info("HERE ::"+eachConfig.toString());
 								lp.setSourceScriptCode(eachConfig.getSourceScriptCode());
 								lp.setTargetLanguage(eachConfig.getTargetLanguage());
 								lp.setTargetScriptCode(eachConfig.getTargetScriptCode());
@@ -1594,9 +1607,10 @@ public class ModelService {
 								firstTaskLanguageList.add(firstTaskLanguageSchema);
 							}
 						}
-						//Given user has not entered either source or target language
 					}
+					//Given user has not entered either source or target language
 					//firstTaskLanguageSchema.setSourceLanguage(lp);
+			
 				}
 			}
 			else if(translationTask.getConfig() == null) 
@@ -1625,7 +1639,6 @@ public class ModelService {
 					&& asrTask.getConfig().getLanguage().getSourceLanguage() != null) 
 			{
 				ASRRequestConfig asrRequestConfig = asrTask.getConfig();
-				LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
 				LanguagePair languagePair = asrRequestConfig.getLanguage();
 		
 				for (TaskSpecification firstTaskSpec : pipelineTaskSpecifications) {
@@ -1635,6 +1648,7 @@ public class ModelService {
 							if(specLanguageSchema.getSourceLanguage() == languagePair.getSourceLanguage())
 							{
 								log.info("CODE HERE");
+								LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
 								LanguagePair lp = new LanguagePair();
 								lp.setSourceLanguage(languagePair.getSourceLanguage());
 								lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
@@ -1660,8 +1674,8 @@ public class ModelService {
 							LanguagePair lp = new LanguagePair();
 							lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
 							lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
-							lp.setTargetLanguage(specLanguageSchema.getTargetLanguage());
-							lp.setTargetScriptCode(specLanguageSchema.getTargetScriptCode());
+							lp.setTargetLanguage(specLanguageSchema.getSourceLanguage());
+							lp.setTargetScriptCode(specLanguageSchema.getSourceScriptCode());
 							firstTaskLanguageSchema.setSourceLanguage(lp);
 							firstTaskLanguageSchema.addTargetLanguageListItem(lp);
 							firstTaskLanguageList.add(firstTaskLanguageSchema);
@@ -1683,14 +1697,33 @@ public class ModelService {
 						{
 							if(specLanguageSchema.getSourceLanguage() == ttsTask.getConfig().getLanguage().getSourceLanguage())
 							{
-								LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
-								LanguagePair tempLangPair = new LanguagePair();
-								tempLangPair.setSourceLanguage(specLanguageSchema.getSourceLanguage());
-								tempLangPair.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
-								firstTaskLanguageSchema.setSourceLanguage(
-									tempLangPair);
-								firstTaskLanguageSchema.addTargetLanguageListItem(tempLangPair);
-								firstTaskLanguageList.add(firstTaskLanguageSchema);
+								if(ttsTask.getConfig().getLanguage().getSourceScriptCode()!=null &&
+								   ttsTask.getConfig().getLanguage().getSourceScriptCode()==specLanguageSchema.getSourceScriptCode())
+								{
+									LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+									LanguagePair tempLangPair = new LanguagePair();
+									tempLangPair.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+									tempLangPair.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
+									tempLangPair.setTargetLanguage(specLanguageSchema.getSourceLanguage());
+									tempLangPair.setTargetScriptCode(specLanguageSchema.getSourceScriptCode());
+									firstTaskLanguageSchema.setSourceLanguage(
+										tempLangPair);
+									firstTaskLanguageSchema.addTargetLanguageListItem(tempLangPair);
+									firstTaskLanguageList.add(firstTaskLanguageSchema);
+								}
+								else if(ttsTask.getConfig().getLanguage().getSourceScriptCode()==null)
+								{
+									LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+									LanguagePair tempLangPair = new LanguagePair();
+									tempLangPair.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+									tempLangPair.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
+									tempLangPair.setTargetLanguage(specLanguageSchema.getSourceLanguage());
+									tempLangPair.setTargetScriptCode(specLanguageSchema.getSourceScriptCode());
+									firstTaskLanguageSchema.setSourceLanguage(
+										tempLangPair);
+									firstTaskLanguageSchema.addTargetLanguageListItem(tempLangPair);
+									firstTaskLanguageList.add(firstTaskLanguageSchema);
+								}
 							}
 						}
 					}
@@ -1785,8 +1818,7 @@ public class ModelService {
 														lp.setSourceLanguage(specLangSchema.getSourceLanguage());
 														lp.setTargetLanguage(specLangSchema.getTargetLanguage());
 														lp.setSourceScriptCode(specLangSchema.getSourceScriptCode());
-														lp.setTargetScriptCode(specLangSchema.getTargetScriptCode());
-														
+														lp.setTargetScriptCode(specLangSchema.getTargetScriptCode());	
 														currentTaskLanguageSchema.setSourceLanguage(lp);
 														currentTaskLanguageSchema.addTargetLanguageListItem(lp);
 
@@ -1871,9 +1903,9 @@ public class ModelService {
 											// Add all target languages where source Language is pa
 											LanguagePair lp = new LanguagePair();
 											lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
-											//lp.setTargetLanguage(specLanguageSchema.getTargetLanguage());
+											lp.setTargetLanguage(specLanguageSchema.getSourceLanguage());
 											lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
-											//lp.setTargetScriptCode(specLanguageSchema.getTargetScriptCode());
+											lp.setTargetScriptCode(specLanguageSchema.getSourceScriptCode());
 											currentTaskLanguageSchema.addTargetLanguageListItem(lp);
 											// specLanguageSchema
 											// for(io.swagger.pipelinemodel.LanguageSchema specLangSchema :
