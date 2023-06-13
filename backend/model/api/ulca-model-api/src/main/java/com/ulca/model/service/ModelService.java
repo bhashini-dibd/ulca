@@ -1645,7 +1645,10 @@ public class ModelService {
 					if (firstTaskSpec.getTaskType().toString() == task) {
 						io.swagger.pipelinemodel.ConfigList firstTaskLanguages = firstTaskSpec.getTaskConfig();
 						for (io.swagger.pipelinemodel.ConfigSchema specLanguageSchema : firstTaskLanguages) {
-							if(specLanguageSchema.getSourceLanguage() == languagePair.getSourceLanguage())
+							//if source language and source script code are both entered
+							if(specLanguageSchema.getSourceLanguage() == languagePair.getSourceLanguage() &&
+							   languagePair.getSourceScriptCode() != null &&
+							   specLanguageSchema.getSourceScriptCode() == languagePair.getSourceScriptCode())
 							{
 								log.info("CODE HERE");
 								LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
@@ -1658,6 +1661,21 @@ public class ModelService {
 								firstTaskLanguageSchema.addTargetLanguageListItem(lp);
 								firstTaskLanguageList.add(firstTaskLanguageSchema);
 							}
+							else if(specLanguageSchema.getSourceLanguage() == languagePair.getSourceLanguage() &&
+							   languagePair.getSourceScriptCode() == null)
+							{
+								log.info("CODE HERE");
+								LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
+								LanguagePair lp = new LanguagePair();
+								lp.setSourceLanguage(languagePair.getSourceLanguage());
+								lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
+								lp.setTargetLanguage(languagePair.getSourceLanguage());
+								lp.setTargetScriptCode(specLanguageSchema.getSourceScriptCode());
+								firstTaskLanguageSchema.setSourceLanguage(lp);
+								firstTaskLanguageSchema.addTargetLanguageListItem(lp);
+								firstTaskLanguageList.add(firstTaskLanguageSchema);
+							}
+
 						}
 					}
 				}
@@ -1768,11 +1786,13 @@ public class ModelService {
 				String currentTaskType = currentTask.getTaskType();
 				LanguagesList previousTaskLangList = languagesArrayList.get(i - 1); // get last task's languages
 				if (currentTaskType == "translation") {
+					TranslationTask translationTask = (TranslationTask) currentTask;
 					TaskSpecifications taskSpecificiations = pipelineModel.getTaskSpecifications();
 					io.swagger.pipelinemodel.ConfigList curTaskLanguages = new ConfigList();
 					for (TaskSpecification curTaskSpec : taskSpecificiations) {
 						if (curTaskSpec.getTaskType().toString() == currentTaskType) {
 							curTaskLanguages = curTaskSpec.getTaskConfig();
+							//curTaskLanguages is list of the configs in pipeline model
 						}
 					}
 					for (LanguageSchema previousSchema : previousTaskLangList) // For each previous task's schema
@@ -1786,75 +1806,69 @@ public class ModelService {
 							LanguageSchema currentTaskLanguageSchema = new LanguageSchema();
 							// Go through each spec within submitted model
 									for (io.swagger.pipelinemodel.ConfigSchema specLanguageSchema : curTaskLanguages) {
-										if (specLanguageSchema.getSourceLanguage() == previousTargetLanguage.getSourceLanguage()
+										//Check
+										if (specLanguageSchema.getSourceLanguage() == previousTargetLanguage.getTargetLanguage()
 											&& specLanguageSchema.getSourceScriptCode() == previousTargetLanguage.getTargetScriptCode()) {
 											boolean sourceLanguageExists = false;
-											for (LanguageSchema eachSchema : currentTaskLangList) {
-												// if previous target language of prev. task already exists as a source
-												// language in cur. task
-												if (eachSchema.getSourceLanguage() != null && 
-													eachSchema.getSourceLanguage().getSourceLanguage() == previousTargetLanguage.getTargetLanguage() &&
-													eachSchema.getSourceLanguage().getSourceScriptCode() == previousTargetLanguage.getTargetScriptCode()) {
-													sourceLanguageExists = true;
-													break;
+											boolean userEntryMatches = false;
+											//User has entered source language and they match
+											if(translationTask.getConfig().getLanguage().getSourceLanguage()!=null && 
+												translationTask.getConfig().getLanguage().getSourceLanguage() == specLanguageSchema.getSourceLanguage() &&
+												translationTask.getConfig().getLanguage().getTargetLanguage() == null)
+											{
+												if(translationTask.getConfig().getLanguage().getSourceScriptCode()!=null && 
+													translationTask.getConfig().getLanguage().getSourceScriptCode() == specLanguageSchema.getSourceScriptCode())
+												{
+													userEntryMatches = true;
 												}
+												if(translationTask.getConfig().getLanguage().getSourceScriptCode()==null)
+													userEntryMatches = true;
 											}
-											if (sourceLanguageExists == false) {
-												//currentTaskLanguageSchema.setSourceLanguage(previousTargetLanguage);
-												// Add all target languages where source Language is pa
+											//user has entered source and target language and they match
+											else if(translationTask.getConfig().getLanguage().getSourceLanguage()!=null && 
+												translationTask.getConfig().getLanguage().getSourceLanguage() == specLanguageSchema.getSourceLanguage() &&
+												translationTask.getConfig().getLanguage().getTargetLanguage()!=null && 
+												translationTask.getConfig().getLanguage().getTargetLanguage() == specLanguageSchema.getTargetLanguage())
+											{
+												if(translationTask.getConfig().getLanguage().getSourceScriptCode() == null)
+													userEntryMatches = true;
+												if(translationTask.getConfig().getLanguage().getSourceScriptCode() != null &&
+													translationTask.getConfig().getLanguage().getTargetScriptCode() == null &&
+													translationTask.getConfig().getLanguage().getSourceScriptCode() == specLanguageSchema.getSourceScriptCode())
+													userEntryMatches = true;
+												if(translationTask.getConfig().getLanguage().getSourceScriptCode() != null &&
+													translationTask.getConfig().getLanguage().getTargetScriptCode() != null &&
+													translationTask.getConfig().getLanguage().getSourceScriptCode() == specLanguageSchema.getSourceScriptCode() &&
+													translationTask.getConfig().getLanguage().getTargetScriptCode() == specLanguageSchema.getTargetScriptCode())
+													userEntryMatches = true;
+											}
+											else if(translationTask.getConfig() == null) 
+											{
+												userEntryMatches = true;
+											}
 
-												for (io.swagger.pipelinemodel.ConfigSchema specLangSchema : curTaskLanguages) {
-													// TODO: This is if there are no target languages in the current
-													// source language for translation
-													
-
-													if (specLangSchema.getSourceLanguage()
-															.equals(previousTargetLanguage.getTargetLanguage()) && 
-														specLangSchema.getSourceScriptCode().equals(previousTargetLanguage.getTargetScriptCode()))
-													{
-														log.info("ADDING LANGUAGE :: "+specLangSchema.toString());
-														LanguageSchema ls = new LanguageSchema();
-														LanguagePair lp = new LanguagePair();
-														lp.setSourceLanguage(specLangSchema.getSourceLanguage());
-														lp.setTargetLanguage(specLangSchema.getTargetLanguage());
-														lp.setSourceScriptCode(specLangSchema.getSourceScriptCode());
-														lp.setTargetScriptCode(specLangSchema.getTargetScriptCode());	
-														currentTaskLanguageSchema.setSourceLanguage(lp);
-														currentTaskLanguageSchema.addTargetLanguageListItem(lp);
-
-														// TranslationTask translationTask = (TranslationTask) pipelineTasks
-														// 		.get(i);
-														// TranslationRequestConfig translationConfig = translationTask
-														// 		.getConfig();
-														// SupportedLanguages currentTaskTarget;
-														// SupportedScripts currentTaskTargetScript;
-														// if (translationConfig != null
-														// 		&& translationConfig.getLanguage() != null
-														// 		&& translationConfig.getLanguage()
-														// 				.getTargetLanguage() != null) {
-														// 	currentTaskTarget = translationConfig.getLanguage()
-														// 			.getTargetLanguage();
-														// 	currentTaskTargetScript = translationConfig.getLanguage().getTargetScriptCode();
-														// } else {
-														// 	currentTaskTarget = specLangSchema.getTargetLanguage();
-														// 	currentTaskTargetScript = specLangSchema.getTargetScriptCode();
-														// }
-														// if (currentTaskLanguageSchema.getTargetLanguageList() == null)
-														// {
-														// 	LanguageSchema ls = new LanguageSchema();
-														// 	LanguagePair lp = new LanguagePair();
-														// 	lp.setSourceLanguage(currentTaskTarget);
-														// 	currentTaskLanguageSchema
-														// 			.addTargetLanguageListItem(ls);
-														// }
-														// else if (!currentTaskLanguageSchema.getTargetLanguageList()
-														// 		.contains(currentTaskTarget))
-														// {
-														// 	currentTaskLanguageSchema
-														// 			.addTargetLanguageListItem(currentTaskTarget);
-														// }
+											if(userEntryMatches == true)
+											{
+												for (LanguageSchema eachSchema : currentTaskLangList) {
+													// if previous target language of prev. task already exists as a source
+													// language in cur. task
+													if (eachSchema.getSourceLanguage() != null && 
+														eachSchema.getSourceLanguage().getSourceLanguage() == previousTargetLanguage.getTargetLanguage() &&
+														eachSchema.getSourceLanguage().getSourceScriptCode() == previousTargetLanguage.getTargetScriptCode()) {
+														sourceLanguageExists = true;
+														break;
 													}
 												}
+											}
+											if (sourceLanguageExists == false && userEntryMatches == true) {
+												log.info("ADDING LANGUAGE :: "+specLanguageSchema.toString());
+												LanguagePair lp = new LanguagePair();
+												lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+												lp.setTargetLanguage(specLanguageSchema.getTargetLanguage());
+												lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
+												lp.setTargetScriptCode(specLanguageSchema.getTargetScriptCode());	
+												currentTaskLanguageSchema.setSourceLanguage(lp);
+												currentTaskLanguageSchema.addTargetLanguageListItem(lp);
 												currentTaskLangList.add(currentTaskLanguageSchema);
 											}
 										}
