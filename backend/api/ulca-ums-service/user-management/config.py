@@ -49,8 +49,8 @@ ROLE_CODES_FILE_NAME    =   os.environ.get('UMS_ROLES_FILE_NAME','roles.json')
 MAIL_SETTINGS           =   {
                                 "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),
                                 "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT','465')),
-                                "MAIL_USE_TLS"  : False,
-                                "MAIL_USE_SSL"  : True,
+                                "MAIL_USE_TLS"  : True,
+                                "MAIL_USE_SSL"  : False,
                                 "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxx'),
                                 "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxx')
                             }
