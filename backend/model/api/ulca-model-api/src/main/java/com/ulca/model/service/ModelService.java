@@ -2754,13 +2754,16 @@ public class ModelService {
 
 		PipelineResponseLanguagesList responseLangList = new PipelineResponseLanguagesList();
 
-		for(LanguageSchema ls : newLanguageList)
-		{
+	
+		
+		for(LanguageSchema languageSchema:newLanguageList) {
 			PipelineResponseLanguageSchema responseLangSchema = new PipelineResponseLanguageSchema();
-			LanguagePair lp = ls.getSourceLanguage();
-
-			responseLangSchema.setSourceLanguage();
-			for(:)
+			responseLangSchema.setSourceLanguage(languageSchema.getSourceLanguage().getSourceLanguage());
+             for (LanguagePair languagePair:languageSchema.getTargetLanguageList()) {
+            	 
+            	 responseLangSchema.getTargetLanguageList().add(languagePair.getTargetLanguage());
+             }
+             responseLangList.add(responseLangSchema);
 		}
 		
 		pipelineResponse.setLanguages(newLanguageList);
