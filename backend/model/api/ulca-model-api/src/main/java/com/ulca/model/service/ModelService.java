@@ -2069,7 +2069,6 @@ public class ModelService {
 					//PARSHANT
 					//targetLangList.add(lp.getTargetLanguage());
 					//targetLangListCopy.add(lp.getTargetLanguage());
-					
 					targetLangList.add(lp);
 					targetLangListCopy.add(lp);
 				}
@@ -2092,8 +2091,9 @@ public class ModelService {
 					targetLangList.remove(0);
 					LanguagesList currentLangList = languagesArrayList.get(currentTaskIndex);
 					for (LanguageSchema curLangSchema : currentLangList) {
-						LanguageSchema tempLanguageSchema = new LanguageSchema();
-						if (targetLanguage.equals(curLangSchema.getSourceLanguage())) {
+						//LanguageSchema tempLanguageSchema = new LanguageSchema();
+						if (targetLanguage.getTargetLanguage().equals(curLangSchema.getSourceLanguage().getSourceLanguage()) && 
+							targetLanguage.getTargetScriptCode().equals(curLangSchema.getSourceLanguage().getSourceScriptCode())) {
 							if (curLangSchema.getTargetLanguageList() != null) {
 								for (LanguagePair lp : curLangSchema.getTargetLanguageList()) {
 									//PARSHANT
@@ -2107,14 +2107,15 @@ public class ModelService {
 								targetLangList.add(curLangSchema.getSourceLanguage());
 
 						}
-						tempLanguageSchema.setSourceLanguage(curLangSchema.getSourceLanguage());
-						tempLanguageSchema.setTargetLanguageList(curLangSchema.getTargetLanguageList());
+						//tempLanguageSchema.setSourceLanguage(curLangSchema.getSourceLanguage());
+						//tempLanguageSchema.setTargetLanguageList(curLangSchema.getTargetLanguageList());
 					}
 				}
 				targetLangSize = targetLangList.size();
 				currentTaskIndex++;
 			}
 			pipelineSchema.setTargetLanguageList(targetLangList);
+			log.info("72 PIPELINESCHEMA :: "+pipelineSchema);
 			boolean srcLangExists = false;
 			for (LanguageSchema each_schema : newLanguageList) {
 				if (each_schema.getSourceLanguage().equals(pipelineSchema.getSourceLanguage())) {
@@ -2137,7 +2138,8 @@ public class ModelService {
 					for (ASRResponseConfig each_task : asrInference.getConfig()) {
 						if (each_task.getLanguage() != null) {
 							if (each_task.getLanguage().getSourceLanguage()
-									.equals(firstTaskSchema.getSourceLanguage())) {
+									.equals(firstTaskSchema.getSourceLanguage().getSourceLanguage()) && 
+								each_task.getLanguage().getSourceScriptCode().equals(firstTaskSchema.getSourceLanguage().getSourceScriptCode())) {
 								modelExists = true;
 								break;
 							}
@@ -2179,7 +2181,8 @@ public class ModelService {
 							if (taskSpecification.getTaskType().name().equals("ASR")) {
 
 								for (ConfigSchema configSchema : taskSpecification.getTaskConfig()) {
-									if (configSchema.getSourceLanguage().equals(firstTaskSchema.getSourceLanguage())) {
+									if (configSchema.getSourceLanguage().equals(firstTaskSchema.getSourceLanguage().getSourceLanguage()) && 
+										configSchema.getSourceScriptCode().equals(firstTaskSchema.getSourceLanguage().getSourceScriptCode())) {
 
 										ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 										log.info("Model Name :: " + model.getName());
@@ -2215,11 +2218,11 @@ public class ModelService {
 				}
 
 				else if (firstTaskType == "translation") {
-
 					// Do Mongo Query for targetLangListCopy
 					Boolean modelExists = false;
 					for (TranslationResponseConfig each_task : translationInference.getConfig()) {
-						if (each_task.getLanguage().getSourceLanguage().equals(firstTaskSchema.getSourceLanguage())) {
+						if (each_task.getLanguage().getSourceLanguage().equals(firstTaskSchema.getSourceLanguage().getSourceLanguage()) &&
+							each_task.getLanguage().getSourceScriptCode().equals(firstTaskSchema.getSourceLanguage().getSourceScriptCode())) {
 							modelExists = true;
 							break;
 						}
@@ -2278,8 +2281,10 @@ public class ModelService {
 								if (taskSpecification.getTaskType().name().equals("TRANSLATION")) {
 
 									for (ConfigSchema configSchema : taskSpecification.getTaskConfig()) {
-										if (configSchema.getSourceLanguage().equals(firstTaskSchema.getSourceLanguage())
-												&& configSchema.getTargetLanguage().equals(targetLang)) {
+										if (configSchema.getSourceLanguage().equals(firstTaskSchema.getSourceLanguage().getSourceLanguage())
+												&& configSchema.getSourceScriptCode().equals(firstTaskSchema.getSourceLanguage().getSourceScriptCode())
+												&& configSchema.getTargetScriptCode().equals(firstTaskSchema.getSourceLanguage().getTargetScriptCode())
+												&& configSchema.getTargetLanguage().equals(targetLang.getTargetLanguage())) {
 
 											ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 											log.info("Model Name :: " + model.getName());
@@ -2311,7 +2316,8 @@ public class ModelService {
 					// Do Mongo Query for targetLangListCopy
 					Boolean modelExists = false;
 					for (TTSResponseConfig each_task : ttsInference.getConfig()) {
-						if (each_task.getLanguage().getSourceLanguage().equals(firstTaskSchema.getSourceLanguage())) {
+						if (each_task.getLanguage().getSourceLanguage().equals(firstTaskSchema.getSourceLanguage().getSourceLanguage()) &&
+							each_task.getLanguage().getSourceScriptCode().equals(firstTaskSchema.getSourceLanguage().getSourceScriptCode())) {
 							modelExists = true;
 							break;
 						}
@@ -2361,7 +2367,8 @@ public class ModelService {
 							if (taskSpecification.getTaskType().name().equals("TTS")) {
 
 								for (ConfigSchema configSchema : taskSpecification.getTaskConfig()) {
-									if (configSchema.getSourceLanguage().equals(firstTaskSchema.getSourceLanguage())) {
+									if (configSchema.getSourceLanguage().equals(firstTaskSchema.getSourceLanguage().getSourceLanguage()) &&
+										configSchema.getSourceScriptCode().equals(firstTaskSchema.getSourceLanguage().getSourceScriptCode())) {
 
 										ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 										log.info("Model Name :: " + model.getName());
@@ -2391,6 +2398,7 @@ public class ModelService {
 					for (int i = 0; i < targetLangSizeCopy; i++) {
 						//PARSHANT
 						//SupportedLanguages sourceLang = targetLangListCopy.get(0);
+						log.info("TARGETLANGLISTCOPY :: "+targetLangListCopy.toString());
 						LanguagePair sourceLang = targetLangListCopy.get(0);
 
 						log.info("CURRENT TASK " + currentTaskIndex + " SOURCE LANGUAGE :: "
@@ -2406,7 +2414,8 @@ public class ModelService {
 						LanguagesList currentLangList = languagesArrayList.get(currentTaskIndex);
 						for (LanguageSchema curLangSchema : currentLangList) {
 							LanguageSchema tempLanguageSchema = new LanguageSchema();
-							if (targetLanguage.equals(curLangSchema.getSourceLanguage())) {
+							if (targetLanguage.getSourceLanguage().equals(curLangSchema.getSourceLanguage().getSourceLanguage()) &&
+								targetLanguage.getSourceScriptCode().equals(curLangSchema.getSourceLanguage().getSourceScriptCode())) {
 								if (curLangSchema.getTargetLanguageList() != null) {
 									//PARSHANT
 									//for (SupportedLanguages targLang : curLangSchema.getTargetLanguageList()) {
@@ -2438,7 +2447,7 @@ public class ModelService {
 							// Do Mongo Query for targetLangListCopy
 							Boolean modelExists = false;
 							for (ASRResponseConfig each_task : asrInference.getConfig()) {
-								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang)) {
+								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang.getSourceLanguage())) {
 									modelExists = true;
 									break;
 								}
@@ -2484,13 +2493,13 @@ public class ModelService {
 								ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
 
 								for (TaskSpecification taskSpecification : pipelineTaskSpecifications) {
-
+									log.info("taskSpecification: "+taskSpecification);
 									if (taskSpecification.getTaskType().name().equals("ASR")) {
 
 										for (ConfigSchema configSchema : taskSpecification.getTaskConfig()) {
 											if (configSchema.getSourceLanguage()
-													.equals(firstTaskSchema.getSourceLanguage())) {
-
+													.equals(firstTaskSchema.getSourceLanguage().getSourceLanguage())) {
+												
 												ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 												log.info("Model Name :: " + model.getName());
 												LanguagePairs langPair = model.getLanguages();
@@ -2520,7 +2529,7 @@ public class ModelService {
 							Boolean modelExists = false;
 							for (TranslationResponseConfig each_task : translationInference.getConfig()) {
 								if (each_task.getLanguage() != null) {
-									if (each_task.getLanguage().getSourceLanguage().equals(sourceLang)) {
+									if (each_task.getLanguage().getSourceLanguage().equals(sourceLang.getSourceLanguage())) {
 										modelExists = true;
 										break;
 									}
@@ -2530,7 +2539,6 @@ public class ModelService {
 								//PARSHANT 
 								//for (SupportedLanguages targetLang : targetLanguageList) {
 									for (LanguagePair targetLang : targetLanguageList) {
-
 									/*
 									 * Query dynamicQuery = new Query();
 									 * 
@@ -2578,8 +2586,8 @@ public class ModelService {
 
 											for (ConfigSchema configSchema : taskSpecification.getTaskConfig()) {
 												if (configSchema.getSourceLanguage()
-														.equals(firstTaskSchema.getSourceLanguage())
-														&& configSchema.getTargetLanguage().equals(targetLang)) {
+														.equals(firstTaskSchema.getSourceLanguage().getSourceLanguage())
+														&& configSchema.getTargetLanguage().equals(targetLang.getTargetLanguage())) {
 
 													ModelExtended model = modelDao
 															.findByModelId(configSchema.getModelId());
@@ -2616,7 +2624,7 @@ public class ModelService {
 							for (TTSResponseConfig each_task : ttsInference.getConfig()) {
 								//log.info("each_task :: "+each_task.toString());
 								if(each_task.getLanguage()!=null) {
-								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang)) {
+								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang.getSourceLanguage())) {
 									modelExists = true;
 									break;
 								}
@@ -2671,7 +2679,7 @@ public class ModelService {
 											// if (configSchema.getSourceLanguage()
 											// .equals(firstTaskSchema.getSourceLanguage())) {
 
-											if (configSchema.getSourceLanguage().equals(sourceLang)) {
+											if (configSchema.getSourceLanguage().equals(sourceLang.getSourceLanguage())) {
 												ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 												log.info("Model Name :: " + model.getName());
 												LanguagePairs langPair = model.getLanguages();
@@ -2702,19 +2710,25 @@ public class ModelService {
 			}
 		}
 		int countResponseConfigs = 0;
+		log.info("asrInference: "+asrInference.toString());
+		log.info("ttsInference: "+ttsInference.toString());
+		log.info("translationInference: "+translationInference);
 		if (asrInference.getConfig().size() != 0) {
+			log.info("Adding ASR");
 			newPipelineResponseConfig.add(asrInference);
 			countResponseConfigs++;
 		}
 		if (ttsInference.getConfig().size() != 0) {
+			log.info("Adding TTS");
 			newPipelineResponseConfig.add(ttsInference);
 			countResponseConfigs++;
 		}
 		if (translationInference.getConfig().size() != 0) {
+			log.info("Adding Translation");
 			newPipelineResponseConfig.add(translationInference);
 			countResponseConfigs++;
 		}
-
+		log.info("countResponseConfigs: "+countResponseConfigs);
 		if (pipelineTasks.size() != countResponseConfigs) {
 			log.info("SHOULD RETURN ERROR");
 		throw new PipelineValidationException("Sequence of languages not supported", HttpStatus.BAD_REQUEST);
@@ -2739,7 +2753,7 @@ public class ModelService {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
-		String json = mapper.writeValueAsString(pipelineResponse);
+		//String json = mapper.writeValueAsString(pipelineResponse);
 		// json = json.replaceAll("\"","");
 		// PipelineResponse responsePipeline =
 		// mapper.readValue(json,PipelineResponse.class);
