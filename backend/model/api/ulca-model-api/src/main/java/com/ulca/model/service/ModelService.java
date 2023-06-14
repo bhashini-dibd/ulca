@@ -1805,6 +1805,7 @@ public class ModelService {
 						{
 							LanguageSchema currentTaskLanguageSchema = new LanguageSchema();
 							// Go through each spec within submitted model
+									log.info("PREVIOUS TARGET LANGUAGE ::" + previousTargetLanguage.toString());
 									for (io.swagger.pipelinemodel.ConfigSchema specLanguageSchema : curTaskLanguages) {
 										//Check
 										if (specLanguageSchema.getSourceLanguage() == previousTargetLanguage.getTargetLanguage()
@@ -1855,8 +1856,11 @@ public class ModelService {
 													// if previous target language of prev. task already exists as a source
 													// language in cur. task
 													if (eachSchema.getSourceLanguage() != null && 
-														eachSchema.getSourceLanguage().getSourceLanguage() == previousTargetLanguage.getTargetLanguage() &&
-														eachSchema.getSourceLanguage().getSourceScriptCode() == previousTargetLanguage.getTargetScriptCode()) {
+														eachSchema.getSourceLanguage().getSourceLanguage() == specLanguageSchema.getSourceLanguage() &&
+														eachSchema.getSourceLanguage().getSourceScriptCode() == specLanguageSchema.getSourceScriptCode() &&
+														eachSchema.getSourceLanguage().getTargetLanguage() == specLanguageSchema.getTargetLanguage() &&
+														eachSchema.getSourceLanguage().getTargetScriptCode() == specLanguageSchema.getTargetScriptCode()	
+														) {
 														sourceLanguageExists = true;
 														break;
 													}
@@ -2075,6 +2079,9 @@ public class ModelService {
 
 
 			}
+
+
+
 			// DFS for targetLangList creation [Final Pipeline Target Lang List]
 			int targetLangSize = targetLangList.size();
 			int targetLangSizeCopy = targetLangSize;
@@ -2114,6 +2121,9 @@ public class ModelService {
 				targetLangSize = targetLangList.size();
 				currentTaskIndex++;
 			}
+
+
+
 			pipelineSchema.setTargetLanguageList(targetLangList);
 			log.info("72 PIPELINESCHEMA :: "+pipelineSchema);
 			boolean srcLangExists = false;
