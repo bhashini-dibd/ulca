@@ -2634,11 +2634,15 @@ public class ModelService {
 							// Do Mongo Query for targetLangListCopy
 							// Do Mongo Query for targetLangListCopy
 							Boolean modelExists = false;
+							log.info("SOURCE LANGUAGE :: "+sourceLang.toString());
 							//log.info("ttsInference.getConfig() :: "+ttsInference.getConfig());
 							for (TTSResponseConfig each_task : ttsInference.getConfig()) {
 								//log.info("each_task :: "+each_task.toString());
+								log.info("EACH TASK :: "+each_task);
+								log.info("SOURCE LANG ::"+sourceLang.toString());
 								if(each_task.getLanguage()!=null) {
-								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang.getSourceLanguage())) {
+								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang.getSourceLanguage()) && 
+									each_task.getLanguage().getSourceScriptCode().equals(sourceLang.getSourceScriptCode())) {
 									modelExists = true;
 									break;
 								}
@@ -2693,7 +2697,8 @@ public class ModelService {
 											// if (configSchema.getSourceLanguage()
 											// .equals(firstTaskSchema.getSourceLanguage())) {
 
-											if (configSchema.getSourceLanguage().equals(sourceLang.getSourceLanguage())) {
+											if (configSchema.getSourceLanguage().equals(sourceLang.getSourceLanguage()) && 
+												configSchema.getSourceScriptCode().equals(sourceLang.getSourceScriptCode())) {
 												ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 												log.info("Model Name :: " + model.getName());
 												LanguagePairs langPair = model.getLanguages();
@@ -2765,7 +2770,7 @@ public class ModelService {
              responseLangList.add(responseLangSchema);
 		}
 		
-		pipelineResponse.setLanguages(newLanguageList);
+		pipelineResponse.setLanguages(responseLangList);
 
 
 
