@@ -138,7 +138,7 @@ const getContributionList = (state, payload) => {
       trainingDataset: element.trainingDataset,
       color:
         element.status === "Completed"
-          ? "#139D60"
+          ? "#139D60"   
           : element.status === "In-Progress"
           ? "#139D60"
           : element.status === "Failed"
