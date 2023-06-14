@@ -27,6 +27,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tomcat.util.json.JSONParser;
+import org.intellij.lang.annotations.Language;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONString;
@@ -161,6 +162,9 @@ import io.swagger.pipelinerequest.LanguagesList;
 import io.swagger.pipelinerequest.LanguageSchema;
 import io.swagger.pipelinemodel.TaskSpecifications;
 import io.swagger.pipelinemodel.TaskSpecification;
+import io.swagger.pipelinerequest.PipelineResponseLanguagesList;
+import io.swagger.pipelinerequest.PipelineResponseLanguageSchema;
+
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -2747,6 +2751,18 @@ public class ModelService {
 
 		pipelineResponse.setPipelineResponseConfig(newPipelineResponseConfig);
 		log.info("NEW LANGUAGE LIST :: " + newLanguageList);
+
+		PipelineResponseLanguagesList responseLangList = new PipelineResponseLanguagesList();
+
+		for(LanguageSchema ls : newLanguageList)
+		{
+			PipelineResponseLanguageSchema responseLangSchema = new PipelineResponseLanguageSchema();
+			LanguagePair lp = ls.getSourceLanguage();
+
+			responseLangSchema.setSourceLanguage();
+			for(:)
+		}
+		
 		pipelineResponse.setLanguages(newLanguageList);
 
 
