@@ -1622,6 +1622,28 @@ public class ModelService {
 				//TranslationRequestConfig translationRequestConfig = translationTask.getConfig();
 				for(ConfigSchema eachConfig : firstTaskLanguages)
 				{
+					
+					
+				
+					//PARSHANT-14-06-23	
+					
+					// NEW CODE START
+					boolean alreadyAdded = false;
+					for(LanguageSchema languageSchema:firstTaskLanguageList) {
+						
+						if(languageSchema.getSourceLanguage().getSourceLanguage().equals(eachConfig.getSourceLanguage())&&
+								languageSchema.getSourceLanguage().getSourceScriptCode().equals(eachConfig.getSourceScriptCode())	) {
+							LanguagePair lp = new LanguagePair();
+							lp.setSourceLanguage(eachConfig.getSourceLanguage());
+							lp.setSourceScriptCode(eachConfig.getSourceScriptCode());
+							lp.setTargetLanguage(eachConfig.getTargetLanguage());
+							lp.setTargetScriptCode(eachConfig.getTargetScriptCode());
+							languageSchema.addTargetLanguageListItem(lp);
+							alreadyAdded=true;
+						}
+					}
+					
+					if(alreadyAdded==false) {
 						LanguageSchema firstTaskLanguageSchema = new LanguageSchema();
 						LanguagePair lp = new LanguagePair();
 						lp.setSourceLanguage(eachConfig.getSourceLanguage());
@@ -1630,7 +1652,11 @@ public class ModelService {
 						lp.setTargetScriptCode(eachConfig.getTargetScriptCode());		
 						firstTaskLanguageSchema.setSourceLanguage(lp);
 						firstTaskLanguageSchema.addTargetLanguageListItem(lp);
-						firstTaskLanguageList.add(firstTaskLanguageSchema);							
+						firstTaskLanguageList.add(firstTaskLanguageSchema);	
+						
+					}
+					
+					// NEW CODE END
 				}
 			}
 		}
@@ -1859,12 +1885,32 @@ public class ModelService {
 												for (LanguageSchema eachSchema : currentTaskLangList) {
 													// if previous target language of prev. task already exists as a source
 													// language in cur. task
+													
+													
+													//PARSHANT-14-06-23				
+													
+													//OLD CODE
+									/*				
 													if (eachSchema.getSourceLanguage() != null && 
 														eachSchema.getSourceLanguage().getSourceLanguage() == specLanguageSchema.getSourceLanguage() &&
 														eachSchema.getSourceLanguage().getSourceScriptCode() == specLanguageSchema.getSourceScriptCode() &&
 														eachSchema.getSourceLanguage().getTargetLanguage() == specLanguageSchema.getTargetLanguage() &&
 														eachSchema.getSourceLanguage().getTargetScriptCode() == specLanguageSchema.getTargetScriptCode()	
+														) {   */
+													
+													//NEW CODE START
+													
+													if (eachSchema.getSourceLanguage() != null && 
+															eachSchema.getSourceLanguage().getSourceLanguage() == specLanguageSchema.getSourceLanguage() &&
+															eachSchema.getSourceLanguage().getSourceScriptCode() == specLanguageSchema.getSourceScriptCode()
 														) {
+														LanguagePair lp = new LanguagePair();
+														lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
+														lp.setTargetLanguage(specLanguageSchema.getTargetLanguage());
+														lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
+														lp.setTargetScriptCode(specLanguageSchema.getTargetScriptCode());
+														eachSchema.addTargetLanguageListItem(lp);
+														//NEW CODE END
 														sourceLanguageExists = true;
 														break;
 													}
