@@ -146,7 +146,9 @@ class UserUtils:
             #connecting to mongo instance/collection
             collections = db.get_db()[USR_MONGO_COLLECTION]  
             #searching username with verification status = True 
-            user_record = collections.find({"email": email}) 
+            #Ignore case sensitivity.
+            regex_case_ignored = re.compile('^'+email+'$', re.IGNORECASE)
+            user_record = collections.find({"email": {"$regex":regex_case_ignored}}) 
             if user_record.count() != 0:
                 for usr in user_record:
                     if usr["isVerified"] == True:
