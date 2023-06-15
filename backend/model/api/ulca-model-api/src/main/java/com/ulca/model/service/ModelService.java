@@ -2112,7 +2112,7 @@ public class ModelService {
 												// if previous target language of prev. task already exists as a source
 												// language in cur. task
 												if (eachSchema.getSourceLanguage().getSourceLanguage() != null && eachSchema
-														.getSourceLanguage().equals(previousTargetLanguage.getTargetLanguage())
+														.getSourceLanguage().getSourceLanguage().equals(previousTargetLanguage.getTargetLanguage())
 														&& eachSchema.getSourceLanguage().getSourceScriptCode() == previousTargetLanguage.getTargetScriptCode() ) {
 													sourceLanguageExists = true;
 													break;
