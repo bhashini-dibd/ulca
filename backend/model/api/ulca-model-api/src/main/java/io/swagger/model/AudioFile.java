@@ -3,8 +3,6 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-
-import io.netty.handler.codec.base64.Base64;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -19,14 +17,12 @@ import javax.validation.constraints.*;
 
 public class AudioFile   {
   @JsonProperty("audioContent")
-  private Base64 audioContent = null;
-
-//  private byte[] audioContent = null;
+  private byte[] audioContent = null;
 
   @JsonProperty("audioUri")
   private String audioUri = null;
 
-  public AudioFile audioContent(Base64 audioContent) {
+  public AudioFile audioContent(byte[] audioContent) {
     this.audioContent = audioContent;
     return this;
   }
@@ -37,11 +33,11 @@ public class AudioFile   {
    **/
   @Schema(description = "audio content with audio duration <= 1min")
   
-    public Base64 getAudioContent() {
+    public byte[] getAudioContent() {
     return audioContent;
   }
 
-  public void setAudioContent(Base64 audioContent) {
+  public void setAudioContent(byte[] audioContent) {
     this.audioContent = audioContent;
   }
 
