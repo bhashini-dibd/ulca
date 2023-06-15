@@ -3,13 +3,15 @@ import ENDPOINTS from "../../../../configs/apiendpoints";
 import md5 from "md5";
 import C from "../../constants";
 
-export default class FetchApiKeysAPI extends API {
-  constructor(timeout = 2000) {
+export default class DataTrackingToggleAPI extends API {
+  constructor(ulcaApiKey,serviceProviderName,dataTracking,timeout = 2000) {
     super("POST", timeout, false);
-    this.type = C.GET_API_KEYS;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
-    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getApiKeys}`;
-  }
+    this.ulcaApiKey = ulcaApiKey;
+    this.serviceProviderName = serviceProviderName;
+    this.dataTracking = dataTracking
+    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.dataTrackingToggle}`;
+  } 
 
   processResponse(res) {
     super.processResponse(res);
@@ -24,7 +26,10 @@ export default class FetchApiKeysAPI extends API {
 
   getBody() {
     return {
-      userID: JSON.parse(localStorage.getItem("userDetails")).userID,
+        userID: JSON.parse(localStorage.getItem("userDetails")).userID,
+        ulcaApiKey: this.ulcaApiKey,
+        serviceProviderName: this.serviceProviderName,
+        dataTracking:this.dataTracking
     };
   }
 
