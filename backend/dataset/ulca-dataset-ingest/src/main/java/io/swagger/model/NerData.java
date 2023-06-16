@@ -3,8 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -14,100 +14,46 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "Ner dataset sentencewise metadata")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:41:06.560Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-11T16:18:51.317347392Z[GMT]")
 
 
-public class NerData  implements AnyOfNerData {
-  /**
-   * position of the word in phrase. B- Beginning, I- Intermediate
-   */
-  public enum PositionEnum {
-    B("B"),
-    
-    I("I");
+public class NerData   {
+  @JsonProperty("token")
+  private String token = null;
 
-    private String value;
-
-    PositionEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static PositionEnum fromValue(String text) {
-      for (PositionEnum b : PositionEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("position")
-  private PositionEnum position = null;
-
-  /**
-   * NER tag for corresponsing word/index. This should be inline with the corresponding tagsFormat specified in params.json.
-   */
-  public enum TagEnum {
-    O("O"),
-    
-    PER("PER"),
-    
-    ORG("ORG"),
-    
-    LOC("LOC");
-
-    private String value;
-
-    TagEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TagEnum fromValue(String text) {
-      for (TagEnum b : TagEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
   @JsonProperty("tag")
-  private TagEnum tag = null;
+  private String tag = null;
 
-  public NerData position(PositionEnum position) {
-    this.position = position;
+  @JsonProperty("tokenIndex")
+  private BigDecimal tokenIndex = null;
+
+  @JsonProperty("tokenStartIndex")
+  private BigDecimal tokenStartIndex = null;
+
+  @JsonProperty("tokenEndIndex")
+  private BigDecimal tokenEndIndex = null;
+
+  public NerData token(String token) {
+    this.token = token;
     return this;
   }
 
   /**
-   * position of the word in phrase. B- Beginning, I- Intermediate
-   * @return position
+   * corresponsing word in the sentence
+   * @return token
    **/
-  @Schema(description = "position of the word in phrase. B- Beginning, I- Intermediate")
-  
-    public PositionEnum getPosition() {
-    return position;
+  @Schema(required = true, description = "corresponsing word in the sentence")
+      @NotNull
+
+    public String getToken() {
+    return token;
   }
 
-  public void setPosition(PositionEnum position) {
-    this.position = position;
+  public void setToken(String token) {
+    this.token = token;
   }
 
-  public NerData tag(TagEnum tag) {
+  public NerData tag(String tag) {
     this.tag = tag;
     return this;
   }
@@ -119,12 +65,72 @@ public class NerData  implements AnyOfNerData {
   @Schema(example = "PER", required = true, description = "NER tag for corresponsing word/index. This should be inline with the corresponding tagsFormat specified in params.json.")
       @NotNull
 
-    public TagEnum getTag() {
+    public String getTag() {
     return tag;
   }
 
-  public void setTag(TagEnum tag) {
+  public void setTag(String tag) {
     this.tag = tag;
+  }
+
+  public NerData tokenIndex(BigDecimal tokenIndex) {
+    this.tokenIndex = tokenIndex;
+    return this;
+  }
+
+  /**
+   * index number of token
+   * @return tokenIndex
+   **/
+  @Schema(example = "1", description = "index number of token")
+  
+    @Valid
+    public BigDecimal getTokenIndex() {
+    return tokenIndex;
+  }
+
+  public void setTokenIndex(BigDecimal tokenIndex) {
+    this.tokenIndex = tokenIndex;
+  }
+
+  public NerData tokenStartIndex(BigDecimal tokenStartIndex) {
+    this.tokenStartIndex = tokenStartIndex;
+    return this;
+  }
+
+  /**
+   * the starting index of word in sentence
+   * @return tokenStartIndex
+   **/
+  @Schema(description = "the starting index of word in sentence")
+  
+    @Valid
+    public BigDecimal getTokenStartIndex() {
+    return tokenStartIndex;
+  }
+
+  public void setTokenStartIndex(BigDecimal tokenStartIndex) {
+    this.tokenStartIndex = tokenStartIndex;
+  }
+
+  public NerData tokenEndIndex(BigDecimal tokenEndIndex) {
+    this.tokenEndIndex = tokenEndIndex;
+    return this;
+  }
+
+  /**
+   * the ending index of word in sentence
+   * @return tokenEndIndex
+   **/
+  @Schema(description = "the ending index of word in sentence")
+  
+    @Valid
+    public BigDecimal getTokenEndIndex() {
+    return tokenEndIndex;
+  }
+
+  public void setTokenEndIndex(BigDecimal tokenEndIndex) {
+    this.tokenEndIndex = tokenEndIndex;
   }
 
 
@@ -137,13 +143,16 @@ public class NerData  implements AnyOfNerData {
       return false;
     }
     NerData nerData = (NerData) o;
-    return Objects.equals(this.position, nerData.position) &&
-        Objects.equals(this.tag, nerData.tag);
+    return Objects.equals(this.token, nerData.token) &&
+        Objects.equals(this.tag, nerData.tag) &&
+        Objects.equals(this.tokenIndex, nerData.tokenIndex) &&
+        Objects.equals(this.tokenStartIndex, nerData.tokenStartIndex) &&
+        Objects.equals(this.tokenEndIndex, nerData.tokenEndIndex);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(position, tag);
+    return Objects.hash(token, tag, tokenIndex, tokenStartIndex, tokenEndIndex);
   }
 
   @Override
@@ -151,8 +160,11 @@ public class NerData  implements AnyOfNerData {
     StringBuilder sb = new StringBuilder();
     sb.append("class NerData {\n");
     
-    sb.append("    position: ").append(toIndentedString(position)).append("\n");
+    sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("    tag: ").append(toIndentedString(tag)).append("\n");
+    sb.append("    tokenIndex: ").append(toIndentedString(tokenIndex)).append("\n");
+    sb.append("    tokenStartIndex: ").append(toIndentedString(tokenStartIndex)).append("\n");
+    sb.append("    tokenEndIndex: ").append(toIndentedString(tokenEndIndex)).append("\n");
     sb.append("}");
     return sb.toString();
   }

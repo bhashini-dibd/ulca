@@ -33,6 +33,8 @@ import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.GlossaryDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.GlossaryDatasetRowSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.NerDatasetParamsSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.NerDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
 import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
@@ -40,11 +42,13 @@ import com.ulca.dataset.service.ProcessTaskTrackerService;
 import io.swagger.model.DatasetType;
 import io.swagger.model.GlossaryDatasetParamsSchema;
 import io.swagger.model.GlossaryDatasetRowSchema;
+import io.swagger.model.NerDatasetParamsSchema;
+import io.swagger.model.NerDatasetRowSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateIngest {
+public class DatasetNerCorpusValidateIngest implements DatasetValidateIngest {
 
 	@Autowired
 	ProcessTaskTrackerService processTaskTrackerService;
@@ -73,14 +77,12 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 	@Autowired
 	TaskTrackerRedisDao taskTrackerRedisDao;
 
-	public static final String SOURCE_TEXT = "sourceText";
-	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
-	public static final String TARGET_TEXT = "targetText";
-	public static final String TARGET_TEXT_HASH = "targetTextHash";
+
+
 
 	public void validateIngest(DatasetIngest datasetIngest) {
 
-		log.info("************ Entry DatasetGlossaryCorpusValidateIngest :: validateIngest *********");
+		log.info("************ Entry DatasetNerCorpusValidateIngest :: validateIngest *********");
 
 		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
 		String datasetName = datasetIngest.getDatasetName();
@@ -91,7 +93,7 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 		String baseLocation = datasetIngest.getBaseLocation();
 		String mode = datasetIngest.getMode();
 
-		GlossaryDatasetParamsSchema paramsSchema = null;
+		NerDatasetParamsSchema paramsSchema = null;
 
 		Error fileError = validateFileExistence(baseLocation);
 
@@ -175,21 +177,21 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 		}
 	}
 
-	public GlossaryDatasetParamsSchema validateParamsSchema(DatasetIngest datasetIngest)
+	public NerDatasetParamsSchema validateParamsSchema(DatasetIngest datasetIngest)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		String paramsFilePath = datasetIngest.getBaseLocation() + File.separator + "params.json";
 
-		log.info("************ Entry DatasetGlossaryCorpusValidateIngest :: validateParamsSchema *********");
+		log.info("************ Entry DatasetNerCorpusValidateIngest :: validateParamsSchema *********");
 		log.info("validing file :: against params schema");
 		log.info(paramsFilePath);
 
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
-		module.addDeserializer(GlossaryDatasetParamsSchema.class, new GlossaryDatasetParamsSchemaDeserializer());
+		module.addDeserializer(NerDatasetParamsSchema.class, new NerDatasetParamsSchemaDeserializer());
 		mapper.registerModule(module);
-		GlossaryDatasetParamsSchema paramsSchema = mapper.readValue(new File(paramsFilePath),
-				GlossaryDatasetParamsSchema.class);
+		NerDatasetParamsSchema paramsSchema = mapper.readValue(new File(paramsFilePath),
+				NerDatasetParamsSchema.class);
 		if (paramsSchema == null) {
 			log.info("params validation failed");
 			throw new IOException("paramsValidation failed");
@@ -198,10 +200,10 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 		return paramsSchema;
 	}
 
-	public void ingest(GlossaryDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
+	public void ingest(NerDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
 			throws JSONException, IOException, NoSuchAlgorithmException {
 
-		log.info("************ Entry DatasetParallelCorpusValidateIngest :: real ingest *********");
+		log.info("************ Entry DatasetNerCorpusValidateIngest :: real ingest *********");
 
 		String datasetId = datasetIngest.getDatasetId();
 		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
@@ -246,19 +248,18 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
 			SimpleModule module = new SimpleModule();
-			module.addDeserializer(GlossaryDatasetRowSchema.class, new GlossaryDatasetRowSchemaDeserializer());
+			module.addDeserializer(NerDatasetRowSchema.class, new NerDatasetRowSchemaDeserializer());
 			mapper.registerModule(module);
 
-			GlossaryDatasetRowSchema rowSchema = null;
+			NerDatasetRowSchema rowSchema = null;
 
 			try {
 
-				rowSchema = mapper.readValue(dataRow, GlossaryDatasetRowSchema.class);
+				rowSchema = mapper.readValue(dataRow, NerDatasetRowSchema.class);
 
 			} catch (Exception e) {
 
 				failedCount++;
-				log.info("increment in failure record :: "+failedCount+ " in SRN "+serviceRequestNumber);
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_ROW_DATA_VALIDATION_FAILED",
 						e.getMessage(), serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
@@ -271,7 +272,6 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 			if (rowSchema != null) {
 
 				successCount++;
-				log.info("increment in success records :: "+successCount +" in SRN "+serviceRequestNumber);
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 
 				JSONObject target = new JSONObject(dataRow);
@@ -280,9 +280,9 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 				if (finalRecord.has("languages")) {
 					JSONObject language = finalRecord.getJSONObject("languages");
 					String sourceLanguage = language.getString("sourceLanguage");
-					String targetLanguage = language.getString("targetLanguage");
+					//String targetLanguage = language.getString("targetLanguage");
 					finalRecord.put("sourceLanguage", sourceLanguage);
-					finalRecord.put("targetLanguage", targetLanguage);
+					//finalRecord.put("targetLanguage", targetLanguage);
 					finalRecord.remove("languages");
 				}
 
@@ -302,14 +302,14 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
 
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
-				+ numberOfRecords + " success record :: " + successCount +" total failed record :: "+failedCount);
+				+ numberOfRecords + " success record :: " + successCount);
 
 	}
 
-	public void precheckIngest(GlossaryDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
+	public void precheckIngest(NerDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
 			throws JSONException, IOException, NoSuchAlgorithmException {
 
-		log.info("************ Entry DatasetGlossaryCorpusValidateIngest :: precheckIngest *********");
+		log.info("************ Entry DatasetNerCorpusValidateIngest :: precheckIngest *********");
 
 		String datasetId = datasetIngest.getDatasetId();
 		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
@@ -368,13 +368,13 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 				ObjectMapper mapper = new ObjectMapper();
 				String dataRow = mapper.writeValueAsString(rowObj);
 				SimpleModule module = new SimpleModule();
-				module.addDeserializer(GlossaryDatasetRowSchema.class, new GlossaryDatasetRowSchemaDeserializer());
+				module.addDeserializer(NerDatasetRowSchema.class, new NerDatasetRowSchemaDeserializer());
 				mapper.registerModule(module);
 
-				GlossaryDatasetRowSchema rowSchema = null;
+				NerDatasetRowSchema rowSchema = null;
 
 				try {
-					rowSchema = mapper.readValue(dataRow, GlossaryDatasetRowSchema.class);
+					rowSchema = mapper.readValue(dataRow, NerDatasetRowSchema.class);
 
 				} catch (Exception e) {
 
@@ -474,7 +474,7 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 		return numberOfRecords;
 	}
 
-	public void initiateIngest(String datasetId, String userId, String md5hash, GlossaryDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
+	public void initiateIngest(String datasetId, String userId, String md5hash, NerDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
 			
 		log.info(" initiateIngest ");
 		String dataFilePath = datasetIngest.getBaseLocation() + File.separator + "data.json";
@@ -494,7 +494,7 @@ public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateInges
 	}
 
 	// update the dataset
-	public void updateDataset(String datasetId, String userId, String md5hash, GlossaryDatasetParamsSchema paramsSchema) {
+	public void updateDataset(String datasetId, String userId, String md5hash, NerDatasetParamsSchema paramsSchema) {
 			
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
