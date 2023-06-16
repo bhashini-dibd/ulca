@@ -376,6 +376,7 @@ class ToggleDataTracking(Resource):
         #ONly success result from patch request needs to be sent to frontEnd.
         #getEmail from userID
         userEmail, appName_ = UserUtils.getUserEmail(body['userID'],body['ulcaApiKey'])
+        log.info(f'userEmailllll , appName____ {userEmail} {appName_}')
         if not userEmail or not appName_:
            return post_error("400", "Error in fetching Details, please check the userID and ulcaApiKey", None), 400
         pipeline_doc = UserUtils.getPipelinefromSrvcPN(body['serviceProviderName'])
