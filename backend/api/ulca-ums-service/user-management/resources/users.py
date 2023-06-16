@@ -388,8 +388,9 @@ class ToggleDataTracking(Resource):
         decrypt_headers = UserUtils.decryptAes(SECRET_KEY,pipeline_masterkeys)
         req_body = {"emailId" : userEmail, "appName" :  appName_,'dataTracking' : boole}
         log.info(f"Patch Request Request :: {req_body}")
+        log.info(f"Patch Request Headers :: {decrypt_headers}")
         patch_req = requests.patch(url = PATCH_URL, headers=decrypt_headers, json=req_body)
-        log.info(f"Patch Request Request :: {patch_req}...............{patch_req.json()} .............{patch_req.status_code}")
+        log.info(f"Patch Request Response :: {patch_req}...............{patch_req.json()} .............{patch_req.status_code}")
         if (patch_req.json()['status']) == 'success':
             toggled_matched, toggle_modified = UserUtils.updateDataTrackingValuePull(body['userID'], body['ulcaApiKey'], body['serviceProviderName'], boole)
             if toggle_modified == 1:
