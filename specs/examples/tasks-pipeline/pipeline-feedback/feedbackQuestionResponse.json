@@ -1,0 +1,45 @@
+{
+    "feedbackLanguage" : "en",
+    "pipelineFeedback" : {
+        "commonFeedback" : [
+            {
+                "question":"Are you satisfied with the pipeline so far?",
+                "supportedFeedbackTypes":["rating","thumbs","comment"]
+            }
+        ]
+    },
+    "taskFeedback": [
+        {
+            "taskType": "asr",
+            "commonFeedback" : [
+                {
+                    "question":"Are you satisfied with the ASR response so far?",
+                    "supportedFeedbackTypes":["rating","thumbs","comment"]
+                }
+            ],
+            "granularFeedback" : [
+                {
+                    "question" : "Which of the following parameters are you not satisfied with?",
+                    "supportedFeedbackTypes":["rating-list", "comment-list", "thumbs-list", "checkbox-list"],
+                    "parameters":["accuracy","speed","readability"]
+                }
+            ]
+        },
+        {
+            "taskType": "translation",
+            "commonFeedback" : [
+                {
+                    "question":"Are you satisfied with the Translation response so far?",
+                    "supportedFeedbackTypes":["rating","thumbs","comment"]
+                }
+            ],
+            "granularFeedback" : [
+                {
+                    "question" : "Which of the following parameters are you not satisfied with?",
+                    "supportedFeedbackTypes":["rating-list", "comment-list", "thumbs-list", "checkbox-list"],
+                    "parameters":["accuracy","speed","readability"]
+                }
+            ]
+        }
+    ]
+}

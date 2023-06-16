@@ -32,8 +32,7 @@ components:
           $ref: '#/components/schemas/LanguagesList'
         pipelineResponseConfig:
           $ref: '#/components/schemas/TaskSchemaList'
-        pipelineInferenceAPIEndPoint:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+        
         dataTrackingToggleUrl:
           description: URL to toggle data logging
           type: string
@@ -42,6 +41,17 @@ components:
           description: URL to give feedback regarding pipeline
           type: string
           format: url
+        pipelineInferenceAPIEndPoint:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      # anyOf:  
+      #   - properties:
+      #      pipelineInferenceAPIEndPoint:
+      #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      #     required: [pipelineInferenceAPIEndPoint] 
+      #   - properties:
+      #      pipelineInferenceSocketEndPoint:
+      #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      #     required: [pipelineInferenceSocketEndPoint] 
     PipelineConfig:
       required:
         - pipelineId

@@ -20,7 +20,7 @@ components:
         taskSequence:
           $ref: "#/components/schemas/RequestList"
         inputData:
-          $ref: "#/components/schemas/InputList"
+          $ref: "#/components/schemas/AnyInputs"
 
     AnyRequests:
       anyOf:
@@ -39,10 +39,10 @@ components:
       items:
         $ref: "#/components/schemas/AnyRequests"
 
-    InputList:
-      type: array
-      items:
-        $ref: "#/components/schemas/AnyInputs"
+    # InputList:
+    #   type: array
+    #   items:
+    #     $ref: "#/components/schemas/AnyInputs"
 
     TranslationRequestInput:
       required:

@@ -1,4 +1,4 @@
-## Translation model examples
+## Transliteration model examples
 Few examples to show how a submitter can publish a transliteration model to ULCA. The submitter can create a params.json file according to the contract and submit via the ULCA portal.
 
 * [Basic example](./basic)

@@ -657,7 +657,7 @@ const MyProfile = (props) => {
                               <TableCell style={{ width: "19%" }}>
                                 {row?.inferenceApiKey?.name ?? "-"}
                               </TableCell>
-                              <TableCell style={{ width: "60%" }}>
+                              <TableCell style={{ width: "60%" ,wordBreak: "break-all"}}>
                                 {row?.inferenceApiKey?.value ?? "-"}
                               </TableCell>
                               <TableCell style={{ width: "60%" }}>
