@@ -768,13 +768,11 @@ class UserUtils:
         collections = db.get_db()[USR_MONGO_COLLECTION]
         email = collections.find_one({"userID":userID})
         if email:
-            if len(email['apiKeyDetails']) > 1:
+            if len(email['apiKeyDetails']) >= 1:
                 for appName in email['apiKeyDetails']:
                     if appName['ulcaApiKey'] == ulcaAK:
                         ulcaAppN = appName['appName']
-                    elif appName['ulcaApiKey'] != ulcaAK:
-                        ulcaAppN = None
-            return email['email'], ulcaAppN
+                        return email['email'], ulcaAppN
         elif not email:
             return None, None
 
