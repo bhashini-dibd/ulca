@@ -1835,6 +1835,8 @@ public class ModelService {
 							LanguagePair lp = new LanguagePair();
 							lp.setSourceLanguage(specLanguageSchema.getSourceLanguage());
 							lp.setSourceScriptCode(specLanguageSchema.getSourceScriptCode());
+							lp.setTargetLanguage(specLanguageSchema.getSourceLanguage());
+							lp.setTargetScriptCode(specLanguageSchema.getSourceScriptCode());
 							firstTaskLanguageSchema.setSourceLanguage(lp);
 							firstTaskLanguageSchema.addTargetLanguageListItem(lp);
 							firstTaskLanguageList.add(firstTaskLanguageSchema);
