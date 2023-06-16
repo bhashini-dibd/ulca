@@ -2180,7 +2180,8 @@ public class ModelService {
 
 			}
 
-
+			log.info("TARGET LANG LIST :: "+targetLangList.toString());
+			log.info("TARGET LANG LIST COPY :: "+targetLangListCopy.toString());
 
 			// DFS for targetLangList creation [Final Pipeline Target Lang List]
 			int targetLangSize = targetLangList.size();
@@ -2737,8 +2738,8 @@ public class ModelService {
 								log.info("EACH TASK :: "+each_task);
 								log.info("SOURCE LANG ::"+sourceLang.toString());
 								if(each_task.getLanguage()!=null) {
-								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang.getSourceLanguage()) && 
-									each_task.getLanguage().getSourceScriptCode().equals(sourceLang.getSourceScriptCode())) {
+								if (each_task.getLanguage().getSourceLanguage().equals(sourceLang.getTargetLanguage()) && 
+									each_task.getLanguage().getSourceScriptCode().equals(sourceLang.getTargetScriptCode())) {
 									modelExists = true;
 									break;
 								}
@@ -2793,8 +2794,8 @@ public class ModelService {
 											// if (configSchema.getSourceLanguage()
 											// .equals(firstTaskSchema.getSourceLanguage())) {
 
-											if (configSchema.getSourceLanguage().equals(sourceLang.getSourceLanguage()) && 
-												configSchema.getSourceScriptCode().equals(sourceLang.getSourceScriptCode())) {
+											if (configSchema.getSourceLanguage().equals(sourceLang.getTargetLanguage()) && 
+												configSchema.getSourceScriptCode().equals(sourceLang.getTargetScriptCode())) {
 												ModelExtended model = modelDao.findByModelId(configSchema.getModelId());
 												log.info("Model Name :: " + model.getName());
 												LanguagePairs langPair = model.getLanguages();
