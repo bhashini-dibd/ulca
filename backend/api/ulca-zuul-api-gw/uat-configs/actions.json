@@ -375,6 +375,30 @@
       "active": true,
       "whiteList": true,
       "description": "Open API to retrieve pipeline details"
+    },
+    {
+      "id": "5ed50c75-0606-4f0f-8ab1-3f3df6350a6a",
+      "uri": "/ulca/user-mgmt/v1/users/dataTrackingToggle",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate service provider api keys"
+    },    
+    {
+      "id": "1d42e5b8-e29d-4314-99b5-64b2ae5a2591",
+      "uri": "/ulca/mdms/v0/pipelineQuestions",
+      "module": "MDMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch feedback pipeline questions"
+    },
+    {
+      "id": "d924225e-7a0e-4fb6-80dd-491f1355f33d",
+      "uri": "/ulca/user-mgmt/v1/users/getApiKeysForProfile",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get api keys of users with non existing service provider names"
     }
   ]
 }
