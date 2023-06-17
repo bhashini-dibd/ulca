@@ -1449,29 +1449,27 @@ public class ModelService {
 
 			pipelineResponse.setPipelineInferenceSocketEndPoint(pipelineInferenceSocketEndPoint);
 			}
-	}else 
-	{
-		
-		throw new PipelineValidationException("InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
-				HttpStatus.BAD_REQUEST);
-	}
+		}
+		else 
+		{
+			
+			throw new PipelineValidationException("InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
+					HttpStatus.BAD_REQUEST);
+		}
 
-	//Generate Individual Language List
-	PipelineUtilities pipelineUtilities = new PipelineUtilities();
-	TaskSpecifications individualTaskSpecifications = pipelineUtilities.getIndividualTaskSpecifications(pipelineRequest.getPipelineTasks(),pipelineModel);
+		//Generate Individual Language List
+		PipelineUtilities pipelineUtilities = new PipelineUtilities();
+		TaskSpecifications individualTaskSpecifications = pipelineUtilities.getIndividualTaskSpecifications(pipelineRequest.getPipelineTasks(),pipelineModel);
+		log.info("INDIVIDUAL TASK SPECIFICATIONS :: "+individualTaskSpecifications.toString());
 
-	PipelineResponseLanguagesList pipelineResponseLanguagesList = pipelineUtilities.getPipelineResponseLanguagesList(individualTaskSpecifications);
-	//Generate Response Language List
-	
-	//Generate Response Config
+		//Generate Response Language List
+		PipelineResponseLanguagesList pipelineResponseLanguagesList = pipelineUtilities.getPipelineResponseLanguagesList(individualTaskSpecifications);
+		log.info("PIPELINE RESPONSE LANGUAGE LIST :: "+pipelineResponseLanguagesList.toString());
+		pipelineResponse.setLanguages(pipelineResponseLanguagesList);
 
-
-
-
-
-
-
-
+		//Generate Response Config
+		TaskSchemaList pipelineResponseSchemaList = pipelineUtilities.getPipelineResponseSchemaList(individualTaskSpecifications);
+		pipelineResponse.setPipelineResponseConfig(pipelineResponseSchemaList);
 
 
 		ObjectMapper mapper = new ObjectMapper();
