@@ -64,6 +64,7 @@ public class PipelineUtilities {
                 {
                     // If source language matches for model and lp or if source script code is empty
                     // or matches
+                    boolean taskAdded = false;
                     ConfigSchema previousTaskSchema = previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().get(i);
                     if (previousTaskSchema.getTargetLanguage() == lp.getSourceLanguage()) {
                         if (lp.getSourceScriptCode() == null || lp.getSourceScriptCode() == previousTaskSchema.getTargetScriptCode()) {
@@ -82,6 +83,7 @@ public class PipelineUtilities {
                                                 confSchema.setTargetLanguage(confSchema.getSourceLanguage());
                                             if (confSchema.getTargetScriptCode() == null)
                                                 confSchema.setTargetScriptCode(confSchema.getSourceScriptCode());
+                                            taskAdded = true;
                                             if(!returnConfigList.contains(confSchema))
                                                 returnConfigList.add(confSchema);
                                         }
@@ -90,6 +92,11 @@ public class PipelineUtilities {
                             }
                         }
                     }
+                    if(taskAdded == false)
+                    {
+                        log.info("TASK REMOVED :: "+previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().get(i).toString());
+                        previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().remove(i);
+                    }
                 }
             } else // if config not entered by user
             {
@@ -97,6 +104,7 @@ public class PipelineUtilities {
                 {
                     // If source language matches for model and lp or if source script code is empty
                     // or matches
+                    boolean taskAdded = false;
                     ConfigSchema previousTaskSchema = previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().get(i);
                     for (ConfigSchema modelTask : modelTaskSpecification.getTaskConfig()) {
                         // if source lang of pipeline model config matches previous task target lang
@@ -108,9 +116,15 @@ public class PipelineUtilities {
                                 confSchema.setTargetLanguage(confSchema.getSourceLanguage());
                             if (confSchema.getTargetScriptCode() == null)
                                 confSchema.setTargetScriptCode(confSchema.getSourceScriptCode());
+                            taskAdded = true;
                             if(!returnConfigList.contains(confSchema))
                                 returnConfigList.add(confSchema);
                         }
+                    }
+                    if(taskAdded == false)
+                    {
+                        log.info("TASK REMOVED :: "+previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().get(i).toString());
+                        previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().remove(i);
                     }
                 }
             }
