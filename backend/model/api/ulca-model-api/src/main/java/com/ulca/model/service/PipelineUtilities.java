@@ -211,6 +211,16 @@ public class PipelineUtilities {
         for (ConfigSchema firstTaskConfigSchema : individualTaskSpecifications.get(0).getTaskConfig()) {
             PipelineResponseLanguageSchema responseLanguageSchema = new PipelineResponseLanguageSchema();
             // set source language as language of the first task
+            boolean sourceLanguageExists = false;
+            //Check if pipeline respone language list already has the source language
+            for(PipelineResponseLanguageSchema respLangSchema : pipelineResponseLanguagesList)
+            {
+                if(respLangSchema.getSourceLanguage().equals(firstTaskConfigSchema.getSourceLanguage()))
+                {
+                    sourceLanguageExists = true;
+                    break;
+                }
+            }
             responseLanguageSchema.setSourceLanguage(firstTaskConfigSchema.getSourceLanguage());
             List<ConfigSchema> targetLanguages = new ArrayList<ConfigSchema>();
             targetLanguages.add(firstTaskConfigSchema);
@@ -247,7 +257,24 @@ public class PipelineUtilities {
                     responseLanguageSchema.addTargetLanguageListItem(finalTaskConfigSchema.getTargetLanguage());
                 }
             }
-            pipelineResponseLanguagesList.add(responseLanguageSchema);
+            if(sourceLanguageExists == true) //if source language exists, find it and add to it's target language list
+            {
+                for(PipelineResponseLanguageSchema respLangSchema : pipelineResponseLanguagesList)
+                {
+                    if(respLangSchema.getSourceLanguage().equals(firstTaskConfigSchema.getSourceLanguage()))
+                    {
+                        for(SupportedLanguages targetLanguage : responseLanguageSchema.getTargetLanguageList())
+                        {
+                            if(!respLangSchema.getTargetLanguageList().contains(targetLanguage))
+                                respLangSchema.addTargetLanguageListItem(targetLanguage);
+                        }
+                    }
+                }
+            }
+            else //if source language doesn't exist, add whole schema
+            {
+                pipelineResponseLanguagesList.add(responseLanguageSchema);
+            }
         }
         return pipelineResponseLanguagesList;
     }
