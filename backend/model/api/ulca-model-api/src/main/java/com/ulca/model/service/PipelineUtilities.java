@@ -81,9 +81,12 @@ public class PipelineUtilities {
                                             confSchema = modelTask;
                                             if (confSchema.getTargetLanguage() == null)
                                                 confSchema.setTargetLanguage(confSchema.getSourceLanguage());
+                                            
                                             if (confSchema.getTargetScriptCode() == null)
                                                 confSchema.setTargetScriptCode(confSchema.getSourceScriptCode());
+                                            
                                             taskAdded = true;
+                                            
                                             if(!returnConfigList.contains(confSchema))
                                                 returnConfigList.add(confSchema);
                                         }
@@ -114,9 +117,12 @@ public class PipelineUtilities {
                             confSchema = modelTask;
                             if (confSchema.getTargetLanguage() == null)
                                 confSchema.setTargetLanguage(confSchema.getSourceLanguage());
+                            
                             if (confSchema.getTargetScriptCode() == null)
                                 confSchema.setTargetScriptCode(confSchema.getSourceScriptCode());
+                            
                             taskAdded = true;
+                            
                             if(!returnConfigList.contains(confSchema))
                                 returnConfigList.add(confSchema);
                         }

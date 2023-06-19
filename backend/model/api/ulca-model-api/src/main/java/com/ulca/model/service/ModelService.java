@@ -1463,6 +1463,14 @@ public class ModelService {
 		log.info("INDIVIDUAL TASK SPECIFICATIONS :: "+individualTaskSpecifications.toString());
 
 		//TODO : individualTaskSpecifications is empty, return No supported tasks found. 
+		for(TaskSpecification taskSpecification:individualTaskSpecifications) {
+			if(taskSpecification.getTaskConfig().isEmpty()) {
+				throw new PipelineValidationException("No supported tasks found for this request!!",
+						HttpStatus.BAD_REQUEST);
+				
+			}
+			
+		}
 
 		//Generate Response Language List
 		PipelineResponseLanguagesList pipelineResponseLanguagesList = pipelineUtilities.getPipelineResponseLanguagesList(individualTaskSpecifications);
@@ -1470,12 +1478,45 @@ public class ModelService {
 		pipelineResponse.setLanguages(pipelineResponseLanguagesList);
 
 		//TODO : pipelineResponseLanguagesList is empty, return No supported tasks found. 
-
-
+		if(pipelineResponseLanguagesList.isEmpty()) {
+			throw new PipelineValidationException("No supported tasks found for this request!!",
+					HttpStatus.BAD_REQUEST);
+		}
+          
 		//Generate Response Config
 		TaskSchemaList pipelineResponseSchemaList =getPipelineResponseSchemaList(individualTaskSpecifications);
 		pipelineResponse.setPipelineResponseConfig(pipelineResponseSchemaList);
-
+               
+		for(int i=0 ; i<pipelineResponseSchemaList.size();i++) {
+			if(pipelineResponseSchemaList.get(i).getTaskType()=="asr") {
+				ASRTaskInference aSRTaskInference= (ASRTaskInference)pipelineResponseSchemaList.get(i);
+				if(aSRTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+					
+				}
+				
+			}
+			if(pipelineResponseSchemaList.get(i).getTaskType()=="translation") {
+				TranslationTaskInference translationTaskInference= (TranslationTaskInference)pipelineResponseSchemaList.get(i);
+				if(translationTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+					
+				}
+				
+			}
+			if(pipelineResponseSchemaList.get(i).getTaskType()=="tts") {
+				TTSTaskInference tTSTaskInference= (TTSTaskInference)pipelineResponseSchemaList.get(i);
+				if(tTSTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+					
+				}
+				
+			}
+			
+		}
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
