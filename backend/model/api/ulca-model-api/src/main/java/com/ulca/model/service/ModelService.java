@@ -1681,11 +1681,15 @@ public class ModelService {
 		log.info("++++++++++++++++Entry to validate User Details+++++++++++++++");
 
 		TranslationTaskInferenceInferenceApiKey infKey = new TranslationTaskInferenceInferenceApiKey();
-		String name = "name";
-		String value = "value";
-		infKey.setName(name);
-		infKey.setValue(value);
-/*		
+
+		String name = null;
+		String value = null;
+		//FOR LOCAL TESTING WITH DEFAULT NAMES AND VALUES FOR KEYS
+		// String name = "name";
+		// String value = "value";
+		// infKey.setName(name);
+		// infKey.setValue(value);
+		
 		JSONObject data = new JSONObject();
 		data.put("userID", userID);
 		data.put("ulcaApiKey", ulcaApiKey);
@@ -1757,7 +1761,7 @@ public class ModelService {
 
 		}
 	
-	*/
+	
 
 		log.info("++++++++++++++++Exit to validate User Details+++++++++++++++");
 

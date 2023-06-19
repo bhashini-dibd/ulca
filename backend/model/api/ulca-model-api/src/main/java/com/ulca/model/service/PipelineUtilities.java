@@ -97,8 +97,8 @@ public class PipelineUtilities {
                     }
                     if(taskAdded == false)
                     {
-                        log.info("TASK REMOVED :: "+previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().get(i).toString());
                         previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().remove(i);
+                        i--;
                     }
                 }
             } else // if config not entered by user
@@ -129,8 +129,8 @@ public class PipelineUtilities {
                     }
                     if(taskAdded == false)
                     {
-                        log.info("TASK REMOVED :: "+previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().get(i).toString());
                         previousTaskSpecifications.get(previousTaskSpecifications.size() - 1).getTaskConfig().remove(i);
+                        i--;
                     }
                 }
             }
@@ -233,6 +233,18 @@ public class PipelineUtilities {
         for (ConfigSchema firstTaskConfigSchema : individualTaskSpecifications.get(0).getTaskConfig()) {
             PipelineResponseLanguageSchema responseLanguageSchema = new PipelineResponseLanguageSchema();
             // set source language as language of the first task
+            boolean sourceLanguageExists = false;
+            //see if the source language exists already
+            int responseSchemaIndex = -1;
+            for(int i=0;i<pipelineResponseLanguagesList.size();i++)
+            {
+                if(pipelineResponseLanguagesList.get(i).getSourceLanguage().equals(firstTaskConfigSchema.getSourceLanguage()))
+                {
+                    sourceLanguageExists = true;
+                    responseSchemaIndex = i;
+                    break;
+                }
+            }
             responseLanguageSchema.setSourceLanguage(firstTaskConfigSchema.getSourceLanguage());
             List<ConfigSchema> targetLanguages = new ArrayList<ConfigSchema>();
             targetLanguages.add(firstTaskConfigSchema);
@@ -266,10 +278,19 @@ public class PipelineUtilities {
                 if(responseLanguageSchema.getTargetLanguageList()==null ||
                     !responseLanguageSchema.getTargetLanguageList().contains(finalTaskConfigSchema.getTargetLanguage()))
                 {
-                    responseLanguageSchema.addTargetLanguageListItem(finalTaskConfigSchema.getTargetLanguage());
+                    if(sourceLanguageExists == true)
+                    {   
+                        if(!pipelineResponseLanguagesList.get(responseSchemaIndex).getTargetLanguageList().contains(finalTaskConfigSchema.getTargetLanguage()))
+                        pipelineResponseLanguagesList.get(responseSchemaIndex).addTargetLanguageListItem(finalTaskConfigSchema.getTargetLanguage());
+                    }
+                    else
+                    {
+                        responseLanguageSchema.addTargetLanguageListItem(finalTaskConfigSchema.getTargetLanguage());                        
+                    } 
                 }
             }
-            pipelineResponseLanguagesList.add(responseLanguageSchema);
+            if(sourceLanguageExists == false)
+                pipelineResponseLanguagesList.add(responseLanguageSchema);
         }
         return pipelineResponseLanguagesList;
     }
