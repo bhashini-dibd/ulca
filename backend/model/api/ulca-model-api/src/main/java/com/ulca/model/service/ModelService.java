@@ -1462,10 +1462,15 @@ public class ModelService {
 		TaskSpecifications individualTaskSpecifications = pipelineUtilities.getIndividualTaskSpecifications(pipelineRequest.getPipelineTasks(),pipelineModel);
 		log.info("INDIVIDUAL TASK SPECIFICATIONS :: "+individualTaskSpecifications.toString());
 
+		//TODO : individualTaskSpecifications is empty, return No supported tasks found. 
+
 		//Generate Response Language List
 		PipelineResponseLanguagesList pipelineResponseLanguagesList = pipelineUtilities.getPipelineResponseLanguagesList(individualTaskSpecifications);
 		log.info("PIPELINE RESPONSE LANGUAGE LIST :: "+pipelineResponseLanguagesList.toString());
 		pipelineResponse.setLanguages(pipelineResponseLanguagesList);
+
+		//TODO : pipelineResponseLanguagesList is empty, return No supported tasks found. 
+
 
 		//Generate Response Config
 		TaskSchemaList pipelineResponseSchemaList =getPipelineResponseSchemaList(individualTaskSpecifications);
