@@ -45,6 +45,7 @@ import com.ulca.benchmark.response.BenchmarkSubmitResponse;
 import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
 import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
 import com.ulca.benchmark.util.ModelConstants;
+import com.ulca.benchmark.util.SupportedBertTgtLangs;
 import com.ulca.benchmark.util.Utility;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
@@ -310,10 +311,28 @@ public class BenchmarkService {
 				BenchmarkDto dto = new BenchmarkDto();
 				BeanUtils.copyProperties(bm, dto);
 				List<String> metricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
+				log.info("metricList before removing bert :: "+metricList.toString());
+				
+				if(SupportedBertTgtLangs.fromValue(bm.getLanguages().getTargetLanguage().name().toLowerCase())==null) {
+					if(metricList.contains("bert")) {
+						
+						metricList.remove("bert");
+					}
+					
+				}
+				
+				log.info("metricList after removing bert :: "+metricList.toString());
 				dto.setMetric(new ArrayList<>(metricList));
 				List<BenchmarkProcess> bmProcList = benchmarkprocessDao
 						.findByModelIdAndBenchmarkDatasetId(request.getModelId(), bm.getBenchmarkId());
 				List<String> allMetricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
+				if(SupportedBertTgtLangs.fromValue(bm.getLanguages().getTargetLanguage().name())==null) {
+					if(allMetricList.contains("bert")) {
+						
+						allMetricList.remove("bert");
+					}
+					
+				}
 				for (BenchmarkProcess bmProc : bmProcList) {
 					if (allMetricList.contains(bmProc.getMetric())) {
 						String status = bmProc.getStatus();
