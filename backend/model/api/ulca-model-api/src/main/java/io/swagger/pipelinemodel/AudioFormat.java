@@ -1,6 +1,5 @@
 package io.swagger.pipelinemodel;
 
-import java.util.Objects;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +16,8 @@ public enum AudioFormat {
     PCM("pcm"),
     MP3("mp3"),
     FLAC("flac"),
-    SPH("sph");
+    SPH("sph"),
+    M4A("m4a");
 
   private String value;
 

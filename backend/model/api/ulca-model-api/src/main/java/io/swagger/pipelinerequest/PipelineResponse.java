@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
 
 public class PipelineResponse   {
   @JsonProperty("languages")
-  private LanguagesList languages = null;
+  private PipelineResponseLanguagesList languages = null;
 
   @JsonProperty("pipelineResponseConfig")
   private TaskSchemaList pipelineResponseConfig = null;
@@ -32,7 +32,7 @@ public class PipelineResponse   {
   @JsonProperty("pipelineInferenceSocketEndPoint")
   private PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint = null;
 
-  public PipelineResponse languages(LanguagesList languages) {
+  public PipelineResponse languages(PipelineResponseLanguagesList languages) {
     this.languages = languages;
     return this;
   }
@@ -45,11 +45,11 @@ public class PipelineResponse   {
       @NotNull
 
     @Valid
-    public LanguagesList getLanguages() {
+    public PipelineResponseLanguagesList getLanguages() {
     return languages;
   }
 
-  public void setLanguages(LanguagesList languages) {
+  public void setLanguages(PipelineResponseLanguagesList languages) {
     this.languages = languages;
   }
 

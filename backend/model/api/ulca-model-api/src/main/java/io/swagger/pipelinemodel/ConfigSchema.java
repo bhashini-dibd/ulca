@@ -4,6 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedScripts;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -13,7 +14,7 @@ import javax.validation.constraints.*;
  * ConfigSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-16T05:12:20.169133522Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-06-09T06:12:11.900779753Z[GMT]")
 
 
 public class ConfigSchema   {
@@ -28,6 +29,12 @@ public class ConfigSchema   {
 
   @JsonProperty("targetLanguage")
   private SupportedLanguages targetLanguage = null;
+
+  @JsonProperty("sourceScriptCode")
+  private SupportedScripts sourceScriptCode = null;
+
+  @JsonProperty("targetScriptCode")
+  private SupportedScripts targetScriptCode = null;
 
   public ConfigSchema modelId(String modelId) {
     this.modelId = modelId;
@@ -110,6 +117,46 @@ public class ConfigSchema   {
     this.targetLanguage = targetLanguage;
   }
 
+  public ConfigSchema sourceScriptCode(SupportedScripts sourceScriptCode) {
+    this.sourceScriptCode = sourceScriptCode;
+    return this;
+  }
+
+  /**
+   * Get sourceScriptCode
+   * @return sourceScriptCode
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public SupportedScripts getSourceScriptCode() {
+    return sourceScriptCode;
+  }
+
+  public void setSourceScriptCode(SupportedScripts sourceScriptCode) {
+    this.sourceScriptCode = sourceScriptCode;
+  }
+
+  public ConfigSchema targetScriptCode(SupportedScripts targetScriptCode) {
+    this.targetScriptCode = targetScriptCode;
+    return this;
+  }
+
+  /**
+   * Get targetScriptCode
+   * @return targetScriptCode
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public SupportedScripts getTargetScriptCode() {
+    return targetScriptCode;
+  }
+
+  public void setTargetScriptCode(SupportedScripts targetScriptCode) {
+    this.targetScriptCode = targetScriptCode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -123,12 +170,14 @@ public class ConfigSchema   {
     return Objects.equals(this.modelId, configSchema.modelId) &&
         Objects.equals(this.serviceId, configSchema.serviceId) &&
         Objects.equals(this.sourceLanguage, configSchema.sourceLanguage) &&
-        Objects.equals(this.targetLanguage, configSchema.targetLanguage);
+        Objects.equals(this.targetLanguage, configSchema.targetLanguage) &&
+        Objects.equals(this.sourceScriptCode, configSchema.sourceScriptCode) &&
+        Objects.equals(this.targetScriptCode, configSchema.targetScriptCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, serviceId, sourceLanguage, targetLanguage);
+    return Objects.hash(modelId, serviceId, sourceLanguage, targetLanguage, sourceScriptCode, targetScriptCode);
   }
 
   @Override
@@ -140,6 +189,8 @@ public class ConfigSchema   {
     sb.append("    serviceId: ").append(toIndentedString(serviceId)).append("\n");
     sb.append("    sourceLanguage: ").append(toIndentedString(sourceLanguage)).append("\n");
     sb.append("    targetLanguage: ").append(toIndentedString(targetLanguage)).append("\n");
+    sb.append("    sourceScriptCode: ").append(toIndentedString(sourceScriptCode)).append("\n");
+    sb.append("    targetScriptCode: ").append(toIndentedString(targetScriptCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

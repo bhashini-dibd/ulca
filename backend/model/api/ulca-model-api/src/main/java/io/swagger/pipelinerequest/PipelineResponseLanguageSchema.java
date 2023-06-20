@@ -22,22 +22,21 @@ import javax.validation.constraints.*;
 
 
 
-public class LanguageSchema   {
+public class PipelineResponseLanguageSchema   {
   @JsonProperty("sourceLanguage")
-  private LanguagePair sourceLanguage = null;
+  private SupportedLanguages sourceLanguage = null;
 
   //sourceScriptCode
 
   @JsonProperty("targetLanguageList")
   @Valid
-  private List<LanguagePair> targetLanguageList = null;
+  private List<SupportedLanguages> targetLanguageList = null;
   //List of Language Pairs
 
-  public LanguageSchema sourceLanguage(LanguagePair sourceLanguage) {
-    this.sourceLanguage = sourceLanguage;
-    return this;
-  }
-
+    public PipelineResponseLanguageSchema sourceLanguage(SupportedLanguages sourceLanguage) {
+      this.sourceLanguage = sourceLanguage;
+      return this;
+    }
   /**
    * Get sourceLanguage
    * @return sourceLanguage
@@ -45,22 +44,22 @@ public class LanguageSchema   {
   @Schema(description = "")
   
     @Valid
-    public LanguagePair getSourceLanguage() {
+    public SupportedLanguages getSourceLanguage() {
     return sourceLanguage;
   }
 
-  public void setSourceLanguage(LanguagePair sourceLanguage) {
+  public void setSourceLanguage(SupportedLanguages sourceLanguage) {
     this.sourceLanguage = sourceLanguage;
   }
 
-  public LanguageSchema targetLanguageList(List<LanguagePair> targetLanguageList) {
+  public PipelineResponseLanguageSchema targetLanguageList(List<SupportedLanguages> targetLanguageList) {
     this.targetLanguageList = targetLanguageList;
     return this;
   }
 
-  public LanguageSchema addTargetLanguageListItem(LanguagePair targetLanguageListItem) {
+  public PipelineResponseLanguageSchema addTargetLanguageListItem(SupportedLanguages targetLanguageListItem) {
     if (this.targetLanguageList == null) {
-      this.targetLanguageList = new ArrayList<LanguagePair>();
+      this.targetLanguageList = new ArrayList<SupportedLanguages>();
     }
     this.targetLanguageList.add(targetLanguageListItem);
     return this;
@@ -72,11 +71,11 @@ public class LanguageSchema   {
    **/
   @Schema(description = "list of")
       @Valid
-    public List<LanguagePair> getTargetLanguageList() {
+    public List<SupportedLanguages> getTargetLanguageList() {
     return targetLanguageList;
   }
 
-  public void setTargetLanguageList(List<LanguagePair> targetLanguageList) {
+  public void setTargetLanguageList(List<SupportedLanguages> targetLanguageList) {
     this.targetLanguageList = targetLanguageList;
   }
 
@@ -89,7 +88,7 @@ public class LanguageSchema   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LanguageSchema languageSchema = (LanguageSchema) o;
+    PipelineResponseLanguageSchema languageSchema = (PipelineResponseLanguageSchema) o;
     return Objects.equals(this.sourceLanguage, languageSchema.sourceLanguage) &&
         Objects.equals(this.targetLanguageList, languageSchema.targetLanguageList);
   }
