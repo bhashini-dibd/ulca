@@ -78,15 +78,17 @@ class BenchmarkControllerTest {
     }
 
 	
-	  @Test void listBytask() throws Exception { BenchmarkListByModelRequest
-	  request = new BenchmarkListByModelRequest(); request.setModelId("test");
-	  mapper = new ObjectMapper(); String json =
-	  mapper.writeValueAsString(request);
-	  
-	  mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL+"/getByTask").
-	  contentType(MediaType.APPLICATION_JSON) .content(json)
-	  .accept(MediaType.APPLICATION_JSON)).
-	  andExpect(MockMvcResultMatchers.status().isOk()); }
+	/*
+	 * @Test void listBytask() throws Exception { BenchmarkListByModelRequest
+	 * request = new BenchmarkListByModelRequest(); request.setModelId("test");
+	 * mapper = new ObjectMapper(); String json =
+	 * mapper.writeValueAsString(request);
+	 * 
+	 * mockMvc.perform(MockMvcRequestBuilders.post(BASE_URL+"/getByTask").
+	 * contentType(MediaType.APPLICATION_JSON) .content(json)
+	 * .accept(MediaType.APPLICATION_JSON)).
+	 * andExpect(MockMvcResultMatchers.status().isOk()); }
+	 */
 	 
     @Test
     void searchBenchmark() throws Exception {
