@@ -514,7 +514,7 @@ public class ModelService {
 
 			}
 
-			// checkModelAvailablity(pipelineModelObj);
+			 checkModelAvailablity(pipelineModelObj);
 
 			// PipelineModel checkModel =
 			// pipelineModelDao.findBySubmitterName(pipelineModelObj.getSubmitter().getName());
@@ -956,14 +956,16 @@ public class ModelService {
 									if (configSchema.getSourceLanguage() != null
 											&& configSchema.getTargetLanguage() == null) {
 
-										if (languagePair.getSourceLanguage().equals(configSchema.getSourceLanguage())) {
+										if (languagePair.getSourceLanguage().equals(configSchema.getSourceLanguage()) 
+												&& languagePair.getSourceScriptCode().equals(configSchema.getSourceScriptCode())) {
 											flag = true;
 											break;
 										}
 									} else {
 										if (languagePair.getSourceLanguage().equals(configSchema.getSourceLanguage())
-												&& languagePair.getTargetLanguage()
-														.equals(configSchema.getTargetLanguage())) {
+												&& languagePair.getTargetLanguage().equals(configSchema.getTargetLanguage())
+												&& languagePair.getSourceScriptCode().equals(configSchema.getSourceScriptCode())
+												&& languagePair.getTargetScriptCode().equals(configSchema.getTargetScriptCode())) {
 											flag = true;
 											break;
 										}
@@ -974,14 +976,15 @@ public class ModelService {
 								if (!flag) {
 									if (configSchema.getSourceLanguage() != null
 											&& configSchema.getTargetLanguage() == null) {
-										throw new ModelValidationException(configSchema.getSourceLanguage()
-												+ " language is not supported by model :: " + modelId + " in "
+										throw new ModelValidationException(configSchema.getSourceLanguage()+"("+configSchema.getSourceScriptCode()
+												+ ") language is not supported by model :: " + modelId + " in "
 												+ taskType + " task type !");
 
 									} else {
 
-										throw new ModelValidationException(configSchema.getSourceLanguage() + "-"
-												+ configSchema.getTargetLanguage()
+										throw new ModelValidationException(configSchema.getSourceLanguage() 
+												+ "("+configSchema.getSourceScriptCode()+")-"+configSchema.getTargetLanguage()
+												+"("+configSchema.getTargetScriptCode()+")"
 												+ " language pair is not supported by model :: " + modelId + " in "
 												+ taskType + " task type !");
 
