@@ -27,7 +27,7 @@ components:
         feedbackTimeStamp:
           type: integer
           format: int64
-          description: unix timestamp when feedback is provided
+          description: unix timestamp in seconds when feedback is provided
         feedbackLanguage:
           $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'
           
