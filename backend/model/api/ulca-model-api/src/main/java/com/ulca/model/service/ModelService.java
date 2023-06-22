@@ -156,6 +156,9 @@ import io.swagger.pipelinerequest.TranslationResponseConfig;
 import io.swagger.pipelinerequest.TranslationTask;
 import io.swagger.pipelinerequest.TranslationTaskInference;
 import io.swagger.pipelinerequest.TranslationTaskInferenceInferenceApiKey;
+import io.swagger.pipelinerequest.TransliterationRequestConfig;
+import io.swagger.pipelinerequest.TransliterationTask;
+import io.swagger.pipelinerequest.TransliterationTaskInference;
 //import io.swagger.v3.core.util.Json;
 import io.swagger.pipelinerequest.PipelineResponse;
 import io.swagger.pipelinerequest.LanguagesList;
@@ -1519,6 +1522,16 @@ public class ModelService {
 				
 			}
 			
+			if(pipelineResponseSchemaList.get(i).getTaskType()=="transliteration") {
+				TransliterationTaskInference transliterationTaskInference= (TransliterationTaskInference)pipelineResponseSchemaList.get(i);
+				if(transliterationTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+					
+				}
+				
+			}
+			
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
@@ -1821,7 +1834,7 @@ public class ModelService {
 		ObjectMapper om = new ObjectMapper();
 		JSONObject jo = om.convertValue(jsonRequest, JSONObject.class);
 		log.info("jo :: " + jo.toString());
-		String[] taskArray = { "translation", "asr", "tts" };
+		String[] taskArray = { "translation", "asr", "tts","transliteration" };
 		List<String> taskList = Arrays.asList(taskArray);
 		JSONArray ja = (JSONArray) jo.get("pipelineTasks");
 		if (ja.length() < 1) {
@@ -1985,7 +1998,65 @@ public class ModelService {
 
 				}
 
-			} else if (pipelineTasks.get(i).getTaskType() == "translation") {
+			}else 	if (pipelineTasks.get(i).getTaskType() == "transliteration") {
+
+				TransliterationTask transliterationTask = (TransliterationTask) pipelineTasks.get(i);
+				if (transliterationTask.getConfig() != null) {
+					TransliterationRequestConfig transliterationRequestConfig = transliterationTask.getConfig();
+					if (pipelineTasks.get(i + 1).getTaskType() == "asr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
+
+						TranslationTask translationTaskNext = (TranslationTask) pipelineTasks.get(i + 1);
+						if (translationTaskNext.getConfig() != null) {
+							TranslationRequestConfig translationRequestConfigNext = translationTaskNext.getConfig();
+
+							if (transliterationRequestConfig.getLanguage().getSourceLanguage() != null
+									&& translationRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!transliterationRequestConfig.getLanguage().getSourceLanguage()
+										.equals(translationRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "tts") {
+						TTSTask tTSTaskNext = (TTSTask) pipelineTasks.get(i + 1);
+						if (tTSTaskNext.getConfig() != null) {
+							TTSRequestConfig tTSRequestConfigNext = tTSTaskNext.getConfig();
+
+							if (transliterationRequestConfig.getLanguage().getSourceLanguage() != null
+									&& tTSRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!transliterationRequestConfig.getLanguage().getSourceLanguage()
+										.equals(tTSRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					} else {
+						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
+
+					}
+
+				}
+
+			} 
+			
+			
+			else if (pipelineTasks.get(i).getTaskType() == "translation") {
 
 				TranslationTask translationTask = (TranslationTask) pipelineTasks.get(i);
 				if (translationTask.getConfig() != null) {
