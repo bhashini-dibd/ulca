@@ -291,6 +291,7 @@ components:
         - mp3
         - flac
         - sph
+        - m4a
     SupportedFormats:
       anyOf:
         - $ref: "#/components/schemas/AudioFormat"

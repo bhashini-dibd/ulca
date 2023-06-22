@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.0
+  version: 1.0.1
 servers:
   - url: /ulca
 paths: {}
@@ -25,7 +25,6 @@ components:
       required:
         - pipelineResponseConfig
         - languages
-        - pipelineInferenceAPIEndPoint
       type: object
       properties:
         languages:
@@ -33,23 +32,21 @@ components:
         pipelineResponseConfig:
           $ref: '#/components/schemas/TaskSchemaList'
         
-        dataTrackingToggleUrl:
-          description: URL to toggle data logging
-          type: string
-          format: url
         feedbackUrl:
           description: URL to give feedback regarding pipeline
           type: string
           format: url
         pipelineInferenceAPIEndPoint:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+        pipelineInferenceSocketEndPoint:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
       # anyOf:  
       #   - properties:
-      #      pipelineInferenceAPIEndPoint:
+      #     pipelineInferenceAPIEndPoint:
       #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
       #     required: [pipelineInferenceAPIEndPoint] 
       #   - properties:
-      #      pipelineInferenceSocketEndPoint:
+      #     pipelineInferenceSocketEndPoint:
       #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
       #     required: [pipelineInferenceSocketEndPoint] 
     PipelineConfig:
@@ -64,12 +61,14 @@ components:
     PipelineTask:
       oneOf:
         - $ref: '#/components/schemas/TranslationTask'
+        - $ref: '#/components/schemas/TransliterationTask'
         - $ref: '#/components/schemas/ASRTask'
         - $ref: '#/components/schemas/TTSTask'
       discriminator:
         propertyName: taskType
         mapping:
           translation: '#/components/schemas/TranslationTask'
+          transliteration: '#/components/schemas/TransliterationTask'
           asr: '#/components/schemas/ASRTask'
           tts: '#/components/schemas/TTSTask'
     PipelineTasks:
@@ -85,6 +84,15 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: '#/components/schemas/TranslationRequestConfig'
+    TransliterationTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/TransliterationRequestConfig'
     ASRTask:
       required:
         - taskType
@@ -104,6 +112,13 @@ components:
         config:
           $ref: '#/components/schemas/TTSRequestConfig'
     TranslationRequestConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    TransliterationRequestConfig:
       required:
         - language
       type: object
@@ -141,12 +156,14 @@ components:
     TaskSchema:
       oneOf:
         - $ref: '#/components/schemas/TranslationTaskInference'
+        - $ref: '#/components/schemas/TransliterationTaskInference'
         - $ref: '#/components/schemas/ASRTaskInference'
         - $ref: '#/components/schemas/TTSTaskInference'
       discriminator:
         propertyName: taskType
         mapping:
           translation: '#/components/schemas/TranslationTaskInference'
+          transliteration : '#/components/schemas/TransliterationTaskInference'
           asr: '#/components/schemas/ASRTaskInference'
           tts: '#/components/schemas/TTSTaskInference'
     TaskSchemaList:
@@ -188,6 +205,39 @@ components:
           description: list of
           items:
             $ref: '#/components/schemas/TranslationResponseConfig'
+            
+    TransliterationTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        inferenceApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/TransliterationResponseConfig'
+            
     ASRTaskInference:
       required:
         - taskType
@@ -251,6 +301,27 @@ components:
           items:
             $ref: '#/components/schemas/TTSResponseConfig'
     TranslationResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+    TransliterationResponseConfig:
       required:
         - language
         - serviceId

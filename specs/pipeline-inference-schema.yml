@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 1.0.4
+  version: 1.0.5
 servers:
   - url: /ulca
 paths: {}
@@ -19,7 +19,6 @@ components:
         - refUrl
         - domain
         - serviceProvider
-        - inferenceEndPoint
         - supportedPipelines
         - taskSpecifications
       type: object
@@ -54,22 +53,14 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
+        inferenceSocketEndPoint:
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
         supportedPipelines:
           $ref: '#/components/schemas/ListOfPipelines'
         taskSpecifications:
           $ref: '#/components/schemas/TaskSpecifications'
         apiEndPoints:
           $ref: '#/components/schemas/ApiEndPoint'
-      # anyOf:  
-      #   - properties:
-      #      inferenceEndPoint:
-      #       $ref: '#/components/schemas/InferenceAPIEndPoint'
-      #     required: [inferenceEndPoint] 
-      #   - properties:
-      #      inferenceSocketEndPoint:
-      #       $ref: '#/components/schemas/InferenceAPIEndPoint'
-      #     required: [inferenceSocketEndPoint] 
-
     ListOfPipelines:
       type: array
       items:
@@ -122,7 +113,7 @@ components:
             pollInterval:
               type: integer
               description: polling interval in millisec to check for status
-      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type. `NOTE:` Either of inferenceEndPoint or inferenceSocketEndPoint is is mandatory at submission time
     TaskSpecifications:
       type: array
       items:
@@ -160,22 +151,21 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
         targetLanguage:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        sourceScriptCode:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
+        targetScriptCode:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
     ApiEndPoint:
       required:
         - apiKeyUrl
-        - dataTrackingToggleUrl
         - feedbackUrl
       type: object
       properties:
         apiKeyUrl:
-          description: URL to generate api keys (using POST Method) and delete api keys (using DELETE method).
-          type: string
-          format: url
-        dataTrackingToggleUrl:
-          description: URL to toggle data logging
+          description: URL to generate api keys (using POST Method) , delete api keys (using DELETE method) and toggle data logging( using PATCH Method).
           type: string
           format: url
         feedbackUrl:
-          description: URL to give feedback regarding pipeline
+          description: URL to give feedback regarding pipeline (using POST Method)
           type: string
           format: url
