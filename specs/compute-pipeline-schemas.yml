@@ -383,8 +383,8 @@ components:
           
     ControlConfig:
       description: generic settings related to pipeline
-      required:
-        - dataTracking
+      # required:
+      #   - dataTracking
       type: object
       properties:
         dataTracking:
