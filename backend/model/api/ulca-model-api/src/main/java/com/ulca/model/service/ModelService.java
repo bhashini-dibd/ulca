@@ -157,6 +157,7 @@ import io.swagger.pipelinerequest.TranslationTask;
 import io.swagger.pipelinerequest.TranslationTaskInference;
 import io.swagger.pipelinerequest.TranslationTaskInferenceInferenceApiKey;
 import io.swagger.pipelinerequest.TransliterationRequestConfig;
+import io.swagger.pipelinerequest.TransliterationResponseConfig;
 import io.swagger.pipelinerequest.TransliterationTask;
 import io.swagger.pipelinerequest.TransliterationTaskInference;
 //import io.swagger.v3.core.util.Json;
@@ -1425,6 +1426,10 @@ public class ModelService {
 
 		// Set response data (endpoint url, feedback url, api key, socket url)
 		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());	
+		//TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = new TranslationTaskInferenceInferenceApiKey();
+		//translationTaskInferenceInferenceApiKey.setName("name");
+	//	translationTaskInferenceInferenceApiKey.setValue("value");
+		
 		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
 				ulcaApiKey, pipelineModel.getPipelineModelId());
 		
@@ -2016,7 +2021,7 @@ public class ModelService {
 							if (transliterationRequestConfig.getLanguage().getSourceLanguage() != null
 									&& translationRequestConfigNext.getLanguage().getSourceLanguage() != null) {
 
-								if (!transliterationRequestConfig.getLanguage().getSourceLanguage()
+								if (!transliterationRequestConfig.getLanguage().getTargetLanguage()
 										.equals(translationRequestConfigNext.getLanguage().getSourceLanguage())) {
 									throw new PipelineValidationException("Invalid Language Sequence!",
 											HttpStatus.BAD_REQUEST);
@@ -2035,7 +2040,7 @@ public class ModelService {
 							if (transliterationRequestConfig.getLanguage().getSourceLanguage() != null
 									&& tTSRequestConfigNext.getLanguage().getSourceLanguage() != null) {
 
-								if (!transliterationRequestConfig.getLanguage().getSourceLanguage()
+								if (!transliterationRequestConfig.getLanguage().getTargetLanguage()
 										.equals(tTSRequestConfigNext.getLanguage().getSourceLanguage())) {
 									throw new PipelineValidationException("Invalid Language Sequence!",
 											HttpStatus.BAD_REQUEST);
@@ -2316,6 +2321,25 @@ public class ModelService {
                     ttsTaskInference.addConfigItem(ttsResponseConfig);
                 }
                 schemaList.add(ttsTaskInference);
+            }
+            if(individualSpec.getTaskType() == SupportedTasks.TRANSLITERATION)
+            {
+                TransliterationTaskInference transliterationTaskInference = new TransliterationTaskInference();
+                for(ConfigSchema curConfigSchema : individualSpec.getTaskConfig())
+                {
+                    TransliterationResponseConfig transliterationResponseConfig = new TransliterationResponseConfig();
+                    log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    LanguagePairs langPair = model.getLanguages();
+                    for (LanguagePair lp : langPair) {
+                    	transliterationResponseConfig.setLanguage(lp);
+                    }
+                    transliterationResponseConfig.setServiceId(curConfigSchema.getServiceId());
+                    transliterationResponseConfig.setModelId(curConfigSchema.getModelId());
+					
+                    transliterationTaskInference.addConfigItem(transliterationResponseConfig);
+                }
+                schemaList.add(transliterationTaskInference);
             }
         }
 
