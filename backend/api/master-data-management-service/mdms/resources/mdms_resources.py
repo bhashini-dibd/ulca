@@ -85,22 +85,24 @@ class PipeLineFeedBack(Resource):
             git_file_location   =   f"{config.git_folder_prefix}/{config.masPipe}.json"
             get_pipeline_qns = utils.read_from_git(git_file_location) #list of dict
             if get_pipeline_qns and isinstance(get_pipeline_qns,list):
-                language_exists = False
-                for pipe in get_pipeline_qns:# and 'taskFeedback' in get_pipeline_qns.keys():
-                    if  'taskFeedback' in pipe.keys() and 'feedbackLanguage' in pipe.keys() :
-                        if body['feedbackLanguage'] == pipe['feedbackLanguage']:
+                language_exists,tasks_exists = False,False
+                for pipe_qns in get_pipeline_qns:
+                    if  'taskFeedback' in pipe_qns.keys() and 'feedbackLanguage' in pipe_qns.keys() :
+                        if body['feedbackLanguage'] == pipe_qns['feedbackLanguage']:
                             language_exists = True
-                            for task in pipe['taskFeedback']:
+                            for task in pipe_qns['taskFeedback']:
                                 if 'taskType' in task.keys():
                                     if task['taskType']  in body['supportedTasks']:
+                                        tasks_exists = True
                                         add_tasktype.append(task)
-                                        add_pipeFeed['feedbackLanguage'], add_pipeFeed['pipelineFeedback'], add_pipeFeed['taskFeedback'] = body['feedbackLanguage'],pipe['pipelineFeedback'], add_tasktype         
-                                        log.info(f'this is the len of dictionary bitvhhhhh {len(add_pipeFeed)}')
-                            if add_pipeFeed:
-                                return add_pipeFeed
-                            #break
+                                        add_pipeFeed['feedbackLanguage'], add_pipeFeed['pipelineFeedback'], add_pipeFeed['taskFeedback'] = body['feedbackLanguage'],pipe_qns['pipelineFeedback'], add_tasktype         
+                            if tasks_exists == True:      
+                                if add_pipeFeed:
+                                    return add_pipeFeed
+                            else:
+                                return post_error(400,"Please check the supported Tasks")
                 if language_exists == False: 
-                    return post_error(400,"Service Exception, please check supported Tasks")
+                    return post_error(400,"Service Exception, please check feedback Language.")
             else:
                 return post_error("Could not get Pipeline Questions from Git",f"Exception occurred:{e}"), 400
         except Exception as e:
