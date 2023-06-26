@@ -1,5 +1,5 @@
 {
-    "name": "AI4Bharat Indic-TTS : English",
+    "name": "AI4Bharat Indic-TTS : Manipuri (Meitei script)",
     "version": "v1.0",
     "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both 'female' and 'male' voices. All the models were trained using the IndicTTS dataset from SMT Lab, IITM.",
     "refUrl": "https://github.com/AI4Bharat/Indic-TTS",
@@ -8,7 +8,8 @@
     },
     "languages": [
         {
-            "sourceLanguage": "en"
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei"
         }
     ],
     "license": "mit",
@@ -47,13 +48,14 @@
             "request": {
                 "input": [
                     {
-                        "source": "Bro, what's up?"
+                        "source": "ꯚꯥꯔꯠ ꯑꯁꯤ ꯑꯩꯒꯤ ꯂꯩꯕꯥꯛꯅꯤ꯫꯫"
                     }
                 ],
                 "config": {
                     "gender": "male",
                     "language": {
-                        "sourceLanguage": "en"
+                        "sourceLanguage": "mni",
+                        "sourceScriptCode": "Mtei"
                     }
                 }
             }
