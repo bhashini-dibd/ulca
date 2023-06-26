@@ -81,6 +81,10 @@ class PipeLineFeedBack(Resource):
         add_tasktype = []
         if 'feedbackLanguage' not in body.keys() and 'supportedTasks' not in body.keys():
             return post_error(400,"something wrong with the feedbackLanguage and supportedTasks ")
+        if len(body['supportedTasks']) == 0:
+            FLAG = True
+        elif len(body['supportedTasks']) != 0:
+            FLAG = False
         try:
             git_file_location   =   f"{config.git_folder_prefix}/{config.masPipe}.json"
             get_pipeline_qns = utils.read_from_git(git_file_location) #list of dict
@@ -90,17 +94,21 @@ class PipeLineFeedBack(Resource):
                     if  'taskFeedback' in pipe_qns.keys() and 'feedbackLanguage' in pipe_qns.keys() :
                         if body['feedbackLanguage'] == pipe_qns['feedbackLanguage']:
                             language_exists = True
-                            for task in pipe_qns['taskFeedback']:
-                                if 'taskType' in task.keys():
-                                    if task['taskType']  in body['supportedTasks']:
-                                        tasks_exists = True
-                                        add_tasktype.append(task)
-                                        add_pipeFeed['feedbackLanguage'], add_pipeFeed['pipelineFeedback'], add_pipeFeed['taskFeedback'] = body['feedbackLanguage'],pipe_qns['pipelineFeedback'], add_tasktype         
-                            if tasks_exists == True:      
-                                if add_pipeFeed:
-                                    return add_pipeFeed
-                            else:
-                                return post_error(400,"Please check the supported Tasks")
+                            if FLAG:
+                                add_pipeFeed['feedbackLanguage'], add_pipeFeed['pipelineFeedback'], add_pipeFeed['taskFeedback'] = body['feedbackLanguage'], pipe_qns['pipelineFeedback'], pipe_qns['taskFeedback']
+                                return add_pipeFeed
+                            elif not FLAG:
+                                for task in pipe_qns['taskFeedback']:
+                                    if 'taskType' in task.keys():
+                                        if task['taskType']  in body['supportedTasks']:
+                                            tasks_exists = True
+                                            add_tasktype.append(task)
+                                            add_pipeFeed['feedbackLanguage'], add_pipeFeed['pipelineFeedback'], add_pipeFeed['taskFeedback'] = body['feedbackLanguage'],pipe_qns['pipelineFeedback'], add_tasktype         
+                                if tasks_exists == True:      
+                                    if add_pipeFeed:
+                                        return add_pipeFeed
+                                else:
+                                    return post_error(400,"Please check the supported Tasks")
                 if language_exists == False: 
                     return post_error(400,"Service Exception, please check feedback Language.")
             else:
