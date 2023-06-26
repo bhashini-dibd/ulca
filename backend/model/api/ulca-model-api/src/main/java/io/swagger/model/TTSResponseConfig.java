@@ -53,6 +53,17 @@ public class TTSResponseConfig   {
   @JsonProperty("duration")
   private BigDecimal duration = null;
 
+  @JsonProperty("postProcessors")
+  private String postProcessors = null;
+
+  public String getPostProcessors() {
+    return postProcessors;
+  }
+
+  public void setPostProcessors(String postProcessors) {
+    this.postProcessors = postProcessors;
+  }
+
   public TTSResponseConfig modelId(String modelId) {
     this.modelId = modelId;
     return this;
@@ -273,12 +284,13 @@ public class TTSResponseConfig   {
         Objects.equals(this.bitsPerSample, ttSResponseConfig.bitsPerSample) &&
         Objects.equals(this.encoding, ttSResponseConfig.encoding) &&
         Objects.equals(this.speed, ttSResponseConfig.speed) &&
+        Objects.equals(this.postProcessors, ttSResponseConfig.postProcessors) &&
         Objects.equals(this.duration, ttSResponseConfig.duration);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, language, gender, audioFormat, channel, samplingRate, bitsPerSample, encoding, speed, duration);
+    return Objects.hash(modelId, language, gender, audioFormat, channel, samplingRate, bitsPerSample, encoding, speed, duration, postProcessors);
   }
 
   @Override
@@ -296,6 +308,7 @@ public class TTSResponseConfig   {
     sb.append("    encoding: ").append(toIndentedString(encoding)).append("\n");
     sb.append("    speed: ").append(toIndentedString(speed)).append("\n");
     sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
+    sb.append("    postProcessors: ").append(toIndentedString(postProcessors)).append("\n");
     sb.append("}");
     return sb.toString();
   }

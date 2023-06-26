@@ -793,9 +793,7 @@ public class ModelInferenceEndPointService {
 			log.info("httpResponse :::::::::"+httpResponse.toString());
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 				log.info("body :::::::::::::: "+body.toString());
-
-				log.info(httpResponse.toString());
-
+				
 				throw new ModelComputeException(httpResponse.message(), body.toString(),
 						HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -804,7 +802,6 @@ public class ModelInferenceEndPointService {
 
 			try {
 				TTSResponse ttsResponse = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
-
 				if (ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <= 0) {
 					throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
 							HttpStatus.BAD_REQUEST);
