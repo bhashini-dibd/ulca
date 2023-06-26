@@ -366,7 +366,7 @@ const ChartRender = (props) => {
 							{ field: "sourceLanguage", value: 'en' },
 							]);
 						setAxisValue({ xAxis: "Languages", yAxis: "Count" });
-						setTitle("Number of parallel sentences per language with");
+						setTitle("Number of glossaries per language with");
 						} else if (page === 1) {
 						setTitle(
 							`Number of records in ${

@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 import ProjectVaani from "./components/ProjectVaani";
 
 function App(props) {
-  const componentObj = [
+  const componentObj = [ 
     // { component: <ProjectVaani />},
     { component: <Dataset /> },
     { component: <Model /> },

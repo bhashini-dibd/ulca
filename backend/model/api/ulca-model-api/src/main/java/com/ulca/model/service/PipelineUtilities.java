@@ -36,6 +36,9 @@ import io.swagger.pipelinerequest.TranslationRequestConfig;
 import io.swagger.pipelinerequest.TranslationResponseConfig;
 import io.swagger.pipelinerequest.TranslationTask;
 import io.swagger.pipelinerequest.TranslationTaskInference;
+import io.swagger.pipelinerequest.TransliterationResponseConfig;
+import io.swagger.pipelinerequest.TransliterationTask;
+import io.swagger.pipelinerequest.TransliterationTaskInference;
 import io.swagger.pipelinerequest.TTSResponseConfig;
 
 import lombok.extern.slf4j.Slf4j;
@@ -199,7 +202,21 @@ public class PipelineUtilities {
                         taskSpecifications = getPossibleConfigForCurrentTask(lp, pipelineSpecification, taskSpecifications);
                     }
                 }
-            } else if (pipelineTask instanceof ASRTask) {
+            } else if (pipelineTask instanceof TransliterationTask) {
+            	TransliterationTask transliterationTask = (TransliterationTask) pipelineTask;
+                // get language pair if it exists
+                if (transliterationTask.getConfig() != null && transliterationTask.getConfig().getLanguage() != null) {
+                    lp = transliterationTask.getConfig().getLanguage();
+                }
+                // get pipeline model task specifications for this particular task
+                for (TaskSpecification pipelineSpecification : pipelineModel.getTaskSpecifications()) {
+                    if (pipelineSpecification.getTaskType() == SupportedTasks.TRANSLITERATION) {
+                        taskSpecifications = getPossibleConfigForCurrentTask(lp, pipelineSpecification, taskSpecifications);
+                    }
+                }
+            }
+            
+            else if (pipelineTask instanceof ASRTask) {
                 ASRTask asrTask = (ASRTask) pipelineTask;
                 if (asrTask.getConfig() != null && asrTask.getConfig().getLanguage() != null) {
                     lp = asrTask.getConfig().getLanguage();
@@ -356,6 +373,25 @@ public class PipelineUtilities {
                     ttsTaskInference.addConfigItem(ttsResponseConfig);
                 }
                 schemaList.add(ttsTaskInference);
+            }
+            if(individualSpec.getTaskType() == SupportedTasks.TRANSLITERATION)
+            {
+                TransliterationTaskInference transliterationTaskInference = new TransliterationTaskInference();
+                for(ConfigSchema curConfigSchema : individualSpec.getTaskConfig())
+                {
+                    TransliterationResponseConfig transliterationResponseConfig = new TransliterationResponseConfig();
+                    log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    LanguagePairs langPair = model.getLanguages();
+                    for (LanguagePair lp : langPair) {
+                    	transliterationResponseConfig.setLanguage(lp);
+                    }
+                    transliterationResponseConfig.setServiceId(curConfigSchema.getServiceId());
+                    transliterationResponseConfig.setModelId(curConfigSchema.getModelId());
+					
+                    transliterationTaskInference.addConfigItem(transliterationResponseConfig);
+                }
+                schemaList.add(transliterationTaskInference);
             }
         }
 

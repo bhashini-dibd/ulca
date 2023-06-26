@@ -24,7 +24,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ulca.benchmark.util.FileUtility;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.ModelComputeException;
@@ -587,7 +590,10 @@ public class ModelInferenceEndPointService {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
-
+           
+			log.info("requestJson  :::   "+requestJson.toString());
+			
+			
 			//OkHttpClient client = new OkHttpClient();
 			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
                     .writeTimeout(60, TimeUnit.SECONDS)
@@ -754,22 +760,41 @@ public class ModelInferenceEndPointService {
 				config.setDuration(compute.getDuration());
 			}
 			request.setConfig(config);
+			 
+			
+			//log.info("request with null :: "+request.toString());
+			
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.setSerializationInclusion(Include.NON_NULL);
+			mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			
+
+			ObjectNode node = mapper.valueToTree(request);
+			
+			//log.info("request without null :: "+node.toString());
 
 			ObjectMapper objectMapper = new ObjectMapper();
-			String requestJson = objectMapper.writeValueAsString(request);
-
-			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			String requestJsonWithoutNull = objectMapper.writeValueAsString(node);
+			
+			log.info("requestJson without null :: "+requestJsonWithoutNull.toString());
+			
+	
+		RequestBody body = RequestBody.create(requestJsonWithoutNull.toString(), MediaType.parse("application/json"));
+			
+			log.info("body :::::::::::::: "+body.toString());
 		//	Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
             Request httpRequest =checkInferenceApiKeyValueAtCompute(inferenceAPIEndPoint,body);
 	   
+            log.info(" httpRequest  :::::::"+httpRequest.toString());
 			OkHttpClient newClient = getTrustAllCertsClient();
 			Response httpResponse = newClient.newCall(httpRequest).execute();
-
+            
+			
+			log.info("httpResponse :::::::::"+httpResponse.toString());
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
-
-				log.info(httpResponse.toString());
-
-				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Failed",
+				log.info("body :::::::::::::: "+body.toString());
+				
+				throw new ModelComputeException(httpResponse.message(), body.toString(),
 						HttpStatus.valueOf(httpResponse.code()));
 			}
 
@@ -777,7 +802,6 @@ public class ModelInferenceEndPointService {
 
 			try {
 				TTSResponse ttsResponse = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
-
 				if (ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <= 0) {
 					throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
 							HttpStatus.BAD_REQUEST);
@@ -1187,9 +1211,9 @@ public class ModelInferenceEndPointService {
 					
 					
 				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(originalInferenceApiKeyName, originalInferenceApiKeyValue).post(body).build();
-				    log.info("httpRequest : "+httpRequest.toString());
+				    log.info("httpRequest with headers : "+httpRequest.toString());
 				
-				
+				    
 			       }
 			}else {
 				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();

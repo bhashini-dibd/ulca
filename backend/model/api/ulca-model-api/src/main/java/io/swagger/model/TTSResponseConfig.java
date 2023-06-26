@@ -53,6 +53,8 @@ public class TTSResponseConfig   {
   @JsonProperty("duration")
   private BigDecimal duration = null;
 
+
+
   public TTSResponseConfig modelId(String modelId) {
     this.modelId = modelId;
     return this;
