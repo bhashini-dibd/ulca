@@ -38,7 +38,7 @@
         ]
     },
     "inferenceEndPoint": {
-        "callbackUrl": "https://tts-api.ai4bharat.org/",
+        "callbackUrl": "https://api.dhruva.ai4bharat.org/services/inference/tts?serviceId=ai4bharat/indic-tts-coqui-indo_aryan-gpu--t4",
         "schema": {
             "taskType": "tts",
             "modelProcessingType": {
