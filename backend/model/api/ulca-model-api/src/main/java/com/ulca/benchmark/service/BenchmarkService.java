@@ -105,7 +105,7 @@ public class BenchmarkService {
 		benchmark.setCreatedOn(Instant.now().toEpochMilli());
 
 		Benchmark existingBenchmark = benchmarkDao.findByName(request.getDatasetName());
-		if (existingBenchmark == null) {
+		if (existingBenchmark == null || existingBenchmark.getStatus().equals("Failed")) {
 			try {
 				benchmarkDao.save(benchmark);
 			} catch (DuplicateKeyException ex) {
