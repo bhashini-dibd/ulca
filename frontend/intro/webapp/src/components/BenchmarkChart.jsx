@@ -24,6 +24,8 @@ import { DatasetItems, Language } from "../configs/DatasetItems";
 import TitleBar from "./TitleBar";
 import image from "../img/shape2.svg";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import ResponsiveChartContainer from "./ResponsiveChartContainer"
+
 var colors = [
   "188efc",
   "7a47a4",
@@ -342,7 +344,7 @@ const ChartRender = (props) => {
             </div>
 
             <div className={classes.title}>
-              <ResponsiveContainer width="98%" height={600}>
+              <ResponsiveChartContainer >
                 <BarChart
                   width={900}
                   height={400}
@@ -424,7 +426,7 @@ const ChartRender = (props) => {
                       })}
                   </Bar>
                 </BarChart>
-              </ResponsiveContainer>
+              </ResponsiveChartContainer>
             </div>
           </Paper>
         </div>
