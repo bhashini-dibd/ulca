@@ -107,6 +107,10 @@ public class BenchmarkService {
 		Benchmark existingBenchmark = benchmarkDao.findByName(request.getDatasetName());
 		if (existingBenchmark == null || existingBenchmark.getStatus().equals("Failed")) {
 			try {
+				if(existingBenchmark != null && existingBenchmark.getStatus().equals("Failed"))
+				{
+					benchmarkDao.deleteById(existingBenchmark.getBenchmarkId());
+				}
 				benchmarkDao.save(benchmark);
 			} catch (DuplicateKeyException ex) {
 				log.info("benchmark with same name exists.: " + benchmark.getName());
