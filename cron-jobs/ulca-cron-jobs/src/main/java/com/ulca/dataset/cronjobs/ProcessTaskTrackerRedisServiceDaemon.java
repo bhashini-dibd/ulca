@@ -360,7 +360,15 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			
 			if(v1 && ingestSuccess==0) {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
-			}else {
+			}else if(v2 && validateSuccess==0) {
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
+
+			}
+			else if(v3 && publishSuccess==0) {
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
+
+			}
+			else {
 				
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
 			}
