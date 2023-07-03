@@ -44,6 +44,7 @@ public class BenchmarkController {
 		log.info("******** Entry BenchMarkController:: Submit *******");
 		BenchmarkSubmitResponse response = benchmarkService.submitBenchmark(request);
 		return new ResponseEntity<>(response, HttpStatus.OK);
+		
 	}
 	
 	@GetMapping("/listByUserId")
