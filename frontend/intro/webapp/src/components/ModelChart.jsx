@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { withStyles, Typography, Paper, Button,TextField } from "@material-ui/core";
 import ChartStyles from "../styles/Dashboard";
-import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, LabelList, YAxis,Label, Tooltip } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, LabelList, YAxis,Label, Tooltip,Brush } from 'recharts';
 import FetchLanguageDataSets from "../actions/FetchLanguageDataSets";
 import { ArrowBack } from '@material-ui/icons';
 import {DatasetItems,Language} from "../configs/DatasetItems";
@@ -235,7 +235,7 @@ const ChartRender = (props) => {
 								</XAxis>
 								<YAxis padding={{ top: 80 }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)}><Label value= {axisValue.yAxis} angle= {-90} position= 'insideLeft' fontWeight="bold" fontSize={16}></Label></YAxis>
 
-
+								{/* <Brush dataKey='label' height={30} stroke="#8884d8"/> */}
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
 								<Bar margin={{ top: 140, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }}>
 									<LabelList
