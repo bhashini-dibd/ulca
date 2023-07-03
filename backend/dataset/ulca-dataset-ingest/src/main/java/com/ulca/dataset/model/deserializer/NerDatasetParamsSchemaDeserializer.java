@@ -32,6 +32,7 @@ import io.swagger.model.NerDatasetParamsSchema;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
 import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedScripts;
 import io.swagger.model.SupportedTagsFormat;
 import lombok.extern.slf4j.Slf4j;
 
@@ -131,6 +132,31 @@ public class NerDatasetParamsSchemaDeserializer extends StdDeserializer<NerDatas
 					lp.setSourceLanguageName(targetLanguageName);
 				}
 
+				// Script code addition
+				
+				
+				if (node.get("languages").has("sourceScriptCode")) {
+					String sourceScriptCode = node.get("languages").get("sourceScriptCode").asText();
+					if(SupportedScripts.fromValue(sourceScriptCode) != null) {
+						lp.setSourceScriptCode(SupportedScripts.fromValue(sourceScriptCode));
+					}else {
+						errorList.add("sourceScriptCode is not one of defined language pair");
+					}
+
+				} 
+			
+				if (node.get("languages").has("targetScriptCode")) {
+					String targetScriptCode = node.get("languages").get("targetScriptCode").asText();
+					if(SupportedScripts.fromValue(targetScriptCode) != null) {
+						lp.setTargetScriptCode(SupportedScripts.fromValue(targetScriptCode));
+					}else {
+						errorList.add("targetScriptCode is not one of defined language pair");
+					}
+
+				}
+			
+				
+				
 				nerParamsSchema.setLanguages(lp);
 			} catch (Exception e) {
 				errorList.add("languages field value not proper.");
