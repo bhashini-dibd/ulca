@@ -1,0 +1,3668 @@
+[{
+    "feedbackLanguage": "en",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "Are you satisfied with the pipeline response?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs",
+            "comment"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "Are you satisfied with the ASR response?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "How would you rate the Speech Recognition?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the speech accurately recognised?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that ASR can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Punctuations"
+            ]
+          },
+          {
+            "question": "Was the background noise handled properly?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was the application able to recognise the speech if you spoke in an accented tone?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case where the Speech was constantly incorrectly recognised?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the translation?",
+            "supportedFeedbackTypes": [
+              "rating"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the application able to translate complex sentences?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Singular / Plural",
+              "Genders"
+            ]
+          },
+          {
+            "question": "Was the translated text grammatically correct and well-structured?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Is there any other specific case where the translation seemed to fail?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the speech output",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the pronunciation of words accurate and natural?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs"
+            ]
+          },
+          {
+            "question": "Was the speech output clear and easy to understand?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case for which the application failed to provide proper speech output?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          },
+          {
+            "question": "Was the speed of the speech output proper?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+,
+  {
+    "feedbackLanguage": "hi",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "क्या आप पाइपलाइन से संतुष्ट हैं?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "आप वाक् अभिज्ञान का मूल्यांकन कैसे करेंगे?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "क्या वार्ता सही ढंग से पहचानी जा सकती है?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ऐसे कौन से क्षेत्र हैं जिनमें वार्ता-से-लिपि में सुधार किया जा सकता है?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नाम",
+              "स्थान",
+              "अंक",
+              "तारीखें",
+              "अंग्रेजी शब्द/कोड मिश्रित शब्द",
+              "तकनीकी शब्द",
+              "यूआरएल",
+              "विराम चिह्न"
+            ]
+          },
+          {
+            "question": "क्या पृष्ठभूमि का कोलाहल ठीक से नियंत्रित किया गया था?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "यदि आप विशिष्ट उच्चारण में बात करते हैं तो क्या एप वार्ता को पहचानने में सक्षम रहता है?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "क्या ऐसे कोई विशिष्ट मामले हैं जहां वार्ता की लगातार गलत पहचान की गई?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "आप अनुवाद का मूल्यांकन कैसे करेंगे?",
+            "supportedFeedbackTypes": [
+              "rating"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "क्या एप जटिल वाक्यों का अनुवाद करने में सक्षम था?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "किन मामलों में अनुवाद प्रक्रिया में सुधार संभव है?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नाम",
+              "स्थान",
+              "अंक",
+              "तारीखें",
+              "अंग्रेजी शब्द/कोड मिश्रित शब्द",
+              "तकनीकी शब्द",
+              "यूआरएल",
+              "लिंग",
+              "एकवचन / बहुवचन",
+              "विराम चिह्न"
+            ]
+          },
+          {
+            "question": "क्या अनुवादित लिपि व्याकरणिक रूप से सही और अच्छी तरह से संरचित थी?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "क्या कोई अन्य विशिष्ट मामला था जहां अनुवाद विफल होता लग रहा था?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "आप वार्ता के आउटपुट का मूल्यांकन कैसे करेंगे?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "क्या शब्दों का उच्चारण सही और स्वाभाविक था?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ऐसे कौन से क्षेत्र हैं जिनमें लिपि-से-वार्ता में सुधार किया जा सकता है?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नाम",
+              "स्थान",
+              "अंक",
+              "तारीखें",
+              "अंग्रेजी शब्द/कोड मिश्रित शब्द",
+              "तकनीकी शब्द",
+              "यूआरएल",
+              "विराम चिह्न",
+              "पृष्ठभूमि कोलाहल",
+              "शब्दों का लोप",
+              "अस्वाभाविक वार्ता"
+            ]
+          },
+          {
+            "question": "क्या वार्ता का आउटपुट स्पष्ट और समझने में आसान था?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "क्या कोई अन्य विशिष्ट मामला था जिसके लिए एप उचित वाक् आउटपुट प्रदान करने में विफल रहा?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          },
+          {
+            "question": "क्या वार्ता के आउटपुट की गति सही थी?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "as",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "গোটৰ পাইপলাইনক লৈ আপুনি সন্তুষ্টনে?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "আপুনি বচন চিনাক্তকৰণক কেনেদৰে ৰেটিং দিব?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "উক্তিটো সঠিকভাৱে চিনাক্ত কৰা হৈছিলনে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "কোনবোৰ ক্ষেত্ৰত উক্তিক লিপিলৈ ৰূপান্তৰ কৰা প্ৰক্ৰিয়াটোৱে উন্নতি কৰিব পাৰে?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "নাম",
+              "সথান",
+              "সংখ্যা",
+              "তাৰিখ",
+              "ইংৰাজী শব্দ / ক'ড মিশ্ৰিত শব্দ",
+              "কাৰিকৰী শব্দ ",
+             "ইউ.আৰ.এল.",
+              "যতি-চিহ্নৰ প্ৰয়োগ"
+            ]
+          },
+          {
+            "question": "নেপথ্যৰ কোলাহলবোৰ সঠিকভাৱে নিয়ন্ত্ৰণ কৰা হৈছিলনে? ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "আপুনি বিশেষ এটা স্বৰত কথা কওঁতে এপ্লিকেশ্যনটোৱে উক্তিটো চিনাক্ত কৰিব পাৰিছিলনে ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "এনেকুৱা কিবা নিৰ্দিষ্ট পৰিস্থিতি আছে নেকি য'ত উক্তিটো বাৰে বাৰে ভুলকৈ চিনাক্ত কৰা হৈছিল?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "উক্তিৰ আউটপুটক আপুনি কিদৰে মূল্যাংকন কৰিব?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "শব্দবোৰৰ উচ্চাৰণ সঠিক আৰু স্বাভাৱিক যেন লাগিছিলনে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "কোনবোৰ ক্ষেত্ৰত লিপিক উক্তিলৈ ৰূপান্তৰ কৰা প্ৰক্ৰিয়াটোৱে উন্নতি কৰিব পাৰে?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "নাম",
+              "স্থান",
+              "সংখ্যা",
+              "তাৰিখ",
+              "ইংৰাজী শব্দ / ক'ড মিশ্ৰিত শব্দ",
+              "কাৰিকৰী শব্দ", 
+              "ইউ.আৰ.এল.",
+              "যতি-চিহ্নৰ প্ৰয়োগ",
+              "নেপথ্যৰ কোলাহল",
+              "শব্দ বাদ পৰা",
+              "অস্বাভাবিক উক্তি"
+            ]
+          },
+          {
+            "question": "উক্তিৰ আউটপুটটো স্পষ্ট আৰু বুজিবলৈ সহজ আছিলনে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "উক্তি আউপুটৰ গতি সঠিক আছিলনে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "অনুুবাদক আপুনি কেনেদৰে মূল্যাংকন কৰিব?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "এপ্লিকেশ্যনটোৱে জটিল বাক্যসমূহ অনুবাদ কৰিবলৈ সক্ষম হৈছিলনে? ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "কোনবোৰ ক্ষেত্ৰত অনুবাদ প্ৰক্ৰিয়াটোৱে উন্নতি কৰিব পাৰে?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "নাম",
+              "স্থান",
+              "সংখ্যা",
+              "তাৰিখ",
+              "ইংৰাজী শব্দ / ক'ড মিশ্ৰিত শব্দ",
+              "কাৰিকৰী শব্দ" ,
+             " ইউ.আৰ.এল.",
+              "লিংগ",
+              "একবচন/ বহুবচন",
+              "যতি-চিহ্নৰ প্ৰয়োগ"
+            ]
+          },
+          {
+            "question": "অনুবাদ কৰা পাঠটো ব্যাকৰণগতভাৱে শুদ্ধ আৰু সুগঠিত আছিলনে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "এনেকুৱা কিবা নিৰ্দিষ্ট পৰিস্থিতি আছে নেকি য'ত অনুবাদ প্ৰক্ৰিয়াটোৱে ব্যৰ্থ হোৱা যেন লাগিছিল?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "bn",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "কাজের গোটা প্রবাহ নিয়ে আপনি কি সন্তুষ্ট?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "বাচন চেনার প্রক্রিয়াকে আপনি কেমন রেটিং দিতে চান?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "উক্তিটি কি যথাযথভাবে নির্দেশিত হয়েছে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": " বাচন থেকে লিপিতে পরিবর্তনের কোন কোন ক্ষেত্রে উন্নতি সম্ভব?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+             "নাম",
+             "জায়গা",
+             "নম্বর",
+             "তারিখ",
+             "ইংরাজি শব্দ / মিশ্রিত শব্দ",
+             "প্রযুক্তিগত পরিভাষা",
+             "ইউআরএল-সমূহ",
+             "যতি, ছেদ"
+            ]
+          },
+          {
+            "question": "নেপথ্যের অতিরিক্ত আওয়াজ কি যথাযথভাবে নিয়ন্ত্রিত হয়েছে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": " আপনি বিশেষ প্রস্বরে কথা বললে অ্যাপ্লিকেশন কি তা যথাযথভাবে বুঝতে পারছে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": " এমন কোনও নির্দিষ্ট বিষয় কি রয়েছে যেক্ষেত্রে আপনার উক্তি ক্রমাগত ভুলভাবে চিহ্নিত হয়েছে?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "বাচনের আউটপুটকে আপনি কেমন রেটিং দিতে চান?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "শব্দের উচ্চারণ কি যথাযথ ও স্বাভাবিক?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "কোন কোন ক্ষেত্রে লিপি থেকে বাচনে রূপান্তর প্রক্রিয়ার উন্নতি সম্ভব?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+             "নাম",
+             "জায়গা",
+             "নম্বর",
+             "তারিখ",
+             "ইংরাজি শব্দ/মিশ্রিত শব্দ",
+             "প্রযুক্তিগত পরিভাষা",
+             "ইউআরএল-সমূহ",
+             "যতি, ছেদ",
+            "নেপথ্যের আওয়াজ",
+             "শব্দ বাদ পড়া",
+             "অস্বাভাবিক বাচন"
+            ]
+          },
+          {
+            "question": "বাচন রূপটি কি স্পষ্ট ও সহজে বোঝার মত?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "বাচন রূপটি কথনের গতি কি যথাযথ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "এমন কোনও নির্দিষ্ট বিষয় কি রয়েছে যেক্ষেত্রে অ্যাপ্লিকেশনটি যথাযথ বাচন রূপ দিতে ব্যর্থ হয়েছে?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "ভাষান্তরের প্রক্রিয়াকে আপনি কেমন রেটিং দিতে চান?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "অ্যাপ্লিকেশনটি কি জটিল বাক্য ভাষান্তর করতে সফল হয়েছে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "কোন কোন ক্ষেত্রে ভাষান্তর প্রক্রিয়ার উন্নতি সম্ভব?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "নাম",
+              "জায়গা",
+              "নম্বর",
+              "তারিখ",
+              "ইংরাজি শব্দ/মিশ্রিত শব্দ",
+              "প্রযুক্তিগত পরিভাষা",
+              "ইউআরএল-সমূহ",
+              "লিঙ্গ",
+              "একবচন/বহুবচন",
+             " যতি, ছেদ"
+            ]
+          },
+          {
+            "question": " ভাষান্তরিত অংশটি কি ব্যাকরণভাবে সঠিক ও সুগঠিত?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "এমন কোনও নির্দিষ্ট বিষয় কি রয়েছে যেক্ষেত্রে ভাষান্তর প্রক্রিয়া ব্যর্থ হয়েছে বলে মনে হয়?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "brx",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "दोलोनि पाइपलाइनखौ लानानै नोंथाङा खुसि ना?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "नोंथाङा बिबुंथि सिनायथिखौ मा रेटिं होगोन?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "উক্তিটি কি যথাযথভাবে নির্দেশিত হয়েছে?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "मा मा बिथिङाव बाथ्राखौ हांखो महर होनायनि आदबफोराव जौगाखांनाय लाबोनो हायो?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+             "मुं",
+             "थावनि",
+             "अनजिमा",
+             "अक्ट",
+             "इंराजि सोदोब/क'ड गलायनाय सोदोब",
+             "टेकनिकेल सोदोब",
+             "इंउ.आर.एल.",
+            "थाद' सिन"
+            ]
+          },
+          {
+            "question": "बाथ्राखौ रोखाहै सिनायनो हादोंमोन ना?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "आन्दोनि दावराव-दावसिफोरखौ मोजाङै बेबस्था लानाय जादोंमोन ना?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "ओरैबायदि माबा मोनसे रोखा जाथाय दं नामा जेराव बे बाथ्राखौ गले-गले गोरोन्थि सिनायनाय जादोंमोन? ",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "बिबुंथिनि आउटपुटखौ नोंथाङा माब्रै रेट खालामगोन?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "सोदोबफोरनि रिंसारथिया आरजावथाव आरो मिथिंगायारिमोन ना?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "मा मा बिथिङाव टेक्स्ट-टु-स्पीच आदबखौ जौगानो हायो?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "मुं",
+              "जायगा",
+              "अनजिमा",
+              "अक्ट",
+              "इंराजि सोदोब/क'ड गलायनाय सोदोब",
+              "टेकनिकेल सोदोब",
+              "इंउ.आर.एल.",
+              "थाद' सिन",
+              "आन्दोआरि दावराव-दावसि",
+              "सोदोब होखोमानाय",
+              "मिथिंगायारि नङै बिबुंथि"
+            ]
+          },
+          {
+            "question": "बिबुंथिनि आउटपुटआ रोखा-रोखा आरो बुजिनो गोरलैमोन नामा?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "बिबुंथि आउटपुटनि खारथाइया आरजाथावमोन नामा?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ओरैबायदि माबाफोर रोखा बिथिं दं नामा जेराव बे एप्लिकेसनआ आरजाथाव बिबुंथि आउटपुट होनायाव फेलें जादोंमोन?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "रावस्लायनायखौ नोंथाङा माब्रै रेट खालामगोन?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "बे एप्लिकेसनआ गोरा-गोरा बाथ्राफोरखौबो रावस्लायनो हादोंमोन ना?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "मा मा बिथिङाव रावस्लायनायखौ जौगाहोनांगौ दं?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "मुं",
+              "थावनि",
+              "अनजिमा",
+              "अक्ट",
+              "इंराजि सोदोब/क'ड गलायनाय सोदोब",
+              "टेकनिकेल सोदोब",
+              "इंउ.आर.एल.",
+              "आथोन",
+              "से सानराय / बां सानराय",
+              "थाद' सिन"
+            ]
+          },
+          {
+            "question": "बे रावस्लायनाय लिरथाइया रावखान्थियारि महरै गेबें आरो आरजाथावमोन ना?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ओरैबायदि माबाफोर रोखा बिथिं दं नामा जेराव रावस्लायनाया खामानि होआखै बायदि मोनो?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "doi",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "क्या तुस प्रक्रिया कन्नै संतुश्ट ओ?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "वाक् दी पंछान गी तुस कि'यां रेट करगे?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "क्या वाक् गी स्हेई ढंगै कन्नै पन्छानेआ गेदा हा?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "केह्‌ड़े थाह्‌र न जित्थै वाक-शा-अबारत च सुधार कीता जाई सकदा ऐ?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नांऽ",
+              "थाह्ऱ",
+              "हिंदसे",
+              "तरीकां",
+              "अंग्रेजी शब्द/कोड आह्‌ले शब्द",
+              "तकनीकी शब्दावली",
+              "यूआरऐल्ल",
+              "विराम चि'न्न"
+            ]
+          },
+          {
+            "question": "क्या पछौकड़ रौले गी  ठीक ढंगै  चाल्ली नियंत्रत कीता गेदा हा?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "जेकर तुस कुसै खास सुर-बल कन्नै बोलदे ओ,  तां क्या ऐप वाक गी पन्छानने च समर्थ ही?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "क्या कोई होर नेही खास स्थिति ही जित्थै वाक् दी लगातार गलत पन्छान कीती गेदी ही?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "तुस वाक् दी आउटपुट गी कि'यां रेट करगे?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "क्या शब्दें दा उच्चारण स्हेई ते सैह्‌ज हा?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "केह्‌ड़े थाह्‌र न जित्थै अबारत-शा-वाक् च सुधार कीता जाई सकदा ऐ?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नांऽ",
+              "थाह्ऱ",
+              "हिंदसे",
+              "तरीकां",
+              "अंग्रेजी शब्द/कोड आह्‌ले शब्द",
+              "तकनीकी शब्दावली",
+              "यूआरऐल्ल",
+              "विराम चि'न्न",
+              "पछौकड़ रौला",
+              "शब्दें दा लोप",
+              "बनौटी वाक्"
+            ]
+          },
+          {
+            "question": "क्या वाक् दा आउटपुट स्पश्ट ते समझने च सौखा हा?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "क्या वाक् दे आउटपुट दी रफ्तार मनासब ही?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "क्या कोई होर खास स्थिति ही जित्थै वाक् दा मनासब आउटपुट देने च ऐपलीकेशन नाकाम रेही होऐ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "तुस अनुवाद गी कि'यां रेट करगे?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "क्या ऐपलीकेशन मिश्र वाक्यें दा अनुवाद करने च समर्थ ही?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "केह्‌ड़े थाह्‌र न जित्थै अनुवाद च सुधार कीता जाई सकदा ऐ?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नांऽ",
+              "थाह्ऱ",
+              "हिंदसे",
+              "तरीकां",
+              "अंग्रेजी शब्द/कोड आह्‌ले शब्द",
+              "तकनीकी शब्दावली",
+              "यूआरऐल्ल",
+              "लिंग",
+              "इकवचन / बहुवचन",
+              "विराम चि'न्न"
+            ]
+          },
+          {
+            "question": "क्या अनूदत अबारत व्याकरण ते संरचना दी नजरी कन्नै स्हेई ऐ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "क्या कोई होर नेही खास स्थिति ही जित्थै अनुवाद नाकाम होंदा लब्भा होऐ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "kn",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "ಯಂತ್ರದ ಕಾರ್ಯ ತೃಪ್ತಿಕರವಾಗಿದೆಯೇ?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "ಮಾತನ್ನು ಗುರುತಿಸುವಿಕೆಗೆ ನೀವು ಎಷ್ಟು ರೇಟಿಂಗ್ ನೀಡುತ್ತೀರಿ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "ಮಾತನ್ನು ಸರಿಯಾಗಿ ಗುರುತಿಸಲಾಗಿದೆಯೇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ಸ್ಪೀಚ್-ಟು-ಟೆಕ್ಸ್ಟ್ ಯಾವ ಯಾವ ವಿಷಯಗಳಲ್ಲಿ ಇನ್ನಷ್ಟು ಉತ್ತಮಗೊಳ್ಳಬಹುದು?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "ಹೆಸರುಗಳು",
+              "ಸ್ಥಳಗಳು",
+              "ಅಂಕಿಗಳು",
+              "ದಿನಾಂಕಗಳು",
+              "ಇಂಗ್ಲಿಷ್ ಪದಗಳು / ಮಿಶ್ರಿತ ಭಾಷೆಯ ಪದಗಳು",
+              "ಪಾರಿಭಾಷಿಕ ಪದಗಳು",
+              "ಯು.ಆರ್.ಎಲ್.ಗಳು",
+              "ಲೇಖನಚಿಹ್ನೆಗಳು"
+            ]
+          },
+          {
+            "question": "ಹಿನ್ನೆಲೆ ಶಬ್ದವನ್ನು ಸೂಕ್ತವಾಗಿ ನಿರ್ವಹಿಸಲಾಗಿದೆಯೇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "ನಿಮ್ಮ ಉಚ್ಚಾರಣೆಯ ಶೈಲಿ ಬೇರೆಯದಾಗಿತ್ತಾದರೆ ಅಪ್ಲಿಕೇಷನ್ ನಿಮ್ಮ ಮಾತನ್ನು ಗುರುತಿಸಿತೇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "ಮಾತನ್ನು ಪದೇ ಪದೇ ತಪ್ಪಾಗಿ ಗುರುತಿಸಲಾದ ಬೇರೆ ಯಾವುದಾದರೂ ನಿರ್ದಿಷ್ಟ ನಿದರ್ಶನವಿದೆಯೇ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "ಕೇಳಿಸಲಾದ ಮಾತಿಗೆ ನೀವು ಎಷ್ಟು ರೇಟಿಂಗ್ ನೀಡುತ್ತೀರಿ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "ಪದಗಳ ಉಚ್ಚಾರಣೆ ಸರಿಯಾಗಿ ಮತ್ತು ಸಹಜವಾಗಿ ಇತ್ತೇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ಯಾವ ಯಾವ ವಿಷಯಗಳಲ್ಲಿ ಟೆಕ್ಸ್ಟ್-ಟು-ಸ್ಪೀಚ್ ಉತ್ತಮಗೊಳ್ಳಬಹುದು?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "ಹೆಸರುಗಳು",
+              "ಸ್ಥಳಗಳು",
+              "ಅಂಕಿಗಳು",
+              "ದಿನಾಂಕಗಳು",
+              "ಇಂಗ್ಲಿಷ್ ಪದಗಳು / ಮಿಶ್ರಿತ ಭಾಷೆಯ ಪದಗಳು",
+              "ಪಾರಿಭಾಷಿಕ ಪದಗಳು",
+              "ಯು.ಆರ್.ಎಲ್.ಗಳು",
+              "ಲೇಖನಚಿಹ್ನೆಗಳು",
+              "ಹಿನ್ನೆಲೆ ಶಬ್ದ",
+              "ಪದಗಳು ಬಿಟ್ಟುಹೋಗಿರುವುದು",
+              "ಅಸಹಜ ಮಾತು"
+            ]
+          },
+          {
+            "question": "ಕೇಳಿಸಲಾದ ಮಾತು ಸ್ಪಷ್ಟವಾಗಿ ಮತ್ತು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಸುಲಭವಾಗಿ ಇತ್ತೇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ಕೇಳಿಸಲಾದ ಮಾತಿನ ವೇಗ ಸೂಕ್ತವಾಗಿತ್ತೇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ಅಪ್ಲಿಕೇಷನ್ ಮಾತನ್ನು ಸರಿಯಾಗಿ ಕೇಳಿಸಲು ಸಾಧ್ಯವಾಗದಿದ್ದ ಬೇರೆ ಯಾವುದಾದರೂ ನಿರ್ದಿಷ್ಟ ನಿದರ್ಶನವಿದೆಯೇ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "ಅನುವಾದಕ್ಕೆ ನೀವು ಎಷ್ಟು ರೇಟಿಂಗ್ ನೀಡುತ್ತೀರಿ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "ಸಂಕೀರ್ಣ ವಾಕ್ಯಗಳನ್ನು ಅನುವಾದಿಸುವುದು ಅಪ್ಲಿಕೇಷನ್ಗೆ ಸಾಧ್ಯವಾಯಿತೇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ಯಾವ ಯಾವ ಅಂಶಗಳ ವಿಷಯದಲ್ಲಿ ಅನುವಾದವು ಉತ್ತಮಗೊಳ್ಳಬಹುದು?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "ಹೆಸರುಗಳು",
+              "ಸ್ಥಳಗಳು",
+              "ಅಂಕಿಗಳು",
+              "ದಿನಾಂಕಗಳು",
+              "ಇಂಗ್ಲಿಷ್ ಪದಗಳು / ಮಿಶ್ರಿತ ಭಾಷೆಯ ಪದಗಳು",
+              "ಪಾರಿಭಾಷಿಕ ಪದಗಳು",
+              "ಯು.ಆರ್.ಎಲ್.ಗಳು",
+              "ಲಿಂಗ",
+              "ಏಕವಚನ / ಬಹುವಚನ",
+              "ಲೇಖನಚಿಹ್ನೆಗಳು"
+            ]
+          },
+          {
+            "question": "ಅನುವಾದಿತ ಪಠ್ಯವು ವ್ಯಾಕರಣಬದ್ಧವಾಗಿ, ಸರಿಯಾಗಿ ರಚನೆಯಾಗಿತ್ತೇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ಅನುವಾದ ವಿಫಲವಾದ ಬೇರೆ ಯಾವುದಾದರೂ ನಿರ್ದಿಷ್ಟ ನಿದರ್ಶನವಿದೆಯೇ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "ml",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "പൈപ്പ്ലൈനിന്റെ കാര്യത്തിൽ നിങ്ങൾ സംതൃപ്തനാണോ?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "സംഭാഷണം തിരിച്ചറിയലിനെ നിങ്ങൾ എങ്ങനെ വിലയിരുത്തും?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "സംഭാഷണം കൃത്യമായി മനസ്സിലാക്കപ്പെട്ടിരുന്നുവോ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "'സംഭാഷണത്തില്‍ നിന്ന് പാഠത്തിലേക്ക്' മെച്ചപ്പെടുത്താന്‍ കഴിയുന്ന സ്ഥലങ്ങള്‍ ഏതൊക്കെയാണ്?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "പേരുകള്‍",
+              "സ്ഥലങ്ങള്‍",
+              "അക്കങ്ങള്‍",
+              "തീയതികള്‍",
+              "ഇംഗ്ലീഷ് വാക്കുകളും മിശ്രഭാഷാപ്രയോഗങ്ങളും",
+              "സാങ്കേതികപദങ്ങള്‍",
+              "യൂ. ആര്‍. എല്ലുകള്‍",
+              "ചിഹ്നനങ്ങള്‍"
+            ]
+          },
+          {
+            "question": "പശ്ചാത്തലത്തിലെ ശബ്ദം വേണ്ടപോലെ കൈകാര്യം ചെയ്യപ്പെട്ടിരുന്നുവോ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": " ഉച്ചാരണഭേദങ്ങള്‍ ആപ്ലികേഷന് മനസ്സിലാക്കാന്‍ കഴിഞ്ഞിരുന്നോ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "സംഭാഷണം നിരന്തരം തെറ്റായി മനസ്സിലാക്കിയ മറ്റു പ്രത്യേക സന്ദര്‍ഭങ്ങള്‍ ഉണ്ടോ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "ലഭ്യമായ ശബ്ദത്തെ നിങ്ങൾ എങ്ങനെ വിലയിരുത്തും?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "വാക്കുകളുടെ ഉച്ചാരണം കൃത്യവും സ്വാഭാവികവും ആയിരുന്നോ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": " 'പാഠത്തില്‍നിന്ന് സംഭാഷണത്തിലേക്ക്' മെച്ചപ്പെടുത്താവുന്ന ഇടങ്ങള്‍ ഏതൊക്കെയാണ്? ",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "പേരുകള്‍",
+              "സ്ഥലങ്ങള്‍",
+              "അക്കങ്ങള്‍",
+              "തീയതികള്‍",
+              "ഇംഗ്ലീഷ് വാക്കുകളും മിശ്രഭാഷാപ്രയോഗങ്ങളും",
+              "സാങ്കേതികപദങ്ങള്‍",
+              "യൂ. ആര്‍. എല്ലുകള്‍",
+              "ചിഹ്നനങ്ങള്‍",
+              "പശ്ചാത്തലശബ്ദം",
+              "വാക്കുകള്‍ വിട്ടുപോകല്‍",
+              "അസ്വാഭാവിക സംഭാഷണം"
+            ]
+          },
+          {
+            "question": "സംഭാഷണം വ്യക്തവും മനസ്സിലാക്കാന്‍ എളുപ്പവും ആയിരുന്നോ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "സംഭാഷണം പുറത്തുവരാന്‍ എടുത്ത സമയം കൃത്യമായിരുന്നോ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "കൃത്യമായ സംഭാഷണം പുറത്തുവരുത്തുന്നതില്‍ ആപ്ലികേഷന്‍ പരാജയപ്പെട്ട മറ്റേതെങ്കിലുംപ്രത്യേക സന്ദര്‍ഭം ഉണ്ടോ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "വിവർത്തനത്തെ നിങ്ങൾ എങ്ങനെ വിലയിരുത്തും?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "സങ്കീര്‍ണ്ണവാക്യങ്ങള്‍ വിവര്‍ത്തനം ചെയ്യാന്‍ ആപ്ലികേഷന് കഴിഞ്ഞോ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "വിവര്‍ത്തനം മെച്ചപ്പെടുത്താന്‍ കഴിയുന്ന മേഖലകള്‍ ഏതൊക്കെയാണ്?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "പേരുകള്‍",
+              "സ്ഥലങ്ങള്‍",
+              "അക്കങ്ങള്‍",
+              "തീയതികള്‍",
+              "ഇംഗ്ലീഷ് വാക്കുകളും മിശ്രഭാഷാപ്രയോഗങ്ങളും",
+              "സാങ്കേതികപദങ്ങള്‍",
+              "യൂ. ആര്‍. എല്ലുകള്‍",
+              "ലിംഗഭേദങ്ങള്‍",
+              "ഏകവചനം/ബഹുവചനം",
+              "ചിഹ്നനങ്ങള്‍"
+            ]
+          },
+          {
+            "question": "വിവര്‍ത്തനം ചെയ്യപ്പെട്ട പാഠം വ്യാകരണപരമായും ഘടനാപരമായും ശരിയായിരുന്നോ? ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "വിവര്‍ത്തനം പരാജയപ്പെട്ടതായി തോന്നിയ ഏതെങ്കിലും പ്രത്യേക ഇടമുണ്ടോ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "mr",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "सध्या चालू असलेल्या या सर्व कामांबद्दल तुम्ही समाधानी आहात का?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "बोलणे ओळखण्याच्या या कामाला तुम्ही किती गुण द्याल?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "बोलणे अचूकपणे ओळखता आले का? ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "बोलण्यातून मजकुरात रुपांतर होताना कोणत्या बाबींमध्ये सुधारणा होऊ शकते?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नावे",
+              "जागा",
+              "आकडे",
+              "तारखा",
+              "इंग्रजी शब्द / कोड मिश्रित शब्द", 
+              "तांत्रिक संज्ञा",
+              "युआरएल्स",
+              "विरामचिन्हे"
+            ]
+          },
+          {
+            "question": "पार्श्वभूमीचा गोंगाट व्यवस्थितपणे हाताळता आला का?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "तुम्ही विशिष्ट लहजामध्ये बोलला असाल तर अ‍ॅप्लिकेशनला ते ओळखता आले का?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "असे कोणते विशिष्ट उदाहरण होते का, ज्यामध्ये बोलणे सातत्याने चुकीच्या पद्धतीने ओळखले गेले?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "या बोलण्याला तुम्ही किती गुण द्याल?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "शब्दांचे उच्चार अचूक आणि नैसर्गिक होते का?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "टेक्स्ट-टू-स्पीचच्या कोणत्या बाबींमध्ये सुधारणा केली जाऊ शकते?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नावे",
+              "जागा",
+              "आकडे",
+              "तारखा",
+              "इंग्रजी शब्द / कोड मिश्रित शब्द", 
+              "तांत्रिक संज्ञा",
+              "युआरएल्स",
+              "विरामचिन्हे",
+              "मागे ऐकू येणारा गोंगाट",
+              "वगळलेले शब्द",
+              "कृत्रिम बोलणे"
+            ]
+          },
+          {
+            "question": "बोलणे स्पष्ट आणि समजण्यासाठी सोपे होते का?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "बोलण्याचा वेग व्यवस्थित होता का?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "एखादे विशिष्ट उदाहरण आहे का ज्यामध्ये बोलणे स्पष्ट देण्यासाठी अ‍ॅप्लिकेशन कमी पडले?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "या भाषांतराला तुम्ही किती गुण द्याल?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "अ‍ॅप्लिकेशन किचकट वाक्ये भाषांतरीत करू शकले का?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "कोणत्या बाबींमध्ये भाषांतरात सुधारणा करता येऊ शकते?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नावे",
+              "जागा",
+              "आकडे",
+              "तारखा",
+             " इंग्रजी शब्द / कोड मिश्रित शब्द", 
+              "तांत्रिक संज्ञा",
+              "युआरएल्स",
+              "लिंग",
+              "एकवचन / अनेकवचन",
+             "विरामचिन्हे"
+            ]
+          },
+          {
+            "question": "भाषांतरीत वाक्याचे व्याकरण योग्य होते का आणि वाक्य रचना उत्तम होती का?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "एखादे विशिष्ट उदाहरण होते का, ज्यामध्ये भाषांतर चुकीचे दिसले?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "or",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "ଆପଣ ଏହି କାର୍ଯ୍ୟଗୁଡ଼ିକ ନେଇ ସନ୍ତୁଷ୍ଟ କି ? ",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "ଆପଣ ଏହି କଥନ ଚିହ୍ନିବା କ୍ଷମତାକୁ କିପରି ମୂଲ୍ୟାୟନ କରିବେ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "କଥନଟି ସଠିକ୍‌ ଭାବେ ଜାଣିହେଉଥିଲା କି?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "କେଉଁ କେଉଁ କ୍ଷେତ୍ରରେ କଥିତରୂପ-ରୁ-ଲିଖିତରୂପରେ ସୁଧାର ଅଣାଯାଇପାରିବ ? ",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "ନାମ",
+              "ସ୍ଥାନ",
+              "ସଂଖ୍ୟା",
+              "ତାରିଖ",
+              "ଇଂରାଜୀ ଶବ୍ଦ/କୋଡ଼ ମିଶ୍ରିତ ଶବ୍ଦ",
+              "ବୈଷୟିକ ଶବ୍ଦାବଳୀ",
+              "ୟୁଆର୍‌ଏଲ୍‌",
+              "ବିରାମ ଚିହ୍ନ"
+            ]
+          },
+          {
+            "question": "ପୃଷ୍ଠଭୂମିର କୋଳାହଳ ଠିକ୍‌ ଭାବେ ନିୟନ୍ତ୍ରିତ ହୋଇଥିଲା କି ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "ଯଦି ଆପଣ କୌଣସି ବିଶେଷ ଉଚ୍ଚାରଣ ଭଙ୍ଗୀରେ କଥା କହିଥିଲେ ଆପ୍‌ ଏହାକୁ ଧରିପାରିଥିଲା କି ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "ଅନ୍ୟ କୌଣସି ନିର୍ଦ୍ଦିଷ୍ଟ କ୍ଷେତ୍ର ଥିଲା କି ଯେଉଁଠି କଥନଟି ସବୁବେଳେ ଭୁଲ୍‌ ଭାବରେ ଚିହ୍ନିତ ହେଉଥିଲା ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "ଆପଣ ଏହି କଥନ ଆଉଟ୍‌ପୁଟ୍‌ର କେମିତି ମୂଲ୍ୟାୟନ କରିବେ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "ଶବ୍ଦଗୁଡ଼ିକର ଉଚ୍ଚାରଣ ସଠିକ୍‌ ଏବଂ ସ୍ୱାଭାବିକ ଥିଲା କି?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ଆଉ କେଉଁ ସବୁ କ୍ଷେତ୍ରରେ ଲିଖିତରୂପ-ରୁ-କଥିତରୂପରେ ଉନ୍ନତି ଅଣାଯାଇପାରିବ? ",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "ନାମ",
+              "ସ୍ଥାନ",
+              "ସଂଖ୍ୟା",
+              "ତାରିଖ",
+              "ଇଂରାଜୀ ଶବ୍ଦ/କୋଡ଼ ମିଶ୍ରିତ ଶବ୍ଦ",
+              "ବୈଷୟିକ ଶବ୍ଦାବଳୀ",
+              "ୟୁଆର୍‌ଏଲ୍‌",
+              "ବିରାମ ଚିହ୍ନ",
+              "ପୃଷ୍ଠଭୂମିର କୋଳାହଳ",
+              "ଶବ୍ଦ ଛାଡ଼ିହୋଇଯିବା",
+              "ଅସ୍ୱାଭାବିକ କଥନ"
+            ]
+          },
+          {
+            "question": "କଥନ ଆଉଟ୍‌ପୁଟ୍‌ ସ୍ପଷ୍ଟ ଏବଂ ସହଜରେ ବୁଝିହେଲା ଭଳି ଥିଲା କି?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "କଥନ ଆଉଟ୍‌ପୁଟ୍‌‌ର ଗତି ସଠିକ୍‌ ଥିଲା କି?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ଅନ୍ୟ କୌଣସି ନିର୍ଦ୍ଦିଷ୍ଟ ବିଷୟ ଥିଲା କି ଯେଉଁଥିପାଇଁ ଏହି ଆପ୍‌ ସଠିକ୍‌ କଥନ ଆଉଟ୍‌ପୁଟ୍‌ ଦେବାରେ ବିଫଳ ହେଲା?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "ଆପଣ ଏହି ଅନୁବାଦର କିପରି ମୂଲ୍ୟାୟନ କରିବେ ? ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "ଏହି ଆପ୍‌ ଜଟିଳ ବାକ୍ୟଗୁଡ଼ିକୁ ଅନୁବାଦ କରିପାରିଲା କି ? ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "କେଉଁ କେଉଁ କ୍ଷେତ୍ରରେ ଅନୁବାଦକୁ ଉନ୍ନତ କରାଯାଇପାରିବ ?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "ନାମ",
+              "ସ୍ଥାନ",
+              "ସଂଖ୍ୟା",
+              "ତାରିଖ",
+              "ଇଂରାଜୀ ଶବ୍ଦ/କୋଡ଼ ମିଶ୍ରିତ ଶବ୍ଦ",
+              "ବୈଷୟିକ ଶବ୍ଦାବଳୀ",
+              "ୟୁଆର୍‌ଏଲ୍‌",
+              "ଲିଙ୍ଗ",
+              "ଏକବଚନ/ବହୁବଚନ",
+              "ବିରାମ ଚିହ୍ନ"
+            ]
+          },
+          {
+            "question": "ଏହି ଆପ୍‌ ଜଟିଳ ବାକ୍ୟଗୁଡ଼ିକୁ ଅନୁବାଦ କରିପାରିଲା କି ? ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ଅନ୍ୟ କୌଣସି ନିର୍ଦ୍ଦିଷ୍ଟ ବିଷୟରେ ଅନୁବାଦ ବିଫଳ ହେଲା ଭଳି ଜଣାପଡ଼ୁଛି କି?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "ta",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "வழங்கப்பட்ட தீர்வு திருப்தியாக இருந்ததா?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "பேச்சைப் புரிந்துகொள்ளும் ஆற்றலுக்கு எத்தனை மதிப்பெண் தருவீர்கள்?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "பேச்சை சரியாகப் புரிந்துகொள்கிறதா? ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "பேச்சை எழுத்தாக மாற்றும் செயலியில் இன்னும் எதையெல்லாம் சரிசெய்ய வேண்டும்?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "பெயர்கள்",
+              "இடங்கள்",
+              "எண்கள்",
+              "தேதி",
+              "ஆங்கிலச் சொற்கள் / கலவை மொழிச் சொற்கள்",
+              "கலைச்சொற்கள்",
+              "இணைப்புகள்",
+              "நிறுத்தக்குறிகள்"
+            ]
+          },
+          {
+            "question": "பின்னணி இரைச்சல் ஓரளவு நீக்கப்படுகிறதா?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "பேசும் பாணியை மாற்றினாலும் பேச்சை சரியாகப் புரிந்துகொள்கிறதா?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "வேறு ஏதாவது குறிப்பிட்ட சூழ்நிலையில் மீண்டும் மீண்டும் பேச்சை தவறாகப் புரிந்துகொள்கிறதா?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "மாற்றப்பட்ட பேச்சுக்கு எத்தனை மதிப்பெண் தருவீர்கள்?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "வார்த்தைகள் மிகச்சரியாகவும் இயல்பாகவும் உச்சரிக்கப்படுகிறதா?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "எழுத்தை பேச்சாக மாற்றும் செயலியில் இன்னும் எதையெல்லாம் சரிசெய்ய வேண்டும்?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "பெயர்கள்",
+              "இடங்கள்",
+              "எண்கள்",
+              "தேதி",
+              "ஆங்கிலச் சொற்கள் / கலவை மொழிச் சொற்கள்",
+              "கலைச்சொற்கள்",
+              " இணைப்புகள்",
+              "நிறுத்தக்குறிகள்",
+              "பின்னணி இரைச்சல்",
+              "சொற்கள் விடுபடுதல்",
+              "இயல்பற்ற முறையில் பேச்சு"
+            ]
+          },
+          {
+            "question": "மாற்றப்பட்ட பேச்சு தெளிவாகவும் சுலபமாகப் புரிந்துகொள்ளும் வகையிலும் இருக்கிறதா?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "மாற்றப்பட்ட பேச்சு சரியான வேகத்தில் இருக்கிறதா?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "வேறு ஏதாவது குறிப்பிட்ட சூழ்நிலையில் இந்தச் செயலி தவறாகப் பேச்சு மாற்றம் செய்கிறதா?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "மொழிபெயர்ப்புக்கு எத்தனை மதிப்பெண் தருவீர்கள்?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "கலவை வாக்கியங்களை இந்தச் செயலி மொழிபெயர்க்கிறதா?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "மொழிபெயர்ப்பின் இலக்கணமும் வாக்கிய அமைப்பும் சரியாக, சீராக இருக்கிறதா? ",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "பெயர்கள்",
+              "இடங்கள்",
+              "எண்கள்",
+              "தேதி",
+              "ஆங்கிலச் சொற்கள் / கலவை மொழிச் சொற்கள்",
+              "கலைச்சொற்கள்",
+              "இணைப்புகள்",
+              "பால் (ஆண்/பெண் வேறுபாடு)",
+              "ஒருமை / பன்மை",
+              "நிறுத்தக்குறிகள்"
+            ]
+          },
+          {
+            "question": "வேறு ஏதாவது குறிப்பிட்ட சூழ்நிலையில் தவறாக மொழிபெயர்க்கிறதா?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "te",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "మీరు అమలు చేయబడుతున్న పనులతో సంతృప్తి పొందారా?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "మాటలను గుర్తించటాన్ని మీరు ఎలా రేట్ చేస్తారు?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "మాటలు సరిగ్గా గుర్తించబడ్డాయా?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "మాటలను వ్రాతకు మార్చటంలో మెరుగుపరుచుకోగల క్షేత్రాలు ఏవి?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "పేర్లు",
+              "స్థలాలు",
+              "సంఖ్యలు",
+              "తేదీలు",
+              "ఇంగ్లీష్ పదాలు / మిశ్రిత భాష  పదాలు",
+              "సాంకేతిక పదాలు",
+              "యూఆర్‌ఎల్‌లు",
+              "విరామ చిహ్నాలు"
+            ]
+          },
+          {
+            "question": "వెనుకనుండి శబ్దాలు బాగానే నిర్వహించబడ్డాయా ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "మీరు యాస ఉచ్చారణలో మాట్లాడితే అప్లికేషన్ మీ మాటలను సరిగ్గానే గుర్తించిందా  ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "ଅନ୍ୟ କୌଣସି ନିର୍ଦ୍ଦିଷ୍ଟ କ୍ଷେତ୍ର ଥିଲା କି ଯେଉଁଠି କଥନଟି ସବୁବେଳେ ଭୁଲ୍‌ ଭାବରେ ଚିହ୍ନିତ ହେଉଥିଲା ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "మాటలు పలకటాన్ని మీరు ఎలా రేట్ చేస్తారు? ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "పదాలను పలకటం సరిగ్గా, సహజంగా ఉండిందా?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "వ్రాతను మాటలలోకి మార్చటంలో మెరుగుపరుచుకోగల క్షేత్రాలు ఏవి?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "పేర్లు",
+              "స్థలాలు",
+              "సంఖ్యలు",
+              "తేదీలు",
+              "ఇంగ్లీష్ పదాలు / మిశ్రిత భాష  పదాలు",
+              "సాంకేతిక పదాలు",
+              "యూఆర్‌ఎల్‌లు",
+              "విరామ చిహ్నాలు",
+              "వెనుకనుండి శబ్దాలు",
+              "పదాలను వదిలివేయడం",
+              "అసహజ ఉచ్చారణ"
+            ]
+          },
+          {
+            "question": "పలికిన మాటలు స్పష్టంగా ఉండి, తేలికగా అర్ధం అయ్యేలా ఉన్నాయా?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "మాటలు పలికే వేగం సరిగ్గా ఉందా?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": " అప్లికేషన్ మాటలను సరిగ్గా పలకలేకపోయిన ప్రత్యేక సందర్భం ఇంకా ఏదైనా ఉండిందా?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "అనువాదాన్ని మీరు ఎలా రేట్ చేస్తారు?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "అప్లికేషన్ సంక్లిష్ట వాక్యాలను సరిగ్గానే అనువదించగలిగిందా?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "అనువదించటంలో మెరుగుపరుచుకోగల క్షేత్రాలు ఏవి?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "పేర్లు",
+              "స్థలాలు",
+              "సంఖ్యలు",
+              "తేదీలు",
+              "ఇంగ్లీష్ పదాలు / మిశ్రిత భాష  పదాలు",
+              "సాంకేతిక పదాలు",
+              "యూఆర్‌ఎల్‌లు",
+             " స్త్రీ/పురుష లింగాలు",
+              "ఏకవచనం/బహువచనం",
+              "విరామ చిహ్నాలు"
+            ]
+          },
+          {
+            "question": "అనువదించబడిన వ్రాత వ్యాకరణపరంగా సరైనది మరియు బాగా నిర్మించబడి ఉందా?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "అనువాదం విఫలమైనట్లు అనిపించిన  ప్రత్యేక సందర్భం ఇంకా ఏదైనా ఉండిందా?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "sa",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "यन्त्रस्य कार्यं समाधानकरम् अस्ति वा?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "भाषणाभिज्ञानयन्त्रस्य मूल्याङ्कनं कथं करोषि?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "आप् त्वया उक्तं सम्यक् अभिज्ञायते वा?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "स्पीच्-टु-टेक्स्ट् उपयोगे केषु विषयेषु गुणाधानम् आनेतुं शक्यते? ",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नामानि",
+              "स्थानानि",
+              "सङ्ख्याः",
+              "दिनाङ्काः",
+              "आङ्ग्लशब्दाः / कोड्-मिक्स्ड् शब्दाः",
+              "पारिभाषिकशब्दाः",
+              "यु.आर्.एल्.",
+              "लेखनचिह्नाङ्कनम्"
+            ]
+          },
+          {
+            "question": "सम्भाषणस्य पृष्टतः क्षोभावहः शब्दः निवारितः किम्?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "उच्चारणभेदे सति आप् सम्भाषणं सम्यक् अभिजानाति वा?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "अन्यस्मिन् कस्मिन्नपि निर्दिष्टविषये सम्भाषणं निरन्तरं दोषयुक्तम् अभिज्ञातं वा? ",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "स्पीच्-औट्पुट् इतीदं कथं मूल्याङ्कनं करोषि?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "टेक्स्ट्-टु-स्पीच् उपयोगे केषु विषयेषु गुणाधानम् आनेतुं शक्यते?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "टेक्स्ट्-टु-स्पीच् उपयोगे केषु विषयेषु गुणाधानम् आनेतुं शक्यते?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नामानि",
+              "स्थानानि",
+              "सङ्ख्याः",
+              "दिनाङ्काः",
+              "आङ्ग्लशब्दाः / कोड्-मिक्स्ड् शब्दाः",
+              "पारिभाषिकशब्दाः",
+              "यु.आर्.एल्.",
+              "लेखनचिह्नाङ्कनम्",
+              "पृष्टतः क्षोभशब्दः",
+              "पदानां परित्यागः",
+              "असहजं भाषणं"
+            ]
+          },
+          {
+            "question": "भाषणस्य गतिः सम्यक् वर्तते किम्?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "भाषणं (स्पीच्-औट्पुट्) स्पष्टं तथा अवगमनसुलभं वर्तते किम्?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "अन्यस्मिन् कस्मिन्नपि निर्दिष्टविषये आप् सम्यक् भाषणं (स्पीच्-औट्पुट्) प्रदातुम् असफलं जातं किम्?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "अनुवादस्य मूल्याङ्कनं कथं करोषि?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "आप् सङ्कीर्णवाक्यानाम् अनुवादं सम्यक्तया करोति किम्?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "केषु विषयेषु अनुवादे गुणाधानम् आनेतुं शक्यते?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नामानि",
+              "स्थानानि",
+              "सङ्ख्याः",
+              "दिनाङ्काः",
+              "आङ्ग्लशब्दाः / कोड्-मिक्स्ड् शब्दाः",
+              "पारिभाषिकशब्दाः",
+              "यु.आर्.एल्.",
+              "लिङ्ग",
+              "वचनम्",
+              "लेखनचिह्नाङ्कनम्"
+            ]
+          },
+          {
+            "question": "अनूदितवाक्यं व्याकरणदृष्ट्या संरचनादृष्ट्या साधुः वा?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "अन्यस्मिन् कस्मिन्नपि निर्दिष्टविषये अनुवादः दोषपूर्णः भाति किम्?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "pa",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "ਕੀ ਤੁਸੀਂ ਕਾਰਜਾਂ ਦੀ ਲੜੀ ਤੋਂ ਸੰਤੁਸ਼ਟ ਹੋ?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "ਤੁਸੀਂ ਬੋਲੀ ਪਛਾਣਨ ਦੀ ਪ੍ਰਕਿਰਿਆ ਨੂੰ ਕਿਵੇਂ ਮੁਲਾਂਕਣ ਕਰੋਗੇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "ਕੀ ਬੋਲੀ ਨੂੰ ਸਹੀ ਤਰ੍ਹਾਂ ਸਮਝਿਆ ਗਿਆ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ਉਹ ਕਿਹੜੀਆਂ ਚੀਜ਼ਾਂ ਹਨ ਜਿਨ੍ਹਾਂ ਵਿੱਚ ਸਪੀਚ-ਟੂ-ਟੈਕਸਟ ਵਿੱਚ ਸੁਧਾਰ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "ਨਾਮ",
+              "ਸਥਾਨ",
+              "ਸੰਖਿਆਵਾਂ",
+              "ਮਿਤੀਆਂ",
+             "ਅੰਗਰੇਜ਼ੀ ਸ਼ਬਦ/ਕੋਡ ਮਿਸ਼ਰਤ ਸ਼ਬਦ",
+              "ਤਕਨੀਕੀ ਸ਼ਬਦ",
+              "ਯੂਆਰਐਲ",
+              "ਵਿਰਾਮ ਚਿੰਨ੍ਹ"
+            ]
+          },
+          {
+            "question": "ਕੀ ਪਿੱਛੇ ਦੇ ਸ਼ੋਰ ਨੂੰ ਸਹੀ ਢੰਗ ਨਾਲ ਸੰਭਾਲਿਆ ਗਿਆ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "ਜੇਕਰ ਤੁਸੀਂ ਇੱਕ ਲਹਿਜ਼ੇ ਵਾਲੀ ਟੋਨ ਵਿੱਚ ਬੋਲਦੇ ਹੋ ਤਾਂ ਕੀ ਇਹ ਐਪਲੀਕੇਸ਼ਨ ਤੁਹਾਡੀ ਬੋਲੀ ਨੂੰ ਪਛਾਣਨ ਦੇ ਯੋਗ ਸੀ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "ਕੀ ਕੋਈ ਹੋਰ ਖਾਸ ਮਾਮਲਾ ਸੀ ਜਿੱਥੇ ਬੋਲੀ ਨੂੰ ਲਗਾਤਾਰ ਗਲਤ ਢੰਗ ਨਾਲ ਸਮਝਿਆ ਗਿਆ ਹੋਵੇ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "ਤੁਸੀਂ ਸਪੀਚ ਆਉਟਪੁੱਟ ਨੂੰ ਕਿਵੇਂ ਮੁਲਾਂਕਣ ਕਰੋਗੇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "ਕੀ ਸ਼ਬਦਾਂ ਦਾ ਉਚਾਰਨ ਸਹੀ ਅਤੇ ਕੁਦਰਤੀ ਸੀ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ਉਹ ਕਿਹੜੀਆਂ ਚੀਜ਼ਾਂ ਹਨ ਜਿੱਥੇ ਟੈਕਸਟ-ਟੂ-ਸਪੀਚ ਵਿੱਚ ਸੁਧਾਰ ਕੀਤੇ ਜਾ ਸਕਦੇ ਹਨ?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "ਨਾਮ",
+              "ਸਥਾਨ",
+              "ਸੰਖਿਆਵਾਂ",
+              "ਮਿਤੀਆਂ",
+              "ਅੰਗਰੇਜ਼ੀ ਸ਼ਬਦ/ਕੋਡ ਮਿਸ਼ਰਤ ਸ਼ਬਦ",
+              "ਤਕਨੀਕੀ ਸ਼ਬਦ",
+              "ਯੂਆਰਐਲ",
+             " ਵਿਰਾਮ ਚਿੰਨ੍ਹ",
+              "ਪਿੱਛੇ ਦਾ ਸ਼ੋਰ",
+              "ਛੱਡੇ ਗਏ ਸ਼ਬਦ",
+              "ਗੈਰ-ਕੁਦਰਤੀ ਬੋਲੀ"
+            ]
+          },
+          {
+            "question": "ਕੀ ਸਪੀਚ ਆਉਟਪੁੱਟ ਸਪਸ਼ਟ ਅਤੇ ਸਮਝਣ ਵਿੱਚ ਆਸਾਨ ਸੀ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ਕੀ ਸਪੀਚ ਆਉਟਪੁੱਟ ਦੀ ਗਤੀ ਠੀਕ ਸੀ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ਕੀ ਕੋਈ ਹੋਰ ਖਾਸ ਮਾਮਲਾ ਵੀ ਸੀ ਜਿੱਥੇ ਇਹ ਐਪਲੀਕੇਸ਼ਨ ਸਹੀ ਸਪੀਚ ਆਉਟਪੁੱਟ ਦੇਣ ਵਿੱਚ ਅਸਫਲ ਰਹੀ ਹੋਵੇ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "ਤੁਸੀਂ ਅਨੁਵਾਦ ਦਾ ਮੁਲਾਂਕਣ ਕਿਵੇਂ ਰੇਟ ਕਰੋਗੇ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "ਕੀ ਇਹ ਐਪਲੀਕੇਸ਼ਨ ਗੁੰਝਲਦਾਰ ਵਾਕਾਂ ਦਾ ਅਨੁਵਾਦ ਕਰਨ ਦੇ ਯੋਗ ਸੀ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ਉਹ ਕਿਹੜੇ ਖੇਤਰ ਹਨ ਜਿਨ੍ਹਾਂ ਵਿੱਚ ਅਨੁਵਾਦ ਉੱਤੇ ਸੁਧਾਰ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "ਨਾਮ",
+              "ਸਥਾਨ",
+              "ਸੰਖਿਆਵਾਂ",
+              "ਮਿਤੀਆਂ",
+              "ਅੰਗਰੇਜ਼ੀ ਸ਼ਬਦ/ਕੋਡ ਮਿਸ਼ਰਤ ਸ਼ਬਦ",
+              "ਤਕਨੀਕੀ ਸ਼ਬਦ",
+              "ਯੂਆਰਐਲ",
+              "ਲਿੰਗ",
+              "ਇਕਵਚਨ/ਬਹੁਵਚਨ",
+              "ਵਿਰਾਮ ਚਿੰਨ੍ਹ"
+            ]
+          },
+          {
+            "question": "ਕੀ ਅਨੁਵਾਦਿਤ ਭਾਗ ਵਿਆਕਰਨਿਕ ਤੌਰ 'ਤੇ ਸਹੀ ਅਤੇ ਚੰਗੀ ਤਰ੍ਹਾਂ ਸੰਗਠਿਤ ਸੀ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "ਕੀ ਕੋਈ ਹੋਰ ਖਾਸ ਮਾਮਲਾ ਵੀ ਸੀ ਜਿੱਥੇ ਇਹ ਅਨੁਵਾਦ ਕਰਨ ਵਿੱਚ ਅਸਫਲ ਲੱਗਿਆ ਹੋਵੇ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "ne",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "के तपाईँ पाइपलाइनसित सन्तुष्ट हुनुहुन्छ?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "तपाईँ वाक् पहिचानलाई कसरी मूल्याङ्कन गर्नुहुन्छ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "के बोली सही रूपमा पहिचान गरिएको थियो?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "बोली-देखि-पाठले सुधार गर्न सक्ने क्षेत्रहरू कुन हुन्?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नाम",
+              "स्थान",
+              "अङ्क",
+              "दिनाङ्क",
+              "अङ्ग्रेजी शब्द / कोड मिश्रित शब्द",
+              "प्राविधिक पदावली",
+              "युआरएल",
+              "विराम चिन्ह"
+            ]
+          },
+          {
+            "question": "के पृष्ठभूमिको आवाज ठिकसँग सम्भालिएको थियो?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "यदि तपाईँले उच्चारित स्वरमा बोल्नुहुन्छ भने के एप्लिकेसनले त्यो बोली पहिचान गर्न सक्षम थियो?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "के त्यहाँ कुनै अन्य विशिष्ट मामला थियो जहाँ बोलीलाई लगातार गलत रूपमा पहिचान गरिएको थियो?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "तपाईँ बोलीको आउटपुटलाई कसरी मूल्याङ्कन गर्नुहुन्छ",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "शब्दहरूको उच्चारण सही र प्राकृतिक थियो?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "पाठदेखि-देखि-बोलीले सुधार गर्न सक्ने क्षेत्रहरू कुन-कुन हुन्?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नाम",
+              "स्थान",
+              "अङ्क",
+              "दिनाङ्क",
+              "अङ्ग्रेजी शब्द / कोड मिश्रित शब्द",
+              "प्राविधिक पदावली",
+              "युआरएल",
+              "विराम चिन्ह",
+              "पृष्ठभूमि आवाज",
+              "शब्द विलोपन",
+              "अप्राकृतिक बोली"
+            ]
+          },
+          {
+            "question": "के बोलीको आउटपुट स्पष्ट र बुझ्न सजिलो थियो?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "बोलीको आउटपुटको गति उचित थियो?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "के त्यहाँ कुनै अन्य विशिष्ट मामला थियो जसका लागि एप्लिकेसनले उचित बोलीको आउटपुट प्रदान गर्न असफल भयो?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "तपाईँ अनुवादलाई कसरी मूल्याङ्कन गर्नुहुन्छ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "के एप्लिकेसनले जटिल वाक्यहरू अनुवाद गर्न सक्षम थियो?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "अनुवादले सुधार गर्न सक्ने क्षेत्रहरू के हुन्?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नाम",
+              "स्थान",
+              "अङ्क",
+              "दिनाङ्क",
+              "अङ्ग्रेजी शब्द / कोड मिश्रित शब्द",
+              "प्राविधिक पदावली",
+              "युआरएल",
+              "लिङ्ग",
+              "एकवचन/ बहुवचन",
+              "विराम चिन्ह"
+            ]
+          },
+          {
+            "question": "के अनुवादित पाठ व्याकरणिक रूपमा सही र राम्रोसँग संरचित थियो?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "त्यहाँ कुनै अन्य विशिष्ट मामला थियो जहाँ अनुवाद असफल भएको देखिन्छ?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "mai",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "की अहाँ काजक श्रृंखलासँ सन्तुष्ट छी?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "अहाँ वार्ताक पहिचानकेँ केहन रेटिंग देबय?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "की वार्ताकेँ सही ढङ्गसँ पहिचानल गेलय?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "एहन कोन क्षेत्रसभ छै जाहिमे  वार्ता-सँ-लिपि मे सुधार कयल जा सकैत छै?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नाम",
+              "स्थान",
+              "अङ्क",
+              "तारीख",
+              "अंग्रेजी शब्द/कोड मिश्रित शब्द",
+              "तकनीकी शब्द",
+              "यूआरएल",
+              "विराम चिह्न"
+            ]
+          },
+          {
+            "question": "की पृष्ठभूमिक आवाज ठीकसँ नियंत्रित कयल गेलय?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "जँ अहाँ विशिष्ट उच्चारणमे गप करैत तऽ की एप वार्ताक पहिचान करबामे सक्षम छै?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"            ]
+          },
+          {
+            "question": "की एहन कोनो विशिष्ट मामले छै जतऽ वार्ताक लगातार गलत पहिचान कयल गेलय?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "अहाँ वार्ताक आउटपुटकेँ केहन रेटिंग देबय?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "की शब्दसभक  उच्चारण सही आ स्वाभाविक छल?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "एहन कोन क्षेत्रसभ छै जाहिमे लिपि-सँ-वार्ता मे सुधार कयल जा सकैत अछि?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नाम",
+              "स्थान",
+              "अङ्क",
+              "तारीख",
+              "अङरेजी शब्द/कोड मिश्रित शब्द",
+              "तकनीकी शब्द",
+              "यूआरएल",
+              "विराम चिह्न",
+              "पृष्ठभूमिक आवाज",
+              "शब्दसभक लोप",
+              "अस्वाभाविक वार्ता"
+            ]
+          },
+          {
+            "question": "की वार्ताक आउटपुट स्पष्ट आ बुझबामे हल्लुक छल?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "की वार्ताके आउटपुटक गति ठीक छल ?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "की कोनो आन विशिष्ट मामला छल जाहि लेल एप उचित वार्ता आउटपुट प्रदान करबामे विफल रहल?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "अहाँ अनुवादकेँ केहन रेटिंग देबय?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "की एप जटिल वाक्यसभक अनुवाद करबामे सक्षम छल?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "कोन क्षेत्रसभमे अनुवादमे सुधारक गुञ्जाइश छै?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "नाम",
+              "स्थान",
+              "अङ्क",
+              "तारीख",
+              "अंग्रेजी शब्द/कोड मिश्रित शब्द",
+              "तकनीकी शब्द",
+              "यूआरएल",
+              "लिङ्ग",
+              "एकवचन / बहुवचन",
+              "विराम चिह्न"
+            ]
+          },
+          {
+            "question": "की अनुवादित लिपि व्याकरणक हिसाबे ठीक आ संरचनाक हिसाबे नीक छल?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "की कोनो आन विशिष्ट मामिला छल जतऽ अनुवाद विफल होइत लागल?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "gu",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "Are you satisfied with the pipeline response?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs",
+            "comment"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "Are you satisfied with the ASR response?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "How would you rate the Speech Recognition?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the speech accurately recognised?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that ASR can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Punctuations"
+            ]
+          },
+          {
+            "question": "Was the background noise handled properly?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was the application able to recognise the speech if you spoke in an accented tone?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case where the Speech was constantly incorrectly recognised?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the translation?",
+            "supportedFeedbackTypes": [
+              "rating"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the application able to translate complex sentences?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Singular / Plural",
+              "Genders"
+            ]
+          },
+          {
+            "question": "Was the translated text grammatically correct and well-structured?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Is there any other specific case where the translation seemed to fail?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the speech output",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the pronunciation of words accurate and natural?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs"
+            ]
+          },
+          {
+            "question": "Was the speech output clear and easy to understand?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case for which the application failed to provide proper speech output?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          },
+          {
+            "question": "Was the speed of the speech output proper?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "ks",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "Are you satisfied with the pipeline response?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs",
+            "comment"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "Are you satisfied with the ASR response?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "How would you rate the Speech Recognition?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the speech accurately recognised?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that ASR can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Punctuations"
+            ]
+          },
+          {
+            "question": "Was the background noise handled properly?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was the application able to recognise the speech if you spoke in an accented tone?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case where the Speech was constantly incorrectly recognised?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the translation?",
+            "supportedFeedbackTypes": [
+              "rating"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the application able to translate complex sentences?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Singular / Plural",
+              "Genders"
+            ]
+          },
+          {
+            "question": "Was the translated text grammatically correct and well-structured?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Is there any other specific case where the translation seemed to fail?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the speech output",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the pronunciation of words accurate and natural?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs"
+            ]
+          },
+          {
+            "question": "Was the speech output clear and easy to understand?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case for which the application failed to provide proper speech output?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          },
+          {
+            "question": "Was the speed of the speech output proper?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "mni",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "Are you satisfied with the pipeline response?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs",
+            "comment"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "Are you satisfied with the ASR response?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "How would you rate the Speech Recognition?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the speech accurately recognised?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that ASR can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Punctuations"
+            ]
+          },
+          {
+            "question": "Was the background noise handled properly?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was the application able to recognise the speech if you spoke in an accented tone?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case where the Speech was constantly incorrectly recognised?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the translation?",
+            "supportedFeedbackTypes": [
+              "rating"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the application able to translate complex sentences?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Singular / Plural",
+              "Genders"
+            ]
+          },
+          {
+            "question": "Was the translated text grammatically correct and well-structured?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Is there any other specific case where the translation seemed to fail?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the speech output",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the pronunciation of words accurate and natural?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs"
+            ]
+          },
+          {
+            "question": "Was the speech output clear and easy to understand?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case for which the application failed to provide proper speech output?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          },
+          {
+            "question": "Was the speed of the speech output proper?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "feedbackLanguage": "ur",
+    "pipelineFeedback": {
+      "commonFeedback": [
+        {
+          "question": "Are you satisfied with the pipeline response?",
+          "supportedFeedbackTypes": [
+            "rating",
+            "thumbs",
+            "comment"
+          ]
+        }
+      ]
+    },
+    "taskFeedback": [
+      {
+        "taskType": "asr",
+        "commonFeedback": [
+          {
+            "question": "Are you satisfied with the ASR response?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "How would you rate the Speech Recognition?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the speech accurately recognised?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that ASR can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Punctuations"
+            ]
+          },
+          {
+            "question": "Was the background noise handled properly?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was the application able to recognise the speech if you spoke in an accented tone?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case where the Speech was constantly incorrectly recognised?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "translation",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the translation?",
+            "supportedFeedbackTypes": [
+              "rating"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the application able to translate complex sentences?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs",
+              "Singular / Plural",
+              "Genders"
+            ]
+          },
+          {
+            "question": "Was the translated text grammatically correct and well-structured?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Is there any other specific case where the translation seemed to fail?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          }
+        ]
+      },
+      {
+        "taskType": "tts",
+        "commonFeedback": [
+          {
+            "question": "How would you rate the speech output",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ],
+        "granularFeedback": [
+          {
+            "question": "Was the pronunciation of words accurate and natural?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Which are the areas that Translation can improve upon?",
+            "supportedFeedbackTypes": [
+              "checkbox-list"
+            ],
+            "parameters": [
+              "names",
+              "places",
+              "numbers",
+              "dates",
+              "English words / code mixed words",
+              "technical terms",
+              "URLs"
+            ]
+          },
+          {
+            "question": "Was the speech output clear and easy to understand?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          },
+          {
+            "question": "Was there any other specific case for which the application failed to provide proper speech output?",
+            "supportedFeedbackTypes": [
+              "comment"
+            ]
+          },
+          {
+            "question": "Was the speed of the speech output proper?",
+            "supportedFeedbackTypes": [
+              "rating",
+              "thumbs"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
