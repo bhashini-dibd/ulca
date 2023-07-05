@@ -88,6 +88,8 @@ class PipeLineFeedBack(Resource):
         try:
             git_file_location   =   f"{config.git_folder_prefix}/{config.masPipe}.json"
             get_pipeline_qns = utils.read_from_git(git_file_location) #list of dict
+            if isinstance(get_pipeline_qns,dict):
+                get_pipeline_qns = get_pipeline_qns['pipelinefeedQns']
             if get_pipeline_qns and isinstance(get_pipeline_qns,list):
                 language_exists,tasks_exists = False,False
                 for pipe_qns in get_pipeline_qns:
