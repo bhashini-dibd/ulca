@@ -257,6 +257,11 @@ class ParallelService:
                     derived_data = {"sourceText": data["sourceText"], "targetText": record["sourceText"],
                                     "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["sourceTextHash"],
                                 "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
+            if derived_data is not None:
+                if "sourceScriptCode" in data.keys():
+                    derived_data["sourceScriptCode"] = data["sourceScriptCode"]
+                if "targetScriptCode" in data.keys():
+                    derived_data["targetScriptCode"] = data["targetScriptCode"]                
             if not derived_data:
                 return None
             hashes = [data["sourceTextHash"], data["targetTextHash"]]
