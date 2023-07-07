@@ -101,6 +101,7 @@ import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.PipelineModelResponse;
 import com.ulca.model.response.PipelinesResponse;
 import com.ulca.model.response.UploadModelResponse;
+import com.ulca.model.response.UploadPipelineResponse;
 
 import io.netty.handler.codec.http.HttpRequest;
 import io.swagger.model.ASRInference;
@@ -506,8 +507,110 @@ public class ModelService {
 	@Transactional
 	public UploadModelResponse uploadModel(MultipartFile file, String userId) throws Exception {
 
-		String modelName = checkModel(file);
-		if (modelName.equals("pipelineModel")) {
+	        String modelFilePath = storeModelFile(file);
+			ModelExtended modelObj = getUploadedModel(modelFilePath);
+
+			if (modelObj != null) {
+				validateModel(modelObj);
+			} else {
+				throw new ModelValidationException("Model validation failed. Check uploaded file syntax");
+			}
+
+			ModelTask taskType = modelObj.getTask();
+			if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
+				LanguagePair lp = new LanguagePair();
+				lp.setSourceLanguage(SupportedLanguages.MIXED);
+				LanguagePairs lps = new LanguagePairs();
+				lps.add(lp);
+				modelObj.setLanguages(lps);
+			}
+
+			modelObj.setUserId(userId);
+			modelObj.setSubmittedOn(Instant.now().toEpochMilli());
+			modelObj.setPublishedOn(Instant.now().toEpochMilli());
+			modelObj.setStatus("unpublished");
+			modelObj.setUnpublishReason("Newly submitted model");
+
+			InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
+			OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
+
+			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
+					|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
+				if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+					ASRInference asrInference = (ASRInference) schema;
+					if (!asrInference.getModelProcessingType().getType()
+							.equals(ModelProcessingType.TypeEnum.STREAMING)) {
+						inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+					}
+				} else {
+					TTSInference ttsInference = (TTSInference) schema;
+
+					if (!ttsInference.getModelProcessingType().getType()
+							.equals(ModelProcessingType.TypeEnum.STREAMING)) {
+						if (ttsInference.getSupportedVoices() != null) {
+							List<VoiceTypes> supportedVoices = ttsInference.getSupportedVoices();
+							if (!supportedVoices.isEmpty()) {
+
+								inferenceAPIEndPoint = modelInferenceEndPointService
+										.validateCallBackUrl(inferenceAPIEndPoint);
+							} else {
+								throw new ModelValidationException("Supported Voices Type is not available");
+
+							}
+						} else {
+							throw new ModelValidationException("Supported Voices Type is not available");
+
+						}
+					}
+				}
+			} else {
+				inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+			}
+
+			if (inferenceAPIEndPoint.getInferenceApiKey() != null) {
+
+				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint
+						.getInferenceApiKey();
+				if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
+					String originalName = inferenceAPIEndPointInferenceApiKey.getName();
+					String originalValue = inferenceAPIEndPointInferenceApiKey.getValue();
+					log.info("SecretKey :: " + SECRET_KEY);
+					// String encryptedName = Aes256.encrypt(originalName, SECRET_KEY);
+					String encryptedName = EncryptDcryptService.encrypt(originalName, SECRET_KEY);
+
+					log.info("encryptedName ::" + encryptedName);
+					// String encryptedValue = Aes256.encrypt(originalValue, SECRET_KEY);
+					String encryptedValue = EncryptDcryptService.encrypt(originalValue, SECRET_KEY);
+
+					log.info("encryptedValue ::" + encryptedValue);
+
+					inferenceAPIEndPointInferenceApiKey.setName(encryptedName);
+					inferenceAPIEndPointInferenceApiKey.setValue(encryptedValue);
+					inferenceAPIEndPoint.setInferenceApiKey(inferenceAPIEndPointInferenceApiKey);
+				}
+			}
+			modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
+
+			if (modelObj != null) {
+				try {
+					modelDao.save(modelObj);
+				} catch (DuplicateKeyException ex) {
+					ex.printStackTrace();
+					throw new DuplicateKeyException("Model with same name and version exist in system");
+				}
+			}
+
+			return new UploadModelResponse("Model Saved Successfully", modelObj);
+
+		
+	}
+	
+	
+	
+	@Transactional
+	public UploadPipelineResponse uploadPipeline(MultipartFile file, String userId) throws Exception {
+
+	
 
 			String pipelineModelFilepath = storePipelineModelFile(file);
 			PipelineModel pipelineModelObj = getUploadedPipelineModel(pipelineModelFilepath);
@@ -634,113 +737,13 @@ public class ModelService {
 				}
 			}
 
-			return new UploadModelResponse("Pipeline Model Saved Successfully", pipelineModelObj);
+			return new UploadPipelineResponse("Pipeline Model Saved Successfully", pipelineModelObj);
 
-		}
+		
 
-		else if (modelName.equals("model")) {
-
-			String modelFilePath = storeModelFile(file);
-			ModelExtended modelObj = getUploadedModel(modelFilePath);
-
-			if (modelObj != null) {
-				validateModel(modelObj);
-			} else {
-				throw new ModelValidationException("Model validation failed. Check uploaded file syntax");
-			}
-
-			ModelTask taskType = modelObj.getTask();
-			if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
-				LanguagePair lp = new LanguagePair();
-				lp.setSourceLanguage(SupportedLanguages.MIXED);
-				LanguagePairs lps = new LanguagePairs();
-				lps.add(lp);
-				modelObj.setLanguages(lps);
-			}
-
-			modelObj.setUserId(userId);
-			modelObj.setSubmittedOn(Instant.now().toEpochMilli());
-			modelObj.setPublishedOn(Instant.now().toEpochMilli());
-			modelObj.setStatus("unpublished");
-			modelObj.setUnpublishReason("Newly submitted model");
-
-			InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-			OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
-
-			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
-					|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
-				if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
-					ASRInference asrInference = (ASRInference) schema;
-					if (!asrInference.getModelProcessingType().getType()
-							.equals(ModelProcessingType.TypeEnum.STREAMING)) {
-						inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
-					}
-				} else {
-					TTSInference ttsInference = (TTSInference) schema;
-
-					if (!ttsInference.getModelProcessingType().getType()
-							.equals(ModelProcessingType.TypeEnum.STREAMING)) {
-						if (ttsInference.getSupportedVoices() != null) {
-							List<VoiceTypes> supportedVoices = ttsInference.getSupportedVoices();
-							if (!supportedVoices.isEmpty()) {
-
-								inferenceAPIEndPoint = modelInferenceEndPointService
-										.validateCallBackUrl(inferenceAPIEndPoint);
-							} else {
-								throw new ModelValidationException("Supported Voices Type is not available");
-
-							}
-						} else {
-							throw new ModelValidationException("Supported Voices Type is not available");
-
-						}
-					}
-				}
-			} else {
-				inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
-			}
-
-			if (inferenceAPIEndPoint.getInferenceApiKey() != null) {
-
-				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint
-						.getInferenceApiKey();
-				if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
-					String originalName = inferenceAPIEndPointInferenceApiKey.getName();
-					String originalValue = inferenceAPIEndPointInferenceApiKey.getValue();
-					log.info("SecretKey :: " + SECRET_KEY);
-					// String encryptedName = Aes256.encrypt(originalName, SECRET_KEY);
-					String encryptedName = EncryptDcryptService.encrypt(originalName, SECRET_KEY);
-
-					log.info("encryptedName ::" + encryptedName);
-					// String encryptedValue = Aes256.encrypt(originalValue, SECRET_KEY);
-					String encryptedValue = EncryptDcryptService.encrypt(originalValue, SECRET_KEY);
-
-					log.info("encryptedValue ::" + encryptedValue);
-
-					inferenceAPIEndPointInferenceApiKey.setName(encryptedName);
-					inferenceAPIEndPointInferenceApiKey.setValue(encryptedValue);
-					inferenceAPIEndPoint.setInferenceApiKey(inferenceAPIEndPointInferenceApiKey);
-				}
-			}
-			modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
-
-			if (modelObj != null) {
-				try {
-					modelDao.save(modelObj);
-				} catch (DuplicateKeyException ex) {
-					ex.printStackTrace();
-					throw new DuplicateKeyException("Model with same name and version exist in system");
-				}
-			}
-
-			return new UploadModelResponse("Model Saved Successfully", modelObj);
-
-		} else {
-
-			return new UploadModelResponse("Invalid Model!", modelName);
-
-		}
+	
 	}
+
 
 	public ModelExtended getUploadedModel(String modelFilePath) {
 
