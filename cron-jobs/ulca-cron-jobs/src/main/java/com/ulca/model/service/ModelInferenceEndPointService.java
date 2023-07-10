@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mervick.aes_everywhere.Aes256;
 import com.ulca.model.service.exception.ModelComputeException;
 
+import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -90,8 +91,10 @@ public class ModelInferenceEndPointService {
 
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
 			ASRRequest request = asrInference.getRequest();
+			ObjectMapper objectMapper = new ObjectMapper();
 
 			ASRResponse response = null;
+			Response	httpresponse=null;
 			SslContext sslContext;
 			try {
 				sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
@@ -115,19 +118,56 @@ public class ModelInferenceEndPointService {
 						String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
 						log.info("inferenceApiKeyName : "+inferenceApiKeyName);
 						log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
-						response = builder.clientConnector(new
+						/*
+						 * response = builder.clientConnector(new
+						 * ReactorClientHttpConnector(httpClient)).build().post()
+						 * .uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue).
+						 * body(Mono.just(request), ASRRequest.class).retrieve()
+						 * .bodyToMono(ASRResponse.class).block();
+						 */		
+						
+						httpresponse = builder.clientConnector(new
 								  ReactorClientHttpConnector(httpClient)).build().post()
 								  .uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue).
 								  body(Mono.just(request), ASRRequest.class).retrieve()
-								  .bodyToMono(ASRResponse.class).block();					
+								  .bodyToMono(Response.class).block();
+						
+						if (httpresponse.code() < 200 || httpresponse.code() > 204) {
+
+							log.info(httpresponse.toString());
+
+							throw new ModelComputeException(httpresponse.message(), "ASR Model Compute Failed",
+									HttpStatus.valueOf(httpresponse.code()));
+						}
+						
+					String responseJsonStr = httpresponse.body().string();
+
+					 response = objectMapper.readValue(responseJsonStr, ASRResponse.class);
+
+					
 					    log.info("response : "+response);
+					    
 				   }
 				}else {
-					response = builder.clientConnector(new
+					httpresponse = builder.clientConnector(new
 							  ReactorClientHttpConnector(httpClient)).build().post()
 							  .uri(callBackUrl).
 							  body(Mono.just(request), ASRRequest.class).retrieve()
-							  .bodyToMono(ASRResponse.class).block();
+							  .bodyToMono(Response.class).block();
+					
+					if (httpresponse.code() < 200 || httpresponse.code() > 204) {
+
+						log.info(httpresponse.toString());
+
+						throw new ModelComputeException(httpresponse.message(), "ASR Model Compute Failed",
+								HttpStatus.valueOf(httpresponse.code()));
+					}
+					
+					
+					String responseJsonStr = httpresponse.body().string();
+
+					 response = objectMapper.readValue(responseJsonStr, ASRResponse.class);
+					
 				    log.info("response : "+response);
 
 					
@@ -141,7 +181,6 @@ public class ModelInferenceEndPointService {
 				e.printStackTrace();
 			}
 
-			ObjectMapper objectMapper = new ObjectMapper();
 			log.info("logging asr inference point response" + objectMapper.writeValueAsString(response));
 			asrInference.setResponse(response);
 			schema = asrInference;
