@@ -70,6 +70,16 @@ public class ModelInferenceEndPointService {
 			Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
+			
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+			
+			
 			String responseJsonStr = httpResponse.body().string();
 
 			TranslationResponse response = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
@@ -159,6 +169,15 @@ public class ModelInferenceEndPointService {
 			Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
+			
+			
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
 			String responseJsonStr = httpResponse.body().string();
 			
 			log.info("responseJsonStr :: "+responseJsonStr);
@@ -188,7 +207,14 @@ public class ModelInferenceEndPointService {
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
+			
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
 			// Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -218,7 +244,13 @@ public class ModelInferenceEndPointService {
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
-               
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
 			
 			
 			
@@ -250,7 +282,13 @@ public class ModelInferenceEndPointService {
 			OkHttpClient newClient = getTrustAllCertsClient();
 
 			Response httpResponse = newClient.newCall(httpRequest).execute();
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "TxtLangDetection Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
 			String responseJsonStr = httpResponse.body().string();
 			TxtLangDetectionResponse response = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
 			txtLangDetectionInference.setResponse(response);
@@ -275,7 +313,13 @@ public class ModelInferenceEndPointService {
 			
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
-			
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Ner Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
 			log.info("httpResponse : "+httpResponse);
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
