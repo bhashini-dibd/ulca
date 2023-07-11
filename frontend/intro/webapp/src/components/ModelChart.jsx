@@ -23,6 +23,7 @@ const ChartRender = (props) => {
 	const [filterValue, setFilterValue] = useState("language");
   const [data, setData] = useState([]);
   const [dataValue, setDataValue] = useState("");
+  const [startIndex, setStartIndex] = useState(20);
 
 	const [page, setPage] = useState(0);
 	const [sourceLanguage, setSourceLanguage] = useState(
@@ -37,7 +38,6 @@ const ChartRender = (props) => {
 	const { classes } = props;
 	const options = DatasetItems;
 	
-
   const fetchChartData = async (dataType, value, criterions) => {
     let apiObj = new FetchLanguageDataSets(dataType, value, criterions);
         fetch(apiObj.apiEndPoint(), {
@@ -235,7 +235,7 @@ const ChartRender = (props) => {
 								</XAxis>
 								<YAxis padding={{ top: 80 }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)}><Label value= {axisValue.yAxis} angle= {-90} position= 'insideLeft' fontWeight="bold" fontSize={16}></Label></YAxis>
 
-								{/* <Brush dataKey='label' height={30} stroke="#8884d8"/> */}
+								{data.length > 100 && <Brush dataKey='label' height={30} stroke="#8884d8" endIndex={startIndex}/> }
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
 								<Bar margin={{ top: 140, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }}>
 									<LabelList
