@@ -36,6 +36,7 @@ import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.PipelinesResponse;
 import com.ulca.model.response.UploadModelResponse;
+import com.ulca.model.response.UploadPipelineResponse;
 import com.ulca.model.service.ModelService;
 
 import io.swagger.pipelinerequest.PipelineRequest;
@@ -73,6 +74,14 @@ public class ModelController {
 			@RequestParam(required = true) String userId) throws Exception {
 		log.info("******** Entry ModelController:: uploadModel *******");
 		return modelService.uploadModel(file, userId);
+	}
+	
+	
+	@PostMapping("/uploadPipeline")
+	public UploadPipelineResponse uploadPipeline(@RequestParam("file") MultipartFile file,
+			@RequestParam(required = true) String userId) throws Exception {
+		log.info("******** Entry ModelController:: uploadModel *******");
+		return modelService.uploadPipeline(file, userId);
 	}
 
 	@PostMapping("/search")
