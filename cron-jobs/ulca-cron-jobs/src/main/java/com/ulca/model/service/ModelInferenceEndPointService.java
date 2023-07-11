@@ -110,13 +110,41 @@ public class ModelInferenceEndPointService {
 
 					if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
 
-						String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
-						String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
-						log.info("inferenceApiKeyName : " + inferenceApiKeyName);
-						log.info("inferenceApiKeyValue : " + inferenceApiKeyValue);
+					//	String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+					//	String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+					//	log.info("inferenceApiKeyName : " + inferenceApiKeyName);
+					//	log.info("inferenceApiKeyValue : " + inferenceApiKeyValue);
+						
+						/////////////////////////////////////////////////////////////
+						
+						String encryptedInferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+						String encryptedInferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+						log.info("Secret Key :: "+SECRET_KEY);
+						
+						log.info("encryptedInferenceApiKeyName : "+encryptedInferenceApiKeyName);
+						log.info("encryptedInferenceApiKeyValue : "+encryptedInferenceApiKeyValue);
+						
+						//String originalInferenceApiKeyName = Aes256.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+
+						//String originalInferenceApiKeyValue = Aes256.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+						
+						String originalInferenceApiKeyName = EncryptDcryptService.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+
+						String originalInferenceApiKeyValue = EncryptDcryptService.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+						log.info("originalInferenceApiKeyName : "+originalInferenceApiKeyName);
+						log.info("originalInferenceApiKeyValue : "+originalInferenceApiKeyValue);
+						
+						///////////////////////////////////////////////////////////
+						
+						
+						
+						
+						
+						
+						
 
 						response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
-								.uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue)
+								.uri(callBackUrl).header(originalInferenceApiKeyName, originalInferenceApiKeyValue)
 								.body(Mono.just(request), ASRRequest.class).retrieve().bodyToMono(ASRResponse.class)
 								.block();
 
