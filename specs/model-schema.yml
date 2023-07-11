@@ -114,6 +114,7 @@ components:
             - $ref: '#/components/schemas/OCRInference'
             - $ref: '#/components/schemas/TxtLangDetectionInference'
             - $ref: '#/components/schemas/NerInference'
+            - $ref: '#/components/schemas/DocLayoutInference'
           discriminator:
             propertyName: taskType
             mapping:
@@ -124,6 +125,7 @@ components:
               ocr: '#/components/schemas/OCRInference'
               txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
               ner: '#/components/schemas/NerInference'
+              doc-layout-detection: '#/components/schemas/DocLayoutInference'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
@@ -329,6 +331,20 @@ components:
           $ref: '#/components/schemas/TranslationRequest'
         response:
           $ref: '#/components/schemas/NerResponse'
+          
+    DocLayoutInference:
+      required:
+        - taskType
+        - request
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        request:
+          $ref: '#/components/schemas/OCRRequest'
+        response:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRResponse
+      
     TranslationAsyncInference:
       required:
         - taskType
