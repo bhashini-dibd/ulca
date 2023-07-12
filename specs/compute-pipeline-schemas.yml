@@ -278,6 +278,7 @@ components:
         - flac
         - sph
         - m4a
+        - webm
     SupportedFormats:
       anyOf:
         - $ref: "#/components/schemas/AudioFormat"
