@@ -244,6 +244,7 @@ components:
         - mp3
         - flac
         - sph
+        - webm
     AudioChannel:
       type: string
       description: number of channel in the audio
