@@ -1,8 +1,11 @@
 package com.ulca.model.service;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.net.http.HttpConnectTimeoutException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -22,9 +25,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mervick.aes_everywhere.Aes256;
 import com.ulca.model.service.exception.ModelComputeException;
 
+import io.netty.channel.ConnectTimeoutException;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import io.netty.handler.timeout.ReadTimeoutException;
+import io.netty.handler.timeout.WriteTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -59,7 +65,7 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(120, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -67,7 +73,16 @@ public class ModelInferenceEndPointService {
             Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 	
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			
+			Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
+			
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
 			String responseJsonStr = httpResponse.body().string();
@@ -86,8 +101,10 @@ public class ModelInferenceEndPointService {
 			try {
 				sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
 
-				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext)).responseTimeout(Duration.ofSeconds(120));
 
+				//responseTimeout(Duration.ofSeconds(120))
+				
 				
 				/*
 				 * response = builder.clientConnector(new
@@ -124,8 +141,14 @@ public class ModelInferenceEndPointService {
 				}
 				
 
-			} catch (SSLException e) {
+			}catch (SSLException e) {
 				e.printStackTrace();
+			} catch (ReadTimeoutException rte) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			} catch (WriteTimeoutException wte) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -144,7 +167,7 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
             log.info("requestJson :: "+requestJson);
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(120, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -156,7 +179,13 @@ public class ModelInferenceEndPointService {
 			
 			
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+        	Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
 			String responseJsonStr = httpResponse.body().string();
@@ -187,7 +216,14 @@ public class ModelInferenceEndPointService {
 			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
-			Response httpResponse = newClient.newCall(httpRequest).execute();
+			
+			Response httpResponse =null; 
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
 
 			// Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
@@ -217,9 +253,14 @@ public class ModelInferenceEndPointService {
 			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
-			Response httpResponse = newClient.newCall(httpRequest).execute();
                
-			
+			Response httpResponse =null; 
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
 			
 			
 			// Response httpResponse = client.newCall(httpRequest).execute();
@@ -249,8 +290,13 @@ public class ModelInferenceEndPointService {
 			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
-			Response httpResponse = newClient.newCall(httpRequest).execute();
-
+			Response httpResponse =null; 
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
 			String responseJsonStr = httpResponse.body().string();
 			TxtLangDetectionResponse response = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
 			txtLangDetectionInference.setResponse(response);
@@ -274,7 +320,14 @@ public class ModelInferenceEndPointService {
 	
 			
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
 			
 			log.info("httpResponse : "+httpResponse);
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
@@ -370,7 +423,13 @@ public class ModelInferenceEndPointService {
         Request httpRequest = new Request.Builder().url(url).post(body).build();
 
         OkHttpClient newClient = getTrustAllCertsClient();
-        Response httpResponse = newClient.newCall(httpRequest).execute();
+        Response httpResponse =null; 
+		try {
+			httpResponse = newClient.newCall(httpRequest).execute();
+		}catch(SocketTimeoutException ste) {
+			throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+					HttpStatus.BAD_REQUEST);
+		}
 
         return httpResponse;
     }
@@ -392,8 +451,15 @@ public class ModelInferenceEndPointService {
         Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 
 		OkHttpClient newClient = getTrustAllCertsClient();
-		Response httpResponse = newClient.newCall(httpRequest).execute();
-
+		
+		  Response httpResponse =null; 
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
+	
 		return httpResponse;
 	}
     
@@ -434,7 +500,7 @@ public class ModelInferenceEndPointService {
         OkHttpClient.Builder newBuilder = new OkHttpClient.Builder();
         newBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
         newBuilder.hostnameVerifier((hostname, session) -> true);
-        return newBuilder.readTimeout(60, TimeUnit.SECONDS).build();
+        return newBuilder.readTimeout(120, TimeUnit.SECONDS).build();
     }
     
     
