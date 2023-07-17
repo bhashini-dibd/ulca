@@ -2,6 +2,7 @@ package com.ulca.model.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -428,8 +429,13 @@ public class ModelInferenceEndPointService {
 		Request httpRequest = new Request.Builder().url(url).post(body).build();
 
 		OkHttpClient newClient = getTrustAllCertsClient();
-		Response httpResponse = newClient.newCall(httpRequest).execute();
-
+     	Response httpResponse =null; 
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}		
 		return httpResponse;
 	}
 	
@@ -595,16 +601,22 @@ public class ModelInferenceEndPointService {
 			
 			
 			//OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
-                    .writeTimeout(60, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
+			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
+                    .writeTimeout(120, TimeUnit.SECONDS)
+                    .readTimeout(120, TimeUnit.SECONDS)
                     .build();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
             Request httpRequest =checkInferenceApiKeyValueAtCompute(inferenceAPIEndPoint,body);
 	
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+        	Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}			
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
 				log.info(httpResponse.toString());
@@ -689,9 +701,9 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			//OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
-                    .writeTimeout(60, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
+			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
+                    .writeTimeout(120, TimeUnit.SECONDS)
+                    .readTimeout(120, TimeUnit.SECONDS)
                     .build();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -702,7 +714,15 @@ public class ModelInferenceEndPointService {
 			
 			
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+			Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
+			
+			
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
 				log.info(httpResponse.toString());
@@ -787,8 +807,14 @@ public class ModelInferenceEndPointService {
 	   
             log.info(" httpRequest  :::::::"+httpRequest.toString());
 			OkHttpClient newClient = getTrustAllCertsClient();
-			Response httpResponse = newClient.newCall(httpRequest).execute();
-            
+			Response httpResponse= null;
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+				
+			}
 			
 			log.info("httpResponse :::::::::"+httpResponse.toString());
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
@@ -842,9 +868,9 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
              log.info("request :: "+requestJson.toString());
 			//OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
-                    .writeTimeout(60, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
+			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
+                    .writeTimeout(120, TimeUnit.SECONDS)
+                    .readTimeout(120, TimeUnit.SECONDS)
                     .build();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -856,8 +882,13 @@ public class ModelInferenceEndPointService {
 			
 			log.info("httpRequest :: "+httpRequest);
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
-			
+			Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}			
 			log.info("httpResponse :: "+httpResponse);
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
@@ -922,8 +953,14 @@ public class ModelInferenceEndPointService {
 			
 			OkHttpClient newClient = getTrustAllCertsClient();
 
-			Response httpResponse = newClient.newCall(httpRequest).execute();
-
+			Response httpResponse= null;
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+				
+			}
 			String responseJsonStr = httpResponse.body().string();
 
 			try {
@@ -965,9 +1002,9 @@ public class ModelInferenceEndPointService {
 
 			//OkHttpClient client = new OkHttpClient();
 			
-			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
-                    .writeTimeout(60, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
+			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
+                    .writeTimeout(120, TimeUnit.SECONDS)
+                    .readTimeout(120, TimeUnit.SECONDS)
                     .build();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -977,7 +1014,14 @@ public class ModelInferenceEndPointService {
 			
 			
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+         	Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}	
+			
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
 				log.info(httpResponse.toString());
@@ -1140,7 +1184,7 @@ public class ModelInferenceEndPointService {
 		OkHttpClient.Builder newBuilder = new OkHttpClient.Builder();
 		newBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
 		newBuilder.hostnameVerifier((hostname, session) -> true);
-		return newBuilder.readTimeout(60, TimeUnit.SECONDS).build();
+		return newBuilder.readTimeout(120, TimeUnit.SECONDS).build();
 	}
 	
 	   public static Request   checkInferenceApiKeyValueAtUpload(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
