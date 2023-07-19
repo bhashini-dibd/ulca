@@ -5,7 +5,7 @@ info:
   contact:
     name: Ministry of Electronics and Information Technology
     url: https://bhashini.gov.in/ulca
-  version: 0.7.0
+  version: 0.8.0
 servers:
 - url: https://meity-auth.ulcacontrib.org 
   description: Production server (uses live data)
@@ -3343,13 +3343,10 @@ components:
         imageUri:
           type: string
       example:
-        modelId: 617798c22fbba1441081885d
+        modelId: 641d1d6592a6a31751ff1f49
         userId: 6a73afa4fc774dcdb28d5fff944511f6
         task: asr
-        source: ml
-        audiFormat: wav
-        audioUri: https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_malayalam.wav
-        audioContent: UklGRiygCwBXQVZFZm10IBAAAAABAAIARKwAABCxAgAEABAAZGF0YQCgCwAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        input: [{"source":"How are you?"}]
   
     ModelComputeResponse:
       type: object
@@ -4687,6 +4684,75 @@ components:
         uploaded:
           type: boolean
           description: status of file upload.
+    SupportedLanguages:
+      type: string
+      description: This attribute defines the  language codes(iso-639-1, iso 639-2) supported under ULCA
+      enum:
+        - en
+        - hi
+        - mr
+        - ta
+        - te
+        - kn
+        - gu
+        - pa
+        - bn
+        - ml
+        - as
+        - brx
+        - doi
+        - ks
+        - kok
+        - mai
+        - mni
+        - ne
+        - or
+        - sd
+        - si
+        - ur
+        - sat
+        - lus
+        - njz
+        - pnr
+        - kha
+        - grt
+        - sa
+        - raj
+        - bho
+        - gom
+        - awa
+        - hne
+        - mag
+        - mwr
+        - sjp
+        - gbm
+        - tcy
+        - hlb
+        - bih
+        - anp
+        - bns
+        - mixed
+        - unknown
+    SupportedScripts:
+      type: string
+      description: This attribute defines the  Script codes(ISO 15924) supported under ULCA, code reference available at - `https://unicode.org/iso15924/iso15924-codes.html' 
+      enum:
+        - Beng
+        - Deva
+        - Thaa
+        - Gujr
+        - Aran
+        - Orya
+        - Guru
+        - Arab
+        - Sinh
+        - Knda
+        - Mlym
+        - Taml
+        - Telu
+        - Mtei
+        - Olck
+        - Latn
   securitySchemes:
     apiKey:
       type: apiKey
