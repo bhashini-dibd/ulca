@@ -25,6 +25,9 @@ public class PipelineModel extends PipelineInference{
 	@JsonProperty("submittedOn")
 	private Long submittedOn;
 	
+	@JsonProperty("status")
+	private String status;
+	
 	public String getPipelineModelId() {
 		return pipelineModelId;
 	}
@@ -51,6 +54,14 @@ public class PipelineModel extends PipelineInference{
 	
 	
 	
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	
 	
 	

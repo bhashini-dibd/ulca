@@ -1420,6 +1420,14 @@ public class ModelService {
 		//Check if task types and config is accepted and in proper order
 		PipelineModel pipelineModel = pipelineModelDao
 				.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
+		
+		
+		if(pipelineModel.getStatus().equalsIgnoreCase("unpublished")) {
+			
+			throw new PipelineValidationException("Requested pipeline is not available !",
+					HttpStatus.BAD_REQUEST);
+		}
+		
 
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
