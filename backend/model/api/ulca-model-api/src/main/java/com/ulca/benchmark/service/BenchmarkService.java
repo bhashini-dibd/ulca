@@ -312,8 +312,7 @@ public class BenchmarkService {
 			LanguagePair lpsentPair = new LanguagePair();
 			lpsentPair.setSourceLanguage(lp.getSourceLanguage());
 			lpsentPair.setTargetLanguage(lp.getTargetLanguage());
-			lpsentPair.setSourceScriptCode(lp.getSourceScriptCode());
-			lpsentPair.setTargetScriptCode(lp.getTargetScriptCode());
+			
 			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(), lpsentPair);
 
 			for (Benchmark bm : list) {
