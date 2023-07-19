@@ -312,6 +312,8 @@ public class BenchmarkService {
 			LanguagePair lpsentPair = new LanguagePair();
 			lpsentPair.setSourceLanguage(lp.getSourceLanguage());
 			lpsentPair.setTargetLanguage(lp.getTargetLanguage());
+			lpsentPair.setSourceScriptCode(lp.getSourceScriptCode());
+			lpsentPair.setTargetScriptCode(lp.getTargetScriptCode());
 			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(), lpsentPair);
 
 			for (Benchmark bm : list) {
@@ -320,6 +322,8 @@ public class BenchmarkService {
 				List<String> metricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
 				log.info("metricList before removing bert :: "+metricList.toString());
 				
+				
+				if(bm.getTask().getType().toString().equalsIgnoreCase("translation")) {
 				if(SupportedBertTgtLangs.fromValue(bm.getLanguages().getTargetLanguage().name().toLowerCase())==null) {
 					if(metricList.contains("bert")) {
 						
@@ -327,12 +331,16 @@ public class BenchmarkService {
 					}
 					
 				}
+				 }
 				
 				log.info("metricList after removing bert :: "+metricList.toString());
 				dto.setMetric(new ArrayList<>(metricList));
 				List<BenchmarkProcess> bmProcList = benchmarkprocessDao
 						.findByModelIdAndBenchmarkDatasetId(request.getModelId(), bm.getBenchmarkId());
 				List<String> allMetricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
+				
+				if(bm.getTask().getType().toString().equalsIgnoreCase("translation")) {
+
 				if(SupportedBertTgtLangs.fromValue(bm.getLanguages().getTargetLanguage().name())==null) {
 					if(allMetricList.contains("bert")) {
 						
@@ -340,6 +348,7 @@ public class BenchmarkService {
 					}
 					
 				}
+				 }
 				for (BenchmarkProcess bmProc : bmProcList) {
 					if (allMetricList.contains(bmProc.getMetric())) {
 						String status = bmProc.getStatus();
