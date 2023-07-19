@@ -3345,7 +3345,7 @@ components:
       example:
         modelId: 641d1d6592a6a31751ff1f49
         userId: 6a73afa4fc774dcdb28d5fff944511f6
-        task: asr
+        task: translation
         input: [{"source":"How are you?"}]
   
     ModelComputeResponse:
