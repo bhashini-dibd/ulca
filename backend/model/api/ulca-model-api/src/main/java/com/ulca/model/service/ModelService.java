@@ -630,7 +630,9 @@ public class ModelService {
 
 				pipelineModelObj.setUserId(userId);
 				pipelineModelObj.setSubmittedOn(Instant.now().toEpochMilli());
-                
+				pipelineModelObj.setPublishedOn(Instant.now().toEpochMilli());
+				pipelineModelObj.setStatus("published");
+				pipelineModelObj.setUnpublishReason(" ");
 				
 				if(pipelineModelObj.getInferenceEndPoint()!=null) {
 				
@@ -1420,6 +1422,14 @@ public class ModelService {
 		//Check if task types and config is accepted and in proper order
 		PipelineModel pipelineModel = pipelineModelDao
 				.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
+		
+		
+		if(pipelineModel.getStatus().equalsIgnoreCase("unpublished")) {
+			
+			throw new PipelineValidationException("Requested pipeline is not available !",
+					HttpStatus.BAD_REQUEST);
+		}
+		
 
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
