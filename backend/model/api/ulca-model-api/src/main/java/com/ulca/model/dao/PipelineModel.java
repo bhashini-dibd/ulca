@@ -28,6 +28,12 @@ public class PipelineModel extends PipelineInference{
 	@JsonProperty("status")
 	private String status;
 	
+	@JsonProperty("publishedOn")
+	private Long publishedOn;
+	
+	@JsonProperty("unpublishReason")
+	private String unpublishReason;
+	
 	public String getPipelineModelId() {
 		return pipelineModelId;
 	}
@@ -64,5 +70,21 @@ public class PipelineModel extends PipelineInference{
 	}
 	
 	
+
+
+	public Long getPublishedOn() {
+		return publishedOn;
+	}
+
+	public void setPublishedOn(Long publishedOn) {
+		this.publishedOn = publishedOn;
+	}
 	
+	public String getUnpublishReason() {
+		return unpublishReason;
+	}
+
+	public void setUnpublishReason(String unpublishReason) {
+		this.unpublishReason = unpublishReason;
+	}
 }

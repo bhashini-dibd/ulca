@@ -630,7 +630,9 @@ public class ModelService {
 
 				pipelineModelObj.setUserId(userId);
 				pipelineModelObj.setSubmittedOn(Instant.now().toEpochMilli());
-                
+				pipelineModelObj.setPublishedOn(Instant.now().toEpochMilli());
+				pipelineModelObj.setStatus("published");
+				pipelineModelObj.setUnpublishReason(" ");
 				
 				if(pipelineModelObj.getInferenceEndPoint()!=null) {
 				
