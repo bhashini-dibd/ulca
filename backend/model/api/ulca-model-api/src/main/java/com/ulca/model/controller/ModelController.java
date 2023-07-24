@@ -1,5 +1,6 @@
 package com.ulca.model.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -98,13 +101,39 @@ public class ModelController {
 		return modelService.changeStatus(request);
 	}
 
-	@PostMapping("/compute")
-	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws Exception {
+	/*
+	 * @PostMapping("/compute") public ModelComputeResponse
+	 * computeModel(@Valid @RequestBody ModelComputeRequest request) throws
+	 * Exception {
+	 * 
+	 * log.info("******** Entry ModelController:: computeModel *******"); return
+	 * modelService.computeModel(request); }
+	 */
+	
+	//@PostMapping("/compute")
+	@PostMapping(value = "/compute")
+	public ModelComputeResponse computeModel(@RequestPart(name ="file",required =false) MultipartFile file,
+			@Valid @RequestBody ModelComputeRequest request) throws Exception {
 
 		log.info("******** Entry ModelController:: computeModel *******");
-		return modelService.computeModel(request);
+		byte[] bytes=null ;
+		if(file!=null) {
+		String imageFilePath = modelService.storeModelTryMeFile(file);
+	       bytes = FileUtils.readFileToByteArray(new File(imageFilePath));
+         }
+		
+		
+		request.setImageBytes(bytes);
+		log.info("request :: "+request.toString());
+		
+		ModelComputeResponse res = null;
+		
+		return res;
+
+		//return modelService.computeModel(request);
 	}
 
+	
 	@PostMapping("/tryMe")
 	public ModelComputeResponse tryMeOcrImageContent(@RequestParam("file") MultipartFile file,
 			@RequestParam(required = true) String modelId) throws Exception {
