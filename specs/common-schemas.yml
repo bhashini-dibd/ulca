@@ -244,6 +244,7 @@ components:
         - mp3
         - flac
         - sph
+        - webm
         - m4a
     AudioChannel:
       type: string
