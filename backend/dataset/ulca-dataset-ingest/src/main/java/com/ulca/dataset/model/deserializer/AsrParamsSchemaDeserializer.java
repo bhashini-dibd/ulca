@@ -36,6 +36,7 @@ import io.swagger.model.MixedDataSource;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
 import io.swagger.model.SupportedLanguages;
+import io.swagger.model.SupportedScripts;
 import io.swagger.model.TranscriptionEvaluationMethod1;
 import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
@@ -130,6 +131,31 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 					String targetLanguageName = node.get("languages").get("targetLanguageName").asText();
 					lp.setSourceLanguageName(targetLanguageName);
 				}
+				
+				
+				// Script code addition
+				
+				
+				if (node.get("languages").has("sourceScriptCode")) {
+					String sourceScriptCode = node.get("languages").get("sourceScriptCode").asText();
+					if(SupportedScripts.fromValue(sourceScriptCode) != null) {
+						lp.setSourceScriptCode(SupportedScripts.fromValue(sourceScriptCode));
+					}else {
+						errorList.add("sourceScriptCode is not one of defined language pair");
+					}
+
+				} 
+			
+				if (node.get("languages").has("targetScriptCode")) {
+					String targetScriptCode = node.get("languages").get("targetScriptCode").asText();
+					if(SupportedScripts.fromValue(targetScriptCode) != null) {
+						lp.setTargetScriptCode(SupportedScripts.fromValue(targetScriptCode));
+					}else {
+						errorList.add("targetScriptCode is not one of defined language pair");
+					}
+
+				}
+			
 
 				asrParamsSchema.setLanguages(lp);
 			} catch (Exception e) {

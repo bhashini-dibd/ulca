@@ -10,20 +10,29 @@ import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
- * audio format of the audio file
+ * This attribute defines the  Script codes(ISO 15924) supported under ULCA
  */
-public enum AudioFormat {
-  WAV("wav"),
-    PCM("pcm"),
-    MP3("mp3"),
-    FLAC("flac"),
-    SPH("sph"),
-    M4A("m4a"),
-    WEBM("webm");
+public enum SupportedScripts {
+  BENG("Beng"),
+    DEVA("Deva"),
+    THAA("Thaa"),
+    GUJR("Gujr"),
+    ARAN("Aran"),
+    ORYA("Orya"),
+    GURU("Guru"),
+    ARAB("Arab"),
+    SINH("Sinh"),
+    KNDA("Knda"),
+    MLYM("Mlym"),
+    TAML("Taml"),
+    TELU("Telu"),
+    MTEI("Mtei"),
+    OLCK("Olck"),
+    LATN("Latn");
 
   private String value;
 
-  AudioFormat(String value) {
+  SupportedScripts(String value) {
     this.value = value;
   }
 
@@ -34,8 +43,8 @@ public enum AudioFormat {
   }
 
   @JsonCreator
-  public static AudioFormat fromValue(String text) {
-    for (AudioFormat b : AudioFormat.values()) {
+  public static SupportedScripts fromValue(String text) {
+    for (SupportedScripts b : SupportedScripts.values()) {
       if (String.valueOf(b.value).equals(text)) {
         return b;
       }
