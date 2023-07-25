@@ -791,7 +791,7 @@ class UserUtils:
     
     @staticmethod
     def listOfServiceProviders():
-        collection = db.get_db()[USR_MONGO_PROCESS_COLLECTION]
+        collection = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
         pipelinie_Docs = list(collection.find({"status":"published"}))        
         if not pipelinie_Docs:
             return None
