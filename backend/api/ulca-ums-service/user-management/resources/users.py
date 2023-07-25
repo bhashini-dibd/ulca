@@ -10,7 +10,6 @@ from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
-list_of_service_providers = ["AI4Bharat","MeitY"]
 
 class CreateUsers(Resource):
 
@@ -200,17 +199,14 @@ class GetApiKeysForProfile(Resource):
         user = body['userID']
         appName = None
         userAPIKeys = UserUtils.get_user_api_keys(user,appName)
+        userServiceProvider = UserUtils.listOfServiceProviders()
         for i in range(0,len(userAPIKeys)):
             if "serviceProviderKeys" in userAPIKeys[i].keys():
                 existing_names = []                    
                 for existing_keys in userAPIKeys[i]["serviceProviderKeys"]: 
                     existing_names.append(existing_keys["serviceProviderName"])
                 if not existing_names:
-                    userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":list_of_service_providers[1]})
-                if len(existing_names) == 1:
-                    str_exsting_names = ''.join(existing_names)
-                    if str_exsting_names == list_of_service_providers[0]:
-                        userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":list_of_service_providers[1]})
+                    userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":userServiceProvider})
         if isinstance(userAPIKeys, list):
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
             return res.getresjson(), 200

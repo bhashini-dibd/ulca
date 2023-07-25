@@ -788,3 +788,9 @@ class UserUtils:
         for rec in record:
             log.info(f"record output of dataTracking {rec}")
         return rec
+    
+    @staticmethod
+    def listOfServiceProviders():
+        collection = db.get_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipelinie_Docs = list(collection.find({"status":"published"}))        
+        return pipelinie_Docs[0]['serviceProvider']['name']
