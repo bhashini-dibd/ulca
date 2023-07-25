@@ -705,7 +705,9 @@ components:
           type: string
           description : specific character
         score:
-          type: integer
+          type: number
+          minimum: 0
+          maximum: 1
           description: probability score for the specific character
     
     Sentences:
