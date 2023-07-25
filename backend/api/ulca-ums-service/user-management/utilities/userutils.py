@@ -793,4 +793,7 @@ class UserUtils:
     def listOfServiceProviders():
         collection = db.get_db()[USR_MONGO_PROCESS_COLLECTION]
         pipelinie_Docs = list(collection.find({"status":"published"}))        
-        return pipelinie_Docs[0]['serviceProvider']['name']
+        if not pipelinie_Docs:
+            return None
+        if isinstance(pipelinie_Docs, list):
+            return pipelinie_Docs[0]['serviceProvider']['name']

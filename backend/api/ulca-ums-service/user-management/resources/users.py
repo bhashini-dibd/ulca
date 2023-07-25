@@ -200,6 +200,8 @@ class GetApiKeysForProfile(Resource):
         appName = None
         userAPIKeys = UserUtils.get_user_api_keys(user,appName)
         userServiceProvider = UserUtils.listOfServiceProviders()
+        if not userServiceProvider:
+            return post_error("400", "User Service Provider is None")
         for i in range(0,len(userAPIKeys)):
             if "serviceProviderKeys" in userAPIKeys[i].keys():
                 existing_names = []                    
