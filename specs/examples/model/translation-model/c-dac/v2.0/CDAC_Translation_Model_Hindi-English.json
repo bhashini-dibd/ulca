@@ -1,0 +1,83 @@
+{
+   "name": "C-DAC, Pune Translation Hindi-English",
+   "version": "v2.0",
+   "description": "C-DAC, Pune, Hind-English Neural Machine Translation model is based on Transformer-attention mechanism. The model is trained on dataset of General domain.",
+   "refUrl": "https://www.cdac.in/",
+   "task": {
+          "type" : "translation"
+   },
+   "languages": [
+          {
+             "sourceLanguage": "en",
+             "targetLanguage": "hi"
+          }
+   ],
+   "license": "unknown-license",
+   "domain": [
+          "general"
+   ],
+   "submitter": {
+          "name": "AAIG, C-DAC",
+          "aboutMe": "Artificial Intelligence (AAI) Group at C-DAC is working on some of the fundamental applications in the field of Natural Language Processing, Machine Translation, Intelligent Language Teaching and Decision Support Systems. MANTRA ",
+          "team": [
+             {
+                "name": "Dr. Ajai Kumar",
+                "aboutMe": "C-DAC, Pune"
+             },
+             {
+                "name": "Mrs. Lenali Singh",
+                "aboutMe": "C-DAC, Pune"
+             },
+             {
+                "name": "Mr. Shashi Pal Singh",
+                "aboutMe":"C-DAC, Pune"
+             },
+             {
+                "name": "Mr. Prashant Chaudhary",
+                "aboutMe": "C-DAC, Pune"
+             },
+             {
+                "name": "Mr. Pulkit Joshi",
+                "aboutMe":"C-DAC, Pune"
+             },
+             {
+                "name": " Ms. Shraddha Amit Kalele",
+                "aboutMe":"C-DAC, Pune"
+             },
+             {
+                "name": "Ms. Nutan",
+                "aboutMe": "C-DAC, Pune"
+             },
+             {
+                "name": "Laishram Rishikanta Meitei",
+                "aboutMe": "C-DAC, Pune"
+             },
+             {
+                "name": "Md Shahzad Alam",
+                "aboutMe": "C-DAC, Pune"
+             }
+          ]
+   },
+   "inferenceEndPoint": {
+          "callbackUrl": "https://loksabha-api.rb-aai.in/getbulkULCAnew2",
+          "schema": {
+             "taskType": "translation",
+             "request": {
+               "input": [
+                    {
+                        "source": "श्रीमती निर्मला सीतारमण ने वर्ष 2021-22 की भारत सरकार की अनुमानित प्राप्तियों और व्यय का विवरण प्रस्तुत किया।"
+                    }
+               ],
+               "config": {
+                    "language": {
+                        "sourceLanguage": "hi",
+                        "targetLanguage": "en"
+                     }
+               }
+            }
+      }
+   },
+   "trainingDataset": {
+          "description": "Trained on dataset of General domain created by CDAC ."
+   }
+}

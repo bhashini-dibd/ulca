@@ -38,6 +38,7 @@ import GetMasterDataAPI from './redux/actions/api/Common/getMasterData';
 import { useDispatch } from "react-redux";
 import APITransport from './redux/actions/apitransport/apitransport';
 import DatasetMetrics from "./ui/container/DataSet/DatasetMetrics/DatasetMetrics";
+import MyProfile from "./ui/container/UserManagement/MyProfile";
 
 const PrivateRoute = ({
   path,
@@ -77,6 +78,7 @@ export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+      // const obj = new GetMasterDataAPI(["feedbackQns","languages", "domains"]);
       const obj = new GetMasterDataAPI(["feedbackQns","languages"]);
       dispatch(APITransport(obj));
   }, [])
@@ -301,6 +303,18 @@ export default function App() {
             dontShowHeader={false}
             type={"admin"}
             index={0}
+          />
+           <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/profile`}
+            title={"My Profile"}
+            component={MyProfile}
+            authenticate={authenticateUser}
+            currentMenu="user-my-profile"
+            dontShowHeader={false}
+          />
+          <Route
+            path={"*"}
+            component={Dashboard}
           />
 
         {/* <Route

@@ -1,0 +1,6 @@
+{
+    "feedbackLanguage" : "en",
+    "supportedTasks" : [
+        "asr", "translation"
+    ]
+}

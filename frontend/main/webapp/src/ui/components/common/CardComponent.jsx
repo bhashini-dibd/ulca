@@ -7,9 +7,12 @@ import {
   FilterByDomain,
 } from "../../../utils/getLabel";
 import React from "react";
+import {  useLocation } from 'react-router-dom';
 import { getCamelCase } from "../../../utils/util";
 const CardComponent = (props) => {
   const { classes, data, index } = props;
+  const location = useLocation();
+ // console.log("location", location)
   const renderPublishedOn = (data) => {
     if (data.publishedOn)
       return (
@@ -62,6 +65,7 @@ const CardComponent = (props) => {
   };
 
   const renderDomain = (data) => {
+    // console.log("hiiiiii",FilterByDomain([data.domain]), data.domain)
     return (
       <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
         <Typography
@@ -72,7 +76,8 @@ const CardComponent = (props) => {
           Domain
         </Typography>
         <Typography variant="body2" style={{ color: "#ffffff" }}>
-          {FilterByDomain([data.domain])[0].label}
+          {/* {FilterByDomain([data.domain])[0].label} */}
+          {data.domain}
         </Typography>
       </Grid>
     );
@@ -81,7 +86,7 @@ const CardComponent = (props) => {
   const renderSourceLanguage = (data) => {
     if (data.source) {
       return (
-        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+        <Grid item  xs={3} sm={3} md={3} lg={4} xl={4}>
           <Typography
             variant="caption"
             style={{ color: "#ffffff", opacity: "0.6" }}
@@ -96,11 +101,12 @@ const CardComponent = (props) => {
       );
     }
   };
+  
 
   const renderTargetLanguage = (data) => {
     if (data.task === "translation" || data.task === "transliteration")
       return (
-        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+        <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
           <Typography
             variant="caption"
             style={{ color: "#ffffff", opacity: "0.6" }}
@@ -117,7 +123,8 @@ const CardComponent = (props) => {
   };
 
   const renderProcessingType = (data) => {
-    if (data.task === "asr" || data.task === "tts") {
+   
+    if ((data.task === "asr" || data.task === "tts")&& !location.pathname.includes('benchmark-datasets')) {
       const {
         inferenceEndPoint: {
           schema: {
@@ -126,7 +133,7 @@ const CardComponent = (props) => {
         },
       } = data;
       return (
-        <Grid Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+        <Grid item  xs={3} sm={3} md={3} lg={4} xl={4}>
           <Typography
             variant="caption"
             style={{ color: "#ffffff", opacity: "0.6" }}
@@ -143,12 +150,31 @@ const CardComponent = (props) => {
     return <></>;
   };
 
+  const renderLicence = (data) => {
+      return (
+        <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
+          <Typography
+            variant="caption"
+            style={{ color: "#ffffff", opacity: "0.6" }}
+            gutterBottom
+          >
+            License
+          </Typography>
+          <Typography variant="body2" style={{ color: "#ffffff" }}>
+            {data.licence}
+          </Typography>
+        </Grid>
+      );
+      return <></>;
+  };
+
   const renderLanguage = (data) => {
     return (
       <Grid className={classes.cardGrid} container>
         {renderSourceLanguage(data)}
         {renderTargetLanguage(data)}
         {renderProcessingType(data)}
+        {renderLicence(data)}
       </Grid>
     );
   };
@@ -159,6 +185,7 @@ const CardComponent = (props) => {
         {renderDomain(data)}
         {renderSubmitterName(data)}
         {renderPublishedOn(data)}
+       
       </Grid>
     );
   };

@@ -366,7 +366,7 @@ const ChartRender = (props) => {
 							{ field: "sourceLanguage", value: 'en' },
 							]);
 						setAxisValue({ xAxis: "Languages", yAxis: "Count" });
-						setTitle("Number of records");
+						setTitle("Number of glossaries per language with");
 						} else if (page === 1) {
 						setTitle(
 							`Number of records in ${
@@ -473,7 +473,7 @@ const ChartRender = (props) => {
 			</ TitleBar>
 			<div className={classes.iconStyle}>
 					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} onClick={() => handleCardNavigation()}>Reset</Button></>
-						 {(selectedOption.value ==="parallel-corpus" || selectedOption.value ==="transliteration-corpus" && page===0 )? 
+						 {(selectedOption.value ==="parallel-corpus" || selectedOption.value ==="transliteration-corpus" || selectedOption.value ==="glossary-corpus" && page===0 )? 
 						<div className= {classes.titleStyle}>
 						
 						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>

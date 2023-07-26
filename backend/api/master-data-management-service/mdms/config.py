@@ -18,3 +18,5 @@ redis_server_host           =   os.environ.get('REDIS_URL', 'localhost')
 redis_server_db             =   os.environ.get('REDIS_MDMS_DB',8)
 redis_server_port           =   os.environ.get('REDIS_PORT', 6379)
 redis_server_password       =   os.environ.get('REDIS_PASS', None)
+#pipeline
+masPipe                     =   "pipelinefeedQns"

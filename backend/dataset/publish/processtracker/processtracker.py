@@ -26,11 +26,11 @@ class ProcessTracker:
             if data["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled, dataset_type_tts]:
                 if data["status"] == "SUCCESS":
                     if 'isUpdate' not in data.keys():
-                        repo.redis_key_inc(data["serviceRequestNumber"], data["durationInSeconds"], False)
+                        repo.redis_key_inc(data["serviceRequestNumber"], int(data["durationInSeconds"]), False)
                     else:
                         repo.redis_key_inc(data["serviceRequestNumber"], None, False)
                 else:
-                    repo.redis_key_inc(data["serviceRequestNumber"], data["durationInSeconds"], True)
+                    repo.redis_key_inc(data["serviceRequestNumber"], int(data["durationInSeconds"]), True)
         else:
             if data["status"] == "SUCCESS":
                 repo.redis_key_inc(data["serviceRequestNumber"], None, False)

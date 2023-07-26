@@ -797,3 +797,4 @@ class UserUtils:
             return None
         if isinstance(pipelinie_Docs, list):
             return pipelinie_Docs[0]['serviceProvider']['name']
+

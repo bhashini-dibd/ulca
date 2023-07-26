@@ -3,8 +3,6 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,7 +15,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "hosted location defines the end point of the model inference. specify a taskType along with Inference type")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-10T10:51:37.068454836Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-11T12:21:45.383626560Z[GMT]")
 
 
 public class InferenceAPIEndPoint   {
@@ -26,6 +24,9 @@ public class InferenceAPIEndPoint   {
 
   @JsonProperty("inferenceApiKey")
   private InferenceAPIEndPointInferenceApiKey inferenceApiKey = null;
+
+  @JsonProperty("isMultilingualEnabled")
+  private Boolean isMultilingualEnabled = false;
 
   @JsonProperty("schema")
   private OneOfInferenceAPIEndPointSchema schema = null;
@@ -67,14 +68,32 @@ public class InferenceAPIEndPoint   {
    **/
   @Schema(description = "")
   
-	
-	  @Valid 
-	  public InferenceAPIEndPointInferenceApiKey getInferenceApiKey() {
-	  return inferenceApiKey; 
-	  }
-	 
+    @Valid
+    public InferenceAPIEndPointInferenceApiKey getInferenceApiKey() {
+    return inferenceApiKey;
+  }
+
   public void setInferenceApiKey(InferenceAPIEndPointInferenceApiKey inferenceApiKey) {
     this.inferenceApiKey = inferenceApiKey;
+  }
+
+  public InferenceAPIEndPoint isMultilingualEnabled(Boolean isMultilingualEnabled) {
+    this.isMultilingualEnabled = isMultilingualEnabled;
+    return this;
+  }
+
+  /**
+   * specify true if the same callbackUrl is capable of handling multiple languages
+   * @return isMultilingualEnabled
+   **/
+  @Schema(description = "specify true if the same callbackUrl is capable of handling multiple languages")
+  
+    public Boolean isIsMultilingualEnabled() {
+    return isMultilingualEnabled;
+  }
+
+  public void setIsMultilingualEnabled(Boolean isMultilingualEnabled) {
+    this.isMultilingualEnabled = isMultilingualEnabled;
   }
 
   public InferenceAPIEndPoint schema(OneOfInferenceAPIEndPointSchema schema) {
@@ -148,6 +167,7 @@ public class InferenceAPIEndPoint   {
     InferenceAPIEndPoint inferenceAPIEndPoint = (InferenceAPIEndPoint) o;
     return Objects.equals(this.callbackUrl, inferenceAPIEndPoint.callbackUrl) &&
         Objects.equals(this.inferenceApiKey, inferenceAPIEndPoint.inferenceApiKey) &&
+        Objects.equals(this.isMultilingualEnabled, inferenceAPIEndPoint.isMultilingualEnabled) &&
         Objects.equals(this.schema, inferenceAPIEndPoint.schema) &&
         Objects.equals(this.isSyncApi, inferenceAPIEndPoint.isSyncApi) &&
         Objects.equals(this.asyncApiDetails, inferenceAPIEndPoint.asyncApiDetails);
@@ -155,7 +175,7 @@ public class InferenceAPIEndPoint   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(callbackUrl, inferenceApiKey, schema, isSyncApi, asyncApiDetails);
+    return Objects.hash(callbackUrl, inferenceApiKey, isMultilingualEnabled, schema, isSyncApi, asyncApiDetails);
   }
 
   @Override
@@ -164,7 +184,8 @@ public class InferenceAPIEndPoint   {
     sb.append("class InferenceAPIEndPoint {\n");
     
     sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append("\n");
-   sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
+    sb.append("    inferenceApiKey: ").append(toIndentedString(inferenceApiKey)).append("\n");
+    sb.append("    isMultilingualEnabled: ").append(toIndentedString(isMultilingualEnabled)).append("\n");
     sb.append("    schema: ").append(toIndentedString(schema)).append("\n");
     sb.append("    isSyncApi: ").append(toIndentedString(isSyncApi)).append("\n");
     sb.append("    asyncApiDetails: ").append(toIndentedString(asyncApiDetails)).append("\n");

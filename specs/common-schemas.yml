@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.6.6
+  version: 0.7.1
 servers:
   - url: /
 paths: {}
@@ -23,11 +23,19 @@ components:
           type: string
           description: Indic language code, iso-639-1, iso 639-2
           $ref: '#/components/schemas/SupportedLanguages'
+        sourceScriptCode:
+          type: string
+          description: ISO 15924, Codes for the representation of names of scripts
+          $ref: '#/components/schemas/SupportedScripts'
         targetLanguageName:
           type: string
           description: human name associated with the language code
         targetLanguage:
           $ref: '#/components/schemas/SupportedLanguages'
+        targetScriptCode:
+          type: string
+          description: ISO 15924, Codes for the representation of names of scripts
+          $ref: '#/components/schemas/SupportedScripts'
       description: language pair, make targetLanguage null to reuse the object to indicate single language
     LanguagePairs:
       type: array
@@ -112,7 +120,7 @@ components:
       properties:
         name:
           maxLength: 50
-          minLength: 5
+          minLength: 3
           type: string
           description: Name of the Submitter
         oauthId:
@@ -236,6 +244,8 @@ components:
         - mp3
         - flac
         - sph
+        - webm
+        - m4a
     AudioChannel:
       type: string
       description: number of channel in the audio
@@ -291,6 +301,14 @@ components:
         - base32
         - ascii
         - ascii85
+    Speed:
+      type: number
+      description: optional field to specify the speed of audio
+      default: 1.0
+    Duration:
+      type: number
+      description: optional field to specify the duration of audio in milliseconds
+      example: 300
     ProcessStage:
       type: string
       description: various life-cycle stage of model when benchmarking
@@ -347,7 +365,6 @@ components:
         type:
           $ref: '#/components/schemas/SupportedTasks'
       description: the category of model under which it has been released or trained
-      
     ModelProcessingType:
       type: object
       properties:
@@ -406,7 +423,26 @@ components:
         - bns
         - mixed
         - unknown
-        
+    SupportedScripts:
+      type: string
+      description: This attribute defines the  Script codes(ISO 15924) supported under ULCA, code reference available at - `https://unicode.org/iso15924/iso15924-codes.html' 
+      enum:
+        - Beng
+        - Deva
+        - Thaa
+        - Gujr
+        - Aran
+        - Orya
+        - Guru
+        - Arab
+        - Sinh
+        - Knda
+        - Mlym
+        - Taml
+        - Telu
+        - Mtei
+        - Olck
+        - Latn
     SupportedTasks:
       type: string
       enum:
@@ -421,7 +457,6 @@ components:
         - txt-lang-detection
         - audio-lang-detection
       description: the category of model under which it has been released or trained
-
     SupportedTagsFormat:
       type: string
       enum:
@@ -431,7 +466,6 @@ components:
         - basic
         - custom
       description: Accepted standards for tags.
-    
     MixedDataSource:
       type: string
       description: This attribute defines the  datasources with mixed languages in it.

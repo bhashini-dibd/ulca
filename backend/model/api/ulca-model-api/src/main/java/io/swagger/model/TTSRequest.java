@@ -4,7 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Sentences;
-import io.swagger.model.TTSConfig;
+import io.swagger.model.TTSRequestConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * TTSRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-10T05:17:35.492966412Z[GMT]")
 
 
 public class TTSRequest   {
@@ -22,7 +22,7 @@ public class TTSRequest   {
   private Sentences input = null;
 
   @JsonProperty("config")
-  private TTSConfig config = null;
+  private TTSRequestConfig config = null;
 
   public TTSRequest input(Sentences input) {
     this.input = input;
@@ -45,7 +45,7 @@ public class TTSRequest   {
     this.input = input;
   }
 
-  public TTSRequest config(TTSConfig config) {
+  public TTSRequest config(TTSRequestConfig config) {
     this.config = config;
     return this;
   }
@@ -58,11 +58,11 @@ public class TTSRequest   {
       @NotNull
 
     @Valid
-    public TTSConfig getConfig() {
+    public TTSRequestConfig getConfig() {
     return config;
   }
 
-  public void setConfig(TTSConfig config) {
+  public void setConfig(TTSRequestConfig config) {
     this.config = config;
   }
 

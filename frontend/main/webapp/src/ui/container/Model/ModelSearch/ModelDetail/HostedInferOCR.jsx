@@ -25,7 +25,7 @@ import {
 
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import OCRModal from "./OCRModal";
 import { translate } from "../../../../../assets/localisation";
 import OCRFileUpload from "../../../../../redux/actions/api/Model/ModelSearch/FileUpload";
@@ -69,7 +69,8 @@ const HostedInferASR = (props) => {
   };
 
   const [suggestEditValues, setSuggestEditValues] = useState("")
-
+  const [feedBackInput, setFeedBackInput] = useState();
+  const [isUrl, setIsUrl] = useState(false);
 
   const [file, setFile] = useState([]);
   const validURL = (str) => {
@@ -154,6 +155,7 @@ const HostedInferASR = (props) => {
       const blob = URL.createObjectURL(e.target.files[0]);
       setPreview(blob);
       setFile(e.target.files);
+      convertImageToBase64(e.target.files);
     }
   };
 
@@ -175,6 +177,7 @@ const HostedInferASR = (props) => {
       let rsp_data = await res.json();
       if (res.ok) {
         setFileData(rsp_data.output[0].source);
+        setTarget(rsp_data.output[0].source);
       } else {
         setSnackbarInfo({
           ...snackbar,
@@ -199,12 +202,36 @@ const HostedInferASR = (props) => {
     setOpenModal(false);
   };
 
+  const convertImageToBase64 = (uploadedFile) => {
+    const [imageFile] = uploadedFile;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(imageFile);
+    reader.onloadend = function () {
+      let base64data = reader.result;
+      setFeedBackInput(base64data);
+    };
+  }
+
   const handleFeedbackSubmit = (feedback) => {
-    const apiObj = new SubmitFeedback('ocr', "", target, feedback)
+    let apiObj;
+    if (isUrl) {
+      apiObj = new SubmitFeedback("ocr", `data:text/uri;${url}`, target, feedback, [], modelId);
+    } else {
+      apiObj = new SubmitFeedback(
+        "ocr",
+        feedBackInput,
+        target,
+        feedback,
+        [],
+        modelId
+      );
+    }
+
     fetch(apiObj.apiEndPoint(), {
       method: 'post',
       headers: apiObj.getHeaders().headers,
-      body: JSON.stringify(apiObj.getBody())
+      body: JSON.stringify(apiObj.getBody()),
     })
       .then(async resp => {
         const rsp_data = await resp.json();
@@ -221,6 +248,12 @@ const HostedInferASR = (props) => {
   const handleOnChange = (e) => {
     setSuggestEditValues(e.target.value)
   }
+
+  useEffect(() => {
+    if (url == "") {
+      setTarget("")
+    }
+  }, [url])
 
   return (
     <>
@@ -364,7 +397,7 @@ const HostedInferASR = (props) => {
               <div >
                 {/* <SimpleDialogDemo/>  */}
                 <div >
-                  <Button variant="contained" size="small" className={classes.ocrfeedbackbutton} onClick={() => {setModal(true);setSuggestEditValues(fileData)}}>
+                  <Button variant="contained" size="small" className={classes.ocrfeedbackbutton} onClick={() => {setModal(true);setSuggestEditValues(fileData); setIsUrl(false)}}>
                     <ThumbUpAltIcon className={classes.feedbackIcon} />
                     <ThumbDownAltIcon className={classes.feedbackIcon} />
                     <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
@@ -460,7 +493,7 @@ const HostedInferASR = (props) => {
               <div >
                 {/* <SimpleDialogDemo/> */}
                 <div >
-                  <Button variant="contained" style={{ float: "right", marginBottom: "13px", marginRight: "20px", backgroundColor: "#FD7F23", borderRadius: "15px" }} onClick={() => {setModal(true); setSuggestEditValues(target)}}>
+                  <Button variant="contained" style={{ float: "right", marginBottom: "13px", marginRight: "20px", backgroundColor: "#FD7F23", borderRadius: "15px" }} onClick={() => {setModal(true); setSuggestEditValues(target); setIsUrl(true)}}>
                     <ThumbUpAltIcon className={classes.feedbackIcon} />
                     <ThumbDownAltIcon className={classes.feedbackIcon} />
                     <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>

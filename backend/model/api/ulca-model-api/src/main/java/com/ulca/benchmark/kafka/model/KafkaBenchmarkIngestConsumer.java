@@ -26,7 +26,9 @@ import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus;
 import com.ulca.benchmark.model.BenchmarkError;
 import com.ulca.benchmark.model.BenchmarkSubmissionType;
 import com.ulca.benchmark.service.BenchmarkSubmtStatusService;
+import com.ulca.benchmark.util.DomainEnum;
 import com.ulca.benchmark.util.FileUtility;
+import com.ulca.model.exception.ModelValidationException;
 
 import io.swagger.model.AsrBenchmarkDatasetParamsSchema;
 import io.swagger.model.Benchmark;
@@ -187,6 +189,16 @@ public class KafkaBenchmarkIngestConsumer {
 		
 		if(params.has("domain")) {
 			Domain domain = objectMapper.readValue(params.get("domain").toString(), Domain.class);
+			for (String domainName : domain) {
+			    
+                
+                if(DomainEnum.fromValue(domainName)==null) {
+              	  
+                	errorList.add(domainName + " is not exist in supported domain list !");
+
+                }
+                
+            }
 			benchmark.setDomain(domain);
 		}else {
 			errorList.add("domain field should be present");
@@ -194,6 +206,7 @@ public class KafkaBenchmarkIngestConsumer {
 		
 		if(params.has("license")) {
 			License license = License.fromValue(params.getString("license"));
+			if(license!=null) {
 			benchmark.setLicense(license);		
 			if(license == License.CUSTOM_LICENSE) {
 				String licenseUrl = params.getString("licenseUrl");
@@ -203,7 +216,10 @@ public class KafkaBenchmarkIngestConsumer {
 					errorList.add("custom licenseUrl field should be present");
 				}
 			}
-			
+			}else {
+				errorList.add("license should be into supported license list !");
+
+			}
 		}else {
 			errorList.add("license field should be present");
 		}

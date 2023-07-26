@@ -1,0 +1,171 @@
+openapi: 3.0.1
+info:
+  title: Pipeline Inference Submission
+  description: The documentation defines the schema in which pipeline inference endpoint details are to be submitted.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 1.0.5
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    PipelineInference:
+      required:
+        - name
+        - version
+        - description
+        - refUrl
+        - domain
+        - serviceProvider
+        - supportedPipelines
+        - taskSpecifications
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          minLength: 3
+          type: string
+          description: model name that you want your users to see
+          example: vakyansh asr model
+        version:
+          maxLength: 20
+          minLength: 1
+          type: string
+          description: version for the model
+          example: v1
+        description:
+          maxLength: 1000
+          minLength: 25
+          type: string
+          description: brief description about model, its goal, basically something sweet about it
+          example: Speech recognition model for classroom lecture
+        domain:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+        refUrl:
+          maxLength: 200
+          minLength: 5
+          type: string
+          description: github link or url giving further info about the model
+          example: https://github.com/Open-Speech-EkStep/vakyansh-models
+        serviceProvider:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
+        inferenceEndPoint:
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
+        inferenceSocketEndPoint:
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
+        supportedPipelines:
+          $ref: '#/components/schemas/ListOfPipelines'
+        taskSpecifications:
+          $ref: '#/components/schemas/TaskSpecifications'
+        apiEndPoints:
+          $ref: '#/components/schemas/ApiEndPoint'
+    ListOfPipelines:
+      type: array
+      items:
+        $ref: '#/components/schemas/PipelineTaskSequence'
+    PipelineTaskSequence:
+      type: array
+      items:
+        anyOf: null
+        $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+    InferenceAPIEndPoint:
+      required:
+        - callbackUrl
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        masterApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        isMultilingualEnabled:
+          type: boolean
+          default: false
+          description: specify true if the same callbackUrl is capable of handling multiple languages
+        isSyncApi:
+          type: boolean
+          description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
+        asyncApiDetails:
+          required:
+            - pollingUrl
+            - pollInterval
+          type: object
+          properties:
+            pollingUrl:
+              type: string
+              format: url
+              description: endpoint specified for polling in async calls
+            pollInterval:
+              type: integer
+              description: polling interval in millisec to check for status
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type. `NOTE:` Either of inferenceEndPoint or inferenceSocketEndPoint is is mandatory at submission time
+    TaskSpecifications:
+      type: array
+      items:
+        $ref: '#/components/schemas/TaskSpecification'
+    TaskSpecification:
+      required:
+        - taskType
+        - taskConfig
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        taskConfig:
+          $ref: '#/components/schemas/ConfigList'
+    ConfigList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfigSchema'
+    ConfigSchema:
+      required:
+        - modelId
+        - serviceId
+        - sourceLanguage
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        serviceId:
+          type: string
+          description: specific id for the service
+          example: ai4bharat/speech-to-speech-gpu--t4
+        sourceLanguage:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        targetLanguage:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        sourceScriptCode:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
+        targetScriptCode:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
+    ApiEndPoint:
+      required:
+        - apiKeyUrl
+        - feedbackUrl
+      type: object
+      properties:
+        apiKeyUrl:
+          description: URL to generate api keys (using POST Method) , delete api keys (using DELETE method) and toggle data logging( using PATCH Method).
+          type: string
+          format: url
+        feedbackUrl:
+          description: URL to give feedback regarding pipeline (using POST Method)
+          type: string
+          format: url

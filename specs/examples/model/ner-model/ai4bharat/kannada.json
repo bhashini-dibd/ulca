@@ -1,0 +1,112 @@
+{
+   "name": "AI4Bharat Kannada NER",
+   "version": "v1.0",
+   "description": "Multilingual Indic-NER model by AI4Bharat to recognize named-entities from provided text. For more details, check our research paper: https://arxiv.org/abs/2212.10168",
+   "refUrl": "https://huggingface.co/ai4bharat/IndicNER",
+   "task": {
+      "type": "ner"
+   },
+   "languages": [
+      {
+         "sourceLanguage": "kn"
+      }
+   ],
+   "license": "mit",
+   "domain": [
+      "general"
+   ],
+   "submitter": {
+      "name": "AI4Bharat",
+      "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+      "team": [
+         {
+            "name": "Arnav Mhaske",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Harshit Kedia",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Sumanth Doddapaneni",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Mitesh Khapra",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Pratyush Kumar",
+            "aboutMe": "Microsoft Research India"
+         },
+         {
+            "name": "Rudra Murthy",
+            "aboutMe": "IBM Research India"
+         },
+         {
+            "name": "Anoop Kunchukuttan",
+            "aboutMe": "Microsoft Research India"
+         }
+      ]
+   },
+   "inferenceEndPoint": {
+      "callbackUrl": "https://ner-api.ai4bharat.org/inference",
+      "schema": {
+         "taskType": "ner",
+         "tagsFormat": "IOB2",
+         "request": {
+            "input": [
+               {
+                  "source": "ಸುಂದರ್ ಅಮೆರಿಕದ ಗೂಗಲ್ ಎಂಬ ಕಂಪನಿಯಲ್ಲಿ ಕೆಲಸ ಮಾಡುತ್ತಿದ್ದಾರೆ."
+               }
+            ],
+            "config": {
+               "language": {
+                  "sourceLanguage": "kn"
+               }
+            }
+         },
+         "response": {
+            "output": [
+               {
+                  "source": "ಸುಂದರ್ ಅಮೆರಿಕದ ಗೂಗಲ್ ಎಂಬ ಕಂಪನಿಯಲ್ಲಿ ಕೆಲಸ ಮಾಡುತ್ತಿದ್ದಾರೆ.",
+                  "nerPrediction": [
+                     {
+                        "token": "ಸುಂದರ್",
+                        "tag": "B-PER"
+                     },
+                     {
+                        "token": "ಅಮೆರಿಕದ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ಗೂಗಲ್",
+                        "tag": "B-ORG"
+                     },
+                     {
+                        "token": "ಎಂಬ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ಕಂಪನಿಯಲ್ಲಿ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ಕೆಲಸ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "ಮಾಡುತ್ತಿದ್ದಾರೆ.",
+                        "tag": "O"
+                     }
+                  ]
+               }
+            ]
+         }
+      }
+   },
+   "trainingDataset": {
+      "datasetId": "",
+      "description": "Trained on Naamapadam dataset, the largest publicly available Named Entity Annotated dataset for 11 Indic languages. More info: https://huggingface.co/datasets/ai4bharat/naamapadam"
+   }
+}

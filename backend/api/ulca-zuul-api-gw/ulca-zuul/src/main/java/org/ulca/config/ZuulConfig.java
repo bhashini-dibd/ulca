@@ -14,7 +14,10 @@ public class ZuulConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("*");
+        registry.addMapping("/**")
+        .allowedOrigins("https://anuvaad-staging.azurewebsites.net/",
+                                    "https://anuvaad.digitalindiacorporation.in/",
+                                    "https://anuvaad.bhashini.gov.in/en");
     }
 }
 

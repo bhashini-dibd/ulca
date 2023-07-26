@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
  * NerPrediction
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-06T13:44:25.814973054Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
 
 
 public class NerPrediction   {
@@ -124,8 +124,9 @@ public class NerPrediction   {
    * the starting index of word in sentence
    * @return tokenStartIndex
    **/
-  @Schema(description = "the starting index of word in sentence")
-  
+  @Schema(required = true, description = "the starting index of word in sentence")
+      @NotNull
+
     @Valid
     public BigDecimal getTokenStartIndex() {
     return tokenStartIndex;
@@ -144,8 +145,9 @@ public class NerPrediction   {
    * the ending index of word in sentence
    * @return tokenEndIndex
    **/
-  @Schema(description = "the ending index of word in sentence")
-  
+  @Schema(required = true, description = "the ending index of word in sentence")
+      @NotNull
+
     @Valid
     public BigDecimal getTokenEndIndex() {
     return tokenEndIndex;

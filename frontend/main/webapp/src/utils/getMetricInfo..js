@@ -1,6 +1,6 @@
 const metricInfo = {
   bleu: "Bilingual Evaluation Understudy Score",
-  meteor: "Metric for Evaluation of Translation with Explicit ORdering",
+  meteor: "Metric for Evaluation of Translation with Explicit Ordering",
   ribes: "Rank-based Intuitive Bilingual Evaluation Score",
   gleu: "Google Bilingual Evaluation Understudy Score",
   bert: "Bidirectional Encoder Representations from Transformers Score",
@@ -12,3 +12,4 @@ const metricInfo = {
 };
 
 export default metricInfo;
+

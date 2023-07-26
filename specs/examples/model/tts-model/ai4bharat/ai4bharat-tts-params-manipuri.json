@@ -1,5 +1,5 @@
 {
-    "name": "AI4Bharat Indic-TTS : Manipuri",
+    "name": "AI4Bharat Indic-TTS : Manipuri (Bangla script)",
     "version": "v1.0",
     "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both 'female' and 'male' voices. All the models were trained using the IndicTTS dataset from SMT Lab, IITM.",
     "refUrl": "https://github.com/AI4Bharat/Indic-TTS",
@@ -8,7 +8,8 @@
     },
     "languages": [
         {
-            "sourceLanguage": "mni"
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng"
         }
     ],
     "license": "mit",
@@ -38,7 +39,7 @@
         ]
     },
     "inferenceEndPoint": {
-        "callbackUrl": "https://tts-api.ai4bharat.org/",
+        "callbackUrl": "https://api.dhruva.ai4bharat.org/services/inference/tts?serviceId=ai4bharat/indic-tts-coqui-misc-gpu--t4",
         "schema": {
             "taskType": "tts",
             "modelProcessingType": {
@@ -53,7 +54,8 @@
                 "config": {
                     "gender": "male",
                     "language": {
-                        "sourceLanguage": "mni"
+                        "sourceLanguage": "mni",
+                        "sourceScriptCode": "Beng"
                     }
                 }
             }

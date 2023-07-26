@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.LanguagePair;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -14,7 +16,7 @@ import javax.validation.constraints.*;
  * OCRConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:33:39.764Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-11T12:21:45.383626560Z[GMT]")
 
 
 public class OCRConfig   {
@@ -93,8 +95,9 @@ public class OCRConfig   {
   @JsonProperty("modality")
   private ModalityEnum modality = ModalityEnum.PRINT;
 
-  @JsonProperty("language")
-  private LanguagePair language = null;
+  @JsonProperty("languages")
+  @Valid
+  private List<LanguagePair> languages = new ArrayList<LanguagePair>();
 
   public OCRConfig modelId(String modelId) {
     this.modelId = modelId;
@@ -153,25 +156,29 @@ public class OCRConfig   {
     this.modality = modality;
   }
 
-  public OCRConfig language(LanguagePair language) {
-    this.language = language;
+  public OCRConfig languages(List<LanguagePair> languages) {
+    this.languages = languages;
+    return this;
+  }
+
+  public OCRConfig addLanguagesItem(LanguagePair languagesItem) {
+    this.languages.add(languagesItem);
     return this;
   }
 
   /**
-   * Get language
-   * @return language
+   * list of
+   * @return languages
    **/
-  @Schema(required = true, description = "")
+  @Schema(required = true, description = "list of")
       @NotNull
-
     @Valid
-    public LanguagePair getLanguage() {
-    return language;
+    public List<LanguagePair> getLanguages() {
+    return languages;
   }
 
-  public void setLanguage(LanguagePair language) {
-    this.language = language;
+  public void setLanguages(List<LanguagePair> languages) {
+    this.languages = languages;
   }
 
 
@@ -187,12 +194,12 @@ public class OCRConfig   {
     return Objects.equals(this.modelId, ocRConfig.modelId) &&
         Objects.equals(this.detectionLevel, ocRConfig.detectionLevel) &&
         Objects.equals(this.modality, ocRConfig.modality) &&
-        Objects.equals(this.language, ocRConfig.language);
+        Objects.equals(this.languages, ocRConfig.languages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, detectionLevel, modality, language);
+    return Objects.hash(modelId, detectionLevel, modality, languages);
   }
 
   @Override
@@ -203,7 +210,7 @@ public class OCRConfig   {
     sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    detectionLevel: ").append(toIndentedString(detectionLevel)).append("\n");
     sb.append("    modality: ").append(toIndentedString(modality)).append("\n");
-    sb.append("    language: ").append(toIndentedString(language)).append("\n");
+    sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: ULCA - model schema
+  description: The documentation defines the model.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 1.0.0
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    Model:
+      required:
+        - name
+        - version
+        - description
+        - task
+        - languages
+        - license
+        - domain
+        - submitter
+        - trainingDataset
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          minLength: 5
+          type: string
+          description: model name that you want your users to see
+          example: vakyansh asr model
+        version:
+          maxLength: 20
+          minLength: 1
+          type: string
+          description: version for the model
+          example: v1
+        description:
+          maxLength: 1000
+          minLength: 25
+          type: string
+          description: brief description about model, its goal, basically something sweet about it
+          example: Speech recognition model for classroom lecture
+        refUrl:
+          maxLength: 200
+          minLength: 5
+          type: string
+          description: github link or url giving further info about the model
+          example: https://github.com/Open-Speech-EkStep/vakyansh-models
+        task:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+        languages:
+          nullable: true
+          allOf:
+            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
+        isMultilingual:
+          type: boolean
+          default: false
+          description: specify true if the same model is capable of handling multiple languages
+        license:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
+        licenseUrl:
+          type: string
+          description: url of the custom license
+        domain:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+        submitter:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
+        trainingDataset:
+          $ref: '#/components/schemas/TrainingDataset'
+    TrainingDataset:
+      required:
+        - description
+      type: object
+      properties:
+        datasetId:
+          type: string
+          description: dataset identifier that has been exported from ULCA system, passing this information makes your model enriched with further information for the community
+        description:
+          type: string
+          description: explain your dataset that you have used for training your model
+      description: training dataset metadata used to train the model

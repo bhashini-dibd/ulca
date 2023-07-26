@@ -4,13 +4,13 @@ import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from 'md5';
 
 export default class MyCOntribution extends API {
-    constructor( user_id, timeout = 200000) {
+    constructor( page = 0, timeout = 200000) {
         super("GET", timeout, false);
-        this.user_id        = user_id
         this.type           = C.GET_MY_REPORT;
         this.endpoint       = `${super.apiEndPointAuto()}${ENDPOINTS.mySearches}`;
         let userInf                     = localStorage.getItem("userDetails")
         this.userId              = JSON.parse(userInf).userID;
+        this.page           = page;
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
     }
 
@@ -21,14 +21,14 @@ export default class MyCOntribution extends API {
     processResponse(res) {
         super.processResponse(res);
         if (res) {
-            this.report = res.data;
+            this.report = res;
         }
     }
 
     apiEndPoint() {
 
         
-        let url = `${this.endpoint}?userId=${this.userId }` 
+        let url = `${this.endpoint}?userId=${this.userId }&startPage=${this.page}&endPage=${this.page}` 
         
          return url;
     }

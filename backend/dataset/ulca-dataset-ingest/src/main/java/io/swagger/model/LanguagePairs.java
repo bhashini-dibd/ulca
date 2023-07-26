@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
  * LanguagePairs
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-12-22T12:21:00.339Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-11T16:20:36.722064280Z[GMT]")
 
 
 public class LanguagePairs extends ArrayList<LanguagePair>  {

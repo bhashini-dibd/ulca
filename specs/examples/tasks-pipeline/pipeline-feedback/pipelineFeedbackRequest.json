@@ -1,0 +1,127 @@
+{
+    "pipelineId": "64392f96daac500b55c543cd",
+    "feedbackTimeStamp": "1682408572",
+    "feedbackLanguage": "en",
+    "pipelineFeedback": {
+        "commonFeedback": [
+            {
+                "question": "Are you satisfied with the pipeline so far?",
+                "feedbackType": "comment",
+                "comment": "The output generated is really impressive. Cheers to the model developers and crew!!"
+            }
+        ]
+    },
+    "taskFeedback": [
+        {
+            "taskType": "asr",
+            "commonFeedback": [
+                {
+                    "question": "Are you satisfied with the ASR response so far?",
+                    "feedbackType": "comment",
+                    "comment": "The output generated is really impressive. Cheers to the model developers and crew!!"
+                }
+            ],
+            "granularFeedback": [
+                {
+                    "question": "What are the areas where ASR should improve upon?",
+                    "feedbackType": "rating-list",
+                    "ratingList": [
+                        {
+                            "parameterName": "accuracy",
+                            "rating": 1
+                        },
+                        {
+                            "parameterName": "speed",
+                            "rating": 5
+                        },
+                        {
+                            "parameterName": "readability",
+                            "rating": 5
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "taskType": "translation",
+            "commonFeedback": [
+                {
+                    "question": "Are you satisfied with the Translation response so far?",
+                    "feedbackType": "comment",
+                    "comment": "The output generated is really impressive. Cheers to the model developers and crew!!"
+                }
+            ],
+            "granularFeedback": [
+                {
+                    "question": "What are the areas where ASR should improve upon?",
+                    "feedbackType": "rating-list",
+                    "ratingList": [
+                        {
+                            "parameterName": "accuracy",
+                            "rating": 1
+                        },
+                        {
+                            "parameterName": "speed",
+                            "rating": 5
+                        },
+                        {
+                            "parameterName": "readability",
+                            "rating": 5
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "pipelineInput": {
+        "pipelineTasks": [
+            {
+                "taskType": "translation",
+                "config": {
+                    "language": {
+                        "serviceId": "ai4bharat/indictrans-fairseq-all-gpu--t4",
+                        "sourceLanguage": "en",
+                        "targetLanguage": "ta"
+                    }
+                }
+            }
+        ],
+        "inputData": {
+            "input": [
+                {
+                    "source": "Page 58 of 144 [Writ A No.– 13156 of 2020 along with."
+                }
+            ]
+        }
+    },
+    "pipelineOutput": {
+        "pipelineResponse": [
+            {
+                "taskType": "translation",
+                "config": null,
+                "output": [
+                    {
+                        "source": "Page 58 of 144 [Writ A No.– 13156 of 2020 along with.",
+                        "target": "144-ன் பக்கம் 58 (பிற தொடர்புடைய விஷயங்களுடன் 2020-ன்."
+                    }
+                ],
+                "audio": null
+            }
+        ]
+    },
+    "suggestedPipelineOutput": {
+        "pipelineResponse": [
+            {
+                "taskType": "translation",
+                "config": null,
+                "output": [
+                    {
+                        "source": "Page 58 of 144 [Writ A No.– 13156 of 2020 along with.",
+                        "target": "144-ன் பக்கம் 58 (பிற தொடர்புடைய விஷயங்களுடன் 2020-ன்."
+                    }
+                ],
+                "audio": null
+            }
+        ]
+    }
+}

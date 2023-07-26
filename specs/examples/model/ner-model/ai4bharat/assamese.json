@@ -1,0 +1,116 @@
+{
+   "name": "AI4Bharat Assamese NER",
+   "version": "v1.0",
+   "description": "Multilingual Indic-NER model by AI4Bharat to recognize named-entities from provided text. For more details, check our research paper: https://arxiv.org/abs/2212.10168",
+   "refUrl": "https://huggingface.co/ai4bharat/IndicNER",
+   "task": {
+      "type": "ner"
+   },
+   "languages": [
+      {
+         "sourceLanguage": "as"
+      }
+   ],
+   "license": "mit",
+   "domain": [
+      "general"
+   ],
+   "submitter": {
+      "name": "AI4Bharat",
+      "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+      "team": [
+         {
+            "name": "Arnav Mhaske",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Harshit Kedia",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Sumanth Doddapaneni",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Mitesh Khapra",
+            "aboutMe": "IIT-Madras"
+         },
+         {
+            "name": "Pratyush Kumar",
+            "aboutMe": "Microsoft Research India"
+         },
+         {
+            "name": "Rudra Murthy",
+            "aboutMe": "IBM Research India"
+         },
+         {
+            "name": "Anoop Kunchukuttan",
+            "aboutMe": "Microsoft Research India"
+         }
+      ]
+   },
+   "inferenceEndPoint": {
+      "callbackUrl": "https://ner-api.ai4bharat.org/inference",
+      "schema": {
+         "taskType": "ner",
+         "tagsFormat": "IOB2",
+         "request": {
+            "input": [
+               {
+                  "source": "সুন্দৰে আমেৰিকাৰ গুগল নামৰ কোম্পানী এটাত কাম কৰে।"
+               }
+            ],
+            "config": {
+               "language": {
+                  "sourceLanguage": "as"
+               }
+            }
+         },
+         "response": {
+            "output": [
+               {
+                  "source": "সুন্দৰে আমেৰিকাৰ গুগল নামৰ কোম্পানী এটাত কাম কৰে।",
+                  "nerPrediction": [
+                     {
+                        "token": "সুন্দৰে",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "আমেৰিকাৰ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "গুগল",
+                        "tag": "B-ORG"
+                     },
+                     {
+                        "token": "নামৰ",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "কোম্পানী",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "এটাত",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "কাম",
+                        "tag": "O"
+                     },
+                     {
+                        "token": "কৰে।",
+                        "tag": "O"
+                     }
+                  ]
+               }
+            ]
+         }
+      }
+   },
+   "trainingDataset": {
+      "datasetId": "",
+      "description": "Trained on Naamapadam dataset, the largest publicly available Named Entity Annotated dataset for 11 Indic languages. More info: https://huggingface.co/datasets/ai4bharat/naamapadam"
+   }
+}

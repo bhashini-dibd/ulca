@@ -21,7 +21,8 @@ public enum DatasetType {
     ASR_UNLABELED_CORPUS("asr-unlabeled-corpus"),
     OCR_CORPUS("ocr-corpus"),
     DOCUMENT_LAYOUT_CORPUS("document-layout-corpus"),
-    GLOSSARY_CORPUS("glossary-corpus");
+    GLOSSARY_CORPUS("glossary-corpus"),
+    NER_CORPUS("ner-corpus");
 
   private String value;
 
