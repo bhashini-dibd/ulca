@@ -664,7 +664,7 @@ public class ModelInferenceEndPointService {
 			ImageFiles imageFiles = new ImageFiles();
 			ImageFile imageFile = new ImageFile();
 			
-			if(compute.getImageUri()!=null || !compute.getImageUri().isBlank()) {
+			if(compute.getImageUri()!=null) {
 			imageFile.setImageUri(compute.getImageUri());
 			}
 			
@@ -757,7 +757,10 @@ public class ModelInferenceEndPointService {
 			String responseJsonStr = httpResponse.body().string();
 			try {
 				OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
-
+                
+				
+				
+				
 				if (ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <= 0
 						|| ocrResponse.getOutput().get(0).getSource().isBlank()) {
 					
@@ -776,6 +779,8 @@ public class ModelInferenceEndPointService {
 							HttpStatus.BAD_REQUEST);
 
 				}
+				
+				log.info("OUTPUT :::::::: "+ocrResponse.getOutput().toString());
 
 				ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
 				BeanUtils.copyProperties(ocrResponse, resp);

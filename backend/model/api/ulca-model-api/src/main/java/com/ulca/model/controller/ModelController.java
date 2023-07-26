@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -111,7 +112,7 @@ public class ModelController {
 	 */
 	
 	//@PostMapping("/compute")
-	@PostMapping(value = "/compute",produces = "multipart/mixed; boundary=MINE_BOUNDARY")
+	@PostMapping(path = "/compute",produces = MediaType.APPLICATION_JSON_VALUE)
 	public ModelComputeResponse computeModel(@RequestPart(name ="file",required =false) MultipartFile file,
 			@Valid @RequestPart ModelComputeRequest request) throws Exception {
 
