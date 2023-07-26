@@ -33,5 +33,6 @@ public class ModelComputeRequest {
     private BigDecimal speed;
     private BigDecimal duration;
     private byte[] imageBytes;
+    private String imageFilePath;
 	  
 }

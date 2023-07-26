@@ -663,7 +663,15 @@ public class ModelInferenceEndPointService {
              
 			ImageFiles imageFiles = new ImageFiles();
 			ImageFile imageFile = new ImageFile();
+			
+			if(compute.getImageUri()!=null || !compute.getImageUri().isBlank()) {
 			imageFile.setImageUri(compute.getImageUri());
+			}
+			
+			if(compute.getImageBytes()!=null) {
+				imageFile.setImageContent(compute.getImageBytes());
+				}
+			
 			imageFiles.add(imageFile);
 			OCRRequest request = ocrInference.getRequest();
 		      LanguagePairs langs =		model.getLanguages();
@@ -718,6 +726,15 @@ public class ModelInferenceEndPointService {
 			try {
 				httpResponse = client.newCall(httpRequest).execute();
 			}catch(SocketTimeoutException ste) {
+				if(compute.getImageBytes()!=null) {
+					try {
+						FileUtils.delete(new File(compute.getImageFilePath()));
+					} catch (IOException ioe) {
+						log.info("Unable to delete the file : " + compute.getImageFilePath());
+						ioe.printStackTrace();
+					}
+					}
+				
 				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
 						HttpStatus.BAD_REQUEST);
 			}
@@ -725,8 +742,14 @@ public class ModelInferenceEndPointService {
 			
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
-				log.info(httpResponse.toString());
-
+				if(compute.getImageBytes()!=null) {
+					try {
+						FileUtils.delete(new File(compute.getImageFilePath()));
+					} catch (IOException ioe) {
+						log.info("Unable to delete the file : " + compute.getImageFilePath());
+						ioe.printStackTrace();
+					}
+					}
 				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Failed",
 						HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -737,6 +760,18 @@ public class ModelInferenceEndPointService {
 
 				if (ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <= 0
 						|| ocrResponse.getOutput().get(0).getSource().isBlank()) {
+					
+					if(compute.getImageBytes()!=null) {
+						try {
+							FileUtils.delete(new File(compute.getImageFilePath()));
+						} catch (IOException ioe) {
+							log.info("Unable to delete the file : " + compute.getImageFilePath());
+							ioe.printStackTrace();
+						}
+						}
+					
+					
+					
 					throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is Empty",
 							HttpStatus.BAD_REQUEST);
 
@@ -751,6 +786,14 @@ public class ModelInferenceEndPointService {
 
 				log.info("response from OCR model inference end not proper : callback url :  " + callBackUrl
 						+ " response :: " + responseJsonStr);
+				if(compute.getImageBytes()!=null) {
+					try {
+						FileUtils.delete(new File(compute.getImageFilePath()));
+					} catch (IOException ioe) {
+						log.info("Unable to delete the file : " + compute.getImageFilePath());
+						ioe.printStackTrace();
+					}
+					}
 
 				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is not proper",
 						HttpStatus.BAD_REQUEST);

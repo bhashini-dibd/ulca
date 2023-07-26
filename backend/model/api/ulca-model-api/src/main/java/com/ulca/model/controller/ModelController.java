@@ -111,26 +111,27 @@ public class ModelController {
 	 */
 	
 	//@PostMapping("/compute")
-	@PostMapping(value = "/compute")
+	@PostMapping(value = "/compute",produces = "multipart/mixed; boundary=MINE_BOUNDARY")
 	public ModelComputeResponse computeModel(@RequestPart(name ="file",required =false) MultipartFile file,
-			@Valid @RequestBody ModelComputeRequest request) throws Exception {
+			@Valid @RequestPart ModelComputeRequest request) throws Exception {
 
 		log.info("******** Entry ModelController:: computeModel *******");
 		byte[] bytes=null ;
 		if(file!=null) {
 		String imageFilePath = modelService.storeModelTryMeFile(file);
 	       bytes = FileUtils.readFileToByteArray(new File(imageFilePath));
+			request.setImageBytes(bytes);
+			request.setImageFilePath(imageFilePath);
+			log.info("file :: "+file.toString());
          }
 		
-		
-		request.setImageBytes(bytes);
 		log.info("request :: "+request.toString());
 		
-		ModelComputeResponse res = null;
+		//ModelComputeResponse res = null;
 		
-		return res;
+		//return res;
 
-		//return modelService.computeModel(request);
+		return modelService.computeModel(request);
 	}
 
 	
