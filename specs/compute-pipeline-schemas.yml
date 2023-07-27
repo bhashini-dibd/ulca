@@ -83,6 +83,13 @@ components:
       properties:
         input:
           $ref: "#/components/schemas/Sentences"
+    OCRRequestInput:
+      required:
+        - image
+      type: object
+      properties:
+        image:
+          $ref: '#/components/schemas/ImageFiles'
           
     TransliterationRequestInput:
       required:
@@ -395,6 +402,25 @@ components:
             - srt
             - transcript
             - alternatives
+            
+    ImageFiles:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/ImageFile'
+    ImageFile:
+      required:
+        - imageContent | imageUri
+      type: object
+      properties:
+        imageContent:
+          type: string
+          description: image content
+          format: byte
+        imageUri:
+          type: string
+          description: path on gcp/s3 bucket or https url
+          example: gs://bucket/testimg.jpeg
 
     Responses:
       anyOf:
