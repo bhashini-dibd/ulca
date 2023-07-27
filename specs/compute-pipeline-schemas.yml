@@ -68,6 +68,21 @@ components:
       properties:
         input:
           $ref: "#/components/schemas/Sentences"
+    
+    NerRequestInput:
+      required:
+        - input
+      type: object
+      properties:
+        input:
+          $ref: "#/components/schemas/Sentences"
+    TxtLangDetectionRequestInput:
+      required:
+        - input
+      type: object
+      properties:
+        input:
+          $ref: "#/components/schemas/Sentences"
           
     TransliterationRequestInput:
       required:

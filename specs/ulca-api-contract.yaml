@@ -315,7 +315,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ModelComputeResponse'
+                $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/OCRResponse
 
   /ulca/apis/v0/model/status/change:
     post:
@@ -3309,6 +3309,16 @@ components:
     ModelComputeRequest:
       required:
         - modelId
+      oneOf:
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/TranslationRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/TransliterationRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/ASRRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/TTSRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/OCRRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/TxtLangDetectionRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/NerRequestInput
+      
+        
       type: object
       properties:
         modelId:
@@ -3316,32 +3326,9 @@ components:
         userId:
           type: string
         task:
-          type: string
-        source:
-          type: string
-        audioFormat:
-          type: string
-        gender:
-          type: string
-          enum:
-            - male
-            - female
-            - transgender
-            - non-specified
-            - others
-        input:
-          type: array
-          items:
-            $ref: '#/components/schemas/Input'
-        audioUri:
-          type: string
-        audioContent:
-          type: array
-          items:
-            type: string
-            format: byte
-        imageUri:
-          type: string
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        
+        
       example:
         modelId: 641d1d6592a6a31751ff1f49
         userId: 6a73afa4fc774dcdb28d5fff944511f6
@@ -3351,12 +3338,13 @@ components:
     ModelComputeResponse:
       type: object
       oneOf:
-        - $ref: '#/components/schemas/TranslationResponse'
-        - $ref: '#/components/schemas/TransliterationResponse'
-        - $ref: '#/components/schemas/ASRResponse'
-        - $ref: '#/components/schemas/TTSResponse'
-        - $ref: '#/components/schemas/OCRResponse'
-        - $ref: '#/components/schemas/TxtLangDetectionResponse'
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/TranslationResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/TransliterationResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/ASRResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/TTSResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/OCRResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/TxtLangDetectionResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/NerResponse
       
 
     Sentences:
