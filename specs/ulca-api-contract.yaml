@@ -320,9 +320,9 @@ paths:
   /ulca/apis/v1/model/compute:
     post:
       tags:
-        - Compute asr audio
-      summary: REST API compute asr
-      description: Compute ASR audio content and audio url
+        - ASR Compute
+      summary: REST API dedicated for ASR compute
+      description: Compute API for ASR audio content and audio url
       requestBody:
         content:
           application/json:
@@ -3359,6 +3359,12 @@ components:
           type: string
         task:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        gender:
+          type : string
+          description: TTS specific field to specify gender
+          enum:
+            - male
+            - female
         
         
       example:
