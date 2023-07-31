@@ -316,6 +316,38 @@ paths:
             '*/*':
               schema:
                 $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/OCRResponse
+                
+  /ulca/apis/v1/model/compute:
+    post:
+      tags:
+        - Compute asr audio
+      summary: REST API compute asr
+      description: Compute ASR audio content and audio url
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/modelcomputeRequest'
+        required: true
+      responses:
+        '200':
+          description: ASR audio computed successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors request body errors, all parameters are required.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error' 
 
   /ulca/apis/v0/model/status/change:
     post:
@@ -3328,12 +3360,7 @@ components:
         task:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         
-        gender:
-          type : string
-          description: TTS specific field to specify gender
-          enum:
-            - male
-            - female
+        
       example:
         modelId: 641d1d6592a6a31751ff1f49
         userId: 6a73afa4fc774dcdb28d5fff944511f6
@@ -4415,6 +4442,38 @@ components:
       example:
         feedbackLanguage: en
         supportedTasks: asr
+    modelcomputeRequest:
+      type: object
+      required:
+        - userId
+        - tasks
+        - source
+        - ModelId
+        - audioContent
+        - audioUri
+      properties:
+        userId:
+          type: string
+          description: userID.
+        Tasks:
+          type: string
+          description: Tasks supported.
+        source:
+          type: string
+          description: source.
+        ModelId:
+          type: string
+          description: ModelID
+        audioContent:
+          type: string
+          description: audioContent
+      example:
+        userId: ij9208497lwieur9u1934
+        Tasks: tasks
+        source: sourced
+        ModelId: 99988889998878alisjd
+        audioContent: audioContent
+        audioUrl: audioUrl
     UserLoginRequest:
       type: object
       properties:
