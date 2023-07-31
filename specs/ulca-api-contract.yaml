@@ -3328,7 +3328,12 @@ components:
         task:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         
-        
+        gender:
+          type : string
+          description: TTS specific field to specify gender
+          enum:
+            - male
+            - female
       example:
         modelId: 641d1d6592a6a31751ff1f49
         userId: 6a73afa4fc774dcdb28d5fff944511f6
