@@ -179,7 +179,7 @@ const SignUp = (props) => {
           type={values.showPassword ? "text" : "password"}
           value={values.password}
           onChange={handleChange("password")}
-          
+          label="Password " 
       onCut={handlePrevent}
       onCopy={handlePrevent}
       onPaste={handlePrevent}
@@ -209,7 +209,7 @@ Minimum length is 8 characters with combination of uppercase, lowercase, number 
         <OutlinedInput
           id="outlined-adornment-password"
           type={"password"}
-          
+          label="Confirm Password *"
       onCut={handlePrevent}
       onCopy={handlePrevent}
       onPaste={handlePrevent}

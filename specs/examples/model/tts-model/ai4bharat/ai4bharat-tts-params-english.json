@@ -1,0 +1,65 @@
+{
+    "name": "AI4Bharat Indic-TTS : English",
+    "version": "v1.0",
+    "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both 'female' and 'male' voices. All the models were trained using the IndicTTS dataset from SMT Lab, IITM.",
+    "refUrl": "https://github.com/AI4Bharat/Indic-TTS",
+    "task": {
+        "type": "tts"
+    },
+    "languages": [
+        {
+            "sourceLanguage": "en"
+        }
+    ],
+    "license": "mit",
+    "domain": [
+        "general"
+    ],
+    "submitter": {
+        "name": "AI4Bharat",
+        "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+        "team": [
+            {
+                "name": "Praveen SV",
+                "aboutMe": "IIT-Madras, AI4Bharat"
+            },
+            {
+                "name": "Gokul Karthik K",
+                "aboutMe": "Microsoft Research Intern, AI4Bharat"
+            },
+            {
+                "name": "Pratyush Kumar",
+                "aboutMe": "Microsoft Research, AI4Bharat"
+            },
+            {
+                "name": "Mitesh Khapra",
+                "aboutMe": "IIT-Madras, AI4Bharat"
+            }
+        ]
+    },
+    "inferenceEndPoint": {
+        "callbackUrl": "https://api.dhruva.ai4bharat.org/services/inference/tts?serviceId=ai4bharat/indic-tts-coqui-misc-gpu--t4",
+        "schema": {
+            "taskType": "tts",
+            "modelProcessingType": {
+                "type": "batch"
+            },
+            "request": {
+                "input": [
+                    {
+                        "source": "Bro, what's up?"
+                    }
+                ],
+                "config": {
+                    "gender": "male",
+                    "language": {
+                        "sourceLanguage": "en"
+                    }
+                }
+            }
+        }
+    },
+    "trainingDataset": {
+        "description": "NLTM-R&D IIT Madras, Chennai."
+    }
+}

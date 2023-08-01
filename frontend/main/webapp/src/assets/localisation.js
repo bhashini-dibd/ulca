@@ -61,7 +61,8 @@ const localization_EN_Data = {
   "label.ulca": "ULCA",
   "label.dataset": "Dataset",
   "label.model": "Model",
-  "label.logOut": "Log out",
+  "label.logOut": "Log Out",
+  "label.myProfile": "My Profile",
   "button.gotoMyContrib": "Go to My Contribution",
   "label.totalCount": "Total Count",
   "label.noRecordsFound": "No records found.",
@@ -144,7 +145,9 @@ const localization_EN_Data = {
   "lable.Pleaserateyourexperience":"Please rate your experience...",
   "button.Suggest an edit":"Suggest an edit",
   "lable.Addyourcomments":"Add your comments",
-  "button.detect": "Detect"
+  "button.detect": "Detect",
+  "button.generate":"Generate API Key",
+
 };
 
 export function translate(locale_text) {

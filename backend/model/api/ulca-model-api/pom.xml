@@ -60,7 +60,6 @@
 			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
 	      <groupId>org.springdoc</groupId>
 	      <artifactId>springdoc-openapi-ui</artifactId>

@@ -1,0 +1,81 @@
+openapi: 3.0.0
+info:
+  title: API Key Generation and Revoking Schema
+  description: The document defines request to generate and revoke service end point api key for ULCA.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 1.0.0
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    APIKeyGenerationRequest:
+      required:
+        - emailId
+        - appName
+      type: object
+      properties:
+        emailId:
+          type: string
+          description: Email of the user for which api key is to be generated
+          example: ulca.ulca@gmail.com/bhashini-prod-android
+        appName:
+          type: string
+          description: App name mapped with ULCA api key of the user for which service api key is to be generated
+          example: bhashini-prod-android
+        dataTracking:
+          type: boolean
+          default: true
+          description: variable specifies whether data used for inferencing will be logged and visible to model provider for future reference
+        
+
+    APIKeyGenerationResponse:
+      required:
+        - ApiKey
+      type: object
+      properties:
+        ApiKey:
+          required:
+            - value
+          type: object
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name. The name and value will be provided as a key-value pair in the header for compute request.
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+   
+    APIKeyDeleteRequest:
+      required:
+        - emailId
+        - appName
+      type: object
+      properties:
+        emailId:
+          type: string
+          description: Email of the user for which api key is to be deleted
+          example: ulca.ulca@gmail.com/bhashini-prod-android
+        appName:
+          type: string
+          description: App name mapped with ULCA api key of the user for which service api key is to be deleted
+          example: bhashini-prod-android
+
+    APIKeyDeleteResponse:
+      required:
+        - isRevoked
+      type: object
+      properties:
+        isRevoked: 
+          type: boolean
+          description: Return true if successfully deleted. Else, return false.
+          example: true
+        message:
+          type: string
+          description: A success message "API Key successfully deleted" if or a failure message describing the error faced such as "API Key not found".
+          example: API Key successfully deleted

@@ -6,14 +6,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
+import io.swagger.model.AudioConfigTranscriptionFormat;
 import io.swagger.model.AudioFormat;
 import io.swagger.model.AudioPostProcessors;
 import io.swagger.model.Domain;
 import io.swagger.model.Encoding;
 import io.swagger.model.LanguagePair;
-import io.swagger.model.TTSConfigInputFormat;
+import io.swagger.model.SpeechContext;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -22,7 +25,7 @@ import javax.validation.constraints.*;
  * AudioConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-15T10:08:37.438508852Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-07-11T05:46:23.563016166Z[GMT]")
 
 
 public class AudioConfig   {
@@ -45,7 +48,11 @@ public class AudioConfig   {
   private AudioBitsPerSample bitsPerSample = null;
 
   @JsonProperty("transcriptionFormat")
-  private TTSConfigInputFormat transcriptionFormat = null;
+  private AudioConfigTranscriptionFormat transcriptionFormat = null;
+
+  @JsonProperty("speechContext")
+  @Valid
+  private List<SpeechContext> speechContext = null;
 
   @JsonProperty("postProcessors")
   private AudioPostProcessors postProcessors = null;
@@ -220,7 +227,7 @@ public class AudioConfig   {
     this.bitsPerSample = bitsPerSample;
   }
 
-  public AudioConfig transcriptionFormat(TTSConfigInputFormat transcriptionFormat) {
+  public AudioConfig transcriptionFormat(AudioConfigTranscriptionFormat transcriptionFormat) {
     this.transcriptionFormat = transcriptionFormat;
     return this;
   }
@@ -232,12 +239,39 @@ public class AudioConfig   {
   @Schema(description = "")
   
     @Valid
-    public TTSConfigInputFormat getTranscriptionFormat() {
+    public AudioConfigTranscriptionFormat getTranscriptionFormat() {
     return transcriptionFormat;
   }
 
-  public void setTranscriptionFormat(TTSConfigInputFormat transcriptionFormat) {
+  public void setTranscriptionFormat(AudioConfigTranscriptionFormat transcriptionFormat) {
     this.transcriptionFormat = transcriptionFormat;
+  }
+
+  public AudioConfig speechContext(List<SpeechContext> speechContext) {
+    this.speechContext = speechContext;
+    return this;
+  }
+
+  public AudioConfig addSpeechContextItem(SpeechContext speechContextItem) {
+    if (this.speechContext == null) {
+      this.speechContext = new ArrayList<SpeechContext>();
+    }
+    this.speechContext.add(speechContextItem);
+    return this;
+  }
+
+  /**
+   * list of
+   * @return speechContext
+   **/
+  @Schema(description = "list of")
+      @Valid
+    public List<SpeechContext> getSpeechContext() {
+    return speechContext;
+  }
+
+  public void setSpeechContext(List<SpeechContext> speechContext) {
+    this.speechContext = speechContext;
   }
 
   public AudioConfig postProcessors(AudioPostProcessors postProcessors) {
@@ -374,6 +408,7 @@ public class AudioConfig   {
         Objects.equals(this.samplingRate, audioConfig.samplingRate) &&
         Objects.equals(this.bitsPerSample, audioConfig.bitsPerSample) &&
         Objects.equals(this.transcriptionFormat, audioConfig.transcriptionFormat) &&
+        Objects.equals(this.speechContext, audioConfig.speechContext) &&
         Objects.equals(this.postProcessors, audioConfig.postProcessors) &&
         Objects.equals(this.domain, audioConfig.domain) &&
         Objects.equals(this.detailed, audioConfig.detailed) &&
@@ -384,7 +419,7 @@ public class AudioConfig   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, postProcessors, domain, detailed, punctuation, model, encoding);
+    return Objects.hash(modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, speechContext, postProcessors, domain, detailed, punctuation, model, encoding);
   }
 
   @Override
@@ -399,6 +434,7 @@ public class AudioConfig   {
     sb.append("    samplingRate: ").append(toIndentedString(samplingRate)).append("\n");
     sb.append("    bitsPerSample: ").append(toIndentedString(bitsPerSample)).append("\n");
     sb.append("    transcriptionFormat: ").append(toIndentedString(transcriptionFormat)).append("\n");
+    sb.append("    speechContext: ").append(toIndentedString(speechContext)).append("\n");
     sb.append("    postProcessors: ").append(toIndentedString(postProcessors)).append("\n");
     sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
     sb.append("    detailed: ").append(toIndentedString(detailed)).append("\n");

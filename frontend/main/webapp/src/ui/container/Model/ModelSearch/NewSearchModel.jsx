@@ -119,6 +119,7 @@ const NewSearchModel = () => {
             onPageChange={(e, page) =>
               dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: page })
             }
+            
           />
         </Suspense>
       );

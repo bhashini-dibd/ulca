@@ -51,7 +51,7 @@ if isinstance(zip_chunk_size, str):
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
-                      "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
+                      "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation","sourceScriptCode"]
 asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                     "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
 asr_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash", "textHash",
@@ -59,7 +59,7 @@ asr_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash", "text
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 tts_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
-                      "fileLocation", "lastModifiedOn", "createdOn"]
+                      "fileLocation", "lastModifiedOn", "createdOn","sourceScriptCode"]
 tts_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                     "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
 tts_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash", "textHash",
@@ -67,7 +67,7 @@ tts_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash", "text
 tts_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage",
-                                "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
+                                "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation","sourceScriptCode"]
 asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                               "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
 asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash",
@@ -75,7 +75,7 @@ asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHa
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 parallel_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
-                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn","sourceScriptCode","targetScriptCode"]
 parallel_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
                          "createdOn"]
 parallel_search_ignore_keys = ["_id", "id", "tags",  "datasetType", "hashedKey", "sk",
@@ -87,21 +87,21 @@ parallel_dataset_submitter = [{"submitter": {"name": "Derived", "aboutMe": "Reco
 parallel_dataset_collection_method = [{"collectionMethod": {"collectionDescription": ["Derived"]}}]
 
 ocr_immutable_keys = ["_id", "id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash", "datasetType",
-                      "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+                      "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn","sourceScriptCode"]
 ocr_non_tag_keys = ["_id", "id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter",
                     "fileLocation", "lastModifiedOn", "createdOn"]
 ocr_search_ignore_keys = ["_id", "id", "tags", "datasetType", "imageHash",
                           "groundTruthHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 ocr_updatable_keys = ["version"]
 
-mono_immutable_keys = ["_id", "id", "text", "textHash", "datasetType", "sourceLanguage", "lastModifiedOn", "createdOn"]
+mono_immutable_keys = ["_id", "id", "text", "textHash", "datasetType", "sourceLanguage", "lastModifiedOn", "createdOn","sourceScriptCode"]
 mono_non_tag_keys = ["_id", "id", "text", "submitter", "lastModifiedOn", "createdOn"]
 mono_search_ignore_keys = ["_id", "id", "tags", "datasetType", "textHash",
                            "lastModifiedOn", "createdOn", "version", "datasetId"]
 mono_updatable_keys = ["version"]
 
 transliteration_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
-                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn","sourceScriptCode","targetScriptCode"]
 transliteration_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
                          "createdOn"]
 transliteration_search_ignore_keys = ["_id", "id", "tags", "datasetType", "hashedKey", "sk",
@@ -110,7 +110,7 @@ transliteration_search_ignore_keys = ["_id", "id", "tags", "datasetType", "hashe
 transliteration_updatable_keys = ["alignmentScore", "version"]
 
 glossary_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
-                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn","sourceScriptCode","targetScriptCode"]
 glossary_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
                          "createdOn"]
 glossary_search_ignore_keys = ["_id", "id", "tags", "datasetType", "hashedKey", "sk",

@@ -4,7 +4,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Domain;
-import io.swagger.model.LanguagePair;
 import io.swagger.model.License;
 import io.swagger.model.ModelTask;
 import io.swagger.model.Source;
@@ -19,7 +18,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "common parameters or attributes of dataset that is primarily same across the supported dataset.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-02-17T09:58:25.365Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:59:56.369839514Z[GMT]")
 
 
 public class BenchmarkDatasetCommonParamsSchema   {
@@ -36,7 +35,7 @@ public class BenchmarkDatasetCommonParamsSchema   {
   private String description = null;
 
   @JsonProperty("languages")
-  private LanguagePair languages = null;
+  private AllOfBenchmarkDatasetCommonParamsSchemaLanguages languages = null;
 
   @JsonProperty("collectionSource")
   private Source collectionSource = null;
@@ -133,7 +132,7 @@ public class BenchmarkDatasetCommonParamsSchema   {
     this.description = description;
   }
 
-  public BenchmarkDatasetCommonParamsSchema languages(LanguagePair languages) {
+  public BenchmarkDatasetCommonParamsSchema languages(AllOfBenchmarkDatasetCommonParamsSchemaLanguages languages) {
     this.languages = languages;
     return this;
   }
@@ -145,12 +144,11 @@ public class BenchmarkDatasetCommonParamsSchema   {
   @Schema(required = true, description = "")
       @NotNull
 
-    @Valid
-    public LanguagePair getLanguages() {
+    public AllOfBenchmarkDatasetCommonParamsSchemaLanguages getLanguages() {
     return languages;
   }
 
-  public void setLanguages(LanguagePair languages) {
+  public void setLanguages(AllOfBenchmarkDatasetCommonParamsSchemaLanguages languages) {
     this.languages = languages;
   }
 

@@ -36,6 +36,13 @@ const endpoints = {
   datasetMetrics: "/ulca/data-metric/v0/store/reportdata",
   getModelHealthStatus: "/ulca/apis/v0/model/getModelHealthStatus",
   getTransliterationModelId:"/ulca/apis/v0/model/getTransliterationModelId",
+  generateApiKey:"/ulca/user-mgmt/v1/users/generateApiKey",
+  getApiKeys: "/ulca/user-mgmt/v1/users/getApiKeysForProfile",
+  revokeApiKey: "/ulca/user-mgmt/v1/users/revokeApiKey",
+  removeServiceProviderKey:"/ulca/user-mgmt/v1/users/removeServiceProviderKey",
+  generateServiceProviderKey:"/ulca/user-mgmt/v1/users/generateServiceProviderKey",
+  dataTrackingToggle:"/ulca/user-mgmt/v1/users/dataTrackingToggle"
+  
 };
 
 export default endpoints;

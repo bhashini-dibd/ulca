@@ -1,0 +1,467 @@
+openapi: 3.0.1
+info:
+  title: Pipeline Tasks Schema
+  description: The schema defines the request and response to identify whether an endpoint supports certain pipeline or not. It returns the pipeline endpoint details and supported model configurations.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 1.0.1
+servers:
+  - url: /ulca
+paths: {}
+components:
+  schemas:
+    PipelineRequest:
+      required:
+        - pipelineTasks
+        - pipelineRequestConfig
+      type: object
+      properties:
+        pipelineTasks:
+          $ref: '#/components/schemas/PipelineTasks'
+        pipelineRequestConfig:
+          $ref: '#/components/schemas/PipelineConfig'
+    PipelineResponse:
+      required:
+        - pipelineResponseConfig
+        - languages
+      type: object
+      properties:
+        languages:
+          $ref: '#/components/schemas/LanguagesList'
+        pipelineResponseConfig:
+          $ref: '#/components/schemas/TaskSchemaList'
+        
+        feedbackUrl:
+          description: URL to give feedback regarding pipeline
+          type: string
+          format: url
+        pipelineInferenceAPIEndPoint:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+        pipelineInferenceSocketEndPoint:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      # anyOf:  
+      #   - properties:
+      #     pipelineInferenceAPIEndPoint:
+      #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      #     required: [pipelineInferenceAPIEndPoint] 
+      #   - properties:
+      #     pipelineInferenceSocketEndPoint:
+      #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      #     required: [pipelineInferenceSocketEndPoint] 
+    PipelineConfig:
+      required:
+        - pipelineId
+      type: object
+      properties:
+        pipelineId:
+          type: string
+          description: ID of the pipeline submitter
+          example: AI4BharatID
+    PipelineTask:
+      oneOf:
+        - $ref: '#/components/schemas/TranslationTask'
+        - $ref: '#/components/schemas/TransliterationTask'
+        - $ref: '#/components/schemas/ASRTask'
+        - $ref: '#/components/schemas/TTSTask'
+      discriminator:
+        propertyName: taskType
+        mapping:
+          translation: '#/components/schemas/TranslationTask'
+          transliteration: '#/components/schemas/TransliterationTask'
+          asr: '#/components/schemas/ASRTask'
+          tts: '#/components/schemas/TTSTask'
+    PipelineTasks:
+      type: array
+      items:
+        $ref: '#/components/schemas/PipelineTask'
+    TranslationTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/TranslationRequestConfig'
+    TransliterationTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/TransliterationRequestConfig'
+    ASRTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/ASRRequestConfig'
+    TTSTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/TTSRequestConfig'
+    TranslationRequestConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    TransliterationRequestConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    TTSRequestConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        gender:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+    ASRRequestConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    LanguageSchema:
+      type: object
+      properties:
+        sourceLanguage:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        targetLanguageList:
+          type: array
+          default:
+            - en
+          description: list of
+          items:
+            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+    TaskSchema:
+      oneOf:
+        - $ref: '#/components/schemas/TranslationTaskInference'
+        - $ref: '#/components/schemas/TransliterationTaskInference'
+        - $ref: '#/components/schemas/ASRTaskInference'
+        - $ref: '#/components/schemas/TTSTaskInference'
+      discriminator:
+        propertyName: taskType
+        mapping:
+          translation: '#/components/schemas/TranslationTaskInference'
+          transliteration : '#/components/schemas/TransliterationTaskInference'
+          asr: '#/components/schemas/ASRTaskInference'
+          tts: '#/components/schemas/TTSTaskInference'
+    TaskSchemaList:
+      type: array
+      items:
+        $ref: '#/components/schemas/TaskSchema'
+    LanguagesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/LanguageSchema'
+    TranslationTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        inferenceApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/TranslationResponseConfig'
+            
+    TransliterationTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        inferenceApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/TransliterationResponseConfig'
+            
+    ASRTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        inferenceApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/ASRResponseConfig'
+    TTSTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        inferenceApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/TTSResponseConfig'
+    TranslationResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+    TransliterationResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+    TTSResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        supportedVoices:
+          type: array
+          description: list of
+          example:
+            - male
+            - female
+          items:
+            $ref: '#/components/schemas/VoiceTypes'
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+    ASRResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        audioFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        channel:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        bitsPerSample:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+        transcriptionFormat:
+          $ref: '#/components/schemas/TranscriptionFormat'
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        postProcessors:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
+        domain:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+        detailed:
+          type: boolean
+          description: to specify whether details are required in output like SNR, sampling rate
+        punctuation:
+          type: boolean
+          example: true
+        model:
+          type: string
+          enum:
+            - command_and_search
+            - phone_call
+            - video
+            - default
+        encoding:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+    TranscriptionFormat:
+      type: object
+      properties:
+        value:
+          type: string
+          description: format of ASR output
+          enum:
+            - srt
+            - transcript
+            - webvtt
+            - alternatives
+            - raw-text
+    TextFormat:
+      type: string
+      description: supported textual formats
+      enum:
+        - srt
+        - transcript
+        - webvtt
+        - alternatives
+        - raw-text
+    AudioFormat:
+      type: string
+      description: audio format of the audio file
+      example: flac
+      enum:
+        - wav
+        - pcm
+        - mp3
+        - flac
+        - sph
+    VoiceTypes:
+      type: string
+      description: supported types of voices
+      enum:
+        - male
+        - female
+    SupportedFormats:
+      anyOf:
+        - $ref: '#/components/schemas/AudioFormat'
+        - $ref: '#/components/schemas/TextFormat'
+        - $ref: '#/components/schemas/TextFormat'

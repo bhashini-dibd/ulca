@@ -14,116 +14,112 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class InferenceAPIEndPointDto {
 
-	  private String callbackUrl;
+	private String callbackUrl;
 
+	private OneOfInferenceAPIEndPointSchema schema;
 
-	  private OneOfInferenceAPIEndPointSchema schema;
+	private Boolean isSyncApi = true;
 
-	
-	  private Boolean isSyncApi = true;
+	private AsyncApiDetails asyncApiDetails;
 
+	public InferenceAPIEndPointDto callbackUrl(String callbackUrl) {
+		this.callbackUrl = callbackUrl;
+		return this;
+	}
 
-	  private AsyncApiDetails asyncApiDetails;
+	public String getCallbackUrl() {
+		return callbackUrl;
+	}
 
-	  public InferenceAPIEndPointDto callbackUrl(String callbackUrl) {
-	    this.callbackUrl = callbackUrl;
-	    return this;
-	  }
+	public void setCallbackUrl(String callbackUrl) {
+		this.callbackUrl = callbackUrl;
+	}
 
-	
+	public InferenceAPIEndPointDto schema(OneOfInferenceAPIEndPointSchema schema) {
+		this.schema = schema;
+		return this;
+	}
 
-	    public String getCallbackUrl() {
-	    return callbackUrl;
-	  }
+	public OneOfInferenceAPIEndPointSchema getSchema() {
+		return schema;
+	}
 
-	  public void setCallbackUrl(String callbackUrl) {
-	    this.callbackUrl = callbackUrl;
-	  }
+	public void setSchema(OneOfInferenceAPIEndPointSchema schema) {
+		this.schema = schema;
+	}
 
-	 
+	public InferenceAPIEndPointDto isSyncApi(Boolean isSyncApi) {
+		this.isSyncApi = isSyncApi;
+		return this;
+	}
 
-	 
+	public Boolean isIsSyncApi() {
+		return isSyncApi;
+	}
 
-	  public InferenceAPIEndPointDto schema(OneOfInferenceAPIEndPointSchema schema) {
-	    this.schema = schema;
-	    return this;
-	  }
+	public void setIsSyncApi(Boolean isSyncApi) {
+		this.isSyncApi = isSyncApi;
+	}
 
-	
+	public InferenceAPIEndPointDto asyncApiDetails(AsyncApiDetails asyncApiDetails) {
+		this.asyncApiDetails = asyncApiDetails;
+		return this;
+	}
 
-	    public OneOfInferenceAPIEndPointSchema getSchema() {
-	    return schema;
-	  }
+	public AsyncApiDetails getAsyncApiDetails() {
+		return asyncApiDetails;
+	}
 
-	  public void setSchema(OneOfInferenceAPIEndPointSchema schema) {
-	    this.schema = schema;
-	  }
+	public void setAsyncApiDetails(AsyncApiDetails asyncApiDetails) {
+		this.asyncApiDetails = asyncApiDetails;
+	}
 
-	  public InferenceAPIEndPointDto isSyncApi(Boolean isSyncApi) {
-	    this.isSyncApi = isSyncApi;
-	    return this;
-	  }
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		InferenceAPIEndPointDto inferenceAPIEndPoint = (InferenceAPIEndPointDto) o;
+		return  Objects.equals(this.callbackUrl, inferenceAPIEndPoint.callbackUrl) &&
 
-	  
-	    public Boolean isIsSyncApi() {
-	    return isSyncApi;
-	  }
+		Objects.equals(this.schema, inferenceAPIEndPoint.schema)
+				&& Objects.equals(this.isSyncApi, inferenceAPIEndPoint.isSyncApi)
+				&& Objects.equals(this.asyncApiDetails, inferenceAPIEndPoint.asyncApiDetails);
+	}
 
-	  public void setIsSyncApi(Boolean isSyncApi) {
-	    this.isSyncApi = isSyncApi;
-	  }
+	@Override
+	public int hashCode() {
+		return Objects.hash(callbackUrl,schema, isSyncApi, asyncApiDetails);
+	}
 
-	  public InferenceAPIEndPointDto asyncApiDetails(AsyncApiDetails asyncApiDetails) {
-	    this.asyncApiDetails = asyncApiDetails;
-	    return this;
-	  }
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class InferenceAPIEndPoint {\n");
 
-	
-	    public AsyncApiDetails getAsyncApiDetails() {
-	    return asyncApiDetails;
-	  }
+		 sb.append(" callbackUrl: ").append(toIndentedString(callbackUrl)).append(
+		 "\n");
 
-	  public void setAsyncApiDetails(AsyncApiDetails asyncApiDetails) {
-	    this.asyncApiDetails = asyncApiDetails;
-	  }
+		sb.append("    schema: ").append(toIndentedString(schema)).append("\n");
+		sb.append("    isSyncApi: ").append(toIndentedString(isSyncApi)).append("\n");
+		sb.append("    asyncApiDetails: ").append(toIndentedString(asyncApiDetails)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
 
-		
-		  @Override public boolean equals(java.lang.Object o) { if (this == o) { return
-		  true; } if (o == null || getClass() != o.getClass()) { return false; }
-		  InferenceAPIEndPointDto inferenceAPIEndPoint = (InferenceAPIEndPointDto) o;
-		  return Objects.equals(this.callbackUrl, inferenceAPIEndPoint.callbackUrl) &&
-		  
-		  Objects.equals(this.schema, inferenceAPIEndPoint.schema) &&
-		  Objects.equals(this.isSyncApi, inferenceAPIEndPoint.isSyncApi) &&
-		  Objects.equals(this.asyncApiDetails, inferenceAPIEndPoint.asyncApiDetails); }
-		 
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 
-		
-		  @Override public int hashCode() { return Objects.hash(callbackUrl, schema,
-		  isSyncApi, asyncApiDetails); }
-		 
-
-		
-		  @Override public String toString() { StringBuilder sb = new StringBuilder();
-		  sb.append("class InferenceAPIEndPoint {\n");
-		  
-		  sb.append("    callbackUrl: ").append(toIndentedString(callbackUrl)).append(
-		  "\n");
-		  
-		  sb.append("    schema: ").append(toIndentedString(schema)).append("\n");
-		  sb.append("    isSyncApi: ").append(toIndentedString(isSyncApi)).append("\n")
-		  ;
-		  sb.append("    asyncApiDetails: ").append(toIndentedString(asyncApiDetails)).
-		  append("\n"); sb.append("}"); return sb.toString(); }
-		 
-
-	  /**
-	   * Convert the given object to string with each line indented by 4 spaces
-	   * (except the first line).
-	   */
-		
-		  private String toIndentedString(java.lang.Object o) { if (o == null) { return
-		  "null"; } return o.toString().replace("\n", "\n    "); }
-		 
 }

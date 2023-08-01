@@ -119,9 +119,10 @@ const getSearchInfo = (searchCriteria) => {
   return result;
 };
 
-const getMySearches = (payload) => {
+const getMySearches = (state, payload) => {
+  let existingResponseData = state.responseData;
   let newArr = [];
-  payload.forEach((element) => {
+  payload.data.forEach((element) => {
     if (element.searchCriteria) {
       let dataSet = getDatasetName(element.searchCriteria.datasetType);
       let langauge =
@@ -169,6 +170,12 @@ const getMySearches = (payload) => {
     }
   });
   newArr = newArr.reverse();
+  
+  if (existingResponseData.length > 0) {
+    let newArrStartIndex = (payload.startPage * 10) - 10;
+    existingResponseData.splice(newArrStartIndex, 10, newArr);
+    return existingResponseData.flat();
+  }
   return newArr;
 };
 
@@ -209,10 +216,11 @@ const getFilteredData = (value, data) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_MY_REPORT:
-      const data = getMySearches(action.payload);
+      const data = getMySearches(state, action.payload);
       return {
         responseData: data,
         filteredData: data,
+        totalCount: action.payload.totalCount
       };
     case C.GET_SEARCHED_VALUES:
       return {

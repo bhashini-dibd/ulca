@@ -45,6 +45,7 @@ import com.ulca.benchmark.response.BenchmarkSubmitResponse;
 import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
 import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
 import com.ulca.benchmark.util.ModelConstants;
+import com.ulca.benchmark.util.SupportedBertTgtLangs;
 import com.ulca.benchmark.util.Utility;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
@@ -94,25 +95,32 @@ public class BenchmarkService {
 
 	public BenchmarkSubmitResponse submitBenchmark(BenchmarkSubmitRequest request)
 			throws RequestParamValidationException {
-
+        
+		
+		String trimmedName= request.getDatasetName().trim();
+		
 		Benchmark benchmark = new Benchmark();
-		benchmark.setName(request.getDatasetName());
+		benchmark.setName(trimmedName);
 		benchmark.setUserId(request.getUserId());
 		benchmark.setDataset(request.getUrl());
 		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());
 		benchmark.setSubmittedOn(Instant.now().toEpochMilli());
 		benchmark.setCreatedOn(Instant.now().toEpochMilli());
 
-		Benchmark existingBenchmark = benchmarkDao.findByName(request.getDatasetName());
-		if (existingBenchmark == null) {
+		Benchmark existingBenchmark = benchmarkDao.findByName(trimmedName);
+		if (existingBenchmark == null || existingBenchmark.getStatus().equals("Failed")) {
 			try {
+				if(existingBenchmark != null && existingBenchmark.getStatus().equals("Failed"))
+				{
+					benchmarkDao.deleteById(existingBenchmark.getBenchmarkId());
+				}
 				benchmarkDao.save(benchmark);
 			} catch (DuplicateKeyException ex) {
 				log.info("benchmark with same name exists.: " + benchmark.getName());
 				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 			}
 		} else {
-			log.info(BenchmarkConstants.datasetNameUniqueErrorMsg + "benchmark name :: " + request.getDatasetName());
+			log.info(BenchmarkConstants.datasetNameUniqueErrorMsg + "benchmark name :: " + trimmedName);
 			throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 		}
 
@@ -298,20 +306,48 @@ public class BenchmarkService {
 
 		ModelExtended model = modelDao.findByModelId(request.getModelId());
 		LanguagePairs lps = model.getLanguages();
-
+		log.info("List of Languages in Model"+lps);
 		for (LanguagePair lp : lps) {
 
-			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(), lp);
+			LanguagePair lpsentPair = new LanguagePair();
+			lpsentPair.setSourceLanguage(lp.getSourceLanguage());
+			lpsentPair.setTargetLanguage(lp.getTargetLanguage());
+			
+			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(), lpsentPair);
 
 			for (Benchmark bm : list) {
-
 				BenchmarkDto dto = new BenchmarkDto();
 				BeanUtils.copyProperties(bm, dto);
 				List<String> metricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
+				log.info("metricList before removing bert :: "+metricList.toString());
+				
+				
+				if(bm.getTask().getType().toString().equalsIgnoreCase("translation")) {
+				if(SupportedBertTgtLangs.fromValue(bm.getLanguages().getTargetLanguage().name().toLowerCase())==null) {
+					if(metricList.contains("bert")) {
+						
+						metricList.remove("bert");
+					}
+					
+				}
+				 }
+				
+				log.info("metricList after removing bert :: "+metricList.toString());
 				dto.setMetric(new ArrayList<>(metricList));
 				List<BenchmarkProcess> bmProcList = benchmarkprocessDao
 						.findByModelIdAndBenchmarkDatasetId(request.getModelId(), bm.getBenchmarkId());
 				List<String> allMetricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
+				
+				if(bm.getTask().getType().toString().equalsIgnoreCase("translation")) {
+
+				if(SupportedBertTgtLangs.fromValue(bm.getLanguages().getTargetLanguage().name())==null) {
+					if(allMetricList.contains("bert")) {
+						
+						allMetricList.remove("bert");
+					}
+					
+				}
+				 }
 				for (BenchmarkProcess bmProc : bmProcList) {
 					if (allMetricList.contains(bmProc.getMetric())) {
 						String status = bmProc.getStatus();
@@ -530,5 +566,8 @@ public class BenchmarkService {
 
 		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size(),count);
 	}
+	
+	
+	
 
 }

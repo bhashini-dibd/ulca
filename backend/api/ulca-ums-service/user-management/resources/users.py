@@ -10,7 +10,6 @@ from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
-list_of_service_providers = ["AI4Bharat","MeitY"]
 
 class CreateUsers(Resource):
 
@@ -200,16 +199,16 @@ class GetApiKeysForProfile(Resource):
         user = body['userID']
         appName = None
         userAPIKeys = UserUtils.get_user_api_keys(user,appName)
-        print("API KEYS:",userAPIKeys)
+        userServiceProvider = UserUtils.listOfServiceProviders()
+        if not userServiceProvider:
+            return post_error("400", "User Service Provider is None")
         for i in range(0,len(userAPIKeys)):
             if "serviceProviderKeys" in userAPIKeys[i].keys():
-                existing_names = []
-                for existing_keys in userAPIKeys[i]["serviceProviderKeys"]:
-                        existing_names.append(existing_keys["serviceProviderName"])
-                for final_list_name in list_of_service_providers:
-                    if final_list_name not in existing_names:
-                        userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":final_list_name})
-        #userAPIKeys.append({"userId": user})
+                existing_names = []                    
+                for existing_keys in userAPIKeys[i]["serviceProviderKeys"]: 
+                    existing_names.append(existing_keys["serviceProviderName"])
+                if not existing_names:
+                    userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":userServiceProvider})
         if isinstance(userAPIKeys, list):
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
             return res.getresjson(), 200
@@ -376,7 +375,6 @@ class ToggleDataTracking(Resource):
         #ONly success result from patch request needs to be sent to frontEnd.
         #getEmail from userID
         userEmail, appName_ = UserUtils.getUserEmail(body['userID'],body['ulcaApiKey'])
-        log.info(f'userEmailllll , appName____ {userEmail} {appName_}')
         if not userEmail or not appName_:
            return post_error("400", "Error in fetching Details, please check the userID and ulcaApiKey", None), 400
         pipeline_doc = UserUtils.getPipelinefromSrvcPN(body['serviceProviderName'])
@@ -388,8 +386,6 @@ class ToggleDataTracking(Resource):
         patch_url = pipeline_doc["apiEndPoints"]["apiKeyUrl"]
         decrypt_headers = UserUtils.decryptAes(SECRET_KEY,pipeline_masterkeys)
         req_body = {"emailId" : userEmail, "appName" :  appName_,'dataTracking' : boole}
-        log.info(f"Patch Request Request :: {req_body}")
-        log.info(f"Patch Request Headers :: {decrypt_headers}")
         patch_req = requests.patch(url = patch_url, headers=decrypt_headers, json=req_body)
         log.info(f"Patch Request Response :: {patch_req}...............{patch_req.json()} .............{patch_req.status_code}")
         if (patch_req.json()['status']) == 'success':
