@@ -149,7 +149,8 @@ class UserUtils:
             #Ignore case sensitivity.
             regex_case_ignored = re.compile('^'+email+'$', re.IGNORECASE)
             user_record = collections.find({"email": {"$regex":regex_case_ignored}}) 
-            log.info(f"user record : {user_record}")
+            for usr in user_record:
+                log.info(f"user record : {user_record}")
             if user_record.count() != 0:
                 for usr in user_record:
                     if usr["isVerified"] == True:
