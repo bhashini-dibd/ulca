@@ -690,25 +690,25 @@ components:
             $ref: '#/components/schemas/TokenProbability'
     
     TokenProbability:
-      type: array
-      description: list of
-      items:
-            $ref: '#/components/schemas/SubtokenProbability'
-    
-    SubtokenProbability:
-      required:
-        - token
-        - score
       type: object
       properties:
-        token:
+        word:
           type: string
-          description : specific character
-        score:
-          type: number
-          minimum: 0
-          maximum: 1
-          description: probability score for the specific character
+        tokens:
+          type: array
+          description: list of
+          items:
+                $ref: '#/components/schemas/SubtokenProbability'
+    
+    SubtokenProbability:
+      type: object
+      additionalProperties:
+        type: number
+        maximum: 1
+        minimum: 0
+      example:
+        T : .8
+        D : .1
     
     Sentences:
       type: array
