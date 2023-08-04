@@ -9,12 +9,14 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -99,12 +101,37 @@ public class ModelController {
 	}
 
 	@PostMapping("/compute")
-	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws Exception {
+	public ModelComputeResponse computeModel(@RequestBody ModelComputeRequest request) throws Exception {
 
-		log.info("******** Entry ModelController:: computeModel *******");
-		return modelService.computeModel(request);
+		log.info("******** Entry ModelController:: computeModel *******"); 
+		
+		log.info("type :::: "+request.getClass().getName());
+		
+		
+		log.info("request :: "+request.toString());
+		return null;
+		//return modelService.computeModel(request);
 	}
 
+	
+	@PostMapping(path = "/compute",produces = MediaType.APPLICATION_JSON_VALUE)
+	public ModelComputeResponse computeModel(@RequestPart(name ="file",required =false) MultipartFile file,
+			@Valid @RequestPart ModelComputeRequest request) throws Exception {
+
+		log.info("******** Entry ModelController:: computeModel *******");
+		
+		
+		
+		log.info("request :: "+request.toString());
+		
+		
+		return null;
+	}
+	
+	
+	
+	
+	
 	@PostMapping("/tryMe")
 	public ModelComputeResponse tryMeOcrImageContent(@RequestParam("file") MultipartFile file,
 			@RequestParam(required = true) String modelId) throws Exception {

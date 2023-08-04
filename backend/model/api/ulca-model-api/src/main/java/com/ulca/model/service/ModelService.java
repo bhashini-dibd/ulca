@@ -1114,7 +1114,7 @@ public class ModelService {
 		return new ModelSearchResponse("Model Search Result", modelDtoList, 0);
 
 	}
-
+/*
 	public ModelComputeResponse computeModel(ModelComputeRequest compute) throws Exception {
 
 		String modelId = compute.getModelId();
@@ -1123,7 +1123,7 @@ public class ModelService {
 
 		return modelInferenceEndPointService.compute(modelObj, compute);
 	}
-
+*/
 	public ModelComputeResponse tryMeOcrImageContent(MultipartFile file, String modelId) throws Exception {
 
 		String imageFilePath = storeModelTryMeFile(file);

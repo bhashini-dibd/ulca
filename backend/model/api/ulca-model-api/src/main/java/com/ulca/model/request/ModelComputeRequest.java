@@ -6,31 +6,28 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.swagger.model.Gender;
+import io.swagger.model.OCRRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Data
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ModelComputeRequest {
-
-	@NotBlank(message="modelId is required")
-	public String modelId;
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = 
+JsonTypeInfo.As.PROPERTY , property = "task")
+@JsonSubTypes({ 
+	@Type(value = TranslationComputeRequest.class, name = "translation"),
+    @Type(value = TTSComputeRequest.class,name = "tts"),
+    @Type(value = NerComputeRequest.class,name = "ner"),
+    @Type(value = OCRRequest.class,name = "ocr"),
+    @Type(value = TxtLangDetectionComputeRequest.class,name = "txt-lang-detection")
 	
-	public String task;
-	public Gender gender;
-    public List<Input> input;
-    public String audioUri;
-    public byte[] audioContent;
-    public String imageUri;
-    private BigDecimal speed;
-    private BigDecimal duration;
-	  
+   })
+public interface ModelComputeRequest {
+
 }
