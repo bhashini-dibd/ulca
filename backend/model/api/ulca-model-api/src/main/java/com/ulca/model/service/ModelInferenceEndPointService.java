@@ -476,7 +476,7 @@ public class ModelInferenceEndPointService {
 		return inferenceAPIEndPoint;
 
 	}
-
+/*
 	public ModelComputeResponse computeAsyncModel(ModelExtended model,
 			ModelComputeRequest compute)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, InterruptedException {
@@ -1104,6 +1104,9 @@ public class ModelInferenceEndPointService {
 		return response;
 	}
 
+	*/
+	
+	
 	/*
 	 * compute for OCR model
 	 */

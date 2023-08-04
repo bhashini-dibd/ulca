@@ -8,6 +8,10 @@ import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.model.Gender;
+import io.swagger.model.OCRRequest;
+import io.swagger.model.OneOfInferenceAPIEndPointSchema;
+import io.swagger.model.TTSRequest;
+import io.swagger.model.TranslationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -25,14 +29,15 @@ public class ModelComputeRequest {
 	public String modelId;
 	
 	public String task;
-	public Gender gender;
-    public List<Input> input;
-    public String audioUri;
-    public byte[] audioContent;
-    public String imageUri;
-    private BigDecimal speed;
-    private BigDecimal duration;
-    private byte[] imageBytes;
-    private String imageFilePath;
-	  
+	
+	public String userId;
+	
+	private OneOfRequest request = null;
+     
+	
 }
+
+
+
+
+

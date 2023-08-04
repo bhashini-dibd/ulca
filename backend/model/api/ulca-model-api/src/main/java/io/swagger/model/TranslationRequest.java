@@ -2,6 +2,8 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.ulca.model.request.OneOfRequest;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.Sentences;
 import io.swagger.model.TranslationConfig;
@@ -16,8 +18,8 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
 
-
-public class TranslationRequest   {
+@JsonTypeName(value="TranslationRequest")
+public class TranslationRequest implements OneOfRequest  {
   @JsonProperty("input")
   private Sentences input = null;
 

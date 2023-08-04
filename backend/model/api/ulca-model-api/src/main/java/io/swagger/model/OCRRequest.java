@@ -2,6 +2,9 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.ulca.model.request.OneOfRequest;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.ImageFiles;
 import io.swagger.model.OCRConfig;
@@ -16,8 +19,8 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
 
-
-public class OCRRequest   {
+@JsonTypeName(value = "OCRRequest")
+public class OCRRequest implements OneOfRequest   {
   @JsonProperty("image")
   private ImageFiles image = null;
 

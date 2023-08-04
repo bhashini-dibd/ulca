@@ -117,22 +117,27 @@ public class ModelController {
 			@Valid @RequestPart ModelComputeRequest request) throws Exception {
 
 		log.info("******** Entry ModelController:: computeModel *******");
-		byte[] bytes=null ;
-		if(file!=null) {
-		String imageFilePath = modelService.storeModelTryMeFile(file);
-	       bytes = FileUtils.readFileToByteArray(new File(imageFilePath));
-			request.setImageBytes(bytes);
-			request.setImageFilePath(imageFilePath);
-			log.info("file :: "+file.toString());
-         }
+		
+		
 		
 		log.info("request :: "+request.toString());
+		
+		/*
+		 * byte[] bytes=null ; if(file!=null) { String imageFilePath =
+		 * modelService.storeModelTryMeFile(file); bytes =
+		 * FileUtils.readFileToByteArray(new File(imageFilePath));
+		 * request.setImageBytes(bytes); request.setImageFilePath(imageFilePath);
+		 * log.info("file :: "+file.toString()); }
+		 * 
+		 * log.info("request :: "+request.toString());
+		 */
 		
 		//ModelComputeResponse res = null;
 		
 		//return res;
 
-		return modelService.computeModel(request);
+		return new ModelComputeResponse() {};
+		
 	}
 
 	
