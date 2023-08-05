@@ -99,7 +99,7 @@ public class ModelController {
 		log.info("******** Entry ModelController:: changeStatus *******");
 		return modelService.changeStatus(request);
 	}
-
+/*
 	@PostMapping("/compute")
 	public ModelComputeResponse computeModel(@RequestBody ModelComputeRequest request) throws Exception {
 
@@ -112,20 +112,21 @@ public class ModelController {
 		return null;
 		//return modelService.computeModel(request);
 	}
-
+*/
 	
-	@PostMapping(path = "/compute",produces = MediaType.APPLICATION_JSON_VALUE)
-	public ModelComputeResponse computeModel(@RequestPart(name ="file",required =false) MultipartFile file,
-			@Valid @RequestPart ModelComputeRequest request) throws Exception {
+	@PostMapping(path = "/compute",consumes={ MediaType.MULTIPART_FORM_DATA_VALUE }, 
+			produces=MediaType.APPLICATION_JSON_VALUE)
+	public ModelComputeResponse computeModel(@RequestPart(required =false) MultipartFile file,
+			@RequestPart ModelComputeRequest request) throws Exception {
 
 		log.info("******** Entry ModelController:: computeModel *******");
 		
 		
 		
 		log.info("request :: "+request.toString());
+       log.info("file :: "+file.getOriginalFilename());	
 		
-		
-		return null;
+		return new ModelComputeResponse() {};
 	}
 	
 	
