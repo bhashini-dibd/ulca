@@ -24,7 +24,8 @@ JsonTypeInfo.As.PROPERTY , property = "task")
 	@Type(value = TranslationComputeRequest.class, name = "translation"),
     @Type(value = TTSComputeRequest.class,name = "tts"),
     @Type(value = NerComputeRequest.class,name = "ner"),
-    @Type(value = OCRRequest.class,name = "ocr"),
+    @Type(value = OCRComputeRequest.class,name = "ocr"),
+    @Type(value = TransliterationComputeRequest.class,name = "transliteration"),
     @Type(value = TxtLangDetectionComputeRequest.class,name = "txt-lang-detection")
 	
    })

@@ -87,6 +87,12 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
+import com.ulca.model.request.NerComputeRequest;
+import com.ulca.model.request.OCRComputeRequest;
+import com.ulca.model.request.TTSComputeRequest;
+import com.ulca.model.request.TranslationComputeRequest;
+import com.ulca.model.request.TransliterationComputeRequest;
+import com.ulca.model.request.TxtLangDetectionComputeRequest;
 import com.ulca.model.response.GetModelFeedbackListResponse;
 import com.ulca.model.response.GetTransliterationModelIdResponse;
 import com.ulca.model.response.ModelComputeResponse;
@@ -1114,16 +1120,53 @@ public class ModelService {
 		return new ModelSearchResponse("Model Search Result", modelDtoList, 0);
 
 	}
-/*
-	public ModelComputeResponse computeModel(ModelComputeRequest compute) throws Exception {
+	
+	public ModelComputeResponse computeModel(ModelComputeRequest compute , String imageFilePath) throws Exception {
 
-		String modelId = compute.getModelId();
-		ModelExtended modelObj = modelDao.findById(modelId).get();
+		String modelId = null;
 		//InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
+		
+		
+		if(compute.getClass().getName().equals("com.ulca.model.request.TranslationComputeRequest")) {
+			com.ulca.model.request.TranslationComputeRequest 	translationComputeRequest = (com.ulca.model.request.TranslationComputeRequest)compute;
+			modelId = translationComputeRequest.getModelId();
+			
+		}else if(compute.getClass().getName().equals("com.ulca.model.request.OCRComputeRequest")) {
+			
+			com.ulca.model.request.OCRComputeRequest 	oCRComputeRequest = (com.ulca.model.request.OCRComputeRequest)compute;
 
-		return modelInferenceEndPointService.compute(modelObj, compute);
+			modelId = oCRComputeRequest.getModelId();
+
+		}else if(compute.getClass().getName().equals("com.ulca.model.request.TransliterationComputeRequest")) {
+			
+			com.ulca.model.request.TransliterationComputeRequest 	transliterationComputeRequest = (com.ulca.model.request.TransliterationComputeRequest)compute;
+			modelId = transliterationComputeRequest.getModelId();
+
+			
+		}else if(compute.getClass().getName().equals("com.ulca.model.request.TTSComputeRequest")) {
+			
+			com.ulca.model.request.TTSComputeRequest 	tTSComputeRequest = (com.ulca.model.request.TTSComputeRequest)compute;
+			modelId = tTSComputeRequest.getModelId();
+
+
+		}else if(compute.getClass().getName().equals("com.ulca.model.request.TxtLangDetectionComputeRequest")) {
+			com.ulca.model.request.TxtLangDetectionComputeRequest 	txtLangDetectionComputeRequest = (com.ulca.model.request.TxtLangDetectionComputeRequest)compute;
+			modelId = txtLangDetectionComputeRequest.getModelId();
+
+		}else if (compute.getClass().getName().equals("com.ulca.model.request.NerComputeRequest")){
+			
+			com.ulca.model.request.NerComputeRequest 	nerComputeRequest = (com.ulca.model.request.NerComputeRequest)compute;
+			modelId = nerComputeRequest.getModelId();
+
+		}
+		
+		ModelExtended modelObj = modelDao.findById(modelId).get();
+
+		
+
+		return modelInferenceEndPointService.compute(modelObj, compute,imageFilePath);
 	}
-*/
+
 	public ModelComputeResponse tryMeOcrImageContent(MultipartFile file, String modelId) throws Exception {
 
 		String imageFilePath = storeModelTryMeFile(file);
