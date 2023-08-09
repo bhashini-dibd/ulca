@@ -63,10 +63,10 @@ def search_dataset():
         data = m_service.get_monolingual_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_tts:
         data = tts_service.get_tts_dataset(req_criteria)
-    if data["datasetType"] == dataset_type_transliteration:
-        data = trans_service.get_transliteration_dataset(data)
-    if data["datasetType"] == dataset_type_ner:
-        data = ner_service.get_ner_dataset(data)
+    if req_criteria["datasetType"] == dataset_type_transliteration:
+        data = trans_service.get_transliteration_dataset(req_criteria)
+    if req_criteria["datasetType"] == dataset_type_ner:
+        data = ner_service.get_ner_dataset(req_criteria)
     response = {"dataset": data}
     return jsonify(response), 200
 

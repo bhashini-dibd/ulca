@@ -27,7 +27,7 @@ class PTRepo:
 
     def get_mongo_instance(self):
         global mongo_instance_pt
-        if not mongo_instance_pt:
+        if mongo_instance_pt is None:
             return self.instantiate()
         else:
             return mongo_instance_pt
