@@ -89,6 +89,16 @@
         "master": "/posCorpusFilters.json",
         "jsonPath": "$.posCorpusFilters"
       }
+    },
+    {
+      "code": "ner-corpus",
+      "label": "NER Dataset",
+      "active": true,
+      "datasetType": "ner-corpus",
+      "values": {
+        "master": "/nerCorpusFilters.json",
+        "jsonPath": "$.nerCorpusFilters"
+      }
     }
   ],
   "relatedMaster": true
