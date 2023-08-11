@@ -12,9 +12,9 @@ Few examples to show how a submitter can publish an OCR model to ULCA. The submi
                }
             ],
     "config": {
-        "language": {
+        "languages": [{
                "sourceLanguage" : "hi"
-        }
+        }]
     }
 }
 ```

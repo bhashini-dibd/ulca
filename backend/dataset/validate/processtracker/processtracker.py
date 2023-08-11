@@ -18,7 +18,7 @@ class ProcessTracker:
     def update_task_details(self, data):
         duration = None
         if 'duration' in data.keys():
-            duration = data['duration']
+            duration = int(data['duration'])
 
         if data["status"] == "SUCCESS":
             repo.redis_key_inc('ServiceRequestNumber_'+data["serviceRequestNumber"], duration, False)

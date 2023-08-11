@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -153,7 +154,7 @@ public class OkHttpClientService {
 		OkHttpClient.Builder newBuilder = new OkHttpClient.Builder();
 		newBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
 		newBuilder.hostnameVerifier((hostname, session) -> true);
-		return newBuilder.readTimeout(60, TimeUnit.SECONDS).build();
+		return newBuilder.readTimeout(120, TimeUnit.SECONDS).build();
 	}
 
 	public String asrCompute(InferenceAPIEndPoint inferenceAPIEndPoint, ASRRequest request) throws IOException {
@@ -165,7 +166,7 @@ public class OkHttpClientService {
 		try {
 			sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
 
-			HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+			HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext)).responseTimeout(Duration.ofSeconds(120));
 
 			
 			if (inferenceAPIEndPoint.getInferenceApiKey() != null) {

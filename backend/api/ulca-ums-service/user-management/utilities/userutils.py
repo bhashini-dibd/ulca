@@ -149,6 +149,8 @@ class UserUtils:
             #Ignore case sensitivity.
             regex_case_ignored = re.compile('^'+email+'$', re.IGNORECASE)
             user_record = collections.find({"email": {"$regex":regex_case_ignored}}) 
+            for usr in user_record:
+                log.info(f"user record : {user_record}")
             if user_record.count() != 0:
                 for usr in user_record:
                     if usr["isVerified"] == True:
@@ -622,8 +624,6 @@ class UserUtils:
         try:
             coll = db.get_db()[USR_MONGO_COLLECTION]
             response = coll.find_one({"userID": userId})
-            log.info("RESPONSE from DB : "+str(response),response)
-            #responseData = {"userId" : userId, "emailId": }
             dupStatus = True
             dupAppName = []
             if appName == None:
@@ -790,3 +790,13 @@ class UserUtils:
         for rec in record:
             log.info(f"record output of dataTracking {rec}")
         return rec
+    
+    @staticmethod
+    def listOfServiceProviders():
+        collection = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipelinie_Docs = list(collection.find({"status":"published"}))        
+        if not pipelinie_Docs:
+            return None
+        if isinstance(pipelinie_Docs, list):
+            return pipelinie_Docs[0]['serviceProvider']['name']
+

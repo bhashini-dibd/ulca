@@ -39,12 +39,14 @@ components:
     TaskRequestConfig:
       anyOf:
         - $ref: "#/components/schemas/TranslationRequestConfig"
+        - $ref: "#/components/schemas/TransliterationRequestConfig"
         - $ref: "#/components/schemas/ASRRequestConfig"
         - $ref: "#/components/schemas/TTSRequestConfig"
 
     PipelineInput:
       oneOf:
         - $ref: "#/components/schemas/TranslationRequestInput"
+        - $ref: "#/components/schemas/TransliterationRequestInput"
         - $ref: "#/components/schemas/ASRRequestInput"
         - $ref: "#/components/schemas/TTSRequestInput"
 
@@ -67,6 +69,14 @@ components:
         input:
           $ref: "#/components/schemas/Sentences"
           
+    TransliterationRequestInput:
+      required:
+        - input
+      type: object
+      properties:
+        input:
+          $ref: "#/components/schemas/Sentences"
+          
     TranslationRequestConfig:
       required:
         - config
@@ -77,6 +87,17 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: "#/components/schemas/TranslationConfig"
+          
+    TransliterationRequestConfig:
+      required:
+        - config
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: "#/components/schemas/TransliterationConfig"
 
     ASRRequestConfig:
       required:
@@ -152,7 +173,24 @@ components:
           $ref: "#/components/schemas/SupportedFormats"
         outputFormat:
           $ref: "#/components/schemas/SupportedFormats"
-
+          
+    TransliterationConfig:
+      required:
+        - language
+        - serviceId
+      type: object
+      properties:
+        serviceId:
+          type: integer
+          description: Unique identifier of service
+          example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+          $ref: "#/components/schemas/SupportedFormats"
+        outputFormat:
+          $ref: "#/components/schemas/SupportedFormats"
+    
     TTSConfig:
       required:
         - language
@@ -239,6 +277,8 @@ components:
         - mp3
         - flac
         - sph
+        - webm
+        - m4a
     SupportedFormats:
       anyOf:
         - $ref: "#/components/schemas/AudioFormat"
@@ -278,6 +318,7 @@ components:
     Responses:
       anyOf:
         - $ref: "#/components/schemas/TranslationResponse"
+        - $ref: "#/components/schemas/TransliterationResponse"
         - $ref: "#/components/schemas/ASRResponse"
         - $ref: "#/components/schemas/TTSResponse"
     ResponseList:
@@ -298,6 +339,20 @@ components:
           $ref: "#/components/schemas/Sentences"
         config:
           $ref: "#/components/schemas/TranslationConfig"
+    
+    TransliterationResponse:
+      description: the response for transliteration.  Standard http status codes to be used.
+      required:
+        - output
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        output:
+          $ref: "#/components/schemas/Sentences"
+        config:
+          $ref: "#/components/schemas/TransliterationConfig"
 
     ASRResponse:
       description: the response for translation.  Standard http status codes to be used.
@@ -329,8 +384,8 @@ components:
           
     ControlConfig:
       description: generic settings related to pipeline
-      required:
-        - dataTracking
+      # required:
+      #   - dataTracking
       type: object
       properties:
         dataTracking:

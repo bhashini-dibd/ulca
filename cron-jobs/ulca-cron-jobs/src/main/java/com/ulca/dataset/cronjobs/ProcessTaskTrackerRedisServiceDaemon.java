@@ -259,7 +259,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		details.put("processedCount", processedCount);
 		details.put("timeStamp", new Date().toString());
 
-		if (ingestComplete == 1 && (ingestSuccess + ingestError == count)) {
+		if (ingestComplete == 1 && (ingestSuccess + ingestError >= count)) {
 			// update the end time for ingest
 			v1 = true;
 			if(ingestSuccess==0) {
@@ -294,8 +294,18 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			// update the end time for validate
 			v2 = true;
 
-			processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+			//processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
+					//com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+			
+			if(validateSuccess==0) {
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
+						com.ulca.dataset.model.TaskTracker.StatusEnum.failed, details.toString());
+				}else {
+					
+					processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
+							com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+				}
+			
 		} else {
 			if (validateSuccess > 0 || validateError > 0)
 				processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.validate,
@@ -323,8 +333,19 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			// update the end time for publish
 			v3 = true;
 
-			processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+			//processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
+				//	com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+			
+			if(publishSuccess==0) {
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
+						com.ulca.dataset.model.TaskTracker.StatusEnum.failed, details.toString());
+				}else {
+					
+					processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
+							com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+				}
+			
+			
 		} else {
 			if (publishSuccess > 0 || publishError > 0)
 				processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.publish,
@@ -339,7 +360,15 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			
 			if(v1 && ingestSuccess==0) {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
-			}else {
+			}else if(v2 && validateSuccess==0) {
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
+
+			}
+			else if(v3 && publishSuccess==0) {
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
+
+			}
+			else {
 				
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
 			}

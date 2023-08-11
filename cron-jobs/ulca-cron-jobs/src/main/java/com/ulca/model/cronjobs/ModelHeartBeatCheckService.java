@@ -99,7 +99,7 @@ public class ModelHeartBeatCheckService {
 		List<ModelExtended> fetchedModels  = modelDao.findByStatus("published");
 		List<String> checkedUrl = new ArrayList<String>();
 		
-		if(fetchedModels == null) {
+		if(fetchedModels.isEmpty()) {
 			log.info("No published models found");
 			return;
 		}
