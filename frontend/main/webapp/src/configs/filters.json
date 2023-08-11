@@ -1317,5 +1317,125 @@
         }
     ],
         "label": "Glossary Dataset"
+    },
+    "pos-corpus": {
+        "filters": [{
+                "value": "sourceLanguage",
+                "label": "Language",
+                "filterType": "language",
+                "active": true,
+                "input": "multi-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "domain",
+                "label": "Domain",
+                "filterType": "basic",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source",
+                "filterType": "basic",
+                "active": false,
+                "input": "string",
+                "type": "text",
+                "parent": null
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            
+            {
+                "value": "license",
+                "label": "License",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "submitterName",
+                "label": "Submitter",
+                "filterType": "advance",
+                "active": false,
+                "input": "string",
+                "type": "text",
+                "parent": null
+            }
+           
+        ],
+        "label": "POS Dataset"
+    },
+    "ner-corpus": {
+        "filters": [{
+                "value": "sourceLanguage",
+                "label": "Language",
+                "filterType": "language",
+                "active": true,
+                "input": "multi-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "domain",
+                "label": "Domain",
+                "filterType": "basic",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source",
+                "filterType": "basic",
+                "active": false,
+                "input": "string",
+                "type": "text",
+                "parent": null
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            
+            {
+                "value": "license",
+                "label": "License",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "submitterName",
+                "label": "Submitter",
+                "filterType": "advance",
+                "active": false,
+                "input": "string",
+                "type": "text",
+                "parent": null
+            }
+           
+        ],
+        "label": "NER Dataset"
     }
 }
