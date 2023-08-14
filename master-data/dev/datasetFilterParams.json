@@ -81,16 +81,6 @@
       }
     },
     {
-      "code": "pos-corpus",
-      "label": "POS Dataset",
-      "active": true,
-      "datasetType": "pos-corpus",
-      "values": {
-        "master": "/posCorpusFilters.json",
-        "jsonPath": "$.posCorpusFilters"
-      }
-    },
-    {
       "code": "ner-corpus",
       "label": "NER Dataset",
       "active": true,
