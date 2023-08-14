@@ -53,6 +53,7 @@ def search_consume():
             for msg in consumer:
                 try:
                     data = msg.value
+                    log.info(f"Received Message to Search :: {data}")
                     if data:
                         log.info(f'{prefix} | Received on Topic: {msg.topic} | Partition: {str(msg.partition)}')
                         if repo.search([data["serviceRequestNumber"]]):
