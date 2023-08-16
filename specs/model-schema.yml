@@ -524,7 +524,7 @@ components:
       type: object
       properties:
         output:
-          $ref: '#/components/schemas/Sentences'
+          $ref: '#/components/schemas/AudioOutput'
         config:
           $ref: '#/components/schemas/TranslationConfig'
         taskType:
@@ -669,6 +669,47 @@ components:
         fileName:
           type: string
           format: binary
+    AudioOutput:
+      type: array
+      description: list of
+      items: 
+        $ref: '#/components/schemas/AudioTranscription'
+    AudioTranscription:
+      required:
+        - source
+      type: object
+      properties:
+        source:
+          minLength: 1
+          type: string
+          description: input sentence for the model
+        nBestTokens:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/TokenProbability'
+    
+    TokenProbability:
+      type: object
+      properties:
+        word:
+          type: string
+        tokens:
+          type: array
+          description: list of
+          items:
+                $ref: '#/components/schemas/SubtokenProbability'
+    
+    SubtokenProbability:
+      type: object
+      additionalProperties:
+        type: number
+        maximum: 1
+        minimum: 0
+      example:
+        T : .8
+        D : .1
+    
     Sentences:
       type: array
       description: list of
@@ -979,6 +1020,9 @@ components:
         detailed:
           type: boolean
           description: to specify whether details are required in output like SNR, sampling rate
+        bestTokenCount : 
+          type: integer
+          description: Displays the token level probabilities of the final prediction. 5 would be the suggested optimal value. Each successive token will have exponentially lower probability
         punctuation:
           type: boolean
           example: true
@@ -1068,10 +1112,10 @@ components:
             - rain
           items:
             type: string
-            description: phrases to perform hotword boosting 
+            description: phrases to perform hotword boosting
         boost:
           type: number
-          description : numeric to specify phrase boosting threshold
+          description: numeric to specify phrase boosting threshold
     TextFormat:
       type: string
       description: supported textual formats

@@ -5,7 +5,7 @@ info:
   contact:
     name: Ministry of Electronics and Information Technology
     url: https://bhashini.gov.in/ulca
-  version: 0.7.0
+  version: 0.8.0
 servers:
 - url: https://meity-auth.ulcacontrib.org 
   description: Production server (uses live data)
@@ -315,7 +315,39 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ModelComputeResponse'
+                $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/OCRResponse
+                
+  /ulca/apis/v1/model/compute:
+    post:
+      tags:
+        - ASR Compute
+      summary: REST API dedicated for ASR compute
+      description: Compute API for ASR audio content and audio url
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/modelcomputeRequest'
+        required: true
+      responses:
+        '200':
+          description: ASR audio computed successfully
+          content:
+            '*/*':
+              schema:
+                $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/ASRResponse
+        '400':
+          description: On input errors request body errors, all parameters are required.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error' 
 
   /ulca/apis/v0/model/status/change:
     post:
@@ -871,12 +903,205 @@ paths:
   
   
   
+  
+                
+  #Pipeline Apis Start
+    
+  /ulca/apis/v0/model/explorePipelines:
+    get: 
+      tags: 
+        - model
+      operationId: explorePipelines
+      summary: Api to fetch pipeline models
+      description: fetch all pipeline model
+      parameters:
+        - name: serviceProviderName
+          in: query
+          required: false
+          schema:
+            type: string
+          example: AI4Bharat  
+        
+      responses:
+        '200':
+          description: OK
+          content: 
+            '*/*':
+              schema: 
+               $ref: '#/components/schemas/PipelinesResponse'  
+                
+                
+  /ulca/apis/v0/model/getModelsPipeline:
+    post : 
+      tags:
+         - model
+      operationId: getModelsPipeline
+      summary: Api to fetch model models pipeline
+      description: fetch pipeline by userId and ulcaApiKey
+      parameters :
+        - name: userID
+          in: header
+          required: true
+          schema: 
+            type: string
+          example: 61c38007
+        - name: ulcaApiKey
+          in: header
+          required: true
+          schema: 
+            type: string
+          example: 61c380072e74fa4
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PipelineRequest'
+            
+                     
+      
+      responses:
+       '200':
+         description: OK
+         content:
+           '*/*':
+              schema:
+                $ref: '#/components/schemas/PipelineResponse'  
+    
+    
+  #Pipeline Apis End
+
+  /ulca/mdms/v0/fetch-master:
+    post:
+      tags:
+        - fetch masters
+      summary: REST API to fetch master
+      description: fetch master
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FetchMasterRequest'
+        required: true
+      responses:
+        '200':
+          description: master data fetched successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors request body errors
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'  
+  /ulca/mdms/v0/fetch-master/bulk:
+    post:
+      tags:
+        - fetch masters in bulk
+      summary: REST API to fetch master in bulk
+      description: fetch master
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FetchMasterBulkRequest'
+        required: true
+      responses:
+        '200':
+          description: Bulk master data fetched successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors request body errors, all parameters are required.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'  
+  /ulca/mdms/v0/bust-cache:
+    post:
+      tags:
+        - load/get cache of master data 
+      summary: REST API to load/get cache of master data 
+      description: load/get cache of master data 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BustCacheRequest'
+        required: true
+      responses:
+        '200':
+          description: Read data from redis successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors request body errors, all parameters are required.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'  
+  /ulca/mdms/v0/pipelineQuestions:
+    post:
+      tags:
+        - Get pipeLine questions
+      summary: REST API to get pipeline questions
+      description: get pipeline questions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pipelineQuestionsRequest'
+        required: true
+      responses:
+        '200':
+          description: pipeline questions fetched successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors request body errors, all parameters are required.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'  
+  
   /v1/users/signup:
     post:
       tags:
-        - 'Create Users'
-      summary: 'REST API to register/create new user'
-      description: 'register/create new user'
+        - Create Users
+      summary: REST API to register/create new user
+      description: register/create new user
       requestBody:
         content:
           application/json:
@@ -902,13 +1127,189 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
-      
+  /v1/users/getApiKeys:
+    post:
+      tags:
+        - Get User Api Key
+      summary: REST API to get user api key
+      description: Fetch user api key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetApiKeyRequest'
+        required: true
+      responses:
+        '200':
+          description: UserApiKey found successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: users not found, user cannot be empty
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/dataTrackingToggle:
+    post:
+      tags:
+        - Toggle DataTracking key
+      summary: REST API to toggle datatracking key
+      description: toggle datatracking key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/dataTrackingToggleRequest'
+        required: true
+      responses:
+        '200':
+          description: Toggled data successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: Coul not toggle data, all parameters are required.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/generateServiceProviderKey:
+    post:
+      tags:
+        - generate service provider key
+      summary: REST API to generate service provider key
+      description: generate service provider key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/generateServiceProviderKeyRequest'
+        required: true
+      responses:
+        '200':
+          description: generated service provide key successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: Coul not generate data, all parameters are required.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/removeServiceProviderKey:
+    post:
+      tags:
+        - remove service provider key
+      summary: REST API to remove service provider key
+      description: remove service provider key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/removeServiceProviderKeyRequest'
+        required: true
+      responses:
+        '200':
+          description: removed data successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: Coul not remove data, all parameters are required.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/generateApiKey:
+    post:
+      tags:
+        - Generate Ulca Api Key
+      summary: REST API to generate ulca api key
+      description: Fetch user api key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/generateApiKeyRequest'
+        required: true
+      responses:
+        '200':
+          description: UlcaApiKey generated successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: could not generate ulcaApiKey appName and userID is required
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/users/getApiKeysForProfile:
+    post:
+      tags:
+        - Get User Service provider Key
+      summary: REST API to get Service provider Key
+      description: Fetch user api key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/getApiKeysForProfileRequest'
+        required: true
+      responses:
+        '200':
+          description: UserApiKey found successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: users not found, user cannot be empty
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/users/revokeApiKey:
+    post:
+      tags:
+        - Revoke User Ulca Api Key
+      summary: REST API to Revoke User Ulca Api Key
+      description: Revoke User Ulca Api Key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/revokeApiKeyRequest'
+        required: true
+      responses:
+        '200':
+          description: UserApiKey revoked successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: users not found, user cannot be empty
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  
   /v1/users/verify-user:
     post:
       tags:
-        - 'Verify Users'
-      summary: 'REST API to verify user account.'
-      description: 'Verify user account'
+        - Verify Users
+      summary: REST API to verify user account.
+      description: Verify user account
       requestBody:
         content:
           application/json:
@@ -934,13 +1335,12 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
-  
   /v1/users/api-key-search:
     post:
       tags:
-        - 'Api-key-search'
-      summary: 'REST API key for search'
-      description: 'search using key'
+        - Api-key-search
+      summary: REST API key for search
+      description: search using key
       requestBody:
         content:
           application/json:
@@ -965,14 +1365,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Error'   
-                
+                $ref: '#/components/schemas/Error'
   /v1/users/login:
     post:
       tags:
-        - 'Login'
-      summary: 'REST API to login'
-      description: 'login to existing/new user'
+        - Login
+      summary: REST API to login
+      description: login to existing/new user
       requestBody:
         content:
           application/json:
@@ -997,15 +1396,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Error' 
-                
-   
+                $ref: '#/components/schemas/Error'
   /v1/users/forgot-password:
     post:
       tags:
-        - 'Forgot Password'
-      summary: 'REST API for forgot password request'
-      description: 'request to change password'
+        - Forgot Password
+      summary: REST API for forgot password request
+      description: request to change password
       requestBody:
         content:
           application/json:
@@ -1030,13 +1427,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Error'          
+                $ref: '#/components/schemas/Error'
   /v1/users/reset-password:
     post:
       tags:
-        - 'Reset Password'
-      summary: 'REST API for resetting password'
-      description: 'Reset forgotten password'
+        - Reset Password
+      summary: REST API for resetting password
+      description: Reset forgotten password
       requestBody:
         content:
           application/json:
@@ -1065,9 +1462,9 @@ paths:
   /v0/error/report:
     post:
       tags:
-        - 'Report Errors'
+        - Report Errors
       summary: 'REST API to get a downloadable reports on errors '
-      description: 'download error reports'
+      description: download error reports
       requestBody:
         content:
           application/json:
@@ -1093,10 +1490,647 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
-
                 
 components:
   schemas:
+    #Pipeline schema start
+    
+    #ExplorePipeline Start
+    PipelinesResponse:
+      type: object
+      properties:
+        data: 
+          $ref: '#/components/schemas/PipelineModelResponse'
+        totalCount:
+          type: integer
+          format: int32
+          example: 1
+          
+    PipelineModelResponse:
+      type: object
+      properties:
+        pipelineId:
+          type: string 
+          example: 34b4ehehjdjj3j3j3
+        name:
+          type: string 
+          example: Ai4Bharat Pipeline
+        description:
+          type: string 
+          example: Ai4Bharat Pipeline model with all all supported pipelines
+        serviceProviderName:
+          type: string
+          example: AI4Bharat
+        supportedTasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/PipelineTaskSequence'
+          
+          
+    #ExplorePipeline End
+    
+    #PipelineModel start
+    
+
+    PipelineInference:
+      required:
+        - name
+        - version
+        - description
+        - refUrl
+        - domain
+        - serviceProvider
+        - supportedPipelines
+        - taskSpecifications
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          minLength: 3
+          type: string
+          description: model name that you want your users to see
+          example: vakyansh asr model
+        version:
+          maxLength: 20
+          minLength: 1
+          type: string
+          description: version for the model
+          example: v1
+        description:
+          maxLength: 1000
+          minLength: 25
+          type: string
+          description: brief description about model, its goal, basically something sweet about it
+          example: Speech recognition model for classroom lecture
+        domain:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+        refUrl:
+          maxLength: 200
+          minLength: 5
+          type: string
+          description: github link or url giving further info about the model
+          example: https://github.com/Open-Speech-EkStep/vakyansh-models
+        serviceProvider:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
+        inferenceEndPoint:
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
+        inferenceSocketEndPoint:
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
+        supportedPipelines:
+          $ref: '#/components/schemas/ListOfPipelines'
+        taskSpecifications:
+          $ref: '#/components/schemas/TaskSpecifications'
+        apiEndPoints:
+          $ref: '#/components/schemas/ApiEndPoint'
+    ListOfPipelines:
+      type: array
+      items:
+        $ref: '#/components/schemas/PipelineTaskSequence'
+    PipelineTaskSequence:
+      type: array
+      items:
+        anyOf: null
+        $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+    InferenceAPIEndPoint:
+      required:
+        - callbackUrl
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        masterApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        isMultilingualEnabled:
+          type: boolean
+          default: false
+          description: specify true if the same callbackUrl is capable of handling multiple languages
+        isSyncApi:
+          type: boolean
+          description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
+        asyncApiDetails:
+          required:
+            - pollingUrl
+            - pollInterval
+          type: object
+          properties:
+            pollingUrl:
+              type: string
+              format: url
+              description: endpoint specified for polling in async calls
+            pollInterval:
+              type: integer
+              description: polling interval in millisec to check for status
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type. `NOTE:` Either of inferenceEndPoint or inferenceSocketEndPoint is is mandatory at submission time
+    
+    # InferenceAPIEndPointDto start
+    InferenceAPIEndPointDto:
+      type: object
+      properties:
+        masterApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        isMultilingualEnabled:
+          type: boolean
+          default: false
+          description: specify true if the same callbackUrl is capable of handling multiple languages
+        isSyncApi:
+          type: boolean
+          description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
+        asyncApiDetails:
+          required:
+            - pollingUrl
+            - pollInterval
+          type: object
+          properties:
+            pollingUrl:
+              type: string
+              format: url
+              description: endpoint specified for polling in async calls
+            pollInterval:
+              type: integer
+              description: polling interval in millisec to check for status
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type. `NOTE:` Either of inferenceEndPoint or inferenceSocketEndPoint is is mandatory at submission time
+    
+    
+    # InferenceAPIEndPointDto End
+    
+    
+    TaskSpecifications:
+      type: array
+      items:
+        $ref: '#/components/schemas/TaskSpecification'
+    TaskSpecification:
+      required:
+        - taskType
+        - taskConfig
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        taskConfig:
+          $ref: '#/components/schemas/ConfigList'
+    ConfigList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfigSchema'
+    ConfigSchema:
+      required:
+        - modelId
+        - serviceId
+        - sourceLanguage
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        serviceId:
+          type: string
+          description: specific id for the service
+          example: ai4bharat/speech-to-speech-gpu--t4
+        sourceLanguage:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        targetLanguage:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        sourceScriptCode:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
+        targetScriptCode:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
+    ApiEndPoint:
+      required:
+        - apiKeyUrl
+        - feedbackUrl
+      type: object
+      properties:
+        apiKeyUrl:
+          description: URL to generate api keys (using POST Method) , delete api keys (using DELETE method) and toggle data logging( using PATCH Method).
+          type: string
+          format: url
+        feedbackUrl:
+          description: URL to give feedback regarding pipeline (using POST Method)
+          type: string
+          format: url
+    
+    #PipelineModel End
+    
+    #PipelineRequest Start
+    
+    PipelineRequest:
+      required:
+        - pipelineTasks
+        - pipelineRequestConfig
+      type: object
+      properties:
+        pipelineTasks:
+          $ref: '#/components/schemas/PipelineTasks'
+        pipelineRequestConfig:
+          $ref: '#/components/schemas/PipelineConfig'
+    PipelineResponse:
+      required:
+        - pipelineResponseConfig
+        - languages
+      type: object
+      properties:
+        languages:
+          $ref: '#/components/schemas/LanguagesList'
+        pipelineResponseConfig:
+          $ref: '#/components/schemas/TaskSchemaList'
+        
+        feedbackUrl:
+          description: URL to give feedback regarding pipeline
+          type: string
+          format: url
+          example: https://feedback.url.com
+        pipelineInferenceAPIEndPoint:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+        pipelineInferenceSocketEndPoint:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      # anyOf:  
+      #   - properties:
+      #     pipelineInferenceAPIEndPoint:
+      #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      #     required: [pipelineInferenceAPIEndPoint] 
+      #   - properties:
+      #     pipelineInferenceSocketEndPoint:
+      #       $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/PipelineInferenceAPIEndPoint
+      #     required: [pipelineInferenceSocketEndPoint] 
+    PipelineConfig:
+      required:
+        - pipelineId
+      type: object
+      properties:
+        pipelineId:
+          type: string
+          description: ID of the pipeline submitter
+          example: AI4BharatID
+    PipelineTask:
+      oneOf:
+        - $ref: '#/components/schemas/TranslationTask'
+        - $ref: '#/components/schemas/TransliterationTask'
+        - $ref: '#/components/schemas/ASRTask'
+        - $ref: '#/components/schemas/TTSTask'
+      discriminator:
+        propertyName: taskType
+        mapping:
+          translation: '#/components/schemas/TranslationTask'
+          transliteration: '#/components/schemas/TransliterationTask'
+          asr: '#/components/schemas/ASRTask'
+          tts: '#/components/schemas/TTSTask'
+    PipelineTasks:
+      type: array
+      items:
+        $ref: '#/components/schemas/PipelineTask'
+    TranslationTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/TranslationRequestConfig'
+    TransliterationTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/TransliterationRequestConfig'
+    ASRTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/ASRRequestConfig'
+    TTSTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/TTSRequestConfig'
+    TranslationRequestConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    TransliterationRequestConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    TTSRequestConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        gender:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+    ASRRequestConfig:
+      required:
+        - language
+      type: object
+      properties:
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    LanguageSchema:
+      type: object
+      properties:
+        sourceLanguage:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+        targetLanguageList:
+          type: array
+          default:
+            - en
+          description: list of
+          items:
+            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+    TaskSchema:
+      oneOf:
+        - $ref: '#/components/schemas/TranslationTaskInference'
+        - $ref: '#/components/schemas/TransliterationTaskInference'
+        - $ref: '#/components/schemas/ASRTaskInference'
+        - $ref: '#/components/schemas/TTSTaskInference'
+      discriminator:
+        propertyName: taskType
+        mapping:
+          translation: '#/components/schemas/TranslationTaskInference'
+          transliteration : '#/components/schemas/TransliterationTaskInference'
+          asr: '#/components/schemas/ASRTaskInference'
+          tts: '#/components/schemas/TTSTaskInference'
+    TaskSchemaList:
+      type: array
+      items:
+        $ref: '#/components/schemas/TaskSchema'
+    LanguagesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/LanguageSchema'
+    TranslationTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/TranslationResponseConfig'
+            
+    TransliterationTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/TransliterationResponseConfig'
+            
+    ASRTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/ASRResponseConfig'
+    TTSTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/TTSResponseConfig'
+    TranslationResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+    TransliterationResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+    TTSResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        supportedVoices:
+          type: array
+          description: list of
+          example:
+            - male
+            - female
+          items:
+            $ref: '#/components/schemas/VoiceTypes'
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+    ASRResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        audioFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        channel:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        bitsPerSample:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+        transcriptionFormat:
+          $ref: '#/components/schemas/TranscriptionFormat'
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        postProcessors:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
+        domain:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+        detailed:
+          type: boolean
+          description: to specify whether details are required in output like SNR, sampling rate
+        punctuation:
+          type: boolean
+          example: true
+        model:
+          type: string
+          enum:
+            - command_and_search
+            - phone_call
+            - video
+            - default
+        encoding:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+    TranscriptionFormat:
+      type: object
+      properties:
+        value:
+          type: string
+          description: format of ASR output
+          enum:
+            - srt
+            - transcript
+            - webvtt
+            - alternatives
+            - raw-text
+    TextFormat:
+      type: string
+      description: supported textual formats
+      enum:
+        - srt
+        - transcript
+        - webvtt
+        - alternatives
+        - raw-text
+    AudioFormat:
+      type: string
+      description: audio format of the audio file
+      example: flac
+      enum:
+        - wav
+        - pcm
+        - mp3
+        - flac
+        - sph
+    VoiceTypes:
+      type: string
+      description: supported types of voices
+      enum:
+        - male
+        - female
+    SupportedFormats:
+      anyOf:
+        - $ref: '#/components/schemas/AudioFormat'
+        - $ref: '#/components/schemas/TextFormat'
+        - $ref: '#/components/schemas/TextFormat'
+    
+    #PipelineRequest End
+    
+    
+  
+    #Pipeline Schema End
+  
     DatasetSubmitRequest:
       required:
         - datasetName
@@ -1702,8 +2736,7 @@ components:
           type: string
           description: describing the contributor
 
-    InferenceAPIEndPoint:
-     $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/InferenceAPIEndPoint
+    
 
     LanguagePair:
       required:
@@ -2124,16 +3157,7 @@ components:
           type: string
           description: explain your dataset that you have used for training your model
       description: training dataset metadata used to train the model
-    TranscriptionFormat:
-      type: object
-      properties:
-        value:
-          type: string
-          description: format of ASR output
-          enum:
-          - srt
-          - transcript
-          - alternatives
+    
 
     TranslationInference:
       required:
@@ -2317,6 +3341,15 @@ components:
     ModelComputeRequest:
       required:
         - modelId
+      oneOf:
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/TranslationRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/TransliterationRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/TTSRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/OCRRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/TxtLangDetectionRequestInput
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/NerRequestInput
+      
+        
       type: object
       properties:
         modelId:
@@ -2324,50 +3357,30 @@ components:
         userId:
           type: string
         task:
-          type: string
-        source:
-          type: string
-        audioFormat:
-          type: string
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         gender:
-          type: string
+          type : string
+          description: TTS specific field to specify gender
           enum:
             - male
             - female
-            - transgender
-            - non-specified
-            - others
-        input:
-          type: array
-          items:
-            $ref: '#/components/schemas/Input'
-        audioUri:
-          type: string
-        audioContent:
-          type: array
-          items:
-            type: string
-            format: byte
-        imageUri:
-          type: string
+        
+        
       example:
-        modelId: 617798c22fbba1441081885d
+        modelId: 641d1d6592a6a31751ff1f49
         userId: 6a73afa4fc774dcdb28d5fff944511f6
-        task: asr
-        source: ml
-        audiFormat: wav
-        audioUri: https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_malayalam.wav
-        audioContent: UklGRiygCwBXQVZFZm10IBAAAAABAAIARKwAABCxAgAEABAAZGF0YQCgCwAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        task: translation
+        input: [{"source":"How are you?"}]
   
     ModelComputeResponse:
       type: object
       oneOf:
-        - $ref: '#/components/schemas/TranslationResponse'
-        - $ref: '#/components/schemas/TransliterationResponse'
-        - $ref: '#/components/schemas/ASRResponse'
-        - $ref: '#/components/schemas/TTSResponse'
-        - $ref: '#/components/schemas/OCRResponse'
-        - $ref: '#/components/schemas/TxtLangDetectionResponse'
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/TranslationResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/TransliterationResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/TTSResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/OCRResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/TxtLangDetectionResponse
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/model-schema.yml#/components/schemas/NerResponse
       
 
     Sentences:
@@ -2517,7 +3530,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/ModelListResponseDto'
+            $ref: '#/components/schemas/ModelListResponseUserId'
         count:
           type: integer
           format: int32
@@ -2526,6 +3539,119 @@ components:
           type: integer
           format: int32
           example: 172
+          
+    #ModelListByUserId      
+    ModelListResponseUserId:
+      required:
+        - modelId
+        - name
+        - userId
+        - version
+        - task
+        - domain
+        - license
+        - status
+        - submittedOn
+        - metric
+        - benchmarkPerformance
+        
+      type: object
+      properties:
+        metric:
+          type: array
+          items:
+            type: string
+          example: ["bleu","meteor","ribes","gleu","bert", "chrf"]
+        benchmarkPerformance:
+          type: array
+          items:
+            $ref: '#/components/schemas/BenchmarkProcess'
+        name:
+          maxLength: 100
+          minLength: 5
+          type: string
+          description: model name that you want your users to see
+          example: vakyansh asr model
+        description:
+          maxLength: 1000
+          minLength: 25
+          type: string
+          description: >-
+            brief description about model, its goal, basically something sweet
+            about it
+          example: Speech recognition model for classroom lecture
+        refUrl:
+          maxLength: 200
+          minLength: 5
+          type: string
+          description: github link or url giving further info about the model
+          example: https://github.com/Open-Speech-EkStep/vakyansh-models
+        task:
+          $ref: '#/components/schemas/ModelTask'
+        languages:
+          type: array
+          properties:
+            empty:
+              type: boolean
+          items:
+            $ref: '#/components/schemas/LanguagePair'
+        license:
+          type: string
+          enum:
+            - cc-by-4.0
+            - cc-by-sa-4.0
+            - cc-by-nd-2.0
+            - cc-by-nd-4.0
+            - cc-by-nc-3.0
+            - cc-by-nc-4.0
+            - cc-by-nc-sa-4.0
+            - mit
+            - gpl-3.0
+            - bsd-3-clause
+            - private-commercial
+            - unknown-license
+            - custom-license
+        licenseUrl:
+          type: string
+          description: url of the custom license
+        domain:
+          type: array
+          properties:
+            empty:
+              type: boolean
+          description: This attribute defines that `relevant business area`
+          items:
+            type: string
+            description: This attribute defines that `relevant business area`
+        submitter:
+          $ref: '#/components/schemas/Submitter'
+        inferenceEndPoint:
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
+        trainingDataset:
+          $ref: '#/components/schemas/TrainingDataset'
+        modelId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        version:
+          type: string
+          example: v1.0
+        userId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        submittedOn:
+          type: string
+          example: Sun Nov 07 16:59:23 IST 2021
+        publishedOn:
+          type: string
+          example: Sun Nov 07 16:59:23 IST 2021
+        status:
+          type: string
+          example: unpublished
+        unpublishReason:
+          type: string
+          example: executing benchmark runs
+
+          
      
     ModelListResponseDto:
       required:
@@ -2609,7 +3735,7 @@ components:
         submitter:
           $ref: '#/components/schemas/Submitter'
         inferenceEndPoint:
-          $ref: '#/components/schemas/InferenceAPIEndPoint'
+          $ref: '#/components/schemas/InferenceAPIEndPointDto'
         trainingDataset:
           $ref: '#/components/schemas/TrainingDataset'
         modelId:
@@ -3134,8 +4260,8 @@ components:
         - roles
       properties:
         firstName:
-         type: string
-         description: Firstname of the user to be registered.
+          type: string
+          description: Firstname of the user to be registered.
         lastName:
           type: string
           description: Lastname of the user to be registered.
@@ -3160,11 +4286,198 @@ components:
         password: password
         roles: user
         phoneNo: 9090909090
-        
-        
-    
-
-    
+    GetApiKeyRequest:
+      type: object
+      required:
+        - userID
+      properties:
+        userID:
+          type: string
+          description: UserID of the user to be fetched.
+      example:
+        userID: odjfio930339920oe892d90
+    revokeApiKeyRequest:
+      type: object
+      required:
+        - userID
+        - ulcaApiKey
+      properties:
+        userID:
+          type: string
+          description: UserID of the user to be revoked.
+        ulcaApiKey:
+          type: string
+          description: ulcaApiKey of Ulca user
+      example:
+        userID: odjfio930339920oe892d90
+        ulcaApiKey: odjfi-o930339920-oe892d90
+    dataTrackingToggleRequest:
+      type: object
+      required:
+        - userID
+        - ulcaApiKey
+        - serviceProviderName
+        - dataTracking
+      properties:
+        userID:
+          type: string
+          description: UserID of the user to be revoked.
+        ulcaApiKey:
+          type: string
+          description: ulcaApiKey of Ulca user
+        serviceProviderName:
+          type: string
+          description: serviceProviderName
+        dataTracking:
+          type: boolean
+          description: dataTracking value
+      example:
+        userID: odjfio930339920oe892d90
+        ulcaApiKey: odjfi-o930339920-oe892d90
+        dataTracking: true
+        serviceProviderName: somename
+    removeServiceProviderKeyRequest:
+      type: object
+      required:
+        - userID
+        - ulcaApiKey
+        - serviceProviderName
+      properties:
+        userID:
+          type: string
+          description: UserID of the user to be revoked.
+        ulcaApiKey:
+          type: string
+          description: ulcaApiKey of Ulca user
+        serviceProviderName:
+          type: string
+          description: serviceProviderName
+      example:
+        userID: odjfio930339920oe892d90
+        ulcaApiKey: odjfi-o930339920-oe892d90
+        serviceProviderName: somename
+    generateServiceProviderKeyRequest:
+      type: object
+      required:
+        - userID
+        - ulcaApiKey
+        - pipelineId
+        - dataTracking
+      properties:
+        userID:
+          type: string
+          description: UserID of the user to be revoked.
+        ulcaApiKey:
+          type: string
+          description: ulcaApiKey of Ulca user
+        pipelineId:
+          type: string
+          description: service pipelineId
+        dataTracking:
+          type: boolean
+          description: dataTracking value
+      example:
+        userID: odjfio930339920oe892d90
+        ulcaApiKey: odjfi-o930339920-oe892d90
+        dataTracking: true
+        pipelineId: odjfio930339920oe892d90
+    generateApiKeyRequest:
+      type: object
+      required:
+        - userID
+        - appName
+      properties:
+        userID:
+          type: string
+          description: userId of Ulca.
+        appName:
+          type: string
+          description: appname of be generated
+      example:
+        userID: odjfio930339920oe892d90
+        appName: appname
+    FetchMasterRequest:
+      type: object
+      required:
+        - masterName
+        - jsonPath
+      properties:
+        masterName:
+          type: string
+          description: Master name to fetch
+        jsonPath:
+          type: string
+          description: json path of master data
+      example:
+        masterNames: masteName
+        jsonPath: json path  
+    FetchMasterBulkRequest:
+      type: object
+      required:
+        - masterNames
+      properties:
+        masterNames:
+          type: string
+          description: Master names to be fetched in bulk.
+      example:
+        masterNames: masteName
+    BustCacheRequest:
+      type: object
+      required:
+        - masterNames
+      properties:
+        masterNames:
+          type: string
+          description: Master names to be fetched in bulk.
+      example:
+        masterNames: masteNames
+    pipelineQuestionsRequest:
+      type: object
+      required:
+        - feedbackLanguage
+        - supportedTasks
+      properties:
+        feedbackLanguage:
+          type: string
+          description: Feedback Languages.
+        supportedTasks:
+          type: string
+          description: Tasks supported.
+      example:
+        feedbackLanguage: en
+        supportedTasks: asr
+    modelcomputeRequest:
+      type: object
+      required:
+        - userId
+        - tasks
+        - source
+        - ModelId
+        - audioContent
+        - audioUri
+      properties:
+        userId:
+          type: string
+          description: userID.
+        Tasks:
+          type: string
+          description: Tasks supported.
+        source:
+          type: string
+          description: source.
+        ModelId:
+          type: string
+          description: ModelID
+        audioContent:
+          type: string
+          description: audioContent
+      example:
+        userId: ij9208497lwieur9u1934
+        Tasks: tasks
+        source: sourced
+        ModelId: 99988889998878alisjd
+        audioContent: audioContent
+        audioUrl: audioUrl
     UserLoginRequest:
       type: object
       properties:
@@ -3181,9 +4494,16 @@ components:
         data:
           email: dummy@gmail.com
           password: password
-        
-  
-
+    getApiKeysForProfileRequest:
+      type: object
+      required:
+        - userID
+      properties:
+        firstName:
+          type: string
+          description: Firstname of the user to be registered.
+      example:
+        firstName: odjfio930339920oe892d90
     ApiKeySearchRequest:
       type: object
       properties:
@@ -3193,8 +4513,6 @@ components:
       description: Request for user records.
       example:
         key: 81eb44672d3746b8ac251ca2425c9184
-
-
     ForgotPasswordRequest:
       type: object
       properties:
@@ -3204,8 +4522,6 @@ components:
       description: Request for user records.
       example:
         email: dummy@gmail.com
-    
-
     ResetPasswordRequest:
       type: object
       properties:
@@ -3218,8 +4534,6 @@ components:
       example:
         email: dummy@gmail.com
         password: resetNewPassword
-
-
     UserVerificationRequest:
       type: object
       properties:
@@ -3232,9 +4546,6 @@ components:
       example:
         email: dummy@gmail.com
         userId: 6a73afa4fc774dcdb28d5fff944511f6
-    
-        
-
     User:
       type: object
       properties:
@@ -3258,7 +4569,7 @@ components:
           description: oauthProvider of the user.
         registeredTime:
           type: string
-          description: UTC object indicating time of user signup. 
+          description: UTC object indicating time of user signup.
         activatedTime:
           type: string
           description: UTC object indicating time of user verification.
@@ -3275,9 +4586,6 @@ components:
           type: array
           items:
             type: string
-            
-          
-  
     Role:
       type: object
       properties:
@@ -3290,10 +4598,6 @@ components:
         description:
           type: string
           description: Description of the role.
-  
-   
-  
-          
     AuthData:
       type: object
       properties:
@@ -3306,7 +4610,6 @@ components:
         privateKey:
           type: string
           description: hexadecimal uuid key for the logged in user for encrypting request data.
-          
     UserData:
       type: object
       properties:
@@ -3314,8 +4617,6 @@ components:
           $ref: '#/components/schemas/AuthData'
         userDetails:
           $ref: '#/components/schemas/User'
-          
-          
     Status:
       type: object
       properties:
@@ -3328,7 +4629,6 @@ components:
         count:
           type: integer
           description: count of data items.
-    
     UserVerificationResponse:
       type: object
       properties:
@@ -3340,7 +4640,6 @@ components:
         count:
           type: integer
           description: count of data items.
-    
     UserLoginResponse:
       type: object
       properties:
@@ -3352,7 +4651,6 @@ components:
         count:
           type: integer
           description: count of data items.
-    
     ApiKeySearchResponse:
       type: object
       properties:
@@ -3364,9 +4662,6 @@ components:
         count:
           type: integer
           description: count of data items.
-      
-   
-      
     UlcaLoginAuthenticator:
       type: object
       properties:
@@ -3376,7 +4671,6 @@ components:
         password:
           type: string
           description: password of user
-         
     GmailLoginAuthenticator:
       type: object
       properties:
@@ -3397,7 +4691,7 @@ components:
           description: expires_in
         id_token:
           type: number
-          description: id_token 
+          description: id_token
         session_state:
           type: object
           description: session_state
@@ -3407,9 +4701,7 @@ components:
               description: extraQueryParams
             authuser:
               type: number
-              description: authuser 
-
-          
+              description: authuser
     Authenticator:
       type: string
       enum:
@@ -3418,8 +4710,6 @@ components:
         - GITHUB
         - FACEBOOK
         - LINKEDIN
-    
-    
     ErrorReportRequest:
       type: object
       properties:
@@ -3429,8 +4719,6 @@ components:
       description: Request for error report on a particular submission.
       example:
         serviceRequestNumber: 1160112134
-
-    
     ErrorReportResponse:
       type: object
       properties:
@@ -3452,18 +4740,85 @@ components:
         uploaded:
           type: boolean
           description: status of file upload.
-
+    SupportedLanguages:
+      type: string
+      description: This attribute defines the  language codes(iso-639-1, iso 639-2) supported under ULCA
+      enum:
+        - en
+        - hi
+        - mr
+        - ta
+        - te
+        - kn
+        - gu
+        - pa
+        - bn
+        - ml
+        - as
+        - brx
+        - doi
+        - ks
+        - kok
+        - mai
+        - mni
+        - ne
+        - or
+        - sd
+        - si
+        - ur
+        - sat
+        - lus
+        - njz
+        - pnr
+        - kha
+        - grt
+        - sa
+        - raj
+        - bho
+        - gom
+        - awa
+        - hne
+        - mag
+        - mwr
+        - sjp
+        - gbm
+        - tcy
+        - hlb
+        - bih
+        - anp
+        - bns
+        - mixed
+        - unknown
+    SupportedScripts:
+      type: string
+      description: This attribute defines the  Script codes(ISO 15924) supported under ULCA, code reference available at - `https://unicode.org/iso15924/iso15924-codes.html' 
+      enum:
+        - Beng
+        - Deva
+        - Thaa
+        - Gujr
+        - Aran
+        - Orya
+        - Guru
+        - Arab
+        - Sinh
+        - Knda
+        - Mlym
+        - Taml
+        - Telu
+        - Mtei
+        - Olck
+        - Latn
   securitySchemes:
-      apiKey:
-        type: apiKey
-        in: header
-        name: key
-      apiSig:
-        type: apiKey
-        in: header
-        name: sig
-        description: signed request url or body   
-        
+    apiKey:
+      type: apiKey
+      in: header
+      name: key
+    apiSig:
+      type: apiKey
+      in: header
+      name: sig
+      description: signed request url or body
 security:
   - apiKey: []
     apiSig: []

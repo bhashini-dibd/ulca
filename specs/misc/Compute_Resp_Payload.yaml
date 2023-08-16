@@ -293,6 +293,7 @@ components:
         - sph
         - webm
         - m4a
+        - webm
     SupportedFormats:
       anyOf:
         - $ref: "#/components/schemas/AudioFormat"
