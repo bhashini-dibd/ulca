@@ -70,7 +70,7 @@ class AggregateDatasetModel(object):
                                     GROUP BY {src}, {tgt},{delete}'
                     log.info(sub_query)
 
-                elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus","document-layout-corpus","tts-corpus"]:
+                elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus","document-layout-corpus","tts-corpus","ner-corpus"]:
                     sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
                 qry_for_lang_pair  = query+sub_query
                 result_parsed = utils.query_runner(qry_for_lang_pair)
