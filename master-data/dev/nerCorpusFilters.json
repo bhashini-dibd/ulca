@@ -1,5 +1,5 @@
 {
-    "posCorpusFilters": [
+    "nerCorpusFilters": [
       {
         "code": "sourceLanguage",
         "label": "Source Language",
