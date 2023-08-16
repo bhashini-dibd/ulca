@@ -64,4 +64,8 @@ public class SearchCriteria {
 	
 	private List<String> assertLanguage;
 	private String mixedDataSource;
+	
+	private String tagsFormat;
+	private Boolean isStopwordsRemoved;
+	private String formatDescription;
 }
