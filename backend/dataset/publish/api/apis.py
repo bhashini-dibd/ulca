@@ -10,7 +10,8 @@ from service.tts import TTSService
 from service.ocr import OCRService
 from service.asrunlabeled import ASRUnlabeledService
 from service.transliteration import TransliterationService
-from configs.configs import dataset_type_parallel, dataset_type_asr_unlabeled, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration
+from service.ner import NERService
+from configs.configs import dataset_type_parallel, dataset_type_asr_unlabeled, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration, dataset_type_ner
 ulca_dataset_publish = Flask(__name__)
 
 
@@ -21,6 +22,7 @@ def insert_dataset():
     p_service, m_service, a_service, o_service, au_service, tts_service, trans_service = ParallelService(), MonolingualService(), \
                                                                                          ASRService(), OCRService(), \
                                                                                          ASRUnlabeledService(), TTSService(), TransliterationService()
+    ner_service = NERService()
     req_criteria["record"]["id"] = str(uuid.uuid4())
     if req_criteria["datasetType"] == dataset_type_parallel:
         data = p_service.load_parallel_dataset(req_criteria)
@@ -35,7 +37,9 @@ def insert_dataset():
     if req_criteria["datasetType"] == dataset_type_tts:
         data = tts_service.load_tts_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_transliteration:
-        data = trans_service.load_transliteration_dataset(data)
+        data = trans_service.load_transliteration_dataset(req_criteria)
+    if req_criteria["datasetType"] == dataset_type_ner:
+        data = ner_service.load_ner_dataset(req_criteria)
     return jsonify(data), 200
 
 
@@ -46,6 +50,7 @@ def search_dataset():
     p_service, m_service, a_service, o_service, au_service, tts_service, trans_service = ParallelService(), MonolingualService(), \
                                                                                          ASRService(), OCRService(), \
                                                                                          ASRUnlabeledService(), TTSService(), TransliterationService()
+    ner_service = NERService();
     if req_criteria["datasetType"] == dataset_type_parallel:
         data = p_service.get_parallel_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_ocr:
@@ -58,8 +63,10 @@ def search_dataset():
         data = m_service.get_monolingual_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_tts:
         data = tts_service.get_tts_dataset(req_criteria)
-    if data["datasetType"] == dataset_type_transliteration:
-        data = trans_service.get_transliteration_dataset(data)
+    if req_criteria["datasetType"] == dataset_type_transliteration:
+        data = trans_service.get_transliteration_dataset(req_criteria)
+    if req_criteria["datasetType"] == dataset_type_ner:
+        data = ner_service.get_ner_dataset(req_criteria)
     response = {"dataset": data}
     return jsonify(response), 200
 
