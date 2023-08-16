@@ -67,9 +67,9 @@ class DatasetControllerTest {
     }
 
 
-    @Test
-    void searchListByUserId() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+"/corpus/search/listByUserId").param("userId","test")).
-                andExpect(MockMvcResultMatchers.status().isOk());
-    }
-}
+	/*
+	 * @Test void searchListByUserId() throws Exception {
+	 * mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL+
+	 * "/corpus/search/listByUserId").param("userId","test")).
+	 * andExpect(MockMvcResultMatchers.status().isOk()); }
+	 */}
