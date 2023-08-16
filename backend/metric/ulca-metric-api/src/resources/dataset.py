@@ -20,5 +20,3 @@ class DatasetAggregateResource(Resource):
             return post_error("Data Missing","Mandatory key checks failed",None), 400
         res = APIResponse(APIStatus.SUCCESS.value, search_result,count)
         return res.getresjson(), 200
-
-
