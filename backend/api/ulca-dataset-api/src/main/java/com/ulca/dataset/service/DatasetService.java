@@ -330,7 +330,7 @@ public class DatasetService {
 		int startPg = startPage - 1;
 		for(int i= startPg; i< endPage; i++) {
 			
-			Pageable paging = PageRequest.of(i, PAGE_SIZE,Sort.by("startTime").descending());
+			Pageable paging = PageRequest.of(i, PAGE_SIZE,Sort.by("startTime").ascending());
 			Page<ProcessTracker> processTrackerPage = processTrackerDao.findByUserIdAndServiceRequestTypeAndServiceRequestAction(userId,ServiceRequestTypeEnum.dataset,ServiceRequestActionEnum.search,paging);
 			List<ProcessTracker> processTrackerList = processTrackerPage.getContent();
 			
