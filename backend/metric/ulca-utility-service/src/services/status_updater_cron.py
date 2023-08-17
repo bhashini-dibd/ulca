@@ -21,6 +21,8 @@ class StatusCronProcessor(Thread):
         while not self.stopped.wait(status_cron_interval_sec):
             log.info(f'Job status updater cron run :{run}')
             try:
+                #Collect srns of last 30 days (pending_jobs_duration) and change status to queued
+                #Collect all srns with queued status (queued_pending_duration) and delete it if > 35 Days
                 pending_srns = self.get_pending_tasks()
                 queued_srns = self.get_queued_srns()
                 if pending_srns:
@@ -55,6 +57,8 @@ class StatusCronProcessor(Thread):
 
     def get_pending_tasks(self):
         lastday = (datetime.now() - timedelta(hours=pending_jobs_duration))
+        #Convert que_lastday to epoch
+        #dateFromString should be long value instead
         query = [{ '$match':{'serviceRequestType':'dataset','serviceRequestAction':'submit','status':{'$in':['In-Progress','Pending']}}}, {
                                                      '$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
                                                      {'$match': {'date': {'$lt': lastday}}}]

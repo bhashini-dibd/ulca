@@ -3,9 +3,10 @@ from models.response import CustomResponse
 from models.response import Status
 import logging
 from services import NotifierService
+from threading import Thread
 
 log = logging.getLogger('file')
-service = NotifierService()
+service = NotifierService(Thread)
 
 class NotifierResource(Resource):
 

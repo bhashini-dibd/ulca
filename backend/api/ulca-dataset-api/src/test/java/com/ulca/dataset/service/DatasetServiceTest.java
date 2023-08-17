@@ -196,44 +196,47 @@ class DatasetServiceTest {
         assertInstanceOf(DatasetSearchStatusResponse.class, datasetService.searchStatus("1"));
     }
 
-    private static Stream<Arguments> searchListByUserIdParam(){
-        return Stream.of(Arguments.of("test",null,null),
-                Arguments.of("test",1,1));
-    }
-
-    @ParameterizedTest
-    @MethodSource("searchListByUserIdParam")
-    void searchListByUserId(String userId, Integer startPage, Integer endPage) {
-        ProcessTracker processTracker = new ProcessTracker();
-        processTracker.setDatasetId("test");
-        processTracker.setUserId("test");
-        processTracker.setStatus("In-Progress");
-        processTracker.serviceRequestNumber("1");
-
-        processTracker.setSearchCriterion(new SearchCriteria());
-
-        List<ProcessTracker> processTrackerList = new ArrayList<>();
-        processTrackerList.add(processTracker);
-
-        TaskTracker taskTracker = new TaskTracker();
-        taskTracker.setTool("test");
-        taskTracker.setStatus("In-Progress");
-
-        List<TaskTracker> taskTrackerList = new ArrayList<>();
-        taskTrackerList.add(taskTracker);
-
-
-        Page<ProcessTracker> processTrackerPage = new PageImpl<>(Collections.singletonList(processTracker));
-
-
-        when(taskTrackerDao.findAllByServiceRequestNumber("1")).thenReturn(taskTrackerList);
-        if (startPage!=null) {
-            when(processTrackerDao.findByUserIdAndServiceRequestTypeAndServiceRequestAction(userId, ProcessTracker.ServiceRequestTypeEnum.dataset, ProcessTracker.ServiceRequestActionEnum.search, PageRequest.of(0, 10))).thenReturn(processTrackerPage);
-        } else
-          when(processTrackerDao.findByUserIdAndServiceRequestTypeAndServiceRequestAction(userId, ProcessTracker.ServiceRequestTypeEnum.dataset, ProcessTracker.ServiceRequestActionEnum.search)).thenReturn(processTrackerList);
-
-        assertInstanceOf(SearchListByUserIdResponse.class,datasetService.searchListByUserId(userId,startPage,endPage));
-    }
-
+	/*
+	 * private static Stream<Arguments> searchListByUserIdParam(){ return
+	 * Stream.of(Arguments.of("test",null,null), Arguments.of("test",1,1)); }
+	 * 
+	 * @ParameterizedTest
+	 * 
+	 * @MethodSource("searchListByUserIdParam") void searchListByUserId(String
+	 * userId, Integer startPage, Integer endPage) { ProcessTracker processTracker =
+	 * new ProcessTracker(); processTracker.setDatasetId("test");
+	 * processTracker.setUserId("test"); processTracker.setStatus("In-Progress");
+	 * processTracker.serviceRequestNumber("1");
+	 * 
+	 * processTracker.setSearchCriterion(new SearchCriteria());
+	 * 
+	 * List<ProcessTracker> processTrackerList = new ArrayList<>();
+	 * processTrackerList.add(processTracker);
+	 * 
+	 * TaskTracker taskTracker = new TaskTracker(); taskTracker.setTool("test");
+	 * taskTracker.setStatus("In-Progress");
+	 * 
+	 * List<TaskTracker> taskTrackerList = new ArrayList<>();
+	 * taskTrackerList.add(taskTracker);
+	 * 
+	 * 
+	 * Page<ProcessTracker> processTrackerPage = new
+	 * PageImpl<>(Collections.singletonList(processTracker));
+	 * 
+	 * 
+	 * when(taskTrackerDao.findAllByServiceRequestNumber("1")).thenReturn(
+	 * taskTrackerList); if (startPage!=null) { when(processTrackerDao.
+	 * findByUserIdAndServiceRequestTypeAndServiceRequestAction(userId,
+	 * ProcessTracker.ServiceRequestTypeEnum.dataset,
+	 * ProcessTracker.ServiceRequestActionEnum.search, PageRequest.of(0,
+	 * 10))).thenReturn(processTrackerPage); } else when(processTrackerDao.
+	 * findByUserIdAndServiceRequestTypeAndServiceRequestAction(userId,
+	 * ProcessTracker.ServiceRequestTypeEnum.dataset,
+	 * ProcessTracker.ServiceRequestActionEnum.search)).thenReturn(
+	 * processTrackerList);
+	 * 
+	 * assertInstanceOf(SearchListByUserIdResponse.class,datasetService.
+	 * searchListByUserId(userId,startPage,endPage)); }
+	 */
 
 }

@@ -54,7 +54,7 @@ class AggregateAi4bModelData(object):
                 chart_data = []
                 for record in result:
                     rec = {}
-                    if match_params[0]["value"] == "TRANSLATION":
+                    if match_params[0]["value"] == "TRANSLATION" or match_params[0]["value"] == "TRANSLITERATION":
                         rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]  # label :language pairs seperated by '-'
                         try:
                             rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())["label"]+"-"+self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
@@ -62,14 +62,6 @@ class AggregateAi4bModelData(object):
                             log.info(f'Language code not found on MDMS : {record["_id"]["lang1"], record["_id"]["lang2"]}')
                             rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
                     
-                    elif match_params[0]["value"] == "TRANSLITERATION":
-                        rec["_id"]    =    record["_id"]["lang2"]
-                        try:
-                            rec["label"]  =   self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
-                        except:
-                            log.info(f'Language code not found on MDMS : {record["_id"]["lang1"]}')
-                            rec["label"]    =   str(record["_id"]["lang1"]).title()
-
                     else:
                         rec["_id"]      =   record["_id"]["lang1"] # label :language 
                         try:

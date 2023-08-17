@@ -46,8 +46,8 @@
         "active": true
       },
       {
-        "code": "pos-corpus",
-        "label": "POS Dataset",
+        "code": "ner-corpus",
+        "label": "NER Dataset",
         "active": true
       }
     ]

@@ -133,7 +133,9 @@ class QueryUtils:
                     continue
                 elem={}
                 # label = LANG_CODES.get(val)
+                log.info(f'values @ 136 {val}')
                 label =  self.mdmsconfigs.get(val)["label"]
+                log.info(f'label @ 138 {label}')
                 if label == None:
                     label = val
                 elem["_id"]=val
