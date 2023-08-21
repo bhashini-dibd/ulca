@@ -96,7 +96,6 @@ const SearchModelDetail = (props) => {
   }, []);
 
   const description = data.result;
-  console.log("description ------- ", description);
 
   const [prevUrl, setUrl] = useState(
     location.state ? location.state.prevUrl : "explore-models"

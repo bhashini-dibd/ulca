@@ -65,7 +65,6 @@ const CardComponent = (props) => {
   };
 
   const renderDomain = (data) => {
-    // console.log("hiiiiii",FilterByDomain([data.domain]), data.domain)
     return (
       <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
         <Typography

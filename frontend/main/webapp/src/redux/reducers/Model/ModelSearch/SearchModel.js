@@ -115,7 +115,6 @@ const getDomainDetails = (data) => {
     let result = "";
     data.length > 1 &&
       data.forEach((element, i) => {
-        //console.log("checkkk",element)
         if (i !== data.length) {
           result = result +  FilterByDomain([element])[0].label + "|";
         } else {

@@ -64,7 +64,6 @@ const HostedInference = (props) => {
 
   const fetchTransliterationModel = async () => {
     const apiObj = new GetTransliterationModelID("en", source);
-    // console.log("source", source);
     source && source !== "en" && fetch(apiObj.apiEndPoint(), {
       method: "GET",
       // headers: apiObj.getHeaders().headers,
