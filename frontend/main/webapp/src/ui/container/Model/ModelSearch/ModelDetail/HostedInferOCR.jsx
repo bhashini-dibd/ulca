@@ -177,7 +177,6 @@ const HostedInferASR = (props) => {
       let rsp_data = await res.json();
       if (res.ok) {
         setFileData(rsp_data.output[0].source);
-        setTarget(rsp_data.output[0].source);
       } else {
         setSnackbarInfo({
           ...snackbar,
