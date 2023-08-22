@@ -169,7 +169,7 @@ const getMySearches = (state, payload) => {
       });
     }
   });
-  newArr = newArr.reverse();
+  // newArr = newArr.reverse();
   
   if (existingResponseData.length > 0) {
     let newArrStartIndex = (payload.startPage * 10) - 10;
