@@ -59,7 +59,7 @@ const Footer = () => {
                 <br />
                 <a
                   class=""
-                  href="https://www.meity.gov.in"
+                  href="https://www.bhashini.gov.in"
                   target="_self"
                   rel="noopener noreferrer"
                 >
@@ -76,8 +76,8 @@ const Footer = () => {
               <div class="">
                 Mail
                 <br />
-                <a class="" href="mailto:contact@bhashini.gov.in">
-                  contact@bhashini.gov.in
+                <a class="" href="mailto:ceo-dibd@digitalindia.gov.in">
+                  ceo-dibd[at]digitalindia[dot]gov[dot]in
                 </a>
               </div>
             </div>
