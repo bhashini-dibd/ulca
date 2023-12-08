@@ -105,6 +105,11 @@ const Footer = () => {
             <div class="row align-items-center">
               <div class="col-md-6">
                 <ul class="d-lg-flex link">
+                  {/* <li>
+                    <a href="https://bhashini.gov.in/images/Bhashini_-_Whitepaper.pdf">
+                      Whitepaper
+                    </a>
+                  </li> */}
                   <li>
                     <a href="https://bhashini.gov.in/en/ecosystem">Ecosystem</a>
                   </li>
