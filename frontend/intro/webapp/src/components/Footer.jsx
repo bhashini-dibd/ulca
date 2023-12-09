@@ -111,21 +111,17 @@ const Footer = () => {
                     </a>
                   </li> */}
                   <li>
-                    <a href="https://bhashini.gov.in/en/ecosystem">Ecosystem</a>
+                    <a class="footer-anchor-redirect-links" href="https://bhashini.gov.in/en/ecosystem">Ecosystem</a>
                   </li>
                   <li>
-                    <a href="">
-                      <div class="join">
-                        <a
-                          class="bh-btn-primary"
-                          href="http://bhashini.gov.in/bhashadaan"
-                          target="_self"
-                          rel="noopener noreferrer"
-                        >
-                          {" "}
-                          Join Bhasha Daan{" "}
-                        </a>
-                      </div>
+                    <a
+                      class="footer-anchor-redirect-links"
+                      href="http://bhashini.gov.in/bhashadaan"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      {" "}
+                      Join Bhasha Daan{" "}
                     </a>
                   </li>
                 </ul>
@@ -151,9 +147,9 @@ const Footer = () => {
                   </li>
                   <li>
                     <a href="https://www.linkedin.com/company/96244597/admin/feed/posts/" target="_self">
-                    <img
+                      <img
                         src={`${process.env.PUBLIC_URL}/img/linkedin.png`}
-                        style={{borderRadius: "100%"}}
+                        style={{ borderRadius: "100%" }}
                         alt="linkedin"
                       />
                     </a>
@@ -199,6 +195,7 @@ const Footer = () => {
                     <a
                       href="https://bhashini.gov.in/en/privacy-policy"
                       target="_self"
+                      class="footer-anchor-redirect-links"
                     >
                       Privacy Policy
                     </a>
@@ -207,6 +204,7 @@ const Footer = () => {
                     <a
                       href="https://bhashini.gov.in/en/terms-conditions"
                       target="_self"
+                      class="footer-anchor-redirect-links"
                     >
                       {" "}
                       Terms of Use
@@ -225,7 +223,7 @@ const Footer = () => {
                 </a>
               </div>
               <div class="col-md-3 text-right">
-              <div class="caption mb-3"><span class="lighGrey text-center ft-14">Designed, Developed &amp; Hosted by</span><a href=""> Digital India Corporation(DIC)</a></div>
+                <div class="caption mb-3"><span class="lighGrey text-center ft-14">Designed, Developed &amp; Hosted by</span><a href=""> Digital India Corporation(DIC)</a></div>
                 <a href="" class="dg-india-logo ">
                   <img
                     src={`${process.env.PUBLIC_URL}/img/dg-india.png`}
