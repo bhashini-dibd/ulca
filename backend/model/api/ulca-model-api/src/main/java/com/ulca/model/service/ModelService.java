@@ -957,11 +957,13 @@ public class ModelService {
 
 						String modelId = configSchema.getModelId();
 						ModelExtended model = modelDao.findByModelId(modelId);
+						log.info("Model Search Response : " + model.toString());						
 						if (model != null) {
 							if (model.getTask().getType().equals(taskType)) {
 								boolean flag = false;
 								for (LanguagePair languagePair : model.getLanguages()) {
-
+								log.info("Language Pair : " + languagePair.toString());						
+								log.info("Config Schema : " + configSchema.toString());															
 									if (configSchema.getSourceLanguage() != null
 											&& configSchema.getTargetLanguage() == null) {
 
