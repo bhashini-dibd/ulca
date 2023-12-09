@@ -438,7 +438,7 @@
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": false,
-      "description": "API to get api keys of users with non existing service provider names"
+      "description": "API to perform pipeline upload"
     }
     
   ]
