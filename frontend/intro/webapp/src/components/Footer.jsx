@@ -59,7 +59,7 @@ const Footer = () => {
                 <br />
                 <a
                   class=""
-                  href="https://www.bhashini.gov.in"
+                  href="https://bhashini.gov.in/"
                   target="_self"
                   rel="noopener noreferrer"
                 >
