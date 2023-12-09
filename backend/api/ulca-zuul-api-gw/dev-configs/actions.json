@@ -431,7 +431,16 @@
       "active": true,
       "whiteList": false,
       "description": "API to get api keys of users with non existing service provider names"
+    },
+    {
+      "id": "e596aa61-a107-4cac-b70d-05bda15a00fe",
+      "uri": "/ulca/apis/v0/model/uploadPipeline",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get api keys of users with non existing service provider names"
     }
+    
   ]
 }
 
