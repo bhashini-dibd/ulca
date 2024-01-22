@@ -274,7 +274,7 @@ const SearchModelDetail = (props) => {
                 lg={4}
                 xl={4}
                 className={classes.rightSection}
-                // style={{ paddingLeft: "24px" }}
+              // style={{ paddingLeft: "24px" }}
               >
                 <Grid container spacing={2} style={{ marginTop: "2%" }}>
                   {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -288,21 +288,15 @@ const SearchModelDetail = (props) => {
                   </Grid> */}
                   <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <Grid container spacing={1}>
-                      {description?.map((des, i) => {
-                        if(des.para) {
-                          return (
-                            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                              <ModelDescription
-                                title={des.title}
-                                para={des.para}
-                                index={i}
-                              />
-                            </Grid>
-                          )
-                        } else {
-                          return <></>
-                        }
-                      })}
+                      {description?.map((des, i) => (
+                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                          <ModelDescription
+                            title={des.title}
+                            para={des.para}
+                            index={i}
+                          />
+                        </Grid>
+                      ))}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -328,18 +322,24 @@ const SearchModelDetail = (props) => {
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Grid container spacing={2}>
                   {description?.map((des, i) => {
-                    if(des.para) {
-                      return (
-                        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-                          <ModelDescription
-                            title={des.title}
-                            para={des.para}
-                            index={i}
-                          />
-                        </Grid>
-                      )
+                    if (des.title === "Type" && (task === "asr" || task === "tts")) {
+                      return <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                        <ModelDescription
+                          title={des.title}
+                          para={des.para}
+                          index={i}
+                        />
+                      </Grid>
+                    } else if (des.title === "Type" && (task !== "asr" || task !== "tts")) {
+                      return null
                     } else {
-                      return <></>
+                      return <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                        <ModelDescription
+                          title={des.title}
+                          para={des.para}
+                          index={i}
+                        />
+                      </Grid>
                     }
                   })}
                 </Grid>
@@ -373,7 +373,7 @@ const SearchModelDetail = (props) => {
                           title={
                             <a
                               style={{ textDecoration: "none" }}
-                              href="https://github.com/ULCA-IN/ulca/wiki/Model-Evaluation-Metrics-Definitions"
+                              href="https://github.com/bhashini-dibd/ulca/wiki/Model-Evaluation-Metrics-Definitions"
                               target="_blank"
                             >{`${metricInfo[metric]}. For further information click here.`}</a>
                           }
