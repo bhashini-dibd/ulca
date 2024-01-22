@@ -47,25 +47,25 @@ components:
           maxLength: 200
           example: Speech recognition model for classroom lecture
         task:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         languages:
           nullable: true
           description: what all languages it supports
           allOf:
-            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
+            - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
         license:
           type: object
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/License
         domain:
           description: what domain your model cater to and its only search purposes.
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         submitter:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
         contributors:
           type: array
           description: users' or teams' who are part of the dataset curation exercise.
           items:
-            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+            $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
         inferenceEndPoint:
           type: object
           description: hosted location of model. Model can be hosted on submitter's infrastructure and must following respective API contract so that UMCA can make API callback to execute benchmarks
@@ -86,7 +86,7 @@ components:
             - $ref: '#/components/schemas/TxtLangDetectionBenchmarkResult'
         stage:
           description: after submission model goes through a process before it gets listed.
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ProcessStage
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ProcessStage
         trainingDataset:
           $ref: '#/components/schemas/TrainingDataset'
     InferenceAPIEndPoint:
@@ -102,9 +102,9 @@ components:
         schema:
           type: object
           oneOf:
-            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/translation-schemas.yml#/components/schemas/TranslateRequest
-            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/audio-schema.yml#/components/schemas/SpeechRecognitionRequest
-            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRRequest
+            - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/translation-schemas.yml#/components/schemas/TranslateRequest
+            - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/audio-schema.yml#/components/schemas/SpeechRecognitionRequest
+            - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRRequest
     FileUploadAPIEndPoint:
       type: object
       description: hosted location defines the end point of the model inference.
@@ -118,7 +118,7 @@ components:
         schema:
           type: object
           oneOf:
-            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/file-upload-schema.yml#/components/schemas/FileUploadRequest
+            - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/file-upload-schema.yml#/components/schemas/FileUploadRequest
     Benchmarks:
       type: array
       items:
@@ -153,7 +153,7 @@ components:
           example: benchmark sentences for government press release domain
         domain:
           type: object
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         createdOn:
           type: string
           description: timestamp when benchmark is created
@@ -171,7 +171,7 @@ components:
       properties:
         languages:
           type: object
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         score:
           type: array
           items:
@@ -186,7 +186,7 @@ components:
       properties:
         languages:
           type: object
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         score:
           type: array
           items:
@@ -225,7 +225,7 @@ components:
       properties:
         languages:
           type: object
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         score:
           type: array
           items:
@@ -240,7 +240,7 @@ components:
       properties:
         languages:
           type: object
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         score:
           type: array
           items:
@@ -350,7 +350,7 @@ components:
           description: is the score as per defined metric for this benchmark.
     TranslationIndividualBenchmarkResult:
       allOf:
-        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/translation-schemas.yml#/components/schemas/Sentence
+        - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/translation-schemas.yml#/components/schemas/Sentence
         - type: object
       type: object
       properties:
@@ -379,7 +379,7 @@ components:
             minItems: 1
     TransliterationIndividualBenchmarkResult:
       allOf:
-        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/translation-schemas.yml#/components/schemas/Sentence
+        - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/translation-schemas.yml#/components/schemas/Sentence
         - type: object
       type: object
       properties:
@@ -408,7 +408,7 @@ components:
             minItems: 1
     TxtLangDetectionIndividualBenchmarkResult:
       allOf:
-        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/translation-schemas.yml#/components/schemas/Sentence
+        - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/translation-schemas.yml#/components/schemas/Sentence
         - type: object
       type: object
       properties:
@@ -492,7 +492,7 @@ components:
             minItems: 1
     ASRIndividualBenchmarkResult:
       allOf:
-        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/audio-schema.yml#/components/schemas/SpeechRecognitionResult
+        - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/audio-schema.yml#/components/schemas/SpeechRecognitionResult
         - type: object
       type: object
       properties:

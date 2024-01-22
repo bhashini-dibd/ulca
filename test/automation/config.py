@@ -27,6 +27,6 @@ DOWNLOAD_FOLDER = 'downloads'
 # schema-related-things
 SCHEMA_FILENAME = "schema.yml"
 ULCA_SCHEMAFILE_URL = (
-    "https://raw.githubusercontent.com/ULCA-IN/ulca/"
+    "https://raw.githubusercontent.com/bhashini-dibd/ulca/"
     + "master/specs/common-schemas.yml"
 )

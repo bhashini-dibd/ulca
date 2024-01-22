@@ -45,7 +45,7 @@ if isinstance(status_cron_interval_sec, str):
     status_cron_interval_sec =  eval(status_cron_interval_sec)
 
 
-data_filter_set_file_path   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','https://raw.githubusercontent.com/ULCA-IN/ulca/develop/master-data/dev/datasetFilterParams.json')
+data_filter_set_file_path   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','https://raw.githubusercontent.com/bhashini-dibd/ulca/develop/master-data/dev/datasetFilterParams.json')
 filter_dir_name             =   os.environ.get('FILTER_DIR_NAME','/app/utilities/')
 shared_storage_path         =   os.environ.get('ULCA_SHARED_STORAGE_PATH', "/opt/")
 filter_file_name            =   os.environ.get('FILTER_FILE_NAME','datasetFilterParams.json')
