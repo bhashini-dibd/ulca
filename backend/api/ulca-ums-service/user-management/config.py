@@ -41,7 +41,7 @@ if isinstance(MAX_API_KEY,str):
     MAX_API_KEY = int(MAX_API_KEY)
 
 #external file read configs
-ROLE_CODES_URL          =   os.environ.get('UMS_ROLE_CODES_URL','https://raw.githubusercontent.com/ULCA-IN/ulca/zuul-gw/backend/api/ulca-zuul-api-gw/dev-configs/roles.json')
+ROLE_CODES_URL          =   os.environ.get('UMS_ROLE_CODES_URL','https://raw.githubusercontent.com/bhashini-dibd/ulca/zuul-gw/backend/api/ulca-zuul-api-gw/dev-configs/roles.json')
 ROLE_CODES_DIR_PATH     =   os.environ.get('UMS_ROLE_DIR_PATH','/app/configs/') 
 ROLE_CODES_FILE_NAME    =   os.environ.get('UMS_ROLES_FILE_NAME','roles.json')
 
