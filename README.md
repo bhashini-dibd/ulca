@@ -59,12 +59,12 @@ Submit any new model from the above mentioned types
 
 ## Codebase & Deployment 
 ULCA code base is published as an open-sourced project (MIT license) under the following repository :
-https://github.com/ULCA-IN/ulca 
+https://github.com/bhashini-dibd/ulca 
 
 #### `Important links`
-* ULCA data/model contracts : https://github.com/ULCA-IN/ulca/tree/master/specs  
-* Sample usages : https://github.com/ULCA-IN/ulca/tree/master/specs/examples 
-* Test datasets : https://github.com/ULCA-IN/ulca/tree/master/ulca-test-datasets  
+* ULCA data/model contracts : https://github.com/bhashini-dibd/ulca/tree/master/specs  
+* Sample usages : https://github.com/bhashini-dibd/ulca/tree/master/specs/examples 
+* Test datasets : https://github.com/bhashini-dibd/ulca/tree/master/ulca-test-datasets  
 
 
 | Service | Build Status |
