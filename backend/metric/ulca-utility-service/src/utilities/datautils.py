@@ -1,6 +1,6 @@
 import requests
-from config import data_filter_set_file_path,shared_storage_path,filter_file_name, file_store_host, file_store_upload_endpoint
-from config import data_metric_host,data_metric_endpoint,shared_storage_path, receiver_email_ids, MAIL_SENDER, ulca_email_group
+from config import data_filter_set_file_path,shared_storage_path,filter_file_name, file_store_host, file_store_upload_endpoint,smtp_server,sender_email, password,dscountsubject,receiver_email
+from config import data_metric_host,data_metric_endpoint,shared_storage_path,sts_subject,sts_html
 import json
 import logging
 from logging.config import dictConfig
@@ -8,11 +8,13 @@ log = logging.getLogger('file')
 from datetime import datetime
 import csv
 import pytz
-from flask_mail import Mail, Message
-from flask import render_template
-from app import mail
 IST = pytz.timezone('Asia/Kolkata')
 import os
+from email.message import EmailMessage
+import os
+from config import filename
+import email, smtplib, ssl
+
 
 
 class DataUtils:
@@ -102,34 +104,48 @@ class DataUtils:
     def generate_email_notification(self,data):
 
         try:
-            if isinstance(data,list):
-                log.info("Generating email notification for data count mismatch !!!!")
-                users = ulca_email_group.split(',')
-                tdy_date    =   datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
-                msg         =   Message(subject=f" ULCA - Alert on dataset counts {tdy_date}",sender=MAIL_SENDER,recipients=users)
-                message     =   ""
-                for i in data:
-                    line = f"Dataset Type : {i['Data Type']}\t\tMongoDB Count : {i['Mongo Count']}\t\tDruid Count : {i['Druid Count']}"
-                    message = f"{message}\n{line}"
-                msg.body    =   f"There is a mismatch found on ulca data stores.\n\nDetails of the unequal types:\n{message}"
-                mail.send(msg)
-                log.info(f"Generated alert email ")
+            if "parallel_count" in data.keys():
+                message = EmailMessage()
+                message["From"] = sender_email
+                message["To"] = receiver_email
+                message["Subject"] = dscountsubject
+                html_ = open(filename).read()
+                html_ = html_.replace('{{parallel}}',data['parallel_count']).replace('{{mono}}',data['mono_count']).replace('{{asr}}',data['asr_count']).replace('{{asrun}}',data['asr_unlabeled_count']).replace('{{tts}}',data['tts_count']).replace('{{ocr}}',data['ocr_count']).replace('{{transliteration}}',data['transliteration_count']).replace('{{glossary}}',data['glossary_count']).replace('{{inprogress}}',data['inprogress']).replace('{{pending}}',data['pending'])
 
-            if isinstance(data,dict):
-                users = receiver_email_ids.split(',')
-                log.info(f"Generating statistic emails for {users} ") 
-                tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
-                msg         = Message(subject=f" ULCA - Statistics {tdy_date}",
-                                sender=MAIL_SENDER,
-                                recipients=users)
-                msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
-                # with open (file,'rb') as fp:
-                #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
-                mail.send(msg)
-                log.info(f"Generated email notifications")
+                message.add_alternative(html_,subtype = 'html')
+                
+                with smtplib.SMTP_SSL(smtp_server, 465) as server:
+                    server.login(sender_email, password)
+                        # Prefer the modern send_message method
+                    server.send_message(message)
+                    log.info(f"Email successfully generated for dataset counts")
+                    server.quit()
+                    del message["From"]
+                    del message["To"]
+            
+            else:
+                message = EmailMessage()
+                message["From"] = sender_email
+                message["To"] = receiver_email
+                message["Subject"] = sts_subject
+                html_ = open(sts_html).read()
+                html_ = html_.replace('{{asr_model_name}}',data['asr-model']).replace('{{asr_model_id}}',data['asr-modelid']).replace('{{asr_status}}',data['speech_1']).replace('{{nmt_model_name}}',data['nmt-modelname']).replace('{{nmt_model_id}}',data['nmt-modelid']).replace('{{nmt_model_status}}',data['Translation']).replace('{{tts_model_name}}',data['tts-modelname']).replace('{{tts_model_id}}',data['tts-modelid']).replace('{{tts_model_status}}',data['speech_2'])
+
+                message.add_alternative(html_,subtype = 'html')
+                
+                with smtplib.SMTP_SSL(smtp_server, 465) as server:
+                    server.login(sender_email, password)
+                        # Prefer the modern send_message method
+                    server.send_message(message)
+                    log.info(f"Email successfully generated for STS")
+                    server.quit()
+                    del message["From"]
+                    del message["To"]
+
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
+    
 
 
 

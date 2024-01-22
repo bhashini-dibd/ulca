@@ -1,9 +1,11 @@
 package com.ulca.model.service;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.SocketTimeoutException;
+import java.net.http.HttpConnectTimeoutException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -13,17 +15,23 @@ import javax.net.ssl.X509TrustManager;
 
 import io.swagger.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mervick.aes_everywhere.Aes256;
 import com.ulca.model.service.exception.ModelComputeException;
 
+import io.netty.handler.codec.http.HttpResponse;
+import io.netty.channel.ConnectTimeoutException;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import io.netty.handler.timeout.ReadTimeoutException;
+import io.netty.handler.timeout.WriteTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -37,11 +45,13 @@ import reactor.netty.http.client.HttpClient;
 @Service
 public class ModelInferenceEndPointService {
 
-    @Autowired
-    WebClient.Builder builder;
+	@Autowired
+	WebClient.Builder builder;
 
-    public InferenceAPIEndPoint validateSyncCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
-			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
+	@Value("${aes.model.apikey.secretkey}")
+	private String SECRET_KEY;
+
+	public InferenceAPIEndPoint validateSyncCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint) throws Exception {
 
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
@@ -54,17 +64,36 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(120, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
              
             Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 	
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			
+			Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
+			
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
+
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+
 			String responseJsonStr = httpResponse.body().string();
 
 			TranslationResponse response = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
@@ -75,60 +104,110 @@ public class ModelInferenceEndPointService {
 
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
 			ASRRequest request = asrInference.getRequest();
+			ObjectMapper objectMapper = new ObjectMapper();
 
 			ASRResponse response = null;
+			Response httpresponse = null;
 			SslContext sslContext;
 			try {
 				sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
 
-				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext)).responseTimeout(Duration.ofSeconds(120));
 
-				
+
 				/*
 				 * response = builder.clientConnector(new
 				 * ReactorClientHttpConnector(httpClient)).build().post()
 				 * .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
 				 * .bodyToMono(ASRResponse.class).block();
 				 */
-			     if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
-				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
+				if (inferenceAPIEndPoint.getInferenceApiKey() != null) {
+					InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint
+							.getInferenceApiKey();
+
+					if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
+
+					//	String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+					//	String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+					//	log.info("inferenceApiKeyName : " + inferenceApiKeyName);
+					//	log.info("inferenceApiKeyValue : " + inferenceApiKeyValue);
+						
+						/////////////////////////////////////////////////////////////
+						
+						String encryptedInferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+						String encryptedInferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+						log.info("Secret Key :: "+SECRET_KEY);
+						
+						log.info("encryptedInferenceApiKeyName : "+encryptedInferenceApiKeyName);
+						log.info("encryptedInferenceApiKeyValue : "+encryptedInferenceApiKeyValue);
+						
+						//String originalInferenceApiKeyName = Aes256.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+
+						//String originalInferenceApiKeyValue = Aes256.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+						
+						String originalInferenceApiKeyName = EncryptDcryptService.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+
+						String originalInferenceApiKeyValue = EncryptDcryptService.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+						log.info("originalInferenceApiKeyName : "+originalInferenceApiKeyName);
+						log.info("originalInferenceApiKeyValue : "+originalInferenceApiKeyValue);
+						
+						///////////////////////////////////////////////////////////
+						
+						
+						
+						
+						
+						
+						
+
+						response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
+								.uri(callBackUrl).header(originalInferenceApiKeyName, originalInferenceApiKeyValue)
+								.body(Mono.just(request), ASRRequest.class).retrieve().bodyToMono(ASRResponse.class)
+								.block();
+
+						//String responseJsonStr = httpresponse.body().string();
+
+						//response = objectMapper.readValue(responseJsonStr, ASRResponse.class);
+
+						log.info("response : " + response);
+
+					}
+				} else {
+					response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
+							.uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
+							.bodyToMono(ASRResponse.class).block();
 
 				
-				if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
-					
-						String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
-						String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
-						log.info("inferenceApiKeyName : "+inferenceApiKeyName);
-						log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
-						response = builder.clientConnector(new
-								  ReactorClientHttpConnector(httpClient)).build().post()
-								  .uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue).
-								  body(Mono.just(request), ASRRequest.class).retrieve()
-								  .bodyToMono(ASRResponse.class).block();					
-					    log.info("response : "+response);
-				   }
-				}else {
-					response = builder.clientConnector(new
-							  ReactorClientHttpConnector(httpClient)).build().post()
-							  .uri(callBackUrl).
-							  body(Mono.just(request), ASRRequest.class).retrieve()
-							  .bodyToMono(ASRResponse.class).block();
-				    log.info("response : "+response);
 
+					//String responseJsonStr = httpresponse.body().string();
+
+					//response = objectMapper.readValue(responseJsonStr, ASRResponse.class);
+
+					log.info("response : " + response);
 					
+				
+
+		}
+				if(response.getOutput()==null) {
+					throw new ModelComputeException(response.toString(), "ASR Model Compute Failed",
+							HttpStatus.BAD_REQUEST);
 				}
-				
-				
-				
-				
-				
-				
 
-			} catch (SSLException e) {
+			}catch (SSLException e) {
 				e.printStackTrace();
+			} catch (ReadTimeoutException rte) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			} catch (WriteTimeoutException wte) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				throw new ModelComputeException(response.toString(), "ASR Model Compute Failed",
+						HttpStatus.BAD_REQUEST);
 			}
 
-			ObjectMapper objectMapper = new ObjectMapper();
 			log.info("logging asr inference point response" + objectMapper.writeValueAsString(response));
 			asrInference.setResponse(response);
 			schema = asrInference;
@@ -139,11 +218,12 @@ public class ModelInferenceEndPointService {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
-
+			log.info("requestJson :: " + requestJson);
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(120, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
               
             Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
@@ -153,10 +233,26 @@ public class ModelInferenceEndPointService {
 			
 			
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+        	Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+      }
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
+
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
 			String responseJsonStr = httpResponse.body().string();
+
+			log.info("responseJsonStr :: " + responseJsonStr);
 			OCRResponse response = objectMapper.readValue(responseJsonStr, OCRResponse.class);
 			ocrInference.setResponse(response);
 			schema = ocrInference;
@@ -172,18 +268,29 @@ public class ModelInferenceEndPointService {
 
 			// OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			// Request httpRequest = new
+			// Request.Builder().url(callBackUrl).post(body).build();
 
-            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
-	
-			
-			
-			
-			
+			Request httpRequest = checkInferenceApiKeyValue(inferenceAPIEndPoint, body);
+
 			OkHttpClient newClient = getTrustAllCertsClient();
 
-			Response httpResponse = newClient.newCall(httpRequest).execute();
+			
+			Response httpResponse =null; 
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
 
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
 			// Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -203,20 +310,30 @@ public class ModelInferenceEndPointService {
 
 			// OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-             
-			
-            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+			// Request httpRequest = new
+			// Request.Builder().url(callBackUrl).post(body).build();
 
-			
-			
+			Request httpRequest = checkInferenceApiKeyValue(inferenceAPIEndPoint, body);
+
 			OkHttpClient newClient = getTrustAllCertsClient();
 
-			Response httpResponse = newClient.newCall(httpRequest).execute();
-               
-			
-			
-			
+
+			Response httpResponse =null; 
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+
+
 			// Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -235,24 +352,35 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-		//	Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-              
-            Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
-	
-			
-			
-			
+			// Request httpRequest = new
+			// Request.Builder().url(callBackUrl).post(body).build();
+
+			Request httpRequest = checkInferenceApiKeyValue(inferenceAPIEndPoint, body);
+
 			OkHttpClient newClient = getTrustAllCertsClient();
 
-			Response httpResponse = newClient.newCall(httpRequest).execute();
+			Response httpResponse =null; 
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+      }
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "TxtLangDetection Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			
+			}
 			String responseJsonStr = httpResponse.body().string();
 			TxtLangDetectionResponse response = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
 			txtLangDetectionInference.setResponse(response);
 			schema = txtLangDetectionInference;
 
 			log.info("logging TransliterationInference point response" + responseJsonStr);
-		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.NerInference")) {
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.NerInference")) {
 			io.swagger.model.NerInference nerInference = (io.swagger.model.NerInference) schema;
 			TranslationRequest request = nerInference.getRequest();
 
@@ -260,26 +388,43 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = new OkHttpClient.Builder().readTimeout(120, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			// Request httpRequest = new
+			// Request.Builder().url(callBackUrl).post(body).build();
+	//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
              
             Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
 	
 			
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
 			
 			log.info("httpResponse : "+httpResponse);
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Ner Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+			log.info("httpResponse : " + httpResponse);
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
 			String responseJsonStr = httpResponse.body().string();
-             System.out.println("responseJsonStr : " +responseJsonStr);
+			System.out.println("responseJsonStr : " + responseJsonStr);
 			NerResponse response = objectMapper.readValue(responseJsonStr, NerResponse.class);
 			nerInference.setResponse(response);
 			schema = nerInference;
-			
+
 			log.info("logging NerInference point response" + responseJsonStr);
 
 		}
@@ -289,9 +434,7 @@ public class ModelInferenceEndPointService {
 
 	}
 
-
-	public InferenceAPIEndPoint validateAsyncUrl(InferenceAPIEndPoint inferenceAPIEndPoint) throws URISyntaxException,
-			IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
+	public InferenceAPIEndPoint validateAsyncUrl(InferenceAPIEndPoint inferenceAPIEndPoint) throws Exception {
 
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
@@ -307,9 +450,9 @@ public class ModelInferenceEndPointService {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
-			
-			//Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
-			Response httpResponse = okHttpClientPostCallInference(requestJson, callBackUrl,inferenceAPIEndPoint);
+
+			// Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
+			Response httpResponse = okHttpClientPostCallInference(requestJson, callBackUrl, inferenceAPIEndPoint);
 
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
 			// false);
@@ -352,27 +495,7 @@ public class ModelInferenceEndPointService {
 		return inferenceAPIEndPoint;
 	}
 
-    public Response okHttpClientPostCall(String requestJson, String url)
-            throws IOException, KeyManagementException, NoSuchAlgorithmException {
-
-        // OkHttpClient client = new OkHttpClient();
-
-        /*
-         * OkHttpClient client = new OkHttpClient.Builder() .readTimeout(60,
-         * TimeUnit.SECONDS) .build();
-         */
-
-        RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-        Request httpRequest = new Request.Builder().url(url).post(body).build();
-
-        OkHttpClient newClient = getTrustAllCertsClient();
-        Response httpResponse = newClient.newCall(httpRequest).execute();
-
-        return httpResponse;
-    }
-    
-    
-    public Response okHttpClientPostCallInference(String requestJson, String url,InferenceAPIEndPoint inferenceAPIEndPoint)
+	public Response okHttpClientPostCall(String requestJson, String url)
 			throws IOException, KeyManagementException, NoSuchAlgorithmException {
 
 		// OkHttpClient client = new OkHttpClient();
@@ -383,19 +506,52 @@ public class ModelInferenceEndPointService {
 		 */
 
 		RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-		//Request httpRequest = new Request.Builder().url(url).post(body).build();
-        
-        Request httpRequest =checkInferenceApiKeyValue(inferenceAPIEndPoint,body);
+		Request httpRequest = new Request.Builder().url(url).post(body).build();
 
-		OkHttpClient newClient = getTrustAllCertsClient();
-		Response httpResponse = newClient.newCall(httpRequest).execute();
+
+        OkHttpClient newClient = getTrustAllCertsClient();
+        Response httpResponse =null; 
+		try {
+			httpResponse = newClient.newCall(httpRequest).execute();
+		}catch(SocketTimeoutException ste) {
+			throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+					HttpStatus.BAD_REQUEST);
+    }
 
 		return httpResponse;
 	}
+
+	public Response okHttpClientPostCallInference(String requestJson, String url,
+			InferenceAPIEndPoint inferenceAPIEndPoint) throws Exception {
+
+		// OkHttpClient client = new OkHttpClient();
+
+		/*
+		 * OkHttpClient client = new OkHttpClient.Builder() .readTimeout(60,
+		 * TimeUnit.SECONDS) .build();
+		 */
+
+		RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+		// Request httpRequest = new Request.Builder().url(url).post(body).build();
+
+		Request httpRequest = checkInferenceApiKeyValue(inferenceAPIEndPoint, body);
+
+		OkHttpClient newClient = getTrustAllCertsClient();
+		
+		  Response httpResponse =null; 
+			try {
+				httpResponse = newClient.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
+	
+		return httpResponse;
+	}
+
     
     public InferenceAPIEndPoint validateCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
-            throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException,
-            InterruptedException {
+            throws Exception {
 
         if (inferenceAPIEndPoint.isIsSyncApi()!= null && !inferenceAPIEndPoint.isIsSyncApi()) {
         	inferenceAPIEndPoint = validateAsyncUrl(inferenceAPIEndPoint);
@@ -431,12 +587,12 @@ public class ModelInferenceEndPointService {
         OkHttpClient.Builder newBuilder = new OkHttpClient.Builder();
         newBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
         newBuilder.hostnameVerifier((hostname, session) -> true);
-        return newBuilder.readTimeout(60, TimeUnit.SECONDS).build();
+        return newBuilder.readTimeout(120, TimeUnit.SECONDS).build();
     }
     
     
     
-    public static Request   checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
+    public Request checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) throws Exception {
 		   Request httpRequest =null;
 			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 			
@@ -445,26 +601,40 @@ public class ModelInferenceEndPointService {
 			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
          log.info("callBackUrl : "+callBackUrl);
 			if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
-				
-					String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
-					String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
-					log.info("inferenceApiKeyName : "+inferenceApiKeyName);
-					log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
-				 httpRequest= new Request.Builder().url(callBackUrl).addHeader(inferenceApiKeyName, inferenceApiKeyValue).post(body).build();
-				    log.info("httpRequest : "+httpRequest.toString());
-				
-				
-			       }
-			}else {
-				 httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
-				    log.info("httpRequest : "+httpRequest.toString());
+	
+				String encryptedInferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+				String encryptedInferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+				log.info("Secret Key :: " + SECRET_KEY);
 
+				log.info("encryptedInferenceApiKeyName : " + encryptedInferenceApiKeyName);
+				log.info("encryptedInferenceApiKeyValue : " + encryptedInferenceApiKeyValue);
 
-				
-			}	
-	   
-		   
-		   return httpRequest;
-	   }
+				// String originalInferenceApiKeyName =
+				// Aes256.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+
+				// String originalInferenceApiKeyValue =
+				// Aes256.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+				String originalInferenceApiKeyName = EncryptDcryptService.decrypt(encryptedInferenceApiKeyName,
+						SECRET_KEY);
+
+				String originalInferenceApiKeyValue = EncryptDcryptService.decrypt(encryptedInferenceApiKeyValue,
+						SECRET_KEY);
+
+				log.info("originalInferenceApiKeyName : " + originalInferenceApiKeyName);
+				log.info("originalInferenceApiKeyValue : " + originalInferenceApiKeyValue);
+
+				httpRequest = new Request.Builder().url(callBackUrl)
+						.addHeader(originalInferenceApiKeyName, originalInferenceApiKeyValue).post(body).build();
+				log.info("httpRequest : " + httpRequest.toString());
+
+			}
+		} else {
+			httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			log.info("httpRequest : " + httpRequest.toString());
+
+		}
+
+		return httpRequest;
+	}
 
 }

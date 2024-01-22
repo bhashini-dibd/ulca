@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, dataset_type_tts, dataset_type_transliteration, dataset_type_glossary, shared_storage_path
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, dataset_type_tts, dataset_type_transliteration, dataset_type_glossary, dataset_type_ner,shared_storage_path
 import hashlib
 import logging
 from logging.config import dictConfig
@@ -39,6 +39,15 @@ class HashDedup(BaseValidator):
             if request["datasetType"] in [dataset_type_parallel, dataset_type_transliteration, dataset_type_glossary]:
                 request['record']['sourceTextHash'] = self.create_hash(request['record']['sourceText'], request['record']['sourceLanguage'])
                 request['record']['targetTextHash'] = self.create_hash(request['record']['targetText'], request['record']['targetLanguage'])
+            
+            if request["datasetType"] in [dataset_type_ner]:
+                if 'sourceText' in request['record'].keys():
+                    request['record']['sourceTextHash'] = self.create_hash(request['record']['sourceText'], request['record']['sourceLanguage'])
+                #if 'nerData' in request['record'].keys():
+                token_tag_concat = ''
+                for dic in request['record']['nerData']:
+                    token_tag_concat = token_tag_concat +  dic['token'] + dic['tag']
+                request['record']['nerDataHash'] = self.create_hash(token_tag_concat, request['record']['sourceLanguage'])
 
             if request["datasetType"] == dataset_type_asr:
                 audio_file = request['record']['fileLocation']

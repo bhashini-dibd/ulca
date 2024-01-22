@@ -15,7 +15,19 @@ def post_error(status_code, message,error_type=None):
 
 class CustomResponse:
 
-    def __init__(self, statuscode, data, count=0):
+    def __init__(self, statuscode, data):
+        self.statuscode = statuscode
+        self.statuscode['data'] = data
+
+    def getres(self):
+        return jsonify(self.statuscode)
+
+    def getresjson(self):
+        return self.statuscode
+
+class SearchCustomResponse:
+
+    def __init__(self, statuscode, data,count):
         self.statuscode = statuscode
         self.statuscode['data'] = data
         self.statuscode['count'] = count

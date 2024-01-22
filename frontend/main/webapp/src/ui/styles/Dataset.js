@@ -479,6 +479,7 @@ const DataSet = (theme) => ({
     },
   },
   mainTitle: { marginTop: "33px", marginLeft: "38px" },
+  mainTitleBenchmark:{marginLeft: "38px", flexBasis:"85%"},
   backButton: {
     boxShadow: "none",
     padding: "0",
@@ -1083,7 +1084,45 @@ const DataSet = (theme) => ({
     borderRadius: "20%",
     padding: "15px",
     height: "fit-content",
-  }
+  },
+  downloadBenchmark:{
+  //  float: "right",
+    backgroundColor: "#FD7F23",
+    '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    },
+  },
+  myProfileActionBtn: {
+    borderRadius: "16px",
+     backgroundColor: "white",
+   // backgroundColor: "rgb(211, 47, 47)",
+    boxShadow: "none",
+     color: "rgb(19, 157, 96)",
+  //  color: "#fff",
+    padding: "10px 25px",
+    fontSize: "1rem",
+    width: "fit-content",
+    height:"36px",
+    cursor: "pointer",
+    "&:hover": {
+       backgroundColor: "white",
+     // backgroundColor: "rgb(211, 47, 47)",
+      boxShadow: "none",
+    },
+  },
+  
+  myProfileGenerateButton: {
+    borderRadius: "16px",
+    margin: "5px",
+    boxShadow: "none",
+    padding: "10px 20px",
+    fontSize: "1rem",
+    width: "fit-content",
+    height:"30px",
+    cursor: "pointer",
+    textTransform: "none",
+  },
 });
 
 export default DataSet;

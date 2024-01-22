@@ -39,10 +39,12 @@ class AggregateTabularDataModel(object):
             sub_query = f'WHERE ({datatype} = \'{dtype_parallel}\') GROUP BY {src}, {tgt},{delete}, array_to_string({domain}, \',\'), array_to_string({collection_method}, \',\'), array_to_string({submitter}, \',\'), {datatype} HAVING {total} > 1000'
             qry  = query+sub_query
             result_parsed = utils.query_runner(qry)
+            log.info(f"query parsed for parallel 40 {qry}")
 
             query = f'SELECT SUM(\"{count}\") as {total},{datatype}, {src}, {tgt},{delete}, array_to_string({domain}, \',\') as {domain}, array_to_string({collection_method}, \',\') as {collection_method}, array_to_string({submitter}, \',\') as {submitter} FROM \"{DRUID_DB_SCHEMA}\"'
             sub_query = f'WHERE ({datatype} = \'{dtype_ocr}\') GROUP BY {src}, {tgt},{delete}, array_to_string({domain}, \',\'), array_to_string({collection_method}, \',\'), array_to_string({submitter}, \',\'), {datatype}'
             qry  = query+sub_query
+            log.info(f"query parsed for ocr 40 {qry}")
             result_parsed_ocr = utils.query_runner(qry)
 
             result_parsed = result_parsed + result_parsed_ocr
@@ -50,6 +52,7 @@ class AggregateTabularDataModel(object):
             query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{datatype}, {src}, {tgt},{delete}, array_to_string({domain}, \',\') as {domain}, array_to_string({collection_method}, \',\') as {collection_method}, array_to_string({submitter}, \',\') as {submitter} FROM \"{DRUID_DB_SCHEMA}\"'
             sub_query = f'WHERE (({datatype} = \'{dtype_asr}\') OR ({datatype} = \'{dtype_tts}\')) GROUP BY {src}, {tgt},{delete}, array_to_string({domain}, \',\'), array_to_string({collection_method}, \',\'), array_to_string({submitter}, \',\'), {datatype}'
             qry  = query+sub_query
+            log.info(f"query parsed for asr/tts at 54 {qry}")
             result_parsed_duration = utils.query_runner(qry)
             for elem in result_parsed_duration:
                 elem[total] = elem[total] / 3600

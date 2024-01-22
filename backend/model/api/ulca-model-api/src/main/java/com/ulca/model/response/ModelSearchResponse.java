@@ -3,6 +3,7 @@ package com.ulca.model.response;
 import java.util.List;
 
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelExtendedDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +13,7 @@ import lombok.Data;
 public class ModelSearchResponse {
 
 	String message;
-	List<ModelExtended> data;
+	List<ModelExtendedDto> data;
 	int count;
 	
 }

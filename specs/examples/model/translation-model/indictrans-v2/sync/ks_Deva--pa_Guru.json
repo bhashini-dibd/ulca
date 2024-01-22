@@ -1,0 +1,94 @@
+{
+  "name": "AI4Bharat IndicTrans-v2: Kashmiri_Devanagari-Punjabi",
+  "version": "v1",
+  "description": "AI4Bharat's Indic-Trans-v2 is a multilingual Transformer (~1.1BM) NMT model trained on Samanantar v2 dataset which is the largest publicly available parallel corpora collection for languages of India at the time of writing (23 March 2023). We currently release two models - Indic to English and English to Indic and support all the 22 scheduled languages of India.",
+  "refUrl": "https://github.com/AI4Bharat/indicTransV2",
+  "task": {
+    "type": "translation"
+  },
+  "languages": [
+    {
+      "sourceLanguage": "ks",
+      "sourceScriptCode": "Deva",
+      "targetLanguage": "pa",
+      "targetScriptCode": "Guru"
+    }
+  ],
+  "license": "mit",
+  "domain": [
+    "general"
+  ],
+  "inferenceEndPoint": {
+    "callbackUrl": "https://api.dhruva.ai4bharat.org/services/inference/translation?serviceId=ai4bharat/indictrans-v2-all-gpu--t4",
+    "schema": {
+      "taskType": "translation",
+      "request": {
+        "input": [
+          {
+            "source": "तिमी कसरी छौ?"
+          }
+        ],
+        "config": {
+          "language": {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa"
+          }
+        }
+      },
+      "response": {
+        "output": [
+          {
+            "source": "तिमी कसरी छौ?",
+            "target": "ਤੁਸੀ ਕਿਵੇਂ ਹੋ?"
+          }
+        ]
+      }
+    }
+  },
+  "trainingDataset": {
+    "description": "Trained on Samanantar v2"
+  },
+  "submitter": {
+    "name": "AI4Bharat",
+    "aboutMe": "AI4Bhārat is a research center at IIT-Madras, working on Artificial Intelligence for languages of Bhārat.",
+    "team": [
+      {
+        "name": "Jay Gala",
+        "aboutMe": "AI Resident, AI4Bharat"
+      },
+      {
+        "name": "Pranjal Agadh Chitale",
+        "aboutMe": "MS Student, IITM"
+      },
+      {
+        "name": "Kumar Deepak",
+        "aboutMe": "Tarento, EkStep"
+      },
+      {
+        "name": "Raghavan AK",
+        "aboutMe": "IIT-Madras"
+      },
+      {
+        "name": "Sumanth Doddapaneni",
+        "aboutMe": "RBCDSAI, IITM"
+      },
+      {
+        "name": "Anoop Kunchukuttan",
+        "aboutMe": "IIT-Madras"
+      },
+      {
+        "name": "Mitesh Khapra",
+        "aboutMe": "IIT-Madras"
+      },
+      {
+        "name": "Pratyush Kumar",
+        "aboutMe": "AI4Bharat"
+      },
+      {
+        "name": "Raj Dabre",
+        "aboutMe": "NICT Japan"
+      }
+    ]
+  }
+}

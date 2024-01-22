@@ -7,6 +7,7 @@ redis_server_port = os.environ.get('REDIS_PORT', 6379)
 redis_server_pass = os.environ.get('REDIS_PASS', None)
 
 db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://10.30.11.136:27017/")
+#db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://127.0.0.1:27017/")
 db = os.environ.get('ULCA_DS_PUBLISH_DB', "ulca")
 asr_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_COL', "asr-dataset")
 tts_collection = os.environ.get('ULCA_DS_PUBLISH_TTS_COL', "tts-dataset")
@@ -16,6 +17,7 @@ parallel_collection = os.environ.get('ULCA_DS_PUBLISH_PARALLEL_COL', "parallel-d
 monolingual_collection = os.environ.get('ULCA_DS_PUBLISH_MONOLINGUAL_COL', "monolingual-dataset")
 transliteration_collection = os.environ.get('ULCA_DS_PUBLISH_TRANSLITERATIONL_COL', "transliteration-dataset")
 glossary_collection = os.environ.get('ULCA_DS_PUBLISH_GLOSSARY_COL', "glossary-dataset")
+ner_collection = os.environ.get('ULCA_DS_NER_COL', "ner-dataset")
 object_store = os.environ.get('ULCA_OBJECT_STORE', "AWS")
 
 offset = os.environ.get('ULCA_DATASET_DEFAULT_OFFSET', None)
@@ -51,7 +53,7 @@ if isinstance(zip_chunk_size, str):
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
-                      "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
+                      "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation","sourceScriptCode"]
 asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                     "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
 asr_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash", "textHash",
@@ -59,7 +61,7 @@ asr_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash", "text
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 tts_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
-                      "fileLocation", "lastModifiedOn", "createdOn"]
+                      "fileLocation", "lastModifiedOn", "createdOn","sourceScriptCode"]
 tts_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                     "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
 tts_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash", "textHash",
@@ -67,7 +69,7 @@ tts_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash", "text
 tts_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage",
-                                "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation"]
+                                "fileLocation", "lastModifiedOn", "createdOn","imageHash","imageFileName", "imageFileLocation","sourceScriptCode"]
 asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                               "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age", "languagesSpoken","exactAge"]
 asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHash",
@@ -75,7 +77,7 @@ asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "datasetType", "audioHa
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 parallel_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
-                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn","sourceScriptCode","targetScriptCode"]
 parallel_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
                          "createdOn"]
 parallel_search_ignore_keys = ["_id", "id", "tags",  "datasetType", "hashedKey", "sk",
@@ -87,21 +89,21 @@ parallel_dataset_submitter = [{"submitter": {"name": "Derived", "aboutMe": "Reco
 parallel_dataset_collection_method = [{"collectionMethod": {"collectionDescription": ["Derived"]}}]
 
 ocr_immutable_keys = ["_id", "id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash", "datasetType",
-                      "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+                      "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn","sourceScriptCode"]
 ocr_non_tag_keys = ["_id", "id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter",
                     "fileLocation", "lastModifiedOn", "createdOn"]
 ocr_search_ignore_keys = ["_id", "id", "tags", "datasetType", "imageHash",
                           "groundTruthHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 ocr_updatable_keys = ["version"]
 
-mono_immutable_keys = ["_id", "id", "text", "textHash", "datasetType", "sourceLanguage", "lastModifiedOn", "createdOn"]
+mono_immutable_keys = ["_id", "id", "text", "textHash", "datasetType", "sourceLanguage", "lastModifiedOn", "createdOn","sourceScriptCode"]
 mono_non_tag_keys = ["_id", "id", "text", "submitter", "lastModifiedOn", "createdOn"]
 mono_search_ignore_keys = ["_id", "id", "tags", "datasetType", "textHash",
                            "lastModifiedOn", "createdOn", "version", "datasetId"]
 mono_updatable_keys = ["version"]
 
 transliteration_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
-                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn","sourceScriptCode","targetScriptCode"]
 transliteration_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
                          "createdOn"]
 transliteration_search_ignore_keys = ["_id", "id", "tags", "datasetType", "hashedKey", "sk",
@@ -110,13 +112,22 @@ transliteration_search_ignore_keys = ["_id", "id", "tags", "datasetType", "hashe
 transliteration_updatable_keys = ["alignmentScore", "version"]
 
 glossary_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
-                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn","sourceScriptCode","targetScriptCode"]
 glossary_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
                          "createdOn"]
 glossary_search_ignore_keys = ["_id", "id", "tags", "datasetType", "hashedKey", "sk",
                                "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn", "version",
                                "datasetId", "sourceLanguage", "targetLanguage"]
 glossary_updatable_keys = ["alignmentScore", "version"]
+
+ner_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn","sourceScriptCode","targetScriptCode"]
+ner_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
+                         "createdOn"]
+ner_search_ignore_keys = ["_id", "id", "tags", "datasetType", "hashedKey", "sk",
+                               "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn", "version",
+                               "datasetId", "sourceLanguage", "targetLanguage"]
+ner_updatable_keys = ["alignmentScore", "version"]
 
 govt_data_whitelist_enabled = os.environ.get('ULCA_PUBLISH_GOVT_DATA_WHITELIST_ENABLED', True)
 if isinstance(govt_data_whitelist_enabled, str):
@@ -162,12 +173,14 @@ error_event_input_topic = os.environ.get('KAFKA_ULCA_DS_ERROR_IP_TOPIC', 'ulca-d
 metric_event_input_topic = os.environ.get('KAFKA_ULCA_DS_BIEVENT_TOPIC', 'org-ulca-bievent-dataset-v3')
 notifier_input_topic = os.environ.get('KAFKA_ULCA_NOTIFIER_CONSUMER_IP_TOPIC', 'ulca-notifier-ip-v0')
 ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 12)
+#ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 3)
 if isinstance(ulca_dataset_topic_partitions, str):
     ulca_dataset_topic_partitions = eval(ulca_dataset_topic_partitions)
 
 ocr_prefix = os.environ.get('ULCA_OS_OCR_PREFIX', 'ocr')
 asr_prefix = os.environ.get('ULCA_OS_ASR_PREFIX', 'asr')
 tts_prefix = os.environ.get('ULCA_OS_TTS_PREFIX', 'tts')
+ner_prefix = os.environ.get('ULCA_OS_NER_PREFIX', 'ner')
 asr_unlabeled_prefix = os.environ.get('ULCA_OS_ASR_UNLABELED_PREFIX', 'asr-unlabeled')
 dataset_prefix = os.environ.get('ULCA_OS_DATASET_PREFIX', 'datasets')
 error_prefix = os.environ.get('ULCA_OS_ERROR_PREFIX', 'errors')
@@ -180,6 +193,7 @@ dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
 dataset_type_transliteration = os.environ.get('DS_TYPE_TRANSLITERATION', 'transliteration-corpus')
 dataset_type_glossary = os.environ.get('DS_TYPE_GLOSSARY', 'glossary-corpus')
+dataset_type_ner = os.environ.get('DS_TYPE_NER', 'ner-corpus')
 
 user_mode_pseudo = os.environ.get('USER_MODE_PSEUDO', 'precheck')
 user_mode_real = os.environ.get('USER_MODE_REAL', 'real')

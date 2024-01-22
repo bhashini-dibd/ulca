@@ -29,7 +29,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * "TxtLangDetectionBenchmarkDatasetParamsSchema"),
  * 
  * @JsonSubTypes.Type(value = NerBenchmarkDatasetParamsSchema.class, name =
- * "NerBenchmarkDatasetParamsSchema") })
+ * "NerBenchmarkDatasetParamsSchema"),
+ * 
+ * @JsonSubTypes.Type(value =
+ * AudioLangDetectionBenchmarkDatasetParamsSchema.class, name =
+ * "AudioLangDetectionBenchmarkDatasetParamsSchema") })
  */
 public interface OneOfDatasetParamsSchemaParams {
 

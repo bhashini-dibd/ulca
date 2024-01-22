@@ -1,5 +1,7 @@
 package com.ulca.model.response;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -27,8 +29,7 @@ public class ModelFeedbackSubmitResponse {
 	@Setter
 	private class Data{  
 		 private  String feedbackId;
-		 
-		public Data(String feedbackId) {
+		 public Data(String feedbackId) {
 			super();
 			this.feedbackId = feedbackId;
 			

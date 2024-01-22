@@ -33,6 +33,14 @@
       "description": "API to fetch user searches by user id"
     },
     {
+      "id": "f47a4ebf-f2d3-4496-beab-062ef2a318d2",
+      "uri": "/ulca/apis/v0/model/getModelsPipeline",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch tasks pipeline"
+    },
+    {
       "id": "a854ad66-00f3-4d05-983c-2bcdbab6562c",
       "uri": "/ulca/apis/v0/dataset/getByServiceRequestNumber",
       "module": "ULCA-API",
@@ -71,6 +79,30 @@
       "active": true,
       "whiteList": true,
       "description": "API to register"
+    },
+    {
+      "id": "1f5bdbec-c3fb-4596-a87d-b2169ccd7a30",
+      "uri": "/ulca/user-mgmt/v1/users/generateApiKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate user api key"
+    },
+    {
+      "id": "43df383c-7857-4302-b64a-48066879739e",
+      "uri": "/ulca/user-mgmt/v1/users/revokeApiKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to revoke user api key"
+    },
+    {
+      "id": "77c40961-eb6f-4b60-9aaf-f5da50b9a718",
+      "uri": "/ulca/user-mgmt/v1/users/getApiKeys",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get all user api keys"
     },
     {
       "id": "6eae39c6-d705-4ee2-9ec6-c2eb445e9f02",
@@ -319,6 +351,54 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch pre calculated ETAs"
+    },
+    {
+      "id": "6703d5c9-0d9b-4f32-9b01-2c07d405ab6a",
+      "uri": "/ulca/user-mgmt/v1/users/removeServiceProviderKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to remove service provider api keys"
+    },
+    {
+      "id": "ac88e949-2616-4baa-aae5-c140369d894d",
+      "uri": "/ulca/user-mgmt/v1/users/generateServiceProviderKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate service provider api keys"
+    },
+    {
+      "id": "3c7e319d-7c69-43f4-b942-e84729c5aae3",
+      "uri": "/ulca/apis/v0/model/explorePipelines",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "Open API to retrieve pipeline details"
+    },
+    {
+      "id": "5ed50c75-0606-4f0f-8ab1-3f3df6350a6a",
+      "uri": "/ulca/user-mgmt/v1/users/dataTrackingToggle",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate service provider api keys"
+    },    
+    {
+      "id": "1d42e5b8-e29d-4314-99b5-64b2ae5a2591",
+      "uri": "/ulca/mdms/v0/pipelineQuestions",
+      "module": "MDMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch feedback pipeline questions"
+    },
+    {
+      "id": "d924225e-7a0e-4fb6-80dd-491f1355f33d",
+      "uri": "/ulca/user-mgmt/v1/users/getApiKeysForProfile",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get api keys of users with non existing service provider names"
     }
   ]
 }

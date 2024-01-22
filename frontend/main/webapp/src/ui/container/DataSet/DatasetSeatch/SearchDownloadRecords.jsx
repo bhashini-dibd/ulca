@@ -59,6 +59,7 @@ const SearchAndDownloadRecords = (props) => {
   const Language = filters.filter((elem) => elem.filterType === "language");
   const basicFilter = filters.filter((elem) => elem.filterType === "basic");
   const advFilter = filters.filter((elem) => elem.filterType === "advance");
+  const datasetDropDown = useSelector(state=>state.mySearchOptions.result);
 
   const dispatch = useDispatch();
   const param = useParams();
@@ -512,14 +513,14 @@ const SearchAndDownloadRecords = (props) => {
           onClose={(e) => handleClose(e)}
           className={classes.styledMenu1}
         >
-          {DatasetType.map((menu) => {
+          {datasetDropDown.map((menu) => {
             return (
               <MenuItem
-                value={menu.value}
+                value={menu.code}
                 name={menu.label}
                 className={classes.styledMenu}
                 onClick={() => {
-                  handleChange(menu.label, menu.value);
+                  handleChange(menu.label, menu.code);
                   handleClose();
                 }}
               >

@@ -14,6 +14,15 @@ class Status(enum.Enum):
     EMPTY_USR_SEARCH        =   {"message" : "Search result is empty"}
     SUCCESS_USR_SEARCH      =   {"message" : "Search result is ready"}
     SUCCESS_USR_UPDATION    =   {"message" : "User details updated successfully"}
+    SUCCESS_REVOKE_APIKEY   =   {"message" : "UserApiKey found and revoked successfully"}
+    SUCCESS_GET_APIKEY      =   {"message" : "UserApiKey found successfully"}
+    SUCCESS_GENERATE_APIKEY =   {"message" : "UserApiKey generated successfully"}
+    SUCCESS_FOUND_APIKEY    =   {"message" : "ApiKey found successfully"}
+    REMOVE_SERVICE_PROVIDER =   {"message" : "Service provider Details successfully removed."}
+    TOGGLED_DATA_SUCCESS    =   {"message" : "DataTracking toggled successfully."}
+    TOGGLED_DATA_EXISTS_SUCCESS = {"message" : "DataTracking is updated accordingly."}
+
+
 
 
    

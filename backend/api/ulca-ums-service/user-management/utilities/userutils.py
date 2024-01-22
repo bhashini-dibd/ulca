@@ -1,4 +1,5 @@
 import uuid
+from uuid import uuid4
 import time
 import re
 import bcrypt
@@ -16,9 +17,15 @@ import requests
 from flask_mail import Mail, Message
 from app import mail
 from flask import render_template
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION
-
+from bson import json_util
+from bson.objectid import ObjectId
+from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION,SPECIAL_CHARS
+from Crypto.Cipher import AES
+import base64
+import sys
+import os
 import logging
+
 
 log = logging.getLogger('file')
 
@@ -37,6 +44,10 @@ apikey_expiry       =   config.USER_API_KEY_EXPIRY
 role_codes          =   []
 role_details        =   []
 
+class OutboxEmptyException(Exception):
+    "Unable to send verification mail. Please try again later"
+    pass
+
 class UserUtils:
 
     @staticmethod
@@ -45,6 +56,28 @@ class UserUtils:
 
         return(uuid.uuid4().hex)
 
+
+    @staticmethod
+    def generate_user_api_key():
+        eventId = datetime.now().strftime('%S') + str(uuid4())
+        return eventId
+
+#take timestamp epoch and add/generate uid based on this time. 38 character
+#by default apiKey will be 1. Maximum apiKey should be 5. if list has only 1 value, we should be able to call generateApiKey. If user has 5 apiKey already existed=>reached max apiKey
+
+    @staticmethod
+    def check_appName(string):
+        FLAG = None
+        FLAG_ = None
+        for strr in string:
+            if strr.isdigit() or strr in SPECIAL_CHARS or strr.isupper():
+                FLAG = True
+            else:
+                FLAG_ = False
+        if FLAG:
+            return True
+        elif not FLAG_:
+            return False
 
     @staticmethod
     def validate_email_format(email):
@@ -113,7 +146,11 @@ class UserUtils:
             #connecting to mongo instance/collection
             collections = db.get_db()[USR_MONGO_COLLECTION]  
             #searching username with verification status = True 
-            user_record = collections.find({"email": email}) 
+            #Ignore case sensitivity.
+            regex_case_ignored = re.compile('^'+email+'$', re.IGNORECASE)
+            user_record = collections.find({"email": {"$regex":regex_case_ignored}}) 
+            for usr in user_record:
+                log.info(f"user record : {user_record}")
             if user_record.count() != 0:
                 for usr in user_record:
                     if usr["isVerified"] == True:
@@ -551,8 +588,12 @@ class UserUtils:
             try:
                 msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
                 msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
-                mail.send(msg)
-                log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
+                with mail.record_messages() as outbox:
+                    mail.send(msg)
+                    log.info("Email outbox size {outboxLength} and subject {emailSubject}".format(outboxLength=len(outbox),emailSubject=outbox[0].subject))
+                    if len(outbox) < 1:
+                        raise OutboxEmptyException
+                    log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
             except Exception as e:
                 log.exception("Exception while generating email notification | {}".format(str(e)))
                 return post_error("Exception while generating email notification","Exception occurred:{}".format(str(e)),None)
@@ -578,8 +619,184 @@ class UserUtils:
             return post_error("Database exception","Exception occurred:{}".format(str(e)),None)
 
 
+    @staticmethod
+    def get_user_api_keys(userId,appName):
+        try:
+            coll = db.get_db()[USR_MONGO_COLLECTION]
+            response = coll.find_one({"userID": userId})
+            dupStatus = True
+            dupAppName = []
+            if appName == None:
+                if isinstance(response,dict):
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        return response['apiKeyDetails'] #Return the list of user api keys
+                    else:
+                        return [] #If user doesn't have any api keys
+                else:
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None)
+            if appName != None:
+                if isinstance(response,dict):
+                    if not 'apiKeyDetails' in response.keys():
+                        return [],False
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        for appN in response["apiKeyDetails"]:
+                            dupAppName.append(appN["appName"])
+                        if appName in dupAppName:
+                            return post_error("Not Valid","This appName is already in use, please try by changing appName",None) , dupStatus
+                        elif appName not in dupAppName:
+                            dupStatus = False
+                            return response['apiKeyDetails'], dupStatus#,dupStatus #Return the list of user api keys
+                    else:
+                        return [], dupStatus #If user doesn't have any api keys
+                else:
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None), dupStatus
+        except Exception as e:
+            log.exception("Not a valid userId")
+            return post_error("error processing ULCA userId:{}".format(str(e)),None)
+
+    @staticmethod
+    def insert_generated_user_api_key(user,appName,apikey,serviceProviderKey):
+        collection = db.get_db()[USR_MONGO_COLLECTION]
+        # if len(serviceProviderKey) == 0:
+        #     spk = []
+        # elif len(serviceProviderKey) >1:
+        #     spk = serviceProviderKey
+        details = collection.update({"userID":user}, {"$push": {"apiKeyDetails":{"appName":appName,"ulcaApiKey":apikey,"createdTimestamp":str(int(time.time())),"serviceProviderKeys":serviceProviderKey}}})
+        return details
 
 
+    @staticmethod
+    def revoke_userApiKey(userid, userapikey):
+        collection = db.get_db()[USR_MONGO_COLLECTION]
+        log.info(f"userapikey {userapikey}")
+        revoke = collection.update({"userID":userid}, {"$pull":{"apiKeyDetails": {"ulcaApiKey" : userapikey.replace(" ","")}}})
+        # log.info(revoke)
+        return json.loads(json_util.dumps(revoke))
+
+
+    @staticmethod
+    def get_userDoc(userID):
+        collection = db.get_db()[USR_MONGO_COLLECTION]
+        userdoc = collection.find_one({"userID" : userID})#, "apiKeyDetails.serviceProviderKeys.serviceProviderName" : serviceName })
+        #log.info(f"userdoc  231231 {userdoc}")
+        if userdoc:
+            if "apiKeyDetails" in userdoc.keys():
+                apiKeyDeets = userdoc["apiKeyDetails"]
+            return apiKeyDeets , userdoc["email"]
+        elif not userdoc:
+            return None, None
+
+    @staticmethod
+    def get_pipelineId(pipelineID):
+        collections = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipeL = collections.find_one({"_id" : ObjectId(pipelineID)})
+        if pipeL:
+            return pipeL 
+        elif not pipeL:
+            return None
+    #Get pipelineId based on serviceProviderName
+    @staticmethod
+    def get_pipelineIdbyServiceProviderName(serviceProviderName):
+        collections = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipeL = collections.find_one({"serviceProvider.name" : serviceProviderName})
+        if pipeL:
+            return pipeL 
+        elif not pipeL:
+            return None
+
+    @staticmethod
+    def decryptAes(secreKey,source):
+        """
+        Input encrypted bytes, return decrypted bytes, using iv and key
+        """
+        decryptedMasterKeysList = []
+        decryptedMasterKeysDict = {}
+        #log.info(source)
+        if source and isinstance(source,list):
+            for decrp in range(2):
                 
+                byte_array = base64.b64decode(source[decrp])
+                iv = byte_array[0:16] # extract the 16-byte initialization vector
+                messagebytes = byte_array[16:] # encrypted message is the bit after the iv
+                cipher = AES.new(secreKey.encode("UTF-8"), AES.MODE_CBC, iv )
+                decrypted_padded = cipher.decrypt(messagebytes)
+                last_byte = decrypted_padded[-1]
+                decrypted = decrypted_padded[0:-last_byte]
+                decryptedMasterKeysList.append(decrypted.decode("UTF-8"))
 
-        
+            decryptedMasterKeysDict[decryptedMasterKeysList[0]] = decryptedMasterKeysList[1]
+        return decryptedMasterKeysDict
+
+
+    @staticmethod
+    def get_service_provider_keys(email, appName,EndPointurl,decryptedValues, dataTracking):
+        body = {"emailId" : email.lower(), "appName" : appName, "dataTracking": dataTracking}
+        log.info("Get Service Provider Key Api Call URL"+str(EndPointurl))
+        log.info("Get Service Provider Key Api Call Request"+str(body))
+        result = requests.post(url=EndPointurl, json=body, headers=decryptedValues)
+        log.info("Get Service Provider Key Api Call Response"+str(result.json()))
+        #log.info(result.json())
+        return result.json()
+
+    @staticmethod
+    def pushServiceProvider(generatedApiKeys,ulcaApiKey,userServiceProviderName, dataTracking):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        updateDoc = collections.update({"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$push":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":userServiceProviderName,"dataTracking":dataTracking,"inferenceApiKey":generatedApiKeys}}})
+        servProvKe = {"serviceProviderKeys":[{"serviceProviderName":userServiceProviderName,"dataTracking": dataTracking,"inferenceApiKey":generatedApiKeys}]}
+        return json.loads(json_util.dumps(updateDoc)), servProvKe
+
+    @staticmethod
+    def removeServiceProviders(userID,ulcaApiKey,serviceProviderName):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        deleteDoc = collections.update({"userID":userID,"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$pull":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":serviceProviderName}}})
+        return json.loads(json_util.dumps(deleteDoc))
+
+    @staticmethod
+    def updateDataTrackingValuePull(userID, ulcaApiKey, serviceProviderName, dataTrackingVal):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        query_to_update = {"userID":userID,"apiKeyDetails.ulcaApiKey":ulcaApiKey,"apiKeyDetails.serviceProviderKeys.serviceProviderName":serviceProviderName}
+        update = {"$set":{"apiKeyDetails.$[].serviceProviderKeys.$[elem].dataTracking": dataTrackingVal}}
+        array_filters = [{"elem.serviceProviderName": serviceProviderName}]
+        collectUpdate = collections.update_one(query_to_update, update, array_filters= array_filters)
+        return collectUpdate.matched_count, collectUpdate.modified_count
+
+
+    @staticmethod
+    def getUserEmail(userID, ulcaAK):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        email = collections.find_one({"userID":userID})
+        if email:
+            if len(email['apiKeyDetails']) >= 1:
+                for appName in email['apiKeyDetails']:
+                    if appName['ulcaApiKey'] == ulcaAK:
+                        ulcaAppN = appName['appName']
+                        return email['email'], ulcaAppN
+        elif not email:
+            return None, None
+
+    @staticmethod
+    def getPipelinefromSrvcPN(spn):
+        collection = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipeline = collection.find_one({"serviceProvider.name":spn})
+        return pipeline
+
+
+    @staticmethod
+    def getDataTrackingKey(userID, ulcaApiKey):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        record = collections.find({"userID":userID, "apiKeyDetails.ulcaApiKey": ulcaApiKey})
+        for rec in record:
+            log.info(f"record output of dataTracking {rec}")
+        return rec
+    
+    @staticmethod
+    def listOfServiceProviders():
+        collection = db.get_process_db()[USR_MONGO_PROCESS_COLLECTION]
+        pipelinie_Docs = list(collection.find({"status":"published"}))        
+        if not pipelinie_Docs:
+            return None
+        if isinstance(pipelinie_Docs, list):
+            return pipelinie_Docs[0]['serviceProvider']['name']
+

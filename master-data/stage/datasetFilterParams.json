@@ -60,26 +60,36 @@
         "jsonPath": "$.ttsCorpusFilters"
       }
     },
-      {
-        "code": "glossary-corpus",
-        "label": "Glossary Dataset",
-        "active": true,
-        "datasetType": "glossary-corpus",
-        "values": {
-          "master": "/glossaryCorpusFilters.json",
-          "jsonPath": "$.glossaryCorpusFilters"
-        }
+    {
+      "code": "transliteration-corpus",
+      "label": "Transliteration Dataset",
+      "active": true,
+      "datasetType": "transliteration-corpus",
+      "values": {
+        "master": "/transliterationCorpusFilters.json",
+        "jsonPath": "$.transliterationCorpusFilters"
+      }
     },
     {
-      "code": "pos-corpus",
-      "label": "POS Dataset",
+      "code": "glossary-corpus",
+      "label": "Glossary Dataset",
       "active": true,
-      "datasetType": "pos-corpus",
+      "datasetType": "glossary-corpus",
       "values": {
-        "master": "/posCorpusFilters.json",
-        "jsonPath": "$.posCorpusFilters"
+        "master": "/glossaryCorpusFilters.json",
+        "jsonPath": "$.glossaryCorpusFilters"
       }
-  }
+    },
+    {
+      "code": "ner-corpus",
+      "label": "NER Dataset",
+      "active": true,
+      "datasetType": "ner-corpus",
+      "values": {
+        "master": "/nerCorpusFilters.json",
+        "jsonPath": "$.nerCorpusFilters"
+      }
+    }
   ],
   "relatedMaster": true
 }

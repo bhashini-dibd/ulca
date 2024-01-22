@@ -22,6 +22,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 @Slf4j
 @Component
@@ -62,7 +64,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			try {
 
 				Map<String, String> val = entry.getValue();
-
+				
 				String mode = val.containsKey("mode") ? val.get("mode") + "" : null;
 				if (mode.equalsIgnoreCase("real")) {
 					realIngestUpdate(val);
@@ -72,7 +74,11 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 			} catch (Exception e) {
 				log.info("Exception while processing the fetched Redis map data :: " + entry.toString());
-				e.printStackTrace();
+				log.info("Exception Message for the above Redis map data : "+e.getMessage());
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				log.info(sw.toString());
 			}
 
 		}
@@ -253,7 +259,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		details.put("processedCount", processedCount);
 		details.put("timeStamp", new Date().toString());
 
-		if (ingestComplete == 1 && (ingestSuccess + ingestError == count)) {
+		if (ingestComplete == 1 && (ingestSuccess + ingestError >= count)) {
 			// update the end time for ingest
 			v1 = true;
 			if(ingestSuccess==0) {
@@ -288,8 +294,18 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			// update the end time for validate
 			v2 = true;
 
-			processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+			//processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
+					//com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+			
+			if(validateSuccess==0) {
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
+						com.ulca.dataset.model.TaskTracker.StatusEnum.failed, details.toString());
+				}else {
+					
+					processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
+							com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+				}
+			
 		} else {
 			if (validateSuccess > 0 || validateError > 0)
 				processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.validate,
@@ -317,8 +333,19 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			// update the end time for publish
 			v3 = true;
 
-			processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+			//processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
+				//	com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+			
+			if(publishSuccess==0) {
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
+						com.ulca.dataset.model.TaskTracker.StatusEnum.failed, details.toString());
+				}else {
+					
+					processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
+							com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+				}
+			
+			
 		} else {
 			if (publishSuccess > 0 || publishError > 0)
 				processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.publish,
@@ -333,7 +360,15 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			
 			if(v1 && ingestSuccess==0) {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
-			}else {
+			}else if(v2 && validateSuccess==0) {
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
+
+			}
+			else if(v3 && publishSuccess==0) {
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.failed);
+
+			}
+			else {
 				
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
 			}

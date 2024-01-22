@@ -404,6 +404,16 @@ h6, .h6 {
   padding: 11px 30px !important;
 }
 
+.footer-anchor-redirect-links{
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.footer-anchor-redirect-links:hover{
+  color: #ff7f11;
+  text-decoration: none;
+}
+
 
 
 

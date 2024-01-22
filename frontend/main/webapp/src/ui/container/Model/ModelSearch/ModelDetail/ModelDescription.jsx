@@ -24,7 +24,7 @@ const ModelDescription = (props) => {
         } else {
             let finalStr = ""
             if(para[0] !== undefined){
-                finalStr = para.length > 35 ? para.substring(0,35)+"..." : para;
+                finalStr = para.length > 30 ? para.substring(0,30)+"..." : para;
                 return capitalizeText ? finalStr.replace(finalStr[0], finalStr[0].toUpperCase()) : finalStr;
             } else{
                 return ""
@@ -52,7 +52,7 @@ const ModelDescription = (props) => {
                     <Tooltip 
                         placement='top-end'
                         arrow
-                        title={typeof(getPara(para, false)) == "string" && getPara(para, false).length > 35 ? para : ""}
+                        title={typeof(getPara(para, false)) == "string" && getPara(para, false).length > 30 ? para : ""}
                     >
                         <CardContent>
                             <Typography component="div" variant="subtitle2" style={{ marginBottom: '0px', paddingLeft: "0px" }} className={classes.cardTitle}>

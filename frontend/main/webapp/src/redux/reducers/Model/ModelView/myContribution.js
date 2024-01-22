@@ -97,9 +97,9 @@ const getClearFilter = (data) => {
 };
 
 const convertDate = (data) => {
-  return data.map((element) => {
-    element.createdOn = element.createdOn
-      ? dateConversion(element.createdOn)
+  return data?.map((element) => {
+    element.createdOn = element?.createdOn
+      ? dateConversion(element?.createdOn)
       : "";
     return element;
   });
@@ -113,54 +113,29 @@ const getContributionList = (state, payload) => {
   let license = [];
   let filter = { status: [], task: [], domain: [], license: [] };
   let refreshStatus = false;
-  payload.data.forEach((element) => {
-    let sLanguage =
-      element.languages &&
-      element.languages.length > 0 &&
-      element.languages[0].sourceLanguage &&
-      getLanguageName(element.languages[0].sourceLanguage);
-    let tLanguage =
-      element.languages &&
-      element.languages.length > 0 &&
-      element.languages[0].targetLanguage &&
-      getLanguageName(element.languages[0].targetLanguage);
-    let lang = tLanguage ? sLanguage + " - " + tLanguage : sLanguage;
-    responseData.push({
-      benchmarkPerformance: convertDate(element.benchmarkPerformance),
+  payload?.data?.forEach((element) => {
+        responseData.push({
+      benchmarkPerformance: convertDate(element?.benchmarkPerformance),
       version: element.version ? element.version : "v1.0",
-      submitRefNumber: element.modelId,
-      modelName: element.name,
-      description: element.description,
-      submittedOn: moment(element.submittedOn).format("DD/MM/YYYY"),
+      submitRefNumber: element?.modelId,
+      modelName: element?.name,
+      submittedOn: moment(element?.submittedOn).format("DD/MM/YYYY"),
       task:
-        element.task.type !== "translation"
-          ? element.task.type.toUpperCase()
-          : element.task.type,
-      domain: getDomainDetails(element.domain),
-      status: element.status,
-      endPoint: element.inferenceEndPoint,
-      language: lang,
-      source:
-        element.languages &&
-        element.languages.length > 0 &&
-        element.languages[0].sourceLanguage,
-      target:
-        element.languages &&
-        element.languages.length > 0 &&
-        element.languages[0].targetLanguage,
-      license: element.license.toUpperCase(),
-      submitter: element.submitter.name,
-      trainingDataset: element.trainingDataset,
+        element.task?.type !== "translation"
+          ? element.task?.type.toUpperCase()
+          : element.task?.type,
+      domain: getDomainDetails(element?.domain),
+      status: element?.status, 
+      license: element?.license?.toUpperCase(),
       action: "View Result",
       color:
-        element.status === "Completed"
+        element?.status === "Completed"
           ? "#139D60"
-          : element.status === "In-Progress"
+          : element?.status === "In-Progress"
           ? "#2C2799"
-          : element.status === "Failed"
+          : element?.status === "Failed"
           ? "#F54336"
           : "green",
-      unpublishReason: element.unpublishReason,
     });
     !statusFilter.includes(element.status) &&
       element.status &&

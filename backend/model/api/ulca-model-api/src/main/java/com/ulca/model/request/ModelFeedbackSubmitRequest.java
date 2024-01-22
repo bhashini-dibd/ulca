@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,8 +19,8 @@ public class ModelFeedbackSubmitRequest {
 	String taskType;
 	String modelId;
 	String userId;
-	String input; //data or url
-	String output; //data or url
+	MultipartFile multipartInput; //data or url
+	MultipartFile multipartOutput; //data or url
 	Object feedback;
 	List<ModelFeedbackSubmitRequest> detailedFeedback;
 	

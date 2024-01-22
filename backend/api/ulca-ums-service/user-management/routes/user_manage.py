@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api
-from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health
+from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey, GetApiKeysForProfile, ToggleDataTracking
 
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
@@ -31,4 +31,32 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     Health, "/health"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    GetApiKey, "/v1/users/getApiKeys"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    GetApiKeysForProfile, "/v1/users/getApiKeysForProfile"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    RevokeApiKey, "/v1/users/revokeApiKey"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    GenerateApiKey, "/v1/users/generateApiKey"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    ToggleDataTracking, "/v1/users/dataTrackingToggle"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    GenerateServiceProviderKey, "/v1/users/generateServiceProviderKey"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    RemoveServiceProviderKey, "/v1/users/removeServiceProviderKey"
 )

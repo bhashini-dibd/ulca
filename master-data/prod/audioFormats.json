@@ -24,6 +24,16 @@
         "code": "sph",
         "label": "SPH",
         "active": true
+      },
+      {
+        "code": "m4a",
+        "label": "M4A",
+        "active": true
+      },
+      {
+        "code": "webm",
+        "label": "WEBM",
+        "active": true
       }
     ]
   }

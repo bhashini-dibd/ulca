@@ -4,8 +4,37 @@ DEBUG = False
 API_URL_PREFIX = "/ulca/apis/"
 HOST = '0.0.0.0'
 PORT = 5001
-
+DRUID_DB_SCHEMA         =   os.environ.get('MATRIC_DRUID_DB_SCHEMA', 'dataset-training-v9')
+#DRUID_DB_SCHEMA     = 'dataset-training-v9'
+TIME_CONVERSION_VAL     =   os.environ.get('ASR_DATA_CONERSION_VAL',3600)
+if isinstance(TIME_CONVERSION_VAL, str):
+    TIME_CONVERSION_VAL  =  eval(TIME_CONVERSION_VAL)
+DRUID_CONNECTION_URL      = os.environ.get('DRUID_CLUSTER_URL', 'druid://localhost:8082/druid/v2/sql/')
 ENABLE_CORS = False
+filename = r'utilities/count_mail.html'
+sts_html = r'utilities/template.html'
+asr_audioContent = r'utilities/en_audio.txt'
+
+
+SEARCHURL = "https://dev-auth.ulcacontrib.org/ulca/data-metric/v0/store/search"
+
+smtp_server = "smtp.gmail.com"
+sender_email = 'ulca.users@gmail.com'
+password = 'balpgskmqsidgrwx'
+dscountsubject = "Hi, Dataset counts are as follows : "
+receiver_email = "ulca-dev@tarento.com"
+sts_subject = "Status of STS APIs : SUCCESS"
+
+
+
+
+#sts 
+sts_headers = {"Content-Type": "application/json"}
+sts_url = "https://dev-auth.ulcacontrib.org/ulca/apis/v0/model/getModelHealthStatus"
+sts_userid = "6a73afa4fc774dcdb28d5fff944511f6"
+asr_compute_url = 'https://dev-auth.ulcacontrib.org/ulca/apis/asr/v1/model/compute'
+translation_compute_url = 'https://dev-auth.ulcacontrib.org/ulca/apis/v0/model/compute'
+
 
 #gmail server configs
 MAIL_SETTINGS               =   {
@@ -13,14 +42,18 @@ MAIL_SETTINGS               =   {
                                 "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT','465')),
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
-                                "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxxx')
+                                #"MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','notifer.tester@gmail.com'),
+                                "MAIL_USERNAME" : 'notifier.tester12@gmail.com',
+                                "MAIL_PASSWORD" : 'qpmpdjdidbgecewa'
+                                #"MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','Welcome@123')
                                 }
-MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
+#MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
+MAIL_SENDER                 = 'ulca@tarento.com'
 
-receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"siddanth.shaiva@tarento.com")
-ulca_email_group            =   os.environ.get('ULCA_EMAIL_GROUP','siddanth.shaiva@tarento.com')
-
+#receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"siddanth.shaiva@tarento.com")
+receiver_email_ids          =   'siddanth.shaiva@tarento.com'
+#ulca_email_group            =   os.environ.get('ULCA_EMAIL_GROUP','siddanth.shaiva@tarento.com')
+ulca_email_group            =   'siddanth.shaiva@tarento.com'
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
 process_connection_url      =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb://localhost:27017')
 data_db_schema              =   os.environ.get('DATA_PARALLEL', 'ulca')
@@ -35,7 +68,7 @@ process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracke
 process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes')
 tasks_col                   =   os.environ.get('TASKS_COL','ulca-pt-tasks')
 
-
+metric_cron_interval_sec     =  43200
 filter_cron_interval_sec     =   os.environ.get('FILTER_CRON_INTERVAL_SEC',300)#14400
 if isinstance(filter_cron_interval_sec, str):
     filter_cron_interval_sec =  eval(filter_cron_interval_sec)
@@ -54,8 +87,8 @@ file_store_host             =   os.environ.get('ULCA_FILE_STORE_SERVER_URL', 'ht
 file_store_upload_endpoint  =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/v0/file/upload')
 data_metric_host            =   os.environ.get('ULCA_DATA_METRIC_SERVER_URL', 'http://data-metric:5001')#
 data_metric_endpoint        =   os.environ.get('ULCA_DATA_METRIC_SEARCH', '/ulca/data-metric/v0/store/search')
-pending_jobs_duration       =   os.environ.get('PENDING_JOBS_DURATION_HRS',72)
-queued_pending_duration     =   os.environ.get('QUEUED_JOBS_DURATION_HRS',120)
+pending_jobs_duration       =   os.environ.get('PENDING_JOBS_DURATION_HRS',690) #30 Days
+queued_pending_duration     =   os.environ.get('QUEUED_JOBS_DURATION_HRS',810) #35 Days
 
 if isinstance(pending_jobs_duration, str):
     pending_jobs_duration =  eval(pending_jobs_duration)

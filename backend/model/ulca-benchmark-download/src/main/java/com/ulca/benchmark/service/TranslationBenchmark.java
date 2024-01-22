@@ -25,17 +25,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mervick.aes_everywhere.Aes256;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.model.ModelInferenceResponse;
+import com.ulca.benchmark.util.EncryptDcryptService;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.Benchmark;
 import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.model.OneOfAsyncApiDetailsAsyncApiSchema;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.PollingRequest;
@@ -44,6 +47,8 @@ import io.swagger.model.Sentences;
 import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 @Slf4j
@@ -69,6 +74,9 @@ public class TranslationBenchmark {
 
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
+	
+	@Value("${aes.model.apikey.secretkey}")
+	private String SECRET_KEY;
 
 	public TranslationResponse computeSync(InferenceAPIEndPoint inferenceAPIEndPoint,
 										   List<String> sourceSentences)
@@ -91,7 +99,7 @@ public class TranslationBenchmark {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
-
+             log.info("REQUEST JSON :: "+requestJson.toString());
 			//OkHttpClient client = new OkHttpClient();
 
 //			OkHttpClient client = new OkHttpClient.Builder()
@@ -106,8 +114,8 @@ public class TranslationBenchmark {
 //
 //			Response httpResponse = client.newCall(httpRequest).execute();
 //			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,callBackUrl);
-
+			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,inferenceAPIEndPoint);
+            log.info("RESPONSE JSON :: "+responseJsonStr);
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 			return translation;
 		}
@@ -143,10 +151,10 @@ public class TranslationBenchmark {
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
-
+            log.info("REQUEST JSON :: "+requestJson);
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,callBackUrl);
-
+			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,inferenceAPIEndPoint);
+            log.info("RESPONSE JSON :: "+responseJsonStr);
 			PollingRequest pollingRequest = objectMapper.readValue(responseJsonStr, PollingRequest.class);
 			translationAsyncInference.setResponse(pollingRequest);
 
@@ -224,7 +232,7 @@ public class TranslationBenchmark {
 			List<String> input = ipChunks.get(k);
 			List<String> expectedTgt = tgtChunks.get(k);
 			TranslationResponse translation = null;
-
+                
 			if(isSyncApi) {
 				translation = computeSync(inferenceAPIEndPoint,input );
 			}else {
@@ -323,4 +331,66 @@ public class TranslationBenchmark {
 		return res;
 	}
 
+	public  Request checkInferenceApiKeyValue(InferenceAPIEndPoint inferenceAPIEndPoint, RequestBody body) {
+		Request httpRequest = null;
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+
+		if (inferenceAPIEndPoint.getInferenceApiKey() != null) {
+
+			InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint
+					.getInferenceApiKey();
+			log.info("callBackUrl : " + callBackUrl);
+			if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
+
+				String encryptedInferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+				String encryptedInferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+				log.info("encryptedInferenceApiKeyName : " + encryptedInferenceApiKeyName);
+				log.info("encryptedInferenceApiKeyValue : " + encryptedInferenceApiKeyValue);
+				log.info("SECRET_KEY ::"+SECRET_KEY);
+				
+				
+				
+				String originalInferenceApiKeyName=null ;
+
+				String originalInferenceApiKeyValue=null;
+				try {
+					//originalInferenceApiKeyValue = Aes256.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+					//originalInferenceApiKeyName = Aes256.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+					
+					originalInferenceApiKeyValue = EncryptDcryptService.decrypt(encryptedInferenceApiKeyValue, SECRET_KEY);
+					originalInferenceApiKeyName = EncryptDcryptService.decrypt(encryptedInferenceApiKeyName, SECRET_KEY);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+				log.info("originalInferenceApiKeyName : "+originalInferenceApiKeyName);
+				log.info("originalInferenceApiKeyValue : "+originalInferenceApiKeyValue);
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				httpRequest = new Request.Builder().url(callBackUrl)
+						.addHeader(originalInferenceApiKeyName, originalInferenceApiKeyValue).post(body).build();
+				log.info("httpRequest : " + httpRequest.toString());
+
+			}
+		} else {
+			httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			log.info("httpRequest : " + httpRequest.toString());
+
+		}
+
+		return httpRequest;
+	}
+
+	
+	
 }

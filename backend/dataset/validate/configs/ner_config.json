@@ -1,0 +1,23 @@
+[
+    {
+        "test_name":"TextLanguageCheck", "active":"False"
+    },
+    {
+        "test_name":"SentenceLengthCheck", "active":"False"
+    },
+    {
+        "test_name":"WordLengthCheck", "active":"False"
+    },
+    {
+        "test_name":"ProfanityCheck", "active":"False"
+    },
+    {
+        "test_name":"RemoveDuplicateWhitespaces", "active":"False"
+    },
+    {
+        "test_name":"RemoveSpecialCharacters", "active":"False"
+    },
+	{
+        "test_name":"HashDedup", "active":"True"
+    }
+]

@@ -9,6 +9,17 @@ export const ModelTask = [
   { value: "transliteration", label: "Transliteration" },
   { value: "txt-lang-detection", label: "Language Detection" },
 ];
+
+export const BenchmarkModelTask = [
+  { value: "translation", label: "Translation" },
+  { value: "asr", label: "ASR" },
+  { value: "tts", label: "TTS" },
+  { value: "ocr", label: "OCR" },
+  { value: "ner", label: "NER" },
+  { value: "transliteration", label: "Transliteration" },
+  { value: "txt-lang-detection", label: "Language Detection" },
+];
+
 export const DatasetItems = [
   { value: "parallel-corpus", label: "Parallel Dataset" },
   { value: "monolingual-corpus", label: "Monolingual Dataset" },
@@ -18,6 +29,8 @@ export const DatasetItems = [
   { value: "tts-corpus", label: "TTS Dataset" },
   { value: "transliteration-corpus", label: "Transliteration Dataset" },
   { value: "glossary-corpus", label: "Glossary Dataset" },
+  { value: "pos-corpus", label: "POS Dataset" },
+  { value: "ner-corpus", label: "NER Dataset" },
 ];
 
 export const DatasetReadymade = [
@@ -27,6 +40,8 @@ export const DatasetReadymade = [
   { value: "ocr-corpus", label: "OCR" },
   { value: "asr-unlabeled-corpus", label: "ASR Unlabeled" },
   { value: "transliteration", label: "Transliteration" },
+  { value: "glossary-corpus", label: "Glossary" },
+  { value: "ner-corpus", label: "NER" },
 ];
 export const Language = [
   { value: "as", label: "Assamese" },
@@ -109,7 +124,7 @@ export const FilterBy = {
       label: "Web Scrapping Ocr",
     },
   ],
-
+  
   domain: [
     {
       value: "agriculture",
@@ -146,6 +161,86 @@ export const FilterBy = {
     {
       value:"parliamentary",
       label:"Parliamentary"
+    },
+    {
+      value: "government-press-release",
+      label: "Government Press Release",
+    },
+    {
+      value: "financial",
+      label: "Financial",
+    },
+    {
+      value: "movies",
+      label: "Movies",
+    },
+    {
+      value: "subtitles",
+      label: "Subtitles",
+    },
+    {
+      value: "sports",
+      label: "Sports",
+    },
+    {
+      value: "technology",
+      label: "Technology",
+    },
+    {
+      value: "lifestyle",
+      label: "Lifestyle",
+    },
+    {
+      value: "entertainment",
+      label: "Entertainment",
+    },
+    {
+      value: "art-and-culture",
+      label: "Art and Culture",
+    },
+    {
+      value: "economy",
+      label: "Economy",
+    },
+    {
+      value: "history",
+      label: "History",
+    },
+    {
+      value: "philosophy",
+      label: "Philosophy",
+    },
+    {
+      value: "religion",
+      label: "Religion",
+    },
+    {
+      value: "national-security-and-defence",
+      label: "National Security and Defence",
+    },
+    {
+      value: "literature",
+      label: "Literature",
+    },
+    {
+      value: "geography",
+      label: "Geography",
+    },
+    {
+      value:"websites",
+      label:"Websites"
+    },
+    {
+      value:"science",
+      label:"Science"
+    },
+    {
+     value: "stories",
+     label:"Stories"
+    },
+    {
+      value: "wikipedia",
+      label: "Wikipedia"
     }
   ],
 };

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * 
  * @JsonSubTypes.Type(value = CollectionMethod.class, name = "CollectionMethod")
  * })
- */ 
+ */
 public interface OneOfSearchParamsParams {
 
 }

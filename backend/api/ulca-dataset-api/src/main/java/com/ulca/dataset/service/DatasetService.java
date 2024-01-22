@@ -145,6 +145,7 @@ public class DatasetService {
 		log.info("******** Entry DatasetService:: datasetListByUserId *******");
 		DatasetListByUserIdResponse response = null;
 		Integer count = datasetDao.countBySubmitterId(userId);
+		log.info("Number of datatsets :: "+count);
 		List<Dataset> list = new ArrayList<Dataset>();
 		if (startPage != null) {
 			int startPg = startPage - 1;
@@ -152,8 +153,11 @@ public class DatasetService {
 				Pageable paging = null;
 				if (pgSize != null) {
 					paging = PageRequest.of(i, pgSize, Sort.by("createdOn").descending());
+					log.info("paging :: "+paging);
 				} else {
 					paging = PageRequest.of(i, PAGE_SIZE, Sort.by("createdOn").descending());
+					log.info("paging :: "+paging);
+
 				}
 				Page<Dataset> datasetList = null;
 				if (name != null) {
@@ -161,11 +165,15 @@ public class DatasetService {
 					dataset.setSubmitterId(userId);
 					dataset.setDatasetName(name);
 					Example<Dataset> example = Example.of(dataset);
-
+                    log.info("example :: "+example);
 					datasetList = datasetDao.findAll(example, paging);
+					log.info("datasetList :: "+datasetList);
 					count = datasetDao.countBySubmitterIdAndDatasetName(userId, name);
+					log.info("count :: "+count);
 				} else {
 					datasetList = datasetDao.findBySubmitterId(userId, paging);
+					log.info("datasetList :: "+datasetList);
+
 				}
 				list.addAll(datasetList.toList());
 			}
@@ -182,13 +190,20 @@ public class DatasetService {
 
 			}
 		}
-
+         
+		log.info("list of datasets :: "+list);
 
 		List<DatasetListByUserIdResponseDto> datasetDtoList = new ArrayList<DatasetListByUserIdResponseDto>();
+		if(!list.isEmpty()) {
 		for (Dataset dataset : list) {
+			log.info("dataset name :: "+dataset.getDatasetName());
 			ProcessTracker processTracker = processTrackerDao.findByDatasetId(dataset.getDatasetId()).get(0);
+			log.info("processTracker :: "+processTracker);
 			String serviceRequestNumber = processTracker.getServiceRequestNumber();
+			log.info("serviceRequestNumber :: "+serviceRequestNumber);
+			
 			String status = processTracker.getStatus();
+			log.info("status :: "+status);
 			if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
 				datasetDtoList.add(new DatasetListByUserIdResponseDto(dataset.getDatasetId(), serviceRequestNumber,
 						dataset.getDatasetName(), dataset.getDatasetType(), dataset.getCreatedOn(), status));
@@ -214,6 +229,7 @@ public class DatasetService {
 			}
 
 		}
+	}
 		log.info("******** Exit DatasetService:: datasetListByUserId *******");
 
 
@@ -314,7 +330,7 @@ public class DatasetService {
 		int startPg = startPage - 1;
 		for(int i= startPg; i< endPage; i++) {
 			
-			Pageable paging = PageRequest.of(i, PAGE_SIZE);
+			Pageable paging = PageRequest.of(i, PAGE_SIZE,Sort.by("startTime").descending());
 			Page<ProcessTracker> processTrackerPage = processTrackerDao.findByUserIdAndServiceRequestTypeAndServiceRequestAction(userId,ServiceRequestTypeEnum.dataset,ServiceRequestActionEnum.search,paging);
 			List<ProcessTracker> processTrackerList = processTrackerPage.getContent();
 			
@@ -332,8 +348,29 @@ public class DatasetService {
 				}
 		}
 		
+		
+		//Start Get Total count
+		int totalCount=0;
+		List<ProcessTracker> processTrackerList = processTrackerDao.findByUserIdAndServiceRequestTypeAndServiceRequestAction(userId,ServiceRequestTypeEnum.dataset,ServiceRequestActionEnum.search);
+		for (ProcessTracker processTracker : processTrackerList) {
+			
+			
+			if (processTracker.getSearchCriterion() != null) {
+				
+				totalCount=totalCount+1;
+			}
+		}
+		
+		//End Get Total count
+		
+		log.info("startPage :: "+startPage);
+		log.info("endPage :: "+endPage);
+
+		log.info("totalCount :: "+totalCount);
+        log.info("search list size :: "+searchList.size());
+		
 		String msg = "Search List";
-		SearchListByUserIdResponse response = new SearchListByUserIdResponse( msg, searchList) ;
+		SearchListByUserIdResponse response = new SearchListByUserIdResponse( msg, searchList,startPage ,endPage,totalCount ) ;
 
 		log.info("******** Exit DatasetService:: searchListByUserIdPagination *******" );
 		return response;
