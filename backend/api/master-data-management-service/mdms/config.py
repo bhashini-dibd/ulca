@@ -8,9 +8,9 @@ PORT            =   5001
 ENABLE_CORS     =   False
 
 #git configs
-git_folder_prefix           =   os.environ.get('ULCA_MASTER_DATA_GIT_FOLDER_PATH','https://raw.githubusercontent.com/ULCA-IN/ulca/mdms/master-data/dev')
+git_folder_prefix           =   os.environ.get('ULCA_MASTER_DATA_GIT_FOLDER_PATH','https://raw.githubusercontent.com/bhashini-dibd/ulca/mdms/master-data/dev')
 #git_folder_prefix = 'https://raw.githubusercontent.com/ULCA-IN/ulca/develop/master-data/dev'
-git_master_data_api         =   os.environ.get('ULCA_MASTER_DATA_GIT_API','https://api.github.com/repos/ULCA-IN/ulca/contents/master-data/dev/')
+git_master_data_api         =   os.environ.get('ULCA_MASTER_DATA_GIT_API','https://api.github.com/repos/bhashini-dibd/ulca/contents/master-data/dev/')
 #sared folder
 shared_storage_folder       =   os.environ.get('ULCA_SHARED_STORAGE_PATH','/opt/') 
 #redis configs 
