@@ -246,6 +246,7 @@ components:
         - sph
         - webm
         - m4a
+        - webm
     AudioChannel:
       type: string
       description: number of channel in the audio
