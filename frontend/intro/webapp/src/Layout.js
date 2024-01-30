@@ -20,7 +20,7 @@ function App(props) {
 
   const fetchNextComp = () => {
     if (index < componentObj.length) {
-      console.log("inside if");
+      // console.log("inside if");
       setData((prev) => [...prev, componentObj[index].component]);
       setIndex((prev) => prev + 1);
     } else if (index === componentObj.length) {
