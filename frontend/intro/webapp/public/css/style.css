@@ -448,10 +448,11 @@ h6, .h6 {
   flex-direction: column;
 }
 
-.elements .col div{
+.elements .col div:nth-of-type(1){
   height: 180px;
   width: auto;
   background-color: #DBEDFF;
+  padding: 0.3rem;
 }
 
 .h1,.h2,.h3,.h4,.h5,.h6{
