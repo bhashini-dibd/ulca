@@ -82,7 +82,7 @@ const FAQ = () => {
   return (
     <div style={{ marginBottom: 40, paddingTop: 40 }}>
       <Typography
-        style={{ textAlign: 'center', letterSpacing: 1, margin: 20, fontFamily: 'Inter' }}
+        style={{ textAlign: 'center', letterSpacing: 1, margin: 20, fontFamily: 'Inter', fontWeight: 600, fontSize: '36px' }}
         variant="h4"
       >
         Frequently Asked Questions
