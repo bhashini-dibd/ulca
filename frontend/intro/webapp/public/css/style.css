@@ -182,6 +182,10 @@ header {
 }
 
 
+
+
+
+
 .shape2 { left: 0; top:0;}
 
 .bannerImg img {
@@ -430,12 +434,17 @@ h6, .h6 {
 
 .container.elements p {
   color: black !important;
-  font-size: 20px !important;
+  font-size: 16px !important;
   font-family: Inter !important;
-  font-weight: 600 !important;
+  /* font-weight: 600 !important; */
   line-height: 28px !important;
   word-wrap: break-word !important;
   width: 100% !important;
+}
+
+#datasetSelect option{
+  background-color: white;
+  width: 200px;
 }
 
 .container.elements{
