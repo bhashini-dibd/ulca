@@ -65,10 +65,10 @@ const ExpandableCard = ({ question, answer }) => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography className={classes.heading}>{question}</Typography>
+          <Typography style={{fontFamily: 'Inter'}} className={classes.heading}>{question}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Typography>{answer}</Typography>
+          <Typography style={{fontFamily: 'Inter'}}>{answer}</Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </div>
@@ -80,12 +80,12 @@ const FAQ = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <div style={{ marginBottom: 40 }}>
+    <div style={{ marginBottom: 40, paddingTop: 40 }}>
       <Typography
-        style={{ textAlign: 'center', letterSpacing: 1, margin: 20 }}
+        style={{ textAlign: 'center', letterSpacing: 1, margin: 20, fontFamily: 'Inter' }}
         variant="h4"
       >
-        Frequently Asked Question
+        Frequently Asked Questions
       </Typography>
       {faqData.map((el, i) => (
         <ExpandableCard
