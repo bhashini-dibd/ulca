@@ -25,9 +25,10 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     card: {
-        height: '100%',
+        height: 220,
         display: 'flex',
         flexDirection: 'column',
+        borderRadius: 8
     },
     cardContent: {
         flex: 1,
@@ -87,8 +88,8 @@ export const WhyULCA = () => {
     const isSmallScreen = useMediaQuery('(max-width:600px)');
     return (
         <Grid style={{ backgroundColor: "#F5F7FA", paddingTop: 40 }}>
-            <Typography style={{ textAlign: "center", letterSpacing: 1, marginBottom: 15 }} variant="h4">Why ULCA</Typography>
-            <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}><Typography style={{ width: "60%" }} variant="body2">Your premier hub for Indian language resources, providing curated datasets and enhanced language-specific tasks for
+            <Typography style={{ textAlign: "center", letterSpacing: 1, marginBottom: 15, fontFamily: 'Inter' }} variant="h4">Why ULCA</Typography>
+            <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}><Typography style={{ width: "60%", fontFamily: 'Inter' }} variant="body2">Your premier hub for Indian language resources, providing curated datasets and enhanced language-specific tasks for
                 cutting-edge linguistic innovation and research.</Typography></div>
             <Grid
                 container
@@ -102,10 +103,10 @@ export const WhyULCA = () => {
                         <Card className={classes.card}>
                             <CardContent className={classes.cardContent}>
                                 <img src={el.icon} alt={el.title} />
-                                <Typography variant="h5" style={{ marginTop: 10 }}>
+                                <Typography variant="h5" style={{ marginTop: 16, fontFamily: 'Inter', fontSize: 20, fontWeight: "600" }}>
                                     {el.title}
                                 </Typography>
-                                <Typography variant="body2" style={{ marginTop: 10 }}>
+                                <Typography variant="body2" style={{ marginTop: 16, fontFamily: 'Inter', fontSize: 20 }}>
                                     {isSmallScreen ? `${el.description.slice(0, 50)}...` : el.description}
                                 </Typography>
                             </CardContent>
