@@ -489,6 +489,39 @@ h6, .h6 {
   font-size: 36px !important;
 }
 
+.carousel{
+  height: auto;
+}
+.carousel-item img {
+  width: 100%;
+  height: auto;
+}
+
+.custom-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 9vw;
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+.custom-indicator {
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  opacity: 0.4;
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.custom-indicator.active {
+  background-color: #fff;
+  opacity: 1;
+}
 
 
 

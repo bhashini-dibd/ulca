@@ -6,7 +6,32 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <!-- font family using Lato"-->
       <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    const indicators = document.querySelectorAll('.custom-indicator');
+    const carousel = document.getElementById('myCarousel');
+
+    carousel.addEventListener('slide.bs.carousel', function () {
+      const activeIndex = $('.carousel-item.active').index();
+      document.querySelector('.custom-indicator.active').classList.remove('active');
+      indicators[activeIndex].classList.add('active');
+    });
+
+    indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', function () {
+        document.querySelector('.custom-indicator.active').classList.remove('active');
+        this.classList.add('active');
+        $('#myCarousel').carousel(index);
+      });
+    });
+  });
+            function redirectToDashboard() {
+                window.open("https://app.swaggerhub.com/apis/ulca/ULCA/0.7.0", "_blank");
+            };
+
+      </script>
       <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="%PUBLIC_URL%/css/bootstrap.min.css">
@@ -74,7 +99,7 @@
       </nav>
       <!-- end here -->
       <section class="section about">
-         <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+         <!-- <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                <div class="carousel-item active">
                   <img src="%PUBLIC_URL%/img/slide1.jpg" class="d-block w-100" alt="...">
@@ -83,7 +108,22 @@
                   <img src="%PUBLIC_URL%/img/slide2.jpg" class="d-block w-100" alt="...">
                </div>
             </div>
-         </div>
+         </div> -->
+         <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="%PUBLIC_URL%/img/slide1.jpg" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="%PUBLIC_URL%/img/slide2.jpg" class="d-block w-100" alt="..." onclick="redirectToDashboard()">
+              </div>
+            </div>
+
+            <ul id="custom-indicators" class="custom-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="custom-indicator active"></li>
+                <li data-target="#myCarousel" data-slide-to="1" class="custom-indicator"></li>
+              </ul>
+          </div>
          <div class="container text-left elements">
             <div class="row">
                <div class="col">
