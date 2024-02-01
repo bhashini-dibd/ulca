@@ -50,11 +50,11 @@ components:
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
         task:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         languages:
           nullable: true
           allOf:
-            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
+            - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
         isLangDetectionEnabled:
           type: boolean
           default: false
@@ -64,14 +64,14 @@ components:
           default: false
           description: specify true if the same model is capable of handling multiple languages
         license:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/License
         licenseUrl:
           type: string
           description: url of the custom license
         domain:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         submitter:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
         trainingDataset:
@@ -273,7 +273,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         request:
           $ref: '#/components/schemas/TranslationRequest'
         response:
@@ -285,7 +285,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         request:
           $ref: '#/components/schemas/TransliterationRequest'
         response:
@@ -297,7 +297,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         request:
           $ref: '#/components/schemas/TxtLangDetectionRequest'
         response:
@@ -309,7 +309,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         request:
           $ref: '#/components/schemas/AudioLangDetectionRequest'
         response:
@@ -322,9 +322,9 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         tagsFormat:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
         request:
           $ref: '#/components/schemas/TranslationRequest'
         response:
@@ -336,7 +336,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         request:
           $ref: '#/components/schemas/TranslationRequest'
         response:
@@ -348,7 +348,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         request:
           $ref: '#/components/schemas/PollingRequest'
         response:
@@ -383,7 +383,7 @@ components:
         config:
           $ref: '#/components/schemas/TranslationConfig'
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     TransliterationRequest:
       required:
         - input
@@ -405,7 +405,7 @@ components:
         config:
           $ref: '#/components/schemas/TransliterationConfig'
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     TxtLangDetectionRequest:
       required:
         - input
@@ -427,7 +427,7 @@ components:
         config:
           $ref: '#/components/schemas/LangDetectionConfig'
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     AudioLangDetectionRequest:
       required:
         - audio
@@ -449,7 +449,7 @@ components:
         config:
           $ref: '#/components/schemas/LangDetectionConfig'
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     NerResponse:
       description: the response for NER.  Standard http status codes to be used.
       required:
@@ -461,7 +461,7 @@ components:
         config:
           $ref: '#/components/schemas/TranslationConfig'
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     ASRInference:
       required:
         - taskType
@@ -470,9 +470,9 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/ASRRequest'
         response:
@@ -485,9 +485,9 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/ASRRequest'
         response:
@@ -500,9 +500,9 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/PollingRequest'
         response:
@@ -528,7 +528,7 @@ components:
         config:
           $ref: '#/components/schemas/TranslationConfig'
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     TTSInference:
       required:
         - taskType
@@ -538,9 +538,9 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         supportedVoices:
           type: array
           description: list of
@@ -561,9 +561,9 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/TTSRequest'
         response:
@@ -576,9 +576,9 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         modelProcessingType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
         request:
           $ref: '#/components/schemas/PollingRequest'
         response:
@@ -604,7 +604,7 @@ components:
         config:
           $ref: '#/components/schemas/TTSResponseConfig'
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     OCRInference:
       required:
         - taskType
@@ -612,7 +612,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         request:
           $ref: '#/components/schemas/OCRRequest'
         response:
@@ -624,7 +624,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         request:
           $ref: '#/components/schemas/OCRRequest'
         response:
@@ -636,7 +636,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         request:
           $ref: '#/components/schemas/PollingRequest'
         response:
@@ -662,7 +662,7 @@ components:
         config:
           $ref: '#/components/schemas/OCRConfig'
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     FileUploadRequest:
       type: object
       properties:
@@ -851,7 +851,7 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/specs-changes/specs/common-schemas.yml#/components/schemas/LanguagePair
     TransliterationConfig:
       required:
         - language
@@ -871,7 +871,7 @@ components:
           default: false
           example: false
         language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
     LangDetectionConfig:
       type: object
       properties:
@@ -918,7 +918,7 @@ components:
           type: array
           description: list of
           items:
-            $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+            $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
     TTSRequestConfig:
       required:
         - language
@@ -930,19 +930,19 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         gender:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
         audioFormat:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         encoding:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
         speed:
           type: number
           description: optional field to specify the speed of audio
@@ -962,19 +962,19 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         gender:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
         audioFormat:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         encoding:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
         speed:
           type: number
           description: optional field to specify the speed of audio
@@ -994,15 +994,15 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         audioFormat:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         transcriptionFormat:
           type: object
           properties:
@@ -1014,9 +1014,9 @@ components:
           items:
             $ref: '#/components/schemas/SpeechContext'
         postProcessors:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
         domain:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         detailed:
           type: boolean
           description: to specify whether details are required in output like SNR, sampling rate
@@ -1034,7 +1034,7 @@ components:
             - video
             - default
         encoding:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
     ImageFiles:
       type: array
       description: list of

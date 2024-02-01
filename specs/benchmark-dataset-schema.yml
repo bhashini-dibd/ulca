@@ -82,25 +82,25 @@ components:
           type: string
           description: user defined name for the benchmark dataset
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         description:
           type: string
           description: description of the benchmark dataset type
         languages:
           nullable: true
           allOf:
-            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+            - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         collectionSource:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Source
         domain:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         license:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/License
         licenseUrl:
           type: string
           description: url of the custom license
         submitter:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
     TranslationBenchmarkDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/BenchmarkDatasetCommonParamsSchema'
@@ -176,13 +176,13 @@ components:
           type: number
           description: audio duration in seconds
         collectionSource:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Source
         channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
     NerBenchmarkDatasetParamsSchema:
       required:
         - tagsFormat
@@ -192,10 +192,10 @@ components:
       type: object
       properties:
         tagsFormat:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
     NerBenchmarkDatasetRowSchema:
       allOf:
-        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/NerDatasetRowSchema
+        - $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/dataset-schema.yml#/components/schemas/NerDatasetRowSchema
         - type: object
     AsrBenchmarkDatasetParamsSchema:
       allOf:
@@ -204,13 +204,13 @@ components:
       type: object
       properties:
         format:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
     AsrBenchmarkDatasetRowSchema:
       required:
         - audioFilename
@@ -231,13 +231,13 @@ components:
           type: number
           description: audio duration in seconds
         collectionSource:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Source
         channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
     OcrBenchmarkDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/BenchmarkDatasetCommonParamsSchema'
@@ -245,11 +245,11 @@ components:
       type: object
       properties:
         format:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ImageFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ImageFormat
         dpi:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ImageDPI
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ImageDPI
         imageTextType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ImageTextType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ImageTextType
     OcrBenchmarkDatasetRowSchema:
       required:
         - imageFilename

@@ -84,20 +84,20 @@ components:
           default: 1
           description: params schema version
         datasetType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/DatasetType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/DatasetType
         languages:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         collectionSource:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Source
         domain:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         license:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/License
         licenseUrl:
           type: string
           description: url of the custom license
         submitter:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
     ParallelDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -166,7 +166,7 @@ components:
       type: object
       properties:
         tagsFormat:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTagsFormat
         isStopwordsRemoved:
           type: boolean
           description: Expects if provided ner list contains stopwords or not
@@ -234,19 +234,19 @@ components:
       type: object
       properties:
         mixedDataSource:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/MixedDataSource
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/MixedDataSource
         format:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         numberOfSpeakers:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/NumberOfSpeakers
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/NumberOfSpeakers
         gender:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
         age:
           type: string
           description: age range
@@ -311,11 +311,11 @@ components:
       type: object
       properties:
         format:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ImageFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ImageFormat
         dpi:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ImageDPI
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ImageDPI
         imageTextType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ImageTextType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ImageTextType
         collectionMethod:
           $ref: '#/components/schemas/OcrCollectionMethod'
     OcrDatasetRowSchema:
@@ -346,17 +346,17 @@ components:
         - dpi
       properties:
         datasetType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/DatasetType
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/DatasetType
         collectionSource:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Source
         license:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/License
         submitter:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         format:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ImageFormat
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ImageFormat
         dpi:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ImageDPI
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ImageDPI
         collectionMethod:
           $ref: '#/components/schemas/OcrCollectionMethod'
     DocumentLayoutRowSchema:
@@ -618,7 +618,7 @@ components:
           type: string
           description: editing tool version
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
     CollectionDetailsManualCurated:
       type: object
       description: manual aligned collection details. The pair was mapped manually from existing parallel documents.
@@ -631,7 +631,7 @@ components:
           type: string
           description: editing tool version
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
     CollectionDetailsMachineTranslatedPostEdited:
       type: object
       description: machine translated and post edited collection details
@@ -651,7 +651,7 @@ components:
           type: string
           description: post editing tool version
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
         timeSpentInSeconds:
           type: number
           description: time spent by user to translated the sentence.
@@ -670,7 +670,7 @@ components:
           type: string
           description: post editing tool version
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
         timeSpentInSeconds:
           type: number
           description: time spent by user to translated the sentence.
@@ -734,7 +734,7 @@ components:
           type: string
           description: post editing tool version
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
         timeSpentInSeconds:
           type: number
           description: time spent by user to transliterate the sentence.
@@ -760,7 +760,7 @@ components:
           type: string
           description: post editing tool version
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
         timeSpentInSeconds:
           type: number
           description: time spent by user to transliterate the sentence.
@@ -779,7 +779,7 @@ components:
           type: string
           description: post editing tool version
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
         timeSpentInSeconds:
           type: number
           description: time spent by user to transliterate the sentence.
@@ -978,19 +978,19 @@ components:
       description: manual translated collection details
       properties:
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
     CollectionDetailsStudioRecorded:
       type: object
       description: studio recorded collection details
       properties:
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
     CollectionDetailsImagePromptedRecording:
       type: object
       description: image prompted recording collection details
       properties:
         contributor:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
     CollectionMethodAudio:
       type: object
       description: specifies how the audio dataset has been curated.
@@ -1108,7 +1108,7 @@ components:
           type: string
           description: speaker name or id for the audio utterance
         gender:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
         exactAge:
           type: number
           description: exact age of the speaker
@@ -1121,7 +1121,7 @@ components:
             - 21-60
             - 61-100
         assertLanguage:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
         languagesSpoken:
           $ref: '#/components/schemas/AsrlanguagesSpoken'
         state:
@@ -1149,13 +1149,13 @@ components:
           type: number
           description: audio duration in seconds
         collectionSource:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Source
         channel:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         dialect:
           type: string
           description: valid dialact of the submitted language.

@@ -29,7 +29,7 @@ components:
           format: int64
           description: unix timestamp in seconds when feedback is provided
         feedbackLanguage:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'
+          $ref: 'https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'
           
         pipelineFeedback:
           type: object
@@ -49,7 +49,7 @@ components:
             properties:
               taskType:
                 $ref: >-
-                  https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+                  https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
               commonFeedback:
                 $ref: '#/components/schemas/Commonfeedback'
               granularFeedback:
@@ -78,14 +78,14 @@ components:
                     propertyName: feedbackType
         pipelineInput:
           $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeRequest
+            https://raw.githubusercontent.com/bhashini-dibd/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/PipelineComputeRequest
         pipelineOutput:
           required:
             - pipelineResponse
           type: object
           properties:
             pipelineResponse:
-              $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/ResponseList"
+              $ref: "https://raw.githubusercontent.com/bhashini-dibd/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/ResponseList"
             
         suggestedPipelineOutput:
           required:
@@ -93,7 +93,7 @@ components:
           type: object
           properties:
             pipelineResponse:
-              $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/ResponseList"
+              $ref: "https://raw.githubusercontent.com/bhashini-dibd/ulca/specs-changes/specs/compute-pipeline-schemas.yml#/components/schemas/ResponseList"
     PipelineFeedbackResponse:
       required:
         - status

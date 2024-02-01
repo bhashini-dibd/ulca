@@ -42,7 +42,7 @@ components:
           description: brief description about model, its goal, basically something sweet about it
           example: Speech recognition model for classroom lecture
         domain:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         refUrl:
           maxLength: 200
           minLength: 5
@@ -50,7 +50,7 @@ components:
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
         serviceProvider:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
         inferenceSocketEndPoint:
@@ -69,7 +69,7 @@ components:
       type: array
       items:
         anyOf: null
-        $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
     InferenceAPIEndPoint:
       required:
         - callbackUrl
@@ -125,7 +125,7 @@ components:
       type: object
       properties:
         taskType:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         taskConfig:
           $ref: '#/components/schemas/ConfigList'
     ConfigList:
@@ -148,13 +148,13 @@ components:
           description: specific id for the service
           example: ai4bharat/speech-to-speech-gpu--t4
         sourceLanguage:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
         targetLanguage:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages
         sourceScriptCode:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
         targetScriptCode:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
     ApiEndPoint:
       required:
         - apiKeyUrl

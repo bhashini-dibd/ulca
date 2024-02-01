@@ -52,7 +52,7 @@ components:
       type: object
       properties:
         type:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: "#/components/schemas/TranslationConfig"
 
@@ -62,7 +62,7 @@ components:
       type: object
       properties:
         type:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: "#/components/schemas/AudioConfig"
 
@@ -72,7 +72,7 @@ components:
       type: object
       properties:
         type:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: "#/components/schemas/TTSConfig"
     TranslationConfig:
@@ -81,7 +81,7 @@ components:
       type: object
       properties:
         language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
 
     TTSConfig:
       required:
@@ -90,10 +90,10 @@ components:
       properties:
         language:
           $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+            https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         gender:
           $ref: >-
-            https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+            https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
 
     AudioConfig:
       required:
@@ -101,4 +101,4 @@ components:
       type: object
       properties:
         language:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair

@@ -18,12 +18,12 @@ components:
       type: object
       properties:
         feedbackLanguage:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'
+          $ref: 'https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'
         supportedTasks:
           type: array
           description : list of
           items:
-            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks'
+            $ref: 'https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks'
         
         
     FeedbackQuestionsResponse:
@@ -32,7 +32,7 @@ components:
       type: object
       properties:
         feedbackLanguage:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'   
+          $ref: 'https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedLanguages'   
         pipelineFeedback:
           type: object
           required:
@@ -51,7 +51,7 @@ components:
             properties:
               taskType:
                 $ref: >-
-                  https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+                  https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
               commonFeedback:
                 $ref: '#/components/schemas/Commonfeedback'
               granularFeedback:
