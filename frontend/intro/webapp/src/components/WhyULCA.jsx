@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     card: {
-        height: 220,
+        minHeight: 260,
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 8
@@ -87,16 +87,16 @@ export const WhyULCA = () => {
     const classes = useStyles();
     const isSmallScreen = useMediaQuery('(max-width:600px)');
     return (
-        <Grid style={{ backgroundColor: "#F5F7FA", paddingTop: 40 }}>
-            <Typography style={{ textAlign: "center", letterSpacing: 1, marginBottom: 15, fontFamily: 'Inter', fontWeight: 600 }} variant="h4">Why ULCA</Typography>
-            <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}><Typography style={{ width: "60%", fontFamily: 'Inter', fontSize: "16px", fontWeight: 400 }} variant="body2">Your premier hub for Indian language resources, providing curated datasets and enhanced language-specific tasks for
+        <Grid style={{ backgroundColor: "#F5F7FA", paddingTop: 40, display: "grid" }}>
+            <Typography style={{ textAlign: "center", letterSpacing: 1, marginBottom: 15, fontFamily: 'Inter' }} variant="h4">Why ULCA</Typography>
+            <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}><Typography style={{ width: "60%", fontFamily: 'Inter', fontSize: "1rem" }} variant="body2">Your premier hub for Indian language resources, providing curated datasets and enhanced language-specific tasks for
                 cutting-edge linguistic innovation and research.</Typography></div>
             <Grid
                 container
                 spacing={5}
                 direction="row"
-                justifyContent="space-evenly"
-                style={{ padding: 40, columnGap: 1 }}
+                justifyContent="center"
+                style={{ padding: 40, columnGap: 0.5, width: "90%", alignSelf: "center", justifySelf: "center"  }}
             >
                 {cardData.map((el, i) => (
                     <Grid item key={i} xs={12} sm={6} md={4} lg={3} className={classes.gridItem}>
