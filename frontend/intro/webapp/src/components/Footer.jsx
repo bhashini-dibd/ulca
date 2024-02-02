@@ -67,13 +67,13 @@ const Footer = () => {
                     </a>
                   </li> */}
                   <li>
-                    <a class="footer-anchor-redirect-links" href="https://bhashini.gov.in/en/ecosystem">Ecosystem</a>
+                    <a class="footer-anchor-redirect-links" target="_blank" href="#">Ecosystem</a>
                   </li>
                   <li>
                     <a
                       class="footer-anchor-redirect-links"
                       href="http://bhashini.gov.in/bhashadaan"
-                      target="_self"
+                      target="_blank"
                       rel="noopener noreferrer"
                     >
                       {" "}
