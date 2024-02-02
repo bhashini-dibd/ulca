@@ -8,7 +8,32 @@ import management1 from '../img/deatail-card-img/management1.svg'
 import serverCheck1 from '../img/deatail-card-img/serverCheck1.svg'
 import standard1 from '../img/deatail-card-img/standard1.svg'
 import training1 from '../img/deatail-card-img/training1.svg'
-import { Card, CardContent, Grid, Typography } from "@material-ui/core";
+import { Grid, Card, CardContent, Typography, useMediaQuery, makeStyles } from '@material-ui/core';
+
+
+const useStyles = makeStyles((theme) => ({
+    gridItem: {
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: 'calc(50% - 40px)', // Two items per row on small screens and larger
+        },
+        [theme.breakpoints.up('md')]: {
+            width: 'calc(33.33% - 40px)', // Three items per row on medium screens and larger
+        },
+        [theme.breakpoints.up('lg')]: {
+            width: 'calc(25% - 40px)', // Four items per row on large screens and larger
+        },
+    },
+    card: {
+        height: 220,
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 8
+    },
+    cardContent: {
+        flex: 1,
+    },
+}));
 
 const cardData = [
     {
@@ -59,21 +84,35 @@ const cardData = [
 ]
 
 export const WhyULCA = () => {
+    const classes = useStyles();
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
     return (
-        <Grid style={{ backgroundColor: "#F5F7FA", paddingTop: 40}}>
-            <Typography style={{textAlign: "center", letterSpacing: 1, marginBottom: 15}} variant="h4">Why ULCA</Typography>
-            <div style={{textAlign: "center", display: "flex", justifyContent: "center"}}><Typography style={{width: "60%"}} variant="body2">Your premier hub for Indian language resources, providing curated datasets and enhanced language-specific tasks for
+        <Grid style={{ backgroundColor: "#F5F7FA", paddingTop: 40 }}>
+            <Typography style={{ textAlign: "center", letterSpacing: 1, marginBottom: 15, fontFamily: 'Inter' }} variant="h4">Why ULCA</Typography>
+            <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}><Typography style={{ width: "60%", fontFamily: 'Inter', fontSize: "1rem" }} variant="body2">Your premier hub for Indian language resources, providing curated datasets and enhanced language-specific tasks for
                 cutting-edge linguistic innovation and research.</Typography></div>
-            <Grid style={{ display: "flex", flexWrap: "wrap", gap: 40, padding: 40 }} direction="row" justifyContent="space-evenly" spacing={3}>
-                {cardData.map((el, i) =>
-                    <Card style={{ width: window.innerWidth * 0.28, height: window.innerHeight * 0.22 }}>
-                        <CardContent>
-                            <img src={el.icon} />
-                            <Typography variant="h5" style={{ marginTop: 10 }}>{el.title}</Typography>
-                            <Typography variant="body2" style={{ marginTop: 10 }}>{el.description}</Typography>
-                        </CardContent>
-                    </Card>
-                )}
+            <Grid
+                container
+                spacing={5}
+                direction="row"
+                justifyContent="space-evenly"
+                style={{ padding: 40, columnGap: 1 }}
+            >
+                {cardData.map((el, i) => (
+                    <Grid item key={i} xs={12} sm={6} md={4} lg={3} className={classes.gridItem}>
+                        <Card className={classes.card}>
+                            <CardContent className={classes.cardContent}>
+                                <img src={el.icon} alt={el.title} />
+                                <Typography variant="h5" style={{ marginTop: 16, fontFamily: 'Inter', fontSize: 20, fontWeight: "600" }}>
+                                    {el.title}
+                                </Typography>
+                                <Typography variant="body2" style={{ marginTop: 16, fontFamily: 'Inter', fontSize: 20 }}>
+                                    {isSmallScreen ? `${el.description.slice(0, 50)}...` : el.description}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                ))}
             </Grid>
         </Grid>
 
