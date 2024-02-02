@@ -318,16 +318,13 @@
    
 
     const response1 = await fetchChartData(initialValue, "", criterions);
-    const response1Json = await response1.json();
-    document.getElementById('totalValue').innerText = response1Json.count;
+    document.getElementById('totalValue').innerText = response1?.count;
 
     const response2 = await fetchChartData("model", "", "");
-    const response2Json = await response2.json();
-    document.getElementById('totalValue2').innerText = response2Json.count;
+    document.getElementById('totalValue2').innerText = response2?.count;
 
     const response3 = await fetchChartData("benchmark", "", "");
-    const response3Json = await response3.json();
-    document.getElementById('totalValue3').innerText = response3Json.count;
+    document.getElementById('totalValue3').innerText = response3?.count;
   } catch (error) {
     console.error("Error handling API response:", error);
   }
@@ -356,8 +353,7 @@ document.querySelectorAll('.select_ul li').forEach(function (selectLi) {
     console.log('Selected value:', selectedValue);
     if (selectedValue) {
                  try {
-                   const response = await fetchChartData(selectedValue,"",criterions);
-                   const responseJson = await response.json()
+                   const responseJson = await fetchChartData(selectedValue,"",criterions);
               document.getElementById('totalValue').innerText = responseJson.count;
                    // Handle the response or update the UI based on the API call result
                    console.log("API Response:", response);
@@ -434,7 +430,7 @@ window.onclick = function(event) {
               
          //     }
          
-               function fetchChartData(dataType, value, criterions) {
+               async function fetchChartData(dataType, value, criterions) {
             window.REACT_APP_APIGW_BASE_URL = '<%= process.env.REACT_APP_APIGW_BASE_URL ||  "https://dev-auth.ulcacontrib.org" %>';
 
             const endpoint = `${window.REACT_APP_APIGW_BASE_URL}/ulca/data-metric/v0/store/search`;
@@ -451,29 +447,15 @@ window.onclick = function(event) {
              },
            };
          
-           return fetch(endpoint, {
+           const resp = await fetch(endpoint, {
              method: "post",
              body: JSON.stringify(request),
              headers: headers.headers,
-           })
-             .then(response => {
-               if (!response.ok) {
-                 return Promise.reject("");
-               }
-         
-               return response.json();
-             })
-             .then(rsp_data => {
-               let res = rsp_data.data.sort((a, b) => b.value - a.value);
-               // Handle the results as needed, e.g., console.log(res);
-               console.log(res,"jj")
-         
-               let total = rsp_data.data.reduce((acc, rem) => acc = acc + Number(rem.value), 0);
-             })
-             .catch(error => {
-               // Handle errors
-               console.error("Error fetching data:", error);
-             });
+           });
+           const resp_data = await resp.json();
+           if(resp.ok){
+            return resp_data;
+           }
          }
          
          
