@@ -90,7 +90,7 @@ export const WhyULCA = () => {
         <Grid style={{ backgroundColor: "#F5F7FA", paddingTop: 40, display: "grid" }}>
             <Typography style={{ textAlign: "center", letterSpacing: 1, marginBottom: 15, fontFamily: 'Inter', fontWeight: 600, fontSize:'36px' }} variant="h4">Why ULCA</Typography>
             <div style={{ textAlign: "center", display: "flex", justifyContent: "center" }}><Typography style={{ width: "60%", fontFamily: 'Inter', fontSize: "16px", fontWeight:400 }} variant="body2">Your premier hub for Indian language resources, providing curated datasets and enhanced language-specific tasks for
-                cutting-edge linguistic innovation and research.</Typography></div>
+cutting-edge linguistic innovation and research.</Typography></div>
             <Grid
                 container
                 spacing={5}
