@@ -127,11 +127,11 @@
          <div class="container text-left elements">
             <div class="row">
                <div class="col">
-                  <p class="h5">Dataset</p>
+                  <p class="h5" style="font-size: 20px;font-weight: 600;line-height: 28px;">Dataset</p>
                   <div>
                      <div style="display: flex; flex-direction: row; justify-content: space-between; height: 2rem;">
-                        <select id="datasetSelect" style="background-color: inherit; border: 0px;font-size: 16px;line-height: 24px;" onchange="handleSelectChange()">
-                           <!-- <option value="">Select Dataset</option> -->
+                        <!-- <select id="datasetSelect" style="background-color: inherit; border: 0px;font-size: 16px;line-height: 24px;" onchange="handleSelectChange()">
+                          
                            <option value="parallel-corpus" >Parallel Dataset</option>
                            <option value="monolingual-corpus">Monolingual Dataset</option>
                            <option value="asr-corpus">ASR Dataset</option>
@@ -140,25 +140,82 @@
                            <option value="asr-unlabeled-corpus">ASR Unlabeled Dataset</option>
                            <option value="transliteration-corpus">Transliteration Dataset</option>
                            <option value="glossary-corpus">Glossary Dataset</option>
-                        </select>
+                        </select> -->
+                        <div class="wrapper" style="height: 20px;">
+                        <div class="select_wrap" style="height: 50px;    margin: -14px 0px 0px -13px;">
+                           <ul class="default_option">
+                               <li >
+                                   <div class="option pizza" >
+                                     <!-- <div class="icon"></div> -->
+                                     <p class="margin:0px">Parallel Dataset</p>
+                                   </div>
+                               </li>
+                           </ul>
+                           <ul class="select_ul">
+                              <li style="padding-top: 25px;">
+                                  <div class="option pizza">
+                                    <!-- <div class="icon"></div> -->
+                                    <p>Monolingual Dataset</p>
+                                  </div>
+                              </li>
+                              <li>
+                                  <div class="option burger">
+                                    <!-- <div class="icon"></div> -->
+                                    <p>ASR Dataset</p>
+                                  </div>  
+                              </li>
+                              <li>
+                                  <div class="option ice">
+                                    <!-- <div class="icon"></div> -->
+                                    <p>TTS Dataset</p>
+                                  </div>  
+                              </li>
+                              <li>
+                                <div class="option fries">
+                                    <!-- <div class="icon"></div> -->
+                                    <p>OCR Dataset</p>
+                                  </div>
+                              </li>
+                              <li>
+                                 <div class="option ice">
+                                   <!-- <div class="icon"></div> -->
+                                   <p>ASR Unlabeled Dataset</p>
+                                 </div>  
+                             </li>
+                             <li>
+                               <div class="option fries">
+                                   <!-- <div class="icon"></div> -->
+                                   <p>Transliteration Dataset</p>
+                                 </div>
+                             </li>
+                           
+                          <li>
+                            <div class="option fries">
+                                <!-- <div class="icon"></div> -->
+                                <p>Glossary Dataset</p>
+                              </div>
+                          </li>
+                          </ul>
+                           </div>
+                           </div>
                         <span style="border: 1px solid black;
                            border-radius: 25rem;
                            padding: 0.1rem 0.5rem;
                            align-items: center;
                            display: flex;
-                           cursor: pointer;">i</span>
+                           cursor: pointer;" data-tooltip="Datasets are collection of structured data that serve as a input for training machine learning models, enablings algorithms to learn patterns and perform tasks based on provided information">i</span>
                      </div>
-                     <h6 style="margin-left: 0.5rem; margin-top: 0.2rem;" id="totalValue">0</h6>
+                     <h6 style="margin-left: 0.5rem; margin-top: 0.6rem;" id="totalValue">0</h6>
                      <div style="text-align: end; margin-top: 20%; margin-right: 0.4rem;">
                        <a href="https://bhashini.gov.in/ulca/dashboard" target="_blank"> <button
                            style="border-radius: 4px;
-                           background: var(--Primary-M_Blue, #0671E0); color: #FFF; border: none;"
+                           background: var(--Primary-M_Blue, #0671E0); color: #FFF; border: none;    padding: 6px 22px 6px 22px;"
                            >Go to Dashboard</button> </a>
                      </div>
                   </div>
                </div>
                <div class="col">
-                  <p class="h5">Model</p>
+                  <p class="h5" style="font-size: 20px;font-weight: 600;line-height: 28px;">Model</p>
                   <div>
                      <div style="display: flex; flex-direction: row; justify-content: space-between; height: 2rem;">
                         <p>Model Total Count</p>
@@ -167,20 +224,20 @@
                            padding: 0.1rem 0.5rem;
                            align-items: center;
                            display: flex;
-                           cursor: pointer;">i</span>
+                           cursor: pointer;" data-tooltip="Models are computational algorithms specifically designed for understanding and processing human language. They enable machines to analyze, interpret, and generate human-like text, facilitating applications such as language translation, sentiment analysis, and chatbot interactions.">i</span>
                      </div>
-                     <h6 style="margin-left: 0.5rem; margin-top: 0.2rem;" id="totalValue2">0</h6>
+                     <h6 style="margin-left: 0.5rem; margin-top: 0.6rem;" id="totalValue2">0</h6>
                      <div style="display: flex; flex-direction: row; justify-content: flex-end; margin-top: 20%; margin-right: 0.4rem;">
-                        <a style="color: #0671E0;" href="https://bhashini.gov.in/ulca/model/explore-models">Explore Model</a>    
+                        <a style="color: #0671E0;    padding: 5px 5px;" href="https://bhashini.gov.in/ulca/model/explore-models">Explore Model</a>    
                         <a href="https://bhashini.gov.in/ulca/dashboard" target="_blank"><button
                            style="border-radius: 4px; margin-left: 0.5rem;
-                           background: var(--Primary-M_Blue, #0671E0); color: #FFF; border: none;"
+                           background: var(--Primary-M_Blue, #0671E0); color: #FFF; border: none;    padding: 6px 22px 6px 22px;"
                            >Go to Dashboard</button></a>
                      </div>
                   </div>
                </div>
                <div class="col">
-                  <p class="h5">Benchmarks</p>
+                  <p class="h5" style="font-size: 20px;font-weight: 600;line-height: 28px;">Benchmarks</p>
                   <div>
                      <div style="display: flex; flex-direction: row; justify-content: space-between; height: 2rem;">
                         <p>Benchmark Total Count </p>
@@ -189,11 +246,11 @@
                            padding: 0.1rem 0.5rem;
                            align-items: center;
                            display: flex;
-                           cursor: pointer;">i</span>
+                           cursor: pointer;" data-tooltip="Benchmarking refers to the process of evaluating and comparing the performance of different algorithms or models against a standardized set of metrics and datasets to determine their relative effectiveness for a specific task or problem. This aids in selecting the most suitable model for a given application.">i</span>
                      </div>
-                     <h6 style="margin-left: 0.5rem; margin-top: 0.2rem;" id="totalValue3">0</h6>
+                     <h6 style="margin-left: 0.5rem; margin-top: 0.6rem;" id="totalValue3">0</h6>
                      <div style="display: flex; flex-direction: row; justify-content: flex-end; margin-top: 20%; margin-right: 0.4rem;">
-                        <a style="color: #0671E0;" href="https://bhashini.gov.in/ulca/model/explore-models">Explore Benchmark</a>    
+                        <a style="color: #0671E0;    padding: 5px 5px;" href="https://bhashini.gov.in/ulca/model/explore-models">Explore Benchmark</a>    
                         <a href="https://bhashini.gov.in/ulca/dashboard" target="_blank"> <button
                            style="border-radius: 4px; margin-left: 0.5rem;
                            background: var(--Primary-M_Blue, #0671E0); color: #FFF; border: none;"
@@ -229,7 +286,81 @@
          </div>
       </section>
       <script>
+
+         // select box
+
+         let selectedValue = 'Parallel Dataset';
          var criterions = [{"field": "sourceLanguage","value": "en"}]
+     async    function logInitialValue() {
+    let initialValue = document.querySelector('.default_option li').textContent.trim();
+    console.log('Initial value:', initialValue);
+    try {
+    // Call the API with the first value on page load
+   
+
+    const response1 = await fetchChartData(initialValue, "", criterions);
+    const response1Json = await response1.json();
+    document.getElementById('totalValue').innerText = response1Json.count;
+
+    const response2 = await fetchChartData("model", "", "");
+    const response2Json = await response2.json();
+    document.getElementById('totalValue2').innerText = response2Json.count;
+
+    const response3 = await fetchChartData("benchmark", "", "");
+    const response3Json = await response3.json();
+    document.getElementById('totalValue3').innerText = response3Json.count;
+  } catch (error) {
+    console.error("Error handling API response:", error);
+  }
+  }
+
+  // Call the function to log the initial value
+  logInitialValue();
+
+         document.querySelectorAll('.default_option').forEach(function (defaultOption) {
+  defaultOption.addEventListener('click', function () {
+    this.parentElement.classList.toggle('active');
+  });
+});
+
+document.querySelectorAll('.select_ul li').forEach(function (selectLi) {
+  selectLi.addEventListener('click', async function () {
+    var currentElement = this.innerHTML;
+    var CurrentValue = this.querySelector('.option').textContent.trim();
+     // Update the selectedValue variable
+     selectedValue = CurrentValue;
+    document.querySelectorAll('.default_option li').forEach(function (defaultLi) {
+      defaultLi.innerHTML = currentElement;
+    });
+
+    this.closest('.select_wrap').classList.remove('active');
+    console.log('Selected value:', selectedValue);
+    if (selectedValue) {
+                 try {
+                   const response = await fetchChartData(selectedValue,"",criterions);
+                   const responseJson = await response.json()
+              document.getElementById('totalValue').innerText = responseJson.count;
+                   // Handle the response or update the UI based on the API call result
+                   console.log("API Response:", response);
+                 } catch (error) {
+                   console.error("Error calling API:", error);
+                 }
+               }
+  });
+
+});
+
+// Close the dropdown when clicking outside of it
+window.onclick = function(event) {
+      if (!event.target.matches('.select_wrap')) {
+         this.closest('.select_wrap').classList.remove('active');
+          
+        
+      }
+    }
+
+         // end select box
+         // var criterions = [{"field": "sourceLanguage","value": "en"}]
          
         //  window.onload = async function() {
         //        // Call the API with the first value on page load
@@ -245,44 +376,44 @@
         //       document.getElementById('totalValue3').innerText = response3Json;
         //      };
          
-        window.onload = async function() {
-  try {
-    // Call the API with the first value on page load
-    const defaultType = document.getElementById('datasetSelect').value;
+//         window.onload = async function() {
+//   try {
+//     // Call the API with the first value on page load
+//     const defaultType = document.getElementById('datasetSelect').value;
 
-    const response1 = await fetchChartData(defaultType, "", criterions);
-    const response1Json = await response1.json();
-    document.getElementById('totalValue').innerText = response1Json.count;
+//     const response1 = await fetchChartData(defaultType, "", criterions);
+//     const response1Json = await response1.json();
+//     document.getElementById('totalValue').innerText = response1Json.count;
 
-    const response2 = await fetchChartData("model", "", "");
-    const response2Json = await response2.json();
-    document.getElementById('totalValue2').innerText = response2Json.count;
+//     const response2 = await fetchChartData("model", "", "");
+//     const response2Json = await response2.json();
+//     document.getElementById('totalValue2').innerText = response2Json.count;
 
-    const response3 = await fetchChartData("benchmark", "", "");
-    const response3Json = await response3.json();
-    document.getElementById('totalValue3').innerText = response3Json.count;
-  } catch (error) {
-    console.error("Error handling API response:", error);
-  }
-};
-         async function handleSelectChange() {
-               var selectedValue = document.getElementById('datasetSelect').value;
-         let criterions = [{"field": "sourceLanguage","value": "en"}]
+//     const response3 = await fetchChartData("benchmark", "", "");
+//     const response3Json = await response3.json();
+//     document.getElementById('totalValue3').innerText = response3Json.count;
+//   } catch (error) {
+//     console.error("Error handling API response:", error);
+//   }
+// };
+         // async function handleSelectChange() {
+         //       var selectedValue = document.getElementById('datasetSelect').value;
+         // let criterions = [{"field": "sourceLanguage","value": "en"}]
          
-               console.log("Selected value:", selectedValue, criterions);
-               if (selectedValue) {
-                 try {
-                   const response = await fetchChartData(selectedValue,"",criterions);
-                   const responseJson = await response.json()
-              document.getElementById('totalValue').innerText = responseJson.count;
-                   // Handle the response or update the UI based on the API call result
-                   console.log("API Response:", response);
-                 } catch (error) {
-                   console.error("Error calling API:", error);
-                 }
-               }
+         //       console.log("Selected value:", selectedValue, criterions);
+         //       if (selectedValue) {
+         //         try {
+         //           const response = await fetchChartData(selectedValue,"",criterions);
+         //           const responseJson = await response.json()
+         //      document.getElementById('totalValue').innerText = responseJson.count;
+         //           // Handle the response or update the UI based on the API call result
+         //           console.log("API Response:", response);
+         //         } catch (error) {
+         //           console.error("Error calling API:", error);
+         //         }
+         //       }
               
-             }
+         //     }
          
                function fetchChartData(dataType, value, criterions) {
            const CONFIG = {
