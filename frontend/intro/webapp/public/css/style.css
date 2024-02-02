@@ -702,7 +702,7 @@ footer ul.link li:first-child {
 
 .container .video-overview {
   height: 437px;
-  width: 775px;
+  width: 100%;
   margin: auto;
   margin-bottom: 81px;
   display: flex;
@@ -722,4 +722,51 @@ footer ul.link li:first-child {
 
 .h3 {
   font-size: 36px !important;
+}
+
+.overviewHeading {
+  line-height: 24px;
+}
+
+.mobileButton {
+  margin-top: 18%;
+}
+
+@media screen and (max-width: 500px) {
+  .mobileButton {
+    margin-top: 15%;
+  }
+
+  .video-overview {
+    width: 100%;
+    text-align: center;
+  }
+
+  .overviewHeading {
+    line-height: 48px;
+  }
+
+  .navbarScroll {
+    width: 400px;
+    overflow: auto;
+  }
+}
+
+@media screen and (max-width: 850px) and (min-width: 501px) {
+  .tabButton {
+    margin-top: 8%;
+  }
+}
+
+@media screen and (max-width: 1100px) and (min-width: 851px) {
+  .desktopButton {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .mobileButtonextraSmall {
+    /* margin-top: 10%; */
+    font-size: 15px;
+  }
 }
