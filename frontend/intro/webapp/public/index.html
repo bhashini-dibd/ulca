@@ -128,7 +128,7 @@
          <div class="container text-left elements">
             <div class="row">
                <div class="col">
-                  <p class="h5" style="font-size: 20px;font-weight: 600;line-height: 28px;">Dataset</p>
+                  <p class="h5" style="font-size: 20px;font-weight: 600;line-height: 28px;">Datasets</p>
                   <div>
                      <div style="display: flex; flex-direction: row; justify-content: space-between; height: 2rem;">
                         <!-- <select id="datasetSelect" style="background-color: inherit; border: 0px;font-size: 16px;line-height: 24px;" onchange="handleSelectChange()">
@@ -216,7 +216,7 @@
                   </div>
                </div>
                <div class="col">
-                  <p class="h5" style="font-size: 20px;font-weight: 600;line-height: 28px;">Model</p>
+                  <p class="h5" style="font-size: 20px;font-weight: 600;line-height: 28px;">Models</p>
                   <div>
                      <div style="display: flex; flex-direction: row; justify-content: space-between; height: 2rem;">
                         <p>Model Total Count</p>
@@ -429,11 +429,9 @@ window.onclick = function(event) {
          //     }
          
                function fetchChartData(dataType, value, criterions) {
-           const CONFIG = {
-             BASE_URL_AUTO: "https://dev-auth.ulcacontrib.org", // Replace with your actual base URL
-           };
-         
-           const endpoint = `${CONFIG.BASE_URL_AUTO}/ulca/data-metric/v0/store/search`;
+            window.REACT_APP_APIGW_BASE_URL = '<%= process.env.REACT_APP_APIGW_BASE_URL ||  "https://dev-auth.ulcacontrib.org" %>';
+
+            const endpoint = `${window.REACT_APP_APIGW_BASE_URL}/ulca/data-metric/v0/store/search`;
          
            const request = {
              type: dataType,
