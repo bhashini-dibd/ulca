@@ -148,52 +148,58 @@
                                <li >
                                    <div class="option pizza" >
                                      <!-- <div class="icon"></div> -->
-                                     <p class="margin:0px">Parallel Dataset</p>
+                                     <p id="parallel-corpus" class="margin:0px">Parallel Dataset</p>
                                    </div>
                                </li>
                            </ul>
                            <ul class="select_ul">
                               <li style="padding-top: 25px;">
+                                 <div class="option pizza" >
+                                   <!-- <div class="icon"></div> -->
+                                   <p id="parallel-corpus" class="margin:0px">Parallel Dataset</p>
+                                 </div>
+                             </li>
+                              <li>
                                   <div class="option pizza">
                                     <!-- <div class="icon"></div> -->
-                                    <p>Monolingual Dataset</p>
+                                    <p id="monolingual-corpus">Monolingual Dataset</p>
                                   </div>
                               </li>
                               <li>
                                   <div class="option burger">
                                     <!-- <div class="icon"></div> -->
-                                    <p>ASR Dataset</p>
+                                    <p id="asr-corpus">ASR Dataset</p>
                                   </div>  
                               </li>
                               <li>
                                   <div class="option ice">
                                     <!-- <div class="icon"></div> -->
-                                    <p>TTS Dataset</p>
+                                    <p id="tts-corpus">TTS Dataset</p>
                                   </div>  
                               </li>
                               <li>
                                 <div class="option fries">
                                     <!-- <div class="icon"></div> -->
-                                    <p>OCR Dataset</p>
+                                    <p id="ocr-corpus">OCR Dataset</p>
                                   </div>
                               </li>
                               <li>
                                  <div class="option ice">
                                    <!-- <div class="icon"></div> -->
-                                   <p>ASR Unlabeled Dataset</p>
+                                   <p id="asr-unlabeled-corpus">ASR Unlabeled Dataset</p>
                                  </div>  
                              </li>
                              <li>
                                <div class="option fries">
                                    <!-- <div class="icon"></div> -->
-                                   <p>Transliteration Dataset</p>
+                                   <p id="transliteration-corpus">Transliteration Dataset</p>
                                  </div>
                              </li>
                            
                           <li>
                             <div class="option fries">
                                 <!-- <div class="icon"></div> -->
-                                <p>Glossary Dataset</p>
+                                <p id="glossary-corpus">Glossary Dataset</p>
                               </div>
                           </li>
                           </ul>
@@ -302,10 +308,10 @@
 
          // select box
 
-         let selectedValue = 'Parallel Dataset';
+         let selectedValue = 'parallel-corpus';
          var criterions = [{"field": "sourceLanguage","value": "en"}]
      async    function logInitialValue() {
-    let initialValue = document.querySelector('.default_option li').textContent.trim();
+    let initialValue = document.querySelector('.default_option li p').id;
     console.log('Initial value:', initialValue);
     try {
     // Call the API with the first value on page load
@@ -339,7 +345,7 @@
 document.querySelectorAll('.select_ul li').forEach(function (selectLi) {
   selectLi.addEventListener('click', async function () {
     var currentElement = this.innerHTML;
-    var CurrentValue = this.querySelector('.option').textContent.trim();
+    var CurrentValue = this.querySelector('.option p').id;
      // Update the selectedValue variable
      selectedValue = CurrentValue;
     document.querySelectorAll('.default_option li').forEach(function (defaultLi) {
