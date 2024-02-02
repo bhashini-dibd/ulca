@@ -149,7 +149,7 @@ const Footer = () => {
                   </li> */}
                   <li>
                     <a
-                      href="https://bhashini.gov.in/en/privacy-policy"
+                      href="https://bhashini.gov.in/privacy-policy"
                       target="_self"
                       class="footer-anchor-redirect-links"
                     >
@@ -158,7 +158,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <a
-                      href="https://bhashini.gov.in/en/terms-conditions"
+                      href="https://bhashini.gov.in/terms-of-use"
                       target="_self"
                       class="footer-anchor-redirect-links"
                     >
