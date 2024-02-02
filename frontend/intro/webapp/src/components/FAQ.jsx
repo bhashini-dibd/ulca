@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
   heading: {
     fontSize: theme.typography.pxToRem(16),
     width: '60%', // Adjust the width for larger screens
-    fontWeight: theme.typography.fontWeightBold,
+    lineHeight:"20px",
+    fontWeight: 600,
     [theme.breakpoints.down('sm')]: {
       width: '90%', // Adjust the width for smaller screens
     },

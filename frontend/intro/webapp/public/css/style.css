@@ -8,10 +8,12 @@ font-family: 'Rowdies', cursive; */
 
 * {
   list-style: none;
+  /* overflow-x: hidden; */
 }
 html,
 body {
   max-width: 100%;
+  overflow-x: hidden;
   height: 100%;
   font-size: 16px;
 }
@@ -59,14 +61,25 @@ img {
 }
 
 /* css start here */
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: 'Rowdies', cursive;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: "Rowdies", cursive;
   font-weight: 400;
   letter-spacing: -1px;
   line-height: 1.3;
 }
-h1, .h1 {
+h1,
+.h1 {
   font-size: 3.125rem;
   font-weight: 300;
 }
@@ -420,16 +433,16 @@ footer ul.link li:first-child {
 }
 
 .footer-anchor-redirect-links {
-  color: #FFFFFF;
+  color: #ffffff;
   text-decoration: none;
 }
 
-.footer-anchor-redirect-links:hover{
+.footer-anchor-redirect-links:hover {
   color: #ff7f11;
   text-decoration: none;
 }
 
-.container .home-elements{
+.container .home-elements {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -595,7 +608,11 @@ footer ul.link li:first-child {
   width: 25px;
 }
 
-.carousel{
+.select_wrap.active .select_ul {
+  display: block;
+}
+
+.carousel {
   height: auto;
 }
 .carousel-item img {
@@ -685,9 +702,17 @@ footer ul.link li:first-child {
 
 .container .video-overview {
   height: 437px;
-  width: 775px;
+  width: 100%;
   margin: auto;
   margin-bottom: 81px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Inter;
+}
+
+.video-overview h1 {
+  font-family: Inter;
 }
 
 .why-ulca {
@@ -697,4 +722,51 @@ footer ul.link li:first-child {
 
 .h3 {
   font-size: 36px !important;
+}
+
+.overviewHeading {
+  line-height: 24px;
+}
+
+.mobileButton {
+  margin-top: 18%;
+}
+
+@media screen and (max-width: 500px) {
+  .mobileButton {
+    margin-top: 15%;
+  }
+
+  .video-overview {
+    width: 100%;
+    text-align: center;
+  }
+
+  .overviewHeading {
+    line-height: 48px;
+  }
+
+  .navbarScroll {
+    width: 400px;
+    overflow: auto;
+  }
+}
+
+@media screen and (max-width: 850px) and (min-width: 501px) {
+  .tabButton {
+    margin-top: 8%;
+  }
+}
+
+@media screen and (max-width: 1100px) and (min-width: 851px) {
+  .desktopButton {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .mobileButtonextraSmall {
+    /* margin-top: 10%; */
+    font-size: 15px;
+  }
 }
