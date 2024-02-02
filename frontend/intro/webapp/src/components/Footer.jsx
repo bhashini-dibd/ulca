@@ -1,50 +1,6 @@
 const Footer = () => {
   return (
     <>
-      <section class="section bg-gray why">
-        <div class="shape2">
-          <img src={`${process.env.PUBLIC_URL}/img/shape2.svg`} alt="shapes" />
-        </div>
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-md-12 col-lg-12">
-              <h2 class="text-center text-black mt-3 mb-4">Why ULCA?</h2>
-              <div class="ulcaInfo text-black">
-                <ul>
-                  <li>
-                    Be the premier data repository for Indian language resources
-                  </li>
-                  <li>
-                    Collect datasets for MT, ASR, TTS, OCR and various NLP tasks
-                    in standardized but extensible formats
-                  </li>
-                  <li>
-                    Collect extensive metadata related to dataset for various
-                    analysis
-                  </li>
-                  <li>
-                    Proper attribution for every contributor at the record level
-                  </li>
-                  <li>Deduplication capability built-in</li>
-                  <li>
-                    Simple interface to search and download datasets based on
-                    various filters
-                  </li>
-                  <li>
-                    Perform various quality checks on the submitted datasets
-                  </li>
-                  <li>Trained models for language specific tasks</li>
-                  <li>Multiple benchmarks defined for each model task</li>
-                  <li>Human validated Benchmark datasets</li>
-                  <li>
-                    Create and submit new benchmark metrics for any model task
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       <footer class="footer">
         <div class="container-fluid">
           <div class="footer-links row">
@@ -111,13 +67,13 @@ const Footer = () => {
                     </a>
                   </li> */}
                   <li>
-                    <a class="footer-anchor-redirect-links" href="https://bhashini.gov.in/en/ecosystem">Ecosystem</a>
+                    <a class="footer-anchor-redirect-links" target="_blank" href="#">Ecosystem</a>
                   </li>
                   <li>
                     <a
                       class="footer-anchor-redirect-links"
                       href="http://bhashini.gov.in/bhashadaan"
-                      target="_self"
+                      target="_blank"
                       rel="noopener noreferrer"
                     >
                       {" "}
@@ -193,7 +149,7 @@ const Footer = () => {
                   </li> */}
                   <li>
                     <a
-                      href="https://bhashini.gov.in/en/privacy-policy"
+                      href="https://bhashini.gov.in/privacy-policy"
                       target="_self"
                       class="footer-anchor-redirect-links"
                     >
@@ -202,7 +158,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <a
-                      href="https://bhashini.gov.in/en/terms-conditions"
+                      href="https://bhashini.gov.in/terms-of-use"
                       target="_self"
                       class="footer-anchor-redirect-links"
                     >
