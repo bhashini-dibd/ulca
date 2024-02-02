@@ -80,7 +80,7 @@ const FAQ = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <div style={{ marginBottom: 40, paddingTop: 40 }}>
+    <div style={{ marginBottom: 40, paddingTop: 40, maxWidth:'55%' }}>
       <Typography
         style={{ textAlign: 'center', letterSpacing: 1, margin: 20, fontFamily: 'Inter', fontWeight: 600, fontSize: '36px' }}
         variant="h4"
