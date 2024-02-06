@@ -591,22 +591,7 @@ footer ul.link li:first-child {
   margin-right: 15px;
 }
 
-.select_wrap .option.pizza .icon {
-  background-position: 0 0;
-}
 
-.select_wrap .option.burger .icon {
-  background-position: 0 -35px;
-}
-
-.select_wrap .option.ice .icon {
-  background-position: 0 -72px;
-}
-
-.select_wrap .option.fries .icon {
-  background-position: 0 -111px;
-  width: 25px;
-}
 
 .select_wrap.active .select_ul {
   display: block;

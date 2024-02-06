@@ -146,58 +146,58 @@
                         <div class="select_wrap" style="height: 50px;    margin: -14px 0px 0px -13px;">
                            <ul class="default_option">
                                <li >
-                                   <div class="option pizza" >
-                                     <!-- <div class="icon"></div> -->
+                                   <div class="option option1" >
+                                   
                                      <p id="parallel-corpus" class="margin:0px">Parallel Dataset</p>
                                    </div>
                                </li>
                            </ul>
                            <ul class="select_ul">
                               <li style="padding-top: 25px;">
-                                 <div class="option pizza" >
+                                 <div class="option" >
                                    <!-- <div class="icon"></div> -->
                                    <p id="parallel-corpus" class="margin:0px">Parallel Dataset</p>
                                  </div>
                              </li>
                               <li>
-                                  <div class="option pizza">
+                                  <div class="option">
                                     <!-- <div class="icon"></div> -->
                                     <p id="monolingual-corpus">Monolingual Dataset</p>
                                   </div>
                               </li>
                               <li>
-                                  <div class="option burger">
+                                  <div class="option ">
                                     <!-- <div class="icon"></div> -->
                                     <p id="asr-corpus">ASR Dataset</p>
                                   </div>  
                               </li>
                               <li>
-                                  <div class="option ice">
+                                  <div class="option ">
                                     <!-- <div class="icon"></div> -->
                                     <p id="tts-corpus">TTS Dataset</p>
                                   </div>  
                               </li>
                               <li>
-                                <div class="option fries">
+                                <div class="option ">
                                     <!-- <div class="icon"></div> -->
                                     <p id="ocr-corpus">OCR Dataset</p>
                                   </div>
                               </li>
                               <li>
-                                 <div class="option ice">
+                                 <div class="option ">
                                    <!-- <div class="icon"></div> -->
                                    <p id="asr-unlabeled-corpus">ASR Unlabeled Dataset</p>
                                  </div>  
                              </li>
                              <li>
-                               <div class="option fries">
+                               <div class="option">
                                    <!-- <div class="icon"></div> -->
                                    <p id="transliteration-corpus">Transliteration Dataset</p>
                                  </div>
                              </li>
                            
                           <li>
-                            <div class="option fries">
+                            <div class="option">
                                 <!-- <div class="icon"></div> -->
                                 <p id="glossary-corpus">Glossary Dataset</p>
                               </div>
@@ -374,62 +374,7 @@ window.onclick = function(event) {
       }
     }
 
-         // end select box
-         // var criterions = [{"field": "sourceLanguage","value": "en"}]
-         
-        //  window.onload = async function() {
-        //        // Call the API with the first value on page load
-        //        const defaultType = document.getElementById('datasetSelect').value;
-        //       const response1 =  await fetchChartData(defaultType,"", criterions);
-        //       const response1Json = await response1.json()
-        //       document.getElementById('totalValue').innerText = response1Json;
-        //        const response2 = await fetchChartData("model","", "");
-        //        const response2Json = await response2.json()
-        //       document.getElementById('totalValue2').innerText = response2Json;
-        //       const response3 = await fetchChartData("benchmark","", "");
-        //        const response3Json = await response3.json()
-        //       document.getElementById('totalValue3').innerText = response3Json;
-        //      };
-         
-//         window.onload = async function() {
-//   try {
-//     // Call the API with the first value on page load
-//     const defaultType = document.getElementById('datasetSelect').value;
-
-//     const response1 = await fetchChartData(defaultType, "", criterions);
-//     const response1Json = await response1.json();
-//     document.getElementById('totalValue').innerText = response1Json.count;
-
-//     const response2 = await fetchChartData("model", "", "");
-//     const response2Json = await response2.json();
-//     document.getElementById('totalValue2').innerText = response2Json.count;
-
-//     const response3 = await fetchChartData("benchmark", "", "");
-//     const response3Json = await response3.json();
-//     document.getElementById('totalValue3').innerText = response3Json.count;
-//   } catch (error) {
-//     console.error("Error handling API response:", error);
-//   }
-// };
-         // async function handleSelectChange() {
-         //       var selectedValue = document.getElementById('datasetSelect').value;
-         // let criterions = [{"field": "sourceLanguage","value": "en"}]
-         
-         //       console.log("Selected value:", selectedValue, criterions);
-         //       if (selectedValue) {
-         //         try {
-         //           const response = await fetchChartData(selectedValue,"",criterions);
-         //           const responseJson = await response.json()
-         //      document.getElementById('totalValue').innerText = responseJson.count;
-         //           /// Handle the response or update the UI based on the API call result
-         //           console.log("API Response:", response);
-         //         } catch (error) {
-         //           console.error("Error calling API:", error);
-         //         }
-         //       }
-              
-         //     }
-         
+        
                async function fetchChartData(dataType, value, criterions) {
             window.REACT_APP_APIGW_BASE_URL = '<%= process.env.REACT_APP_APIGW_BASE_URL ||  "https://dev-auth.ulcacontrib.org" %>';
 
