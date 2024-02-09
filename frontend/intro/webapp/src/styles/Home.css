@@ -1,0 +1,430 @@
+/* Header */
+/* HamburgerMenu.css */
+
+.navbar {
+  margin-bottom: 0px;
+}
+.hamburger-menu {
+  position: relative;
+  border: 1px solid lightgray;
+  padding: 0px 10px;
+  border-radius: 10px;
+}
+
+.hamburger-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.menu {
+  position: absolute;
+  top: 57px;
+  left: -16px;
+  background: #f3f3f3;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100vw;
+  z-index: 3;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin-left: 21px;
+}
+
+.menu ul li {
+  padding: 5px 0;
+}
+
+.menu ul ul {
+  /* padding-left: 20px; */
+  /* border-left: 1px solid #ccc; */
+  background-color: #fff;
+}
+
+.menu ul ul li {
+  padding: 5px 14px;
+  border: 1px solid lightgray;
+}
+
+/* Header end */
+
+/* Banner */
+
+.Homesection {
+  height: 427px;
+  flex-direction: row;
+  align-items: center;
+  padding: 64px 112px;
+  box-sizing: border-box;
+  position: relative;
+  gap: 64px;
+  background-image: url(../img/Desktop_banner/Group\ 149.jpg);
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: top;
+  font-size: 16px;
+  font-family: Roboto;
+}
+
+.homeBanner2 {
+  background-image: url(../img/Desktop_banner/Dataset\ banner\ .jpg);
+}
+
+.content1 {
+  display: flex;
+  width: 49%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  z-index: 0;
+  height: 100%;
+}
+
+.contentInner,
+.solutionMattersParent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.solutionMattersParent {
+  width: 373px;
+  flex-direction: row;
+  padding: 8px;
+  gap: 10px;
+}
+
+.solutionMatters {
+  position: relative;
+  line-height: 24px;
+  color: white;
+  font-family: "OS-Regular";
+}
+
+.Header__heading {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 32px;
+  font-size: 60px;
+  color: #313e5b;
+}
+
+.Carousel2BoxHeading {
+  flex-direction: row;
+  font-family: "Inter-Regular";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.Header__heading2 {
+  font-size: 16px;
+  line-height: 30px;
+  font-weight: 400;
+  font-family: "OS-Regular";
+  line-height: 28px;
+  align-self: stretch;
+  position: relative;
+  color: #fff;
+}
+
+.Carousel2Box {
+  font-size: 16px;
+  line-height: 30px;
+  font-weight: 400;
+  font-family: "OS-Regular";
+  line-height: 28px;
+  align-self: stretch;
+  position: relative;
+  color: #fff;
+  width: 190px;
+  height: 196px;
+  padding: 15px;
+  border: 1px solid #fff;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Carousel2Img {
+  height: 71px;
+  width: 71px;
+}
+
+.Carousel2Title1 {
+  font-family: "Inter-Regular";
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 36px;
+  letter-spacing: 0em;
+  text-align: center;
+}
+
+.Carousel2Title2 {
+  font-family: "Inter-Regular";
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 18px;
+}
+
+.button5 {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.Header__buttonTxt:hover {
+  cursor: pointer;
+  scale: 1.1;
+  /* color: #6e2b8b; */
+  /* background-color: #0671e0; */
+  /* color: #fff; */
+  margin-right: 5px;
+}
+
+.Header__buttonTxt {
+  line-height: 28px;
+  font-family: "OS-Regular";
+  font-weight: 600;
+}
+
+.Header__buttonContainer {
+  background-color: #fff;
+  border: 1px solid #d0d5dd;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  color: #0671e0;
+  border-radius: 4px;
+  border: 1px solid var(--Primary-M_Blue, #0671e0);
+  background: var(--Neutral-White, #fff);
+}
+.Header__button {
+  flex-shrink: 0;
+  justify-content: flex-start;
+  color: #344054;
+}
+
+.custom-container {
+  max-width: 1300px; /* Set your desired width here */
+}
+
+.custom-Headercontainer {
+  max-width: 1350px; /* Set your desired width here */
+}
+
+.Bannerheading {
+  font-size: 36px;
+  line-height: 48px;
+  font-family: "Inter-Regular";
+  align-self: stretch;
+  position: relative;
+  color: #fff;
+}
+
+.SliderSection .slick-slider .slick-dots {
+  display: block;
+  text-align: center;
+  padding: 10px 0;
+  bottom: 15px !important;
+  right: 600px !important;
+}
+
+.SliderSection .slick-dots li {
+  display: inline-block;
+  margin: 0 0px;
+}
+
+.SliderSection .slick-dots li button {
+  /* font-size: 10px; */
+  line-height: 1;
+  color: #000; /* Adjust the color as needed */
+  border-radius: 50%;
+  background: #dbedff;
+  cursor: pointer;
+  padding: 5px;
+  width: 13px;
+  height: 13px;
+}
+
+.SliderSection .slick-dots li button:before {
+  font-size: 0px !important;
+}
+
+.SliderSection .slick-dots li.slick-active button {
+  background-color: #fff; /* Active dot background color */
+}
+
+.SliderSection .slick-prev {
+  left: 4% !important;
+  z-index: 1;
+}
+
+.SliderSection .slick-next {
+  right: 4% !important;
+  z-index: 1;
+}
+
+.submenu-arrow {
+  position: absolute;
+  right: 25px;
+  transition: transform 0.3s ease;
+  font-size: 18px;
+}
+
+.sub-menu,
+.sub-menu1 {
+  display: none;
+}
+
+.submenu-open .sub-menu {
+  display: block;
+  margin-left: -10px;
+}
+
+.submenu-open1 .sub-menu1 {
+  display: block;
+  margin-left: -10px;
+}
+
+.submenu-open1 .submenu-arrow {
+  transform: rotate(180deg);
+}
+
+.nav-color {
+  color: black;
+}
+
+@media screen and (max-width: 550px) {
+  .SliderSection {
+    height: 200px;
+  }
+  .Homesection {
+    /* padding: 20px; */
+    background-image: url(../img/Mobile_banner/banner\ 1.jpg);
+
+    background-size: contain;
+    height: 28vh;
+  }
+
+  .Bannerheading {
+    line-height: 30px;
+  }
+  .content1 {
+    width: 100%;
+    height: auto;
+  }
+
+  .Header__heading2 {
+    font-size: 10px;
+  }
+
+  .homeBanner2 {
+    background-size: contain;
+    background-image: url(../img/Mobile_banner/Banner\ 2.jpg);
+  }
+  .Bannerheading {
+    font-size: 22px;
+  }
+
+  .Carousel2Box {
+    height: 137px;
+  }
+
+  .Carousel2Img {
+    height: 40px;
+    width: 40px;
+  }
+
+  .SliderSection .slick-slider .slick-dots {
+    bottom: 10px !important;
+    right: 0 !important;
+  }
+
+  .Carousel2Box {
+    width: 110px;
+  }
+
+  .Carousel2Title1 {
+    font-size: 20px;
+  }
+
+  .Header__heading {
+    gap: 15px;
+  }
+
+  .DatasetCard {
+    margin-bottom: 25px;
+  }
+
+  .DatasetContainer {
+    padding: 10px !important;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .Carousel2Box {
+    width: 100px;
+  }
+
+  .Carousel2Title1 {
+    font-size: 16px;
+  }
+
+  .Header__heading {
+    gap: 5px;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width: 1200px) {
+  .SliderSection .slick-slider .slick-dots {
+    right: 400px !important;
+  }
+
+  .TabNavbar {
+    font-size: 11px;
+  }
+
+  .Homesection,
+  .homeBanner2 {
+    object-fit: contain;
+    height: 310px;
+  }
+}
+
+@media screen and (min-width: 1201px) and (max-width: 1320px) {
+  .SliderSection .slick-slider .slick-dots {
+    right: 550px !important;
+  }
+}
+
+@media screen and (min-width: 1321px) and (max-width: 1500px) {
+  .SliderSection .slick-slider .slick-dots {
+    right: 570px !important;
+  }
+}
