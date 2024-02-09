@@ -25,14 +25,14 @@ const HomeDatasets = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Assuming fetchChartData1, fetchChartData2, and fetchChartData3 are your API functions
+        
         const [response1, response2, response3] = await Promise.all([
           fetchChartData(apiValue, "", criterions),
           fetchChartData("model", "", ""),
           fetchChartData("benchmark", "", ""),
         ]);
 
-        // Check for errors in each response
+       
         if (!response1.ok)
           throw new Error(`HTTP error! Status: ${response1.status}`);
         if (!response2.ok)
