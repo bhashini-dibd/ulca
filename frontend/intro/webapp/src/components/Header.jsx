@@ -42,7 +42,7 @@ const MobileHeader = () => {
                   <li className="sub-item">Team</li>
                 </ul> */}
               </li>
-              <li>
+              {/* <li>
                 {" "}
                 <a
                   className="nav-color"
@@ -50,7 +50,7 @@ const MobileHeader = () => {
                 >
                   Ecosystem
                 </a>
-              </li>
+              </li> */}
               <li>
                 {" "}
                 <a
@@ -271,14 +271,14 @@ function Header() {
                     </a>
                   </div>
                 </li> */}
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     href="https://bhashini.gov.in/ecosystem"
                   >
                     Ecosystem
                   </a>
-                </li>
+                </li> */}
                 <li className="nav-item">
                   <a
                     className="nav-link"
