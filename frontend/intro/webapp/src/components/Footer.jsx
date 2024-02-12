@@ -33,7 +33,8 @@ const Footer = () => {
                 Mail
                 <br />
                 <a class="" href="mailto:ceo-dibd@digitalindia.gov.in">
-                  ceo-dibd[at]digitalindia[dot]gov[dot]in
+                  {/* ceo-dibd[at]digitalindia[dot]gov[dot]in */}
+                  ceo-dibd@digitalindia.gov.in
                 </a>
               </div>
             </div>
