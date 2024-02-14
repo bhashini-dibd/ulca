@@ -38,8 +38,8 @@ const localization_EN_Data = {
   "label.downloadAll": "Download All",
   "label.downloadSample": "Download sample",
   "button.openDialog": "Open dialog",
-  "link.meity": "www.meity.gov.in",
-  "link.contactUs": "contact@bhashini.gov.in",
+  "link.meity": "www.bhashini.gov.in",
+  "link.contactUs": "ceo-dibd@digitalindia.gov.in",
   "label.addressInfo":
     "Electronics Niketan, 6, CGO Complex, Lodhi Road, New Delhi - 110003",
   "link.joinBhashaDaan": "Join Bhasha Daan",
