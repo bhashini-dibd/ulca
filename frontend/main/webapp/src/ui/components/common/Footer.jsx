@@ -19,7 +19,16 @@ const Footer = (props) => {
   return (
     <footer>
       <Grid container>
-        <Grid item xs={12} sm={4} md={4} lg={4} xl={4} className={classes.grid} style={{width:"100vw"}}>
+        <Grid
+          item
+          xs={12}
+          sm={4}
+          md={4}
+          lg={4}
+          xl={4}
+          className={classes.grid}
+          style={{ width: "100vw" }}
+        >
           <img src={web} alt="" className={classes.image} />
           <div>
             <Typography variant="body2">{translate("label.web")}</Typography>
@@ -36,15 +45,7 @@ const Footer = (props) => {
             </Typography>
           </div>
         </Grid>
-        <Grid
-          item
-          xs={0}
-          sm={4}
-          md={4}
-          lg={4}
-          xl={4}
-          className={classes.grid2}
-        >
+        <Grid item xs={0} sm={4} md={4} lg={4} xl={4} className={classes.grid2}>
           <img src={email} alt="" className={classes.image} />
           <div className="">
             <Typography variant="body2">{translate("label.mail")}</Typography>
@@ -54,7 +55,6 @@ const Footer = (props) => {
                 href="mailto:contact@bhashini.gov.in"
               >
                 {translate("link.contactUs")}
-              
               </Link>
             </Typography>
           </div>
@@ -70,7 +70,9 @@ const Footer = (props) => {
         >
           <img src={location} alt="" className={classes.image} />
           <div className="">
-            <Typography variant="body2">{translate("label.address")}</Typography>
+            <Typography variant="body2">
+              {translate("label.address")}
+            </Typography>
             <Typography variant="body1" className={classes.link} href="">
               {translate("label.addressInfo")}
             </Typography>
@@ -80,7 +82,7 @@ const Footer = (props) => {
       <div className="section primary-color">
         <div className={classes.parentDiv}>
           <Grid container className={classes.container}>
-            <Grid container>
+            <Grid container style={{ alignItems: "center" }}>
               <Grid item xs={12} sm={12} md={6} lg={4} xl={6}>
                 <ul className={classes.bhasini}>
                   {/* <Typography variant="body2">
@@ -91,23 +93,23 @@ const Footer = (props) => {
                     </li>
                   </Typography> */}
 
-                  <Typography variant="body1">
+                  <Typography style={{ fontSize: "1rem" }}>
                     <li>
                       <Link
                         color="while"
-                        href="https://bhashini.gov.in/en/ecosystem"
+                        href="https://bhashini.gov.in/ecosystem"
                       >
-                         {translate("link.ecosystem")}
+                        {translate("link.ecosystem")}
                       </Link>
                     </li>
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography variant="body1" style={{ fontSize: "1rem" }}>
                     <li>
                       <Link
                         color="while"
                         href="http://bhashini.gov.in/bhashadaan"
                       >
-                         {translate("link.joinBhashaDaan")}{" "}
+                        {translate("link.joinBhashaDaan")}{" "}
                       </Link>
                     </li>
                   </Typography>
@@ -136,7 +138,10 @@ const Footer = (props) => {
                 <ul className={classes.social}>
                   <Typography variant="body1">
                     <li>
-                      <Link href="https://www.facebook.com/profile.php?id=100093281985246" target="_self">
+                      <Link
+                        href="https://www.facebook.com/profile.php?id=100093281985246"
+                        target="_self"
+                      >
                         <img src={facebook} alt="facebook" />
                       </Link>
                     </li>
@@ -150,7 +155,10 @@ const Footer = (props) => {
                   </Typography>
                   <Typography variant="body1">
                     <li>
-                      <Link href="https://www.instagram.com/_officialbhashini/" target="_self">
+                      <Link
+                        href="https://www.instagram.com/_officialbhashini/"
+                        target="_self"
+                      >
                         {" "}
                         <img src={insta} alt="instagram" />
                       </Link>
@@ -158,17 +166,30 @@ const Footer = (props) => {
                   </Typography>
                   <Typography variant="body1">
                     <li>
-                      <Link href="https://www.linkedin.com/company/96244597/admin/feed/posts/" target="_self">
+                      <Link
+                        href="https://www.linkedin.com/company/96244597/admin/feed/posts/"
+                        target="_self"
+                      >
                         {" "}
-                        <img src={process.env.PUBLIC_URL + '/linkedin.png'} style={{ borderRadius: "100%" }} alt="linkedin" />
+                        <img
+                          src={process.env.PUBLIC_URL + "/linkedin.png"}
+                          style={{ borderRadius: "100%" }}
+                          alt="linkedin"
+                        />
                       </Link>
                     </li>
                   </Typography>
                   <Typography variant="body1">
                     <li>
-                      <Link href="https://www.kooapp.com/profile/_BHASHINI" target="_self">
+                      <Link
+                        href="https://www.kooapp.com/profile/_BHASHINI"
+                        target="_self"
+                      >
                         {" "}
-                        <img src={process.env.PUBLIC_URL + '/koo.svg'} alt="instagram" />
+                        <img
+                          src={process.env.PUBLIC_URL + "/koo.svg"}
+                          alt="instagram"
+                        />
                       </Link>
                     </li>
                   </Typography>
@@ -192,14 +213,14 @@ const Footer = (props) => {
                 {translate("label.nltm")}
               </Typography> */}
             </Grid>
-            <Grid item xs={12} sm={6} md={6}  lg={3} xl={3} >
-              <ul className={classes.info} >
-                <Typography variant="body2" >
+            <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
+              <ul className={classes.info}>
+                <Typography variant="body2">
                   {" "}
                   <li>
                     <Link
                       color="while"
-                      href="https://bhashini.gov.in/en/privacy-policy"
+                      href="https://bhashini.gov.in/privacy-policy"
                       target="_self"
                     >
                       {translate("link.privacyPolicy")}
@@ -210,7 +231,7 @@ const Footer = (props) => {
                   <li>
                     <Link
                       color="white"
-                      href="https://bhashini.gov.in/en/privacy-policy"
+                      href="https://bhashini.gov.in/privacy-policy"
                       target="_self"
                     >
                       {translate("link.privacyPolicy")}
@@ -221,11 +242,11 @@ const Footer = (props) => {
                   <li>
                     <Link
                       color="white"
-                      href="https://bhashini.gov.in/en/terms-conditions"
+                      href="https://bhashini.gov.in/terms-of-use"
                       target="_self"
                     >
                       {" "}
-                      {translate('link.termsAndConditions')}
+                      {translate("link.termsAndConditions")}
                     </Link>
                   </li>
                 </Typography>
@@ -240,26 +261,47 @@ const Footer = (props) => {
                 {translate("label.nltm")}
               </Typography> */}
             </Grid>
-            <Grid item xs={12} sm={6} md={6}  lg={3} xl={3} >
-              <div className={classes.infoNew} style={{display:"flex"}}>
-                <Typography variant="body2" className="lighGrey mb-0" style={{display:"flex", justifyContent:"flex-end"}}>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={6}
+              lg={3}
+              xl={3}
+              className={classes.mobileDesigned}
+            >
+              <div className={classes.infoNew} style={{ display: "flex" }}>
+                <Typography
+                  variant="body2"
+                  className="lighGrey mb-0"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    lineHeight: "14px",
+                  }}
+                >
                   {" "}
                   Designed, Developed & Hosted by
                 </Typography>
-             
-           
               </div>
-              <div className={classes.infoNew} style={{marginTop:"5px"}}>
-                <Typography variant="body2" className="light mb-0" style={{color:"white", display:"flex", justifyContent:"flex-end"}}>
+              <div
+                className={classes.infoNew}
+                style={{ marginTop: "5px", display: "flex" }}
+              >
+                <Typography
+                  variant="body2"
+                  className="light mb-0"
+                  style={{
+                    color: "white",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
                   {" "}
                   Digital India Bhashini Division (DIBD)
                 </Typography>
-             
-           
               </div>
             </Grid>
-
-          
 
             <Grid
               item
@@ -268,12 +310,18 @@ const Footer = (props) => {
               md={6}
               lg={6}
               xl={6}
-              style={{ marginTop: "0rem", display:"flex", alignItems:"center" }}
+              style={{
+                marginTop: "0rem",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
-              <a href="" className="tdl-logo">
-                <img className={classes.tdlLogo} src={process.env.PUBLIC_URL + '/meity_logo.png'} />
+              <a href="" className={classes.tdlLogoSection}>
+                <img
+                  className={classes.tdlLogo}
+                  src={process.env.PUBLIC_URL + "/meity_logo.png"}
+                />
               </a>
-              
             </Grid>
             <Grid
               item
@@ -294,14 +342,12 @@ const Footer = (props) => {
                 <img src={dg} alt="dg-india logo" />
               </a>
             </Grid>
-            <div className={classes.BottomText} style={{display:"flex"}}>
-                <Typography variant="body2" className="lighGrey mb-0" >
-                  {" "}
-                  Technology Development for Indian Languages Programme
-                </Typography>
-             
-           
-              </div>
+            <div className={classes.BottomText} style={{ display: "flex" }}>
+              <Typography variant="body2" className="lighGrey mb-0 mt-3">
+                {" "}
+                Technology Development for Indian Languages Programme
+              </Typography>
+            </div>
 
             {/* <Grid
               item
