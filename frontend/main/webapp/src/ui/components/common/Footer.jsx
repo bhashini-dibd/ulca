@@ -36,7 +36,8 @@ const Footer = (props) => {
               <Link
                 className={classes.link}
                 color="#16337B"
-                href="https://www.meity.gov.in"
+                // href="https://www.meity.gov.in"
+                href="https://www.bhashini.gov.in"
                 target="_self"
                 rel="noopener noreferrer"
               >
@@ -52,7 +53,7 @@ const Footer = (props) => {
             <Typography variant="body1">
               <Link
                 className={classes.link}
-                href="mailto:contact@bhashini.gov.in"
+                href="mailto:ceo-dibd@digitalindia.gov.in"
               >
                 {translate("link.contactUs")}
               </Link>
@@ -216,8 +217,18 @@ const Footer = (props) => {
             <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
               <ul className={classes.info}>
                 <Typography variant="body2">
+                <li>
+                    <Link
+                      color="while"
+                      href="https://bhashini.gov.in/privacy-policy"
+                      target="_self"
+                    >
+                      {translate("link.privacyPolicy")}
+                    </Link>
+                  </li>
+                  </Typography>
                   {" "}
-                  <li>
+                  {/* <li>
                     <Link
                       color="while"
                       href="https://bhashini.gov.in/privacy-policy"
