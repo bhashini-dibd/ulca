@@ -162,7 +162,6 @@ header {
 .navbar-light .navbar-nav .nav-link:hover {
   border-color: #ff7f11;
   padding-bottom: 15px;
-
 }
 .bh-btn-primary {
   background-color: #2961ad;
@@ -738,8 +737,9 @@ footer ul.link li:first-child {
 
 .mobileButton {
   margin-top: 9%;
+  display: flex;
   flex-direction: row;
-  justify-content: "space-between";
+  justify-content: flex-end;
 }
 
 @media screen and (max-width: 500px) {
