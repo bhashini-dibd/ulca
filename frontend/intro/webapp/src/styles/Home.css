@@ -320,6 +320,16 @@
   color: black;
 }
 
+.nav-color:active,
+.nav-color:focus,
+.nav-color:hover {
+  color: black;
+}
+
+.nav-color:hover {
+  text-decoration: none;
+}
+
 @media screen and (max-width: 550px) {
   .SliderSection {
     height: 200px;
