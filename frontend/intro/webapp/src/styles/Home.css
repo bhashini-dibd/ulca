@@ -438,3 +438,18 @@
     right: 570px !important;
   }
 }
+
+@media screen and (min-width: 1701px) {
+  .datasetResponsiveContainer {
+    padding: 24px 200px;
+  }
+
+  .Homesection {
+    height: 600px;
+  }
+
+  .SliderSection .slick-slider .slick-dots {
+    bottom: 100px !important;
+    right: 690px !important;
+  }
+}

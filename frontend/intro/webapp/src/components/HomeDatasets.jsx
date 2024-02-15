@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import info from "../img/info.svg";
+import { useMediaQuery } from "@material-ui/core";
 const HomeDatasets = () => {
   const [selectedValue, setSelectedDataset] = useState("Parallel Dataset");
   const [apiValue, setApiValue] = useState("parallel-corpus");
   const [totalValue, setTotalValue] = useState("");
   const [totalValue2, setTotalValue2] = useState("");
   const [totalValue3, setTotalValue3] = useState("");
-
+  const isDesktopScreen = useMediaQuery("(max-width:1700px)");
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -25,14 +26,12 @@ const HomeDatasets = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
         const [response1, response2, response3] = await Promise.all([
           fetchChartData(apiValue, "", criterions),
           fetchChartData("model", "", ""),
           fetchChartData("benchmark", "", ""),
         ]);
 
-       
         if (!response1.ok)
           throw new Error(`HTTP error! Status: ${response1.status}`);
         if (!response2.ok)
@@ -40,22 +39,18 @@ const HomeDatasets = () => {
         if (!response3.ok)
           throw new Error(`HTTP error! Status: ${response3.status}`);
 
-  
         const response1Json = await response1.json();
         const response2Json = await response2.json();
         const response3Json = await response3.json();
 
-        
         setTotalValue(response1Json?.count || "");
         setTotalValue2(response2Json?.count || "");
         setTotalValue3(response3Json?.count || "");
       } catch (error) {
         console.error("Error fetching data:", error);
-        
       }
     };
 
-    
     fetchData();
   }, []);
 
@@ -104,7 +99,7 @@ const HomeDatasets = () => {
   };
   return (
     <div
-      className="container text-left elements "
+      className={`${isDesktopScreen ? 'container' : ''} datasetResponsiveContainer  text-left elements  `}
       style={{ marginBottom: "80px" }}
     >
       <div className="row">
@@ -256,11 +251,7 @@ const HomeDatasets = () => {
                 <img src={info} className="w-75" />
               </span>
             </div>
-            <h6
-              id="totalValue"
-            >
-              {totalValue ? totalValue : 0}
-            </h6>
+            <h6 id="totalValue">{totalValue ? totalValue : 0}</h6>
             <div
               style={{
                 textAlign: "center",
@@ -315,11 +306,7 @@ const HomeDatasets = () => {
                 <img src={info} />
               </span>
             </div>
-            <h6
-              id="totalValue2"
-            >
-              {totalValue2 ? totalValue2 : 0}
-            </h6>
+            <h6 id="totalValue2">{totalValue2 ? totalValue2 : 0}</h6>
             <div
               style={{
                 display: "flex",
@@ -383,11 +370,7 @@ const HomeDatasets = () => {
                 <img src={info} />
               </span>
             </div>
-            <h6
-              id="totalValue3"
-            >
-              {totalValue3 ? totalValue3 : 0}
-            </h6>
+            <h6 id="totalValue3">{totalValue3 ? totalValue3 : 0}</h6>
             <div
               style={{
                 display: "flex",
