@@ -56,7 +56,6 @@ const faqData = [
   },
 ]
 
-console.log("checking")
 
 const ExpandableCard = ({ question, answer }) => {
   const classes = useStyles();
