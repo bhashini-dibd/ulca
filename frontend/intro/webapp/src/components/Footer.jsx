@@ -1,20 +1,24 @@
+import { useMediaQuery } from "@material-ui/core";
+
 const Footer = () => {
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+
   return (
     <>
-      <footer class="footer">
-        <div class="container-fluid">
-          <div class="footer-links row">
-            <div class="col-md-4 footerBg bg1">
+      <footer className="footer">
+        <div className="container-fluid">
+          <div className="footer-links row">
+            <div className="col-md-4 footerBg bg1">
               <img
                 src={`${process.env.PUBLIC_URL}/img/web.png`}
                 alt="Web.png"
-                class=""
+                className=""
               />
-              <div class="">
+              <div className="">
                 Web
                 <br />
                 <a
-                  class=""
+                  className=""
                   href="https://bhashini.gov.in/"
                   target="_self"
                   rel="noopener noreferrer"
@@ -23,56 +27,64 @@ const Footer = () => {
                 </a>
               </div>
             </div>
-            <div class="col-md-4 footerBg bg2">
+            <div className="col-md-4 footerBg bg2">
               <img
                 src={`${process.env.PUBLIC_URL}/img/email-id.png`}
                 alt="email-id.png"
-                class=""
+                className=""
               />
-              <div class="">
+              <div className="">
                 Mail
                 <br />
-                <a class="" href="mailto:ceo-dibd@digitalindia.gov.in">
-                  {/* ceo-dibd[at]digitalindia[dot]gov[dot]in */}
-                  ceo-dibd@digitalindia.gov.in
+                <a className="" href="mailto:ceo-dibd@digitalindia.gov.in">
+                  ceo-dibd[at]digitalindia[dot]gov[dot]in
                 </a>
               </div>
             </div>
-            <div class="col-md-4 footerBg bg3">
+            <div className="col-md-4 footerBg bg3">
               <img
                 src={`${process.env.PUBLIC_URL}/img/location.png`}
                 alt="location.png"
-                class=""
+                className=""
               />
-              <div class="">
+              <div className="">
                 Address
                 <br />
-                <p class="ft-20 fw-500" href="">
+                <p className="ft-20 fw-500" href="">
                   Electronics Niketan, 6, CGO Complex, Lodhi Road, New Delhi -
                   110003
                   <br />
-                  <span class="ft-14">Tel: 011-24301361</span>
+                  <span className="ft-14">Tel: 011-24301361</span>
                 </p>
               </div>
             </div>
           </div>
         </div>
-        <div class="section primary-color">
-          <div class="container">
-            <div class="row align-items-center">
-              <div class="col-md-6">
-                <ul class="d-lg-flex link">
+        <div className="section primary-color">
+          <div className="container">
+            <div className="row align-items-center">
+              <div className="col-md-6">
+                <ul
+                  className="d-block d-lg-flex link"
+                  style={{ textAlign: isSmallScreen ? "center" : "" }}
+                >
                   {/* <li>
                     <a href="https://bhashini.gov.in/images/Bhashini_-_Whitepaper.pdf">
                       Whitepaper
                     </a>
                   </li> */}
                   <li>
-                    <a class="footer-anchor-redirect-links" target="_blank" href="#">Ecosystem</a>
+                    <a
+                      className="footer-anchor-redirect-links"
+                      target="_blank"
+                      href="https://bhashini.gov.in/ecosystem"
+                    >
+                      Ecosystem
+                    </a>
                   </li>
                   <li>
                     <a
-                      class="footer-anchor-redirect-links"
+                      className="footer-anchor-redirect-links"
                       href="http://bhashini.gov.in/bhashadaan"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -83,10 +95,13 @@ const Footer = () => {
                   </li>
                 </ul>
               </div>
-              <div class="col-md-6">
-                <ul class="socialLink link d-flex justify-content-end">
+              <div className="col-md-6">
+                <ul className="socialLink link d-flex justify-content-end">
                   <li>
-                    <a href="https://www.instagram.com/_officialbhashini/" target="_self">
+                    <a
+                      href="https://www.instagram.com/_officialbhashini/"
+                      target="_self"
+                    >
                       {" "}
                       <img
                         src={`${process.env.PUBLIC_URL}/img/insta.png`}
@@ -95,7 +110,10 @@ const Footer = () => {
                     </a>
                   </li>
                   <li>
-                    <a href="https://www.facebook.com/profile.php?id=100093281985246" target="_self">
+                    <a
+                      href="https://www.facebook.com/profile.php?id=100093281985246"
+                      target="_self"
+                    >
                       <img
                         src={`${process.env.PUBLIC_URL}/img/facebook.png`}
                         alt="facebook"
@@ -103,7 +121,10 @@ const Footer = () => {
                     </a>
                   </li>
                   <li>
-                    <a href="https://www.linkedin.com/company/96244597/admin/feed/posts/" target="_self">
+                    <a
+                      href="https://www.linkedin.com/company/96244597/admin/feed/posts/"
+                      target="_self"
+                    >
                       <img
                         src={`${process.env.PUBLIC_URL}/img/linkedin.png`}
                         style={{ borderRadius: "100%" }}
@@ -120,7 +141,10 @@ const Footer = () => {
                     </a>
                   </li>
                   <li>
-                    <a href="https://www.kooapp.com/profile/_BHASHINI" target="_self">
+                    <a
+                      href="https://www.kooapp.com/profile/_BHASHINI"
+                      target="_self"
+                    >
                       <img
                         src={`${process.env.PUBLIC_URL}/img/koo.svg`}
                         alt="twitter"
@@ -131,15 +155,15 @@ const Footer = () => {
               </div>
             </div>
             <hr />
-            <div class="row align-items-center mt-4 mb-4">
-              <div class="col-md-8 col-lg-6">
-                {/* <p class="lighGrey mb-0">
+            <div className="row align-items-center mt-4 mb-4">
+              <div className="col-md-8 col-lg-6">
+                {/* <p className="lighGrey mb-0">
                   Copyright @2021 NLTM. All Rights Reserved.
                   <br /> NLTM: National Language Translation Mission
                 </p> */}
               </div>
-              <div class="col-md-4 col-lg-6">
-                <ul class="d-lg-flex link justify-content-end ">
+              <div className="col-md-4 col-lg-6">
+                <ul className={`d-flex d-lg-flex link ${isSmallScreen ? 'justify-content-center' : 'justify-content-end '} `}>
                   {/* <li>
                     <a
                       href="https://bhashini.gov.in/en/web-information-manager"
@@ -152,7 +176,7 @@ const Footer = () => {
                     <a
                       href="https://bhashini.gov.in/privacy-policy"
                       target="_self"
-                      class="footer-anchor-redirect-links"
+                      className="footer-anchor-redirect-links"
                     >
                       Privacy Policy
                     </a>
@@ -161,7 +185,7 @@ const Footer = () => {
                     <a
                       href="https://bhashini.gov.in/terms-of-use"
                       target="_self"
-                      class="footer-anchor-redirect-links"
+                      className="footer-anchor-redirect-links"
                     >
                       {" "}
                       Terms of Use
@@ -170,18 +194,23 @@ const Footer = () => {
                 </ul>
               </div>
             </div>
-            <div class="row align-items-center justify-content-between mt-5">
-              <div class="col-md-7">
-                <a href="" class="tdl-logo">
+            <div className="row align-items-center justify-content-between mt-5">
+              <div className="col-md-7">
+                <a href="" className="tdl-logo">
                   <img
                     src={`${process.env.PUBLIC_URL}/img/meity_logo.png`}
                     alt="TDIL logo"
                   />
                 </a>
               </div>
-              <div class="col-md-3 text-right">
-                <div class="caption mb-3"><span class="lighGrey text-center ft-14">Designed, Developed &amp; Hosted by</span><a href=""> Digital India Corporation(DIC)</a></div>
-                <a href="" class="dg-india-logo ">
+              <div className="col-md-3 text-right">
+                <div className="caption mb-3">
+                  <span className="lighGrey text-center ft-14">
+                    Designed, Developed &amp; Hosted by
+                  </span>
+                  <a href=""> Digital India Corporation(DIC)</a>
+                </div>
+                <a href="" className="dg-india-logo ">
                   <img
                     src={`${process.env.PUBLIC_URL}/img/dg-india.png`}
                     alt="dg-india logo"
@@ -189,20 +218,20 @@ const Footer = () => {
                 </a>
               </div>
             </div>
-            <div class="row mt-4 pt-4">
-              <div class="col-md-5">
-                <p class="lighGrey text-center ft-14">
+            <div className="row mt-4 pt-4">
+              <div className="col-md-5">
+                <p className="lighGrey text-center ft-14">
                   Technology Development for Indian Languages Programme
                 </p>
               </div>
-              <div class="col-md-4">
-                {/* <p class="lighGrey text-center ft-14 ">
+              <div className="col-md-4">
+                {/* <p className="lighGrey text-center ft-14 ">
                   JavaScript must be enabled to access this site. Supports :
                   Firefox, Google Chrome, Internet Explorer 10.0+, Safari
                 </p> */}
               </div>
-              <div class="col-md-4">
-                {/* <p class="lighGrey text-center ft-14">
+              <div className="col-md-4">
+                {/* <p className="lighGrey text-center ft-14">
                   Last reviewed and updated on:16–Jun-2021
                 </p> */}
               </div>
