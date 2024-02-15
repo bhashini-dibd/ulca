@@ -31,55 +31,23 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   card: {
-    minHeight: 260,
+    minHeight: 250,
     display: "flex",
     flexDirection: "column",
     borderRadius: 8,
   },
   cardContent: {
     flex: 1,
+    padding: "32px",
   },
 }));
 
 const cardData = [
   {
-    icon: clipboard1,
-    title: "Task-Specific Excellence",
-    description: "Multiple benchmarks defined for each model task.",
-  },
-  {
-    icon: dataClassification1,
-    title: "Attributing Excellence",
-    description:
-      "Proper attribution for every contributor at the record level.",
-  },
-  {
-    icon: dataCollection1,
-    title: "Comprehensive metadata Collection",
-    description:
-      "Collect extensive metadata related to dataset for various analysis.",
-  },
-  {
-    icon: data1,
-    title: "Seamless Exploration",
-    description:
-      "Simple interface to search and download datasets based on various filters.",
-  },
-  {
-    icon: efficiency1,
-    title: "Efficiency Unleashed",
-    description: "Deduplication capability built-in",
-  },
-  {
     icon: management1,
     title: "Establishing Dominance",
     description:
       "Aiming to Become the Leading Data Repository for Indian Language Resources.",
-  },
-  {
-    icon: serverCheck1,
-    title: "Elevating Standards",
-    description: "Perform various quality checks on the submitted datasets.",
   },
   {
     icon: standard1,
@@ -88,15 +56,52 @@ const cardData = [
       "Collect datasets for MT, ASR, TTS, OCR and various NLP tasks in standardized but extensible formats.",
   },
   {
+    icon: dataCollection1,
+    title: "Comprehensive metadata Collection",
+    description:
+      "Collect extensive metadata related to dataset for various analysis.",
+  },
+  {
+    icon: dataClassification1,
+    title: "Attributing Excellence",
+    description:
+      "Proper attribution for every contributor at the record level.",
+  },
+  {
+    icon: efficiency1,
+    title: "Efficiency Unleashed",
+    description: "Deduplication capability built-in",
+  },
+  {
+    icon: data1,
+    title: "Seamless Exploration",
+    description:
+      "Simple interface to search and download datasets based on various filters.",
+  },
+  {
+    icon: serverCheck1,
+    title: "Elevating Standards",
+    description: "Perform various quality checks on the submitted datasets.",
+  },
+
+  {
     icon: training1,
     title: "Precision Perfected",
     description: "Trained models for language specific tasks.",
+  },
+  {
+    icon: clipboard1,
+    title: "Task-Specific Excellence",
+    description: "Multiple benchmarks defined for each model task.",
   },
 ];
 
 export const WhyULCA = () => {
   const classes = useStyles();
   const isSmallScreen = useMediaQuery("(max-width:600px)");
+  const isMediumScreen = useMediaQuery(
+    "(min-width:801px) and (max-width:1200px)"
+  );
   return (
     <Grid
       style={{ backgroundColor: "#F5F7FA", paddingTop: 40, display: "grid" }}
@@ -106,7 +111,7 @@ export const WhyULCA = () => {
           textAlign: "center",
           letterSpacing: 1,
           marginBottom: 15,
-          fontFamily: "Inter",
+          fontFamily: "Inter-Regular",
           fontWeight: 600,
           fontSize: "36px",
         }}
@@ -123,10 +128,11 @@ export const WhyULCA = () => {
       >
         <Typography
           style={{
-            width: "60%",
-            fontFamily: "Inter",
+            width: isSmallScreen ? "80%" : "60%",
+            fontFamily: "OS-Regular",
             fontSize: "16px",
             fontWeight: 400,
+            marginBottom: isSmallScreen ? "25px" : "0px",
           }}
           variant="body2"
         >
@@ -141,9 +147,9 @@ export const WhyULCA = () => {
         direction="row"
         justifyContent="center"
         style={{
-          padding: 40,
+          padding: isSmallScreen ? 10 : 40,
           columnGap: 0.5,
-          width: "90%",
+          width: isSmallScreen ? "100%" : isMediumScreen ? "127%" : "110%",
           alignSelf: "center",
           justifySelf: "center",
         }}
@@ -154,7 +160,7 @@ export const WhyULCA = () => {
             key={i}
             xs={12}
             sm={6}
-            md={4}
+            md={3}
             lg={3}
             className={classes.gridItem}
           >
@@ -165,7 +171,7 @@ export const WhyULCA = () => {
                   variant="h5"
                   style={{
                     marginTop: 16,
-                    fontFamily: "Inter",
+                    fontFamily: "Inter-Regular",
                     fontSize: 20,
                     fontWeight: "600",
                   }}
@@ -176,7 +182,7 @@ export const WhyULCA = () => {
                   variant="body2"
                   style={{
                     marginTop: 16,
-                    fontFamily: "Open Sans",
+                    fontFamily: "OS-Regular",
                     fontSize: 16,
                   }}
                 >
