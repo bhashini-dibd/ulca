@@ -43,9 +43,12 @@ const HomeDatasets = () => {
         const response2Json = await response2.json();
         const response3Json = await response3.json();
 
-        setTotalValue(response1Json?.count || "");
-        setTotalValue2(response2Json?.count || "");
-        setTotalValue3(response3Json?.count || "");
+        setTotalValue(response1?.count || "");
+        console.log(response1?.count, response1,"1");
+        console.log(response2?.count, response2,"2");
+        console.log(response3?.count, response3,"3");
+        setTotalValue2(response2?.count || "");
+        setTotalValue3(response3?.count || "");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
