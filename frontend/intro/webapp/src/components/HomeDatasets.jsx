@@ -26,29 +26,28 @@ const HomeDatasets = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [response1, response2, response3] = await Promise.all([
-          fetchChartData(apiValue, "", criterions),
-          fetchChartData("model", "", ""),
-          fetchChartData("benchmark", "", ""),
-        ]);
+        // const [response1, response2, response3] = await Promise.all([
+        //   fetchChartData(apiValue, "", criterions),
+        //   fetchChartData("model", "", ""),
+        //   fetchChartData("benchmark", "", ""),
+        // ]);
 
-        if (!response1.ok)
-          throw new Error(`HTTP error! Status: ${response1.status}`);
-        if (!response2.ok)
-          throw new Error(`HTTP error! Status: ${response2.status}`);
-        if (!response3.ok)
-          throw new Error(`HTTP error! Status: ${response3.status}`);
+        const response1 = await fetchChartData(apiValue, "", criterions);
+        setTotalValue(response1?.count);
+        const response2 = await fetchChartData("model", "", "");
+        setTotalValue(response2?.count);
+        const response3 = await fetchChartData("benchmark", "", "");
+        setTotalValue(response3?.count);
+        
 
-        const response1Json = await response1.json();
-        const response2Json = await response2.json();
-        const response3Json = await response3.json();
+        // setTotalValue(response1?.count || "");
+        // console.log(response1?.count, response1, "1");
+        // console.log(response2?.count, response2, "2");
+        // console.log(response3?.count, response3, "3");
+        // console.log("1");
 
-        setTotalValue(response1?.count || "");
-        console.log(response1?.count, response1,"1");
-        console.log(response2?.count, response2,"2");
-        console.log(response3?.count, response3,"3");
-        setTotalValue2(response2?.count || "");
-        setTotalValue3(response3?.count || "");
+        // setTotalValue2(response2?.count || "");
+        // setTotalValue3(response3?.count || "");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -56,6 +55,7 @@ const HomeDatasets = () => {
 
     fetchData();
   }, []);
+  console.log("3");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,7 +72,7 @@ const HomeDatasets = () => {
     }
   }, [apiValue]);
 
-  console.log(totalValue, totalValue2, totalValue3,"change");
+  console.log(totalValue, totalValue2, totalValue3, "change");
 
   const fetchChartData = async (dataType, value, criterions) => {
     try {
@@ -104,7 +104,9 @@ const HomeDatasets = () => {
   };
   return (
     <div
-      className={`${isDesktopScreen ? 'container' : ''} datasetResponsiveContainer  text-left elements  `}
+      className={`${
+        isDesktopScreen ? "container" : ""
+      } datasetResponsiveContainer  text-left elements  `}
       style={{ marginBottom: "80px" }}
     >
       <div className="row">
