@@ -34,8 +34,8 @@ const HomeBanner = () => {
   var settings = {
     dots: true,
     infinite: true,
-    autoplay: false,
-    arrows:true,
+    autoplay: true,
+    arrows: true,
     autoplaySpeed: 3000,
     speed: 500,
     slidesToShow: 1,
@@ -96,8 +96,8 @@ const HomeBanner = () => {
               </div> */}
             </div>
             <div className="Homesection homeBanner2">
-              {/* <div className="content1">
-                <div className="Header__heading Carousel2BoxHeading">
+              <div className="content1">
+                {/* <div className="Header__heading Carousel2BoxHeading">
                   {DatasetData.map((data) => (
                     <>
                       <div>
@@ -112,18 +112,18 @@ const HomeBanner = () => {
                   ))}
 
               
+                </div> */}
+
+                <div className="Header__buttonContainer">
+                  <a
+                    href="https://app.swaggerhub.com/apis/ulca/ULCA/0.7.0"
+                    target="_blank"
+                  >
+                    {" "}
+                    <div className="Header__buttonTxt">Get the API</div>
+                  </a>
                 </div>
-                <div className="actions">
-                  <div className="Header__heading2" style={{ width: "50%" }}>
-                    ULCA are documented as open APIs Using Swagger.
-                  </div>
-                  <div className="Header__button">
-                    <div className="Header__buttonContainer">
-                      <div className="Header__buttonTxt">Get the API</div>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
+              </div>
               {/* <div className={styles.rectangleParent}>
                     <div className={styles.frameChild} />
                     <div className={styles.frameItem} />
