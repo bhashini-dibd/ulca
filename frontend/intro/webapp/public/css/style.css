@@ -771,6 +771,11 @@ footer ul.link li:first-child {
     overflow: auto;
   }
 
+  [data-tooltip]::before {
+    width: 280px;
+    left: -110px;
+  }
+
   .tabButton {
     flex-direction: column;
     justify-content: "center";
@@ -781,11 +786,20 @@ footer ul.link li:first-child {
   .tabButton {
     margin-top: 6%;
   }
+
+  [data-tooltip]::before {
+    width: 280px;
+    left: -100px;
+  }
 }
 
 @media screen and (min-width: 801px) and (max-width: 850px) {
   .tabButton {
     margin-top: 4%;
+  }
+  [data-tooltip]::before {
+    width: 280px;
+    left: -100px;
   }
 }
 
@@ -796,6 +810,11 @@ footer ul.link li:first-child {
 
   .tabButton {
     margin-top: 4%;
+  }
+
+  [data-tooltip]::before {
+    width: 280px;
+    left: -100px;
   }
 }
 
