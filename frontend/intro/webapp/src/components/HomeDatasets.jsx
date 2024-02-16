@@ -35,9 +35,9 @@ const HomeDatasets = () => {
         const response1 = await fetchChartData(apiValue, "", criterions);
         setTotalValue(response1?.count);
         const response2 = await fetchChartData("model", "", "");
-        setTotalValue(response2?.count);
+        setTotalValue2(response2?.count);
         const response3 = await fetchChartData("benchmark", "", "");
-        setTotalValue(response3?.count);
+        setTotalValue3(response3?.count);
         
 
         // setTotalValue(response1?.count || "");
