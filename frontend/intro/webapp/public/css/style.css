@@ -777,15 +777,25 @@ footer ul.link li:first-child {
   }
 }
 
-@media screen and (max-width: 850px) and (min-width: 501px) {
+@media screen and (max-width: 800px) and (min-width: 501px) {
   .tabButton {
-    margin-top: 8%;
+    margin-top: 6%;
+  }
+}
+
+@media screen and (min-width: 801px) and (max-width: 850px) {
+  .tabButton {
+    margin-top: 4%;
   }
 }
 
 @media screen and (max-width: 1100px) and (min-width: 851px) {
   .desktopButton {
     font-size: 10px;
+  }
+
+  .tabButton {
+    margin-top: 4%;
   }
 }
 

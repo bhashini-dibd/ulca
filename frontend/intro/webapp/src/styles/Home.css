@@ -77,12 +77,14 @@
 
 .content1 {
   display: flex;
-  width: 49%;
-  flex-direction: column;
+  /* width: 49%; */
+  /* flex-direction: column; */
   justify-content: center;
+  align-items: end;
   gap: 20px;
   z-index: 0;
   height: 100%;
+  margin-top: 10px;
 }
 
 .contentInner,
@@ -224,6 +226,11 @@
   border: 1px solid var(--Primary-M_Blue, #0671e0);
   background: var(--Neutral-White, #fff);
 }
+
+.Header__buttonContainer a {
+  color: #0671e0;
+  text-decoration: none;
+}
 .Header__button {
   flex-shrink: 0;
   justify-content: flex-start;
@@ -338,16 +345,30 @@
     /* padding: 20px; */
     background-image: url(../img/Mobile_banner/banner\ 1.jpg);
 
-    background-size: contain;
-    height: 28vh;
+    background-size: 100% auto;
+    height: 25vh;
   }
 
   .Bannerheading {
     line-height: 30px;
   }
+
+  .homeBanner2 {
+    position: relative;
+  }
   .content1 {
     width: 100%;
+    position: absolute;
+    bottom: 10px;
+    justify-content: start;
     height: auto;
+  }
+
+  .Header__buttonContainer {
+    padding: 0px 6px;
+    margin-bottom: 22px;
+    height: 20px;
+    font-size: 10px;
   }
 
   .Header__heading2 {
@@ -355,7 +376,7 @@
   }
 
   .homeBanner2 {
-    background-size: contain;
+    background-size: 100% auto;
     background-image: url(../img/Mobile_banner/Banner\ 2.jpg);
   }
   .Bannerheading {
@@ -366,13 +387,17 @@
     height: 137px;
   }
 
+  .Homesection {
+    padding: 10px 40px;
+  }
+
   .Carousel2Img {
     height: 40px;
     width: 40px;
   }
 
   .SliderSection .slick-slider .slick-dots {
-    bottom: 10px !important;
+    bottom: 20px !important;
     right: 0 !important;
   }
 
@@ -409,9 +434,36 @@
   .Header__heading {
     gap: 5px;
   }
+  .content1 {
+    position: absolute;
+    bottom: -20px;
+  }
+
+  .Header__buttonTxt {
+    font-size: 10px;
+  }
+}
+@media screen and (max-width: 361px) {
+  .content1 {
+    position: absolute;
+    bottom: -8px;
+  }
 }
 
-@media screen and (min-width: 800px) and (max-width: 1200px) {
+@media screen and (min-width: 551px) and (max-width: 799px) {
+  .Homesection,
+  .homeBanner2 {
+    object-fit: contain;
+    height: 255px;
+  }
+
+  .Header__buttonContainer {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width: 830px) {
   .SliderSection .slick-slider .slick-dots {
     right: 400px !important;
   }
@@ -425,11 +477,60 @@
     object-fit: contain;
     height: 310px;
   }
+
+  .Header__buttonContainer {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .content1 {
+    height: 80%;
+    margin-left: 12px;
+    margin-top: 0px;
+  }
+}
+
+@media screen and (min-width: 831px) and (max-width: 1200px) {
+  .SliderSection .slick-slider .slick-dots {
+    right: 400px !important;
+  }
+
+  .TabNavbar {
+    font-size: 11px;
+  }
+
+  .Homesection,
+  .homeBanner2 {
+    object-fit: contain;
+    height: 310px;
+  }
+
+  .Header__buttonContainer {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .content1 {
+    height: 100%;
+    margin-left: 12px;
+    margin-top: 0px;
+  }
 }
 
 @media screen and (min-width: 1201px) and (max-width: 1320px) {
   .SliderSection .slick-slider .slick-dots {
-    right: 550px !important;
+    right: 480px !important;
+    bottom: 55px !important;
+  }
+
+  .content1 {
+    height: 84%;
+    margin-left: 12px;
+  }
+
+  .Header__buttonContainer {
+    font-size: 14px;
+    padding: 6px 12px;
   }
 }
 
@@ -450,6 +551,10 @@
 
   .SliderSection .slick-slider .slick-dots {
     bottom: 100px !important;
-    right: 690px !important;
+    right: 700px !important;
+  }
+
+  .content1 {
+    height: 77%;
   }
 }
