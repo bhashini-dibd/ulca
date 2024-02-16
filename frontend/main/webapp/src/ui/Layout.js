@@ -59,7 +59,7 @@ function App(props) {
 
   window.addEventListener('scroll', e => {
     if (window.pageYOffset > 100 && !show) {
-        setShow(true);
+      setShow(true);
     }
   })
 
@@ -80,9 +80,12 @@ function App(props) {
             <Component />
           </Suspense>
         </div>
-        {show ? <Suspense fallback={<div>Loading....</div>}>
+        {/* {show ? <Suspense fallback={<div>Loading....</div>}>
           <Footer />
-        </Suspense> : <></>}
+        </Suspense: <></>} */}
+        <Suspense fallback={<div>Loading....</div>}>
+          <Footer />
+        </Suspense>
       </div>
     </MuiThemeProvider>
   );

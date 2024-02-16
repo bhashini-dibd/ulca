@@ -56,6 +56,7 @@ const faqData = [
   },
 ]
 
+
 const ExpandableCard = ({ question, answer }) => {
   const classes = useStyles();
 

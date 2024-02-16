@@ -139,7 +139,7 @@ const Header = (props) => {
       <AppBar color="inherit" position="static" >
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
-            <Link href="https://bhashini.gov.in">
+            <Link href="https://bhashini.gov.in/">
               <img
                 className={classes.bhashiniLogo}
                 src={bhashiniLogo}
