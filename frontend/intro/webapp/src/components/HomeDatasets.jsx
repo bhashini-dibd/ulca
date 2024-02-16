@@ -43,9 +43,9 @@ const HomeDatasets = () => {
         const response2Json = await response2.json();
         const response3Json = await response3.json();
 
-        setTotalValue(response1Json?.data.length || "");
-        setTotalValue2(response2Json?.data.length || "");
-        setTotalValue3(response3Json?.data.length || "");
+        setTotalValue(response1Json?.count || "");
+        setTotalValue2(response2Json?.count || "");
+        setTotalValue3(response3Json?.count || "");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -58,7 +58,7 @@ const HomeDatasets = () => {
     const fetchData = async () => {
       try {
         const response1 = await fetchChartData(apiValue, "", criterions);
-        setTotalValue(response1?.data.length);
+        setTotalValue(response1?.count);
       } catch (error) {
         console.error("Error handling API response:", error);
       }
@@ -68,6 +68,8 @@ const HomeDatasets = () => {
       fetchData();
     }
   }, [apiValue]);
+
+  console.log(totalValue, totalValue2, totalValue3,"change");
 
   const fetchChartData = async (dataType, value, criterions) => {
     try {
