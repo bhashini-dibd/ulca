@@ -8,6 +8,8 @@ const HomeDatasets = () => {
   const [totalValue2, setTotalValue2] = useState("");
   const [totalValue3, setTotalValue3] = useState("");
   const isDesktopScreen = useMediaQuery("(max-width:1700px)");
+  const isMobileScreen = useMediaQuery("(max-width:500px)");
+  const isTabScreen = useMediaQuery("(max-width:900px) and (min-width:600px)");
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -26,28 +28,14 @@ const HomeDatasets = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const [response1, response2, response3] = await Promise.all([
-        //   fetchChartData(apiValue, "", criterions),
-        //   fetchChartData("model", "", ""),
-        //   fetchChartData("benchmark", "", ""),
-        // ]);
-
+      
         const response1 = await fetchChartData(apiValue, "", criterions);
         setTotalValue(response1?.count);
         const response2 = await fetchChartData("model", "", "");
         setTotalValue2(response2?.count);
         const response3 = await fetchChartData("benchmark", "", "");
         setTotalValue3(response3?.count);
-        
 
-        // setTotalValue(response1?.count || "");
-        // console.log(response1?.count, response1, "1");
-        // console.log(response2?.count, response2, "2");
-        // console.log(response3?.count, response3, "3");
-        // console.log("1");
-
-        // setTotalValue2(response2?.count || "");
-        // setTotalValue3(response3?.count || "");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -72,7 +60,6 @@ const HomeDatasets = () => {
     }
   }, [apiValue]);
 
-  console.log(totalValue, totalValue2, totalValue3, "change");
 
   const fetchChartData = async (dataType, value, criterions) => {
     try {
@@ -255,7 +242,11 @@ const HomeDatasets = () => {
                 }}
                 data-tooltip="Datasets are collection of structured data that serve as a input for training machine learning models, enablings algorithms to learn patterns and perform tasks based on provided information"
               >
-                <img src={info} className="w-75" />
+                <img
+                  src={info}
+                  className="w-100"
+                  style={{ height: isMobileScreen ? "" : "30px" }}
+                />
               </span>
             </div>
             <h6 id="totalValue">{totalValue ? totalValue : 0}</h6>
@@ -263,12 +254,18 @@ const HomeDatasets = () => {
               style={{
                 textAlign: "center",
                 marginRight: "24px",
+                marginLeft: "24px",
                 fontSize: "14px",
               }}
               className="mobileButton mobileButton1"
             >
-              <a href="https://bhashini.gov.in/ulca/dashboard" target="_blank">
+              <a
+                href="https://bhashini.gov.in/ulca/dashboard"
+                target="_blank"
+                className="MobileButton__bigContainer"
+              >
                 <button
+                  className="MobileButton__big"
                   style={{
                     borderRadius: "4px",
                     background: "var(--Primary-M_Blue, #0671E0)",
@@ -310,7 +307,7 @@ const HomeDatasets = () => {
                 }}
                 data-tooltip="Models are computational algorithms specifically designed for understanding and processing human language. They enable machines to analyze, interpret, and generate human-like text, facilitating applications such as language translation, sentiment analysis, and chatbot interactions."
               >
-                <img src={info} />
+                <img src={info} className="w-100" style={{ height: "30px" }} />
               </span>
             </div>
             <h6 id="totalValue2">{totalValue2 ? totalValue2 : 0}</h6>
@@ -319,7 +316,7 @@ const HomeDatasets = () => {
                 display: "flex",
                 marginRight: "24px",
                 marginLeft: "24px",
-                fontSize: "14px",
+                fontSize: isTabScreen ? "12px" : "14px",
               }}
               className="mobileButton"
             >
@@ -374,7 +371,7 @@ const HomeDatasets = () => {
                 }}
                 data-tooltip="Benchmarking refers to the process of evaluating and comparing the performance of different algorithms or models against a standardized set of metrics and datasets to determine their relative effectiveness for a specific task or problem. This aids in selecting the most suitable model for a given application."
               >
-                <img src={info} />
+                <img src={info} className="w-100" style={{ height: "30px" }} />
               </span>
             </div>
             <h6 id="totalValue3">{totalValue3 ? totalValue3 : 0}</h6>
