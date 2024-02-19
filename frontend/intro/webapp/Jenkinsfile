@@ -36,7 +36,7 @@ then
 fi
 '''
    
-def matcher = manager.getLogMatcher(".*tagged anuvaadio.(.*).*")
+def matcher = manager.getLogMatcher(".*push anuvaadio.(.*).*")
 def buildMsg = matcher.group(1)
 manager.addShortText(buildMsg)
         }
