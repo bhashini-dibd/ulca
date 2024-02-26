@@ -100,7 +100,7 @@ const HomeDatasets = () => {
         <div className="col DatasetCard">
           <p
             className="h5"
-            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px" }}
+            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px",fontFamily: "Roboto-Regular", }}
           >
             Datasets
           </p>
@@ -284,7 +284,7 @@ const HomeDatasets = () => {
         <div className="col DatasetCard">
           <p
             className="h5"
-            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px" }}
+            style={{ fontSize: "20px",fontFamily: "Roboto-Regular", fontWeight: 600, lineHeight: "28px" }}
           >
             Models
           </p>
@@ -348,7 +348,7 @@ const HomeDatasets = () => {
         <div className="col DatasetCard">
           <p
             className="h5"
-            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px" }}
+            style={{ fontSize: "20px",fontFamily: "Roboto-Regular", fontWeight: 600, lineHeight: "28px" }}
           >
             Benchmarks
           </p>

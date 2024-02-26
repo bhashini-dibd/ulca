@@ -580,6 +580,10 @@
   .content1 {
     height: 77%;
   }
+
+  .custom-container {
+    max-width: 1600px; /* Set your desired width here */
+  }
 }
 
 @media screen and (min-width: 2000px) and (max-width: 2299px) {
@@ -592,6 +596,10 @@
 
   .SliderSection .slick-slider .slick-dots {
     display: none !important;
+  }
+
+  .custom-container, .custom-Headercontainer {
+    max-width: 1800px; /* Set your desired width here */
   }
 }
 
@@ -611,6 +619,10 @@
   .slick-next:before {
     font-size: 30px !important;
   }
+
+  .custom-container, .custom-Headercontainer {
+    max-width: 2200px; /* Set your desired width here */
+  }
 }
 
 @media screen and (min-width: 2801px) and (max-width: 3000px) {
@@ -628,5 +640,8 @@
 
   .SliderSection .slick-slider .slick-dots {
     display: none !important;
+  }
+  .custom-container {
+    max-width: 2200px; /* Set your desired width here */
   }
 }
