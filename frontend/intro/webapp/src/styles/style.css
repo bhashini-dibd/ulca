@@ -365,9 +365,9 @@ font-family: 'Rowdies', cursive; */
   header {
 	  padding: .6rem 0;
   }
-  .navbar .join {
+  /* .navbar .join {
 	display: none;
-   }
+   } */
    .navbar-light .navbar-nav .nav-link {
   
 	  margin-left: .5rem;

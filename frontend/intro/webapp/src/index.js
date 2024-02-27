@@ -5,6 +5,13 @@ import App from './Layout';
 import reportWebVitals from './reportWebVitals';
 import Theme from "./theme/theme-default";
 import { MuiThemeProvider } from "@material-ui/core";
+
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+
+import "./App.css";
+
+ 
 ReactDOM.render(
   <React.StrictMode>
     <MuiThemeProvider theme={Theme}>

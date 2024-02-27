@@ -1,3 +1,203 @@
+@font-face {
+  font-family: "OS-Bold";
+  src: url("./assets/fonts/OpenSans-Bold.ttf");
+}
+
+@font-face {
+  font-family: "OS-BoldItalic";
+  src: url("./assets/fonts/OpenSans-BoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-ExtraBold";
+  src: url("./assets/fonts/OpenSans-ExtraBold.ttf");
+}
+
+@font-face {
+  font-family: "OS-ExtraBoldItalic";
+  src: url("./assets/fonts/OpenSans-ExtraBoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-Italic";
+  src: url("./assets/fonts/OpenSans-Italic.ttf");
+}
+
+@font-face {
+  font-family: "OS-Light";
+  src: url("./assets/fonts/OpenSans-Light.ttf");
+}
+
+@font-face {
+  font-family: "OS-LightItalic";
+  src: url("./assets/fonts/OpenSans-LightItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-Medium";
+  src: url("./assets/fonts/OpenSans-Medium.ttf");
+}
+
+@font-face {
+  font-family: "OS-MediumItalic";
+  src: url("./assets/fonts/OpenSans-MediumItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-Regular";
+  src: url("./assets/fonts/OpenSans-Regular.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiBold";
+  src: url("./assets/fonts/OpenSans-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiBoldItalic";
+  src: url("./assets/fonts/OpenSans-SemiBoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-Bold";
+  src: url("./assets/fonts/OpenSans_Condensed-Bold.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-BoldItalic";
+  src: url("./assets/fonts/OpenSans_Condensed-BoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-ExtraBold";
+  src: url("./assets/fonts/OpenSans_Condensed-ExtraBold.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-Italic";
+  src: url("./assets/fonts/OpenSans_Condensed-Italic.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-Light";
+  src: url("./assets/fonts/OpenSans_Condensed-Light.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-LightItalic";
+  src: url("./assets/fonts/OpenSans_Condensed-LightItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-Medium";
+  src: url("./assets/fonts/OpenSans_Condensed-Medium.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-MediumItalic";
+  src: url("./assets/fonts/OpenSans_Condensed-MediumItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-Regular";
+  src: url("./assets/fonts/OpenSans_Condensed-Regular.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-SemiBold";
+  src: url("./assets/fonts/OpenSans_Condensed-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "OS-Condensed-SemiBoldItalic";
+  src: url("./assets/fonts/OpenSans_Condensed-SemiBoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiCondensed-Bold";
+  src: url("./assets/fonts/OpenSans_SemiCondensed-Bold.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiCondensed-BoldItalic";
+  src: url("./assets/fonts/OpenSans_SemiCondensed-BoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiCondensed-Italic";
+  src: url("./assets/fonts/OpenSans_SemiCondensed-Italic.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiCondensed-LightItalic";
+  src: url("./assets/fonts/OpenSans_SemiCondensed-LightItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiCondensed-Medium";
+  src: url("./assets/fonts/OpenSans_SemiCondensed-Medium.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiCondensed-MediumItalic";
+  src: url("./assets/fonts/OpenSans_SemiCondensed-MediumItalic.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiCondensed-Regular";
+  src: url("./assets/fonts/OpenSans_SemiCondensed-Regular.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiCondensed-SemiBold";
+  src: url("./assets/fonts/OpenSans_SemiCondensed-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "OS-SemiCondensed-SemiBoldItalic";
+  src: url("./assets/fonts/OpenSans_SemiCondensed-SemiBoldItalic.ttf");
+}
+
+@font-face {
+  font-family: "Inter-Bold";
+  src: url("./assets/fonts/Inter-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Inter-ExtraBold";
+  src: url("./assets/fonts/Inter-ExtraBold.ttf");
+}
+
+@font-face {
+  font-family: "Inter-ExtraLight";
+  src: url("./assets/fonts/Inter-ExtraLight.ttf");
+}
+
+@font-face {
+  font-family: "Inter-Light";
+  src: url("./assets/fonts/Inter-Light.ttf");
+}
+
+@font-face {
+  font-family: "Inter-Regular";
+  src: url("./assets/fonts/Inter-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Inter-SemiBold";
+  src: url("./assets/fonts/Inter-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "Inter-Medium";
+  src: url("./assets/fonts/Inter-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("./assets/fonts/Roboto-Regular.ttf");
+}
+
 .App {
   text-align: center;
 }

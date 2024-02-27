@@ -19,7 +19,16 @@ const Footer = (props) => {
   return (
     <footer>
       <Grid container>
-        <Grid item xs={12} sm={4} md={4} lg={4} xl={4} className={classes.grid}>
+        <Grid
+          item
+          xs={12}
+          sm={4}
+          md={4}
+          lg={4}
+          xl={4}
+          className={classes.grid}
+          style={{ width: "100vw" }}
+        >
           <img src={web} alt="" className={classes.image} />
           <div>
             <Typography variant="body2">{translate("label.web")}</Typography>
@@ -27,7 +36,8 @@ const Footer = (props) => {
               <Link
                 className={classes.link}
                 color="#16337B"
-                href="https://www.meity.gov.in"
+                // href="https://www.meity.gov.in"
+                href="https://www.bhashini.gov.in"
                 target="_self"
                 rel="noopener noreferrer"
               >
@@ -36,25 +46,16 @@ const Footer = (props) => {
             </Typography>
           </div>
         </Grid>
-        <Grid
-          item
-          xs={0}
-          sm={4}
-          md={4}
-          lg={4}
-          xl={4}
-          className={classes.grid2}
-        >
+        <Grid item xs={0} sm={4} md={4} lg={4} xl={4} className={classes.grid2}>
           <img src={email} alt="" className={classes.image} />
           <div className="">
             <Typography variant="body2">{translate("label.mail")}</Typography>
             <Typography variant="body1">
               <Link
                 className={classes.link}
-                href="mailto:contact@bhashini.gov.in"
+                href="mailto:ceo-dibd@digitalindia.gov.in"
               >
                 {translate("link.contactUs")}
-              
               </Link>
             </Typography>
           </div>
@@ -70,7 +71,9 @@ const Footer = (props) => {
         >
           <img src={location} alt="" className={classes.image} />
           <div className="">
-            <Typography variant="body2">{translate("label.address")}</Typography>
+            <Typography variant="body2">
+              {translate("label.address")}
+            </Typography>
             <Typography variant="body1" className={classes.link} href="">
               {translate("label.addressInfo")}
             </Typography>
@@ -80,28 +83,38 @@ const Footer = (props) => {
       <div className="section primary-color">
         <div className={classes.parentDiv}>
           <Grid container className={classes.container}>
-            <Grid container>
-              <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <Grid container style={{ alignItems: "center" }}>
+              <Grid item xs={12} sm={12} md={6} lg={4} xl={6}>
                 <ul className={classes.bhasini}>
-                  <Typography variant="body1">
+                  {/* <Typography variant="body2">
                     <li>
                       <Link color="while" href="https://bhashini.gov.in/images/Bhashini_-_Whitepaper.pdf">
                         {translate("link.whitePaper")}
                       </Link>
                     </li>
-                  </Typography>
+                  </Typography> */}
 
-                  <Typography variant="body1">
+                  <Typography style={{ fontSize: "1rem" }}>
                     <li>
                       <Link
                         color="while"
-                        href="https://bhashini.gov.in/en/ecosystem"
+                        href="https://bhashini.gov.in/ecosystem"
                       >
                         {translate("link.ecosystem")}
                       </Link>
                     </li>
                   </Typography>
-                  <Typography variant="body1" >
+                  <Typography variant="body1" style={{ fontSize: "1rem" }}>
+                    <li>
+                      <Link
+                        color="while"
+                        href="http://bhashini.gov.in/bhashadaan"
+                      >
+                        {translate("link.joinBhashaDaan")}{" "}
+                      </Link>
+                    </li>
+                  </Typography>
+                  {/* <Typography variant="body1" >
                     <li>
                       <Link color="while" href="">
                         <div className="join">
@@ -119,30 +132,65 @@ const Footer = (props) => {
                         </div>
                       </Link>
                     </li>
-                  </Typography>
+                  </Typography> */}
                 </ul>
               </Grid>
-              <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+              <Grid item xs={12} sm={12} md={6} lg={8} xl={6}>
                 <ul className={classes.social}>
                   <Typography variant="body1">
                     <li>
-                      <Link href="https://www.facebook.com/" target="_self">
+                      <Link
+                        href="https://www.facebook.com/profile.php?id=100093281985246"
+                        target="_self"
+                      >
                         <img src={facebook} alt="facebook" />
                       </Link>
                     </li>
                   </Typography>
                   <Typography variant="body1">
                     <li>
-                      <Link href="https://twitter.com/" target="_self">
+                      <Link href="https://twitter.com/_BHASHINI" target="_self">
                         <img src={tw} alt="twitter" />
                       </Link>
                     </li>
                   </Typography>
                   <Typography variant="body1">
                     <li>
-                      <Link href="https://www.instagram.com/" target="_self">
+                      <Link
+                        href="https://www.instagram.com/_officialbhashini/"
+                        target="_self"
+                      >
                         {" "}
                         <img src={insta} alt="instagram" />
+                      </Link>
+                    </li>
+                  </Typography>
+                  <Typography variant="body1">
+                    <li>
+                      <Link
+                        href="https://www.linkedin.com/company/96244597/admin/feed/posts/"
+                        target="_self"
+                      >
+                        {" "}
+                        <img
+                          src={process.env.PUBLIC_URL + "/linkedin.png"}
+                          style={{ borderRadius: "100%" }}
+                          alt="linkedin"
+                        />
+                      </Link>
+                    </li>
+                  </Typography>
+                  <Typography variant="body1">
+                    <li>
+                      <Link
+                        href="https://www.kooapp.com/profile/_BHASHINI"
+                        target="_self"
+                      >
+                        {" "}
+                        <img
+                          src={process.env.PUBLIC_URL + "/koo.svg"}
+                          alt="instagram"
+                        />
                       </Link>
                     </li>
                   </Typography>
@@ -158,67 +206,114 @@ const Footer = (props) => {
               }}
             />
 
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={6} md={6} lg={9} xl={6}>
               <br />
-              <Typography variant="body1" className="lighGrey mb-0">
+              {/* <Typography variant="body1" className="lighGrey mb-0">
                 {translate("label.copyright")}
                 <br />
                 {translate("label.nltm")}
-              </Typography>
+              </Typography> */}
             </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
               <ul className={classes.info}>
-                <Typography variant="body1">
-                  {" "}
-                  <li>
+                <Typography variant="body2">
+                <li>
                     <Link
                       color="while"
-                      href="https://bhashini.gov.in/en/web-information-manager"
+                      href="https://bhashini.gov.in/privacy-policy"
                       target="_self"
                     >
-                      {translate("link.webInfo")}
+                      {translate("link.privacyPolicy")}
                     </Link>
                   </li>
-                </Typography>
-                <Typography variant="body1">
-                  <li>
+                  </Typography>
+                  {" "}
+                  {/* <li>
                     <Link
-                      color="white"
-                      href="https://bhashini.gov.in/en/privacy-policy"
+                      color="while"
+                      href="https://bhashini.gov.in/privacy-policy"
                       target="_self"
                     >
                       {translate("link.privacyPolicy")}
                     </Link>
                   </li>
                 </Typography>
-                <Typography variant="body1">
+                {/* <Typography variant="body1">
                   <li>
                     <Link
                       color="white"
-                      href="https://bhashini.gov.in/en/terms-conditions"
+                      href="https://bhashini.gov.in/privacy-policy"
+                      target="_self"
+                    >
+                      {translate("link.privacyPolicy")}
+                    </Link>
+                  </li>
+                </Typography> */}
+                <Typography variant="body2">
+                  <li>
+                    <Link
+                      color="white"
+                      href="https://bhashini.gov.in/terms-of-use"
                       target="_self"
                     >
                       {" "}
-                      {translate('link.termsAndConditions')}
+                      {translate("link.termsAndConditions")}
                     </Link>
                   </li>
                 </Typography>
               </ul>
             </Grid>
 
+            <Grid item xs={12} sm={6} md={6} lg={9} xl={6}>
+              <br />
+              {/* <Typography variant="body1" className="lighGrey mb-0">
+                {translate("label.copyright")}
+                <br />
+                {translate("label.nltm")}
+              </Typography> */}
+            </Grid>
             <Grid
               item
               xs={12}
               sm={6}
               md={6}
-              lg={6}
-              xl={6}
-              style={{ marginTop: "3rem" }}
+              lg={3}
+              xl={3}
+              className={classes.mobileDesigned}
             >
-              <a href="" className="tdl-logo">
-                <img src={tdil} />
-              </a>
+              <div className={classes.infoNew} style={{ display: "flex" }}>
+                <Typography
+                  variant="body2"
+                  className="lighGrey mb-0"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    lineHeight: "14px",
+                  }}
+                >
+                  {" "}
+                  Designed, Developed & Hosted by
+                </Typography>
+              </div>
+              <div
+                className={classes.infoNew}
+                style={{ marginTop: "5px", display: "flex" }}
+              >
+                <Typography
+                  variant="body2"
+                  className="light mb-0"
+                  style={{
+                    color: "white",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  {" "}
+                  Digital India Bhashini Division (DIBD)
+                </Typography>
+              </div>
             </Grid>
+
             <Grid
               item
               xs={12}
@@ -227,17 +322,45 @@ const Footer = (props) => {
               lg={6}
               xl={6}
               style={{
+                marginTop: "0rem",
                 display: "flex",
-                marginTop: "3rem",
-                justifyContent: "flex-end",
+                alignItems: "center",
               }}
+            >
+              <a href="" className={classes.tdlLogoSection}>
+                <img
+                  className={classes.tdlLogo}
+                  src={process.env.PUBLIC_URL + "/meity_logo.png"}
+                />
+              </a>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={6}
+              lg={6}
+              xl={6}
+              className={classes.FooterLogo}
+              // style={{
+              //   display: "flex",
+              //   marginTop: "2rem",
+              //   justifyContent: "flex-end",
+              //   marginBottom:"3rem",
+              // }}
             >
               <a href="" className="dg-india-logo ">
                 <img src={dg} alt="dg-india logo" />
               </a>
             </Grid>
+            <div className={classes.BottomText} style={{ display: "flex" }}>
+              <Typography variant="body2" className="lighGrey mb-0 mt-3">
+                {" "}
+                Technology Development for Indian Languages Programme
+              </Typography>
+            </div>
 
-            <Grid
+            {/* <Grid
               item
               xs={12}
               sm={4}
@@ -275,7 +398,7 @@ const Footer = (props) => {
               <Typography variant="body1" className="lighGrey text-center">
                 {translate("label.lastUpdated")}
               </Typography>
-            </Grid>
+            </Grid> */}
           </Grid>
         </div>
       </div>

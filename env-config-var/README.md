@@ -5,15 +5,15 @@ The common variables used throughout the application are stored in yaml files at
 - common-variables.yml : 
 Common variables used by all components.
 
-Stored at https://github.com/ULCA-IN/ulca/blob/master/env-config-var/common-variables.yml
+Stored at https://github.com/bhashini-dibd/ulca/blob/master/env-config-var/common-variables.yml
 - backend-variables.yml :
 Common variables used by backend components.
 
-Stored at https://github.com/ULCA-IN/ulca/blob/master/backend/env-config-var/backend-variables.yml
+Stored at https://github.com/bhashini-dibd/ulca/blob/master/backend/env-config-var/backend-variables.yml
 - frontend-variables.yml :
 Common variables used by frontend components.
 
-Stored at https://github.com/ULCA-IN/ulca/blob/master/frontend/env-config-var/backend-variables.yml
+Stored at https://github.com/bhashini-dibd/ulca/blob/master/frontend/env-config-var/backend-variables.yml
 - service-variables.yml :
 Variables used by a service, to be created at the particular component level
 
