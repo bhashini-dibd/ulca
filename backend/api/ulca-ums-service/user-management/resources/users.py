@@ -347,6 +347,32 @@ class RemoveServiceProviderKey(Resource):
         if "ulcaApiKey" not in body.keys():
             return post_error("400", "Please provide ulcaApiKey", None), 400
 
+        # Get service pipeline
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if isinstance(pipelineID,dict) and pipelineID:
+            masterList = []
+            if "serviceProvider" in pipelineID.keys():
+                serviceProviderName = pipelineID["serviceProvider"]["name"]
+            if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys():
+                serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+                masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+                masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+                masterList.append(masterkeyname)
+                masterList.append(masterkeyvalue)
+        elif pipelineID == None:
+            return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
+
+        # Retrieve user details 
+        user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
+
+        if isinstance(user_document, list) and user_document:
+            if not any(usr['ulcaApiKey'] == body['ulcaApiKey'] for usr in user_document):
+                return post_error("400", "ulcaApiKey does not exist. Please provide a valid one.", None), 400
+            for usr in user_document:
+                if body["ulcaApiKey"] in usr.values():
+                    if "appName" in usr.keys():
+                        decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
+                        generatedSecretKeys = UserUtils.revoke_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys)
         pullRecord = UserUtils.removeServiceProviders(body['userID'],body['ulcaApiKey'],body["serviceProviderName"])
         if pullRecord['nModified'] == 1:
             res = CustomResponse(Status.REMOVE_SERVICE_PROVIDER.value, "SUCCESS")

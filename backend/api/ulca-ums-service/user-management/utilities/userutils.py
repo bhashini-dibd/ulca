@@ -741,6 +741,17 @@ class UserUtils:
         return result.json()
 
     @staticmethod
+    def revoke_service_provider_keys(email, appName,EndPointurl,decryptedValues):
+        body = {"emailId" : email.lower(), "appName" : appName}
+        log.info("Revoke Service Provider Key Api Call URL"+str(EndPointurl))
+        log.info("Revoke Service Provider Key Api Call Request"+str(body))
+        result = requests.delete(url=EndPointurl, json=body, headers=decryptedValues)
+        log.info(f"Revoked Response :: {result.status_code} :: {result.json()}")   
+        log.info("Revoke Service Provider Key Api Call Response"+str(result.json()))
+        #log.info(result.json())
+        return result.json()
+
+    @staticmethod
     def pushServiceProvider(generatedApiKeys,ulcaApiKey,userServiceProviderName, dataTracking):
         collections = db.get_db()[USR_MONGO_COLLECTION]
         updateDoc = collections.update({"apiKeyDetails.ulcaApiKey":ulcaApiKey},{"$push":{"apiKeyDetails.$.serviceProviderKeys":{"serviceProviderName":userServiceProviderName,"dataTracking":dataTracking,"inferenceApiKey":generatedApiKeys}}})
