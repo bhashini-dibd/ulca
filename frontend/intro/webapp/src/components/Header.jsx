@@ -83,7 +83,7 @@ const MobileHeader = () => {
                     {" "}
                     <a
                       className="nav-color"
-                      href="https://bhashini.gov.in/career"
+                      href="https://chitraanuvaad.bhashini.co.in/"
                       target="_self"
                       rel="noopener noreferrer"
                     >
