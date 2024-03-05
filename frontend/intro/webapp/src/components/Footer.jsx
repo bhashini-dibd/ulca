@@ -196,26 +196,26 @@ const Footer = () => {
             </div>
             <div className="row align-items-center justify-content-between mt-5">
               <div className="col-md-7">
-                <a href="" className="tdl-logo">
+                {/* <a href="" className="tdl-logo"> */}
                   <img
                     src={`${process.env.PUBLIC_URL}/img/meity_logo.png`}
                     alt="TDIL logo"
                   />
-                </a>
+                {/* </a> */}
               </div>
               <div className="col-md-3 text-right">
                 <div className="caption mb-3">
                   <span className="lighGrey text-center ft-14">
                     Designed, Developed &amp; Hosted by
                   </span>
-                  <a href=""> Digital India Corporation(DIC)</a>
+                  <div style={{color:"white"}}> Digital India Corporation(DIC)</div>
                 </div>
-                <a href="" className="dg-india-logo ">
+                {/* <a href="" className="dg-india-logo "> */}
                   <img
                     src={`${process.env.PUBLIC_URL}/img/dg-india.png`}
                     alt="dg-india logo"
                   />
-                </a>
+                {/* </a> */}
               </div>
             </div>
             <div className="row mt-4 pt-4">

@@ -15,6 +15,11 @@ const MobileHeader = () => {
     e.stopPropagation(); // Prevents the parent menu from closing
     e.target.parentElement.classList.toggle("submenu-open1");
   };
+
+  const toggleSubMenu2 = (e) => {
+    e.stopPropagation(); // Prevents the parent menu from closing
+    e.target.parentElement.classList.toggle("submenu-open2");
+  };
   return (
     <div className="navbar">
       <div className="hamburger-menu">
@@ -51,7 +56,7 @@ const MobileHeader = () => {
                   Ecosystem
                 </a>
               </li> */}
-              <li>
+              {/* <li>
                 {" "}
                 <a
                   className="nav-color"
@@ -59,6 +64,33 @@ const MobileHeader = () => {
                 >
                   Anuvaad
                 </a>
+              </li> */}
+              <li onClick={toggleSubMenu2}>
+                Prayog <span className="submenu-arrow">⏷</span>
+                <ul className="sub-menu2">
+                  <li className="sub-item">
+                    {" "}
+                    <a
+                      className="nav-color"
+                      href="https://anuvaad.bhashini.gov.in/"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Anuvaad
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    {" "}
+                    <a
+                      className="nav-color"
+                      href="https://bhashini.gov.in/career"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Chitraanuvaad
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li onClick={toggleSubMenu1}>
                 Sahyogi <span className="submenu-arrow">⏷</span>
@@ -279,13 +311,49 @@ function Header() {
                     Ecosystem
                   </a>
                 </li> */}
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     href="https://anuvaad.bhashini.gov.in/"
                   >
                     Anuvaad
                   </a>
+                </li> */}
+                <li className="dropdown">
+                  <a
+                    className="dropdown-toggle nav-link"
+                    href="#"
+                    id="SahyogidropdownMenuLink"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Prayog
+                  </a>
+                  <div
+                    aria-labelledby="SahyogidropdownMenuLink"
+                    data-bs-popper="static"
+                    className="dropdown-menu"
+                  >
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://anuvaad.bhashini.gov.in/"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Anuvaad
+                    </a>
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://chitraanuvaad.bhashini.co.in/"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Chitraanuvaad
+                    </a>
+                  </div>
                 </li>
                 <li className="dropdown">
                   <a

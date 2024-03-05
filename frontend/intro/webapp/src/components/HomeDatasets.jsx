@@ -28,14 +28,14 @@ const HomeDatasets = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-      
+
         const response1 = await fetchChartData(apiValue, "", criterions);
         setTotalValue(response1?.count);
         const response2 = await fetchChartData("model", "", "");
         setTotalValue2(response2?.count);
         const response3 = await fetchChartData("benchmark", "", "");
         setTotalValue3(response3?.count);
-
+        
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -100,7 +100,7 @@ const HomeDatasets = () => {
         <div className="col DatasetCard">
           <p
             className="h5"
-            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px" }}
+            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px",fontFamily: "Roboto-Regular", }}
           >
             Datasets
           </p>
@@ -245,7 +245,7 @@ const HomeDatasets = () => {
                 <img
                   src={info}
                   className="w-100"
-                  style={{ height: isMobileScreen ? "" : "30px" }}
+                  style={{ height: isMobileScreen ? "" : "24px" }}
                 />
               </span>
             </div>
@@ -284,7 +284,7 @@ const HomeDatasets = () => {
         <div className="col DatasetCard">
           <p
             className="h5"
-            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px" }}
+            style={{ fontSize: "20px",fontFamily: "Roboto-Regular", fontWeight: 600, lineHeight: "28px" }}
           >
             Models
           </p>
@@ -348,7 +348,7 @@ const HomeDatasets = () => {
         <div className="col DatasetCard">
           <p
             className="h5"
-            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px" }}
+            style={{ fontSize: "20px",fontFamily: "Roboto-Regular", fontWeight: 600, lineHeight: "28px" }}
           >
             Benchmarks
           </p>
@@ -386,7 +386,7 @@ const HomeDatasets = () => {
             >
               <a
                 style={{ color: "#0671E0", padding: "5px 5px" }}
-                href="https://bhashini.gov.in/ulca/model/explore-models"
+                href="https://bhashini.gov.in/ulca/model/benchmark-datasets"
                 className="mobileButtonextraSmall desktopButton"
               >
                 Explore Benchmark
