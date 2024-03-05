@@ -465,7 +465,7 @@ footer ul.link li:first-child {
   bottom: 100%; /* Position above the element */
   left: 50%;
   transform: translateX(-50%);
-  padding: 8px;
+  padding: 24px;
   background-color: #333;
   margin-bottom: 10px; /* Adjust margin to control the distance from the element */
   color: #fff;
@@ -557,7 +557,7 @@ footer ul.link li:first-child {
   content: "";
   position: absolute;
   top: 25px;
-  right: 18px;
+  right: 0px;
   width: 6px;
   height: 6px;
   border: 2px solid;
@@ -569,6 +569,7 @@ footer ul.link li:first-child {
   position: absolute;
   top: 48px;
   left: 12px;
+  z-index: 1;
   width: 120%;
   background: #fff;
   border-radius: 5px;
@@ -826,5 +827,17 @@ footer ul.link li:first-child {
 
   .DatasetContainer1 {
     height: 215px !important;
+  }
+}
+
+@media screen and (min-width: 2000px) and (max-width: 2300px) {
+  .mobileButton {
+    margin-top: 4%;
+  }
+}
+
+@media screen and (min-width: 2300px) and (max-width: 3000px) {
+  .mobileButton {
+    margin-top: 3%;
   }
 }
