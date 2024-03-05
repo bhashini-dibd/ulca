@@ -557,7 +557,7 @@ footer ul.link li:first-child {
   content: "";
   position: absolute;
   top: 25px;
-  right: 18px;
+  right: 0px;
   width: 6px;
   height: 6px;
   border: 2px solid;
@@ -569,6 +569,7 @@ footer ul.link li:first-child {
   position: absolute;
   top: 48px;
   left: 12px;
+  z-index: 1;
   width: 120%;
   background: #fff;
   border-radius: 5px;
