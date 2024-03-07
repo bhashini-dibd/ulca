@@ -378,7 +378,7 @@
   .content1 {
     width: 100%;
     position: absolute;
-    bottom: 15px;
+    bottom: 13px;
     justify-content: start;
     height: auto;
   }
@@ -449,7 +449,7 @@
   }
 }
 
-@media screen and (max-width: 390px) and (min-width: 261px) {
+@media screen and (max-width: 380px) and (min-width: 261px) {
   .Carousel2Box {
     width: 100px;
   }
@@ -463,7 +463,7 @@
   }
   .content1 {
     position: absolute;
-    bottom: 22px;
+    bottom: -18px;
     left: 38px;
   }
 
