@@ -299,7 +299,16 @@
 
 .submenu-arrow {
   position: absolute;
-  left: 90px;
+  left: 65px;
+  top: 15px;
+  transition: transform 0.3s ease;
+  font-size: 16px;
+}
+
+.submenu-arrow1 {
+  position: absolute;
+  left: 65px;
+  top: 15px;
   transition: transform 0.3s ease;
   font-size: 16px;
 }
@@ -329,7 +338,7 @@
   margin-left: -10px;
 }
 
-.submenu-open2 .submenu-arrow {
+.submenu-open2 .submenu-arrow1 {
   transform: rotate(180deg);
 }
 
@@ -440,7 +449,7 @@
   }
 }
 
-@media screen and (max-width: 380px) and (min-width: 261px) {
+@media screen and (max-width: 390px) and (min-width: 261px) {
   .Carousel2Box {
     width: 100px;
   }
@@ -454,8 +463,8 @@
   }
   .content1 {
     position: absolute;
-    bottom: -18px;
-    left: 40px;
+    bottom: 0px;
+    left: 38px;
   }
 
   .Header__buttonTxt {
