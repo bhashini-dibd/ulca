@@ -57,7 +57,7 @@ const HomeBanner = () => {
           slidesToShow: 1,
           slidesToScroll: 1,
           initialSlide: 0,
-          dots: true,
+          dots: false,
           arrows: false,
         },
       },
@@ -66,7 +66,7 @@ const HomeBanner = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          dots: true,
+          dots: false,
           arrows: true,
         },
       },

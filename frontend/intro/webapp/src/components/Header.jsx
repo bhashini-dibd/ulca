@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/Home.css";
 import useMedia from "../hooks/useMedia";
-
+import downArrow from "../img/arrowDown.svg";
 const MobileHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -9,7 +9,7 @@ const MobileHeader = () => {
     setIsOpen(!isOpen);
   };
 
-
+  
 
   const toggleSubMenu1 = (e) => {
     e.stopPropagation(); // Prevents the parent menu from closing
@@ -65,8 +65,13 @@ const MobileHeader = () => {
                   Anuvaad
                 </a>
               </li> */}
-              <li onClick={toggleSubMenu2}>
-                Prayog <span className="submenu-arrow">⏷</span>
+              <li onClick={toggleSubMenu2} style={{ position: "relative" }}>
+                Prayog{" "}
+                <img
+                  className="submenu-arrow1"
+                  style={{ height: "16px" }}
+                  src={downArrow}
+                ></img>
                 <ul className="sub-menu2">
                   <li className="sub-item">
                     {" "}
@@ -92,8 +97,13 @@ const MobileHeader = () => {
                   </li>
                 </ul>
               </li>
-              <li onClick={toggleSubMenu1}>
-                Sahyogi <span className="submenu-arrow">⏷</span>
+              <li onClick={toggleSubMenu1} style={{ position: "relative" }}>
+                Sahyogi{" "}
+                <img
+                  className="submenu-arrow"
+                  style={{ height: "16px" }}
+                  src={downArrow}
+                ></img>
                 <ul className="sub-menu1">
                   <li className="sub-item">
                     {" "}

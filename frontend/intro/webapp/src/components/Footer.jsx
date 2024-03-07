@@ -50,12 +50,12 @@ const Footer = () => {
               <div className="">
                 Address
                 <br />
-                <p className="ft-20 fw-500" href="">
+                <a className="ft-20 fw-500" href="https://www.google.com/maps/@28.5865266,77.2395194,19z?entry=ttu" target="_blank">
                   Electronics Niketan, 6, CGO Complex, Lodhi Road, New Delhi -
                   110003
                   <br />
                   <span className="ft-14">Tel: 011-24301361</span>
-                </p>
+                </a>
               </div>
             </div>
           </div>
