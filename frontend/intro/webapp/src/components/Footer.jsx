@@ -203,7 +203,7 @@ const Footer = () => {
                   />
                 {/* </a> */}
               </div>
-              <div className="col-md-3 text-right">
+              <div className="col-md-3 text-center">
                 <div className="caption mb-3">
                   <span className="lighGrey text-center ft-14">
                     Designed, Developed &amp; Hosted by
