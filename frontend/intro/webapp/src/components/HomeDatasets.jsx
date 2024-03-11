@@ -35,7 +35,7 @@ const HomeDatasets = () => {
         setTotalValue2(response2?.count);
         const response3 = await fetchChartData("benchmark", "", "");
         setTotalValue3(response3?.count);
-        
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -66,7 +66,7 @@ const HomeDatasets = () => {
       window.REACT_APP_APIGW_BASE_URL =
         process.env.REACT_APP_APIGW_BASE_URL ||
         "https://dev-auth.ulcacontrib.org";
-      const endpoint = `${window.REACT_APP_APIGW_BASE_URL}/ulca/data-metric/v0/store/search`;
+      const endpoint = `${window.REACT_APP_APIGW_BASE_URL}ulca/data-metric/v0/store/search`;
       const request = {
         type: dataType,
         criterions: criterions ? criterions : null,
