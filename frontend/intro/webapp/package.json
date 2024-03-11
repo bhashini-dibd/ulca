@@ -2,7 +2,6 @@
     "name": "ulca",
     "version": "0.1.0",
     "private": true,
-    "homepage": "/intro",
     "dependencies": {
         "@material-ui/core": "^4.11.4",
         "@material-ui/data-grid": "^4.0.0-alpha.30",
