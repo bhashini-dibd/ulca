@@ -65,8 +65,8 @@ const HomeDatasets = () => {
     try {
       window.REACT_APP_APIGW_BASE_URL =
         process.env.REACT_APP_APIGW_BASE_URL ||
-        "https://dev-auth.ulcacontrib.org/";
-      const endpoint = `${window.REACT_APP_APIGW_BASE_URL}ulca/data-metric/v0/store/search`;
+        "https://dev-auth.ulcacontrib.org";
+      const endpoint = `${window.REACT_APP_APIGW_BASE_URL}/ulca/data-metric/v0/store/search`;
       const request = {
         type: dataType,
         criterions: criterions ? criterions : null,
