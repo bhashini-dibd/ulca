@@ -509,6 +509,7 @@ class UserUtils:
             #fetching the user details from db
             result = collections.find({'email': user_email}, {
                 'password': 1, '_id': 0,'isActive':1,'isVerified':1})
+            log.info(f"Result from user search :: {result}")
             if result.count() == 0:
                 log.info("{} is not a verified user".format(user_email))
                 return post_error("Not verified", "This email address is not registered with ULCA. Please sign up.", None)
