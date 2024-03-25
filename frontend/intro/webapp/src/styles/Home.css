@@ -238,7 +238,7 @@
 }
 
 .custom-container {
-  max-width: 1300px; /* Set your desired width here */
+  max-width: 720px; /* Set your desired width here */
 }
 
 .custom-Headercontainer {
@@ -598,6 +598,32 @@
   }
 }
 
+@media screen and (min-width: 992px) {
+  .container {
+    max-width: 960px;
+ }
+  .custom-container{
+    max-width: 920px; /* Set your desired width here */
+  }
+}
+
+@media screen and (min-width: 1200px) {
+   .container {
+    max-width: 1140px;
+ }
+  .custom-container{
+    max-width: 1100px; /* Set your desired width here */
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+ }
+  .custom-container{
+    max-width: 1280px; /* Set your desired width here */
+  } 
+}
 @media screen and (min-width: 1701px) {
   .datasetResponsiveContainer {
     padding: 24px 200px;
@@ -614,10 +640,6 @@
 
   .content1 {
     height: 77%;
-  }
-
-  .custom-container {
-    max-width: 1600px; /* Set your desired width here */
   }
 }
 
