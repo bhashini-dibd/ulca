@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import info from "../img/info.svg";
+import { useMediaQuery } from "@material-ui/core";
 const HomeDatasets = () => {
   const [selectedValue, setSelectedDataset] = useState("Parallel Dataset");
   const [apiValue, setApiValue] = useState("parallel-corpus");
   const [totalValue, setTotalValue] = useState("");
   const [totalValue2, setTotalValue2] = useState("");
   const [totalValue3, setTotalValue3] = useState("");
-
+  const isDesktopScreen = useMediaQuery("(max-width:1700px)");
+  const isMobileScreen = useMediaQuery("(max-width:500px)");
+  const isTabScreen = useMediaQuery("(max-width:900px) and (min-width:600px)");
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -25,39 +28,22 @@ const HomeDatasets = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
-        const [response1, response2, response3] = await Promise.all([
-          fetchChartData(apiValue, "", criterions),
-          fetchChartData("model", "", ""),
-          fetchChartData("benchmark", "", ""),
-        ]);
 
-       
-        if (!response1.ok)
-          throw new Error(`HTTP error! Status: ${response1.status}`);
-        if (!response2.ok)
-          throw new Error(`HTTP error! Status: ${response2.status}`);
-        if (!response3.ok)
-          throw new Error(`HTTP error! Status: ${response3.status}`);
+        const response1 = await fetchChartData(apiValue, "", criterions);
+        setTotalValue(response1?.count);
+        const response2 = await fetchChartData("model", "", "");
+        setTotalValue2(response2?.count);
+        const response3 = await fetchChartData("benchmark", "", "");
+        setTotalValue3(response3?.count);
 
-  
-        const response1Json = await response1.json();
-        const response2Json = await response2.json();
-        const response3Json = await response3.json();
-
-        
-        setTotalValue(response1Json?.count || "");
-        setTotalValue2(response2Json?.count || "");
-        setTotalValue3(response3Json?.count || "");
       } catch (error) {
         console.error("Error fetching data:", error);
-        
       }
     };
 
-    
     fetchData();
   }, []);
+  console.log("3");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,6 +59,7 @@ const HomeDatasets = () => {
       fetchData();
     }
   }, [apiValue]);
+
 
   const fetchChartData = async (dataType, value, criterions) => {
     try {
@@ -104,14 +91,16 @@ const HomeDatasets = () => {
   };
   return (
     <div
-      className="container text-left elements "
+      className={`${
+        isDesktopScreen ? "container" : ""
+      } datasetResponsiveContainer  text-left elements  `}
       style={{ marginBottom: "80px" }}
     >
       <div className="row">
         <div className="col DatasetCard">
           <p
             className="h5"
-            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px" }}
+            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px",fontFamily: "Roboto-Regular", }}
           >
             Datasets
           </p>
@@ -253,24 +242,30 @@ const HomeDatasets = () => {
                 }}
                 data-tooltip="Datasets are collection of structured data that serve as a input for training machine learning models, enablings algorithms to learn patterns and perform tasks based on provided information"
               >
-                <img src={info} className="w-75" />
+                <img
+                  src={info}
+                  className="w-100"
+                  style={{ height: isMobileScreen ? "" : "24px" }}
+                />
               </span>
             </div>
-            <h6
-              id="totalValue"
-            >
-              {totalValue ? totalValue : 0}
-            </h6>
+            <h6 id="totalValue">{totalValue ? totalValue : 0}</h6>
             <div
               style={{
                 textAlign: "center",
                 marginRight: "24px",
+                marginLeft: "24px",
                 fontSize: "14px",
               }}
               className="mobileButton mobileButton1"
             >
-              <a href="https://bhashini.gov.in/ulca/dashboard" target="_blank">
+              <a
+                href="https://bhashini.gov.in/ulca/dashboard"
+                target="_blank"
+                className="MobileButton__bigContainer"
+              >
                 <button
+                  className="MobileButton__big"
                   style={{
                     borderRadius: "4px",
                     background: "var(--Primary-M_Blue, #0671E0)",
@@ -289,7 +284,7 @@ const HomeDatasets = () => {
         <div className="col DatasetCard">
           <p
             className="h5"
-            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px" }}
+            style={{ fontSize: "20px",fontFamily: "Roboto-Regular", fontWeight: 600, lineHeight: "28px" }}
           >
             Models
           </p>
@@ -312,20 +307,16 @@ const HomeDatasets = () => {
                 }}
                 data-tooltip="Models are computational algorithms specifically designed for understanding and processing human language. They enable machines to analyze, interpret, and generate human-like text, facilitating applications such as language translation, sentiment analysis, and chatbot interactions."
               >
-                <img src={info} />
+                <img src={info} className="w-100" style={{ height: "30px" }} />
               </span>
             </div>
-            <h6
-              id="totalValue2"
-            >
-              {totalValue2 ? totalValue2 : 0}
-            </h6>
+            <h6 id="totalValue2">{totalValue2 ? totalValue2 : 0}</h6>
             <div
               style={{
                 display: "flex",
                 marginRight: "24px",
                 marginLeft: "24px",
-                fontSize: "14px",
+                fontSize: isTabScreen ? "12px" : "14px",
               }}
               className="mobileButton"
             >
@@ -357,7 +348,7 @@ const HomeDatasets = () => {
         <div className="col DatasetCard">
           <p
             className="h5"
-            style={{ fontSize: "20px", fontWeight: 600, lineHeight: "28px" }}
+            style={{ fontSize: "20px",fontFamily: "Roboto-Regular", fontWeight: 600, lineHeight: "28px" }}
           >
             Benchmarks
           </p>
@@ -380,14 +371,10 @@ const HomeDatasets = () => {
                 }}
                 data-tooltip="Benchmarking refers to the process of evaluating and comparing the performance of different algorithms or models against a standardized set of metrics and datasets to determine their relative effectiveness for a specific task or problem. This aids in selecting the most suitable model for a given application."
               >
-                <img src={info} />
+                <img src={info} className="w-100" style={{ height: "30px" }} />
               </span>
             </div>
-            <h6
-              id="totalValue3"
-            >
-              {totalValue3 ? totalValue3 : 0}
-            </h6>
+            <h6 id="totalValue3">{totalValue3 ? totalValue3 : 0}</h6>
             <div
               style={{
                 display: "flex",
@@ -399,7 +386,7 @@ const HomeDatasets = () => {
             >
               <a
                 style={{ color: "#0671E0", padding: "5px 5px" }}
-                href="https://bhashini.gov.in/ulca/model/explore-models"
+                href="https://bhashini.gov.in/ulca/model/benchmark-datasets"
                 className="mobileButtonextraSmall desktopButton"
               >
                 Explore Benchmark

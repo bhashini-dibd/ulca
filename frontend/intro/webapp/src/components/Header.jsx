@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/Home.css";
 import useMedia from "../hooks/useMedia";
-
+import downArrow from "../img/arrowDown.svg";
 const MobileHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -9,11 +9,16 @@ const MobileHeader = () => {
     setIsOpen(!isOpen);
   };
 
-
+  
 
   const toggleSubMenu1 = (e) => {
     e.stopPropagation(); // Prevents the parent menu from closing
     e.target.parentElement.classList.toggle("submenu-open1");
+  };
+
+  const toggleSubMenu2 = (e) => {
+    e.stopPropagation(); // Prevents the parent menu from closing
+    e.target.parentElement.classList.toggle("submenu-open2");
   };
   return (
     <div className="navbar">
@@ -34,7 +39,7 @@ const MobileHeader = () => {
                   className="nav-color"
                   href="https://bhashini.gov.in/about-bhashini"
                 >
-                  About
+                  About Bhashini
                 </a>
                 {/* <span className="submenu-arrow">▶</span> */}
                 {/* <ul className="sub-menu">
@@ -51,7 +56,7 @@ const MobileHeader = () => {
                   Ecosystem
                 </a>
               </li> */}
-              <li>
+              {/* <li>
                 {" "}
                 <a
                   className="nav-color"
@@ -59,9 +64,46 @@ const MobileHeader = () => {
                 >
                   Anuvaad
                 </a>
+              </li> */}
+              <li style={{ position: "relative" }} >
+                <a href="https://bhashini.gov.in/prayog" className="nav-color">Prayog{" "}</a>
+                {/* <img
+                  className="submenu-arrow1"
+                  style={{ height: "16px" }}
+                  src={downArrow}
+                ></img>
+                <ul className="sub-menu2">
+                  <li className="sub-item">
+                    {" "}
+                    <a
+                      className="nav-color"
+                      href="https://anuvaad.bhashini.gov.in/"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Anuvaad
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    {" "}
+                    <a
+                      className="nav-color"
+                      href="https://chitraanuvaad.bhashini.co.in/"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Chitraanuvaad
+                    </a>
+                  </li>
+                </ul> */}
               </li>
-              <li onClick={toggleSubMenu1}>
-                Sahyogi <span className="submenu-arrow">⏷</span>
+              <li style={{ position: "relative" }}>
+                <a href="https://bhashini.gov.in/sahyogi" className="nav-color">Sahyogi{" "}</a>
+                {/* <img
+                  className="submenu-arrow"
+                  style={{ height: "16px" }}
+                  src={downArrow}
+                ></img>
                 <ul className="sub-menu1">
                   <li className="sub-item">
                     {" "}
@@ -85,26 +127,14 @@ const MobileHeader = () => {
                       Career
                     </a>
                   </li>
-                </ul>
+                </ul> */}
               </li>
               <li>
                 {" "}
-                <a className="nav-color" href="#">
-                  ULCA
+                <a className="nav-color" href="https://bhashini.gov.in/sanchalak">
+                  Sanchalak
                 </a>
-              </li>
-              <li>
-                {" "}
-                <a className="nav-color" href="https://bhashini.gov.in/tender">
-                  Tender's/EOI's
-                </a>
-              </li>
-              <li>
-                {" "}
-                <a className="nav-color" href="https://bhashini.gov.in/career">
-                  Career
-                </a>
-              </li>
+                </li>
               <li>
                 {" "}
                 <a
@@ -116,11 +146,8 @@ const MobileHeader = () => {
               </li>
               <li>
                 {" "}
-                <a
-                  className="nav-color"
-                  href="https://bhashini.gov.in/starup-velocity-1.0"
-                >
-                  Bhashini Startup
+                <a className="nav-color" href="https://bhashini.gov.in/tender">
+                  Tender's/EOI's
                 </a>
               </li>
             </ul>
@@ -279,26 +306,55 @@ function Header() {
                     Ecosystem
                   </a>
                 </li> */}
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     href="https://anuvaad.bhashini.gov.in/"
                   >
                     Anuvaad
                   </a>
+                </li> */}
+                <li className="dropdown">
+                  <a
+                    className="nav-link"
+                    href="https://bhashini.gov.in/prayog"
+                    title="hello"
+                  >
+                    Prayog
+                  </a>
+                  {/* <div
+                    aria-labelledby="SahyogidropdownMenuLink"
+                    data-bs-popper="static"
+                    className="dropdown-menu"
+                  >
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://anuvaad.bhashini.gov.in/"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Anuvaad
+                    </a>
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://chitraanuvaad.bhashini.co.in/"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Chitraanuvaad
+                    </a>
+                  </div> */}
                 </li>
                 <li className="dropdown">
                   <a
-                    className="dropdown-toggle nav-link"
-                    href="#"
-                    id="SahyogidropdownMenuLink"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
+                    className="nav-link"
+                    href="https://bhashini.gov.in/sahyogi"
                   >
                     Sahyogi
                   </a>
-                  <div
+                  {/* <div
                     aria-labelledby="SahyogidropdownMenuLink"
                     data-bs-popper="static"
                     className="dropdown-menu"
@@ -321,21 +377,11 @@ function Header() {
                     >
                       Career
                     </a>
-                  </div>
+                  </div> */}
                 </li>
                 <li className="nav-item active">
-                  <a className="nav-link" href="#">
-                    ULCA
-                  </a>
-                </li>
-                <li className="nav-item ">
-                  <a className="nav-link" href="https://bhashini.gov.in/tender">
-                    Tender's /EOI's
-                  </a>
-                </li>
-                <li className="nav-item ">
-                  <a className="nav-link" href="https://bhashini.gov.in/career">
-                    Career
+                  <a className="nav-link" href="https://bhashini.gov.in/sanchalak">
+                    Sanchalak
                   </a>
                 </li>
                 <li className="nav-item ">
@@ -347,13 +393,23 @@ function Header() {
                   </a>
                 </li>
                 <li className="nav-item ">
+                  <a className="nav-link" href="https://bhashini.gov.in/tender">
+                    Tender's /EOI's
+                  </a>
+                </li>
+                {/* <li className="nav-item ">
+                  <a className="nav-link" href="https://bhashini.gov.in/career">
+                    Career
+                  </a>
+                </li>
+                <li className="nav-item ">
                   <a
                     className="nav-link"
                     href="https://bhashini.gov.in/starup-velocity-1.0"
                   >
                     Bhashini Startup
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
             <div className="join">

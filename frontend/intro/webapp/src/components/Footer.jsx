@@ -50,12 +50,12 @@ const Footer = () => {
               <div className="">
                 Address
                 <br />
-                <p className="ft-20 fw-500" href="">
+                <a className="ft-20 fw-500" href="https://www.google.com/maps/@28.5865266,77.2395194,19z?entry=ttu" target="_blank">
                   Electronics Niketan, 6, CGO Complex, Lodhi Road, New Delhi -
                   110003
                   <br />
                   <span className="ft-14">Tel: 011-24301361</span>
-                </p>
+                </a>
               </div>
             </div>
           </div>
@@ -196,26 +196,26 @@ const Footer = () => {
             </div>
             <div className="row align-items-center justify-content-between mt-5">
               <div className="col-md-7">
-                <a href="" className="tdl-logo">
+                {/* <a href="" className="tdl-logo"> */}
                   <img
                     src={`${process.env.PUBLIC_URL}/img/meity_logo.png`}
                     alt="TDIL logo"
                   />
-                </a>
+                {/* </a> */}
               </div>
-              <div className="col-md-3 text-right">
+              <div className="col-md-3 text-center">
                 <div className="caption mb-3">
                   <span className="lighGrey text-center ft-14">
                     Designed, Developed &amp; Hosted by
                   </span>
-                  <a href=""> Digital India Corporation(DIC)</a>
+                  <div style={{color:"white"}}> Digital India Corporation(DIC)</div>
                 </div>
-                <a href="" className="dg-india-logo ">
+                {/* <a href="" className="dg-india-logo "> */}
                   <img
                     src={`${process.env.PUBLIC_URL}/img/dg-india.png`}
                     alt="dg-india logo"
                   />
-                </a>
+                {/* </a> */}
               </div>
             </div>
             <div className="row mt-4 pt-4">

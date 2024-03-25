@@ -186,9 +186,10 @@ export const WhyULCA = () => {
                     fontSize: 16,
                   }}
                 >
-                  {isSmallScreen
+                  {/* {isSmallScreen
                     ? `${el.description.slice(0, 50)}...`
-                    : el.description}
+                    : el.description} */}
+                    {el?.description}
                 </Typography>
               </CardContent>
             </Card>
