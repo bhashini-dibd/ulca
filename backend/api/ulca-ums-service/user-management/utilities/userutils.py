@@ -513,6 +513,7 @@ class UserUtils:
                 log.info("{} is not a verified user".format(user_email))
                 return post_error("Not verified", "This email address is not registered with ULCA. Please sign up.", None)
             for value in result:
+                log.info(f"Result from user search :: {value}")
                 if value["isVerified"]== False:
                     log.info("{} is not a verified user".format(user_email))
                     return post_error("Not active", "User account is not verified. Please click on the verification link sent on your email address to complete the verification process.", None)
@@ -737,6 +738,17 @@ class UserUtils:
         log.info("Get Service Provider Key Api Call Request"+str(body))
         result = requests.post(url=EndPointurl, json=body, headers=decryptedValues)
         log.info("Get Service Provider Key Api Call Response"+str(result.json()))
+        #log.info(result.json())
+        return result.json()
+
+    @staticmethod
+    def revoke_service_provider_keys(email, appName,EndPointurl,decryptedValues):
+        body = {"emailId" : email.lower(), "appName" : appName}
+        log.info("Revoke Service Provider Key Api Call URL"+str(EndPointurl))
+        log.info("Revoke Service Provider Key Api Call Request"+str(body))
+        result = requests.delete(url=EndPointurl, json=body, headers=decryptedValues)
+        log.info(f"Revoked Response :: {result.status_code} :: {result.json()}")   
+        log.info("Revoke Service Provider Key Api Call Response"+str(result.json()))
         #log.info(result.json())
         return result.json()
 
