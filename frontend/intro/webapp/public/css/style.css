@@ -677,6 +677,19 @@ footer ul.link li:first-child {
 .container.elements {
   margin-top: 40px;
 }
+.theme-btn{
+    background:#2961ad;
+    border: none;
+    font-size: 16px;
+    padding: 8px 25px;
+    border-radius: 0px;
+    background-clip: padding-box;
+    font-weight: bold;
+}
+.theme-btn:hover{
+ background-color: #08408a;
+ 
+}
 
 .home-elements .dataset-element,
 .home-elements .model-element,

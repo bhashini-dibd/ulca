@@ -158,13 +158,14 @@ const MobileHeader = () => {
         {" "}
         <div className="join">
           <a
-            className="bh-btn-primary"
-            href="https://bhashini.gov.in/bhashadaan"
+            role="button"
+            tabIndex={0}
+            className="theme-btn btn btn-primary"
+            href="https://bhashini.gov.in/bhashadaan/en/home"
             target="_blank"
             rel="noopener noreferrer"
-          >
-            {" "}
-            Join Bhasha<span className="yellowColor">&nbsp;Daan</span>{" "}
+           >
+              Bhashadaan
           </a>
         </div>
       </div>
@@ -192,7 +193,7 @@ function Header() {
         </div>
       ) : (
         <header>
-          <div className="container custom-Headercontainer">
+          <div className="container">
             <div className="row align-items-center">
               <div className="col-3 col-md-5">
                 <img
@@ -249,7 +250,7 @@ function Header() {
             </button>
             <div className="collapse navbar-collapse" id="navbarsExample07">
               <ul className="navbar-nav mr-auto navbarScroll TabNavbar">
-                <li className="nav-item">
+                <li className="nav-item active">
                   <a className="nav-link" href="https://bhashini.gov.in/">
                     Home <span className="sr-only">(current)</span>
                   </a>
@@ -379,7 +380,7 @@ function Header() {
                     </a>
                   </div> */}
                 </li>
-                <li className="nav-item active">
+                <li className="nav-item">
                   <a className="nav-link" href="https://bhashini.gov.in/sanchalak">
                     Sanchalak
                   </a>
@@ -414,13 +415,14 @@ function Header() {
             </div>
             <div className="join">
               <a
-                className="bh-btn-primary"
-                href="https://bhashini.gov.in/bhashadaan"
+                role="button"
+                tabIndex={0}
+                className="theme-btn btn btn-primary"
+                href="https://bhashini.gov.in/bhashadaan/en/home"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {" "}
-                Join Bhasha<span className="yellowColor">&nbsp;Daan</span>{" "}
+                Bhashadaan
               </a>
             </div>
           </div>
