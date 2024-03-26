@@ -63,7 +63,7 @@
   box-sizing: border-box;
   position: relative;
   gap: 64px;
-  background-image: url(../img/Desktop_banner/Group\ 149.jpg);
+  background-image: url(../img/Desktop_banner/Banner_1.jpg);
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: top;
@@ -72,7 +72,7 @@
 }
 
 .homeBanner2 {
-  background-image: url(../img/Desktop_banner/Dataset\ banner\ .jpg);
+  background-image: url(../img/Desktop_banner/Banner_2.jpg);
 }
 
 .content1 {
@@ -84,7 +84,7 @@
   gap: 20px;
   z-index: 0;
   height: 100%;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 .contentInner,
@@ -362,7 +362,7 @@
   }
   .Homesection {
     /* padding: 20px; */
-    background-image: url(../img/Mobile_banner/banner\ 1.jpg);
+    background-image: url(../img/Mobile_banner/mobile_banner_1.jpg);
 
     background-size: contain;
     height: 25vh;
@@ -396,7 +396,7 @@
 
   .homeBanner2 {
     background-size: contain;
-    background-image: url(../img/Mobile_banner/Banner\ 2.jpg);
+    background-image: url(../img/Mobile_banner/mobile_banner_2.jpg);
   }
   .Bannerheading {
     font-size: 22px;
@@ -463,8 +463,8 @@
   }
   .content1 {
     position: absolute;
-    bottom: -18px;
-    left: 38px;
+    bottom: 10px;
+    left: 16px;
   }
 
   .Header__buttonTxt {
@@ -473,7 +473,7 @@
 
   .Homesection {
     /* padding: 20px; */
-    background-image: url(../img/Mobile_banner/banner\ 1.jpg);
+    background-image: url(../img/Mobile_banner/mobile_banner_1.jpg);
 
     background-size: contain;
     height: 27vh;
