@@ -513,6 +513,7 @@ class UserUtils:
                 log.info("{} is not a verified user".format(user_email))
                 return post_error("Not verified", "This email address is not registered with ULCA. Please sign up.", None)
             for value in result:
+                log.info(f"Result from user search :: {value}")
                 if value["isVerified"]== False:
                     log.info("{} is not a verified user".format(user_email))
                     return post_error("Not active", "User account is not verified. Please click on the verification link sent on your email address to complete the verification process.", None)

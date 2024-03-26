@@ -114,7 +114,7 @@ const HomeBanner = () => {
               
                 </div> */}
 
-                <div className="Header__buttonContainer">
+                {/* <div className="Header__buttonContainer">
                   <a
                     href="https://app.swaggerhub.com/apis/ulca/ULCA/0.7.0"
                     target="_blank"
@@ -122,7 +122,7 @@ const HomeBanner = () => {
                     {" "}
                     <div className="Header__buttonTxt">Get the API</div>
                   </a>
-                </div>
+                </div> */}
               </div>
               {/* <div className={styles.rectangleParent}>
                     <div className={styles.frameChild} />

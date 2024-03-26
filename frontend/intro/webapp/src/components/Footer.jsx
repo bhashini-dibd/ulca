@@ -37,7 +37,7 @@ const Footer = () => {
                 Mail
                 <br />
                 <a className="" href="mailto:ceo-dibd@digitalindia.gov.in">
-                  ceo-dibd[at]digitalindia[dot]gov[dot]in
+                ceo-dibd@digitalindia.gov.in
                 </a>
               </div>
             </div>
@@ -208,7 +208,7 @@ const Footer = () => {
                   <span className="lighGrey text-center ft-14">
                     Designed, Developed &amp; Hosted by
                   </span>
-                  <div style={{color:"white"}}> Digital India Corporation(DIC)</div>
+                  <div style={{color:"white"}}> Digital India Bhashini Division (DIBD)</div>
                 </div>
                 {/* <a href="" className="dg-india-logo "> */}
                   <img
