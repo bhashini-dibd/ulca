@@ -618,7 +618,7 @@ class UserUtils:
                     server.starttls()
                     server.login(SENDER_USERNAME, SENDER_PASSWORD)
                     response = server.sendmail(SENDER_EMAIL, email, msg.as_string())
-                    print("Email sent on last week's feedback")
+                    print("Email sent")
                             
                 
                 
