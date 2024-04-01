@@ -616,6 +616,8 @@ class UserUtils:
                 # Connect to the SMTP server
                 with smtplib.SMTP('smtp.azurecomm.net', 587) as server:
                     server.starttls()
+                    print(f"SENDER USERNAME :: {SENDER_USERNAME}")
+                    print(f"SENDER PASSWORD :: {SENDER_PASSWORD}")
                     server.login(SENDER_USERNAME, SENDER_PASSWORD)
                     response = server.sendmail(SENDER_EMAIL, email, msg.as_string())
                     print("Email sent")
