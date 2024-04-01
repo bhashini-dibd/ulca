@@ -598,9 +598,11 @@ class UserUtils:
                 msg['From'] = SENDER_EMAIL
                 msg['To'] = email
                 msg['Subject'] = email_subject
+                    
+                message_html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
 
                 # Attach the message to the email
-                msg.attach(MIMEText(msg, 'plain'))
+                msg.attach(MIMEText(message_html, 'html'))
 
                 # # Attach the file if provided
                 # attachment_filename = "feedback.xlsx"
