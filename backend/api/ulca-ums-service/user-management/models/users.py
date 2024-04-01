@@ -16,6 +16,12 @@ class UserManagementModel(object):
         try:
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
+            # Check if the email exists or not
+            email_to_check = records[0]["email"]
+            # Count documents that match the email
+            count = collections.count_documents({"email": email_to_check})
+            if count>0:
+                return post_error("400", "Please try signing up with a different email id", None)
             #inserting user records on db
             results = collections.insert(records)
             log.info("Count of users created : {}".format(len(results)))
