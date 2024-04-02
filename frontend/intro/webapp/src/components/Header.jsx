@@ -206,8 +206,10 @@ function Header() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 <img
-                  src={process.env.PUBLIC_URL + "/img/Bhashini_en.svg"}
+                  src={process.env.PUBLIC_URL + "/img/Bhashini_en.png"}
                   alt="bhashini logo"
+                  className="img-fluid"
+                  style={{height:"60px"}}
                 />
               </div>
             </div>
@@ -221,9 +223,10 @@ function Header() {
             <div className="logo" style={{ backgroundColor: "#fff" }}>
               {" "}
               <img
-                src={process.env.PUBLIC_URL + "/img/Bhashini_en.svg"}
+                src={process.env.PUBLIC_URL + "/img/Bhashini_en.png"}
                 alt="bhashini logo"
-                style={{ width: "96%" }}
+                style={{ height:"60px", marginLeft:"1rem" }}
+                className="img-fluid"
               />
             </div>
             <div className="w-100 py-2">
@@ -250,7 +253,7 @@ function Header() {
             </button>
             <div className="collapse navbar-collapse" id="navbarsExample07">
               <ul className="navbar-nav mr-auto navbarScroll TabNavbar">
-                <li className="nav-item active">
+                <li className="nav-item">
                   <a className="nav-link" href="https://bhashini.gov.in/">
                     Home <span className="sr-only">(current)</span>
                   </a>
