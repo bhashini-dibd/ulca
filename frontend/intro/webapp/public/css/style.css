@@ -1,5 +1,7 @@
 /* font-family: 'Roboto', sans-serif;
 font-family: 'Rowdies', cursive; */
+@import url('https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap');
+
 * img {
   -webkit-transition: all 300ms ease-in-out;
   -moz-transition: all 300ms ease-in-out;
@@ -680,7 +682,8 @@ footer ul.link li:first-child {
     padding: 8px 25px;
     border-radius: 0px;
     background-clip: padding-box;
-    font-weight: bold;
+    font-weight: 300;
+    font-family: 'Rowdies';
 }
 .theme-btn:hover{
  background-color: #08408a;

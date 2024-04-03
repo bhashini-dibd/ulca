@@ -164,6 +164,7 @@ const MobileHeader = () => {
             href="https://bhashini.gov.in/bhashadaan/en/home"
             target="_blank"
             rel="noopener noreferrer"
+            style={{borderRadius: "4px"}}
            >
               Bhashadaan
           </a>
@@ -424,6 +425,7 @@ function Header() {
                 href="https://bhashini.gov.in/bhashadaan/en/home"
                 target="_blank"
                 rel="noopener noreferrer"
+                style={{borderRadius: "4px"}}
               >
                 Bhashadaan
               </a>
