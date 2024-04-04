@@ -1,5 +1,10 @@
 import uuid
 from uuid import uuid4
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 import time
 import re
 import bcrypt
@@ -20,6 +25,7 @@ from flask import render_template
 from bson import json_util
 from bson.objectid import ObjectId
 from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION,SPECIAL_CHARS
+from config import SENDER_EMAIL, SENDER_PASSWORD, SENDER_USERNAME
 from Crypto.Cipher import AES
 import base64
 import sys
@@ -587,14 +593,47 @@ class UserUtils:
                 link            =   mail_ui_link+reset_pwd_link+"{}/{}/{}/{}".format(email,pubKey,pvtKey,timestamp)
                 name            =   user_record["name"]
             try:
-                msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
-                msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
-                with mail.record_messages() as outbox:
-                    mail.send(msg)
-                    log.info("Email outbox size {outboxLength} and subject {emailSubject}".format(outboxLength=len(outbox),emailSubject=outbox[0].subject))
-                    if len(outbox) < 1:
-                        raise OutboxEmptyException
-                    log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
+                
+                msg = MIMEMultipart()
+                msg['From'] = SENDER_EMAIL
+                msg['To'] = email
+                msg['Subject'] = email_subject
+                    
+                message_html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
+
+                # Attach the message to the email
+                msg.attach(MIMEText(message_html, 'html'))
+
+                # # Attach the file if provided
+                # attachment_filename = "feedback.xlsx"
+                # attachment = open(attachment_filename, "rb")
+                # part = MIMEBase('application', 'octet-stream')
+                # part.set_payload(attachment.read())
+                # encoders.encode_base64(part)
+                # part.add_header('Content-Disposition', f"attachment; filename= {attachment_filename}")
+                # msg.attach(part)
+
+                # Connect to the SMTP server
+                with smtplib.SMTP('smtp.azurecomm.net', 587) as server:
+                    server.starttls()
+                    print(f"SENDER USERNAME :: {SENDER_USERNAME}")
+                    print(f"SENDER PASSWORD :: {SENDER_PASSWORD}")
+                    server.login(SENDER_USERNAME, SENDER_PASSWORD)
+                    response = server.sendmail(SENDER_EMAIL, email, msg.as_string())
+                    print("Email sent")
+                            
+                
+                
+                # Older email code                
+                # msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
+                # msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
+                # with mail.record_messages() as outbox:
+                #     mail.send(msg)
+                #     log.info("Email outbox size {outboxLength} and subject {emailSubject}".format(outboxLength=len(outbox),emailSubject=outbox[0].subject))
+                #     if len(outbox) < 1:
+                #         raise OutboxEmptyException
+                #     log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
+
             except Exception as e:
                 log.exception("Exception while generating email notification | {}".format(str(e)))
                 return post_error("Exception while generating email notification","Exception occurred:{}".format(str(e)),None)
