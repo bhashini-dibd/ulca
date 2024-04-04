@@ -6,6 +6,8 @@ import HomeBanner from "./components/HomeBanner";
 import HomeDatasets from "./components/HomeDatasets";
 import VideoSection from "./components/VideoSection";
 import Header from "./components/Header";
+import DownloadApp from "./components/DownloadApp";
+import { FooterNewDesign } from "./components/FooterNewDesign";
 
 function App(props) {
   return (
@@ -16,7 +18,9 @@ function App(props) {
       <VideoSection />
       <WhyULCA />
       {/* <FAQ /> */}
-      <Footer />
+      <DownloadApp />
+      <FooterNewDesign />
+      {/* <Footer /> */}
     </>
   );
 }
