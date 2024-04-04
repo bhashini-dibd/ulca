@@ -46,6 +46,8 @@ const HomeDatasets = () => {
 
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsLoading(false);
+        setIsLoadingDrop(false);
       }
     };
 
@@ -264,7 +266,7 @@ const HomeDatasets = () => {
                 textAlign: "center",
                 marginRight: "24px",
                 marginLeft: "24px",
-                fontSize: "14px",
+                fontSize: "13px",
               }}
               className="mobileButton mobileButton1"
             >
@@ -325,7 +327,7 @@ const HomeDatasets = () => {
                 display: "flex",
                 marginRight: "24px",
                 marginLeft: "24px",
-                fontSize: isTabScreen ? "12px" : "14px",
+                fontSize: isTabScreen ? "12px" : "13px",
               }}
               className="mobileButton"
             >
@@ -389,7 +391,7 @@ const HomeDatasets = () => {
                 display: "flex",
                 marginRight: "24px",
                 marginLeft: "24px",
-                fontSize: "14px",
+                fontSize: "13px",
               }}
               className="mobileButton tabButton "
             >

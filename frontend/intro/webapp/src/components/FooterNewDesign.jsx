@@ -27,7 +27,7 @@ const FooterNewDesign = () => {
         {/* Using div component */}
         <Row>
           {FootersData.map((data) => (
-            <Col xs={6} md={6} lg={data?.size} className="mb-4 ps-4 mb-md-0 ps-md-0" style={{paddingLeft: "1.5rem",'@media (min-width: 768px)': {
+            <Col xs={6} md={6} lg={data?.size} className="mb-4 ps-4 mb-md-0 ps-md-0 FooterColumn" style={{paddingLeft: "1.5rem",'@media (min-width: 768px)': {
               paddingLeft: "0"
              }}}>
               <div className="FooterNewDesignManagement">

@@ -187,3 +187,8 @@ color:rgb(171, 190, 209, 0.4);
   font-weight: 700;
   color: #212121;
 }
+@media (min-width: 768px) {
+  .FooterColumn{
+    padding-left: 0!important;
+  }
+}
