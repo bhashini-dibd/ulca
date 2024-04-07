@@ -8,11 +8,15 @@ import VideoSection from "./components/VideoSection";
 import Header from "./components/Header";
 import DownloadApp from "./components/DownloadApp";
 import { FooterNewDesign } from "./components/FooterNewDesign";
+import TopContent from "./components/TopContent";
+import AppContextProvider from "./context/ContextAPI";
 
 function App(props) {
   return (
     <>
-    <Header />
+    <AppContextProvider>
+      <TopContent />
+      <Header />
       <HomeBanner />
       <HomeDatasets />
       <VideoSection />
@@ -20,6 +24,7 @@ function App(props) {
       {/* <FAQ /> */}
       <DownloadApp />
       <FooterNewDesign />
+    </AppContextProvider>
       {/* <Footer /> */}
     </>
   );
