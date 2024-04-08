@@ -8,7 +8,7 @@ const HomeDatasets = () => {
   const [totalValue, setTotalValue] = useState("");
   const [totalValue2, setTotalValue2] = useState("");
   const [totalValue3, setTotalValue3] = useState("");
-  const isDesktopScreen = useMediaQuery("(max-width:1700px)");
+  const isDesktopScreen = useMediaQuery("(max-width:2000px)");
   const isMobileScreen = useMediaQuery("(max-width:500px)");
   const isTabScreen = useMediaQuery("(max-width:900px) and (min-width:600px)");
   const [isLoading, setIsLoading] = useState(false);

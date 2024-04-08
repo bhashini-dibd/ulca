@@ -645,7 +645,7 @@
 }
 @media screen and (min-width: 1701px) {
   .datasetResponsiveContainer {
-    padding: 24px 200px;
+    padding: 24px 0;
   }
 
   .Homesection {
