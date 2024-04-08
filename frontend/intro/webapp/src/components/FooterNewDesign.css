@@ -39,6 +39,8 @@ color:rgb(171, 190, 209, 0.4);
   display: flex;
   font-family: "Roboto", sans-serif;
   font-weight: 400;
+  width: 100%;
+  align-items: baseline;
 
 }
 .FooterNewDesignContainer .FooterNewDesignManagement .FooterNewDesignContent a, .FooterNewDesignContainer .FooterNewDesignManagement .FooterNewDesignContent .FooterNewDesignBottomPolicyTerms a {

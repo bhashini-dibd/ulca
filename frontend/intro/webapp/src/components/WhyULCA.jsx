@@ -149,7 +149,7 @@ export const WhyULCA = () => {
         style={{
           padding: isSmallScreen ? 10 : 40,
           columnGap: 0.5,
-          width: isSmallScreen ? "100%" : isMediumScreen ? "127%" : "110%",
+          width: isSmallScreen ? "100%" : isMediumScreen ? "127%" : "100%",
           alignSelf: "center",
           justifySelf: "center",
         }}

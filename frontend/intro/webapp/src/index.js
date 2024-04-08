@@ -5,6 +5,7 @@ import App from './Layout';
 import reportWebVitals from './reportWebVitals';
 import Theme from "./theme/theme-default";
 import { MuiThemeProvider } from "@material-ui/core";
+import i18n from './configs/i18n';
 
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";

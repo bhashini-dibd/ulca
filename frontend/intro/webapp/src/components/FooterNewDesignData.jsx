@@ -8,7 +8,8 @@ const FootersData = [
   {
     id : 1,
     title : "About",
-    size:3,
+    size:2,
+    sizeMob:6,
     links : [
       {
         id:1,
@@ -24,18 +25,12 @@ const FootersData = [
       },
       {
         id:3,
-        text:"Contact us",
-        link:"/ContactUs",
-        icon:""
-      },
-      {
-        id:4,
         text:"Terms & Conditions",
         link:"/terms-of-use",
         icon:""
       },
       {
-        id:5,
+        id:4,
         text:"Policy",
         link:"/privacy-policy",
         icon:""
@@ -47,6 +42,7 @@ const FootersData = [
     title : "Prayog",
     tooltipData:"Explore our reference applications",
     size:2,
+    sizeMob:6,
     links : [
       {
         id:1,
@@ -79,7 +75,8 @@ const FootersData = [
     id : 3,
     title : "Sahyogi",
     tooltipData:"Discover our Associates",
-    size:3,
+    size:2,
+    sizeMob:6,
     links : [
       {
         id:1,
@@ -119,6 +116,7 @@ const FootersData = [
     title : "Sanchalak",
     tooltipData:"Drivers, Services and Offerings",
     size:2,
+    sizeMob:6,
     links : [
       {
         id:1,
@@ -140,6 +138,7 @@ const FootersData = [
     id : 5,
     title : "Other",
     size:2,
+    sizeMob:12,
     links : [
       {
         id:1,
@@ -158,6 +157,33 @@ const FootersData = [
         text:"Ecosystem",
         link:"/ecosystem",
         icon:""
+      },
+      
+    ]
+  },
+   {
+    id : 5,
+    title : "Contact Us",
+    size:2,
+    sizeMob:12,
+    links : [
+      {
+        id:1,
+        text:"<p style='margin-top:10px;'>Email <br /> <a href='mailto:ceo-dibd@digitalgov.co.in' style='pointer-events: auto;text-decoration:underline;color:#4D4D4D;'>ceo-dibd@digitalgov.co.in </a></p>",
+        link:"",
+        icon:"",
+      },
+      {
+        id:2,
+        text:"<p>Phone <br /> <a href='callto:011 24301361' style='width:100%;pointer-events: auto;text-decoration:underline; color:#4D4D4D;'>011-24301361</a> <hr style='color:black;opacity:0.25;' /></p> ",
+        link:"",
+        icon:""
+      },
+      {
+        id:3,
+        text:"<a href='https:/bhashini.gov.in/ContactUs' style='color:#0671E0;'><p style='text-align:start;pointer-events: auto;font-size:16px;font-weight:600'>Write to us </p></a>",
+        link:"",
+        icon:"check"
       },
       
     ]
