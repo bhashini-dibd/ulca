@@ -107,7 +107,7 @@ export default function TopContent(props) {
                     </a>
                   </li>
                   <li className="top__listing-item">
-                    <a href="#;" className="top__listing-link">
+                    <a href="#" className="top__listing-link">
                       <span className="u-icon"><LanguageIcon /></span>
                       <select
                         className="lang"

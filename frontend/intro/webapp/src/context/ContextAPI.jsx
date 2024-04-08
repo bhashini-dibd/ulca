@@ -1,24 +1,32 @@
 import { createContext, useState, useEffect } from "react";
-import {GET_FONT_NAME } from "../constants/FontConstants"; 
+import { GET_FONT_NAME } from "../constants/FontConstants";
 export const AppContext = createContext();
 export const { translation, tts } = { translation: "translation", tts: "tts" };
 const AppContextProvider = (props) => {
     const [getFontSize, setFontSize] = useState('');
-    const [getDefaultFontSize, setDefaultFontSize] = useState(GET_FONT_NAME); 
+    const [getDefaultFontSize, setDefaultFontSize] = useState(GET_FONT_NAME);
 
 
     //SearchModelRequest
-      
+
     const [getSearchModelErrorMessage, setSearchModelErrorMessage] = useState({});
-    const [isSkipToMainContent, setSkipToMainContent] = useState(false); 
+    const [isSkipToMainContent, setSkipToMainContent] = useState(false);
     // =============================================================================
- 
+
     const updateSkipToMainContent = (isSkip) => setSkipToMainContent(isSkip);
 
- 
+
 
     const updateFont = (fontSize) => {
-      setFontSize(fontSize)   
+        let root = document.documentElement; // Access the root element (html) of the document
+        if (fontSize === 'increase') {
+            root.style.fontSize = '18px'; // Set root font size to 18px
+        } else if (fontSize === 'decrease') {
+            root.style.fontSize = '14px'; // Set root font size to 14px
+        } else {
+            root.style.fontSize = '16px'; // Set root font size to 16px for default or any other cases
+        }
+        setFontSize(fontSize)
     }
 
     return (
