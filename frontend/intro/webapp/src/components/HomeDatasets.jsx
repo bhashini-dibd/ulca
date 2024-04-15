@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import info from "../img/info.svg";
 import { useMediaQuery } from "@material-ui/core";
+import Loader from "./Loader";
 const HomeDatasets = () => {
   const [selectedValue, setSelectedDataset] = useState("Parallel Dataset");
   const [apiValue, setApiValue] = useState("parallel-corpus");
   const [totalValue, setTotalValue] = useState("");
   const [totalValue2, setTotalValue2] = useState("");
   const [totalValue3, setTotalValue3] = useState("");
-  const isDesktopScreen = useMediaQuery("(max-width:1700px)");
+  const isDesktopScreen = useMediaQuery("(max-width:2000px)");
   const isMobileScreen = useMediaQuery("(max-width:500px)");
   const isTabScreen = useMediaQuery("(max-width:900px) and (min-width:600px)");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingDrop, setIsLoadingDrop] = useState(false);
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
@@ -18,6 +21,7 @@ const HomeDatasets = () => {
   };
 
   const handleDatasetChange = (dataset, apiName) => {
+    setIsLoadingDrop(true);
     setSelectedDataset(dataset);
     setApiValue(apiName);
     setDropdownVisible(false); // Close the dropdown after selection
@@ -26,6 +30,8 @@ const HomeDatasets = () => {
   const criterions = [{ field: "sourceLanguage", value: "en" }];
 
   useEffect(() => {
+    setIsLoading(true);
+    setIsLoadingDrop(true);
     const fetchData = async () => {
       try {
 
@@ -35,9 +41,13 @@ const HomeDatasets = () => {
         setTotalValue2(response2?.count);
         const response3 = await fetchChartData("benchmark", "", "");
         setTotalValue3(response3?.count);
+        setIsLoading(false);
+        setIsLoadingDrop(false);
 
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsLoading(false);
+        setIsLoadingDrop(false);
       }
     };
 
@@ -50,6 +60,7 @@ const HomeDatasets = () => {
       try {
         const response1 = await fetchChartData(apiValue, "", criterions);
         setTotalValue(response1?.count);
+        setIsLoadingDrop(false);
       } catch (error) {
         console.error("Error handling API response:", error);
       }
@@ -249,13 +260,13 @@ const HomeDatasets = () => {
                 />
               </span>
             </div>
-            <h6 id="totalValue">{totalValue ? totalValue : 0}</h6>
+            <h6 id="totalValue">{isLoadingDrop ? <Loader /> : (totalValue ? (Number.isInteger(totalValue) ? totalValue : parseFloat(totalValue).toFixed(2)): 0)}</h6>
             <div
               style={{
                 textAlign: "center",
                 marginRight: "24px",
                 marginLeft: "24px",
-                fontSize: "14px",
+                fontSize: "13px",
               }}
               className="mobileButton mobileButton1"
             >
@@ -310,13 +321,13 @@ const HomeDatasets = () => {
                 <img src={info} className="w-100" style={{ height: "30px" }} />
               </span>
             </div>
-            <h6 id="totalValue2">{totalValue2 ? totalValue2 : 0}</h6>
+            <h6 id="totalValue2">{isLoading ? <Loader /> : (totalValue2 ? totalValue2 : 0)}</h6>
             <div
               style={{
                 display: "flex",
                 marginRight: "24px",
                 marginLeft: "24px",
-                fontSize: isTabScreen ? "12px" : "14px",
+                fontSize: isTabScreen ? "12px" : "13px",
               }}
               className="mobileButton"
             >
@@ -374,13 +385,13 @@ const HomeDatasets = () => {
                 <img src={info} className="w-100" style={{ height: "30px" }} />
               </span>
             </div>
-            <h6 id="totalValue3">{totalValue3 ? totalValue3 : 0}</h6>
+            <h6 id="totalValue3">{isLoading ? <Loader /> : (totalValue3 ? totalValue3 : 0)}</h6>
             <div
               style={{
                 display: "flex",
                 marginRight: "24px",
                 marginLeft: "24px",
-                fontSize: "14px",
+                fontSize: "13px",
               }}
               className="mobileButton tabButton "
             >
