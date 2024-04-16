@@ -16,8 +16,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.LinkedList;
@@ -253,6 +255,10 @@ public class ModelService {
 
 		modelDao.save(model);
 		return model;
+	}
+
+	public List<ModelExtended> findModelsByIds(Set<String> modelIds) {
+		return modelDao.findAllByModelIdIn(modelIds);
 	}
 
 	public ModelListByUserIdResponse modelListByUserId(String userId, Integer startPage, Integer endPage,
@@ -2308,27 +2314,89 @@ public class ModelService {
 	}
 
 	public AppModelsResponse getAppModels(String taskType) {
-		String[] tasksRequested = null;
-		List<PipelineModel> pipelineModels = pipelineModelDao.findAll();
 		AppModelsResponse appModelsResponse = new AppModelsResponse();
-		if (taskType != null) {
-			tasksRequested[0] = taskType;
-		} else {
-			String[] defaultTasks = { "translation", "asr", "tts", "transliteration" };
-			tasksRequested = defaultTasks;
-		}
+		String[] defaultTasks = { "translation", "asr", "transliteration","tts"};
+		List<String> defaultTasksList = Arrays.asList(defaultTasks);
+		List<String> tasksRequested = new ArrayList<String>();
 
-		for (int i = 0; i < tasksRequested.length; i++) {
-			String taskTypeToSearch = tasksRequested[i];
-			AppModelUtilities appModelUtilities = new AppModelUtilities();
-			List<AppModelService> appModelServices = appModelUtilities
-					.getAllModelServicesOfIndividualTaskType(taskTypeToSearch, pipelineModels);
-			AppModel appModel= new AppModel();
-			appModel.setTaskType(taskTypeToSearch);
-			appModel.setServices(appModelServices);
-			appModelsResponse.getModels().add(appModel);
+		if (taskType != null) {
+			if (SupportedTasks.fromValue(taskType) == null)
+				throw new PipelineValidationException(taskType + " is not exist in supported tasks !",
+						HttpStatus.BAD_REQUEST);
+
+			if (!defaultTasksList.contains(taskType))
+				throw new PipelineValidationException("This task type is not supported by the pipeline!",
+						HttpStatus.BAD_REQUEST);
+
+			tasksRequested.add(taskType);
+
+		} else {
+			tasksRequested = defaultTasksList;
+
+		}
+		List<PipelineModel> pipelineModels = pipelineModelDao.findAll();
+
+		if (!pipelineModels.isEmpty()) {
+			log.info("size of pipeline models : " + pipelineModels.size());
+			List<AppModel> models = new ArrayList<AppModel>();
+
+			log.info("tasksRequested :: " + tasksRequested);
+			for (String taskTypeToSearch : tasksRequested) {
+				List<AppModelService> appModelServices = getAllModelServicesOfIndividualTaskType(taskTypeToSearch,
+						pipelineModels);
+				log.info("appModelServices :: " + appModelServices.size());
+				AppModel appModel = new AppModel();
+				appModel.setTaskType(taskTypeToSearch);
+				appModel.setServices(appModelServices);
+				models.add(appModel);
+			}
+			appModelsResponse.setModels(models);
+		} else {
+			throw new PipelineValidationException("No pipeline is available!", HttpStatus.BAD_REQUEST);
+
 		}
 
 		return appModelsResponse;
 	}
+
+	public List<AppModelService> getAllModelServicesOfIndividualTaskType(String taskType,
+			List<PipelineModel> pipelineModels) {
+		log.info("task type to be search :: " + taskType);
+		List<AppModelService> services = new ArrayList<AppModelService>();
+
+		Map<String, AppModelService> modelsMap = new HashMap<String, AppModelService>();
+		for (PipelineModel pipelineModel : pipelineModels) {
+			for (TaskSpecification taskSpecification : pipelineModel.getTaskSpecifications()) {
+				log.info("task type of pipeline :: " + taskSpecification.getTaskType().name());
+				if (taskSpecification.getTaskType().name().toLowerCase().equals(taskType)) {
+					for (ConfigSchema configSchema : taskSpecification.getTaskConfig()) {
+						AppModelService appModelService = new AppModelService();
+						appModelService.setServiceId(configSchema.getServiceId());
+						appModelService.setSourceLanguage(configSchema.getSourceLanguage());
+						appModelService.setSourceScriptCode(configSchema.getSourceScriptCode());
+						appModelService.setTargetLanguage(configSchema.getTargetLanguage());
+						appModelService.setTargetScriptCode(configSchema.getTargetScriptCode());
+
+						modelsMap.put(configSchema.getModelId(), appModelService);
+					}
+				}
+			}
+		}
+		if (modelsMap != null) {
+
+			List<ModelExtended> models = findModelsByIds(modelsMap.keySet());
+			for (ModelExtended model : models) {
+				AppModelService service = modelsMap.get(model.getModelId());
+				service.setName(model.getName());
+				service.setDescription(model.getDescription());
+				modelsMap.put(model.getModelId(), service);
+			}
+
+			services = new ArrayList<AppModelService>(modelsMap.values());
+		}
+
+		return services;
+
+	}
+
 }
