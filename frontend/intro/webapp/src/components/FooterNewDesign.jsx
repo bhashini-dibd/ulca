@@ -28,12 +28,12 @@ const FooterNewDesign = () => {
         {/* Using div component */}
         <Row>
           {FootersData.map((data) => (
-            <Col xs={data?.sizeMob } md={6} lg={data?.size} className="mb-4 ps-4 mb-md-0 ps-md-0 FooterColumn" style={{
+            <Col xs={data?.sizeMob} md={6} lg={data?.size} className="mb-4 ps-4 mb-md-0 ps-md-0 FooterColumn" style={{
               paddingLeft: "1.5rem", '@media (min-width: 768px)': {
                 paddingLeft: "0"
               }
             }}>
-              <div className="FooterNewDesignManagement" style={{gap:data?.title === 'Contact Us' ? "0px" : '20px'}}>
+              <div className="FooterNewDesignManagement" style={{ gap: data?.title === 'Contact Us' ? "0px" : '20px' }}>
                 {" "}
                 {data?.title === 'Prayog' || data?.title === "Sahyogi" || data?.title === "Sanchalak" ? <OverlayTrigger placement="top"
                   delay={{ show: 250, hide: 300 }}
@@ -48,22 +48,25 @@ const FooterNewDesign = () => {
                     {" "}
                     {/* Applying FooterNewDesignContent class */}
                     {isMobile || (value.text === 'State gov' || value.text === 'Mitra' || value.text === 'Udayat' || value.text === 'Vanianuvaad' || value.text === 'Lekhaanuvaad') ? (
-                      // <a href={`https://bhashini.gov.in${value.link}`} target="_blank">
-                      //   <div className="py-1 FooterNewDesignLinksColor">
-                      //     {" "}
-                      //     {value.text}
-                      //   </div>
-                      // </a>
-                      data?.title !== "Contact Us" ? <a href={`https://bhashini.gov.in${value.link}`} >
-                        <div className="py-1 FooterNewDesignLinksColor" dangerouslySetInnerHTML={{
+                      value.text == 'ULCA' || value.text == 'Chitraanuvaad' || value.text == "Anuvaad" ? (
+                        <a href={value.link} target="_blank">
+                          <div className="py-1 FooterNewDesignLinksColor">
+                            {" "}
+                            {value.text}
+                          </div>
+                        </a>
+                      ) :
+                        data?.title !== "Contact Us" ? <a href={`https://bhashini.gov.in${value.link}`}  >
+                          <div className="py-1 FooterNewDesignLinksColor" dangerouslySetInnerHTML={{
+                            __html: value?.text,
+                          }} />
+                          {" "}
+                          {/* {value.text} */}
+                          {/* </div> */}
+                        </a> : <div className="py-1 FooterNewDesignLinksColor" style={{ width: "100%" }} dangerouslySetInnerHTML={{
                           __html: value?.text,
                         }} />
-                        {" "}
-                        {/* {value.text}
-                        </div> */}
-                      </a> : <div className="py-1 FooterNewDesignLinksColor" dangerouslySetInnerHTML={{
-                        __html: value?.text,
-                      }} />
+
                     )
                       : (value.text == 'ULCA' || value.text == 'Chitraanuvaad' || value.text == "Anuvaad" ? (
                         <a href={value.link} target="_blank">
@@ -73,12 +76,6 @@ const FooterNewDesign = () => {
                           </div>
                         </a>
                       ) :
-                        //  <a href={`https://bhashini.gov.in${value.link}`} target="_blank">
-                        //   <div className="py-1 FooterNewDesignLinksColor">
-                        //     {" "}
-                        //     {value.text}
-                        //   </div>
-                        // </a>
                         data?.title !== "Contact Us" ? <a href={`https://bhashini.gov.in${value.link}`}  >
                           <div className="py-1 FooterNewDesignLinksColor" dangerouslySetInnerHTML={{
                             __html: value?.text,

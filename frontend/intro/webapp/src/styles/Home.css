@@ -723,3 +723,11 @@
     max-width: 2200px; /* Set your desired width here */
   }
 }
+@media screen and (max-width: 991px) {
+  .mainNav {
+      padding: 8px 0 0 0 !important;
+  }
+  .navbar-row{
+    padding: 0 0.75rem;
+  }
+}
