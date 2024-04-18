@@ -102,9 +102,7 @@ const HomeDatasets = () => {
   };
   return (
     <div
-      className={`${
-        isDesktopScreen ? "container" : ""
-      } datasetResponsiveContainer  text-left elements  `}
+      className="container datasetResponsiveContainer  text-left elements"
       style={{ marginBottom: "80px" }}
     >
       <div className="row">
