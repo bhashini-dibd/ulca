@@ -4,17 +4,19 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.model.LanguagePair;
 
+
 /**
  * OCRResponseConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-03-27T08:49:40.963303725Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-18T12:02:12.925631920Z[GMT]")
 
 
 public class OCRResponseConfig   {
@@ -98,6 +100,12 @@ public class OCRResponseConfig   {
   }
   @JsonProperty("modality")
   private ModalityEnum modality = ModalityEnum.PRINT;
+
+  @JsonProperty("inputFormat")
+  private SupportedFormats inputFormat = null;
+
+  @JsonProperty("outputFormat")
+  private SupportedFormats outputFormat = null;
 
   public OCRResponseConfig serviceId(String serviceId) {
     this.serviceId = serviceId;
@@ -198,6 +206,46 @@ public class OCRResponseConfig   {
     this.modality = modality;
   }
 
+  public OCRResponseConfig inputFormat(SupportedFormats inputFormat) {
+    this.inputFormat = inputFormat;
+    return this;
+  }
+
+  /**
+   * Get inputFormat
+   * @return inputFormat
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public SupportedFormats getInputFormat() {
+    return inputFormat;
+  }
+
+  public void setInputFormat(SupportedFormats inputFormat) {
+    this.inputFormat = inputFormat;
+  }
+
+  public OCRResponseConfig outputFormat(SupportedFormats outputFormat) {
+    this.outputFormat = outputFormat;
+    return this;
+  }
+
+  /**
+   * Get outputFormat
+   * @return outputFormat
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public SupportedFormats getOutputFormat() {
+    return outputFormat;
+  }
+
+  public void setOutputFormat(SupportedFormats outputFormat) {
+    this.outputFormat = outputFormat;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -212,12 +260,14 @@ public class OCRResponseConfig   {
         Objects.equals(this.modelId, ocRResponseConfig.modelId) &&
         Objects.equals(this.language, ocRResponseConfig.language) &&
         Objects.equals(this.detectionLevel, ocRResponseConfig.detectionLevel) &&
-        Objects.equals(this.modality, ocRResponseConfig.modality);
+        Objects.equals(this.modality, ocRResponseConfig.modality) &&
+        Objects.equals(this.inputFormat, ocRResponseConfig.inputFormat) &&
+        Objects.equals(this.outputFormat, ocRResponseConfig.outputFormat);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, modelId, language, detectionLevel, modality);
+    return Objects.hash(serviceId, modelId, language, detectionLevel, modality, inputFormat, outputFormat);
   }
 
   @Override
@@ -230,6 +280,8 @@ public class OCRResponseConfig   {
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("    detectionLevel: ").append(toIndentedString(detectionLevel)).append("\n");
     sb.append("    modality: ").append(toIndentedString(modality)).append("\n");
+    sb.append("    inputFormat: ").append(toIndentedString(inputFormat)).append("\n");
+    sb.append("    outputFormat: ").append(toIndentedString(outputFormat)).append("\n");
     sb.append("}");
     return sb.toString();
   }

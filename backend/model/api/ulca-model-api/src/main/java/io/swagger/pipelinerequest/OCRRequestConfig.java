@@ -9,12 +9,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.model.LanguagePair;
 
-
 /**
  * OCRRequestConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-03-27T08:49:40.963303725Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-04-18T12:02:12.925631920Z[GMT]")
 
 
 public class OCRRequestConfig   {
