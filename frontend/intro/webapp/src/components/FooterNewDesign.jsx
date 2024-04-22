@@ -7,7 +7,9 @@ import { Col, Container, Row } from "react-bootstrap"; // Importing components f
 // import CustomButton from "../buttonComponent/CustomButton";
 
 import Meity from "../img/Footer/MeityBlack.svg";
-import BhashiniImg from "../img/Footer/BhashiniBlack.svg";
+// import BhashiniImg from "../img/Footer/BhashiniBlack.svg";
+import BhashiniImg from "../img/Footer/Bhashini_new_en.png";
+import BhashiniNewImg from "../img/Footer/Bhashini_new_logo.png"
 import useMedia from "../hooks/useMedia";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Arrow from '../img/arrow_forward.svg'
@@ -146,7 +148,7 @@ const FooterNewDesign = () => {
               <div className="media">
                 <img
                   className="img-fluid u-image"
-                  src={BhashiniImg}
+                  src={BhashiniNewImg}
                   alt="meity-img"
                 />
               </div>
