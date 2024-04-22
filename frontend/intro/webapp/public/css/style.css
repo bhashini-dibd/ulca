@@ -853,3 +853,31 @@ footer ul.link li:first-child {
     margin-top: 3%;
   }
 }
+
+@media screen and (min-width: 2000px) and (max-width: 2100px) {
+ .whyUlcaGrid{
+   padding-inline: 4% !important;  
+ }
+}
+@media screen and (min-width: 2100px) and (max-width: 2200px) {
+ .whyUlcaGrid{
+   padding-inline: 7% !important;  
+ }
+}
+@media screen and (min-width: 2200px) and (max-width: 2350px) {
+ .whyUlcaGrid{
+   padding-inline: 10% !important;  
+ }
+}
+@media screen and (min-width: 2350px) and (max-width: 2400px) {
+ .whyUlcaGrid{
+   padding-inline: 13% !important;  
+ }
+}
+@media screen and (min-width: 2400px){
+ .whyUlcaGrid{
+   padding-inline: 15% !important;  
+ }
+}
+
+

@@ -23,7 +23,7 @@ const MobileHeader = () => {
     e.target.parentElement.classList.toggle("submenu-open2");
   };
   return (
-    <div className="navbar">
+    <div className="navbar navbar-row">
       <div className="hamburger-menu">
         <button className="hamburger-button" onClick={toggleMenu}>
           ☰
@@ -233,7 +233,7 @@ function Header() {
                 className="img-fluid"
               />
             </div>
-            <div className="w-100 py-2">
+            <div className="mainNav w-100 py-2">
               <div
                 // className="d-flex justify-content-center mx-3"
                 style={{ height: "60px" }}
