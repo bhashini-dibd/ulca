@@ -121,6 +121,9 @@ color:rgb(171, 190, 209, 0.4);
     gap: 20px;
     padding: 20px;
   }
+  .FooterNewDesignContainer .FooterNewDesignBottomLinks1 .u-image{
+    margin-right: 1rem;
+  }
 }
 .FooterNewDesignContainer .FooterNewDesignBottomLinks1 .FooterNewDesignBottomLinkSeparator {
   display: flex;

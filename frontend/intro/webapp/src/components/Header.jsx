@@ -207,10 +207,10 @@ function Header() {
               </div>
               <div
                 className="col-9 col-md-7"
-                style={{ display: "flex", justifyContent: "flex-end" }}
+                style={{ display: "flex", justifyContent: "flex-end", paddingRight: "0" }}
               >
                 <img
-                  src={process.env.PUBLIC_URL + "/img/Bhashini_en.png"}
+                  src={process.env.PUBLIC_URL + "/img/Bhashini_new_en.png"}
                   alt="bhashini logo"
                   className="img-fluid"
                   style={{height:"60px"}}
@@ -227,9 +227,9 @@ function Header() {
             <div className="logo" style={{ backgroundColor: "#fff" }}>
               {" "}
               <img
-                src={process.env.PUBLIC_URL + "/img/Bhashini_en.png"}
+                src={process.env.PUBLIC_URL + "/img/Bhashini_new_en.png"}
                 alt="bhashini logo"
-                style={{ height:"60px", marginLeft:"1rem" }}
+                style={{ height:"60px", marginLeft:"-13px" }}
                 className="img-fluid"
               />
             </div>
