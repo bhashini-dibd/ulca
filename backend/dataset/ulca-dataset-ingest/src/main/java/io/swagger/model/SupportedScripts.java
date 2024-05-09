@@ -28,7 +28,8 @@ public enum SupportedScripts {
     TELU("Telu"),
     MTEI("Mtei"),
     OLCK("Olck"),
-    LATN("Latn");
+    LATN("Latn"),
+	DOGR("Dogr");
 
   private String value;
 
