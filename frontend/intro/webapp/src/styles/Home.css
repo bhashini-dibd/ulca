@@ -72,7 +72,7 @@
 }
 
 .homeBanner2 {
-  background-image: url(../img/Desktop_banner/Banner_2.jpg);
+  background-image: url(../img/Desktop_banner/Banner_21.svg );
 }
 
 .content1 {
@@ -417,7 +417,7 @@
 
   .homeBanner2 {
     background-size: contain;
-    background-image: url(../img/Mobile_banner/mobile_banner_2.jpg);
+    background-image: url(../img/Mobile_banner/mobile_banner_2.svg);
   }
   .Bannerheading {
     font-size: 22px;
