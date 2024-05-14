@@ -169,6 +169,10 @@ import io.swagger.pipelinerequest.TransliterationTaskInference;
 //import io.swagger.v3.core.util.Json;
 import io.swagger.pipelinerequest.PipelineResponse;
 import io.swagger.pipelinerequest.LanguagesList;
+import io.swagger.pipelinerequest.OCRRequestConfig;
+import io.swagger.pipelinerequest.OCRResponseConfig;
+import io.swagger.pipelinerequest.OCRTask;
+import io.swagger.pipelinerequest.OCRTaskInference;
 import io.swagger.pipelinerequest.LanguageSchema;
 import io.swagger.pipelinemodel.TaskSpecifications;
 import io.swagger.pipelinemodel.TaskSpecification;
@@ -1414,12 +1418,12 @@ public class ModelService {
 		PipelineResponse pipelineResponse = new PipelineResponse();
 
 		// Set response data (endpoint url, feedback url, api key, socket url)
-		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
-		// TranslationTaskInferenceInferenceApiKey
-		// translationTaskInferenceInferenceApiKey = new
-		// TranslationTaskInferenceInferenceApiKey();
-		// translationTaskInferenceInferenceApiKey.setName("name");
-		// translationTaskInferenceInferenceApiKey.setValue("value");
+    
+		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());	
+		//TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = new TranslationTaskInferenceInferenceApiKey();
+		//translationTaskInferenceInferenceApiKey.setName("name");
+		//translationTaskInferenceInferenceApiKey.setValue("value");
+		
 
 		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
 				ulcaApiKey, pipelineModel.getPipelineModelId());
@@ -1535,6 +1539,17 @@ public class ModelService {
 				}
 
 			}
+
+			if(pipelineResponseSchemaList.get(i).getTaskType()=="ocr") {
+				OCRTaskInference ocrTaskInference= (OCRTaskInference)pipelineResponseSchemaList.get(i);
+				if(ocrTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+					
+				}
+				
+			}
+			
 
 		}
 
@@ -1834,7 +1849,9 @@ public class ModelService {
 		ObjectMapper om = new ObjectMapper();
 		JSONObject jo = om.convertValue(jsonRequest, JSONObject.class);
 		log.info("jo :: " + jo.toString());
-		String[] taskArray = { "translation", "asr", "tts", "transliteration" };
+    
+		String[] taskArray = { "translation", "asr", "tts","transliteration","ocr" };
+
 		List<String> taskList = Arrays.asList(taskArray);
 		JSONArray ja = (JSONArray) jo.get("pipelineTasks");
 		if (ja.length() < 1) {
@@ -1903,7 +1920,7 @@ public class ModelService {
 		ObjectMapper om = new ObjectMapper();
 		JSONObject jo = om.convertValue(jsonRequest, JSONObject.class);
 		log.info("jo :: " + jo.toString());
-		String[] taskArray = { "translation", "asr", "tts" };
+		String[] taskArray = { "translation", "asr", "tts","transliteration","ocr"};
 		List<String> taskList = Arrays.asList(taskArray);
 		JSONArray ja = (JSONArray) jo.get("pipelineTasks");
 		if (ja.length() < 1) {
@@ -1938,6 +1955,7 @@ public class ModelService {
 	public PipelineRequest checkLanguageSequence(PipelineRequest pipelineRequest) {
 		PipelineTasks pipelineTasks = pipelineRequest.getPipelineTasks();
 
+
 		for (int i = 0; i < pipelineTasks.size() - 1; i++) {
 
 			if (pipelineTasks.get(i).getTaskType() == "asr") {
@@ -1949,7 +1967,12 @@ public class ModelService {
 
 						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
 
-					} else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
+					}else if (pipelineTasks.get(i + 1).getTaskType() == "ocr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} 
+					else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
 
 						TranslationTask translationTaskNext = (TranslationTask) pipelineTasks.get(i + 1);
 						if (translationTaskNext.getConfig() != null) {
@@ -1969,7 +1992,28 @@ public class ModelService {
 
 						}
 
-					} else if (pipelineTasks.get(i + 1).getTaskType() == "tts") {
+					}else if (pipelineTasks.get(i + 1).getTaskType() == "transliteration") {
+
+						TransliterationTask transliterationTaskNext = (TransliterationTask) pipelineTasks.get(i + 1);
+						if (transliterationTaskNext.getConfig() != null) {
+							TransliterationRequestConfig transliterationRequestConfigNext = transliterationTaskNext.getConfig();
+
+							if (aSRRequestConfig.getLanguage().getSourceLanguage() != null
+									&& transliterationRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!aSRRequestConfig.getLanguage().getSourceLanguage()
+										.equals(transliterationRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					}
+					else if (pipelineTasks.get(i + 1).getTaskType() == "tts") {
 						TTSTask tTSTaskNext = (TTSTask) pipelineTasks.get(i + 1);
 						if (tTSTaskNext.getConfig() != null) {
 							TTSRequestConfig tTSRequestConfigNext = tTSTaskNext.getConfig();
@@ -1995,7 +2039,90 @@ public class ModelService {
 
 				}
 
-			} else if (pipelineTasks.get(i).getTaskType() == "transliteration") {
+			}else if (pipelineTasks.get(i).getTaskType() == "ocr") {
+
+				OCRTask ocrTask = (OCRTask) pipelineTasks.get(i);
+				if (ocrTask.getConfig() != null) {
+					 OCRRequestConfig ocrRequestConfig = ocrTask.getConfig();
+					if (pipelineTasks.get(i + 1).getTaskType() == "asr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					}else if (pipelineTasks.get(i + 1).getTaskType() == "ocr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} 
+					else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
+
+						TranslationTask translationTaskNext = (TranslationTask) pipelineTasks.get(i + 1);
+						if (translationTaskNext.getConfig() != null) {
+							TranslationRequestConfig translationRequestConfigNext = translationTaskNext.getConfig();
+
+							if (ocrRequestConfig.getLanguage().getSourceLanguage() != null
+									&& translationRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!ocrRequestConfig.getLanguage().getSourceLanguage()
+										.equals(translationRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					}else if (pipelineTasks.get(i + 1).getTaskType() == "transliteration") {
+
+						TransliterationTask transliterationTaskNext = (TransliterationTask) pipelineTasks.get(i + 1);
+						if (transliterationTaskNext.getConfig() != null) {
+							TransliterationRequestConfig transliterationRequestConfigNext = transliterationTaskNext.getConfig();
+
+							if (ocrRequestConfig.getLanguage().getSourceLanguage() != null
+									&& transliterationRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!ocrRequestConfig.getLanguage().getSourceLanguage()
+										.equals(transliterationRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					}
+					else if (pipelineTasks.get(i + 1).getTaskType() == "tts") {
+						TTSTask tTSTaskNext = (TTSTask) pipelineTasks.get(i + 1);
+						if (tTSTaskNext.getConfig() != null) {
+							TTSRequestConfig tTSRequestConfigNext = tTSTaskNext.getConfig();
+
+							if (ocrRequestConfig.getLanguage().getSourceLanguage() != null
+									&& tTSRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!ocrRequestConfig.getLanguage().getSourceLanguage()
+										.equals(tTSRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					} else {
+						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
+
+					}
+
+				}
+
+			}
+			else 	if (pipelineTasks.get(i).getTaskType() == "transliteration") {
+
 
 				TransliterationTask transliterationTask = (TransliterationTask) pipelineTasks.get(i);
 				if (transliterationTask.getConfig() != null) {
@@ -2004,7 +2131,16 @@ public class ModelService {
 
 						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
 
-					} else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "transliteration") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "ocr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} 
+					else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
 
 						TranslationTask translationTaskNext = (TranslationTask) pipelineTasks.get(i + 1);
 						if (translationTaskNext.getConfig() != null) {
@@ -2061,7 +2197,12 @@ public class ModelService {
 
 						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
 
-					} else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
+					}else if (pipelineTasks.get(i + 1).getTaskType() == "ocr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} 
+					else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
 
 						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
 
@@ -2084,7 +2225,28 @@ public class ModelService {
 
 						}
 
-					} else {
+					}else if (pipelineTasks.get(i + 1).getTaskType() == "transliteration") {
+
+						TransliterationTask transliterationTaskNext = (TransliterationTask) pipelineTasks.get(i + 1);
+						if (transliterationTaskNext.getConfig() != null) {
+							TransliterationRequestConfig transliterationRequestConfigNext = transliterationTaskNext.getConfig();
+
+							if (translationRequestConfig.getLanguage().getSourceLanguage() != null
+									&& transliterationRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!translationRequestConfig.getLanguage().getSourceLanguage()
+										.equals(transliterationRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					} 
+					else {
 
 						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
 					}
@@ -2124,7 +2286,16 @@ public class ModelService {
 
 						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
 
-					} else {
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "transliteration") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "ocr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					}
+					else {
 						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
 
 					}
@@ -2286,33 +2457,54 @@ public class ModelService {
 					ttsResponseConfig.setServiceId(curConfigSchema.getServiceId());
 					ttsResponseConfig.setModelId(curConfigSchema.getModelId());
 					TTSInference tTSInference = (TTSInference) model.getInferenceEndPoint().getSchema();
-					ttsResponseConfig.setSupportedVoices(tTSInference.getSupportedVoices());
-					ttsTaskInference.addConfigItem(ttsResponseConfig);
-				}
-				schemaList.add(ttsTaskInference);
-			}
-			if (individualSpec.getTaskType() == SupportedTasks.TRANSLITERATION) {
-				TransliterationTaskInference transliterationTaskInference = new TransliterationTaskInference();
-				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
-					TransliterationResponseConfig transliterationResponseConfig = new TransliterationResponseConfig();
-					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
-					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
-					LanguagePairs langPair = model.getLanguages();
-					for (LanguagePair lp : langPair) {
-						transliterationResponseConfig.setLanguage(lp);
-					}
-					transliterationResponseConfig.setServiceId(curConfigSchema.getServiceId());
-					transliterationResponseConfig.setModelId(curConfigSchema.getModelId());
+                    ttsResponseConfig.setSupportedVoices(tTSInference.getSupportedVoices());
+                    ttsTaskInference.addConfigItem(ttsResponseConfig);
+                }
+                schemaList.add(ttsTaskInference);
+            }
+            if(individualSpec.getTaskType() == SupportedTasks.TRANSLITERATION)
+            {
+                TransliterationTaskInference transliterationTaskInference = new TransliterationTaskInference();
+                for(ConfigSchema curConfigSchema : individualSpec.getTaskConfig())
+                {
+                    TransliterationResponseConfig transliterationResponseConfig = new TransliterationResponseConfig();
+                    log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    LanguagePairs langPair = model.getLanguages();
+                    for (LanguagePair lp : langPair) {
+                    	transliterationResponseConfig.setLanguage(lp);
+                    }
+                    transliterationResponseConfig.setServiceId(curConfigSchema.getServiceId());
+                    transliterationResponseConfig.setModelId(curConfigSchema.getModelId());
+					
+                    transliterationTaskInference.addConfigItem(transliterationResponseConfig);
+                }
+                schemaList.add(transliterationTaskInference);
+            }
+            if(individualSpec.getTaskType() == SupportedTasks.OCR)
+            {
+                OCRTaskInference ocrTaskInference = new OCRTaskInference();
+                for(ConfigSchema curConfigSchema : individualSpec.getTaskConfig())
+                {
+                    OCRResponseConfig ocrResponseConfig = new OCRResponseConfig();
+                    log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    LanguagePairs langPair = model.getLanguages();
+                    for (LanguagePair lp : langPair) {
+                    	ocrResponseConfig.setLanguage(lp);
+                    }
+                    ocrResponseConfig.setServiceId(curConfigSchema.getServiceId());
+                    ocrResponseConfig.setModelId(curConfigSchema.getModelId());
+					
+                    ocrTaskInference.addConfigItem(ocrResponseConfig);
+                }
+                schemaList.add(ocrTaskInference);
+            }
+        }
 
-					transliterationTaskInference.addConfigItem(transliterationResponseConfig);
-				}
-				schemaList.add(transliterationTaskInference);
-			}
-		}
-
-		return schemaList;
-	}
-
+        return schemaList;
+    }	
+	
 	public AppModelsResponse getAppModels(String taskType) {
 		AppModelsResponse appModelsResponse = new AppModelsResponse();
 		String[] defaultTasks = { "translation", "asr", "transliteration","tts"};
