@@ -11,7 +11,11 @@ import {
   TableCell,
   Table,
   Switch,
+  Tooltip,
+  IconButton,
 } from "@material-ui/core";
+import InfoIcon from '@material-ui/icons/Info';
+import { Link } from 'react-router-dom'
 import Search from "../../components/Datasets&Model/Search";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 // import createMuiTheme from "../../styles/Datatable";
@@ -123,6 +127,7 @@ const MyProfile = (props) => {
     useState(false);
   const [serviceProviderName, setServiceProviderName] = useState("");
   const [expandableRow, setExpandableRow] = useState([]);
+  const [fetchAppName, setFetchAppName] = useState('');
 
 
   useEffect(() => {
@@ -614,6 +619,7 @@ const MyProfile = (props) => {
     },
     rowsExpanded: expandableRow,
     renderExpandableRow: (rowData, rowMeta) => {
+      setFetchAppName(rowData[0])
       const data = rowData[2];
       if (data?.length)
         return (
@@ -641,16 +647,28 @@ const MyProfile = (props) => {
                         >
                           Action
                         </TableCell>
+                        <TableCell
+                          style={{ paddingLeft: "50px", width: "15%", }}
+                        >
+                          <Box display='flex' alignItems="center">
+                            <Box>Glossary</Box>
+                            <Box> <Tooltip title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
+      <IconButton>
+        <InfoIcon />
+      </IconButton>
+    </Tooltip></Box>
+                          </Box>
+                        </TableCell>
                       </TableHead>
                       <TableBody>
                         {data.map((row, i) => {
-                          return (
+                          return (                        
                             <TableRow
                               style={{
                                 backgroundColor: "rgba(254, 191, 44, 0.1)",
                               }}
                               key={i}
-                            >
+                            >                             
                               <TableCell style={{ width: "18%" }}>
                                 {row?.serviceProviderName}
                               </TableCell>
@@ -714,6 +732,33 @@ const MyProfile = (props) => {
                                   >
                                     Generate
                                   </Button>
+                                )}
+                              </TableCell>
+                              <TableCell style={{ width: "15%" }}>
+                                {row?.inferenceApiKey?.value && (
+                                  <Link to={`${process.env.PUBLIC_URL}/glossary`}>
+                                       <Button
+                                    variant="contained"
+                                    className={classes.myProfileActionBtn}
+                                    onClick={() => console.log(row, fetchAppName,"kk")}
+                                    // onClick={() =>
+                                    //   handleSubmitServiceProviderKey(
+                                    //     row?.serviceProviderName,
+                                    //     rowData[1]
+                                    //   )
+                                    // }
+                                    style={{
+                                      height: "30px",
+                                      margin: "5px",
+                                      color: "red",
+                                      textAlign: "center",
+                                      textTransform: "capitalize",
+                                    }}
+                                  >
+                                    View
+                                  </Button>
+                                  </Link>
+                               
                                 )}
                               </TableCell>
                             </TableRow>
