@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api
-from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey, GetApiKeysForProfile, ToggleDataTracking
+from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey, GetApiKeysForProfile, ToggleDataTracking,CreateGlossary,DeleteGlossary,FetchGlossary
 
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
@@ -59,4 +59,16 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     RemoveServiceProviderKey, "/v1/users/removeServiceProviderKey"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    CreateGlossary, "/v1/users/glossary/create"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    DeleteGlossary, "/v1/users/glossary/delete"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    FetchGlossary, "/v1/users/glossary/delete"
 )

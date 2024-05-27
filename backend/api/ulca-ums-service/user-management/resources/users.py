@@ -428,7 +428,81 @@ class ToggleDataTracking(Resource):
 
         
 
+class CreateGlossary(Resource):
+    def post(self):
+        body = request.get_json()
+        if 'userID' not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if 'appName' not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        if 'serviceProviderName' not in body.keys():
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        if 'glossary' not in body.keys()
+            return post_error("400", "Please provide Glossary", None), 400
+        if not isinstance(body['glossary'],dict):
+            return post_error("400", "Glossary should be dictionary/dictionaries", None), 400     
+        
+        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
+        if not infkey:
+            return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
+        prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
+        apiInfKey = infkey[1]
+        glossary = body['glossary']
+        dhruva_results = UserUtils.send_create_req_for_dhruva(prepare_dhruva_headers,glossary,apiInfKey)
+        if not dhruva_results:
+            return post_error("400", "Error in creating glossary, Please try again", None), 400
 
+        res = CustomResponse(Status.GLOSSARY_CREATION_SUCCESS.value,"SUCCESS")
+        return res.getresjson(), 200
+
+class DeleteGlossary(Resource):
+    def post(self):
+        body = request.get_json()
+        if 'userID' not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if 'appName' not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        if 'serviceProviderName' not in body.keys():
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        if 'glossary' not in body.keys()#and not isinstance(body['glossary'], dict):
+            return post_error("400", "Please provide Glossary", None), 400
+        if not isinstance(body['glossary'],dict):
+            return post_error("400", "Glossary should be dictionary/dictionaries", None), 400     
+        
+        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
+        if not infkey:
+            return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
+        prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
+        apiInfKey = infkey[1]
+        glossary = body['glossary']
+        dhruva_results = UserUtils.send_delete_req_for_dhruva(prepare_dhruva_headers,glossary,apiInfKey)
+        if not dhruva_results:
+            return post_error("400", "Error in deleting glossary, Please try again", None), 400
+
+        res = CustomResponse(Status.GLOSSARY_DELETION_SUCCESS.value,"SUCCESS")
+        return res.getresjson(), 200
+        
+
+class FetchGlossary(Resource):
+    def post(self):
+        body = request.get_json()
+        if 'userID' not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if 'appName' not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        if 'serviceProviderName' not in body.keys():
+            return post_error("400", "Please provide serviceProviderName", None), 400        
+
+        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
+        if not infkey:
+            return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
+        prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
+        apiInfKey = infkey[1]
+        dhruva_results = UserUtils.send_fetch_req_for_dhruva(prepare_dhruva_headers,apiInfKey)
+        if not dhruva_results:
+            return post_error("400", "Error in fetching glossary, Please try again", None), 400
+        res = CustomResponse(Status.GLOSSARY_FETCH_SUCCESS.value,"SUCCESS")
+        return res.getresjson(), 200
 
 
 
