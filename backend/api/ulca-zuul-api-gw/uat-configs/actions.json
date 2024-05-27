@@ -399,6 +399,30 @@
       "active": true,
       "whiteList": false,
       "description": "API to get api keys of users with non existing service provider names"
+    },
+    {
+      "id": "0b628b1b-2aaa-4952-826d-bd3b3aff871a",
+      "uri": "ulca/user-mgmt/v1/users/glossary/create",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get create entries within glossary of Bhashini"
+    },
+    {
+      "id": "7cbb0e40-5eb0-4cee-9c5e-26ad5d68c88e",
+      "uri": "ulca/user-mgmt/v1/users/glossary/fetch",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get fetch entries within glossary of Bhashini"
+    },
+    {
+      "id": "aa18b5dd-d625-4784-9b44-76221e0d6db9",
+      "uri": "ulca/user-mgmt/v1/users/glossary/delete",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get delete entries within glossary of Bhashini"
     }
   ]
 }
