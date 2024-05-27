@@ -464,7 +464,7 @@ class DeleteGlossary(Resource):
             return post_error("400", "Please provide appName", None), 400
         if 'serviceProviderName' not in body.keys():
             return post_error("400", "Please provide serviceProviderName", None), 400
-        if 'glossary' not in body.keys()#and not isinstance(body['glossary'], dict):
+        if 'glossary' not in body.keys():#and not isinstance(body['glossary'], dict):
             return post_error("400", "Please provide Glossary", None), 400
         if not isinstance(body['glossary'],dict):
             return post_error("400", "Glossary should be dictionary/dictionaries", None), 400     
