@@ -70,5 +70,5 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
-    FetchGlossary, "/v1/users/glossary/delete"
+    FetchGlossary, "/v1/users/glossary/fetch"
 )
