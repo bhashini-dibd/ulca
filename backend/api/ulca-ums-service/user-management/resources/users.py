@@ -442,7 +442,7 @@ class CreateGlossary(Resource):
         if not isinstance(body['glossary'],dict):
             return post_error("400", "Glossary should be dictionary/dictionaries", None), 400     
         
-        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
+        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProviderName'])
         if not infkey:
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
         prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
