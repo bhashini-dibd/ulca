@@ -451,37 +451,32 @@ class CreateGlossary(Resource):
                 return post_error("400", "sourceText is missing in glossary", None), 400 
             if "targetText" not in body['glossary'][0]:
                 return post_error("400", "targetText is missing in glossary", None), 400 
-            
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],body['userID'], body['serviceProviderName'])
+        if userinferenceApiKey:
+            api_dict = {"api-key":userinferenceApiKey}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
-        if not pipelineID:
-            return post_error("400", "Error while getting pipelineID, try again", None), 400
-
-        if isinstance(pipelineID,dict) and pipelineID:
-            masterList = []
-            # if "serviceProvider" in pipelineID.keys():
-            #     serviceProviderName = pipelineID["serviceProvider"]["name"]
-            if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys():
-                # serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID:
+            if isinstance(pipelineID,dict) and pipelineID:
+                masterList = []
+            if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
                 masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
                 masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
                 masterList.append(masterkeyname)
                 masterList.append(masterkeyvalue)
-        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProviderName'])
-        log.info(f"infkey for create {infkey}")
-        if not masterList:
-            return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
-        prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        log.info(f"prepare_dhruva_headers {prepare_dhruva_headers}")
-        apiInfKey = infkey[0]
-        glossary = body['glossary']
-        log.info(f"glossary {glossary}")
-        log.info(f"apiInfKey {apiInfKey}")
-        dhruva_results = UserUtils.send_create_req_for_dhruva(prepare_dhruva_headers,glossary,apiInfKey)
-        if not dhruva_results:
-            return post_error("400", "Error in creating glossary, Please try again", None), 400
+            log.info(f"master api keys {masterList}")
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        log.info(f"decrypt_headers {decrypt_headers}")
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+        dhruva_results = UserUtils.send_create_req_for_dhruva(decrypt_headers,body['glossary'])
+        log.info(dhruva_results)
+        if dhruva_results:
+            return dhruva_results
 
-        res = CustomResponse(Status.GLOSSARY_CREATION_SUCCESS.value,"SUCCESS")
-        return res.getresjson(), 200
+        
 
 class DeleteGlossary(Resource):
     def post(self):

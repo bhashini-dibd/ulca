@@ -857,17 +857,15 @@ class UserUtils:
         userinfkey = collections.find_one({"userID":userID})
         if not userinfkey:
             return None
-        list_to_store = []
+        
         if "apiKeyDetails" in userinfkey.keys():
             for apiK in userinfkey['apiKeyDetails']:
                 if apiK['appName'] == appName:
-                    list_to_store.append(apiK['ulcaApiKey'])
-
+                    for service in apiK['serviceProviderKeys']:
+                        if service['serviceProviderName'] == serviceProvider:
+                            return apiK['ulcaApiKey']
         else:
             return None
-        if list_to_store:
-            return list_to_store
-        return None
         
     @staticmethod
     def send_create_req_for_dhruva(auth_headers,glossary, infKey):
