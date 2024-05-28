@@ -863,7 +863,7 @@ class UserUtils:
                 if apiK['appName'] == appName and 'serviceProviderKeys' in apiK.keys():
                     for service in apiK['serviceProviderKeys']:
                         if service['serviceProviderName'] == serviceProvider:
-                            return apiK['inferenceApiKey']['value']
+                            return service['inferenceApiKey']['value']
         else:
             return None
         
