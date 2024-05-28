@@ -6,7 +6,7 @@ from flask import request, jsonify
 import config
 import logging
 import requests
-from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
+from config import MAX_API_KEY, SECRET_KEY, PATCH_URL, temp_api_key
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -454,7 +454,7 @@ class CreateGlossary(Resource):
         
         userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],body['userID'], body['serviceProviderName'])
         if userinferenceApiKey:
-            api_dict = {"api-key":userinferenceApiKey}
+            api_dict = {"api-key":temp_api_key}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
@@ -467,7 +467,8 @@ class CreateGlossary(Resource):
                 masterList.append(masterkeyname)
                 masterList.append(masterkeyvalue)
             log.info(f"master api keys {masterList}")
-        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        decrypt_headers = {'Authorization' : temp_api_key}
         if decrypt_headers:
             decrypt_headers.update(api_dict)
             log.info(f"decrypt_headers {decrypt_headers}")

@@ -39,6 +39,7 @@ SECRET_KEY              =   os.environ.get('API_SECRET_KEY', 'TjWnZr4u7xD*G-KaPd
 SPECIAL_CHARS           =   "!@#$%^''&*() -+?=,<>/"
 if isinstance(MAX_API_KEY,str):
     MAX_API_KEY = int(MAX_API_KEY)
+temp_api_key = 'G3D2HWubBD0Ml5eitWJRS2NOXzK8XVDvuQcBQkh7zZ2p2wzwW1vW8gVeQA8NBoe7'
 
 #external file read configs
 ROLE_CODES_URL          =   os.environ.get('UMS_ROLE_CODES_URL','https://raw.githubusercontent.com/bhashini-dibd/ulca/zuul-gw/backend/api/ulca-zuul-api-gw/dev-configs/roles.json')
