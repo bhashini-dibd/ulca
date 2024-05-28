@@ -472,7 +472,7 @@ class CreateGlossary(Resource):
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
         prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
         log.info(f"prepare_dhruva_headers {prepare_dhruva_headers}")
-        apiInfKey = infkey[1]
+        apiInfKey = infkey[0]
         glossary = body['glossary']
         log.info(f"glossary {glossary}")
         log.info(f"apiInfKey {apiInfKey}")

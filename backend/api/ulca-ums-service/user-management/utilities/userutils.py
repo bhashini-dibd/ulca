@@ -861,10 +861,7 @@ class UserUtils:
         if "apiKeyDetails" in userinfkey.keys():
             for apiK in userinfkey['apiKeyDetails']:
                 if apiK['appName'] == appName:
-                    for serv in apiK['serviceProviderKeys']:
-                        if serv['serviceProviderName'] == serviceProvider:
-                            list_to_store.append(serv['inferenceApiKey']['name'])
-                            list_to_store.append(serv['inferenceApiKey']['value'])
+                    list_to_store.append(apiK['ulcaApiKey'])
 
         else:
             return None
