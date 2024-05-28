@@ -458,15 +458,14 @@ class CreateGlossary(Resource):
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
-        if pipelineID:
-            if isinstance(pipelineID,dict) and pipelineID:
-                masterList = []
-            if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
-                masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
-                masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
-                masterList.append(masterkeyname)
-                masterList.append(masterkeyvalue)
-            log.info(f"master api keys {masterList}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        log.info(f"master api keys {masterList}")
         #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
         decrypt_headers = {'Authorization' : temp_api_key}
         if decrypt_headers:
@@ -489,23 +488,45 @@ class DeleteGlossary(Resource):
             return post_error("400", "Please provide appName", None), 400
         if 'serviceProviderName' not in body.keys():
             return post_error("400", "Please provide serviceProviderName", None), 400
-        if 'glossary' not in body.keys():#and not isinstance(body['glossary'], dict):
+        if 'glossary' not in body.keys():
             return post_error("400", "Please provide Glossary", None), 400
-        if not isinstance(body['glossary'],dict):
-            return post_error("400", "Glossary should be dictionary/dictionaries", None), 400     
+        if not isinstance(body['glossary'],list):
+            return post_error("400", "Glossary should be list of dictionaries", None), 400     
+        if isinstance(body['glossary'], list):
+            if "sourceLanguage" not in body['glossary'][0]:
+                return post_error("400", "sourceLanguage is missing in glossary", None), 400 
+            if "targetLanguage" not in body['glossary'][0]:
+                return post_error("400", "sourceLanguage is missing in glossary", None), 400 
+            if "sourceText" not in body['glossary'][0]:
+                return post_error("400", "sourceText is missing in glossary", None), 400 
+            if "targetText" not in body['glossary'][0]:
+                return post_error("400", "targetText is missing in glossary", None), 400 
         
-        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
-        if not infkey:
-            return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
-        prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
-        apiInfKey = infkey[1]
-        glossary = body['glossary']
-        dhruva_results = UserUtils.send_delete_req_for_dhruva(prepare_dhruva_headers,glossary,apiInfKey)
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],body['userID'], body['serviceProviderName'])
+        if userinferenceApiKey:
+            api_dict = {"api-key":temp_api_key}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        log.info(f"master api keys {masterList}")
+        #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        decrypt_headers = {'Authorization' : temp_api_key}
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+        dhruva_results = UserUtils.send_delete_req_for_dhruva(decrypt_headers,body['glossary'])
         if not dhruva_results:
             return post_error("400", "Error in deleting glossary, Please try again", None), 400
 
         res = CustomResponse(Status.GLOSSARY_DELETION_SUCCESS.value,"SUCCESS")
-        return res.getresjson(), 200
+        return dhruva_results
         
 
 class FetchGlossary(Resource):
@@ -518,16 +539,17 @@ class FetchGlossary(Resource):
         if 'serviceProviderName' not in body.keys():
             return post_error("400", "Please provide serviceProviderName", None), 400        
 
-        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
+        #infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
+        infkey = {'api-key':temp_api_key, 'Authorization':temp_api_key}
         if not infkey:
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
-        prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
-        apiInfKey = infkey[1]
-        dhruva_results = UserUtils.send_fetch_req_for_dhruva(prepare_dhruva_headers,apiInfKey)
+        #prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
+        #apiInfKey = infkey[1]
+        dhruva_results = UserUtils.send_fetch_req_for_dhruva(infkey)
         if not dhruva_results:
             return post_error("400", "Error in fetching glossary, Please try again", None), 400
         res = CustomResponse(Status.GLOSSARY_FETCH_SUCCESS.value,"SUCCESS")
-        return res.getresjson(), 200
+        return dhruva_results
 
 
 

@@ -877,8 +877,8 @@ class UserUtils:
         return None
     
     @staticmethod
-    def send_delete_req_for_dhruva(auth_headers,glossary, infKey):
-        body = {"apiKey":infKey, "glossary":glossary}
+    def send_delete_req_for_dhruva(auth_headers,glossary):
+        body = {"glossary":glossary}
         result = requests.post(url=BHAHSINI_GLOSSARY_DELETE_URL, json=body, headers=auth_headers)
         if result.status_code == 200:
             return result.json()
