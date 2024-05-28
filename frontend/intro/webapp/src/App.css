@@ -236,3 +236,7 @@
     transform: rotate(360deg);
   }
 }
+
+.dropdown-toggle::after {
+  display: none;
+}

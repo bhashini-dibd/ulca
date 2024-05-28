@@ -4,6 +4,8 @@ import useMedia from "../hooks/useMedia";
 import downArrow from "../img/arrowDown.svg";
 import { AppContext } from "../context/ContextAPI";
 import { useTranslation } from "react-i18next";
+import Arrow from '../assets/arrow_nav.svg'
+import Logo from '../assets/bhashini-ulcaLogo.png'
 const MobileHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
@@ -210,7 +212,7 @@ function Header() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 <img
-                  src={process.env.PUBLIC_URL + "/img/Bhashini_en.png"}
+                  src={Logo}
                   alt="bhashini logo"
                   className="img-fluid"
                   style={{height:"60px"}}
@@ -262,15 +264,15 @@ function Header() {
                     {t('home')} <span className="sr-only">(current)</span>
                   </a>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     href="https://bhashini.gov.in/about-bhashini"
                   >
                     {t('aboutBhashini')}
                   </a>
-                </li>
-                {/* <li className="dropdown">
+                </li> */}
+                <li className="dropdown">
                   <a
                     className="dropdown-toggle nav-link"
                     href="#"
@@ -279,7 +281,8 @@ function Header() {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    About Bhashini
+                    About
+                    <img src={Arrow} alt="Dropdown Arrow" style={{marginLeft: '10px', width:"15px"}} />
                   </a>
                   <div
                     className="dropdown-menu"
@@ -305,119 +308,196 @@ function Header() {
                       Team
                     </a>
                   </div>
-                </li> */}
-                {/* <li className="nav-item">
-                  <a
-                    className="nav-link"
-                    href="https://bhashini.gov.in/ecosystem"
-                  >
-                    Ecosystem
-                  </a>
-                </li> */}
-                {/* <li className="nav-item">
-                  <a
-                    className="nav-link"
-                    href="https://anuvaad.bhashini.gov.in/"
-                  >
-                    Anuvaad
-                  </a>
-                </li> */}
+                </li>
                 <li className="dropdown">
                   <a
-                    className="nav-link"
-                    href="https://bhashini.gov.in/prayog"
-                    title="hello"
+                    className="dropdown-toggle nav-link"
+                    href="#"
+                    id="dropdownMenuLink"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Arpan
+                    <img src={Arrow} alt="Dropdown Arrow" style={{marginLeft: '10px', width:"15px"}} />
+                  </a>
+                  <div
+                    className="dropdown-menu"
+                    data-bs-popper="static"
+                    aria-labelledby="dropdownMenuLink"
+                  >
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://bhashini.gov.in/about-bhashini"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      About Bhashini
+                    </a>
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://bhashini.gov.in/teams"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Team
+                    </a>
+                  </div>
+                </li>
+                <li className="dropdown">
+                  <a
+                    className="dropdown-toggle nav-link"
+                    href="#"
+                    id="dropdownMenuLink"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
                   >
                     Prayog
+                    <img src={Arrow} alt="Dropdown Arrow" style={{marginLeft: '10px', width:"15px"}} />
                   </a>
-                  {/* <div
-                    aria-labelledby="SahyogidropdownMenuLink"
-                    data-bs-popper="static"
+                  <div
                     className="dropdown-menu"
+                    data-bs-popper="static"
+                    aria-labelledby="dropdownMenuLink"
                   >
                     <a
                       data-rr-ui-dropdown-item=""
                       className="dropdown-item nav-item"
-                      href="https://anuvaad.bhashini.gov.in/"
+                      href="https://bhashini.gov.in/about-bhashini"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Anuvaad
+                      About Bhashini
                     </a>
                     <a
                       data-rr-ui-dropdown-item=""
                       className="dropdown-item nav-item"
-                      href="https://chitraanuvaad.bhashini.co.in/"
+                      href="https://bhashini.gov.in/teams"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Chitraanuvaad
+                      Team
                     </a>
-                  </div> */}
+                  </div>
                 </li>
                 <li className="dropdown">
                   <a
-                    className="nav-link"
-                    href="https://bhashini.gov.in/sahyogi"
+                    className="dropdown-toggle nav-link"
+                    href="#"
+                    id="dropdownMenuLink"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
                   >
                     Sahyogi
+                    <img src={Arrow} alt="Dropdown Arrow" style={{marginLeft: '10px', width:"15px"}} />
                   </a>
-                  {/* <div
-                    aria-labelledby="SahyogidropdownMenuLink"
-                    data-bs-popper="static"
+                  <div
                     className="dropdown-menu"
+                    data-bs-popper="static"
+                    aria-labelledby="dropdownMenuLink"
                   >
                     <a
                       data-rr-ui-dropdown-item=""
                       className="dropdown-item nav-item"
-                      href="https://bhashini.gov.in/sahyogi"
+                      href="https://bhashini.gov.in/about-bhashini"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Empanelled Agencies
+                      About Bhashini
                     </a>
                     <a
                       data-rr-ui-dropdown-item=""
                       className="dropdown-item nav-item"
-                      href="https://bhashini.gov.in/career"
+                      href="https://bhashini.gov.in/teams"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Career
+                      Team
                     </a>
-                  </div> */}
+                  </div>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="https://bhashini.gov.in/sanchalak">
-                    Sanchalak
-                  </a>
-                </li>
-                <li className="nav-item ">
+                <li className="dropdown">
                   <a
-                    className="nav-link"
-                    href="https://bhashini.gov.in/pravakta"
+                    className="dropdown-toggle nav-link"
+                    href="#"
+                    id="dropdownMenuLink"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Sanchalak
+                    <img src={Arrow} alt="Dropdown Arrow" style={{marginLeft: '10px', width:"15px"}} />
+                  </a>
+                  <div
+                    className="dropdown-menu"
+                    data-bs-popper="static"
+                    aria-labelledby="dropdownMenuLink"
+                  >
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://bhashini.gov.in/about-bhashini"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      About Bhashini
+                    </a>
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://bhashini.gov.in/teams"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Team
+                    </a>
+                  </div>
+                </li>
+                <li className="dropdown">
+                  <a
+                    className="dropdown-toggle nav-link"
+                    href="#"
+                    id="dropdownMenuLink"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
                   >
                     Pravakta
+                    <img src={Arrow} alt="Dropdown Arrow" style={{marginLeft: '10px', width:"15px"}} />
                   </a>
-                </li>
-                <li className="nav-item ">
-                  <a className="nav-link" href="https://bhashini.gov.in/tender">
-                    Tender's /EOI's
-                  </a>
-                </li>
-                {/* <li className="nav-item ">
-                  <a className="nav-link" href="https://bhashini.gov.in/career">
-                    Career
-                  </a>
-                </li>
-                <li className="nav-item ">
-                  <a
-                    className="nav-link"
-                    href="https://bhashini.gov.in/starup-velocity-1.0"
+                  <div
+                    className="dropdown-menu"
+                    data-bs-popper="static"
+                    aria-labelledby="dropdownMenuLink"
                   >
-                    Bhashini Startup
-                  </a>
-                </li> */}
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://bhashini.gov.in/about-bhashini"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      About Bhashini
+                    </a>
+                    <a
+                      data-rr-ui-dropdown-item=""
+                      className="dropdown-item nav-item"
+                      href="https://bhashini.gov.in/teams"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Team
+                    </a>
+                  </div>
+                </li>
+               
+                
+                
+              
               </ul>
             </div>
             <div className="join">
