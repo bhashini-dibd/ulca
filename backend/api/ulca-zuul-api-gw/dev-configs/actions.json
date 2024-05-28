@@ -442,7 +442,7 @@
     },
     {
       "id": "0b628b1b-2aaa-4952-826d-bd3b3aff871a",
-      "uri": "ulca/user-mgmt/v1/users/glossary/create",
+      "uri": "/ulca/user-mgmt/v1/users/glossary/create",
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": false,
@@ -450,7 +450,7 @@
     },
     {
       "id": "7cbb0e40-5eb0-4cee-9c5e-26ad5d68c88e",
-      "uri": "ulca/user-mgmt/v1/users/glossary/fetch",
+      "uri": "/ulca/user-mgmt/v1/users/glossary/fetch",
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": false,
@@ -458,7 +458,7 @@
     },
     {
       "id": "aa18b5dd-d625-4784-9b44-76221e0d6db9",
-      "uri": "ulca/user-mgmt/v1/users/glossary/delete",
+      "uri": "/ulca/user-mgmt/v1/users/glossary/delete",
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": false,
