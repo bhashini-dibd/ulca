@@ -860,10 +860,10 @@ class UserUtils:
         
         if "apiKeyDetails" in userinfkey.keys():
             for apiK in userinfkey['apiKeyDetails']:
-                if apiK['appName'] == appName:
+                if apiK['appName'] == appName and 'serviceProviderKeys' in apiK.keys():
                     for service in apiK['serviceProviderKeys']:
                         if service['serviceProviderName'] == serviceProvider:
-                            return apiK['ulcaApiKey']
+                            return apiK['inferenceApiKey']['value']
         else:
             return None
         
