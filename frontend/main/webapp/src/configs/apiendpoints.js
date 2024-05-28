@@ -41,7 +41,8 @@ const endpoints = {
   revokeApiKey: "/ulca/user-mgmt/v1/users/revokeApiKey",
   removeServiceProviderKey:"/ulca/user-mgmt/v1/users/removeServiceProviderKey",
   generateServiceProviderKey:"/ulca/user-mgmt/v1/users/generateServiceProviderKey",
-  dataTrackingToggle:"/ulca/user-mgmt/v1/users/dataTrackingToggle"
+  dataTrackingToggle:"/ulca/user-mgmt/v1/users/dataTrackingToggle",
+  getGlossaryData:"/ulca/user-mgmt/v1/users/aamir"
   
 };
 

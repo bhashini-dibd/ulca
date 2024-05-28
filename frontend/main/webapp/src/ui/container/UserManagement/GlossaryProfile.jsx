@@ -40,6 +40,7 @@ import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiK
 import Delete from '../../../assets/deleteIcon.svg'
 import GlossaryBanner from '../../../assets/GlossaryBanner.png'
 import { useLocation } from 'react-router-dom';
+import FetchGlossaryDetails from "../../../redux/actions/api/UserManagement/FetchGlossaryDetails";
 
 const styles = {
   bannerContainer: {
@@ -214,7 +215,14 @@ const GlossaryProfile = (props) => {
   };
 
  
+  const getApiGlossaryData = async () => {
+    const apiObj = new FetchGlossaryDetails(inferenceApiKey,appName);
+    dispatch(APITransport(apiObj));
+  };
 
+  useEffect(() => {
+    getApiGlossaryData();
+  }, []);
 
 
   const fetchHeaderButton = () => {
