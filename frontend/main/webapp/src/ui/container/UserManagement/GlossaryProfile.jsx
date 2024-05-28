@@ -16,8 +16,12 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@material-ui/core";
-import InfoIcon from '@material-ui/icons/Info';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Search from "../../components/Datasets&Model/Search";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 // import createMuiTheme from "../../styles/Datatable";
@@ -33,17 +37,121 @@ import APITransport from "../../../redux/actions/apitransport/apitransport";
 import CustomizedSnackbars from "../../components/common/Snackbar";
 import Spinner from "../../components/common/Spinner";
 import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiKeys";
+import Delete from '../../../assets/deleteIcon.svg'
+import GlossaryBanner from '../../../assets/GlossaryBanner.png'
+import { useLocation } from 'react-router-dom';
+
+const styles = {
+  bannerContainer: {
+    position: 'relative',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bannerImage: {
+    width: '100%',
+    height: 'auto',
+  },
+  textContainer: {
+    position: 'absolute',
+    color: 'white',
+    textAlign: 'center',
+    padding: '100px',
+    display:"flex",
+    flexDirection:"column",
+    gap:"20px"
+  },
+  heading: {
+    fontSize: '2rem',
+    margin: '0',
+    fontFamily:"Noto-Bold",
+    color:"black"
+  },
+  paragraph: {
+    fontSize: '1rem',
+    margin: '0',
+    fontFamily:"Noto-Regular",
+    color:"black",
+    lineHeight:"21.79px"
+  },
+  // Media queries for responsiveness
+  '@media (max-width: 768px)': {
+    heading: {
+      fontSize: '1.5rem',
+    },
+    paragraph: {
+      fontSize: '0.875rem',
+    },
+  },
+  '@media (max-width: 480px)': {
+    heading: {
+      fontSize: '1.2rem',
+    },
+    paragraph: {
+      fontSize: '0.75rem',
+    },
+  },
+};
 
 
+const initialData = [
+    {
+      source: "Dummy Source 1",
+      target: "Dummy Target 1",
+      sourceLanguage: "English",
+      targetLanguage: "French",
+      glossary: "Dummy Glossary 1",
+      action: "Dummy Action 1",
+    },
+    {
+      source: "Dummy Source 2",
+      target: "Dummy Target 2",
+      sourceLanguage: "Spanish",
+      targetLanguage: "German",
+      glossary: "Dummy Glossary 2",
+      action: "Dummy Action 2",
+    },
+    // Add more dummy data as needed
+  ];
+
+  const languages = [
+    { "code": "as", "label": "Assamese" },
+    { "code": "en", "label": "English" },
+    { "code": "bn", "label": "Bengali" },
+    { "code": "brx", "label": "Bodo" },
+    { "code": "doi", "label": "Dogri" },
+    { "code": "gom", "label": "Goan Konkani" },
+    { "code": "gu", "label": "Gujarati" },
+    { "code": "hi", "label": "Hindi" },
+    { "code": "kn", "label": "Kannada" },
+    { "code": "ks", "label": "Kashmiri" },
+    { "code": "mai", "label": "Maithili" },
+    { "code": "ml", "label": "Malayalam" },
+    { "code": "mni", "label": "Manipuri" },
+    { "code": "mr", "label": "Marathi" },
+    { "code": "ne", "label": "Nepali" },
+    { "code": "or", "label": "Odia" },
+    { "code": "pa", "label": "Punjabi" },
+    { "code": "sa", "label": "Sanskrit" },
+    { "code": "sat", "label": "Santali" },
+    { "code": "sd", "label": "Sindhi" },
+    { "code": "ta", "label": "Tamil" },
+    { "code": "te", "label": "Telugu" },
+    { "code": "ur", "label": "Urdu" }
+  ];
+  
 
 const GlossaryProfile = (props) => {
   const { classes } = props;
   const dispatch = useDispatch();
 
   const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
-
+  const [searchKey, setSearchKey] = useState("");
   const [loading, setLoading] = useState(false);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState(initialData);
+  const [filteredData, setFilteredData] = useState(initialData); // State for filtered data
+  const [searchText, setSearchText] = useState('');
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: "",
@@ -58,12 +166,14 @@ const GlossaryProfile = (props) => {
     lastName: '',
   });
 
-
-  useEffect(() => {
-    if (apiKeys) {
-      setTableData(apiKeys);
-    }
-  }, [apiKeys]);
+  const location = useLocation();
+  const { serviceProviderName, inferenceApiKey, appName} = location.state || {};
+  console.log(serviceProviderName, inferenceApiKey, appName,"neeww");
+//   useEffect(() => {
+//     if (apiKeys) {
+//       setTableData(apiKeys);
+//     }
+//   }, [apiKeys]);
 
 
 
@@ -92,22 +202,35 @@ const GlossaryProfile = (props) => {
     getApiKeysCall();
   }, []);
 
+  useEffect(() => {
+    const filtered = initialData.filter((row) => row.glossary.toLowerCase().includes(searchText.toLowerCase()));
+    setTableData(filtered);
+  }, [searchText]);
+
+  const handleSearch = (value) => {
+    setSearchText(value);
+    // const filtered = tableData.filter((row) => row.glossary.toLowerCase().includes(value.toLowerCase()));
+    // setFilteredData(filtered);
+  };
+
  
+
+
 
   const fetchHeaderButton = () => {
     return (
-      <Grid container>
+      <Grid container style={{justifyContent:"space-between", fontFamily:"Noto-Regular"}}>
         <Grid
           item
           xs={8}
           sm={8}
-          md={8}
-          lg={8}
-          xl={8}
-          style={{ display: "flex", justifyContent: "flex-start" }}
+          md={3}
+          lg={3}
+          xl={3}
+          style={{ display: "flex", justifyContent: "space-between" }}
         >
           {/* <Search value="" handleSearch={(e) => handleSearch(e.target.value)} /> */}
-          <Typography variant="h5">Glossary List</Typography>
+          <Typography variant="h5" style={{fontFamily:"Noto-Regular"}}>Glossary List</Typography>
         </Grid>
       
 
@@ -115,30 +238,13 @@ const GlossaryProfile = (props) => {
           item
           xs={3}
           sm={3}
-          md={3}
-          lg={3}
-          xl={3}
+          md={5}
+          lg={5}
+          xl={5}
           className={classes.filterGrid}
-          style={{ marginLeft: "100px" }}
+          style={{ marginLeft: "100px", gap:"20px", display:"flex" }}
         >
-          <Button
-            color="primary"
-            size="medium"
-            variant="contained"
-            className={classes.ButtonRefresh}
-            // onClick={() => {
-            //   setModal(true);
-            // }}
-            style={{
-              height: "36px",
-              textTransform: "capitalize",
-              fontSize: "1rem",
-              marginRight:"10px"
-            }}
-          >
-            {" "}
-            Bulk Upload
-          </Button>
+         <Search value='' handleSearch={(e) => handleSearch(e.target.value)}/>
           <Button
             color="primary"
             size="medium"
@@ -151,6 +257,10 @@ const GlossaryProfile = (props) => {
               height: "36px",
               textTransform: "capitalize",
               fontSize: "1rem",
+              borderRadius:"4px",
+              fontFamily: "Noto-Regular",
+               fontWeight:"400",
+               fontSize:"15px",
             }}
           >
             {" "}
@@ -204,6 +314,7 @@ const GlossaryProfile = (props) => {
         MuiTable: {
           root: {
             borderCollapse: "hidden",
+            fontFamily:"Noto-Regular"
           },
         },
         MUIDataTableBodyRow: {
@@ -278,22 +389,94 @@ const GlossaryProfile = (props) => {
       },
     });
 
-    const columns = [
+    const options = {
+        textLabels: {
+          body: {
+            noMatch: "No records",
+          },
+          toolbar: {
+            search: "Search",
+            viewColumns: "View Column",
+          },
+          pagination: {
+            rowsPerPage: "Rows per page",
+          },
+        },
+        customToolbar: fetchHeaderButton,
+        print: false,
+        viewColumns: false,
+        rowsPerPageOptions: false,
+        selectableRows: "multiple",
+        selectableRowsOnClick: false,
+        fixedHeader: false,
+        download: false,
+        search: false,
+        customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
+            <Tooltip title="Show Selected Data">
+              <IconButton
+                onClick={() => {
+                  const selectedData = selectedRows.data.map(row => tableData[row.dataIndex]);
+                  console.log("Selected Rows' Data:", selectedData);
+                  alert(JSON.stringify(selectedData, null, 2)); // Display selected data in an alert
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          ),
+        filter: false,
+        onRowSelectionChange: (currentRowsSelected, allRowsSelected) => {
+          const selectedData = allRowsSelected.map(row => tableData[row.dataIndex]);
+          console.log("Selected Rows' Data:", selectedData);
+        //   setSelectedRowsData(selectedData);
+        }
+      };
+    
+  
+    
+      const columns = [
+        // {
+        //   name: "index",
+        //   label: "Index",
+        //   options: {
+        //     filter: true,
+        //     sort: true,
+        //     customBodyRenderLite: (dataIndex) => {
+        //       return dataIndex + 1;
+        //     }
+        //   }
+        // },
         {
           name: "source",
           label: "Source",
+          options: {
+            filter: true,
+            sort: true,
+          }
         },
         {
           name: "target",
           label: "Target",
+          options: {
+            filter: true,
+            sort: true,
+          }
         },
         {
           name: "sourceLanguage",
           label: "Source Language",
+          options: {
+            filter: true,
+            sort: true,
+          }
         },
         {
           name: "targetLanguage",
           label: "Target Language",
+          options: {
+            filter: true,
+            sort: true,
+          }
         },
         {
           name: "glossary",
@@ -313,64 +496,16 @@ const GlossaryProfile = (props) => {
           options: {
             customBodyRender: (value, tableMeta) => (
               <Button
-                variant="contained"
+                // variant="contained"
                 onClick={() => console.log('Action clicked for row:', tableMeta.rowIndex)}
               >
-                Delete
+                <img src={Delete} alt="delete img"/>
               </Button>
             )
           }
         }
       ];
-      
-      const Glossarydata = [
-        {
-          source: "Dummy Source 1",
-          target: "Dummy Target 1",
-          sourceLanguage: "English",
-          targetLanguage: "French",
-          glossary: "Dummy Glossary 1",
-          action: "Dummy Action 1",
-        },
-        {
-          source: "Dummy Source 2",
-          target: "Dummy Target 2",
-          sourceLanguage: "Spanish",
-          targetLanguage: "German",
-          glossary: "Dummy Glossary 2",
-          action: "Dummy Action 2",
-        },
-        // Add more dummy data as needed
-      ];
-
-
-
-
-
-
-  const options = {
-    textLabels: {
-      body: {
-        noMatch: "No records",
-      },
-      toolbar: {
-        search: "Search",
-        viewColumns: "View Column",
-      },
-      pagination: {
-        rowsPerPage: "Rows per page",
-      },
-    },
-    customToolbar: fetchHeaderButton,
-    print: false,
-    viewColumns: false,
-    rowsPerPageOptions: false,
-    selectableRows: "none",
-    fixedHeader: false,
-    download: false,
-    search: false,
-    filter: false,
-  };
+    
 
   const renderSnackBar = () => {
     return (
@@ -386,129 +521,146 @@ const GlossaryProfile = (props) => {
     );
   };
 
+
+
   return (
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
-     
+      <Box style={{ width: '100%', padding: '0px', textAlign: 'center', marginBottom: '20px' }}>
+      <div style={styles.bannerContainer}>
+        <img src={GlossaryBanner} alt="banner" style={styles.bannerImage} />
+        <div style={styles.textContainer}>
+          <h1 style={styles.heading}>Glossary</h1>
+          <p style={styles.paragraph}>Glossary is a custom dictionary defined by the user that is utilized in Bhashini Translations to translate the customer's domain-specific terminology. For example, when translating from English to Hindi, Bhashini Division maybe translated to भाषिनी प्रभाग by default but given it's an organization name, we need the translation as भाषिणी डिवीज़न. Such word and phrase level translations can be performed using glossaries for your custom domain specific needs.</p>
+        </div>
+      </div>
+      </Box>
 
       <MuiThemeProvider theme={getMuiTheme}>
-        <MUIDataTable data={Glossarydata} columns={columns} options={options} />
+      <MUIDataTable
+        //   title={"Glossary List"}
+          data={tableData}
+          columns={columns}
+          options={options}
+        />
       </MuiThemeProvider>
-      <Modal
-        open={modal}
-        onClose={() => setModal(false)}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-      
-    <Container>
-      <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-        <Typography variant="h4" fontWeight="bold" style={{marginBottom:"20px", marginTop:"20px"}}>Create Glossary</Typography>
-        <Grid container spacing={2} alignItems="center">
-          {/* First Select Box */}
-          <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Select Source Language</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="demo-simple-select-label">Select Source Language</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                name="option1"
-                value={formState.option1}
-                onChange={handleChange}
-                label="Select Source Language"
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value="option1.1">Option 1.1</MenuItem>
-                <MenuItem value="option1.2">Option 1.2</MenuItem>
-                <MenuItem value="option1.3">Option 1.3</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+      <Dialog
+      open={modal}
+      onClose={() => setModal(false)}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+      maxWidth="xs"
+    //   style={{fontFamily: "Noto Sans"}}
+      fullWidth
+    >
+      <DialogTitle id="dialog-title">
+        <div style={{fontFamily: "Noto-Bold", fontWeight:"600"}}>
+        Create Glossary
+        </div>
+        </DialogTitle>
+      <DialogContent>
+        <Container>
+          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+            <Grid container spacing={2} alignItems="center">
+              {/* First Select Box */}
+            
+              <Grid item xs={12} sm={12}>
+              <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Source Language</Typography>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel id="select-source-label">Select Source Language</InputLabel>
+                  <Select
+                    labelId="select-source-label"
+                    id="select-source"
+                    name="option1"
+                    value={formState.option1}
+                    onChange={handleChange}
+                    label="Select Source Language"
+                  >
+                     {languages.map((lang) => (
+                      <MenuItem key={lang.code} value={lang.code}>
+                        {lang.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-          {/* Second Select Box */}
-          <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Select Target Language</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="select-option-2-label">Select Target Language</InputLabel>
-              <Select
-                labelId="select-option-2-label"
-                id="select-option-2"
-                name="option2"
-                value={formState.option2}
-                onChange={handleChange}
-                label="Select Target Language"
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value="option2.1">Option 2.1</MenuItem>
-                <MenuItem value="option2.2">Option 2.2</MenuItem>
-                <MenuItem value="option2.3">Option 2.3</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+              {/* Second Select Box */}
+             
+              <Grid item xs={12} sm={12}>
+                
+                <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Target Language</Typography>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel id="select-target-label">Select Target Language</InputLabel>
+                  <Select
+                    labelId="select-target-label"
+                    id="select-target"
+                    name="option2"
+                    value={formState.option2}
+                    onChange={handleChange}
+                    label="Select Target Language"
+                  >
+                    {languages.map((lang) => (
+                      <MenuItem key={lang.code} value={lang.code}>
+                        {lang.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-          {/* First Text Field */}
-          <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Enter Source Text</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              variant="outlined"
-              fullWidth
-              label="Enter Source Text"
-              name="firstName"
-              value={formState.firstName}
-              onChange={handleChange}
-            />
-          </Grid>
+              {/* First Text Field */}
+            
+              <Grid item xs={12} sm={12}>
+              <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  label="Enter Source Text"
+                  name="firstName"
+                  value={formState.firstName}
+                  onChange={handleChange}
+                />
+              </Grid>
 
-          {/* Second Text Field */}
-          <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Enter Target Text</Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              variant="outlined"
-              fullWidth
-              label="Enter Target Text"
-              name="lastName"
-              value={formState.lastName}
-              onChange={handleChange}
-            />
-          </Grid>
-
-          {/* Submit Button */}
-          <Grid item xs={12} style={{display:"flex", justifyContent:"end", gap:"20px", marginTop:"20px"}} >
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setModal(false)}
-              style={{padding:"12px 24px"}}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              style={{padding:"12px 24px"}}
-            >
-              Submit
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
-    </Container>
-      </Modal>
+              {/* Second Text Field */}
+            
+              <Grid item xs={12} sm={12}>
+              <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Target Text</Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  label="Enter Target Text"
+                  name="lastName"
+                  value={formState.lastName}
+                  onChange={handleChange}
+                />
+              </Grid>
+            </Grid>
+          </form>
+        </Container>
+      </DialogContent>
+      <DialogActions style={{ display: "flex", justifyContent: "end", gap: "20px", marginTop: "10px", marginRight:"40px", marginBottom:"10px",fontFamily: "Noto-Regular", fontWeight:"400" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setModal(false)}p
+          style={{ padding: "12px 24px" }}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          style={{ padding: "12px 24px" }}
+          onClick={handleSubmit}
+        >
+          Submit
+        </Button>
+      </DialogActions>
+    </Dialog>
 
    
 

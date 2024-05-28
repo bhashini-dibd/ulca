@@ -44,7 +44,7 @@ import ServiceProviderDialog from "../../components/common/ServiceProviderDialog
 import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/RemoveServiceProviderKey";
 import GenerateServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/GenerateServiceProviderKey";
 import DataTrackingToggleAPI from "../../../redux/actions/api/UserManagement/DataTrackingToggle";
-
+import { useHistory } from 'react-router-dom';
 const SwitchCases = ({
   dataTrackingValue,
   setSnackbarInfo,
@@ -53,6 +53,7 @@ const SwitchCases = ({
   Ulcakey,
 }) => {
   const [checked, setChecked] = useState(dataTrackingValue);
+  const history = useHistory();
   useEffect(() => {
     setChecked(dataTrackingValue);
   }, [dataTrackingValue]);
@@ -128,7 +129,7 @@ const MyProfile = (props) => {
   const [serviceProviderName, setServiceProviderName] = useState("");
   const [expandableRow, setExpandableRow] = useState([]);
   const [fetchAppName, setFetchAppName] = useState('');
-
+  const history = useHistory();
 
   useEffect(() => {
     if (apiKeys) {
@@ -587,6 +588,15 @@ const MyProfile = (props) => {
     setExpandableRow(temp);
   };
 
+  const handleGlossaryData = (row) => {
+    console.log(row)
+    history.push(`${process.env.PUBLIC_URL}/glossary`, {
+      serviceProviderName: row?.serviceProviderName,
+      inferenceApiKey: row?.inferenceApiKey.value,
+      appName: fetchAppName,
+    })
+  }
+
   const options = {
     textLabels: {
       body: {
@@ -650,14 +660,7 @@ const MyProfile = (props) => {
                         <TableCell
                           style={{ paddingLeft: "50px", width: "15%", }}
                         >
-                          <Box display='flex' alignItems="center">
-                            <Box>Glossary</Box>
-                            <Box> <Tooltip title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
-      <IconButton>
-        <InfoIcon />
-      </IconButton>
-    </Tooltip></Box>
-                          </Box>
+                          
                         </TableCell>
                       </TableHead>
                       <TableBody>
@@ -734,32 +737,20 @@ const MyProfile = (props) => {
                                   </Button>
                                 )}
                               </TableCell>
-                              <TableCell style={{ width: "15%" }}>
+                              <TableCell style={{ width: "25%" }}>
                                 {row?.inferenceApiKey?.value && (
-                                  <Link to={`${process.env.PUBLIC_URL}/glossary`}>
-                                       <Button
-                                    variant="contained"
-                                    className={classes.myProfileActionBtn}
-                                    onClick={() => console.log(row, fetchAppName,"kk")}
-                                    // onClick={() =>
-                                    //   handleSubmitServiceProviderKey(
-                                    //     row?.serviceProviderName,
-                                    //     rowData[1]
-                                    //   )
-                                    // }
-                                    style={{
-                                      height: "30px",
-                                      margin: "5px",
-                                      color: "red",
-                                      textAlign: "center",
-                                      textTransform: "capitalize",
-                                    }}
-                                  >
-                                    View
-                                  </Button>
-                                  </Link>
+                                  <div onClick={() => handleGlossaryData(row)}>
+                                        <Box display='flex' alignItems="center">
+                            <Box sx={{color:"blue"}}>Create Glossary</Box>
+                            <Box> <Tooltip title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
+      <IconButton>
+        <InfoIcon />
+      </IconButton>
+    </Tooltip></Box>
+                          </Box>
+                                  </div>
                                
-                                )}
+                                )}                            
                               </TableCell>
                             </TableRow>
                           );
