@@ -456,12 +456,12 @@ class CreateGlossary(Resource):
                 masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
                 masterList.append(masterkeyname)
                 masterList.append(masterkeyvalue)
-        #infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProviderName'])
-        #log.info(f"infkey for create {infkey}")
+        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProviderName'])
+        log.info(f"infkey for create {infkey}")
         if not masterList:
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
         prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        apiInfKey = masterList[1]
+        apiInfKey = infkey[1]
         glossary = body['glossary']
         dhruva_results = UserUtils.send_create_req_for_dhruva(prepare_dhruva_headers,glossary,apiInfKey)
         if not dhruva_results:
