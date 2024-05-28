@@ -443,13 +443,13 @@ class CreateGlossary(Resource):
         if not isinstance(body['glossary'],list):
             return post_error("400", "Glossary should be list of dictionaries", None), 400     
         if isinstance(body['glossary'], list):
-            if "sourceLanguage" not in body['glosssary'][0]:
+            if "sourceLanguage" not in body['glossary'][0]:
                 return post_error("400", "sourceLanguage is missing in glossary", None), 400 
-            if "targetLanguage" not in body['glosssary'][0]:
+            if "targetLanguage" not in body['glossary'][0]:
                 return post_error("400", "sourceLanguage is missing in glossary", None), 400 
-            if "sourceText" not in body['glosssary'][0]:
+            if "sourceText" not in body['glossary'][0]:
                 return post_error("400", "sourceText is missing in glossary", None), 400 
-            if "targetText" not in body['glosssary'][0]:
+            if "targetText" not in body['glossary'][0]:
                 return post_error("400", "targetText is missing in glossary", None), 400 
             
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
