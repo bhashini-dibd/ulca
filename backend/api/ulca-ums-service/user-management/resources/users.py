@@ -468,9 +468,10 @@ class CreateGlossary(Resource):
                 masterList.append(masterkeyvalue)
             log.info(f"master api keys {masterList}")
         decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        log.info(f"decrypt_headers {decrypt_headers}")
         if decrypt_headers:
             decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+
         dhruva_results = UserUtils.send_create_req_for_dhruva(decrypt_headers,body['glossary'])
         log.info(dhruva_results)
         if dhruva_results:

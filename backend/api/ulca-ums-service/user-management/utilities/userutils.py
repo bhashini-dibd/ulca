@@ -868,8 +868,8 @@ class UserUtils:
             return None
         
     @staticmethod
-    def send_create_req_for_dhruva(auth_headers,glossary, infKey):
-        body = {"apiKey":infKey, "glossary":glossary}
+    def send_create_req_for_dhruva(auth_headers,glossary):
+        body = {"glossary":glossary}
         result = requests.post(url=BHAHSINI_GLOSSARY_CREATE_URL, json=body, headers=auth_headers)
         log.info(f"result from dhruva {result}")
         if result.status_code == 200:
