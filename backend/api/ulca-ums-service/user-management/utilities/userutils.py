@@ -871,10 +871,10 @@ class UserUtils:
     def send_create_req_for_dhruva(auth_headers,glossary):
         body = {"glossary":glossary}
         result = requests.post(url=BHAHSINI_GLOSSARY_CREATE_URL, json=body, headers=auth_headers)
-        log.info(f"result from dhruva {result}")
+        log.info(f"result from dhruva {result.json}")
         # if result.status_code == 200:
         #     return result.json()
-        return result
+        return result.json()
     
     @staticmethod
     def send_delete_req_for_dhruva(auth_headers,glossary):
@@ -882,7 +882,8 @@ class UserUtils:
         result = requests.post(url=BHAHSINI_GLOSSARY_DELETE_URL, json=body, headers=auth_headers)
         # if result.status_code == 200:
         #     return result.json()
-        return result
+
+        return result.json()
     
     @staticmethod
     def send_fetch_req_for_dhruva(auth_headers):
@@ -891,4 +892,4 @@ class UserUtils:
         #if result.status_code == 200:
          #   return result.json()
         #else:
-        return result
+        return result.json()

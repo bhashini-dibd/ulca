@@ -474,8 +474,8 @@ class CreateGlossary(Resource):
 
         dhruva_results = UserUtils.send_create_req_for_dhruva(decrypt_headers,body['glossary'])
         log.info(dhruva_results)
-        if dhruva_results:
-            return dhruva_results.json()
+        #if dhruva_results:
+        return dhruva_results
 
         
 
@@ -526,18 +526,19 @@ class DeleteGlossary(Resource):
             return post_error("400", "Error in deleting glossary, Please try again", None), 400
 
         res = CustomResponse(Status.GLOSSARY_DELETION_SUCCESS.value,"SUCCESS")
-        return dhruva_results.json()
+        log.info(f"dhruva_results {dhruva_results}")
+        return dhruva_results
         
 
 class FetchGlossary(Resource):
-    def post(self):
-        body = request.get_json()
-        if 'userID' not in body.keys():
-            return post_error("400", "Please provide userID", None), 400
-        if 'appName' not in body.keys():
-            return post_error("400", "Please provide appName", None), 400
-        if 'serviceProviderName' not in body.keys():
-            return post_error("400", "Please provide serviceProviderName", None), 400        
+    def get(self):
+        # body = request.get_json()
+        # if 'userID' not in body.keys():
+        #     return post_error("400", "Please provide userID", None), 400
+        # if 'appName' not in body.keys():
+        #     return post_error("400", "Please provide appName", None), 400
+        # if 'serviceProviderName' not in body.keys():
+        #     return post_error("400", "Please provide serviceProviderName", None), 400        
 
         #infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
         infkey = {'api-key':temp_api_key, 'Authorization':temp_api_key}
@@ -549,7 +550,9 @@ class FetchGlossary(Resource):
         if not dhruva_results:
             return post_error("400", "Error in fetching glossary, Please try again", None), 400
         res = CustomResponse(Status.GLOSSARY_FETCH_SUCCESS.value,"SUCCESS")
-        return dhruva_results.json()
+        log.info(f"dhruva_results {dhruva_results}")
+
+        return dhruva_results
 
 
 

@@ -69,5 +69,5 @@ RESET_PWD_ENDPOINT      =   os.environ.get('ULCA_RESET_PWD_ENDPOINT','user/reset
 #dhruva data toggle patch request
 PATCH_URL               =   "https://api.dhruva.ai4bharat.org/auth/api-key/ulca"
 BHAHSINI_GLOSSARY_CREATE_URL = "https://bhashini-dhruva-staging-backend-app-service.azurewebsites.net/services/glossary/v1/create"
-BHAHSINI_GLOSSARY_FETCH_URL  = "https://bhashini-dhruva-staging-backend-app-service.azurewebsites.net/services/glossary/v1/fetch"
+BHAHSINI_GLOSSARY_FETCH_URL  = "https://bhashini-dhruva-staging-backend-app-service.azurewebsites.net/services/glossary/v1/fetch-all"
 BHAHSINI_GLOSSARY_DELETE_URL  = "https://bhashini-dhruva-staging-backend-app-service.azurewebsites.net/services/glossary/v1/delete"
