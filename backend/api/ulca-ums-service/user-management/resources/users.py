@@ -475,7 +475,7 @@ class CreateGlossary(Resource):
         dhruva_results = UserUtils.send_create_req_for_dhruva(decrypt_headers,body['glossary'])
         log.info(dhruva_results)
         if dhruva_results:
-            return dhruva_results
+            return dhruva_results.json()
 
         
 
@@ -526,7 +526,7 @@ class DeleteGlossary(Resource):
             return post_error("400", "Error in deleting glossary, Please try again", None), 400
 
         res = CustomResponse(Status.GLOSSARY_DELETION_SUCCESS.value,"SUCCESS")
-        return dhruva_results
+        return dhruva_results.json()
         
 
 class FetchGlossary(Resource):
@@ -549,7 +549,7 @@ class FetchGlossary(Resource):
         if not dhruva_results:
             return post_error("400", "Error in fetching glossary, Please try again", None), 400
         res = CustomResponse(Status.GLOSSARY_FETCH_SUCCESS.value,"SUCCESS")
-        return dhruva_results
+        return dhruva_results.json()
 
 
 
