@@ -442,7 +442,7 @@
     },
     {
       "id": "7cbb0e40-5eb0-4cee-9c5e-26ad5d68c88e",
-      "uri": "/ulca/user-mgmt/v1/users/glossary/fetch",
+      "uri": "/ulca/user-mgmt/v1/users/glossary/fetch-all",
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": false,
