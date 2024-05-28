@@ -442,13 +442,26 @@ class CreateGlossary(Resource):
             return post_error("400", "Please provide Glossary", None), 400
         if not isinstance(body['glossary'],dict):
             return post_error("400", "Glossary should be dictionary/dictionaries", None), 400     
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if not pipelineID:
+            return post_error("400", "Error while getting pipelineID, try again", None), 400
         
-        infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProviderName'])
-        log.info(f"infkey for create {infkey}")
-        if not infkey:
+        if isinstance(pipelineID,dict) and pipelineID:
+            masterList = []
+            # if "serviceProvider" in pipelineID.keys():
+            #     serviceProviderName = pipelineID["serviceProvider"]["name"]
+            if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys():
+                # serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+                masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+                masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+                masterList.append(masterkeyname)
+                masterList.append(masterkeyvalue)
+        #infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProviderName'])
+        #log.info(f"infkey for create {infkey}")
+        if not masterList:
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
-        prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
-        apiInfKey = infkey[1]
+        prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        apiInfKey = masterList[1]
         glossary = body['glossary']
         dhruva_results = UserUtils.send_create_req_for_dhruva(prepare_dhruva_headers,glossary,apiInfKey)
         if not dhruva_results:
