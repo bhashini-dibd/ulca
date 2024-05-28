@@ -471,8 +471,11 @@ class CreateGlossary(Resource):
         if not masterList:
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
         prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        log.info(f"prepare_dhruva_headers {prepare_dhruva_headers}")
         apiInfKey = infkey[1]
         glossary = body['glossary']
+        log.info(f"glossary {glossary}")
+        log.info(f"apiInfKey {apiInfKey}")
         dhruva_results = UserUtils.send_create_req_for_dhruva(prepare_dhruva_headers,glossary,apiInfKey)
         if not dhruva_results:
             return post_error("400", "Error in creating glossary, Please try again", None), 400
