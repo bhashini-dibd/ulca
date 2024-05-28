@@ -321,6 +321,7 @@ class GenerateServiceProviderKey(Resource):
                         return servProvKeyExists
                     else:
                         decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
+                        log.info(f"decrepted keys for generate service provider keys {decryptedKeys}")
                         generatedSecretKeys = UserUtils.get_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys, dataTracking)
                         addServiceKeys, servProvAdded = UserUtils.pushServiceProvider(generatedSecretKeys, body["ulcaApiKey"],serviceProviderName, dataTracking)
                         returnServiceProviderKey = {"serviceProviderKeys":servProvAdded["serviceProviderKeys"][0]}
@@ -443,6 +444,7 @@ class CreateGlossary(Resource):
             return post_error("400", "Glossary should be dictionary/dictionaries", None), 400     
         
         infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProviderName'])
+        log.info(f"infkey for create {infkey}")
         if not infkey:
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
         prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
