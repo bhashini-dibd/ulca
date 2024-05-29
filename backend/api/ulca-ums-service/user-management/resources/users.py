@@ -431,9 +431,8 @@ class ToggleDataTracking(Resource):
 
 class CreateGlossary(Resource):
     def post(self):
+        user_id=request.headers["x-user-id"]
         body = request.get_json()
-        if 'userID' not in body.keys():
-            return post_error("400", "Please provide userID", None), 400
         if 'appName' not in body.keys():
             return post_error("400", "Please provide appName", None), 400
         if 'serviceProviderName' not in body.keys():
@@ -452,7 +451,7 @@ class CreateGlossary(Resource):
             if "targetText" not in body['glossary'][0]:
                 return post_error("400", "targetText is missing in glossary", None), 400 
         
-        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],body['userID'], body['serviceProviderName'])
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
         if userinferenceApiKey:
             api_dict = {"api-key":temp_api_key}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
@@ -481,9 +480,8 @@ class CreateGlossary(Resource):
 
 class DeleteGlossary(Resource):
     def post(self):
+        user_id=request.headers["x-user-id"]
         body = request.get_json()
-        if 'userID' not in body.keys():
-            return post_error("400", "Please provide userID", None), 400
         if 'appName' not in body.keys():
             return post_error("400", "Please provide appName", None), 400
         if 'serviceProviderName' not in body.keys():
@@ -502,7 +500,7 @@ class DeleteGlossary(Resource):
             if "targetText" not in body['glossary'][0]:
                 return post_error("400", "targetText is missing in glossary", None), 400 
         
-        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],body['userID'], body['serviceProviderName'])
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
         if userinferenceApiKey:
             api_dict = {"api-key":temp_api_key}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
@@ -539,8 +537,15 @@ class FetchGlossary(Resource):
         #     return post_error("400", "Please provide appName", None), 400
         # if 'serviceProviderName' not in body.keys():
         #     return post_error("400", "Please provide serviceProviderName", None), 400        
-
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
         #infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
+        user_id=request.headers["x-user-id"]
+
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        if userinferenceApiKey:
+            api_dict = {"api-key":temp_api_key}
+
         infkey = {'api-key':temp_api_key, 'Authorization':temp_api_key}
         if not infkey:
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
