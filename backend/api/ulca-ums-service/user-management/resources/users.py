@@ -541,11 +541,11 @@ class FetchGlossary(Resource):
         serviceProviderName = request.args.get("serviceProviderName")
         #infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
         user_id=request.headers["x-user-id"]
-
+        infkey = {}
         userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
         if userinferenceApiKey:
             infkey = {'api-key':temp_api_key, 'Authorization':temp_api_key}
-        if not infkey:
+        if len(infkey)==0:
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
         #prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
         #apiInfKey = infkey[1]
