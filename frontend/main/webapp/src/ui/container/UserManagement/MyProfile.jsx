@@ -740,7 +740,7 @@ const MyProfile = (props) => {
                               <TableCell style={{ width: "25%" }}>
                                 {row?.inferenceApiKey?.value && (
                                   <div onClick={() => handleGlossaryData(row)}>
-                                        <Box display='flex' alignItems="center">
+                                        <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
                             <Box sx={{color:"blue"}}>Create Glossary</Box>
                             <Box> <Tooltip title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
       <IconButton>

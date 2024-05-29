@@ -41,6 +41,9 @@ import Delete from '../../../assets/deleteIcon.svg'
 import GlossaryBanner from '../../../assets/GlossaryBanner.png'
 import { useLocation } from 'react-router-dom';
 import FetchGlossaryDetails from "../../../redux/actions/api/UserManagement/FetchGlossaryDetails";
+import AddGlossaryDataApi from "../../../redux/actions/api/UserManagement/AddGlossaryData";
+import DeleteGlossaryApi from "../../../redux/actions/api/UserManagement/DeleteGlossary";
+import MultiDeleteGlossaryApi from "../../../redux/actions/api/UserManagement/MultiDeleteGlossary";
 
 const styles = {
   bannerContainer: {
@@ -96,25 +99,6 @@ const styles = {
 };
 
 
-const initialData = [
-    {
-      source: "Dummy Source 1",
-      target: "Dummy Target 1",
-      sourceLanguage: "English",
-      targetLanguage: "French",
-      glossary: "Dummy Glossary 1",
-      action: "Dummy Action 1",
-    },
-    {
-      source: "Dummy Source 2",
-      target: "Dummy Target 2",
-      sourceLanguage: "Spanish",
-      targetLanguage: "German",
-      glossary: "Dummy Glossary 2",
-      action: "Dummy Action 2",
-    },
-    // Add more dummy data as needed
-  ];
 
   const languages = [
     { "code": "as", "label": "Assamese" },
@@ -146,30 +130,32 @@ const initialData = [
 const GlossaryProfile = (props) => {
   const { classes } = props;
   const dispatch = useDispatch();
-
   const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
   const [searchKey, setSearchKey] = useState("");
   const [loading, setLoading] = useState(false);
-  const [tableData, setTableData] = useState(initialData);
-  const [filteredData, setFilteredData] = useState(initialData); // State for filtered data
+  const AppGlossaryData = useSelector((state)=>state?.getGlossaryData?.glossaryData);
+  const [tableData, setTableData] = useState(AppGlossaryData || []);
+  // const [filteredData, setFilteredData] = useState(initialData); // State for filtered data
   const [searchText, setSearchText] = useState('');
+
+  const [modal, setModal] = useState(false);
+ 
+  const [formState, setFormState] = useState({
+    sourceLanguage: '',
+    targetLanguage: '',
+    sourceText: '',
+    targetText: '',
+  });
+  const UserDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: "",
     variant: "success",
   });
-  const [modal, setModal] = useState(false);
- 
-  const [formState, setFormState] = useState({
-    option1: '',
-    option2: '',
-    firstName: '',
-    lastName: '',
-  });
 
   const location = useLocation();
   const { serviceProviderName, inferenceApiKey, appName} = location.state || {};
-  console.log(serviceProviderName, inferenceApiKey, appName,"neeww");
+  console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,"neeww");
 //   useEffect(() => {
 //     if (apiKeys) {
 //       setTableData(apiKeys);
@@ -185,7 +171,6 @@ const GlossaryProfile = (props) => {
     }
   };
 
-  const UserDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
@@ -204,7 +189,11 @@ const GlossaryProfile = (props) => {
   }, []);
 
   useEffect(() => {
-    const filtered = initialData.filter((row) => row.glossary.toLowerCase().includes(searchText.toLowerCase()));
+    setTableData(AppGlossaryData);
+  }, [AppGlossaryData]);
+
+  useEffect(() => {
+    const filtered = AppGlossaryData.filter((row) => row.sourceText.toLowerCase().includes(searchText.toLowerCase()));
     setTableData(filtered);
   }, [searchText]);
 
@@ -216,7 +205,7 @@ const GlossaryProfile = (props) => {
 
  
   const getApiGlossaryData = async () => {
-    const apiObj = new FetchGlossaryDetails(inferenceApiKey,appName);
+    const apiObj = new FetchGlossaryDetails(appName,serviceProviderName);
     dispatch(APITransport(apiObj));
   };
 
@@ -314,6 +303,35 @@ const GlossaryProfile = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Form Data:', formState);
+    const apiObj = new AddGlossaryDataApi(appName,serviceProviderName,formState);
+    dispatch(APITransport(apiObj));
+    // getApiGlossaryData()
+    setTimeout(() => {
+
+      getApiGlossaryData() 
+      setSnackbarInfo({
+        open: true,
+        message: "Glossary Added Successfully",
+        variant: "success",
+      }); 
+    },1500)
+    // window.location.reload()
+    setModal(false)
+    setFormState({
+      sourceLanguage: '',
+      targetLanguage: '',
+      sourceText: '',
+      targetText: '',
+    })
+  };
+
+  const isFormValid = () => {
+    return (
+      formState.sourceText !== '' &&
+      formState.targetText !== '' &&
+      formState.sourceLanguage !== '' &&
+      formState.targetLanguage !== ''
+    );
   };
 
   const getMuiTheme = () =>
@@ -425,7 +443,18 @@ const GlossaryProfile = (props) => {
                 onClick={() => {
                   const selectedData = selectedRows.data.map(row => tableData[row.dataIndex]);
                   console.log("Selected Rows' Data:", selectedData);
-                  alert(JSON.stringify(selectedData, null, 2)); // Display selected data in an alert
+                  const apiObj = new MultiDeleteGlossaryApi(appName,serviceProviderName,selectedData);
+                  dispatch(APITransport(apiObj));
+                  setTimeout(() => {
+
+                    getApiGlossaryData() 
+                    setSnackbarInfo({
+                      open: true,
+                      message: "Multiple Glossaries Deleted Successfully",
+                      variant: "success",
+                    });  
+                  },1500)
+                  // alert(JSON.stringify(selectedData, null, 2)); // Display selected data in an alert
                 }}
               >
                 <DeleteIcon />
@@ -435,7 +464,7 @@ const GlossaryProfile = (props) => {
         filter: false,
         onRowSelectionChange: (currentRowsSelected, allRowsSelected) => {
           const selectedData = allRowsSelected.map(row => tableData[row.dataIndex]);
-          console.log("Selected Rows' Data:", selectedData);
+          console.log("Selected Rows' Datahhh:", selectedData);
         //   setSelectedRowsData(selectedData);
         }
       };
@@ -443,17 +472,7 @@ const GlossaryProfile = (props) => {
   
     
       const columns = [
-        // {
-        //   name: "index",
-        //   label: "Index",
-        //   options: {
-        //     filter: true,
-        //     sort: true,
-        //     customBodyRenderLite: (dataIndex) => {
-        //       return dataIndex + 1;
-        //     }
-        //   }
-        // },
+        
         {
           name: "source",
           label: "Source",
@@ -486,18 +505,18 @@ const GlossaryProfile = (props) => {
             sort: true,
           }
         },
-        {
-          name: "glossary",
-          label: "Glossary",
-          options: {
-            customBodyRender: (value) => (
-              <Box display='flex' alignItems="center">
-                <Box>{value}</Box>
+        // {
+        //   name: "glossary",
+        //   label: "Glossary",
+        //   options: {
+        //     customBodyRender: (value) => (
+        //       <Box display='flex' alignItems="center">
+        //         <Box>{value}</Box>
                
-              </Box>
-            )
-          }
-        },
+        //       </Box>
+        //     )
+        //   }
+        // },
         {
           name: "action",
           label: "Action",
@@ -505,7 +524,23 @@ const GlossaryProfile = (props) => {
             customBodyRender: (value, tableMeta) => (
               <Button
                 // variant="contained"
-                onClick={() => console.log('Action clicked for row:', tableMeta.rowIndex)}
+                onClick={() => {
+                  console.log('Action clicked for row:', tableMeta.rowData)
+                  const resultString = tableMeta.rowData.filter(item => item !== undefined);
+                  const [sourceLanguage, targetLanguage, sourceText, targetText] = resultString;
+                  const apiObj = new DeleteGlossaryApi(appName,serviceProviderName,sourceLanguage, targetLanguage, sourceText, targetText);
+                  dispatch(APITransport(apiObj));
+                  setTimeout(() => {
+
+                    getApiGlossaryData() 
+                    setSnackbarInfo({
+                      open: true,
+                      message: "Glossary Deleted Successfully",
+                      variant: "success",
+                    });  
+                  },1500)
+                }
+              }
               >
                 <img src={Delete} alt="delete img"/>
               </Button>
@@ -529,6 +564,7 @@ const GlossaryProfile = (props) => {
     );
   };
 
+ 
 
 
   return (
@@ -548,7 +584,14 @@ const GlossaryProfile = (props) => {
       <MuiThemeProvider theme={getMuiTheme}>
       <MUIDataTable
         //   title={"Glossary List"}
-          data={tableData}
+          data={ tableData.map(row => [
+            // row.checkbox,
+            row?.sourceText,
+            row?.targetText,
+            row?.sourceLanguage,
+            row?.targetLanguage,
+            row?.action
+          ])}
           columns={columns}
           options={options}
         />
@@ -580,8 +623,8 @@ const GlossaryProfile = (props) => {
                   <Select
                     labelId="select-source-label"
                     id="select-source"
-                    name="option1"
-                    value={formState.option1}
+                    name="sourceLanguage"
+                    value={formState.sourceLanguage}
                     onChange={handleChange}
                     label="Select Source Language"
                   >
@@ -604,8 +647,8 @@ const GlossaryProfile = (props) => {
                   <Select
                     labelId="select-target-label"
                     id="select-target"
-                    name="option2"
-                    value={formState.option2}
+                    name="targetLanguage"
+                    value={formState.targetLanguage}
                     onChange={handleChange}
                     label="Select Target Language"
                   >
@@ -626,8 +669,8 @@ const GlossaryProfile = (props) => {
                   variant="outlined"
                   fullWidth
                   label="Enter Source Text"
-                  name="firstName"
-                  value={formState.firstName}
+                  name="sourceText"
+                  value={formState.sourceText}
                   onChange={handleChange}
                 />
               </Grid>
@@ -640,8 +683,8 @@ const GlossaryProfile = (props) => {
                   variant="outlined"
                   fullWidth
                   label="Enter Target Text"
-                  name="lastName"
-                  value={formState.lastName}
+                  name="targetText"
+                  value={formState.targetText}
                   onChange={handleChange}
                 />
               </Grid>
@@ -653,7 +696,14 @@ const GlossaryProfile = (props) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => setModal(false)}p
+          onClick={() => {
+            setModal(false); 
+            setFormState({
+            sourceLanguage: '',
+            targetLanguage: '',
+            sourceText: '',
+            targetText: '',
+          })}}
           style={{ padding: "12px 24px" }}
         >
           Cancel
@@ -664,6 +714,7 @@ const GlossaryProfile = (props) => {
           type="submit"
           style={{ padding: "12px 24px" }}
           onClick={handleSubmit}
+          disabled={!isFormValid()}
         >
           Submit
         </Button>

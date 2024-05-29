@@ -3,18 +3,22 @@ import ENDPOINTS from "../../../../configs/apiendpoints";
 import md5 from "md5";
 import C from "../../constants";
 
-export default class FetchGlossaryDetails extends API {
-  constructor(appName,serviceProviderName,timeout = 2000) {
-    super("GET", timeout, false);
-    this.type = C.GET_GLOSSARY_DATA;
+export default class AddGlossaryDataApi extends API {
+  constructor(appName,serviceProviderName,formState,timeout = 2000) {
+    super("POST", timeout, false);
+    this.type = C.ADD_GLOSSARY_DATA;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
-    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getGlossaryData}?appName=${appName}&serviceProviderName=${serviceProviderName}`;
-  }
+    // this.userID = userID;
+    this.appName = appName;
+    this.serviceProviderName = serviceProviderName;
+    this.formState = formState;
+    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.addGlossaryData}`;
+  } 
 
   processResponse(res) {
     super.processResponse(res);
     if (res) {
-      this.report = res.glossary;
+      this.report = res.data;
     }
   }
 
@@ -23,6 +27,14 @@ export default class FetchGlossaryDetails extends API {
   }
 
   getBody() {
+    return {
+        // userID: JSON.parse(localStorage.getItem("userDetails")).userID,
+        appName:this.appName,
+        serviceProviderName: this.serviceProviderName,
+        glossary:[
+          this.formState
+        ]
+    };
   }
 
   getHeaders() {
