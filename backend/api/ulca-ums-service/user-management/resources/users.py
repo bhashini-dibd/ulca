@@ -466,7 +466,7 @@ class CreateGlossary(Resource):
             masterList.append(masterkeyvalue)
         log.info(f"master api keys {masterList}")
         #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        decrypt_headers = {'Authorization' : temp_api_key}
+        decrypt_headers = {'Authorization' : masterkeyvalue}
         if decrypt_headers:
             decrypt_headers.update(api_dict)
             log.info(f"decrypt_headers {decrypt_headers}")
@@ -515,7 +515,7 @@ class DeleteGlossary(Resource):
             masterList.append(masterkeyvalue)
         log.info(f"master api keys {masterList}")
         #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        decrypt_headers = {'Authorization' : temp_api_key}
+        decrypt_headers = {'Authorization' : masterkeyvalue}
         if decrypt_headers:
             decrypt_headers.update(api_dict)
             log.info(f"decrypt_headers {decrypt_headers}")
@@ -545,11 +545,39 @@ class FetchGlossary(Resource):
         userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
         if userinferenceApiKey:
             infkey = {'api-key':temp_api_key, 'Authorization':temp_api_key}
-        if len(infkey)==0:
+            
+            
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        if userinferenceApiKey:
+            api_dict = {"api-key":temp_api_key}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        log.info(f"master api keys {masterList}")
+        #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        decrypt_headers = {'Authorization' : masterkeyvalue}
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+
+            
+            
+            
+            
+            
+        if len(decrypt_headers)==0:
             return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
         #prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
         #apiInfKey = infkey[1]
-        dhruva_results = UserUtils.send_fetch_req_for_dhruva(infkey)
+        dhruva_results = UserUtils.send_fetch_req_for_dhruva(decrypt_headers)
         if not dhruva_results:
             return post_error("400", "Error in fetching glossary, Please try again", None), 400
         res = CustomResponse(Status.GLOSSARY_FETCH_SUCCESS.value,"SUCCESS")
