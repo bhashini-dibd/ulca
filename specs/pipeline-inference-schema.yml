@@ -155,6 +155,9 @@ components:
           $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
         targetScriptCode:
           $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedScripts
+        default:
+          type: boolean
+          description: this field is used to mention that model will be select by default in mobile app.
     ApiEndPoint:
       required:
         - apiKeyUrl
