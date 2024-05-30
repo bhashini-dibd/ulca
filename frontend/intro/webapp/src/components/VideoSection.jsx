@@ -160,29 +160,28 @@ const VideoSection = () => {
     <div className="VideoBoxSection">
     <div className="container mt-3">
       <div
-        className="text-center mb-3 overviewHeading"
+        className="text-center  overviewHeading"
         style={{
           fontSize: "36px",
           fontWeight: 600,
-          fontFamily: "Inter-Bold",
+          fontFamily: "Noto-Bold",
           letterSpacing: "1px",
+          marginBottom:"20px"
         }}
       >
-        A Quick Overview of the ULCA
+       Why ULCA
       </div>
       <div
         className="display-6 text-center"
         style={{
-          fontFamily: "OS-Regular",
+          fontFamily: "Noto-Regular",
           fontSize: "16px",
           fontWeight: 400,
           lineHeight: "24px",
+          marginBottom:"10px"
         }}
       >
-        Get ready for a swift introduction to ULCA! Our video provides a quick
-        overview, highlighting the key features
-        <br />
-        and benefits of ULCA's platform.
+        Your premier hub for Indian language resources, providing curated datasets and enhanced <br /> language-specific tasks for cutting-edge linguistic innovation and research.
       </div>
       
     </div>

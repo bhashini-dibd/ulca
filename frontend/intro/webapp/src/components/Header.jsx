@@ -9,24 +9,33 @@ import Logo from '../assets/bhashini-ulcaLogo.png'
 const MobileHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
+  const menuRef = useRef(null);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  
-
-  const toggleSubMenu1 = (e) => {
+  const toggleSubMenu = (e, submenuClass) => {
     e.stopPropagation(); // Prevents the parent menu from closing
-    e.target.parentElement.classList.toggle("submenu-open1");
+    e.target.closest('li').classList.toggle(submenuClass);
   };
 
-  const toggleSubMenu2 = (e) => {
-    e.stopPropagation(); // Prevents the parent menu from closing
-    e.target.parentElement.classList.toggle("submenu-open2");
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setIsOpen(false);
+      // setOpenDropdown(null);
+    }
   };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="navbar">
-      <div className="hamburger-menu">
+      <div className="hamburger-menu" ref={menuRef}>
         <button className="hamburger-button" onClick={toggleMenu}>
           ☰
         </button>
@@ -38,47 +47,19 @@ const MobileHeader = () => {
                   {t('home')}
                 </a>
               </li>
-              <li /* onClick={toggleSubMenu} */>
-                <a
-                  className="nav-color"
-                  href="https://bhashini.gov.in/about-bhashini"
-                >
-                  {t('aboutBhashini')}
-                </a>
-                {/* <span className="submenu-arrow">▶</span> */}
-                {/* <ul className="sub-menu">
-                  <li className="sub-item">About Bhashini</li>
-                  <li className="sub-item">Team</li>
-                </ul> */}
-              </li>
-              {/* <li>
-                {" "}
-                <a
-                  className="nav-color"
-                  href="https://bhashini.gov.in/ecosystem"
-                >
-                  Ecosystem
-                </a>
-              </li> */}
-              {/* <li>
-                {" "}
-                <a
-                  className="nav-color"
-                  href="https://anuvaad.bhashini.gov.in/"
-                >
-                  Anuvaad
-                </a>
-              </li> */}
-              <li style={{ position: "relative" }} >
-                <a href="https://bhashini.gov.in/prayog" className="nav-color">Prayog{" "}</a>
-                {/* <img
-                  className="submenu-arrow1"
+
+              <li style={{ position: "relative" }}>
+                <div onClick={(e) => toggleSubMenu(e, 'submenu-open2')} className="nav-color">
+                  Prayog{" "}
+                </div>
+                <img
+                  className="submenu-arrow"
                   style={{ height: "16px" }}
                   src={downArrow}
-                ></img>
+                  onClick={(e) => toggleSubMenu(e, 'submenu-open2')}
+                />
                 <ul className="sub-menu2">
                   <li className="sub-item">
-                    {" "}
                     <a
                       className="nav-color"
                       href="https://anuvaad.bhashini.gov.in/"
@@ -89,7 +70,6 @@ const MobileHeader = () => {
                     </a>
                   </li>
                   <li className="sub-item">
-                    {" "}
                     <a
                       className="nav-color"
                       href="https://chitraanuvaad.bhashini.co.in/"
@@ -99,18 +79,21 @@ const MobileHeader = () => {
                       Chitraanuvaad
                     </a>
                   </li>
-                </ul> */}
+                </ul>
               </li>
+
               <li style={{ position: "relative" }}>
-                <a href="https://bhashini.gov.in/sahyogi" className="nav-color">Sahyogi{" "}</a>
-                {/* <img
+                <div  onClick={(e) => toggleSubMenu(e, 'submenu-open1')} className="nav-color">
+                  Sahyogi{" "}
+                </div>
+                <img
                   className="submenu-arrow"
                   style={{ height: "16px" }}
                   src={downArrow}
-                ></img>
+                  onClick={(e) => toggleSubMenu(e, 'submenu-open1')}
+                />
                 <ul className="sub-menu1">
                   <li className="sub-item">
-                    {" "}
                     <a
                       className="nav-color"
                       href="https://bhashini.gov.in/sahyogi"
@@ -121,7 +104,6 @@ const MobileHeader = () => {
                     </a>
                   </li>
                   <li className="sub-item">
-                    {" "}
                     <a
                       className="nav-color"
                       href="https://bhashini.gov.in/career"
@@ -131,52 +113,178 @@ const MobileHeader = () => {
                       Career
                     </a>
                   </li>
-                </ul> */}
+                </ul>
               </li>
-              <li>
-                {" "}
-                <a className="nav-color" href="https://bhashini.gov.in/sanchalak">
+
+              <li style={{ position: "relative" }}>
+                <div className="nav-color" onClick={(e) => toggleSubMenu(e, 'submenu-open3')}>
                   Sanchalak
-                </a>
-                </li>
-              <li>
-                {" "}
-                <a
-                  className="nav-color"
-                  href="https://bhashini.gov.in/pravakta"
-                >
-                  Pravakta
-                </a>
+                </div>
+                <img
+                  className="submenu-arrow1"
+                  style={{ height: "16px" }}
+                  src={downArrow}
+                  onClick={(e) => toggleSubMenu(e, 'submenu-open3')}
+                />
+                <ul className="sub-menu3">
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="https://link1.com"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Link1
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="https://link2.com"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Link2
+                    </a>
+                  </li>
+                </ul>
               </li>
-              <li>
-                {" "}
-                <a className="nav-color" href="https://bhashini.gov.in/tender">
+
+              <li style={{ position: "relative" }}>
+                <div  onClick={(e) => toggleSubMenu(e, 'submenu-open4')} className="nav-color" >
+                  Pravakta
+                </div>
+                <img
+                  className="submenu-arrow1"
+                  style={{ height: "16px" }}
+                  src={downArrow}
+                  onClick={(e) => toggleSubMenu(e, 'submenu-open4')}
+                />
+                <ul className="sub-menu4">
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="https://link3.com"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Link3
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="https://link4.com"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Link4
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li style={{ position: "relative" }}>
+                <div className="nav-color" onClick={(e) => toggleSubMenu(e, 'submenu-open5')}>
                   Tender's/EOI's
-                </a>
+                </div>
+                <img
+                  className="submenu-arrow1"
+                  style={{ height: "16px" }}
+                  src={downArrow}
+                  onClick={(e) => toggleSubMenu(e, 'submenu-open5')}
+                />
+                <ul className="sub-menu5">
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="https://link5.com"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Link5
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="https://link6.com"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Link6
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li style={{ position: "relative" }}>
+                <div className="nav-color"  onClick={(e) => toggleSubMenu(e, 'submenu-open6')}>
+                  Contact
+                </div>
+                <img
+                  className="submenu-arrow1"
+                  style={{ height: "16px" }}
+                  src={downArrow}
+                  onClick={(e) => toggleSubMenu(e, 'submenu-open6')}
+                />
+                <ul className="sub-menu6">
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="https://link7.com"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Link7
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="https://link8.com"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Link8
+                    </a>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>
         )}
       </div>
       <div className="logo">
-        {" "}
-        <div className="join">
-          <a
-            role="button"
-            tabIndex={0}
-            className="theme-btn btn btn-primary"
-            href="https://bhashini.gov.in/bhashadaan/en/home"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{borderRadius: "4px"}}
-           >
-              Bhashadaan
-          </a>
-        </div>
-      </div>
+<div className="join">
+  <a
+    role="button"
+    tabIndex={0}
+    className="theme-btn btn btn-primary"
+    href="https://bhashini.gov.in/bhashadaan/en/home"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ borderRadius: "4px",fontSize:"12px", marginRight:"5px",backgroundColor:"white", border:"1px solid #2947A3", color:"#2947A3" }}
+  >
+    Bhashadaan
+  </a>
+  <a
+    role="button"
+    tabIndex={0}
+    className="theme-btn btn btn-primary"
+    href="https://bhashini.gov.in/bhashadaan/en/home"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ borderRadius: "4px",fontSize:"12px" }}
+  >
+    Download App
+  </a>
+</div>
+</div>
     </div>
   );
 };
+
 
 
 
@@ -299,10 +407,10 @@ function Header() {
       <nav className="navbar navbar-expand navbar-light bg-light">
         {isMobile ? (
           <div className="d-flex flex-column w-100">
-            <div className="logo" style={{ backgroundColor: "#fff" }}>
+            <div className="logo" style={{ backgroundColor: "#fff", display:"flex", justifyContent:"center" }}>
               {" "}
               <img
-                src={process.env.PUBLIC_URL + "/img/Bhashini_en.png"}
+                src={Logo}
                 alt="bhashini logo"
                 style={{ height:"60px", marginLeft:"1rem" }}
                 className="img-fluid"

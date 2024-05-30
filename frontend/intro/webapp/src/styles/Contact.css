@@ -1,0 +1,49 @@
+
+
+.ContactUs__Banner {
+    background-image: url('../assets/contactBanner.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      /* padding: 20px 0; */
+      /* margin-bottom: 30px; */
+      /* height: 400px; */
+      font-family: "Noto-Regular";
+      height: 205px;
+  }
+  
+  .Contact__banner-content {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .Contact__bannerHeading{
+    font-family: "Noto-Bold";
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 54px;
+    text-align: left;
+    
+    }
+    
+    .Contact__bannerDesc{
+    font-family: "Noto-Regular";
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21.79px;
+    text-align: left;
+    
+    }
+
+
+    @media screen and (max-width:600px) {
+        .ContactUs__Banner{
+            height: 350px;
+        }
+
+        .Contact__bannerHeading, .Contact__bannerDesc{
+            text-align: center;
+        }
+    }

@@ -37,7 +37,7 @@
   font-size: 36px;
   color: #000000;
   line-height: 44px;
-  font-family: "Roboto",sans-serif;
+  font-family: "Noto-Bold";
 }
 .content-left1 .DownloadAppLeft .DownloadAppLeftText {
   font-weight: 400;
@@ -45,13 +45,13 @@
   line-height: 22px;
   color: #000000;
   margin: 10px 0px;
-  font-family: "Roboto",sans-serif;
+  font-family: "Noto-Regular"
 }
 .content-left1 .DownloadAppLeft .DownloadAppDownloadTxt {
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 10px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Noto-Regular";
   color: #000000;
 }
 @media (max-width: 550px) {

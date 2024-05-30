@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Home.css";
+import "../styles/Contact.css";
 
 
 import { Breadcrumb, Button, Col, Container, Row } from "react-bootstrap";
@@ -10,18 +10,18 @@ const Contactus = () => {
     <Row className="SliderSection">
       <Col md={12}>
      
-          <div className="ULCA__Homesection">
+          <div className="ContactUs__Banner">
           <Container style={{height:"100%"}}>
               <Row style={{height:"100%"}}>
-                  <Col md={6} className="ULCA__banner-content" style={{display:"flex", justifyContent:"center"}}>
+                  <Col md={6} className="Contact__banner-content" style={{display:"flex", justifyContent:"center"}}>
                 
 
-                      <div className="ULCA__bannerHeading pb-3">Empowering Indian Languages
-with AI Technologies</div>
-                   
+                      <div className="Contact__bannerHeading pb-3">Need more information?</div>
+                      <p className="Contact__bannerDesc">Write your concern to us and we will get back to you.</p>
+                      
                     
                   </Col>
-                  <Col md={6} className="d-flex justify-content-center align-items-center ULCA__bannerImg">
+                  <Col md={6} className="d-flex justify-content-center align-items-center Contact__bannerImg">
                      <Button>Contact us</Button>
                   </Col>
               </Row>

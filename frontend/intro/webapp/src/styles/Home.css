@@ -72,6 +72,25 @@
     font-family: "Noto-Regular";
 }
 
+.ContactUs__Banner {
+  background-image: url('../assets/contactBanner.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    /* padding: 20px 0; */
+    /* margin-bottom: 30px; */
+    height: 400px;
+    font-family: "Noto-Regular";
+    height: 205px;
+}
+
+.Contact__banner-content {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .ULCA__banner-content {
   background: transparent;
   padding: 60px 20px 0px  20px;
@@ -353,16 +372,39 @@ text-align: left;
 
 .submenu-arrow1 {
   position: absolute;
-  left: 65px;
+  left: 115px;
   top: 15px;
   transition: transform 0.3s ease;
   font-size: 16px;
 }
 
+/* .submenu-arrow1 {
+  position: absolute;
+  left: 65px;
+  top: 15px;
+  transition: transform 0.3s ease;
+  font-size: 16px;
+} */
+
 .sub-menu,
 .sub-menu1,
 .sub-menu2 {
   display: none;
+}
+
+.sub-menu1, .sub-menu2, .sub-menu3, .sub-menu4, .sub-menu5, .sub-menu6 {
+  display: none;
+  /* Additional styling for submenu */
+}
+
+.submenu-open1 .sub-menu1,
+.submenu-open2 .sub-menu2,
+.submenu-open3 .sub-menu3,
+.submenu-open4 .sub-menu4,
+.submenu-open5 .sub-menu5,
+.submenu-open6 .sub-menu6 {
+  display: block;
+  /* Additional styling for open submenu */
 }
 
 .submenu-open .sub-menu {
@@ -371,6 +413,31 @@ text-align: left;
 }
 
 .submenu-open1 .sub-menu1 {
+  display: block;
+  margin-left: -10px;
+}
+
+.submenu-open2 .sub-menu2 {
+  display: block;
+  margin-left: -10px;
+}
+
+.submenu-open3 .sub-menu3 {
+  display: block;
+  margin-left: -10px;
+}
+
+.submenu-open4 .sub-menu4 {
+  display: block;
+  margin-left: -10px;
+}
+
+.submenu-open5 .sub-menu5 {
+  display: block;
+  margin-left: -10px;
+}
+
+.submenu-open6 .sub-menu6 {
   display: block;
   margin-left: -10px;
 }
