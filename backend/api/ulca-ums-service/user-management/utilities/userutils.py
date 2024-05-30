@@ -874,6 +874,7 @@ class UserUtils:
         log.info(f"result from dhruva {result.json}")
         # if result.status_code == 200:
         #     return result.json()
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
         return result.json()
     
     @staticmethod
@@ -882,7 +883,7 @@ class UserUtils:
         result = requests.post(url=BHAHSINI_GLOSSARY_DELETE_URL, json=body, headers=auth_headers)
         # if result.status_code == 200:
         #     return result.json()
-
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
         return result.json()
     
     @staticmethod
@@ -892,4 +893,5 @@ class UserUtils:
         #if result.status_code == 200:
          #   return result.json()
         #else:
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
         return result.json()
