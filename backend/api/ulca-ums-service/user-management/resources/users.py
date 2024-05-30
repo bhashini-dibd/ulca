@@ -1,12 +1,12 @@
 from flask_restful import Resource
 from repositories import UserManagementRepositories
-from models import CustomResponse,SearchCustomResponse, Status, post_error
+from models import CustomResponse,SearchCustomResponse, CustomResponseDhruva,Status, post_error
 from utilities import UserUtils
 from flask import request, jsonify
 import config
 import logging
 import requests
-from config import MAX_API_KEY, SECRET_KEY, PATCH_URL, temp_api_key
+from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -452,9 +452,12 @@ class CreateGlossary(Resource):
                 return post_error("400", "targetText is missing in glossary", None), 400 
         
         userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
-        if userinferenceApiKey:
-            api_dict = {"api-key":temp_api_key}
+        if not userinferenceApiKey:
+            return post_error("404", "Couldn't find the user inference api Key", None), 404
+        api_dict = {"api-key":userinferenceApiKey}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if not pipelineID:
+            return post_error("404", "Couldn't find the user inference api Key", None), 404
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
         if pipelineID and isinstance(pipelineID,dict):
@@ -464,18 +467,17 @@ class CreateGlossary(Resource):
             masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
             masterList.append(masterkeyname)
             masterList.append(masterkeyvalue)
+        else:
+            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
         log.info(f"master api keys {masterList}")
         decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        # decrypt_headers = {'Authorization' : masterkeyvalue}
         if decrypt_headers:
             decrypt_headers.update(api_dict)
             log.info(f"decrypt_headers {decrypt_headers}")
 
-        dhruva_results = UserUtils.send_create_req_for_dhruva(decrypt_headers,body['glossary'])
-        log.info(dhruva_results)
-        #if dhruva_results:
-        return dhruva_results
-
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_create_req_for_dhruva(decrypt_headers,body['glossary'])
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults()
         
 
 class DeleteGlossary(Resource):
@@ -501,9 +503,12 @@ class DeleteGlossary(Resource):
                 return post_error("400", "targetText is missing in glossary", None), 400 
         
         userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
-        if userinferenceApiKey:
-            api_dict = {"api-key":temp_api_key}
+        if not userinferenceApiKey:
+            return post_error("404", "Couldn't find the user inference api Key", None), 404
+        api_dict = {"api-key":userinferenceApiKey}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if not pipelineID:
+            return post_error("404", "Couldn't find the user inference api Key", None), 404
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
         if pipelineID and isinstance(pipelineID,dict):
@@ -513,77 +518,49 @@ class DeleteGlossary(Resource):
             masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
             masterList.append(masterkeyname)
             masterList.append(masterkeyvalue)
+        else:
+            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
         log.info(f"master api keys {masterList}")
         decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        # decrypt_headers = {'Authorization' : masterkeyvalue}
         if decrypt_headers:
             decrypt_headers.update(api_dict)
             log.info(f"decrypt_headers {decrypt_headers}")
-        dhruva_results = UserUtils.send_delete_req_for_dhruva(decrypt_headers,body['glossary'])
-        if not dhruva_results:
-            return post_error("400", "Error in deleting glossary, Please try again", None), 400
-
-        res = CustomResponse(Status.GLOSSARY_DELETION_SUCCESS.value,"SUCCESS")
-        log.info(f"dhruva_results {dhruva_results}")
-        return dhruva_results
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_delete_req_for_dhruva(decrypt_headers,body['glossary'])
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults()        
         
 
 class FetchGlossary(Resource):
-    def get(self):
-        # body = request.get_json()
-        # if 'userID' not in body.keys():
-        #     return post_error("400", "Please provide userID", None), 400
-        # if 'appName' not in body.keys():
-        #     return post_error("400", "Please provide appName", None), 400
-        # if 'serviceProviderName' not in body.keys():
-        #     return post_error("400", "Please provide serviceProviderName", None), 400        
+    def get(self):    
         appName = request.args.get("appName")
         serviceProviderName = request.args.get("serviceProviderName")
-        #infkey = UserUtils.getUserInfKey(body['appName'], body['userID'], body['serviceProvideName'])
         user_id=request.headers["x-user-id"]
-        infkey = {}
         userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
-        if userinferenceApiKey:
-            infkey = {'api-key':temp_api_key, 'Authorization':temp_api_key}
-            
-            
-        
-        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
-        if userinferenceApiKey:
-            api_dict = {"api-key":temp_api_key}
+        if not userinferenceApiKey:
+            return post_error("404", "Couldn't find the user inference api Key", None), 404
+        api_dict = {"api-key":userinferenceApiKey}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("404", "Couldn't find the user inference api Key", None), 404
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
         if pipelineID and isinstance(pipelineID,dict):
             masterList = []
-        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
-            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
-            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
-            masterList.append(masterkeyname)
-            masterList.append(masterkeyvalue)
+        if "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys() and "serviceProvider" not in pipelineID.keys():
+            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
+        masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+        masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+        masterList.append(masterkeyname)
+        masterList.append(masterkeyvalue)
         log.info(f"master api keys {masterList}")
         decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        # decrypt_headers = {'Authorization' : masterkeyvalue}
         if decrypt_headers:
             decrypt_headers.update(api_dict)
             log.info(f"decrypt_headers {decrypt_headers}")
 
-            
-            
-            
-            
-            
-        if len(decrypt_headers)==0:
-            return post_error("400", "Error while getting inferenceApiKey, try again", None), 400
-        #prepare_dhruva_headers = UserUtils.decryptAes(SECRET_KEY,infkey)
-        #apiInfKey = infkey[1]
-        dhruva_results = UserUtils.send_fetch_req_for_dhruva(decrypt_headers)
-        if not dhruva_results:
-            return post_error("400", "Error in fetching glossary, Please try again", None), 400
-        res = CustomResponse(Status.GLOSSARY_FETCH_SUCCESS.value,"SUCCESS")
-        log.info(f"dhruva_results {dhruva_results}")
-
-        return dhruva_results
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_fetch_req_for_dhruva(decrypt_headers)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults()   
 
 
 
