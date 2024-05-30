@@ -31,7 +31,7 @@ with AI Technologies</div>
                         <Breadcrumb className="ULCA__breadcrumb">
                             <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
                             <Breadcrumb.Item href="#">Library</Breadcrumb.Item>
-                            <Breadcrumb.Item  style={{color:"white"}}>Data</Breadcrumb.Item>
+                            <Breadcrumb.Item active style={{color:"white"}}>Data</Breadcrumb.Item>
                         </Breadcrumb>
                       </div>
                     </Col>

@@ -536,6 +536,8 @@ footer ul.link li:first-child {
 .DatasetTxt {
   margin-left: 20px;
   margin-top: 5px;
+  display: flex;
+  margin-left: 0px;
 }
 
 #totalValue,

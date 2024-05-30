@@ -1,4 +1,4 @@
-import AppImg from "../img/DownloadApp/AppNew1.svg";
+import AppImg from "../assets/DownloadApp.png";
 import playStore from '../img/DownloadApp/googlePlay.png';
 import appStore from '../img/DownloadApp/appStore.png'
 import playStoreQR from '../img/DownloadApp/PlaystoreQRCode.jpg'

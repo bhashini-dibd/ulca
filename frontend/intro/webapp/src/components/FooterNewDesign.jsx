@@ -1,170 +1,106 @@
 import React from "react"; // Import React library
+import FooterLogo from '../assets/footerLogo.svg'
 
-import { FooterData, FootersData, socialMedia } from "./FooterNewDesignData"; // Importing data from FooterData.js
 import "./FooterNewDesign.css"; // Importing CSS file
 import { Col, Container, Row } from "react-bootstrap"; // Importing components from react-bootstrap
-// import { Link } from "react-router-dom"; // Importing Link component from react-router-dom
-// import CustomButton from "../buttonComponent/CustomButton";
 
-import Meity from "../img/Footer/MeityBlack.svg";
-import BhashiniImg from "../img/Footer/BhashiniBlack.svg";
+import playStore from '../img/DownloadApp/googlePlay.png';
+import appStore from '../img/DownloadApp/appStore.png'
 import useMedia from "../hooks/useMedia";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Arrow from '../img/arrow_forward.svg'
+import youtube from '../assets/socialmedia/youtube.svg'
+import facebook from '../assets/socialmedia/facebook.svg'
+import instagram from '../assets/socialmedia/instagram.svg'
+import twitter from '../assets/socialmedia/twitter.svg'
+import linkedin from '../assets/socialmedia/linkedin.svg'
 
 const FooterNewDesign = () => {
   const isMobile = useMedia("(max-width:600px)");
-  const renderTooltip = (message) => (
-    <Tooltip className="navbar-tooltip">
-      {message}
-    </Tooltip>
-  );
+ 
   return (
     <div className="FooterNewDesignContainer pt-5">
       {" "}
       {/* Applying FooterNewDesignContainer class */}
       <Container>
-        {" "}
-        {/* Using div component */}
         <Row>
-          {FootersData.map((data) => (
-            <Col xs={data?.sizeMob } md={6} lg={data?.size} className="mb-4 ps-4 mb-md-0 ps-md-0 FooterColumn" style={{
-              paddingLeft: "1.5rem", '@media (min-width: 768px)': {
-                paddingLeft: "0"
-              }
-            }}>
-              <div className="FooterNewDesignManagement" style={{gap:data?.title === 'Contact Us' ? "0px" : '20px'}}>
-                {" "}
-                {data?.title === 'Prayog' || data?.title === "Sahyogi" || data?.title === "Sanchalak" ? <OverlayTrigger placement="top"
-                  delay={{ show: 250, hide: 300 }}
-                  overlay={renderTooltip(data?.tooltipData)}>
-                  <div className="FooterNewDesignHeading"> {data.title}</div>
-                </OverlayTrigger> : <div className="FooterNewDesignHeading"> {data.title}</div>}
-                {/* Applying FooterNewDesignManagement class */}
-                {" "}
-                {/* Applying FooterNewDesignHeading class */}
-                {data.links.map((value) => (
-                  <div className="FooterNewDesignContent">
-                    {" "}
-                    {/* Applying FooterNewDesignContent class */}
-                    {isMobile || (value.text === 'State gov' || value.text === 'Mitra' || value.text === 'Udayat' || value.text === 'Vanianuvaad' || value.text === 'Lekhaanuvaad') ? (
-                      // <a href={`https://bhashini.gov.in${value.link}`} target="_blank">
-                      //   <div className="py-1 FooterNewDesignLinksColor">
-                      //     {" "}
-                      //     {value.text}
-                      //   </div>
-                      // </a>
-                      data?.title !== "Contact Us" ? <a href={`https://bhashini.gov.in${value.link}`} >
-                        <div className="py-1 FooterNewDesignLinksColor" dangerouslySetInnerHTML={{
-                          __html: value?.text,
-                        }} />
-                        {" "}
-                        {/* {value.text}
-                        </div> */}
-                      </a> : <div className="py-1 FooterNewDesignLinksColor" dangerouslySetInnerHTML={{
-                        __html: value?.text,
-                      }} />
-                    )
-                      : (value.text == 'ULCA' || value.text == 'Chitraanuvaad' || value.text == "Anuvaad" ? (
-                        <a href={value.link} target="_blank">
-                          <div className="py-1 FooterNewDesignLinksColor">
-                            {" "}
-                            {value.text}
-                          </div>
-                        </a>
-                      ) :
-                        //  <a href={`https://bhashini.gov.in${value.link}`} target="_blank">
-                        //   <div className="py-1 FooterNewDesignLinksColor">
-                        //     {" "}
-                        //     {value.text}
-                        //   </div>
-                        // </a>
-                        data?.title !== "Contact Us" ? <a href={`https://bhashini.gov.in${value.link}`}  >
-                          <div className="py-1 FooterNewDesignLinksColor" dangerouslySetInnerHTML={{
-                            __html: value?.text,
-                          }} />
-                          {" "}
-                          {/* {value.text} */}
-                          {/* </div> */}
-                        </a> : (value.icon === "check" ?
-                          <>
-                            <span className="py-1 FooterNewDesignLinksColor" style={{ width: value.icon === "check" ? "40%" : "100%" }} dangerouslySetInnerHTML={{
-                              __html: value?.text,
-                            }} /><span><img src={Arrow} /></span>
-                          </>
-                          : <div className="py-1 FooterNewDesignLinksColor" style={{ width: "100%" }} dangerouslySetInnerHTML={{
-                            __html: value?.text,
-                          }} />)
-                      )}
-                  </div>
-                ))}
-              </div>
-            </Col>
-          ))}
-          <hr className="my-2 my-md-2" />
-          <div className="FooterNewDesignBottomLinks">
-            <div className="FooterNewDesignBottomLinksSection">
-              <span className="FooterNewDesignBottomLinksName">
-                {/* <CustomButton
-          className="global_btn"
-          text={`Bhashadaan `}
-          link={"https://bhashini.gov.in/bhashadaan/en/home"}
-          target={"_blank"}
-        /> */}
-                <a
-                  href="https://bhashini.gov.in/bhashadaan/en/home"
-                  target="_blank"
-                >
-                  <div className="Footer_btn">Contribute to Bhashadaan</div>
-                </a>
-              </span>{" "}
-              {/* Applying FooterNewDesignBottomLinksName class */}
+        <Col sm={12} md={4} lg={3}>
+          <div>
+            <div>Digital India Bhashini Division</div>
+            <p>Electronics Niketan, 6-CGO Complex, New Delhi - 110003</p>
+            <div className="FooterNewDesign_logo">
+              <p className="m-0">Powered By</p>
+              <img src={FooterLogo}/>
             </div>
-            <div className="FooterSocialMedia">
-              <div className="FooterSocialMedia_Heading">Connect with us</div>
-              {socialMedia.map((data) => (
-                <a href={data?.link} target="_blank">
-                  <img src={data?.image} className="FooterSocialMediaImg" />
-                </a>
-              ))}
-            </div>
+            <p>Digital India Corporation(DIC)
+Ministry of Electronics & IT (MeitY)
+Government of India®</p>
           </div>
-        </Row>
-      </Container>
-      <div className="FooterNewDesignBottomLinks1">
-        <Container>
-          <div className="FooterNewDesignBottomLinkSeparator">
+        </Col>
+        <Col sm={12} md={4} lg={2} className={`${isMobile ? 'mt-3' : ''}`}>
+          <div>
+            <div className="mb-2">Quick Links</div>
             <div>
-              <span className="FooterNewDesignBottomLinks2Name">
-                <div className="media">
-                  <img
-                    className="img-fluid u-image"
-                    src={Meity}
-                    alt="meity-img"
-                  />
-                </div>
-              </span>
+
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
             </div>
-            <div className="FooterNewDesignBottomPolicyTerms">
-              <div className="media">
-                <img
-                  className="img-fluid u-image"
-                  src={BhashiniImg}
-                  alt="meity-img"
-                />
-              </div>
             </div>
-          </div>
-        </Container>
-      </div>
-      <div className="FooterCopyRight">
-        <div className="FooterCopyRightHeading">
-          Designed, Developed & Hosted by
-        </div>
-        <div className="FooterCopyRightDesc">
-          Digital India Bhashini Division (DIBD)
-        </div>
-      </div>
+        </Col>
+        <Col sm={12} md={4} lg={2} className={`${isMobile ? 'mt-3' : ''}`}>
+        <div>
+            <div className="mb-2">Category 1</div>
+            <div>
+
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            </div>
+            </div>
+        </Col>
+        <Col sm={12} md={4} lg={2}>
+        <div>
+            <div className="mb-2">Category 2</div>
+            <div>
+
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            <li>item1</li>
+            </div>
+            </div>
+        </Col>
+        <Col sm={12} md={4} lg={3} className={`${isMobile ? 'mt-4' : ''}`}>
+          <div>
+            <div>Get the Bhashini app</div>
+            <div className="d-flex justify-content-start align-items-center">
+              <img src={playStore} className="bhashiniapp__footer"/>
+              <img src={appStore} className="bhashiniapp__footer"/>
+            </div>
+            <div className={`${isMobile ? 'mt-3' : ''}`}>Join Us</div>
+            <div>
+            <div className="d-flex justify-content-start align-items-center">
+              <img src={youtube} className="bhashiniapp__footer"/>
+              <img src={facebook} className="bhashiniapp__footer"/>
+              <img src={instagram} className="bhashiniapp__footer"/>
+              <img src={twitter} className="bhashiniapp__footer"/>
+              <img src={linkedin} className="bhashiniapp__footer"/>
+            </div>
+            </div>
+            </div>
+        </Col>
+        </Row>
+        <hr />
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center pb-3">
+             <div>© 2024 - Copyright All rights reserved.  </div>
+             <div className=" Footer__documents">
+              <li>Terms & Condition</li>
+              <li>Privacy Policy</li>
+              <li>Contact Us</li>
+             </div>
+            </div>
+       </Container>
     </div>
   );
 };

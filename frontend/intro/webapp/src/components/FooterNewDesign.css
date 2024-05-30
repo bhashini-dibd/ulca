@@ -1,14 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 .FooterNewDesignContainer {
-  background: #F5F7FA;
+  background: #0B1941;
+  color: white;
   padding-top: 20px;
 }
-.FooterNewDesignContainer .FooterNewDesignManagement {
+.FooterNewDesignContainer .FooterNewDesign_logo {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   padding: 0px;
-  gap: 20px;
+  gap: 5px;
+  align-items: center;
+}
+
+.FooterNewDesignContainer .bhashiniapp__footer{
+  width: 120px;
+  height: 40px;
+  margin-right: 10px;
+  margin-top: 10px;
 }
 hr{
 flex-shrink: 0;
@@ -19,178 +27,11 @@ padding-left: 12px;
 border-top: 1px solid;
 color:rgb(171, 190, 209, 0.4);
 }
-@media (max-width: 650px) {
-  .FooterNewDesignContainer .FooterNewDesignManagement {
-    gap: 5px;
-  }
-}
-.FooterNewDesignContainer .FooterNewDesignManagement .FooterNewDesignHeading {
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 28px;
-  color: #212121;
-  font-family: "Roboto";
-}
-.FooterNewDesignContainer .FooterNewDesignManagement .FooterNewDesignContent {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  color: #000000;
-  display: flex;
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  width: 100%;
-  align-items: baseline;
 
-}
-.FooterNewDesignContainer .FooterNewDesignManagement .FooterNewDesignContent a, .FooterNewDesignContainer .FooterNewDesignManagement .FooterNewDesignContent .FooterNewDesignBottomPolicyTerms a {
-  text-decoration: none;
-  color: #000000;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem 0rem 1.5rem 0rem;
-  flex-shrink: 0;
-  width: 100%;
-  max-width: 100%;
-  padding: 0 12px;
-}
-@media (max-width: 550px) {
-  .FooterNewDesignContainer .FooterNewDesignBottomLinks {
-    justify-content: center !important;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 10px;
-    gap: 20px;
-  }
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks .FooterNewDesignBottomLinksName {
-  font-weight: 700;
-  font-size: 28px;
-  line-height: 35px;
-  color: #fcfaff;
-  margin-right: 15px;
-  display: flex;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks .FooterNewDesignBottomLinksName .Footer_btn {
-  width: 255px;
-  background-color: #FFFFFF;
-  border: 1px solid #0671E0;
-  color: #0671E0;
-  font-size: 16px;
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-  padding: 8px 16px;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks .FooterSocialMedia {
+.FooterNewDesignContainer .Footer__documents{
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 15px;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks .FooterSocialMedia .FooterSocialMedia_Heading {
-  font-size: 20px;
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  margin-right: 5px;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks .FooterSocialMedia .FooterSocialMediaImg {
-  height: 30.77px;
-  width: 30.9px;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks1 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1rem 0rem;
-  background-color: #FFFFFF;
-  padding: 10px 80px;
-  margin: 0px;
-}
-@media (max-width: 650px) {
-  .FooterNewDesignContainer .FooterNewDesignBottomLinks1 {
-    justify-content: center;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-  }
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks1 .FooterNewDesignBottomLinkSeparator {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ABBED1;
-}
-@media (max-width: 650px) {
-  .FooterNewDesignContainer .FooterNewDesignBottomLinks1 .FooterNewDesignBottomLinkSeparator {
-    flex-direction: column;
-  }
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks1 .FooterNewDesignBottomLinksSection {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks1 .FooterNewDesignManagement {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks1 .FooterNewDesignBottomLinks2Name {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  /* Foundation/Primary/200 */
-  width: 868px;
-  color: #e9d7fe;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks1 .FooterNewDesignBottomPolicyTerms {
-  display: flex;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  color: #e9d7fe;
-}
-.FooterNewDesignContainer .FooterNewDesignBottomLinks1 .FooterNewDesignLinksColor {
-  color: #e9d7fe;
-}
-.FooterNewDesignContainer .FooterCopyRight {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 0px 10px 0px;
-  background-color: #FFFFFF;
-}
-@media screen and (max-width: 600px) {
-  .FooterNewDesignContainer .FooterCopyRight {
-    padding-bottom: 20px;
-  }
-}
-.FooterNewDesignContainer .FooterCopyRight .FooterCopyRightHeading {
-  font-size: 12px;
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  color: #89939E;
-}
-.FooterNewDesignContainer .FooterCopyRight .FooterCopyRightDesc {
-  font-size: 14px;
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  color: #212121;
-}
-@media (min-width: 768px) {
-  .FooterColumn{
-    padding-left: 0!important;
-  }
+ 
 }

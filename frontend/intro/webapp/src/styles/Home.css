@@ -55,13 +55,19 @@
 
 /* Banner */
 
+.ULCA__disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
+
 .ULCA__Homesection {
   background-image: url('../assets/BannerImg.png');
     background-size: cover;
     background-position: center;
     color: white;
     /* padding: 20px 0; */
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
     height: 400px;
     font-family: "Noto-Regular";
 }
