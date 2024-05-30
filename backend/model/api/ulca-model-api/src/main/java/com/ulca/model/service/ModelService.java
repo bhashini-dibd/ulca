@@ -2507,7 +2507,7 @@ public class ModelService {
 	
 	public AppModelsResponse getAppModels(String taskType) {
 		AppModelsResponse appModelsResponse = new AppModelsResponse();
-		String[] defaultTasks = { "translation", "asr", "transliteration","tts"};
+		String[] defaultTasks = { "translation", "asr", "transliteration","tts","ocr"};
 		List<String> defaultTasksList = Arrays.asList(defaultTasks);
 		List<String> tasksRequested = new ArrayList<String>();
 
