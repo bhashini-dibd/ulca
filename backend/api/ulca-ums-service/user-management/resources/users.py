@@ -465,8 +465,8 @@ class CreateGlossary(Resource):
             masterList.append(masterkeyname)
             masterList.append(masterkeyvalue)
         log.info(f"master api keys {masterList}")
-        #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        decrypt_headers = {'Authorization' : masterkeyvalue}
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        # decrypt_headers = {'Authorization' : masterkeyvalue}
         if decrypt_headers:
             decrypt_headers.update(api_dict)
             log.info(f"decrypt_headers {decrypt_headers}")
@@ -514,8 +514,8 @@ class DeleteGlossary(Resource):
             masterList.append(masterkeyname)
             masterList.append(masterkeyvalue)
         log.info(f"master api keys {masterList}")
-        #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        decrypt_headers = {'Authorization' : masterkeyvalue}
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        # decrypt_headers = {'Authorization' : masterkeyvalue}
         if decrypt_headers:
             decrypt_headers.update(api_dict)
             log.info(f"decrypt_headers {decrypt_headers}")
@@ -562,8 +562,8 @@ class FetchGlossary(Resource):
             masterList.append(masterkeyname)
             masterList.append(masterkeyvalue)
         log.info(f"master api keys {masterList}")
-        #decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        decrypt_headers = {'Authorization' : masterkeyvalue}
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        # decrypt_headers = {'Authorization' : masterkeyvalue}
         if decrypt_headers:
             decrypt_headers.update(api_dict)
             log.info(f"decrypt_headers {decrypt_headers}")
