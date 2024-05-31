@@ -6,7 +6,7 @@ from flask import request, jsonify
 import config
 import logging
 import requests
-from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
+from config import MAX_API_KEY, SECRET_KEY, PATCH_URL, temp_api_key
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -453,7 +453,7 @@ class CreateGlossary(Resource):
         userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
         if not userinferenceApiKey:
             return post_error("400", "Couldn't find the user inference api Key", None), 400
-        api_dict = {"api-key":userinferenceApiKey}
+        api_dict = {"api-key":temp_api_key}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
         if not pipelineID:
             return post_error("400", "Couldn't find the user inference api Key", None), 400
@@ -504,11 +504,11 @@ class DeleteGlossary(Resource):
         
         userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
         if not userinferenceApiKey:
-            return post_error("404", "Couldn't find the user inference api Key", None), 404
-        api_dict = {"api-key":userinferenceApiKey}
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":temp_api_key}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
         if not pipelineID:
-            return post_error("404", "Couldn't find the user inference api Key", None), 404
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
         if pipelineID and isinstance(pipelineID,dict):
@@ -537,11 +537,11 @@ class FetchGlossary(Resource):
         user_id=request.headers["x-user-id"]
         userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
         if not userinferenceApiKey:
-            return post_error("404", "Couldn't find the user inference api Key", None), 404
-        api_dict = {"api-key":userinferenceApiKey}
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":temp_api_key}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
         if not pipelineID:
-            return post_error("404", "Couldn't find the user inference api Key", None), 404
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
         if pipelineID and isinstance(pipelineID,dict):
