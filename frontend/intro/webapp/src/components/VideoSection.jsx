@@ -192,7 +192,8 @@ const VideoSection = () => {
           marginBottom:"40px"
         }}
       >
-       Why <span style={{color:"#2947A3"}}>ULCA</span> 
+       {/* Why <span style={{color:"#2947A3"}}>ULCA</span>  */}
+       Data Excellence Framework
       </div>
       <div
         className="display-6 text-center"
