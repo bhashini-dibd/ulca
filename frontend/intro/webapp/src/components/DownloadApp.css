@@ -163,3 +163,24 @@
     gap: 15px;
   }
 }
+
+@media screen and (max-width: 1400px) {
+  
+  .content-left1 .DownloadAppLeft .DownloadAppLeftHeading {
+    font-size: 28px;
+   
+  }
+
+  .background-image{
+    width: 80%;
+  }
+
+  .image-right{
+    justify-content: flex-end;
+  }
+
+  .content-left2ContainerImg{
+    height: 150px;
+    width: 150px;
+  }
+}
