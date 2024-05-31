@@ -1,106 +1,150 @@
 import React from "react"; // Import React library
-import FooterLogo from '../assets/footerLogo.svg'
+import FooterLogo from "../assets/footerLogo.svg";
 
 import "./FooterNewDesign.css"; // Importing CSS file
 import { Col, Container, Row } from "react-bootstrap"; // Importing components from react-bootstrap
 
-import playStore from '../img/DownloadApp/googlePlay.png';
-import appStore from '../img/DownloadApp/appStore.png'
+import playStore from "../img/DownloadApp/googlePlay.png";
+import appStore from "../img/DownloadApp/appStore.png";
 import useMedia from "../hooks/useMedia";
-import youtube from '../assets/socialmedia/youtube.svg'
-import facebook from '../assets/socialmedia/facebook.svg'
-import instagram from '../assets/socialmedia/instagram.svg'
-import twitter from '../assets/socialmedia/twitter.svg'
-import linkedin from '../assets/socialmedia/linkedin.svg'
+import youtube from "../assets/socialmedia/youtube.svg";
+import facebook from "../assets/socialmedia/facebook.svg";
+import instagram from "../assets/socialmedia/instagram.svg";
+import twitter from "../assets/socialmedia/twitter.svg";
+import linkedin from "../assets/socialmedia/linkedin.svg";
 
 const FooterNewDesign = () => {
   const isMobile = useMedia("(max-width:600px)");
- 
+
   return (
     <div className="FooterNewDesignContainer pt-5">
       {" "}
       {/* Applying FooterNewDesignContainer class */}
       <Container>
         <Row>
-        <Col sm={12} md={4} lg={3}>
-          <div>
-            <div>Digital India Bhashini Division</div>
-            <p>Electronics Niketan, 6-CGO Complex, New Delhi - 110003</p>
-            <div className="FooterNewDesign_logo">
-              <p className="m-0">Powered By</p>
-              <img src={FooterLogo}/>
+          <Col sm={12} md={4} lg={3}>
+            <div className="about_company">
+              <div className="company_name">
+                Digital India Bhashini Division
+              </div>
+              <p className="company_address m-0">
+                Electronics Niketan, 6-CGO Complex, <br /> New Delhi - 110003
+              </p>
+              <div className="FooterNewDesign_logo">
+                <p className="m-0 company_address">Powered By</p>
+                <img src={FooterLogo} />
+              </div>
+              <p className="company_address">
+                Digital India Corporation(DIC) Ministry of Electronics & IT
+                (MeitY) Government of India®
+              </p>
             </div>
-            <p>Digital India Corporation(DIC)
-Ministry of Electronics & IT (MeitY)
-Government of India®</p>
-          </div>
-        </Col>
-        <Col sm={12} md={4} lg={2} className={`${isMobile ? 'mt-3' : ''}`}>
-          <div>
-            <div className="mb-2">Quick Links</div>
+          </Col>
+          <Col sm={12} md={4} lg={2} className={`${isMobile ? "mt-3" : ""}`}>
             <div>
+              {/* <div className="mb-3 footerlinks__header">Quick Links</div> */}
+              <div className="footerlinks__links">
+                <li>
+                  <a href="#">Home</a>
+                </li>
+                <li>
+                  <a href="#">Arpan</a>
+                </li>
+                <li>
+                  <a href="#">Sahyogi</a>
+                </li>
+                <li>
+                  <a href="#">Careers</a>
+                </li>
+                <li>
+                  <a href="#">Bhashadaan</a>
+                </li>
+              </div>
+            </div>
+          </Col>
+          <Col sm={12} md={4} lg={2} className={`${isMobile ? "mt-3" : ""}`}>
+            <div>
+              {/* <div className="mb-3 footerlinks__header">Category 1</div> */}
+              <div className="footerlinks__links">
+                <li>
+                  <a href="#">Sanchalak</a>
+                </li>
+                <li>
+                  <a href="#">ULCA</a>
+                </li>
+                <li>
+                  <a href="#">Ecosystem</a>
+                </li>
+                <li>
+                  <a href="#">Pravakta</a>
+                </li>
+              </div>
+            </div>
+          </Col>
+          <Col sm={12} md={4} lg={2} className={`${isMobile ? "mt-3" : ""}`}>
+            <div>
+              {/* <div className="mb-3 footerlinks__header">Category 2</div> */}
+              <div className="footerlinks__links">
+                <li>
+                  <a href="#">Mitra</a>
+                </li>
+                <li>
+                  <a href="#">Startups</a>
+                </li>
+                <li>
+                  <a href="#">Udyat</a>
+                </li>
+                <li>
+                  <a href="#">Prayog</a>
+                </li>
+              </div>
+            </div>
+          </Col>
 
-            <li>item1</li>
-            <li>item1</li>
-            <li>item1</li>
-            <li>item1</li>
-            </div>
-            </div>
-        </Col>
-        <Col sm={12} md={4} lg={2} className={`${isMobile ? 'mt-3' : ''}`}>
-        <div>
-            <div className="mb-2">Category 1</div>
-            <div>
+          <Col sm={12} md={4} lg={3} className={`${isMobile ? "mt-4" : ""}`}>
+            <div className="bhashini__app">
+              <div className="company_name">Get the Bhashini app</div>
+              <div className="d-flex justify-content-start align-items-center">
+                <img src={playStore} className="bhashiniapp__footer" />
+                <img src={appStore} className="bhashiniapp__footer" />
+              </div>
+              <div>
+                <div
+                  className={`${
+                    isMobile ? "mt-3" : "mt-2"
+                  } footerlinks__header`}
+                >
+                  Join Us
+                </div>
+                <div className="d-flex justify-content-start align-items-center">
+                  <a href="#"><img
+                    src={youtube}
+                    className="bhashiniapp__footerIcons"
+                    height="24px"
+                    width="24px"
+                  /></a>
+                  <a href="#"><img src={facebook} className="bhashiniapp__footerIcons" /></a>
+                  <a href="#"><img src={instagram} className="bhashiniapp__footerIcons" /></a>
+                  <a href="#"><img src={twitter} className="bhashiniapp__footerIcons" /></a>
+                  <a href="#"><img src={linkedin} className="bhashiniapp__footerIcons" /></a>
+                </div>
 
-            <li>item1</li>
-            <li>item1</li>
-            <li>item1</li>
-            <li>item1</li>
+              </div>
             </div>
-            </div>
-        </Col>
-        <Col sm={12} md={4} lg={2}>
-        <div>
-            <div className="mb-2">Category 2</div>
-            <div>
-
-            <li>item1</li>
-            <li>item1</li>
-            <li>item1</li>
-            <li>item1</li>
-            </div>
-            </div>
-        </Col>
-        <Col sm={12} md={4} lg={3} className={`${isMobile ? 'mt-4' : ''}`}>
-          <div>
-            <div>Get the Bhashini app</div>
-            <div className="d-flex justify-content-start align-items-center">
-              <img src={playStore} className="bhashiniapp__footer"/>
-              <img src={appStore} className="bhashiniapp__footer"/>
-            </div>
-            <div className={`${isMobile ? 'mt-3' : ''}`}>Join Us</div>
-            <div>
-            <div className="d-flex justify-content-start align-items-center">
-              <img src={youtube} className="bhashiniapp__footer"/>
-              <img src={facebook} className="bhashiniapp__footer"/>
-              <img src={instagram} className="bhashiniapp__footer"/>
-              <img src={twitter} className="bhashiniapp__footer"/>
-              <img src={linkedin} className="bhashiniapp__footer"/>
-            </div>
-            </div>
-            </div>
-        </Col>
+          </Col>
         </Row>
         <hr />
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center pb-3">
-             <div>© 2024 - Copyright All rights reserved.  </div>
-             <div className=" Footer__documents">
-              <li>Terms & Condition</li>
-              <li>Privacy Policy</li>
-              <li>Contact Us</li>
-             </div>
-            </div>
-       </Container>
+          <div>© 2024 - Copyright All rights reserved. </div>
+          <div className=" Footer__documents">
+            <li><a href="#">Terms & Condition</a></li>
+            <li style={{ color: "#73B8F9" }}>|</li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li style={{ color: "#73B8F9" }}>|</li>
+            <li><a href="#">Contact Us</a></li>
+          </div>
+        </div>
+      </Container>
     </div>
   );
 };

@@ -3,6 +3,10 @@ import img1 from '../assets/whyulca1.svg';
 import img2 from '../assets/whyulca2.svg';
 import img3 from '../assets/whyulca3.svg';
 import img4 from '../assets/whyulca4.svg';
+import img5 from '../assets/WhyUlca5.svg';
+import img6 from '../assets/WhyUlca6.svg';
+import img7 from '../assets/WhyUlca7.svg';
+import img8 from '../assets/WhyUlca8.svg';
 import arrowBack from '../assets/arrow_back.svg';
 import arrowFront from '../assets/arrow_front.svg';
 import Slider from 'react-slick';
@@ -12,36 +16,55 @@ import '../styles/VideoSection.css'
 import useMedia from "../hooks/useMedia";
 import { Col, Row } from "react-bootstrap";
 export const HomeApproachData = [
+ 
   {
       id:1,
-      title:'Identify Problem',
-      description:"We meticulously analyze business challenges and data gaps to pinpoint the specific problem areas in your business. Through comprehensive assessments, we understand the nuances of the issues and their impact on business objectives.",
+      title:'Metadata Collection',
+      description:"Collect extensive metadata related to dataset for various analysis. ",
       image:img1,
   },
   {
-      id:1,
-      title:'Preparation',
-      description:"We strategize and outline a data-driven plan, identifying the necessary resources and technologies. We build a very strong foundational data layer for your business that sets the stage to efficiently tackle the upcoming challenges through effective analytics and AI implementation.",
-      image:img1,
+      id:2,
+      title:'Establishing Dominance',
+      description:"Aiming to become the leading data repository for indian language resources. ",
+      image:img2,
   },
   {
-      id:1,
-      title:'Prototype',
-      description:"We develop prototypes and models to test potential solutions and gauge their effectiveness. By iteratively refining prototypes based on feedback, we ensure the alignment of proposed solutions with your business requirements. ",
-      image:img1,
+      id:3,
+      title:'Curate and standardize',
+      description:"Collect datasets for MT, ASR, TTS, OCR and various NLP tasks in standardized but extensible formats.",
+      image:img3,
   },
   {
-      id:1,
-      title:'Evaluation',
-      description:"GWC lets you experience and rigorously evaluate the performance of analytics models against predefined success metrics. We gather insights from evaluations to fine-tune algorithms, ensuring they align with your evolving business needs and objectives. ",
-      image:img1,
-  },
-  {
-      id:1,
-      title:'Kick-Start',
-      description:"This stage involves the Kick-Start the partnership for Data & AI solutions. Discuss the partnership model, objectives, targets and road map. GWC will be an extended arm for you’re your business with laser focused approach on ROI.",
-      image:img1,
-  },
+    id:4,
+    title:'Seamless Exploration',
+    description:"Simple interface to search and download datasets based on various filters.",
+    image:img4,
+},
+{
+    id:5,
+    title:'Attributing Excellence',
+    description:"Proper attribution for every contributor at the record level.",
+    image:img5,
+},
+{
+  id:6,
+  title:'Elevating Standards',
+  description:"Perform various quality checks on the submitted datasets.",
+  image:img6,
+},
+{
+  id:7,
+  title:'Precision Perfected',
+  description:"Trained models for language specific tasks.",
+  image:img7,
+},
+{
+  id:8,
+  title:'Efficiency Unleashed',
+  description:"Deduplication capability built-in",
+  image:img8,
+},
   // {
   //     id:1,
   //     title:'Problem',
@@ -166,10 +189,10 @@ const VideoSection = () => {
           fontWeight: 600,
           fontFamily: "Noto-Bold",
           letterSpacing: "1px",
-          marginBottom:"20px"
+          marginBottom:"40px"
         }}
       >
-       Why ULCA
+       Why <span style={{color:"#2947A3"}}>ULCA</span> 
       </div>
       <div
         className="display-6 text-center"
@@ -177,7 +200,7 @@ const VideoSection = () => {
           fontFamily: "Noto-Regular",
           fontSize: "16px",
           fontWeight: 400,
-          lineHeight: "24px",
+          lineHeight: "21.79px",
           marginBottom:"10px"
         }}
       >

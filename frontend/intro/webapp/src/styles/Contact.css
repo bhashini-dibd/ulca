@@ -21,20 +21,53 @@
 
   .Contact__bannerHeading{
     font-family: "Noto-Bold";
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 500;
-    line-height: 54px;
+    line-height: 48px;
     text-align: left;
-    
     }
     
+
     .Contact__bannerDesc{
     font-family: "Noto-Regular";
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 400;
     line-height: 21.79px;
     text-align: left;
     
+    }
+
+    .footerlinks__links li a:hover {
+      text-decoration: none;
+      /* color: #2947A3; */
+    }
+
+    .ContactUs__contactButton{
+      width: 180px;
+      height: 52px;
+      gap: 0px;
+      opacity: 0px;
+      background-color: #2947A3;
+      font-family: "Noto-Regular";
+      /*padding: 10px 30px;
+      */font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      letter-spacing: 0.005em;
+      text-align: left;
+      text-decoration: none;
+      border-radius: 4px;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      -ms-border-radius: 4px;
+      -o-border-radius: 4px;
+}
+
+    .ContactUs__contactButtonText{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
 
 

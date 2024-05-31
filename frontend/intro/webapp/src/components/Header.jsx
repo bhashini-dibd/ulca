@@ -8,6 +8,7 @@ import Arrow from '../assets/arrow_nav.svg'
 import Logo from '../assets/bhashini-ulcaLogo.png'
 const MobileHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const isSmallMobile = useMedia("(max-width:350px)");
   const { t } = useTranslation();
   const menuRef = useRef(null);
   const toggleMenu = () => {
@@ -62,21 +63,61 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://anuvaad.bhashini.gov.in/"
+                      href="#"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Anuvaad
+                      About us
                     </a>
                   </li>
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://chitraanuvaad.bhashini.co.in/"
+                      href="#"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Chitraanuvaad
+                      Vision & Mission
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Our Objectives
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Bhashini Ecosystem
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      CEO & Our Team
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Our Journey
                     </a>
                   </li>
                 </ul>
@@ -84,7 +125,7 @@ const MobileHeader = () => {
 
               <li style={{ position: "relative" }}>
                 <div  onClick={(e) => toggleSubMenu(e, 'submenu-open1')} className="nav-color">
-                  Sahyogi{" "}
+                  Arpan{" "}
                 </div>
                 <img
                   className="submenu-arrow"
@@ -96,21 +137,51 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://bhashini.gov.in/sahyogi"
+                      href="#"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Empanelled Agencies
+                     Our Services
                     </a>
                   </li>
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://bhashini.gov.in/career"
+                      href="#"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Career
+                     Our Products
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                     Careers
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                     Tenders/EOI
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                     On - Premise
                     </a>
                   </li>
                 </ul>
@@ -118,7 +189,7 @@ const MobileHeader = () => {
 
               <li style={{ position: "relative" }}>
                 <div className="nav-color" onClick={(e) => toggleSubMenu(e, 'submenu-open3')}>
-                  Sanchalak
+                  Prayog
                 </div>
                 <img
                   className="submenu-arrow1"
@@ -130,25 +201,69 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://link1.com"
+                      href="#"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Link1
+                      Parikshan App
                     </a>
                   </li>
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://link2.com"
+                      href="#"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Link2
+                      Model Vatika
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Data Vatika
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Abhiyantrikee Prayogshala
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Avinya Prayogshala
                     </a>
                   </li>
                 </ul>
               </li>
+
+              <li>
+                <a className="nav-color" href="#">
+                  Sahyogi
+                </a>
+              </li>
+
+              <li>
+                <a className="nav-color" href="#">
+                  Sanchalak
+                </a>
+              </li>
+
+             
 
               <li style={{ position: "relative" }}>
                 <div  onClick={(e) => toggleSubMenu(e, 'submenu-open4')} className="nav-color" >
@@ -168,23 +283,63 @@ const MobileHeader = () => {
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Link3
+                      CEO Speaks
                     </a>
                   </li>
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://link4.com"
+                      href="#"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Link4
+                      News & Events
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Awards & Achievement
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Videos & Gallery
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Industry Association
+                    </a>
+                  </li>
+                  <li className="sub-item">
+                    <a
+                      className="nav-color"
+                      href="#"
+                      target="_self"
+                      rel="noopener noreferrer"
+                    >
+                      Academician/ Competitions/Hackathons/GICs
                     </a>
                   </li>
                 </ul>
               </li>
 
-              <li style={{ position: "relative" }}>
+              {/* <li style={{ position: "relative" }}>
                 <div className="nav-color" onClick={(e) => toggleSubMenu(e, 'submenu-open5')}>
                   Tender's/EOI's
                 </div>
@@ -250,7 +405,7 @@ const MobileHeader = () => {
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
             </ul>
           </div>
         )}
@@ -264,7 +419,7 @@ const MobileHeader = () => {
     href="https://bhashini.gov.in/bhashadaan/en/home"
     target="_blank"
     rel="noopener noreferrer"
-    style={{ borderRadius: "4px",fontSize:"12px", marginRight:"5px",backgroundColor:"white", border:"1px solid #2947A3", color:"#2947A3" }}
+    style={{ borderRadius: "4px",fontSize:isSmallMobile ? "9px" :"12px", marginRight:"5px",backgroundColor:"white", border:"1px solid #2947A3", color:"#2947A3" }}
   >
     Bhashadaan
   </a>
@@ -272,10 +427,10 @@ const MobileHeader = () => {
     role="button"
     tabIndex={0}
     className="theme-btn btn btn-primary"
-    href="https://bhashini.gov.in/bhashadaan/en/home"
+    href="https://play.google.com/store/apps/details?id=com.dibd.bhashini&hl=en&gl=US&pli=1"
     target="_blank"
     rel="noopener noreferrer"
-    style={{ borderRadius: "4px",fontSize:"12px" }}
+    style={{ borderRadius: "4px",fontSize:isSmallMobile ? "9px" :"12px" }}
   >
     Download App
   </a>
@@ -348,19 +503,49 @@ const Dropdown = ({ label, items }) => {
 
 function Header() {
   const isMobile = useMedia("(max-width:900px)");
+ 
   const {getdefaultFontSize} = useContext(AppContext);
   
 
   const dropdownItems1 = [
-    { label: 'About Bhashini', href: 'https://bhashini.gov.in/about-bhashini' },
-    { label: 'Team', href: 'https://bhashini.gov.in/teams' },
+    { label: 'About us', href: '#' },
+    { label: 'Vision & Mission', href: '#' },
+    { label: 'Our Objectives', href: '#' },
+    { label: 'Bhashini Ecosystem', href: '#' },
+    { label: 'CEO & Our Team', href: '#' },
+    { label: 'Our Journey', href: '#' },
+   
   ];
 
   const dropdownItems2 = [
-    { label: 'About Arpan', href: 'https://bhashini.gov.in/about-bhashini' },
-    { label: 'Team', href: 'https://bhashini.gov.in/teams' },
+    { label: 'Our Services', href: '#' },
+    { label: 'Our Products', href: '#' },
+    { label: 'Careers', href: '#' },
+    { label: 'Tenders/EOI', href: '#' },
+    { label: 'On - Premise', href: '#' },
+    { label: 'Team', href: '#' },
   ];
 
+  const dropdownItems3 = [
+   
+    { label: 'Parikshan App', href: '#' },
+    { label: 'Model Vatika', href: '#' },
+    { label: 'Data Vatika', href: '#' },
+    { label: 'Abhiyantrikee Prayogshala', href: '#' },
+    { label: 'Avinya Prayogshala', href: '#' },
+   
+  ];
+
+  const dropdownItems4 = [
+   
+    { label: 'CEO Speaks', href: 'https://bhashini.gov.in/teams' },
+    { label: 'News & events', href: 'https://bhashini.gov.in/teams' },
+    { label: 'Awards & Achievements', href: 'https://bhashini.gov.in/teams' },
+    { label: 'Videos & Gallery', href: 'https://bhashini.gov.in/teams' },
+    { label: 'Industry Association', href: 'https://bhashini.gov.in/teams' },
+    { label: 'Academician/Competitions/Hackathons/GICs', href: 'https://bhashini.gov.in/teams' },
+   
+  ];
 
   const { t } = useTranslation();
   return (
@@ -455,10 +640,20 @@ function Header() {
                 </li> */}
                 <Dropdown label="About" items={dropdownItems1} />
                 <Dropdown label="Arpan" items={dropdownItems2} />
-                <Dropdown label="Prayog" items={dropdownItems1} />
-                <Dropdown label="Sagyogi" items={dropdownItems1} />
-                <Dropdown label="Sanchalak" items={dropdownItems1} />
-                <Dropdown label="Pravakta" items={dropdownItems1} />
+                <Dropdown label="Prayog" items={dropdownItems3} />
+                <li className="nav-item">
+                  <a className="nav-link" href="https://bhashini.gov.in/">
+                   Sahyogi
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="https://bhashini.gov.in/">
+                   Sanchalak
+                  </a>
+                </li>
+                {/* <Dropdown label="Sagyogi" items={dropdownItems1} /> */}
+                {/* <Dropdown label="Sanchalak" items={dropdownItems1} /> */}
+                <Dropdown label="Pravakta" items={dropdownItems4} />
                 {/* <li className="dropdown" ref={dropdownRef}>
                   <a
                     className="dropdown-toggle nav-link"
@@ -515,7 +710,8 @@ function Header() {
                 href="https://bhashini.gov.in/bhashadaan/en/home"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{borderRadius: "4px", marginRight:"10px"}}
+                // style={{borderRadius: "4px", marginRight:"10px"}}
+                style={{ borderRadius: "4px", marginRight:"10px",backgroundColor:"white", border:"1px solid #2947A3", color:"#2947A3"}}
               >
                 Bhashadaan
               </a>
@@ -523,12 +719,12 @@ function Header() {
                 role="button"
                 tabIndex={0}
                 className="theme-btn btn btn-primary"
-                href="https://bhashini.gov.in/bhashadaan/en/home"
+                href="https://play.google.com/store/apps/details?id=com.dibd.bhashini&hl=en&gl=US&pli=1"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{borderRadius: "4px"}}
               >
-                Bhashadaan
+                Download App
               </a>
             </div>
           </div>

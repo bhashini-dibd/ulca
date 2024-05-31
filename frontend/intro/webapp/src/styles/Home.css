@@ -121,6 +121,7 @@ text-align: left;
   background-color: transparent;
   padding: 0;
   font-family: "Noto-Bold";
+  color:"#F1F1F1  "
 }
 
 .ULCA__breadcrumb .breadcrumb{
@@ -130,9 +131,10 @@ text-align: left;
 
 .ULCA__breadcrumb .breadcrumb-item + .breadcrumb-item::before {
   content: ">>  ";
-  color: white;
+  color: #F1F1F1;
   font-size: 12px;
   padding: 4px 6px;
+  
 }
 
 .ULCA__breadcrumb .breadcrumb-item + .breadcrumb-item a{
@@ -372,7 +374,7 @@ text-align: left;
 
 .submenu-arrow1 {
   position: absolute;
-  left: 115px;
+  left: 80px;
   top: 15px;
   transition: transform 0.3s ease;
   font-size: 16px;

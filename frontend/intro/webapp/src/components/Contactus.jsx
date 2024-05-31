@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/Contact.css";
-
+import ArrowRight from '../assets/Arrow-white.svg'
 
 import { Breadcrumb, Button, Col, Container, Row } from "react-bootstrap";
 import bannerImg from "../assets/bannerImg1.png";
@@ -22,7 +22,9 @@ const Contactus = () => {
                     
                   </Col>
                   <Col md={6} className="d-flex justify-content-center align-items-center Contact__bannerImg">
-                     <Button>Contact us</Button>
+                     <a href="#" className="ContactUs__contactButton">
+                      <div className="ContactUs__contactButtonText">Contact us <img src={ArrowRight} className="ml-2"/></div>
+                     </a>
                   </Col>
               </Row>
           </Container>

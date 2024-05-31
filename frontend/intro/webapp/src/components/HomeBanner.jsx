@@ -29,9 +29,9 @@ with AI Technologies</div>
                       <div>
 
                         <Breadcrumb className="ULCA__breadcrumb">
-                            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-                            <Breadcrumb.Item href="#">Library</Breadcrumb.Item>
-                            <Breadcrumb.Item active style={{color:"white"}}>Data</Breadcrumb.Item>
+                            <Breadcrumb.Item href="#" style={{color:"#F1F1F1"}}><span style={{color:"#F1F1F1"}}>Home</span></Breadcrumb.Item>
+                            <Breadcrumb.Item href="#" ><span style={{color:"#F1F1F1"}}>Sanchalak</span></Breadcrumb.Item>
+                            <Breadcrumb.Item active style={{color:"#F1F1F1"}}>ULCA</Breadcrumb.Item>
                         </Breadcrumb>
                       </div>
                     </Col>

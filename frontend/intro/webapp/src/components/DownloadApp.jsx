@@ -1,8 +1,8 @@
 import AppImg from "../assets/DownloadApp.png";
 import playStore from '../img/DownloadApp/googlePlay.png';
 import appStore from '../img/DownloadApp/appStore.png'
-import playStoreQR from '../img/DownloadApp/PlaystoreQRCode.jpg'
-import appStoreQR from '../img/DownloadApp/AppleQRCode.jpg'
+import playStoreQR from '../img/DownloadApp/PlaystoreQRCode.jpeg'
+import appStoreQR from '../img/DownloadApp/AppleQRCode.jpeg'
 import "./DownloadApp.css";
 import { Container } from "react-bootstrap";
 import useMedia from "../hooks/useMedia";

@@ -81,6 +81,11 @@
   gap: 25px;
   align-items: center;
 }
+
+.content-left2ContainerImg{
+  width: 200px;
+  height: 200px;
+}
 @media screen and (max-width: 600px) {
   .content-left2 .content-left2Container {
     gap: 20px;

@@ -13,6 +13,8 @@ import { Card, Col, Container, Dropdown, Form, Row } from "react-bootstrap";
 import CardImg1 from "../assets/analytics.svg";
 import CardImg2 from "../assets/modeling.svg";
 import CardImg3 from "../assets/benchmark.svg";
+import DatasetArrow from '../assets/datasetCardArrow.svg'
+import DatasetArrowDisabled from '../assets/Arrow-gray.svg'
 const HomeDatasets = () => {
   const [selectedValue, setSelectedDataset] = useState("parallel-corpus");
   const [apiValue, setApiValue] = useState("parallel-corpus");
@@ -488,7 +490,7 @@ const HomeDatasets = () => {
                       style={{
                         display: "flex",
                         justifyContent: "flex-start",
-                        width: "60%",
+                        width: "70%",
                         // marginTop: "10px",
                         padding:"10px 40px",
                         margin:"0px"
@@ -506,7 +508,7 @@ const HomeDatasets = () => {
                       >
                         <MenuItem
                           value={"parallel-corpus"}
-                          style={{ display: "flex" }}
+                          style={{ display: "flex",color:"#150202",fontSize:"16px", fontWeight:400, fontFamily:"Noto-Regular" }}
                         >
                           Parallel Corpus
                         </MenuItem>
@@ -521,7 +523,7 @@ const HomeDatasets = () => {
                     </FormControl>
                     <h6
                       id="totalValue"
-                      style={{ display: "flex", marginLeft: "40px",marginTop:"0px" }}
+                      style={{ display: "flex", marginLeft: "40px",marginTop:"0px" , fontFamily:"Noto-Bold"}}
                     >
                       {isLoadingDrop ? (
                         <Loader />
@@ -536,7 +538,7 @@ const HomeDatasets = () => {
                       )}
                     </h6>
                     <hr style={{overflow:"hidden", width:"90%"}} />
-                    <a href="#dataset-dashboard" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px"}}>Go to dashboard →</a>
+                    <a href="#dataset-dashboard" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px", color:"#2947A3", fontSize:"16px", fontWeight:600, fontFamily:"Noto-Bold"}}>Go to dashboard <img src={DatasetArrow} className="ml-2"/></a>
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -568,7 +570,7 @@ const HomeDatasets = () => {
                       style={{ height: "65px", width: "65px" }}
                       className="mb-3"
                     />
-                    <div data-tooltip="Datasets are collection of structured data that serve as a input for training machine learning models, enablings algorithms to learn patterns and perform tasks based on provided information">
+                    <div  data-tooltip="Models are computational algorithms specifically designed for understanding and processing human language. They enable machines to analyze, interpret, and generate human-like text, facilitating applications such as language translation, sentiment analysis, and chatbot interactions.">
                       <img
                         src={info}
                         className="w-100"
@@ -578,15 +580,16 @@ const HomeDatasets = () => {
                   </div>
 
                   <Card.Text className="text-start">
-                    <p className="DatasetTxt"  style={{  marginLeft: "40px",marginTop:"0px" }}>Total model count</p>
+                    <p className="DatasetTxt"  style={{  marginLeft: "40px",marginTop:"0px",color:"#150202",fontSize:"16px", fontWeight:400, fontFamily:"Noto-Regular" }}>Total model count</p>
                     <h6
                       id="totalValue2"
-                      style={{ display: "flex",  marginLeft: "40px",marginTop:"0px" }}
+                      style={{ display: "flex",  marginLeft: "40px",marginTop:"0px", fontFamily:"Noto-Bold" }}
                     >
                       {isLoading ? <Loader /> : totalValue2 ? totalValue2 : 0}
                     </h6>
                     <hr style={{overflow:"hidden", width:"90%"}} />
-                    <a href="#dataset-dashboard" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px"}} className="ULCA__disabled">Go to dashboard →</a>
+                    <a href="#dataset-dashboard" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px"}} className="ULCA__disabled">Go to dashboard <img src={DatasetArrowDisabled} style={{color:"white"}} className="ml-2"/></a>
+                    
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -618,7 +621,7 @@ const HomeDatasets = () => {
                       style={{ height: "65px", width: "65px" }}
                       className="mb-3"
                     />
-                    <div data-tooltip="Datasets are collection of structured data that serve as a input for training machine learning models, enablings algorithms to learn patterns and perform tasks based on provided information">
+                    <div data-tooltip="Benchmarking refers to the process of evaluating and comparing the performance of different algorithms or models against a standardized set of metrics and datasets to determine their relative effectiveness for a specific task or problem. This aids in selecting the most suitable model for a given application.">
                       <img
                         src={info}
                         className="w-100"
@@ -628,16 +631,16 @@ const HomeDatasets = () => {
                   </div>
 
                   <Card.Text className="text-start">
-                    <p className="DatasetTxt"  style={{  marginLeft: "40px",marginTop:"0px" }}>Total Benchmark count</p>
+                    <p className="DatasetTxt"  style={{  marginLeft: "40px",marginTop:"0px",color:"#150202", fontSize:"16px", fontWeight:400, fontFamily:"Noto-Regular" }}>Total Benchmark count</p>
                     <h6
                       id="totalValue3"
-                      style={{ display: "flex",  marginLeft: "40px",marginTop:"0px" }}
+                      style={{ display: "flex",  marginLeft: "40px",marginTop:"0px", fontFamily:"Noto-Bold" }}
                     >
                       {isLoading ? <Loader /> : (totalValue3 ? totalValue3 : 0)}
                       
                     </h6>
                     <hr style={{overflow:"hidden", width:"90%"}} />
-                    <a href="#dataset-dashboard" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px"}} className="ULCA__disabled">Go to dashboard →</a>
+                    <a href="#dataset-dashboard" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px"}} className="ULCA__disabled">Go to dashboard <img src={DatasetArrowDisabled} style={{color:"white"}} className="ml-2"/></a>
                   </Card.Text>
                 </Card.Body>
               </Card>

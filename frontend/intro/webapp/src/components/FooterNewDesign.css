@@ -19,6 +19,60 @@
   margin-right: 10px;
   margin-top: 10px;
 }
+
+.FooterNewDesignContainer .bhashiniapp__footerIcons{
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.FooterNewDesignContainer .about_company{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.FooterNewDesignContainer .company_name{
+font-family: "Noto-Bold";
+font-size: 18px;
+font-weight: 600;
+line-height: 27px;
+text-align: left;
+}
+
+.FooterNewDesignContainer .company_address{
+font-family: "Noto-Regular";
+font-size: 12px;
+font-weight: 400;
+line-height: 16.34px;
+text-align: left;
+}
+
+.FooterNewDesignContainer .footerlinks__header{
+font-family: "Noto-Bold";
+font-size: 16px;
+font-weight: 700;
+line-height: 21.79px;
+text-align: left;
+}
+
+.FooterNewDesignContainer .footerlinks__links{
+  font-family: "Noto-Regular";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 21.79px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  }
+
+  .FooterNewDesignContainer .bhashini__app{
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+
 hr{
 flex-shrink: 0;
 width: 100%;
@@ -35,4 +89,15 @@ color:rgb(171, 190, 209, 0.4);
   align-items: center;
   gap: 15px;
  
+}
+
+
+@media screen and (max-width:600px) {
+  .FooterNewDesignContainer .footerlinks__links{
+    gap: 7px;
+  }
+
+  .FooterNewDesignContainer .bhashini__app{
+    gap: 5px;
+  }
 }
