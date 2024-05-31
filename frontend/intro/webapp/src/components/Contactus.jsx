@@ -22,9 +22,20 @@ const Contactus = () => {
                     
                   </Col>
                   <Col md={6} className="d-flex justify-content-center align-items-center Contact__bannerImg">
-                     <a href="#" className="ContactUs__contactButton">
+                     {/* <a href="#" className="ContactUs__contactButton">
                       <button className="ContactUs__contactButtonText">Contact us <img src={ArrowRight} className="ml-2"/></button>
-                     </a>
+                     </a> */}
+                     <a
+    role="button"
+    tabIndex={0}
+    className="theme-btn btn btn-primary"
+    href="#"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ borderRadius: "4px", backgroundColor: "#2947A3" }}
+  >
+    Contact Us <img src={ArrowRight} className="ml-2"/>
+  </a>
                   </Col>
               </Row>
           </Container>
