@@ -20,5 +20,6 @@ public class AppModelService {
 	private SupportedLanguages targetLanguage;
 	private SupportedScripts sourceScriptCode;
 	private SupportedScripts targetScriptCode;
+	private Boolean defaultModel;
 	
 }

@@ -2507,7 +2507,7 @@ public class ModelService {
 	
 	public AppModelsResponse getAppModels(String taskType) {
 		AppModelsResponse appModelsResponse = new AppModelsResponse();
-		String[] defaultTasks = { "translation", "asr", "transliteration","tts"};
+		String[] defaultTasks = { "translation", "asr", "transliteration","tts","ocr"};
 		List<String> defaultTasksList = Arrays.asList(defaultTasks);
 		List<String> tasksRequested = new ArrayList<String>();
 
@@ -2558,6 +2558,7 @@ public class ModelService {
 
 		Map<String, AppModelService> modelsMap = new HashMap<String, AppModelService>();
 		for (PipelineModel pipelineModel : pipelineModels) {
+			log.info("pipelineId :: "+pipelineModel.getPipelineModelId());
 			for (TaskSpecification taskSpecification : pipelineModel.getTaskSpecifications()) {
 				log.info("task type of pipeline :: " + taskSpecification.getTaskType().name());
 				if (taskSpecification.getTaskType().name().toLowerCase().equals(taskType)) {
@@ -2568,6 +2569,15 @@ public class ModelService {
 						appModelService.setSourceScriptCode(configSchema.getSourceScriptCode());
 						appModelService.setTargetLanguage(configSchema.getTargetLanguage());
 						appModelService.setTargetScriptCode(configSchema.getTargetScriptCode());
+						if(configSchema.isDefaultModel()!=null) {
+							if(configSchema.isDefaultModel()) {
+								appModelService.setDefaultModel(true);
+							}
+							
+						}else {
+						appModelService.setDefaultModel(false);
+						}
+						
 
 						modelsMap.put(configSchema.getModelId(), appModelService);
 					}
