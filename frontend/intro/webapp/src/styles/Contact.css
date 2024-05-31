@@ -63,6 +63,13 @@
       -o-border-radius: 4px;
 }
 
+.ContactUs__contactButton button{
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+
     .ContactUs__contactButtonText{
       display: flex;
       justify-content: center;

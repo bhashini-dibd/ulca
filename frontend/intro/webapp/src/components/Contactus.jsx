@@ -23,7 +23,7 @@ const Contactus = () => {
                   </Col>
                   <Col md={6} className="d-flex justify-content-center align-items-center Contact__bannerImg">
                      <a href="#" className="ContactUs__contactButton">
-                      <div className="ContactUs__contactButtonText">Contact us <img src={ArrowRight} className="ml-2"/></div>
+                      <button className="ContactUs__contactButtonText">Contact us <img src={ArrowRight} className="ml-2"/></button>
                      </a>
                   </Col>
               </Row>
