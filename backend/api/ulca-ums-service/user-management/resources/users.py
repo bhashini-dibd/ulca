@@ -301,7 +301,6 @@ class GenerateServiceProviderKey(Resource):
             return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
         user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
         if isinstance(user_document, list) and user_document:
-            #log.info("DETAILS:",user_document,body)
             if not any(usr['ulcaApiKey'] == body['ulcaApiKey'] for usr in user_document):
                 return post_error("400", "ulcaApiKey does not exist. Please provide a valid one.", None), 400
             for usr in user_document:
@@ -453,11 +452,11 @@ class CreateGlossary(Resource):
         
         userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
         if not userinferenceApiKey:
-            return post_error("404", "Couldn't find the user inference api Key", None), 404
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
         api_dict = {"api-key":userinferenceApiKey}
         pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
         if not pipelineID:
-            return post_error("404", "Couldn't find the user inference api Key", None), 404
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
         if pipelineID and isinstance(pipelineID,dict):
@@ -465,10 +464,11 @@ class CreateGlossary(Resource):
         if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
             masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
             masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            #urlEndPoint    =  pipelineID["apiEndPoints"]["apiKeyUrl"]
             masterList.append(masterkeyname)
             masterList.append(masterkeyvalue)
         else:
-            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
+            return post_error("400", "Couldn't find the endpoints, please check the service provider name", None), 400
         log.info(f"master api keys {masterList}")
         decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
         if decrypt_headers:
