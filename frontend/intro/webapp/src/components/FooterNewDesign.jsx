@@ -1,5 +1,5 @@
 import React from "react"; // Import React library
-import FooterLogo from "../assets/footerLogo.svg";
+import FooterLogo from "../assets/Bhashini-logo.png";
 
 import "./FooterNewDesign.css"; // Importing CSS file
 import { Col, Container, Row } from "react-bootstrap"; // Importing components from react-bootstrap
@@ -12,7 +12,8 @@ import facebook from "../assets/socialmedia/facebook.svg";
 import instagram from "../assets/socialmedia/instagram.svg";
 import twitter from "../assets/socialmedia/twitter.svg";
 import linkedin from "../assets/socialmedia/linkedin.svg";
-
+import mailIcon from '../assets/mailIcon.svg'
+import callIcon from '../assets/callIcon.svg'
 const FooterNewDesign = () => {
   const isMobile = useMedia("(max-width:600px)");
 
@@ -24,28 +25,40 @@ const FooterNewDesign = () => {
         <Row>
           <Col sm={12} md={4} lg={3}>
             <div className="about_company">
+            <div className="FooterNewDesign_logo mb-3">
+                {/* <p className="m-0 company_address">Powered By</p> */}
+                <img src={FooterLogo} />
+              </div>
               <div className="company_name">
                 Digital India Bhashini Division
               </div>
               <p className="company_address m-0">
                 Electronics Niketan, 6-CGO Complex, <br /> New Delhi - 110003
               </p>
-              <div className="FooterNewDesign_logo">
-                <p className="m-0 company_address">Powered By</p>
-                <img src={FooterLogo} />
-              </div>
-              <p className="company_address">
+
+              {/* <p className="company_address">
                 Digital India Corporation(DIC) Ministry of Electronics & IT
                 (MeitY) Government of India®
-              </p>
+              </p> */}
+               <div className="FooterNewDesign_logo mt-2">
+                <img src={mailIcon} className="mr-2" />
+                <p className="m-0 company_address">ceo-dibd[at]digitalgov[dot]co[dot]in</p>
+              </div>
+              <div className="FooterNewDesign_logo">
+                <img src={callIcon} className="mr-2" />
+                <p className="m-0 company_address">011-24301361</p>
+              </div>
             </div>
           </Col>
-          <Col sm={12} md={4} lg={2} className={`${isMobile ? "mt-3" : ""}`}>
+          <Col sm={12} md={4} lg={2} className={`${isMobile ? "mt-4" : ""}`}>
             <div>
               {/* <div className="mb-3 footerlinks__header">Quick Links</div> */}
               <div className="footerlinks__links">
                 <li>
                   <a href="#">Home</a>
+                </li>
+                <li>
+                  <a href="#">About</a>
                 </li>
                 <li>
                   <a href="#">Arpan</a>
@@ -62,12 +75,15 @@ const FooterNewDesign = () => {
               </div>
             </div>
           </Col>
-          <Col sm={12} md={4} lg={2} className={`${isMobile ? "mt-3" : ""}`}>
+          <Col sm={12} md={4} lg={2} className={`${isMobile ? "mt-4" : ""}`}>
             <div>
               {/* <div className="mb-3 footerlinks__header">Category 1</div> */}
               <div className="footerlinks__links">
                 <li>
                   <a href="#">Sanchalak</a>
+                </li>
+                <li>
+                  <a href="#">BHashini Setu</a>
                 </li>
                 <li>
                   <a href="#">ULCA</a>
@@ -81,7 +97,7 @@ const FooterNewDesign = () => {
               </div>
             </div>
           </Col>
-          <Col sm={12} md={4} lg={2} className={`${isMobile ? "mt-3" : ""}`}>
+          <Col sm={12} md={4} lg={2} className={`${isMobile ? "mt-4" : ""}`}>
             <div>
               {/* <div className="mb-3 footerlinks__header">Category 2</div> */}
               <div className="footerlinks__links">
@@ -92,7 +108,7 @@ const FooterNewDesign = () => {
                   <a href="#">Startups</a>
                 </li>
                 <li>
-                  <a href="#">Udyat</a>
+                  <a href="#">Parikshan App</a>
                 </li>
                 <li>
                   <a href="#">Prayog</a>
@@ -138,9 +154,9 @@ const FooterNewDesign = () => {
           <div>© 2024 - Copyright All rights reserved. </div>
           <div className=" Footer__documents">
             <li><a href="#">Terms & Condition</a></li>
-            <li style={{ color: "#73B8F9" }}>|</li>
+            <li style={{ color: "#73B8F9", display: isMobile ? 'none':"" }}>|</li>
             <li><a href="#">Privacy Policy</a></li>
-            <li style={{ color: "#73B8F9" }}>|</li>
+            <li style={{ color: "#73B8F9", display: isMobile ? 'none':"" }}>|</li>
             <li><a href="#">Contact Us</a></li>
           </div>
         </div>

@@ -412,7 +412,7 @@ const MobileHeader = () => {
       </div>
       <div className="logo">
 <div className="join">
-  <a
+  {/* <a
     role="button"
     tabIndex={0}
     className="theme-btn btn btn-primary"
@@ -422,17 +422,17 @@ const MobileHeader = () => {
     style={{ borderRadius: "4px",fontSize:isSmallMobile ? "9px" :"12px", marginRight:"5px",backgroundColor:"white", border:"1px solid #2947A3", color:"#2947A3" }}
   >
     Bhashadaan
-  </a>
+  </a> */}
   <a
     role="button"
     tabIndex={0}
     className="theme-btn btn btn-primary"
-    href="https://play.google.com/store/apps/details?id=com.dibd.bhashini&hl=en&gl=US&pli=1"
+    href="https://bhashini.gov.in/bhashadaan/en/home"
     target="_blank"
     rel="noopener noreferrer"
-    style={{ borderRadius: "4px",fontSize:isSmallMobile ? "9px" :"12px" }}
+    style={{ borderRadius: "4px",fontSize:isSmallMobile ? "11px" :"14px" }}
   >
-    Download App
+    Bhashadaan
   </a>
 </div>
 </div>
@@ -703,6 +703,7 @@ function Header() {
               </ul>
             </div>
             <div className="join">
+            
               <a
                 role="button"
                 tabIndex={0}
@@ -710,21 +711,9 @@ function Header() {
                 href="https://bhashini.gov.in/bhashadaan/en/home"
                 target="_blank"
                 rel="noopener noreferrer"
-                // style={{borderRadius: "4px", marginRight:"10px"}}
-                style={{ borderRadius: "4px", marginRight:"10px",backgroundColor:"white", border:"1px solid #2947A3", color:"#2947A3"}}
-              >
-                Bhashadaan
-              </a>
-              <a
-                role="button"
-                tabIndex={0}
-                className="theme-btn btn btn-primary"
-                href="https://play.google.com/store/apps/details?id=com.dibd.bhashini&hl=en&gl=US&pli=1"
-                target="_blank"
-                rel="noopener noreferrer"
                 style={{borderRadius: "4px"}}
               >
-                Download App
+                Bhashadaan
               </a>
             </div>
           </div>

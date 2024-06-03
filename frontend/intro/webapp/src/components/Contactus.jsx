@@ -32,7 +32,7 @@ const Contactus = () => {
     href="#"
     target="_blank"
     rel="noopener noreferrer"
-    style={{ borderRadius: "4px", backgroundColor: "#2947A3" }}
+    style={{ borderRadius: "4px", backgroundColor: "#2947A3", padding: "12px 28px" }}
   >
     Contact Us <img src={ArrowRight} className="ml-2"/>
   </a>
