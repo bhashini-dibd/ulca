@@ -6,6 +6,8 @@ import { AppContext } from "../context/ContextAPI";
 import { useTranslation } from "react-i18next";
 import Arrow from '../assets/arrow_nav.svg'
 import Logo from '../assets/bhashini-ulcaLogo.png'
+import { withStyles, makeStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
 const MobileHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const isSmallMobile = useMedia("(max-width:350px)");
@@ -443,8 +445,24 @@ const MobileHeader = () => {
 
 
 
+const useStylesBootstrap = makeStyles((theme) => ({
+  arrow: {
+    color: theme.palette.common.black,
+  },
+  tooltip: {
+    backgroundColor: theme.palette.common.black,
+    padding:"10px",
+    fontSize:"12px"
+  },
+}));
 
-const Dropdown = ({ label, items }) => {
+function BootstrapTooltip(props) {
+  const classes = useStylesBootstrap();
+
+  return <Tooltip arrow classes={classes} {...props} />;
+}
+
+const Dropdown = ({ label, items,tooltipValue }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -472,6 +490,7 @@ const Dropdown = ({ label, items }) => {
 
   return (
     <li className="nav-item dropdown" ref={dropdownRef}>
+       <BootstrapTooltip title={tooltipValue} placement="top">
       <a
         className="nav-link dropdown-toggle"
         href="#"
@@ -481,6 +500,7 @@ const Dropdown = ({ label, items }) => {
       >
         {label} <img src={Arrow} alt="Dropdown Arrow" style={{marginLeft: '10px', width:"15px"}} />
       </a>
+      </BootstrapTooltip>
       <ul className={`dropdown-menu${isDropdownOpen ? ' show' : ''}`} aria-labelledby="dropdownMenuLink">
         {items.map((item, index) => (
           <li key={index}>
@@ -638,9 +658,9 @@ function Header() {
                     {t('aboutBhashini')}
                   </a>
                 </li> */}
-                <Dropdown label="About" items={dropdownItems1} />
-                <Dropdown label="Arpan" items={dropdownItems2} />
-                <Dropdown label="Prayog" items={dropdownItems3} />
+                <Dropdown label="About" items={dropdownItems1} tooltipValue="About Bhashini" />
+                <Dropdown label="Arpan" items={dropdownItems2} tooltipValue="About Arpan"/>
+                <Dropdown label="Prayog" items={dropdownItems3} tooltipValue="Explore our reference applications"/>
                 <li className="nav-item">
                   <a className="nav-link" href="https://bhashini.gov.in/">
                    Sahyogi
@@ -653,7 +673,7 @@ function Header() {
                 </li>
                 {/* <Dropdown label="Sagyogi" items={dropdownItems1} /> */}
                 {/* <Dropdown label="Sanchalak" items={dropdownItems1} /> */}
-                <Dropdown label="Pravakta" items={dropdownItems4} />
+                <Dropdown label="Pravakta" items={dropdownItems4} tooltipValue="Awareness and outreach"/>
                 {/* <li className="dropdown" ref={dropdownRef}>
                   <a
                     className="dropdown-toggle nav-link"
