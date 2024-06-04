@@ -44,6 +44,9 @@ import FetchGlossaryDetails from "../../../redux/actions/api/UserManagement/Fetc
 import AddGlossaryDataApi from "../../../redux/actions/api/UserManagement/AddGlossaryData";
 import DeleteGlossaryApi from "../../../redux/actions/api/UserManagement/DeleteGlossary";
 import MultiDeleteGlossaryApi from "../../../redux/actions/api/UserManagement/MultiDeleteGlossary";
+import { IndicTransliterate, getTransliterationLanguages, getTransliterateSuggestions } from "@ai4bharat/indic-transliterate";
+import "@ai4bharat/indic-transliterate/dist/index.css";
+import { useRef } from "react";
 
 const styles = {
   bannerContainer: {
@@ -139,10 +142,14 @@ const GlossaryProfile = (props) => {
   const [searchText, setSearchText] = useState('');
 
   const [modal, setModal] = useState(false);
- 
+  const [text, setText] = useState("");
+  const [debouncedText, setDebouncedText] = useState("");
+  const debouncedTextRef = useRef("");
+  const suggestionRef = useRef([null]);
+  const [prev, setprev] = useState(false);
   const [formState, setFormState] = useState({
-    sourceLanguage: '',
-    targetLanguage: '',
+    sourceLanguage: 'en',
+    targetLanguage: 'hi',
     sourceText: '',
     targetText: '',
   });
@@ -163,7 +170,38 @@ const GlossaryProfile = (props) => {
 //   }, [apiKeys]);
 
 
+useEffect(() => { 
+  if (debouncedTextRef.current.trim()!="" && suggestionRef.current.length>1) {
+    console.log("nnn",suggestionRef.current);
+    console.log("nnn",debouncedTextRef.current,text);
+    const words = debouncedTextRef.current.split(/\s+/).filter(word => word.trim() !== "");
 
+      const optedWord = suggestionRef.current.find((item) => item === words[words.length-1]) || "";
+
+      const newKeystroke = {
+        keystrokes: debouncedTextRef.current,
+        results: suggestionRef.current,
+        opted:optedWord,
+        created_at: new Date().toISOString(),
+      };
+      newKeystrokesRef.current = newKeystroke
+      if (
+        keystrokesRef.current.length > 0 &&
+        keystrokesRef.current[keystrokesRef.current.length - 1].keystrokes === newKeystroke.keystrokes
+      ) {
+        keystrokesRef.current[keystrokesRef.current.length - 1] = newKeystroke;
+      } else {
+        keystrokesRef.current = [...keystrokesRef.current, newKeystroke];
+      }
+      console.log("nnn", keystrokesRef.current,newKeystrokesRef.current);
+      const finalJson = {
+        word: debouncedTextRef.current,
+        steps: keystrokesRef.current,
+        language: selectedLang.LangCode!=undefined?selectedLang.LangCode:"hi",
+      };
+      localStorage.setItem('TransliterateLogging', JSON.stringify(finalJson));
+  }
+}, [suggestionRef.current,prev,formState.sourceLanguage]);
 
   const onKeyDown = (event) => {
     if (event.keyCode == 27) {
@@ -548,6 +586,29 @@ const GlossaryProfile = (props) => {
           }
         }
       ];
+
+      const renderTextarea = (props, heading) => {
+        return (
+          <>
+          <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>{heading}</Typography>
+          <textarea
+            {...props}
+            placeholder={"Enter text here..."}
+            rows={5}
+            // className={classes.textAreaTransliteration}
+            style={{border:"1px solid lightGray", backgroundColor: "inherit", width: "90%", resize: "none",
+            fontSize: "18px",
+            lineHeight: "32px",
+            color: "black",
+            fontFamily: "Roboto",
+            height : "14rem",
+            padding : "1rem", borderRadius:"8px"}}
+
+          />
+          
+          </>
+        );
+      };
     
 
   const renderSnackBar = () => {
@@ -653,7 +714,7 @@ const GlossaryProfile = (props) => {
                     label="Select Target Language"
                   >
                     {languages.map((lang) => (
-                      <MenuItem key={lang.code} value={lang.code}>
+                      <MenuItem key={lang.code} value={lang.code} disabled={lang.code === formState.sourceLanguage}>
                         {lang.label}
                       </MenuItem>
                     ))}
@@ -664,7 +725,7 @@ const GlossaryProfile = (props) => {
               {/* First Text Field */}
             
               <Grid item xs={12} sm={12}>
-              <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
+              {/* <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
                 <TextField
                   variant="outlined"
                   fullWidth
@@ -672,13 +733,35 @@ const GlossaryProfile = (props) => {
                   name="sourceText"
                   value={formState.sourceText}
                   onChange={handleChange}
-                />
+                /> */}
+                 <IndicTransliterate
+        lang={formState.sourceLanguage}
+        value={formState.sourceText}
+        onChangeText={(val) => {
+          setText(val)
+          setDebouncedText(val);
+          setFormState((prevState) => ({
+            ...prevState,
+            sourceText: val,
+          }));
+          debouncedTextRef.current=val
+          if(!debouncedTextRef.current.toString().includes(debouncedText)){
+            setprev(true)
+          }
+          else{
+            setprev(false)
+          }
+          console.log("nnn",text,debouncedText,debouncedTextRef.current);
+        }}
+        renderComponent={(props) => renderTextarea(props,"Source Text")}
+        showCurrentWordAsLastSuggestion={true}
+      />
               </Grid>
 
               {/* Second Text Field */}
             
               <Grid item xs={12} sm={12}>
-              <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Target Text</Typography>
+              {/* <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Target Text</Typography>
                 <TextField
                   variant="outlined"
                   fullWidth
@@ -686,7 +769,29 @@ const GlossaryProfile = (props) => {
                   name="targetText"
                   value={formState.targetText}
                   onChange={handleChange}
-                />
+                /> */}
+                 <IndicTransliterate
+        lang={formState.targetLanguage}
+        value={formState.targetText}
+        onChangeText={(val) => {
+          setText(val)
+          setDebouncedText(val);
+          setFormState((prevState) => ({
+            ...prevState,
+            targetText: val,
+          }));
+          debouncedTextRef.current=val
+          if(!debouncedTextRef.current.toString().includes(debouncedText)){
+            setprev(true)
+          }
+          else{
+            setprev(false)
+          }
+          console.log("nnn",text,debouncedText,debouncedTextRef.current);
+        }}
+        renderComponent={(props) => renderTextarea(props,"Target Text")}
+        showCurrentWordAsLastSuggestion={true}
+      />
               </Grid>
             </Grid>
           </form>
