@@ -594,14 +594,14 @@ useEffect(() => {
           <textarea
             {...props}
             placeholder={"Enter text here..."}
-            rows={5}
+            rows={2}
             // className={classes.textAreaTransliteration}
             style={{border:"1px solid lightGray", backgroundColor: "inherit", width: "90%", resize: "none",
             fontSize: "18px",
             lineHeight: "32px",
             color: "black",
             fontFamily: "Roboto",
-            height : "14rem",
+            // height : "14rem",
             padding : "1rem", borderRadius:"8px"}}
 
           />
