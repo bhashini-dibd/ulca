@@ -29,7 +29,7 @@ const Contactus = () => {
     role="button"
     tabIndex={0}
     className="theme-btn btn btn-primary"
-    href="#"
+    href="https://uat-bhashini.bhashini.co.in/connect"
     target="_blank"
     rel="noopener noreferrer"
     style={{ borderRadius: "4px", backgroundColor: "#2947A3", padding: "12px 28px" }}

@@ -507,7 +507,7 @@ const Dropdown = ({ label, items,tooltipValue }) => {
             <a
               className="dropdown-item nav-item"
               href={item.href}
-              target="_self"
+              target="_blank"
               rel="noopener noreferrer"
             >
               {item.label}
@@ -528,7 +528,7 @@ function Header() {
   
 
   const dropdownItems1 = [
-    { label: 'About us', href: '#' },
+    { label: 'About us', href: 'https://uat-bhashini.bhashini.co.in/about' },
     { label: 'Vision & Mission', href: '#' },
     { label: 'Our Objectives', href: '#' },
     { label: 'Bhashini Ecosystem', href: '#' },
@@ -646,7 +646,7 @@ function Header() {
             <div className="collapse navbar-collapse" id="navbarsExample07">
               <ul className="navbar-nav mr-auto navbarScroll TabNavbar">
                 <li className="nav-item">
-                  <a className="nav-link" href="https://bhashini.gov.in/">
+                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/">
                     {t('home')} <span className="sr-only">(current)</span>
                   </a>
                 </li>
@@ -662,12 +662,12 @@ function Header() {
                 <Dropdown label="Arpan" items={dropdownItems2} tooltipValue="About Arpan"/>
                 <Dropdown label="Prayog" items={dropdownItems3} tooltipValue="Explore our reference applications"/>
                 <li className="nav-item">
-                  <a className="nav-link" href="https://bhashini.gov.in/">
+                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/sahyogi">
                    Sahyogi
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="https://bhashini.gov.in/">
+                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/sanchalak">
                    Sanchalak
                   </a>
                 </li>

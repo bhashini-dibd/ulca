@@ -55,16 +55,16 @@ const FooterNewDesign = () => {
               {/* <div className="mb-3 footerlinks__header">Quick Links</div> */}
               <div className="footerlinks__links">
                 <li>
-                  <a href="#">Home</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/connect">Home</a>
                 </li>
                 <li>
-                  <a href="#">About</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/about">About</a>
                 </li>
                 <li>
-                  <a href="#">Arpan</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/arpan">Arpan</a>
                 </li>
                 <li>
-                  <a href="#">Sahyogi</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/sahyogi">Sahyogi</a>
                 </li>
                 <li>
                   <a href="#">Careers</a>
@@ -80,7 +80,7 @@ const FooterNewDesign = () => {
               {/* <div className="mb-3 footerlinks__header">Category 1</div> */}
               <div className="footerlinks__links">
                 <li>
-                  <a href="#">Sanchalak</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/sanchalak">Sanchalak</a>
                 </li>
                 <li>
                   <a href="#">BHashini Setu</a>
@@ -92,7 +92,7 @@ const FooterNewDesign = () => {
                   <a href="#">Ecosystem</a>
                 </li>
                 <li>
-                  <a href="#">Pravakta</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/pravakta">Pravakta</a>
                 </li>
               </div>
             </div>
@@ -111,7 +111,7 @@ const FooterNewDesign = () => {
                   <a href="#">Parikshan App</a>
                 </li>
                 <li>
-                  <a href="#">Prayog</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/prayog">Prayog</a>
                 </li>
               </div>
             </div>
@@ -139,10 +139,10 @@ const FooterNewDesign = () => {
                     height="24px"
                     width="24px"
                   /></a>
-                  <a href="#"><img src={facebook} className="bhashiniapp__footerIcons" /></a>
-                  <a href="#"><img src={instagram} className="bhashiniapp__footerIcons" /></a>
-                  <a href="#"><img src={twitter} className="bhashiniapp__footerIcons" /></a>
-                  <a href="#"><img src={linkedin} className="bhashiniapp__footerIcons" /></a>
+                  <a href="https://www.facebook.com/profile.php?id=100093281985246" target="_blank"><img src={facebook} className="bhashiniapp__footerIcons" /></a>
+                  <a href="https://www.instagram.com/_officialbhashini/" target="_blank"><img src={instagram} className="bhashiniapp__footerIcons" /></a>
+                  <a href="https://twitter.com/_BHASHINI" target="_blank"><img src={twitter} className="bhashiniapp__footerIcons" /></a>
+                  <a href="https://www.linkedin.com/company/96244597/admin/feed/posts/" target="_blank"><img src={linkedin} className="bhashiniapp__footerIcons" /></a>
                 </div>
 
               </div>
@@ -153,11 +153,11 @@ const FooterNewDesign = () => {
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center pb-3">
           <div>© 2024 - Copyright All rights reserved. </div>
           <div className=" Footer__documents">
-            <li><a href="#">Terms & Condition</a></li>
+            <li><a href="https://uat-bhashini.bhashini.co.in/termsAndConditions">Terms & Condition</a></li>
             <li style={{ color: "#73B8F9", display: isMobile ? 'none':"" }}>|</li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="https://uat-bhashini.bhashini.co.in/privacy-policy">Privacy Policy</a></li>
             <li style={{ color: "#73B8F9", display: isMobile ? 'none':"" }}>|</li>
-            <li><a href="#">Contact Us</a></li>
+            <li><a href="https://uat-bhashini.bhashini.co.in/connect">Contact Us</a></li>
           </div>
         </div>
       </Container>
