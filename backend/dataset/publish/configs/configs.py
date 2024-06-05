@@ -135,7 +135,7 @@ if isinstance(govt_data_whitelist_enabled, str):
         govt_data_whitelist_enabled = True
     else:
         govt_data_whitelist_enabled = False
-govt_cs = ["ac.in", "gov.in", "nic.in", "org", "edu.in", "org.in"]
+govt_cs = ["ac.in", "gov.in", "nic.in", "org", "edu.in", "org.in", "nplt"]
 
 #whitelist data based on submitername 
 submiter_name_whitelist_enabled = os.environ.get('ULCA_PUBLISH_SUBMITTER_NAME_WHITELIST_ENABLED', True)
