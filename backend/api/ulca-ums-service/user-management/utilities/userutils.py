@@ -724,7 +724,8 @@ class UserUtils:
         if userdoc:
             if "apiKeyDetails" in userdoc.keys():
                 apiKeyDeets = userdoc["apiKeyDetails"]
-            return apiKeyDeets , userdoc["email"]
+                return apiKeyDeets , userdoc["email"]
+            return None, None
         elif not userdoc:
             return None, None
 
