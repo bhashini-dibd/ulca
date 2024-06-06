@@ -303,7 +303,7 @@ class GenerateServiceProviderKey(Resource):
  
         user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
         if not user_document and not email:
-            return post_error("400", "userID does not exists.   Please provide a valid userID", None), 400
+            return post_error("400", "Error in fetching ulcaApiKey. Please check if it exists.", None), 400
         if isinstance(user_document, list) and user_document:
             if not any(usr['ulcaApiKey'] == body['ulcaApiKey'] for usr in user_document):
                 return post_error("400", "ulcaApiKey does not exist. Please provide a valid one.", None), 400
