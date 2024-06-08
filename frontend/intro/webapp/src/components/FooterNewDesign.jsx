@@ -55,7 +55,7 @@ const FooterNewDesign = () => {
               {/* <div className="mb-3 footerlinks__header">Quick Links</div> */}
               <div className="footerlinks__links">
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/connect">Home</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/">Home</a>
                 </li>
                 <li>
                   <a href="https://uat-bhashini.bhashini.co.in/about">About</a>
@@ -67,10 +67,10 @@ const FooterNewDesign = () => {
                   <a href="https://uat-bhashini.bhashini.co.in/sahyogi">Sahyogi</a>
                 </li>
                 <li>
-                  <a href="#">Careers</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/careers">Careers</a>
                 </li>
                 <li>
-                  <a href="#">Bhashadaan</a>
+                  <a href="https://bhashini.gov.in/bhashadaan/en/home">Bhashadaan</a>
                 </li>
               </div>
             </div>
@@ -83,13 +83,13 @@ const FooterNewDesign = () => {
                   <a href="https://uat-bhashini.bhashini.co.in/sanchalak">Sanchalak</a>
                 </li>
                 <li>
-                  <a href="#">BHashini Setu</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/connect">Contact Us</a>
                 </li>
                 <li>
                   <a href="#">ULCA</a>
                 </li>
                 <li>
-                  <a href="#">Ecosystem</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/bhashini-ecosystem">Ecosystem</a>
                 </li>
                 <li>
                   <a href="https://uat-bhashini.bhashini.co.in/pravakta">Pravakta</a>
@@ -102,17 +102,17 @@ const FooterNewDesign = () => {
               {/* <div className="mb-3 footerlinks__header">Category 2</div> */}
               <div className="footerlinks__links">
                 <li>
-                  <a href="#">Mitra</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/mitra">Mitra</a>
                 </li>
                 <li>
-                  <a href="#">Startups</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/startup">Startups</a>
                 </li>
                 <li>
-                  <a href="#">Parikshan App</a>
+                  <a href="https://uat-bhashini.bhashini.co.in/parikshan-app">Parikshan App</a>
                 </li>
-                <li>
+                {/* <li>
                   <a href="https://uat-bhashini.bhashini.co.in/prayog">Prayog</a>
-                </li>
+                </li> */}
               </div>
             </div>
           </Col>
@@ -133,7 +133,7 @@ const FooterNewDesign = () => {
                   Join Us
                 </div>
                 <div className="d-flex justify-content-start align-items-center">
-                  <a href="#"><img
+                  <a href="https://www.youtube.com/@_Bhashini"><img
                     src={youtube}
                     className="bhashiniapp__footerIcons"
                     height="24px"

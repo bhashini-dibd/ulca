@@ -46,14 +46,14 @@ const MobileHeader = () => {
           <div className="menu">
             <ul>
               <li>
-                <a className="nav-color" href="https://bhashini.gov.in/">
+                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/">
                   {t('home')}
                 </a>
               </li>
 
               <li style={{ position: "relative" }}>
                 <div onClick={(e) => toggleSubMenu(e, 'submenu-open2')} className="nav-color">
-                  Prayog{" "}
+                  About{" "}
                 </div>
                 <img
                   className="submenu-arrow"
@@ -65,7 +65,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/about-us"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -75,7 +75,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/vision-mission"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -85,7 +85,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/our-objectives"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -95,7 +95,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/bhashini-ecosystem"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -105,7 +105,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/our-team"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -115,17 +115,17 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/bhashini-at-work"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Our Journey
+                      Bhashini At Work
                     </a>
                   </li>
                 </ul>
               </li>
 
-              <li style={{ position: "relative" }}>
+              {/* <li style={{ position: "relative" }}>
                 <div  onClick={(e) => toggleSubMenu(e, 'submenu-open1')} className="nav-color">
                   Arpan{" "}
                 </div>
@@ -187,11 +187,11 @@ const MobileHeader = () => {
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
 
               <li style={{ position: "relative" }}>
                 <div className="nav-color" onClick={(e) => toggleSubMenu(e, 'submenu-open3')}>
-                  Prayog
+                  Arpan
                 </div>
                 <img
                   className="submenu-arrow1"
@@ -203,71 +203,83 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/services"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Parikshan App
+                       Services
                     </a>
                   </li>
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/product"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Model Vatika
+                      Our Product
                     </a>
                   </li>
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/careers"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Data Vatika
+                      Careers
                     </a>
                   </li>
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/tender"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Abhiyantrikee Prayogshala
+                      Tender/EOI
                     </a>
                   </li>
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="#"
+                      href="https://uat-bhashini.bhashini.co.in/on-premise"
                       target="_self"
                       rel="noopener noreferrer"
                     >
-                      Avinya Prayogshala
+                      On-Premise
                     </a>
                   </li>
                 </ul>
               </li>
 
               <li>
-                <a className="nav-color" href="#">
+                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/sahyogi">
                   Sahyogi
                 </a>
               </li>
 
               <li>
-                <a className="nav-color" href="#">
+                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/sanchalak">
                   Sanchalak
+                </a>
+              </li>
+
+              <li>
+                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/parikshan-app">
+                  Prayog
+                </a>
+              </li>
+
+              <li>
+                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/pravakta">
+                  Pravakta
                 </a>
               </li>
 
              
 
-              <li style={{ position: "relative" }}>
+              {/* <li style={{ position: "relative" }}>
                 <div  onClick={(e) => toggleSubMenu(e, 'submenu-open4')} className="nav-color" >
                   Pravakta
                 </div>
@@ -339,7 +351,7 @@ const MobileHeader = () => {
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
 
               {/* <li style={{ position: "relative" }}>
                 <div className="nav-color" onClick={(e) => toggleSubMenu(e, 'submenu-open5')}>
@@ -462,12 +474,16 @@ function BootstrapTooltip(props) {
   return <Tooltip arrow classes={classes} {...props} />;
 }
 
-const Dropdown = ({ label, items,tooltipValue }) => {
+const Dropdown = ({ label, items,tooltipValue,link }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const handleMouseEnter = () => {
+    setIsDropdownOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDropdownOpen(false);
   };
 
   const handleClickOutside = (event) => {
@@ -489,13 +505,14 @@ const Dropdown = ({ label, items,tooltipValue }) => {
   }, [isDropdownOpen]);
 
   return (
-    <li className="nav-item dropdown" ref={dropdownRef}>
+    <li className="nav-item dropdown" ref={dropdownRef}  onMouseEnter={handleMouseEnter} 
+    onMouseLeave={handleMouseLeave}>
        <BootstrapTooltip title={tooltipValue} placement="top">
       <a
         className="nav-link dropdown-toggle"
-        href="#"
+        href={link}
         id="dropdownMenuLink"
-        onClick={toggleDropdown}
+        // onClick={toggleDropdown}
         aria-expanded={isDropdownOpen}
       >
         {label} <img src={Arrow} alt="Dropdown Arrow" style={{marginLeft: '10px', width:"15px"}} />
@@ -528,22 +545,22 @@ function Header() {
   
 
   const dropdownItems1 = [
-    { label: 'About us', href: 'https://uat-bhashini.bhashini.co.in/about' },
-    { label: 'Vision & Mission', href: '#' },
-    { label: 'Our Objectives', href: '#' },
-    { label: 'Bhashini Ecosystem', href: '#' },
-    { label: 'CEO & Our Team', href: '#' },
-    { label: 'Our Journey', href: '#' },
+    { label: 'About us', href: 'https://uat-bhashini.bhashini.co.in/about-us' },
+    { label: 'Vision & Mission', href: 'https://uat-bhashini.bhashini.co.in/vision-mission' },
+    { label: 'Our Objectives', href: 'https://uat-bhashini.bhashini.co.in/our-objectives' },
+    { label: 'CEO & Our Team', href: 'https://uat-bhashini.bhashini.co.in/our-team' },
+    { label: 'Bhashini Ecosystem', href: 'https://uat-bhashini.bhashini.co.in/bhashini-ecosystem' },
+    { label: 'Bhashini At Work', href: 'https://uat-bhashini.bhashini.co.in/bhashini-at-work' },
    
   ];
 
   const dropdownItems2 = [
-    { label: 'Our Services', href: '#' },
-    { label: 'Our Products', href: '#' },
-    { label: 'Careers', href: '#' },
-    { label: 'Tenders/EOI', href: '#' },
-    { label: 'On - Premise', href: '#' },
-    { label: 'Team', href: '#' },
+    { label: 'Our Services', href: 'https://uat-bhashini.bhashini.co.in/services' },
+    { label: 'Our Products', href: 'https://uat-bhashini.bhashini.co.in/product' },
+    { label: 'Careers', href: 'https://uat-bhashini.bhashini.co.in/careers' },
+    { label: 'Tenders/EOI', href: 'https://uat-bhashini.bhashini.co.in/tender' },
+    { label: 'On - Premise', href: 'https://uat-bhashini.bhashini.co.in/on-premise' },
+    // { label: 'Team', href: '#' },
   ];
 
   const dropdownItems3 = [
@@ -658,9 +675,9 @@ function Header() {
                     {t('aboutBhashini')}
                   </a>
                 </li> */}
-                <Dropdown label="About" items={dropdownItems1} tooltipValue="About Bhashini" />
-                <Dropdown label="Arpan" items={dropdownItems2} tooltipValue="About Arpan"/>
-                <Dropdown label="Prayog" items={dropdownItems3} tooltipValue="Explore our reference applications"/>
+                <Dropdown label="About" items={dropdownItems1} tooltipValue="About Bhashini"  link="https://uat-bhashini.bhashini.co.in/about-us"/>
+                <Dropdown label="Arpan" items={dropdownItems2} tooltipValue="About Arpan" link="https://uat-bhashini.bhashini.co.in/services"/>
+                {/* <Dropdown label="Prayog" items={dropdownItems3} tooltipValue="Explore our reference applications"/> */}
                 <li className="nav-item">
                   <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/sahyogi">
                    Sahyogi
@@ -671,9 +688,21 @@ function Header() {
                    Sanchalak
                   </a>
                 </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/parikshan-app">
+                   Prayog
+                  </a>
+                </li>
+                <li className="nav-item">
+                <BootstrapTooltip title="Awareness and outreach" placement="top">
+                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/pravakta">
+                   Pravakta
+                  </a>
+                  </BootstrapTooltip>
+                </li>
                 {/* <Dropdown label="Sagyogi" items={dropdownItems1} /> */}
                 {/* <Dropdown label="Sanchalak" items={dropdownItems1} /> */}
-                <Dropdown label="Pravakta" items={dropdownItems4} tooltipValue="Awareness and outreach"/>
+                {/* <Dropdown label="Pravakta" items={dropdownItems4} tooltipValue="Awareness and outreach"/> */}
                 {/* <li className="dropdown" ref={dropdownRef}>
                   <a
                     className="dropdown-toggle nav-link"
