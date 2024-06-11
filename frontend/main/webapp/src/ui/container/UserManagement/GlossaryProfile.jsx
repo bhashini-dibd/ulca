@@ -145,6 +145,8 @@ const GlossaryProfile = (props) => {
   const [text, setText] = useState("");
   const [debouncedText, setDebouncedText] = useState("");
   const debouncedTextRef = useRef("");
+  const newKeystrokesRef = useRef(null)
+  const keystrokesRef = useRef(null)
   const suggestionRef = useRef([null]);
   const [prev, setprev] = useState(false);
   const [formState, setFormState] = useState({
@@ -194,12 +196,12 @@ useEffect(() => {
         keystrokesRef.current = [...keystrokesRef.current, newKeystroke];
       }
       console.log("nnn", keystrokesRef.current,newKeystrokesRef.current);
-      const finalJson = {
-        word: debouncedTextRef.current,
-        steps: keystrokesRef.current,
-        language: selectedLang.LangCode!=undefined?selectedLang.LangCode:"hi",
-      };
-      localStorage.setItem('TransliterateLogging', JSON.stringify(finalJson));
+      // const finalJson = {
+      //   word: debouncedTextRef.current,
+      //   steps: keystrokesRef.current,
+      //   language: selectedLang.LangCode!=undefined?selectedLang.LangCode:"hi",
+      // };
+      // localStorage.setItem('TransliterateLogging', JSON.stringify(finalJson));
   }
 }, [suggestionRef.current,prev,formState.sourceLanguage]);
 
