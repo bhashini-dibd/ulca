@@ -36,8 +36,9 @@
   color: #16337B;
 }
 .top__listing-link .u-text {
-  font-size: 0.875rem;
+  font-size: 12px;
   color: #EBEBEB;
+  margin-top: 3px;
 }
 .top__listing-link .u-icon {
   font-size: 0.8125rem;

@@ -112,23 +112,28 @@ export default function TopContent(props) {
           <div className="col-12">
             <div className="top__head-container">
               <div className="top__head-item">
-              {!isMobile ? <> {currentDate} <span className="mx-2">|</span>  {currentTime} </>:''}
+               {currentDate} <span className="mx-2">|</span>  {currentTime} 
               </div>
               <div className="top__head-item">
                 <ul className="top__listing"> 
-                  <li className="top__listing-item">
+              {isMobile ? <></> :  <>  <li className="top__listing-item">
                     <a href="https://bhashini.gov.in/#mainPage" className="top__listing-link" target="_blank">
-                      <span className="fa-solid fa-laptop u-icon"> 
+                      {/* <span className="fa-solid fa-laptop u-icon"> 
                       <LaptopIcon />
-                      </span>
+                      </span> */}
                       <span className="u-text">{t("skipToMainContent")}</span>
                     </a>
                   </li>
                   <li className="top__listing-item">
                     <div className="top__listing-link">
+                    <div
+                        className="sub-link"
+                      >
+                        |
+                      </div>
                       <span className="u-icon">
                       <FontIcon/>
-                      </span>
+                      </span>                     
                       <a
                         href="#;"
                         className="sub-link"
@@ -150,9 +155,14 @@ export default function TopContent(props) {
                       >
                         +A
                       </a>
+                      <div
+                        className="sub-link"
+                      >
+                        |
+                      </div>
                     </div>
-                  </li>
-                  <li className="top__listing-item">
+                  </li> </>}
+                  {/* <li className="top__listing-item">
                     <a
                       className="top__listing-link"
                       href={'https://bhashini.gov.in/screen-reader'}
@@ -161,7 +171,8 @@ export default function TopContent(props) {
                       <span className="u-icon"><BookReaderIcon /></span>
                       <span className="u-text">{t("screenReader")}</span>
                     </a>
-                  </li>
+                  </li> */}
+                  
                   <li className="top__listing-item">
                     <a href="#" className="top__listing-link">
                       <span className="u-icon"><LanguageIcon /></span>
@@ -169,6 +180,7 @@ export default function TopContent(props) {
                         className="lang"
                         value={getSelectedLanguage.languageName}
                         onChange={handleChange}
+                        disabled
                       >
                         {LANGUAGE_LIST.map((item) => {
                           return item.isVisible ? (
