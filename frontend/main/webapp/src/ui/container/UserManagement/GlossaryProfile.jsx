@@ -645,7 +645,7 @@ useEffect(() => {
       <MuiThemeProvider theme={getMuiTheme}>
       <MUIDataTable
         //   title={"Glossary List"}
-          data={ tableData.map(row => [
+          data={ tableData?.map(row => [
             // row.checkbox,
             row?.sourceText,
             row?.targetText,
