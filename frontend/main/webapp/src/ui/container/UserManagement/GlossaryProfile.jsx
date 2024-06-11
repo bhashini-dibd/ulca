@@ -45,7 +45,7 @@ import AddGlossaryDataApi from "../../../redux/actions/api/UserManagement/AddGlo
 import DeleteGlossaryApi from "../../../redux/actions/api/UserManagement/DeleteGlossary";
 import MultiDeleteGlossaryApi from "../../../redux/actions/api/UserManagement/MultiDeleteGlossary";
 import { IndicTransliterate, getTransliterationLanguages, getTransliterateSuggestions } from "@ai4bharat/indic-transliterate";
-import "@ai4bharat/indic-transliterate/dist/index.css";
+// import "@ai4bharat/indic-transliterate/dist/index.css";
 import { useRef } from "react";
 
 const styles = {
