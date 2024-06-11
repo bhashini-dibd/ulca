@@ -131,9 +131,9 @@ export default function TopContent(props) {
                       >
                         |
                       </div>
-                      <span className="u-icon">
+                      {/* <span className="u-icon">
                       <FontIcon/>
-                      </span>                     
+                      </span>                      */}
                       <a
                         href="#;"
                         className="sub-link"
