@@ -11,7 +11,11 @@ import {
   TableCell,
   Table,
   Switch,
+  Tooltip,
+  IconButton,
 } from "@material-ui/core";
+import InfoIcon from '@material-ui/icons/Info';
+import { Link } from 'react-router-dom'
 import Search from "../../components/Datasets&Model/Search";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 // import createMuiTheme from "../../styles/Datatable";
@@ -40,7 +44,7 @@ import ServiceProviderDialog from "../../components/common/ServiceProviderDialog
 import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/RemoveServiceProviderKey";
 import GenerateServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/GenerateServiceProviderKey";
 import DataTrackingToggleAPI from "../../../redux/actions/api/UserManagement/DataTrackingToggle";
-
+import { useHistory } from 'react-router-dom';
 const SwitchCases = ({
   dataTrackingValue,
   setSnackbarInfo,
@@ -49,6 +53,7 @@ const SwitchCases = ({
   Ulcakey,
 }) => {
   const [checked, setChecked] = useState(dataTrackingValue);
+  const history = useHistory();
   useEffect(() => {
     setChecked(dataTrackingValue);
   }, [dataTrackingValue]);
@@ -123,7 +128,8 @@ const MyProfile = (props) => {
     useState(false);
   const [serviceProviderName, setServiceProviderName] = useState("");
   const [expandableRow, setExpandableRow] = useState([]);
-
+  const [fetchAppName, setFetchAppName] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     if (apiKeys) {
@@ -582,6 +588,15 @@ const MyProfile = (props) => {
     setExpandableRow(temp);
   };
 
+  const handleGlossaryData = (row) => {
+    console.log(row)
+    history.push(`${process.env.PUBLIC_URL}/glossary`, {
+      serviceProviderName: row?.serviceProviderName,
+      inferenceApiKey: row?.inferenceApiKey.value,
+      appName: fetchAppName,
+    })
+  }
+
   const options = {
     textLabels: {
       body: {
@@ -614,6 +629,7 @@ const MyProfile = (props) => {
     },
     rowsExpanded: expandableRow,
     renderExpandableRow: (rowData, rowMeta) => {
+      setFetchAppName(rowData[0])
       const data = rowData[2];
       if (data?.length)
         return (
@@ -641,16 +657,21 @@ const MyProfile = (props) => {
                         >
                           Action
                         </TableCell>
+                        <TableCell
+                          style={{ paddingLeft: "50px", width: "15%", }}
+                        >
+                          
+                        </TableCell>
                       </TableHead>
                       <TableBody>
                         {data.map((row, i) => {
-                          return (
+                          return (                        
                             <TableRow
                               style={{
                                 backgroundColor: "rgba(254, 191, 44, 0.1)",
                               }}
                               key={i}
-                            >
+                            >                             
                               <TableCell style={{ width: "18%" }}>
                                 {row?.serviceProviderName}
                               </TableCell>
@@ -716,6 +737,22 @@ const MyProfile = (props) => {
                                   </Button>
                                 )}
                               </TableCell>
+                              <TableCell></TableCell>
+                              {/* <TableCell style={{ width: "25%" }}>
+                                {row?.inferenceApiKey?.value && (
+                                  <div onClick={() => handleGlossaryData(row)}>
+                                        <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
+                            <Box sx={{color:"blue"}}>Create Glossary</Box>
+                            <Box> <Tooltip title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
+      <IconButton>
+        <InfoIcon />
+      </IconButton>
+    </Tooltip></Box>
+                          </Box>
+                                  </div>
+                               
+                                )}                            
+                              </TableCell> */}
                             </TableRow>
                           );
                         })}

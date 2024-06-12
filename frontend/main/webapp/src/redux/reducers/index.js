@@ -32,6 +32,7 @@ import datasetMetrics from "../reducers/DataSet/DatasetMetrics/GetReportData";
 import getTransliterationText from '../reducers/Model/ModelSearch/GetTransliterationText';
 import getModelHealthCheckStatus from './Model/ModelView/ModalStatusCheck';
 import getApiKeys from './UserManagement/getApiKeys';
+import getGlossaryData from "./UserManagement/getGlossaryData";
 
 const index = {
   apiStatus,
@@ -68,6 +69,7 @@ const index = {
   getTransliterationText,
   getModelHealthCheckStatus,
   getApiKeys,
+  getGlossaryData,
 };
 
 export default index;

@@ -1,0 +1,9 @@
+@font-face {
+    font-family: "Noto-Bold";
+    src: url("./assets/fonts/noto-sans/NotoSans-ExtraBold.ttf");
+  }
+  
+  @font-face {
+    font-family: "Noto-Regular";
+    src: url("./assets/fonts/noto-sans/NotoSans-Regular.ttf");
+  }

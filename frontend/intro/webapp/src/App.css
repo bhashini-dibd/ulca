@@ -198,6 +198,16 @@
   src: url("./assets/fonts/Roboto-Regular.ttf");
 }
 
+@font-face {
+  font-family: "Noto-Bold";
+  src: url("./assets/fonts/NotoSans-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Noto-Regular";
+  src: url("./assets/fonts/NotoSans-Regular.ttf");
+}
+
 .App {
   text-align: center;
 }
@@ -211,6 +221,14 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.MuiInput-underline:before {
+  border-bottom: none !important;
+}
+
+.MuiSelect-select.MuiSelect-select {
+  display: flex;
 }
 
 .App-header {
@@ -235,4 +253,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.dropdown-toggle::after {
+  display: none;
 }
