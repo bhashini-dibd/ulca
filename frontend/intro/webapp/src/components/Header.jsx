@@ -37,8 +37,8 @@ const MobileHeader = () => {
   }, []);
 
   return (
-    <div className="navbar">
-      <div className="hamburger-menu" ref={menuRef}>
+    <div className="navbar navbar-row">
+      <div className="hamburger-menu">
         <button className="hamburger-button" onClick={toggleMenu}>
           ☰
         </button>
@@ -612,10 +612,10 @@ function Header() {
               </div>
               <div
                 className="col-9 col-md-7"
-                style={{ display: "flex", justifyContent: "flex-end" }}
+                style={{ display: "flex", justifyContent: "flex-end", paddingRight: "0" }}
               >
                 <img
-                  src={Logo}
+                  src={process.env.PUBLIC_URL + "/img/Bhashini_new_en.png"}
                   alt="bhashini logo"
                   className="img-fluid"
                   style={{height:"60px"}}
@@ -632,13 +632,13 @@ function Header() {
             <div className="logo" style={{ backgroundColor: "#fff", display:"flex", justifyContent:"center" }}>
               {" "}
               <img
-                src={Logo}
+                src={process.env.PUBLIC_URL + "/img/Bhashini_new_en.png"}
                 alt="bhashini logo"
-                style={{ height:"60px", marginLeft:"1rem" }}
+                style={{ height:"60px", marginLeft:"-13px" }}
                 className="img-fluid"
               />
             </div>
-            <div className="w-100 py-2">
+            <div className="mainNav w-100 py-2">
               <div
                 // className="d-flex justify-content-center mx-3"
                 style={{ height: "60px" }}
