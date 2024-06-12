@@ -48,6 +48,8 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
 import io.swagger.model.AsyncApiDetails;
+import io.swagger.model.GenderDetectionRequest;
+import io.swagger.model.GenderDetectionResponse;
 import io.swagger.model.ImageFile;
 import io.swagger.model.ImageFiles;
 import io.swagger.model.InferenceAPIEndPoint;
@@ -345,6 +347,68 @@ public class ModelInferenceEndPointService {
 			schema = nerInference;
 			
 			log.info("logging NerInference point response" + responseJsonStr);
+
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.GenderDetectionInference")) {
+
+			io.swagger.model.GenderDetectionInference genderDetectionInference = (io.swagger.model.GenderDetectionInference) schema;
+			GenderDetectionRequest request = genderDetectionInference.getRequest();
+
+			GenderDetectionResponse response = null;
+			SslContext sslContext;
+			try {
+				sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+
+				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+
+				
+				/*
+				 * response = builder.clientConnector(new
+				 * ReactorClientHttpConnector(httpClient)).build().post()
+				 * .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
+				 * .bodyToMono(ASRResponse.class).block();
+				 */
+			     if(inferenceAPIEndPoint.getInferenceApiKey()!=null) {
+				InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey=inferenceAPIEndPoint.getInferenceApiKey();
+
+				
+				if(inferenceAPIEndPointInferenceApiKey.getValue()!=null) {
+					
+						String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+						String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+						log.info("inferenceApiKeyName : "+inferenceApiKeyName);
+						log.info("inferenceApiKeyValue : "+inferenceApiKeyValue);
+						response = builder.clientConnector(new
+								  ReactorClientHttpConnector(httpClient)).build().post()
+								  .uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue).
+								  body(Mono.just(request), GenderDetectionRequest.class).retrieve()
+								  .bodyToMono(GenderDetectionResponse.class).block();					
+					    log.info("response : "+response);
+				   }
+				}else {
+					response = builder.clientConnector(new
+							  ReactorClientHttpConnector(httpClient)).build().post()
+							  .uri(callBackUrl).
+							  body(Mono.just(request), GenderDetectionRequest.class).retrieve()
+							  .bodyToMono(GenderDetectionResponse.class).block();
+				    log.info("response : "+response);
+
+					
+				}
+				
+				
+				
+				
+				
+				
+
+			} catch (SSLException e) {
+				e.printStackTrace();
+			}
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			log.info("logging asr inference point response" + objectMapper.writeValueAsString(response));
+			genderDetectionInference.setResponse(response);
+			schema = genderDetectionInference;
 
 		}
 
@@ -1048,6 +1112,109 @@ public class ModelInferenceEndPointService {
 			response = resp;
 			return response;
 			
+		}
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.GenderDetectionInference")) {
+			io.swagger.model.GenderDetectionInference genderDetectionInference = (io.swagger.model.GenderDetectionInference) schema;
+             
+			ImageFiles imageFiles = new ImageFiles();
+			ImageFile imageFile = new ImageFile();
+			imageFile.setImageUri(compute.getImageUri());
+			imageFiles.add(imageFile);
+			OCRRequest request = ocrInference.getRequest();
+		      LanguagePairs langs =		model.getLanguages();
+		      
+		      
+		      
+
+			if(model.isIsLangDetectionEnabled()==null) {
+				
+		      request.getConfig().setLanguages(langs);
+		      
+			}else if(model.isIsLangDetectionEnabled()!=null ) {
+				      
+				if(!model.isIsLangDetectionEnabled()) {
+				      request.getConfig().setLanguages(langs);
+
+					
+				}else {
+					
+					LanguagePairs langs1 = new LanguagePairs();
+					request.getConfig().setLanguages(langs1);
+				}
+				
+				
+				
+			}
+			
+			
+			
+			
+			request.setImage(imageFiles);
+			
+			
+			
+             log.info(request.getConfig().getLanguages().toString());
+         
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			//OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
+                    .writeTimeout(120, TimeUnit.SECONDS)
+                    .readTimeout(120, TimeUnit.SECONDS)
+                    .build();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+            Request httpRequest =checkInferenceApiKeyValueAtCompute(inferenceAPIEndPoint,body);
+
+			
+			
+			
+			
+			Response httpResponse =null; 
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			}catch(SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout", "Unable to fetch model response (timeout). Please try again later !",
+						HttpStatus.BAD_REQUEST);
+			}
+			
+			
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+
+			String responseJsonStr = httpResponse.body().string();
+			try {
+				OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
+
+				if (ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <= 0
+						|| ocrResponse.getOutput().get(0).getSource().isBlank()) {
+					throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is Empty",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+				ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
+				BeanUtils.copyProperties(ocrResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from OCR model inference end not proper : callback url :  " + callBackUrl
+						+ " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is not proper",
+						HttpStatus.BAD_REQUEST);
+
+			}
+
 		}
 
 		

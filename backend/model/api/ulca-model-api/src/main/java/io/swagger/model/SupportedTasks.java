@@ -22,7 +22,8 @@ public enum SupportedTasks {
     GLOSSARY("glossary"),
     NER("ner"),
     TXT_LANG_DETECTION("txt-lang-detection"),
-    AUDIO_LANG_DETECTION("audio-lang-detection");
+    AUDIO_LANG_DETECTION("audio-lang-detection"),
+    GENDER_DETECTION("gender-detection");
 
   private String value;
 
