@@ -1,0 +1,89 @@
+
+
+.ContactUs__Banner {
+    background-image: url('../assets/contactBanner.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      /* padding: 20px 0; */
+      /* margin-bottom: 30px; */
+      /* height: 400px; */
+      font-family: "Noto-Regular";
+      height: 205px;
+  }
+  
+  .Contact__banner-content {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .Contact__bannerHeading{
+    font-family: "Noto-Bold";
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 48px;
+    text-align: left;
+    }
+    
+
+    .Contact__bannerDesc{
+    font-family: "Noto-Regular";
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 21.79px;
+    text-align: left;
+    
+    }
+
+    .footerlinks__links li a:hover {
+      text-decoration: none;
+      /* color: #2947A3; */
+    }
+
+    .ContactUs__contactButton{
+      width: 180px;
+      height: 52px;
+      gap: 0px;
+      opacity: 0px;
+      background-color: #2947A3;
+      font-family: "Noto-Regular";
+      /*padding: 10px 30px;
+      */font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      letter-spacing: 0.005em;
+      text-align: left;
+      text-decoration: none;
+      border-radius: 4px;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      -ms-border-radius: 4px;
+      -o-border-radius: 4px;
+}
+
+.ContactUs__contactButton button{
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+}
+
+    .ContactUs__contactButtonText{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+
+    @media screen and (max-width:600px) {
+        .ContactUs__Banner{
+            height: 350px;
+        }
+
+        .Contact__bannerHeading, .Contact__bannerDesc{
+            text-align: center;
+        }
+    }

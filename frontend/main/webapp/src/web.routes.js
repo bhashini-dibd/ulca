@@ -39,6 +39,7 @@ import { useDispatch } from "react-redux";
 import APITransport from './redux/actions/apitransport/apitransport';
 import DatasetMetrics from "./ui/container/DataSet/DatasetMetrics/DatasetMetrics";
 import MyProfile from "./ui/container/UserManagement/MyProfile";
+import GlossaryProfile from "./ui/container/UserManagement/GlossaryProfile";
 
 const PrivateRoute = ({
   path,
@@ -308,6 +309,14 @@ export default function App() {
             path={`${process.env.PUBLIC_URL}/profile`}
             title={"My Profile"}
             component={MyProfile}
+            authenticate={authenticateUser}
+            currentMenu="user-my-profile"
+            dontShowHeader={false}
+          />
+           <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/glossary`}
+            title={"Glossary Profile"}
+            component={GlossaryProfile}
             authenticate={authenticateUser}
             currentMenu="user-my-profile"
             dontShowHeader={false}

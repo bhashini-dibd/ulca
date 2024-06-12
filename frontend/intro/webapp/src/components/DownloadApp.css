@@ -10,7 +10,7 @@
 }
 .content-left1 {
   flex: 2;
-  padding: 20px;
+  padding: 20px 20px 0px 20px;
   background-color: #ffffff;
   display: flex;
   align-items: center;
@@ -20,7 +20,7 @@
   flex-direction: column;
   align-items: flex-start;
   padding: 0px;
-  gap: 40px;
+  gap: 25px;
   order: 0;
 }
 .DownloadImage{
@@ -37,7 +37,7 @@
   font-size: 36px;
   color: #000000;
   line-height: 44px;
-  font-family: "Roboto",sans-serif;
+  font-family: "Noto-Bold";
 }
 .content-left1 .DownloadAppLeft .DownloadAppLeftText {
   font-weight: 400;
@@ -45,13 +45,13 @@
   line-height: 22px;
   color: #000000;
   margin: 10px 0px;
-  font-family: "Roboto",sans-serif;
+  font-family: "Noto-Regular"
 }
 .content-left1 .DownloadAppLeft .DownloadAppDownloadTxt {
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 10px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Noto-Regular";
   color: #000000;
 }
 @media (max-width: 550px) {
@@ -70,8 +70,8 @@
 }
 .content-left2 {
   flex: 1;
-  padding: 20px;
-  background: linear-gradient(90deg, #FEA96C 0%, #FD7F23 100%);
+  padding:0px 20px 20px 20px;
+  /* background: linear-gradient(90deg, #FEA96C 0%, #FD7F23 100%); */
   display: flex;
   align-items: center;
   gap: 15px;
@@ -80,6 +80,11 @@
   display: flex;
   gap: 25px;
   align-items: center;
+}
+
+.content-left2ContainerImg{
+  width: 200px;
+  height: 200px;
 }
 @media screen and (max-width: 600px) {
   .content-left2 .content-left2Container {
@@ -94,7 +99,7 @@
   width: 2px;
   height: 157px;
   flex-shrink: 0;
-  background: #FEC49A;
+  background: #C7C9D9  ;
 }
 .image-right {
   position: absolute;
@@ -123,6 +128,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+  margin-top: 30px;
 }
 @media (max-width: 768px) {
   .section {
@@ -155,5 +161,26 @@
 @media screen and (max-width: 600px) {
   .DownloadAppleftButtonContainerMobile {
     gap: 15px;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  
+  .content-left1 .DownloadAppLeft .DownloadAppLeftHeading {
+    font-size: 28px;
+   
+  }
+
+  .background-image{
+    width: 80%;
+  }
+
+  .image-right{
+    justify-content: flex-end;
+  }
+
+  .content-left2ContainerImg{
+    height: 150px;
+    width: 150px;
   }
 }
