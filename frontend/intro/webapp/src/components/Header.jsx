@@ -46,7 +46,7 @@ const MobileHeader = () => {
           <div className="menu">
             <ul>
               <li>
-                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/">
+                <a className="nav-color" href="https://bhashini.gov.in/">
                   {t('home')}
                 </a>
               </li>
@@ -65,7 +65,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/about-us"
+                      href="https://bhashini.gov.in/about-bhashini"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -75,7 +75,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/vision-mission"
+                      href="https://bhashini.gov.in/vision-mission"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -85,7 +85,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/our-objectives"
+                      href="https://bhashini.gov.in/our-objectives"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -95,7 +95,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/bhashini-ecosystem"
+                      href="https://bhashini.gov.in/bhashini-ecosystem"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -105,7 +105,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/our-team"
+                      href="https://bhashini.gov.in/our-team"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -115,7 +115,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/bhashini-at-work"
+                      href="https://bhashini.gov.in/bhashini-at-work"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -203,7 +203,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/services"
+                      href="https://bhashini.gov.in/services"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -213,7 +213,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/product"
+                      href="https://bhashini.gov.in/product"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -223,7 +223,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/careers"
+                      href="https://bhashini.gov.in/career"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -233,7 +233,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/tender"
+                      href="https://bhashini.gov.in/tender"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -243,7 +243,7 @@ const MobileHeader = () => {
                   <li className="sub-item">
                     <a
                       className="nav-color"
-                      href="https://uat-bhashini.bhashini.co.in/on-premise"
+                      href="https://bhashini.gov.in/on-premise"
                       target="_self"
                       rel="noopener noreferrer"
                     >
@@ -254,25 +254,25 @@ const MobileHeader = () => {
               </li>
 
               <li>
-                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/sahyogi">
+                <a className="nav-color" href="https://bhashini.gov.in/sahyogi">
                   Sahyogi
                 </a>
               </li>
 
               <li>
-                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/sanchalak">
+                <a className="nav-color" href="https://bhashini.gov.in/sanchalak">
                   Sanchalak
                 </a>
               </li>
 
               <li>
-                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/parikshan-app">
+                <a className="nav-color" href="https://bhashini.gov.in/parikshan-app">
                   Prayog
                 </a>
               </li>
 
               <li>
-                <a className="nav-color" href="https://uat-bhashini.bhashini.co.in/pravakta">
+                <a className="nav-color" href="https://bhashini.gov.in/pravakta">
                   Pravakta
                 </a>
               </li>
@@ -545,21 +545,21 @@ function Header() {
   
 
   const dropdownItems1 = [
-    { label: 'About us', href: 'https://uat-bhashini.bhashini.co.in/about-us' },
-    { label: 'Vision & Mission', href: 'https://uat-bhashini.bhashini.co.in/vision-mission' },
-    { label: 'Our Objectives', href: 'https://uat-bhashini.bhashini.co.in/our-objectives' },
-    { label: 'CEO & Our Team', href: 'https://uat-bhashini.bhashini.co.in/our-team' },
-    { label: 'Bhashini Ecosystem', href: 'https://uat-bhashini.bhashini.co.in/bhashini-ecosystem' },
-    { label: 'Bhashini At Work', href: 'https://uat-bhashini.bhashini.co.in/bhashini-at-work' },
+    { label: 'About us', href: 'https://bhashini.gov.in/about-bhashini' },
+    { label: 'Vision & Mission', href: 'https://bhashini.gov.in/vision-mission' },
+    { label: 'Our Objectives', href: 'https://bhashini.gov.in/our-objectives' },
+    { label: 'CEO & Our Team', href: 'https://bhashini.gov.in/our-team' },
+    { label: 'Bhashini Ecosystem', href: 'https://bhashini.gov.in/bhashini-ecosystem' },
+    { label: 'Bhashini At Work', href: 'https://bhashini.gov.in/bhashini-at-work' },
    
   ];
 
   const dropdownItems2 = [
-    { label: 'Our Services', href: 'https://uat-bhashini.bhashini.co.in/services' },
-    { label: 'Our Products', href: 'https://uat-bhashini.bhashini.co.in/product' },
-    { label: 'Careers', href: 'https://uat-bhashini.bhashini.co.in/careers' },
-    { label: 'Tenders/EOI', href: 'https://uat-bhashini.bhashini.co.in/tender' },
-    { label: 'On - Premise', href: 'https://uat-bhashini.bhashini.co.in/on-premise' },
+    { label: 'Our Services', href: 'https://bhashini.gov.in/services' },
+    { label: 'Our Products', href: 'https://bhashini.gov.in/product' },
+    { label: 'Careers', href: 'https://bhashini.gov.in/career' },
+    { label: 'Tenders/EOI', href: 'https://bhashini.gov.in/tender' },
+    { label: 'On - Premise', href: 'https://bhashini.gov.in/on-premise' },
     // { label: 'Team', href: '#' },
   ];
 
@@ -663,7 +663,7 @@ function Header() {
             <div className="collapse navbar-collapse" id="navbarsExample07">
               <ul className="navbar-nav mr-auto navbarScroll TabNavbar">
                 <li className="nav-item">
-                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/">
+                  <a className="nav-link" href="https://bhashini.gov.in/">
                     {t('home')} <span className="sr-only">(current)</span>
                   </a>
                 </li>
@@ -675,27 +675,27 @@ function Header() {
                     {t('aboutBhashini')}
                   </a>
                 </li> */}
-                <Dropdown label="About" items={dropdownItems1} tooltipValue="About Bhashini"  link="https://uat-bhashini.bhashini.co.in/about-us"/>
-                <Dropdown label="Arpan" items={dropdownItems2} tooltipValue="About Arpan" link="https://uat-bhashini.bhashini.co.in/services"/>
+                <Dropdown label="About" items={dropdownItems1} tooltipValue="About Bhashini"  link="https://bhashini.gov.in/about-bhashini"/>
+                <Dropdown label="Arpan" items={dropdownItems2} tooltipValue="About Arpan" link="https://bhashini.gov.in/services"/>
                 {/* <Dropdown label="Prayog" items={dropdownItems3} tooltipValue="Explore our reference applications"/> */}
                 <li className="nav-item">
-                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/sahyogi">
+                  <a className="nav-link" href="https://bhashini.gov.in/sahyogi">
                    Sahyogi
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/sanchalak">
+                  <a className="nav-link" href="https://bhashini.gov.in/sanchalak">
                    Sanchalak
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/parikshan-app">
+                  <a className="nav-link" href="https://bhashini.gov.in/parikshan-app">
                    Prayog
                   </a>
                 </li>
                 <li className="nav-item">
                 <BootstrapTooltip title="Awareness and outreach" placement="top">
-                  <a className="nav-link" href="https://uat-bhashini.bhashini.co.in/pravakta">
+                  <a className="nav-link" href="https://bhashini.gov.in/pravakta">
                    Pravakta
                   </a>
                   </BootstrapTooltip>

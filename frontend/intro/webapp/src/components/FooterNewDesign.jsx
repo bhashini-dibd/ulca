@@ -55,19 +55,19 @@ const FooterNewDesign = () => {
               {/* <div className="mb-3 footerlinks__header">Quick Links</div> */}
               <div className="footerlinks__links">
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/">Home</a>
+                  <a href="https://bhashini.gov.in/">Home</a>
                 </li>
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/about">About</a>
+                  <a href="https://bhashini.gov.in/about-bhashini">About</a>
                 </li>
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/arpan">Arpan</a>
+                  <a href="https://bhashini.gov.in/arpan">Arpan</a>
                 </li>
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/sahyogi">Sahyogi</a>
+                  <a href="https://bhashini.gov.in/sahyogi">Sahyogi</a>
                 </li>
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/careers">Careers</a>
+                  <a href="https://bhashini.gov.in/career">Careers</a>
                 </li>
                 <li>
                   <a href="https://bhashini.gov.in/bhashadaan/en/home">Bhashadaan</a>
@@ -80,19 +80,19 @@ const FooterNewDesign = () => {
               {/* <div className="mb-3 footerlinks__header">Category 1</div> */}
               <div className="footerlinks__links">
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/sanchalak">Sanchalak</a>
+                  <a href="https://bhashini.gov.in/sanchalak">Sanchalak</a>
                 </li>
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/connect">Contact Us</a>
+                  <a href="https://bhashini.gov.in/connect">Contact Us</a>
                 </li>
                 <li>
                   <a href="#">ULCA</a>
                 </li>
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/bhashini-ecosystem">Ecosystem</a>
+                  <a href="https://bhashini.gov.in/bhashini-ecosystem">Ecosystem</a>
                 </li>
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/pravakta">Pravakta</a>
+                  <a href="https://bhashini.gov.in/pravakta">Pravakta</a>
                 </li>
               </div>
             </div>
@@ -102,16 +102,16 @@ const FooterNewDesign = () => {
               {/* <div className="mb-3 footerlinks__header">Category 2</div> */}
               <div className="footerlinks__links">
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/mitra">Mitra</a>
+                  <a href="https://bhashini.gov.in/sahyogi/anushandhan-mitra">Mitra</a>
                 </li>
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/startup">Startups</a>
+                  <a href="https://bhashini.gov.in/sahyogi/startup">Startups</a>
                 </li>
                 <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/parikshan-app">Parikshan App</a>
+                  <a href="https://bhashini.gov.in/parikshan-app">Parikshan App</a>
                 </li>
                 {/* <li>
-                  <a href="https://uat-bhashini.bhashini.co.in/prayog">Prayog</a>
+                  <a href="https://bhashini.gov.in/prayog">Prayog</a>
                 </li> */}
               </div>
             </div>
@@ -153,11 +153,11 @@ const FooterNewDesign = () => {
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center pb-3">
           <div>© 2024 - Copyright All rights reserved. </div>
           <div className=" Footer__documents">
-            <li><a href="https://uat-bhashini.bhashini.co.in/termsAndConditions">Terms & Condition</a></li>
+            <li><a href="https://bhashini.gov.in/termsAndConditions">Terms & Condition</a></li>
             <li style={{ color: "#73B8F9", display: isMobile ? 'none':"" }}>|</li>
-            <li><a href="https://uat-bhashini.bhashini.co.in/privacy-policy">Privacy Policy</a></li>
+            <li><a href="https://bhashini.gov.in/privacy-policy">Privacy Policy</a></li>
             <li style={{ color: "#73B8F9", display: isMobile ? 'none':"" }}>|</li>
-            <li><a href="https://uat-bhashini.bhashini.co.in/connect">Contact Us</a></li>
+            <li><a href="https://bhashini.gov.in/connect">Contact Us</a></li>
           </div>
         </div>
       </Container>

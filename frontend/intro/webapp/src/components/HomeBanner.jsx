@@ -29,8 +29,8 @@ with AI Technologies</div>
                       <div>
 
                         <Breadcrumb className="ULCA__breadcrumb">
-                            <Breadcrumb.Item href="https://uat-bhashini.bhashini.co.in/" style={{color:"#F1F1F1"}}><span style={{color:"#F1F1F1"}}>Home</span></Breadcrumb.Item>
-                            <Breadcrumb.Item href="https://uat-bhashini.bhashini.co.in/sanchalak" ><span style={{color:"#F1F1F1"}}>Sanchalak</span></Breadcrumb.Item>
+                            <Breadcrumb.Item href="https://bhashini.gov.in/" style={{color:"#F1F1F1"}}><span style={{color:"#F1F1F1"}}>Home</span></Breadcrumb.Item>
+                            <Breadcrumb.Item href="https://bhashini.gov.in/sanchalak" ><span style={{color:"#F1F1F1"}}>Sanchalak</span></Breadcrumb.Item>
                             <Breadcrumb.Item active style={{color:"#F1F1F1"}}>ULCA</Breadcrumb.Item>
                         </Breadcrumb>
                       </div>
