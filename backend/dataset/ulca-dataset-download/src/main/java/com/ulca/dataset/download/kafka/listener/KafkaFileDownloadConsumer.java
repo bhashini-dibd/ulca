@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
+
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +46,9 @@ import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 import com.ulca.dataset.util.UnzipUtility;
 
-import io.swagger.model.DatasetType;
+import io.swagger.model.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 @Service
@@ -335,15 +338,95 @@ public class KafkaFileDownloadConsumer {
 				throw new IOException("Invalid datasetType");
 			}
 
+			if (params.has("languages") && !params.isNull("languages")) {
+				JSONObject languages = params.getJSONObject("languages");
+				String sourceLanguage = languages.isNull("sourceLanguage") ? null
+						: languages.getString("sourceLanguage");
+				log.info("sourceLanguage :: " + sourceLanguage);
+				String sourceScriptCode = languages.isNull("sourceScriptCode") ? null
+						: languages.getString("sourceScriptCode");
+				log.info("sourceScriptCode :: " + sourceScriptCode);
+				SupportedLanguages langMatched = null;
+				if (sourceLanguage != null && !StringUtils.isEmpty(sourceLanguage)) {
+					langMatched = SupportedLanguages.fromValue(sourceLanguage);
+					if (langMatched != null) {
+						validateScript(sourceLanguage, sourceScriptCode);
+						String targetLanguage = languages.isNull("targetLanguage") ? null
+								: languages.getString("targetLanguage");
+						log.info("targetLanguage :: " + targetLanguage);
+						if (targetLanguage != null && !StringUtils.isEmpty(targetLanguage)) {
+							langMatched = SupportedLanguages.fromValue(targetLanguage);
+							if (langMatched != null) {
+								String targetScriptCode = languages.isNull("targetScriptCode") ? null
+										: languages.getString("targetScriptCode");
+								log.info("targetScriptCode :: " + targetScriptCode);
+								validateScript(targetLanguage, targetScriptCode);
+							} else {
+								throw new IOException("Invalid targetLanguage !");
+							}
+						}
+					} else {
+						throw new IOException("Invalid sourceLanguage !");
+					}
+				} else {
+					throw new IOException(" sourceLanguage value should not be null or empty");
+				}
+
+			} else {
+				throw new IOException("languages value should not be null or empty");
+			}
+
 			return datasetType;
-			
-			
+
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			 throw new IOException("params.json not valid");
-			
+			throw new IOException("params.json not valid");
+
 		}
-		
+
 	}
+
+	public boolean validateScript(String lang, String script) throws IOException {
+		String multiScriptSupportedLangsArr[] = { "ks", "mni", "doi" };
+		ArrayList<String> multiScriptSupportedLangsArrayList = new ArrayList<>(
+				Arrays.asList(multiScriptSupportedLangsArr));
+		if (multiScriptSupportedLangsArrayList.contains(lang)) {
+			if (script != null && !StringUtils.isEmpty(script)) {
+				SupportedScripts scriptMatched = SupportedScripts.fromValue(script);
+				if (scriptMatched != null) {
+					if (lang.equals("ks")) {
+						String kashmiriScripts[] = { "Deva", "Arab" };
+						ArrayList<String> kashmiriScriptsList = new ArrayList<>(Arrays.asList(kashmiriScripts));
+						if (!kashmiriScriptsList.contains(script)) {
+							throw new IOException(script + " is not valid script code for Kashmiri!");
+
+						}
+
+					}
+					if (lang.equals("mni")) {
+						String manipuriScripts[] = { "Beng", "Mtei" };
+						ArrayList<String> manipuriScriptsList = new ArrayList<>(Arrays.asList(manipuriScripts));
+						if (!manipuriScriptsList.contains(script)) {
+							throw new IOException(script + " is not valid script code for Manipuri!");
+						}
+					}
+					if (lang.equals("doi")) {
+						String dogriScripts[] = { "Dogr", "Arab", "Deva" };
+						ArrayList<String> dogriScriptsList = new ArrayList<>(Arrays.asList(dogriScripts));
+						if (!dogriScriptsList.contains(script)) {
+							throw new IOException(script + " is not valid script code for Dogri!");
+						}
+					}
+				} else {
+					throw new IOException("Invalid scriptCode : " + script + " !");
+				}
+			} else {
+				throw new IOException("scriptCode value should not be null or empty for : " + lang + " language !");
+
+			}
+		}
+		return true;
+	}
+
 }

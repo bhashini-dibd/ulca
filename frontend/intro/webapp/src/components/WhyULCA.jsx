@@ -143,6 +143,7 @@ export const WhyULCA = () => {
       </div>
       <Grid
         container
+        className="whyUlcaGrid"
         spacing={5}
         direction="row"
         justifyContent="center"

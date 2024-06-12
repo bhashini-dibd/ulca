@@ -16,6 +16,8 @@
 .top__head{
   padding: 6px;
   border-bottom: 1px solid #ECECEC;
+  background-color: #13296C ;
+  color: #EBEBEB;
 }
 .top__head-container{
   display: flex;
@@ -34,12 +36,13 @@
   color: #16337B;
 }
 .top__listing-link .u-text {
-  font-size: 0.875rem;
-  color: #3A3A3A;
+  font-size: 12px;
+  color: #EBEBEB;
+  margin-top: 3px;
 }
 .top__listing-link .u-icon {
   font-size: 0.8125rem;
-  color: #16337B;
+  color: #EBEBEB;
   margin-right: 5px;
 }
 .top__listing-item + .top__listing-item {
@@ -47,7 +50,7 @@
 }
 .top__listing-link .sub-link {
   font-size: 0.875rem;
-  color: #3A3A3A;
+  color: #EBEBEB;
   min-width: 22px;
   text-align: center;
 }
