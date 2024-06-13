@@ -84,10 +84,11 @@ const HomeDatasets = () => {
         console.error("Error handling API response:", error);
       }
     };
+    fetchData();
 
-    if (apiValue !== "parallel-corpus") {
-      fetchData();
-    }
+    // if (apiValue !== "parallel-corpus") {
+    //   fetchData();
+    // }
   }, [apiValue]);
 
 
@@ -507,18 +508,19 @@ const HomeDatasets = () => {
                         className="DatasetTxt m-0 p-0"
                       >
                         <MenuItem
-                          value={"parallel-corpus"}
+                          value="parallel-corpus"
                           style={{ display: "flex",color:"#150202",fontSize:"16px", fontWeight:400, fontFamily:"Noto-Regular" }}
                         >
                           Parallel Corpus
                         </MenuItem>
-                        <MenuItem value= " monolingual-corpus">Monolingual Dataset</MenuItem>
-                        <MenuItem value=" asr-corpus">ASR Dataset</MenuItem>
-                        <MenuItem value="tts-corpus ">TTS Dataset</MenuItem>
-                        <MenuItem value="ocr-corpus ">OCR Dataset</MenuItem>
+                        <MenuItem value="monolingual-corpus">Monolingual Dataset</MenuItem>
+                        <MenuItem value="asr-corpus">ASR Dataset</MenuItem>
+                        <MenuItem value="tts-corpus">TTS Dataset</MenuItem>
+                        <MenuItem value="ocr-corpus">OCR Dataset</MenuItem>
                         <MenuItem value="asr-unlabeled-corpus">ASR Unlabeled Dataset</MenuItem>
-                        <MenuItem value="transliteration-corpus ">Transliteration Dataset</MenuItem>
-                        <MenuItem value=" glossary-corpus">Glossary Dataset</MenuItem>
+                        <MenuItem value="tts-corpus">TTS Dataset</MenuItem>
+                        <MenuItem value="transliteration-corpus">Transliteration Dataset</MenuItem>
+                        <MenuItem value="glossary-corpus">Glossary Dataset</MenuItem>
                       </Select>
                     </FormControl>
                     <h6
