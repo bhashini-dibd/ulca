@@ -4,7 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AudioFile;
-import io.swagger.model.GenderPredictions;
+import io.swagger.model.AudioGenderPredictions;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * AudioGenderPrediction
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-12T11:10:30.623150359Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-13T12:41:05.989770988Z[GMT]")
 
 
 public class AudioGenderPrediction   {
@@ -22,7 +22,7 @@ public class AudioGenderPrediction   {
   private AudioFile audio = null;
 
   @JsonProperty("genderPrediction")
-  private GenderPredictions genderPrediction = null;
+  private AudioGenderPredictions genderPrediction = null;
 
   public AudioGenderPrediction audio(AudioFile audio) {
     this.audio = audio;
@@ -45,7 +45,7 @@ public class AudioGenderPrediction   {
     this.audio = audio;
   }
 
-  public AudioGenderPrediction genderPrediction(GenderPredictions genderPrediction) {
+  public AudioGenderPrediction genderPrediction(AudioGenderPredictions genderPrediction) {
     this.genderPrediction = genderPrediction;
     return this;
   }
@@ -58,11 +58,11 @@ public class AudioGenderPrediction   {
       @NotNull
 
     @Valid
-    public GenderPredictions getGenderPrediction() {
+    public AudioGenderPredictions getGenderPrediction() {
     return genderPrediction;
   }
 
-  public void setGenderPrediction(GenderPredictions genderPrediction) {
+  public void setGenderPrediction(AudioGenderPredictions genderPrediction) {
     this.genderPrediction = genderPrediction;
   }
 

@@ -14,10 +14,10 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "list of")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-12T11:10:30.623150359Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-13T12:41:05.989770988Z[GMT]")
 
 
-public class GenderPredictions extends ArrayList<GenderPrediction>  {
+public class AudioGenderPredictions extends ArrayList<GenderPrediction>  {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -38,7 +38,7 @@ public class GenderPredictions extends ArrayList<GenderPrediction>  {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GenderPredictions {\n");
+    sb.append("class AudioGenderPredictions {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();

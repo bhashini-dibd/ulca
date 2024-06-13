@@ -3,7 +3,7 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.GenderDetectionOutput;
+import io.swagger.model.AudioGenderDetectionOutput;
 import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
@@ -15,17 +15,17 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-12T11:10:30.623150359Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-13T12:41:05.989770988Z[GMT]")
 
 
-public class GenderDetectionResponse   {
+public class AudioGenderDetectionResponse   {
   @JsonProperty("output")
-  private GenderDetectionOutput output = null;
+  private AudioGenderDetectionOutput output = null;
 
   @JsonProperty("taskType")
   private SupportedTasks taskType = null;
 
-  public GenderDetectionResponse output(GenderDetectionOutput output) {
+  public AudioGenderDetectionResponse output(AudioGenderDetectionOutput output) {
     this.output = output;
     return this;
   }
@@ -38,15 +38,15 @@ public class GenderDetectionResponse   {
       @NotNull
 
     @Valid
-    public GenderDetectionOutput getOutput() {
+    public AudioGenderDetectionOutput getOutput() {
     return output;
   }
 
-  public void setOutput(GenderDetectionOutput output) {
+  public void setOutput(AudioGenderDetectionOutput output) {
     this.output = output;
   }
 
-  public GenderDetectionResponse taskType(SupportedTasks taskType) {
+  public AudioGenderDetectionResponse taskType(SupportedTasks taskType) {
     this.taskType = taskType;
     return this;
   }
@@ -76,9 +76,9 @@ public class GenderDetectionResponse   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GenderDetectionResponse genderDetectionResponse = (GenderDetectionResponse) o;
-    return Objects.equals(this.output, genderDetectionResponse.output) &&
-        Objects.equals(this.taskType, genderDetectionResponse.taskType);
+    AudioGenderDetectionResponse audioGenderDetectionResponse = (AudioGenderDetectionResponse) o;
+    return Objects.equals(this.output, audioGenderDetectionResponse.output) &&
+        Objects.equals(this.taskType, audioGenderDetectionResponse.taskType);
   }
 
   @Override
@@ -89,7 +89,7 @@ public class GenderDetectionResponse   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GenderDetectionResponse {\n");
+    sb.append("class AudioGenderDetectionResponse {\n");
     
     sb.append("    output: ").append(toIndentedString(output)).append("\n");
     sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");

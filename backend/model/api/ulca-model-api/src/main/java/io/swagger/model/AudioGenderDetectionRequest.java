@@ -4,27 +4,27 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AudioFiles;
-import io.swagger.model.GenderDetectionConfig;
+import io.swagger.model.AudioGenderDetectionConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GenderDetectionRequest
+ * AudioGenderDetectionRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-12T11:10:30.623150359Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-13T12:41:05.989770988Z[GMT]")
 
 
-public class GenderDetectionRequest   {
+public class AudioGenderDetectionRequest   {
   @JsonProperty("audio")
   private AudioFiles audio = null;
 
   @JsonProperty("config")
-  private GenderDetectionConfig config = null;
+  private AudioGenderDetectionConfig config = null;
 
-  public GenderDetectionRequest audio(AudioFiles audio) {
+  public AudioGenderDetectionRequest audio(AudioFiles audio) {
     this.audio = audio;
     return this;
   }
@@ -45,7 +45,7 @@ public class GenderDetectionRequest   {
     this.audio = audio;
   }
 
-  public GenderDetectionRequest config(GenderDetectionConfig config) {
+  public AudioGenderDetectionRequest config(AudioGenderDetectionConfig config) {
     this.config = config;
     return this;
   }
@@ -58,11 +58,11 @@ public class GenderDetectionRequest   {
       @NotNull
 
     @Valid
-    public GenderDetectionConfig getConfig() {
+    public AudioGenderDetectionConfig getConfig() {
     return config;
   }
 
-  public void setConfig(GenderDetectionConfig config) {
+  public void setConfig(AudioGenderDetectionConfig config) {
     this.config = config;
   }
 
@@ -75,9 +75,9 @@ public class GenderDetectionRequest   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GenderDetectionRequest genderDetectionRequest = (GenderDetectionRequest) o;
-    return Objects.equals(this.audio, genderDetectionRequest.audio) &&
-        Objects.equals(this.config, genderDetectionRequest.config);
+    AudioGenderDetectionRequest audioGenderDetectionRequest = (AudioGenderDetectionRequest) o;
+    return Objects.equals(this.audio, audioGenderDetectionRequest.audio) &&
+        Objects.equals(this.config, audioGenderDetectionRequest.config);
   }
 
   @Override
@@ -88,7 +88,7 @@ public class GenderDetectionRequest   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GenderDetectionRequest {\n");
+    sb.append("class AudioGenderDetectionRequest {\n");
     
     sb.append("    audio: ").append(toIndentedString(audio)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");

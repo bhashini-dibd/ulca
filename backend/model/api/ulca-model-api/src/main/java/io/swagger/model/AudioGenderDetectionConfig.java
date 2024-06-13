@@ -13,13 +13,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GenderDetectionConfig
+ * AudioGenderDetectionConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-12T11:10:30.623150359Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-13T12:41:05.989770988Z[GMT]")
 
 
-public class GenderDetectionConfig   {
+public class AudioGenderDetectionConfig   {
   @JsonProperty("modelId")
   private String modelId = null;
 
@@ -41,7 +41,7 @@ public class GenderDetectionConfig   {
   @JsonProperty("postProcessors")
   private String postProcessors = null;
 
-  public GenderDetectionConfig modelId(String modelId) {
+  public AudioGenderDetectionConfig modelId(String modelId) {
     this.modelId = modelId;
     return this;
   }
@@ -61,7 +61,7 @@ public class GenderDetectionConfig   {
     this.modelId = modelId;
   }
 
-  public GenderDetectionConfig language(LanguagePair language) {
+  public AudioGenderDetectionConfig language(LanguagePair language) {
     this.language = language;
     return this;
   }
@@ -82,7 +82,7 @@ public class GenderDetectionConfig   {
     this.language = language;
   }
 
-  public GenderDetectionConfig audioFormat(AudioFormat audioFormat) {
+  public AudioGenderDetectionConfig audioFormat(AudioFormat audioFormat) {
     this.audioFormat = audioFormat;
     return this;
   }
@@ -103,7 +103,7 @@ public class GenderDetectionConfig   {
     this.audioFormat = audioFormat;
   }
 
-  public GenderDetectionConfig samplingRate(BigDecimal samplingRate) {
+  public AudioGenderDetectionConfig samplingRate(BigDecimal samplingRate) {
     this.samplingRate = samplingRate;
     return this;
   }
@@ -124,7 +124,7 @@ public class GenderDetectionConfig   {
     this.samplingRate = samplingRate;
   }
 
-  public GenderDetectionConfig encoding(Encoding encoding) {
+  public AudioGenderDetectionConfig encoding(Encoding encoding) {
     this.encoding = encoding;
     return this;
   }
@@ -145,7 +145,7 @@ public class GenderDetectionConfig   {
     this.encoding = encoding;
   }
 
-  public GenderDetectionConfig preProcessors(String preProcessors) {
+  public AudioGenderDetectionConfig preProcessors(String preProcessors) {
     this.preProcessors = preProcessors;
     return this;
   }
@@ -165,7 +165,7 @@ public class GenderDetectionConfig   {
     this.preProcessors = preProcessors;
   }
 
-  public GenderDetectionConfig postProcessors(String postProcessors) {
+  public AudioGenderDetectionConfig postProcessors(String postProcessors) {
     this.postProcessors = postProcessors;
     return this;
   }
@@ -194,14 +194,14 @@ public class GenderDetectionConfig   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GenderDetectionConfig genderDetectionConfig = (GenderDetectionConfig) o;
-    return Objects.equals(this.modelId, genderDetectionConfig.modelId) &&
-        Objects.equals(this.language, genderDetectionConfig.language) &&
-        Objects.equals(this.audioFormat, genderDetectionConfig.audioFormat) &&
-        Objects.equals(this.samplingRate, genderDetectionConfig.samplingRate) &&
-        Objects.equals(this.encoding, genderDetectionConfig.encoding) &&
-        Objects.equals(this.preProcessors, genderDetectionConfig.preProcessors) &&
-        Objects.equals(this.postProcessors, genderDetectionConfig.postProcessors);
+    AudioGenderDetectionConfig audioGenderDetectionConfig = (AudioGenderDetectionConfig) o;
+    return Objects.equals(this.modelId, audioGenderDetectionConfig.modelId) &&
+        Objects.equals(this.language, audioGenderDetectionConfig.language) &&
+        Objects.equals(this.audioFormat, audioGenderDetectionConfig.audioFormat) &&
+        Objects.equals(this.samplingRate, audioGenderDetectionConfig.samplingRate) &&
+        Objects.equals(this.encoding, audioGenderDetectionConfig.encoding) &&
+        Objects.equals(this.preProcessors, audioGenderDetectionConfig.preProcessors) &&
+        Objects.equals(this.postProcessors, audioGenderDetectionConfig.postProcessors);
   }
 
   @Override
@@ -212,7 +212,7 @@ public class GenderDetectionConfig   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GenderDetectionConfig {\n");
+    sb.append("class AudioGenderDetectionConfig {\n");
     
     sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");

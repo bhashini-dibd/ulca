@@ -3,8 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.GenderDetectionRequest;
-import io.swagger.model.GenderDetectionResponse;
+import io.swagger.model.AudioGenderDetectionRequest;
+import io.swagger.model.AudioGenderDetectionResponse;
 import io.swagger.model.ModelProcessingType;
 import io.swagger.model.SupportedTasks;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,13 +13,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * GenderDetectionInference
+ * AudioGenderDetectionInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-12T11:10:30.623150359Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-13T12:41:05.989770988Z[GMT]")
 
 
-public class GenderDetectionInference  implements OneOfInferenceAPIEndPointSchema {
+public class AudioGenderDetectionInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("taskType")
   private SupportedTasks taskType = null;
 
@@ -27,12 +27,12 @@ public class GenderDetectionInference  implements OneOfInferenceAPIEndPointSchem
   private ModelProcessingType modelProcessingType = null;
 
   @JsonProperty("request")
-  private GenderDetectionRequest request = null;
+  private AudioGenderDetectionRequest request = null;
 
   @JsonProperty("response")
-  private GenderDetectionResponse response = null;
+  private AudioGenderDetectionResponse response = null;
 
-  public GenderDetectionInference taskType(SupportedTasks taskType) {
+  public AudioGenderDetectionInference taskType(SupportedTasks taskType) {
     this.taskType = taskType;
     return this;
   }
@@ -53,7 +53,7 @@ public class GenderDetectionInference  implements OneOfInferenceAPIEndPointSchem
     this.taskType = taskType;
   }
 
-  public GenderDetectionInference modelProcessingType(ModelProcessingType modelProcessingType) {
+  public AudioGenderDetectionInference modelProcessingType(ModelProcessingType modelProcessingType) {
     this.modelProcessingType = modelProcessingType;
     return this;
   }
@@ -74,7 +74,7 @@ public class GenderDetectionInference  implements OneOfInferenceAPIEndPointSchem
     this.modelProcessingType = modelProcessingType;
   }
 
-  public GenderDetectionInference request(GenderDetectionRequest request) {
+  public AudioGenderDetectionInference request(AudioGenderDetectionRequest request) {
     this.request = request;
     return this;
   }
@@ -87,15 +87,15 @@ public class GenderDetectionInference  implements OneOfInferenceAPIEndPointSchem
       @NotNull
 
     @Valid
-    public GenderDetectionRequest getRequest() {
+    public AudioGenderDetectionRequest getRequest() {
     return request;
   }
 
-  public void setRequest(GenderDetectionRequest request) {
+  public void setRequest(AudioGenderDetectionRequest request) {
     this.request = request;
   }
 
-  public GenderDetectionInference response(GenderDetectionResponse response) {
+  public AudioGenderDetectionInference response(AudioGenderDetectionResponse response) {
     this.response = response;
     return this;
   }
@@ -108,11 +108,11 @@ public class GenderDetectionInference  implements OneOfInferenceAPIEndPointSchem
       @NotNull
 
     @Valid
-    public GenderDetectionResponse getResponse() {
+    public AudioGenderDetectionResponse getResponse() {
     return response;
   }
 
-  public void setResponse(GenderDetectionResponse response) {
+  public void setResponse(AudioGenderDetectionResponse response) {
     this.response = response;
   }
 
@@ -125,11 +125,11 @@ public class GenderDetectionInference  implements OneOfInferenceAPIEndPointSchem
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GenderDetectionInference genderDetectionInference = (GenderDetectionInference) o;
-    return Objects.equals(this.taskType, genderDetectionInference.taskType) &&
-        Objects.equals(this.modelProcessingType, genderDetectionInference.modelProcessingType) &&
-        Objects.equals(this.request, genderDetectionInference.request) &&
-        Objects.equals(this.response, genderDetectionInference.response);
+    AudioGenderDetectionInference audioGenderDetectionInference = (AudioGenderDetectionInference) o;
+    return Objects.equals(this.taskType, audioGenderDetectionInference.taskType) &&
+        Objects.equals(this.modelProcessingType, audioGenderDetectionInference.modelProcessingType) &&
+        Objects.equals(this.request, audioGenderDetectionInference.request) &&
+        Objects.equals(this.response, audioGenderDetectionInference.response);
   }
 
   @Override
@@ -140,7 +140,7 @@ public class GenderDetectionInference  implements OneOfInferenceAPIEndPointSchem
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GenderDetectionInference {\n");
+    sb.append("class AudioGenderDetectionInference {\n");
     
     sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
