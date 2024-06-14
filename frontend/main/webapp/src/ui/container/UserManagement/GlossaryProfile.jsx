@@ -358,8 +358,8 @@ useEffect(() => {
     // window.location.reload()
     setModal(false)
     setFormState({
-      sourceLanguage: '',
-      targetLanguage: '',
+      sourceLanguage: 'en',
+      targetLanguage: 'hi',
       sourceText: '',
       targetText: '',
     })
@@ -806,8 +806,8 @@ useEffect(() => {
           onClick={() => {
             setModal(false); 
             setFormState({
-            sourceLanguage: '',
-            targetLanguage: '',
+            sourceLanguage: 'en',
+            targetLanguage: 'hi',
             sourceText: '',
             targetText: '',
           })}}

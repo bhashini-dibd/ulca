@@ -737,8 +737,8 @@ const MyProfile = (props) => {
                                   </Button>
                                 )}
                               </TableCell>
-                              <TableCell></TableCell>
-                              {/* <TableCell style={{ width: "25%" }}>
+                            
+                              <TableCell style={{ width: "25%" }}>
                                 {row?.inferenceApiKey?.value && (
                                   <div onClick={() => handleGlossaryData(row)}>
                                         <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
@@ -752,7 +752,7 @@ const MyProfile = (props) => {
                                   </div>
                                
                                 )}                            
-                              </TableCell> */}
+                              </TableCell>
                             </TableRow>
                           );
                         })}
