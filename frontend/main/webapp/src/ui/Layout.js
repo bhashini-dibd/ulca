@@ -10,6 +10,9 @@ import { withStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import GlobalStyles from "./styles/Styles";
 import Spinner from "./components/common/Spinner";
 import Snackbar from "./components/common/Snackbar";
+import { FooterNewDesign } from "./components/common/FooterNewDesign";
+import Clients from "./components/common/Clients";
+import Contactus from "./components/common/Contactus";
 
 const Header = React.lazy(() => import("./components/common/Header"));
 const Footer = React.lazy(() => import("./components/common/Footer"));
@@ -84,7 +87,9 @@ function App(props) {
           <Footer />
         </Suspense: <></>} */}
         <Suspense fallback={<div>Loading....</div>}>
-          <Footer />
+        <Contactus />
+          <Clients />
+          <FooterNewDesign />
         </Suspense>
       </div>
     </MuiThemeProvider>

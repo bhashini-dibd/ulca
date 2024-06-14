@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  useMediaQuery,
 } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Search from "../../components/Datasets&Model/Search";
@@ -38,7 +39,7 @@ import CustomizedSnackbars from "../../components/common/Snackbar";
 import Spinner from "../../components/common/Spinner";
 import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiKeys";
 import Delete from '../../../assets/deleteIcon.svg'
-import GlossaryBanner from '../../../assets/GlossaryBanner.png'
+import GlossaryBanner from '../../../assets/GlossaryNewBanner.png'
 import { useLocation } from 'react-router-dom';
 import FetchGlossaryDetails from "../../../redux/actions/api/UserManagement/FetchGlossaryDetails";
 import AddGlossaryDataApi from "../../../redux/actions/api/UserManagement/AddGlossaryData";
@@ -132,6 +133,7 @@ const styles = {
 
 const GlossaryProfile = (props) => {
   const { classes } = props;
+  const isMobile = useMediaQuery("(max-width:600px)")
   const dispatch = useDispatch();
   const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
   const [searchKey, setSearchKey] = useState("");
@@ -478,7 +480,7 @@ useEffect(() => {
         download: false,
         search: false,
         customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-            <Tooltip title="Show Selected Data">
+            <Tooltip title="">
               <IconButton
                 onClick={() => {
                   const selectedData = selectedRows.data.map(row => tableData[row.dataIndex]);
@@ -634,13 +636,30 @@ useEffect(() => {
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
+      <Box style={{ width: '50%', padding: '0px', textAlign: 'start', marginBottom: '20px' }}>
+        <Typography variant="h4">App Integration Details</Typography>
+        <Box style={{display:"flex", flexDirection: isMobile ? "column" : 'row', justifyContent:isMobile ? "" :"space-between", alignItems:isMobile ? '' :"center", marginTop:"10px"}}>
+          <Box>
+            <Typography variant="body1">{appName}</Typography>
+            <Typography variant="body2">App Name</Typography>
+          </Box>
+          <Box>
+            <Typography variant="body1">{UserDetails.userID}</Typography>
+            <Typography variant="body2">ULCA API Key</Typography>
+          </Box>
+          {/* <Box>
+            <Typography variant="body2">h1</Typography>
+            <Typography variant="body1">jjj</Typography>
+          </Box> */}
+        </Box>
+      </Box>
       <Box style={{ width: '100%', padding: '0px', textAlign: 'center', marginBottom: '20px' }}>
       <div style={styles.bannerContainer}>
         <img src={GlossaryBanner} alt="banner" style={styles.bannerImage} />
-        <div style={styles.textContainer}>
+        {/* <div style={styles.textContainer}>
           <h1 style={styles.heading}>Glossary</h1>
           <p style={styles.paragraph}>Glossary is a custom dictionary defined by the user that is utilized in Bhashini Translations to translate the customer's domain-specific terminology. For example, when translating from English to Hindi, Bhashini Division maybe translated to भाषिनी प्रभाग by default but given it's an organization name, we need the translation as भाषिणी डिवीज़न. Such word and phrase level translations can be performed using glossaries for your custom domain specific needs.</p>
-        </div>
+        </div> */}
       </div>
       </Box>
 
@@ -664,13 +683,13 @@ useEffect(() => {
       onClose={() => setModal(false)}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
-      maxWidth="xs"
+      maxWidth="md"
     //   style={{fontFamily: "Noto Sans"}}
       fullWidth
     >
       <DialogTitle id="dialog-title">
         <div style={{fontFamily: "Noto-Bold", fontWeight:"600"}}>
-        Create Glossary
+        Create a New Glossary
         </div>
         </DialogTitle>
       <DialogContent>
@@ -679,7 +698,7 @@ useEffect(() => {
             <Grid container spacing={2} alignItems="center">
               {/* First Select Box */}
             
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12} md={6}>
               <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Source Language</Typography>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel id="select-source-label">Select Source Language</InputLabel>
@@ -702,7 +721,7 @@ useEffect(() => {
 
               {/* Second Select Box */}
              
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12} md={6}>
                 
                 <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Target Language</Typography>
                 <FormControl fullWidth variant="outlined">
@@ -726,7 +745,7 @@ useEffect(() => {
 
               {/* First Text Field */}
             
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12} md={6}>
               {/* <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
                 <TextField
                   variant="outlined"
@@ -762,7 +781,7 @@ useEffect(() => {
 
               {/* Second Text Field */}
             
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12} md={6}>
               {/* <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Target Text</Typography>
                 <TextField
                   variant="outlined"
@@ -799,7 +818,7 @@ useEffect(() => {
           </form>
         </Container>
       </DialogContent>
-      <DialogActions style={{ display: "flex", justifyContent: "end", gap: "20px", marginTop: "10px", marginRight:"40px", marginBottom:"10px",fontFamily: "Noto-Regular", fontWeight:"400" }}>
+      <DialogActions style={{ display: "flex", justifyContent: "space-between", gap: "20px", marginTop: "10px", marginRight:"40px", marginLeft:"40px",marginBottom:"10px",fontFamily: "Noto-Regular", fontWeight:"400" }}>
         <Button
           variant="contained"
           color="primary"

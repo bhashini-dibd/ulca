@@ -299,7 +299,39 @@ const MyProfile = (props) => {
   const fetchHeaderButton = () => {
     return (
       <Grid container>
-        <Grid
+        {/* <Grid >
+        <Typography variant="h6" component="h2" align="center">
+            App Integration Details
+          </Typography>
+        </Grid> */}
+        <Box style={{display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
+          <Box>
+          <Typography variant="h6" component="h2" align="center">
+            App Integration Details
+          </Typography>
+          </Box>
+          <Box style={{display:"flex", justifyContent:"space-between", gap:"15px"}}>
+            <Box> <Search value="" handleSearch={(e) => handleSearch(e.target.value)} /></Box>
+            <Box><Button
+            color="primary"
+            size="medium"
+            variant="contained"
+            className={classes.ButtonRefresh}
+            onClick={() => {
+              setModal(true);
+            }}
+            style={{
+              height: "36px",
+              textTransform: "capitalize",
+              fontSize: "1rem",
+            }}
+          >
+            {" "}
+            {translate("button.generate")}
+          </Button></Box>
+          </Box>
+        </Box>
+        {/* <Grid
           item
           xs={9}
           sm={8}
@@ -309,7 +341,7 @@ const MyProfile = (props) => {
           style={{ display: "flex", justifyContent: "flex-start" }}
         >
           <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
-        </Grid>
+        </Grid> */}
         {/* <Grid
           item
           xs={2}
@@ -352,7 +384,7 @@ const MyProfile = (props) => {
           </Button>
         </Grid> */}
 
-        <Grid
+        {/* <Grid
           item
           xs={2}
           sm={2}
@@ -379,7 +411,7 @@ const MyProfile = (props) => {
             {" "}
             {translate("button.generate")}
           </Button>
-        </Grid>
+        </Grid> */}
 
         <Grid
           item
@@ -658,9 +690,16 @@ const MyProfile = (props) => {
                           Action
                         </TableCell>
                         <TableCell
-                          style={{ paddingLeft: "50px", width: "15%", }}
+                          // style={{ paddingLeft: "50px", width: "15%", }}
                         >
-                          
+                          <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
+                            <Box sx={{color:"black"}}>Create Glossary</Box>
+                            <Box> <Tooltip title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
+      <IconButton>
+        <InfoIcon />
+      </IconButton>
+    </Tooltip></Box>
+                          </Box>
                         </TableCell>
                       </TableHead>
                       <TableBody>
@@ -740,16 +779,16 @@ const MyProfile = (props) => {
                             
                               <TableCell style={{ width: "25%" }}>
                                 {row?.inferenceApiKey?.value && (
-                                  <div onClick={() => handleGlossaryData(row)}>
-                                        <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
-                            <Box sx={{color:"blue"}}>Create Glossary</Box>
-                            <Box> <Tooltip title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
-      <IconButton>
-        <InfoIcon />
-      </IconButton>
-    </Tooltip></Box>
-                          </Box>
-                                  </div>
+                                 
+                                      <Button
+                                    color="primary"
+                                    variant="contained"
+                                    className={classes.myProfileGenerateButton}
+                                    onClick={() => handleGlossaryData(row)}
+                                  >
+                                    View
+                                  </Button>
+                                
                                
                                 )}                            
                               </TableCell>
@@ -787,11 +826,11 @@ const MyProfile = (props) => {
       {renderSnackBar()}
       {loading && <Spinner />}
       <Grid container direction="row" spacing={2}>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h3" component="h2" align="center">
             App Integration Details
           </Typography>
-        </Grid>
+        </Grid> */}
         <Typography
           variant="body"
           style={{

@@ -10,6 +10,7 @@ import {
   MuiThemeProvider,
   Divider,
   Grid,
+  Box,
 } from "@material-ui/core";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
 import Avatar from "@material-ui/core/Avatar";
@@ -24,7 +25,7 @@ import { menuItems } from "../../../configs/menuItems";
 import Dialog from "./Dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { initialSearchFilter } from "../../../redux/actions/api/Model/ModelSearch/Benchmark";
-import bhashiniLogo from "../../../assets/Bhashini_en.svg";
+import bhashiniLogo from "../../../assets/BhashiniHeaderLogo.png";
 import { Link } from "@material-ui/core";
 import SubHeader from "./SubHeader";
 import getMenuType from "../../../redux/actions/api/Common/getMenuType";
@@ -138,7 +139,7 @@ const Header = (props) => {
     <MuiThemeProvider theme={Theme}>
       <AppBar color="inherit" position="static" >
         <Toolbar className={classes.toolbar}>
-          <div className={classes.menu}>
+          <div className={classes.menu} style={{margin:"10px 0px"}}>
             <Link href="https://bhashini.gov.in/">
               <img
                 className={classes.bhashiniLogo}
@@ -155,7 +156,12 @@ const Header = (props) => {
                 window.location = `${process.env.REACT_APP_INTRO_URL}/ulca/intro`;
               }}
             >
-              {translate("label.ulca")}
+              {/* {translate("label.ulca")} */}
+              <Box>
+                <Box>Bhashini Udyat</Box>
+                <Box><Typography variant="body2">API Consumption Portal</Typography></Box>
+              </Box>
+
             </Typography>
 
             {
