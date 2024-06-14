@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * ConfigSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-06-09T06:12:11.900779753Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-05-30T16:53:40.522456331Z[GMT]")
 
 
 public class ConfigSchema   {
@@ -35,6 +35,9 @@ public class ConfigSchema   {
 
   @JsonProperty("targetScriptCode")
   private SupportedScripts targetScriptCode = null;
+
+  @JsonProperty("defaultModel")
+  private Boolean defaultModel = null;
 
   public ConfigSchema modelId(String modelId) {
     this.modelId = modelId;
@@ -107,7 +110,8 @@ public class ConfigSchema   {
    * @return targetLanguage
    **/
   @Schema(description = "")
-  
+      @NotNull
+
     @Valid
     public SupportedLanguages getTargetLanguage() {
     return targetLanguage;
@@ -127,7 +131,8 @@ public class ConfigSchema   {
    * @return sourceScriptCode
    **/
   @Schema(description = "")
-  
+      @NotNull
+
     @Valid
     public SupportedScripts getSourceScriptCode() {
     return sourceScriptCode;
@@ -147,7 +152,8 @@ public class ConfigSchema   {
    * @return targetScriptCode
    **/
   @Schema(description = "")
-  
+      @NotNull
+
     @Valid
     public SupportedScripts getTargetScriptCode() {
     return targetScriptCode;
@@ -155,6 +161,26 @@ public class ConfigSchema   {
 
   public void setTargetScriptCode(SupportedScripts targetScriptCode) {
     this.targetScriptCode = targetScriptCode;
+  }
+
+  public ConfigSchema defaultModel(Boolean defaultModel) {
+    this.defaultModel = defaultModel;
+    return this;
+  }
+
+  /**
+   * this field is used to mention that model will be select by default in mobile app.
+   * @return defaultModel
+   **/
+  @Schema(description = "this field is used to mention that model will be select by default in mobile app.")
+      @NotNull
+
+    public Boolean isDefaultModel() {
+    return defaultModel;
+  }
+
+  public void setDefaultModel(Boolean defaultModel) {
+    this.defaultModel = defaultModel;
   }
 
 
@@ -172,12 +198,13 @@ public class ConfigSchema   {
         Objects.equals(this.sourceLanguage, configSchema.sourceLanguage) &&
         Objects.equals(this.targetLanguage, configSchema.targetLanguage) &&
         Objects.equals(this.sourceScriptCode, configSchema.sourceScriptCode) &&
-        Objects.equals(this.targetScriptCode, configSchema.targetScriptCode);
+        Objects.equals(this.targetScriptCode, configSchema.targetScriptCode) &&
+        Objects.equals(this.defaultModel, configSchema.defaultModel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, serviceId, sourceLanguage, targetLanguage, sourceScriptCode, targetScriptCode);
+    return Objects.hash(modelId, serviceId, sourceLanguage, targetLanguage, sourceScriptCode, targetScriptCode, defaultModel);
   }
 
   @Override
@@ -191,6 +218,7 @@ public class ConfigSchema   {
     sb.append("    targetLanguage: ").append(toIndentedString(targetLanguage)).append("\n");
     sb.append("    sourceScriptCode: ").append(toIndentedString(sourceScriptCode)).append("\n");
     sb.append("    targetScriptCode: ").append(toIndentedString(targetScriptCode)).append("\n");
+    sb.append("    defaultModel: ").append(toIndentedString(defaultModel)).append("\n");
     sb.append("}");
     return sb.toString();
   }

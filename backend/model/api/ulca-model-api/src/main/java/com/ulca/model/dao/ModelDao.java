@@ -1,6 +1,7 @@
 package com.ulca.model.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ public interface ModelDao extends MongoRepository<ModelExtended, String> {
 	Integer countByUserIdAndName(String userId,String name);
 
 	List<ModelExtended> findByStatus(String status);
+    List<ModelExtended> findAllByModelIdIn(Set<String> modelIds);
 
 
 }
