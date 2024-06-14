@@ -292,7 +292,7 @@ class GenerateServiceProviderKey(Resource):
         if isinstance(pipelineID,dict) and pipelineID:
             masterList = []
             if "serviceProvider" not in pipelineID.keys() and "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys():
-                return post_error("400", "serviceProvider or apiEndPoints or inferenceEndPoint does not exists. Please provide valid details", None), 400
+                return post_error("400", "Inference API key does not exist. Please create keys.", None), 400
             serviceProviderName = pipelineID["serviceProvider"]["name"]
             serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
             masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
@@ -358,7 +358,7 @@ class RemoveServiceProviderKey(Resource):
         if isinstance(pipelineID,dict) and pipelineID:
             masterList = []
             if "serviceProvider" not in pipelineID.keys() and "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys():
-                return post_error("400", "serviceProvider or apiEndPoints or inferenceEndPoint does not exists. Please provide valid details", None), 400
+                return post_error("400", "Inference API key does not exist. Please create keys.", None), 400
             serviceProviderName = pipelineID["serviceProvider"]["name"]
             serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
             masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
