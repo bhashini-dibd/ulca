@@ -723,8 +723,11 @@ class UserUtils:
         #log.info(f"userdoc  231231 {userdoc}")
         if userdoc:
             if "apiKeyDetails" in userdoc.keys():
-                apiKeyDeets = userdoc["apiKeyDetails"]
-            return apiKeyDeets , userdoc["email"]
+                if len(userdoc["apiKeyDetails"]) >= 1:
+                    apiKeyDeets = userdoc["apiKeyDetails"]
+                    return apiKeyDeets , userdoc["email"]
+                return None, None
+            return None, None
         elif not userdoc:
             return None, None
 
