@@ -106,10 +106,10 @@ const styles = {
 
   const languages = [
     { "code": "as", "label": "Assamese" },
-    { "code": "en", "label": "English" },
     { "code": "bn", "label": "Bengali" },
     { "code": "brx", "label": "Bodo" },
     { "code": "doi", "label": "Dogri" },
+    { "code": "en", "label": "English" },
     { "code": "gom", "label": "Goan Konkani" },
     { "code": "gu", "label": "Gujarati" },
     { "code": "hi", "label": "Hindi" },
