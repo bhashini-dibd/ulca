@@ -281,7 +281,7 @@ useEffect(() => {
           lg={5}
           xl={5}
           className={classes.filterGrid}
-          style={{ marginLeft: "100px", gap:"20px", display:"flex" }}
+          style={{ marginLeft: "100px", gap:"20px", display:isMobile ? 'none' : "flex" }}
         >
          <Search value='' handleSearch={(e) => handleSearch(e.target.value)}/>
           <Button
@@ -637,20 +637,20 @@ useEffect(() => {
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
-      <Box style={{ width: '100%', padding: '20px 0px', textAlign: 'start', marginBottom: '30px' }}>
+      <Box style={{ width: '100%', padding: isMobile ? "20px 25px" :  '20px 0px', textAlign: 'start', marginBottom: '30px' }}>
         <Typography variant="h4" style={{padding:"10px 0px"}}>App Integration Details</Typography>
         <Box style={{display:"flex", flexDirection: isMobile ? "column" : 'row', justifyContent:isMobile ? "" :"space-between", alignItems:isMobile ? '' :"center", marginTop:"10px"}}>
           <Box>
             <Typography variant="body1">{appName}</Typography>
-            <Typography variant="body2">App Name</Typography>
+            <Typography variant="body2" fontWeight="400">App Name</Typography>
           </Box>
           <Box>
             <Typography variant="body1">{UlcaApiKey}</Typography>
-            <Typography variant="body2">ULCA API Key</Typography>
+            <Typography variant="body2" fontWeight="400">ULCA API Key</Typography>
           </Box>
           <Box>
             <Typography variant="body1">{UserDetails.userID}</Typography>
-            <Typography variant="body2">User ID</Typography>
+            <Typography variant="body2" fontWeight="400">User ID</Typography>
           </Box>
         </Box>
       </Box>

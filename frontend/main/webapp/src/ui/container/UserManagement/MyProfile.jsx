@@ -315,7 +315,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
 
   const fetchHeaderButton = () => {
     return (
-      <Grid container>
+      <Grid container style={{marginBottom: isMobile ? '20px' : ''}}>
         {/* <Grid >
         <Typography variant="h6" component="h2" align="center">
             App Integration Details
@@ -357,7 +357,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
           md={7}
           lg={7}
           xl={7}
-          style={{ display: "flex", justifyContent: "start", alignItems:"center"}}
+          style={{ display: "flex", justifyContent: "start", alignItems:"center" }}
         >
           <Typography variant="h6" component="h2" align={isMobile ? 'center' : 'left'} style={{paddingBottom: isMobile ? "20px" : '',width:isMobile? '100%' : ''}}>
             App Integration Details
@@ -879,7 +879,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
       <Box style={{ width: '100%', padding: '30px',marginTop:"-35px", textAlign: 'start', marginBottom: '30px', backgroundColor:"#F0F9FF" }}>
         {/* <Typography variant="h4" className="mb-4">App Integration Details</Typography> */}
         <Box style={{display:"flex",width:"50%", flexDirection: isMobile ? "column" : 'row', justifyContent:isMobile ? "" :"space-between", alignItems:isMobile ? '' :"center", marginTop:"10px"}}>
-          <Box style={{display:"flex", gap:"10px", justifyContent:"center", alignItems:"center", paddingRight:isMobile ? '' :"40px", borderRight:"2px solid #C9C9C9", paddingLeft:isMobile ? '50px' : '', paddingBottom: isMobile? '30px' : ''}}>
+          <Box style={{display:"flex", gap:"10px", justifyContent:"center", alignItems:"center", paddingRight:isMobile ? '' :"40px", borderRight:isMobile ? '' : "2px solid #C9C9C9", paddingLeft:isMobile ? '50px' : '', paddingBottom: isMobile? '30px' : ''}}>
             <Typography variant="body1"> <Avatar
                     className={classes.avatar}
                     style={{height:isMobile ?'' :"100px", width:isMobile ? '' :"100px", color:"white", backgroundColor:"#2947A3"}}
