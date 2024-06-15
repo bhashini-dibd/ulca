@@ -165,8 +165,8 @@ const GlossaryProfile = (props) => {
   });
 
   const location = useLocation();
-  const { serviceProviderName, inferenceApiKey, appName} = location.state || {};
-  console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,"neeww");
+  const { serviceProviderName, inferenceApiKey, appName,UlcaApiKey} = location.state || {};
+  console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,UlcaApiKey,"neeww");
 //   useEffect(() => {
 //     if (apiKeys) {
 //       setTableData(apiKeys);
@@ -357,8 +357,8 @@ useEffect(() => {
         message: "Glossary Added Successfully",
         variant: "success",
         }); 
-      },2000)
-    // window.location.reload()
+      window.location.reload()
+      },2500)
     setModal(false)
     setFormState({
       sourceLanguage: '',
@@ -601,7 +601,7 @@ useEffect(() => {
             placeholder={"Enter text here..."}
             rows={2}
             // className={classes.textAreaTransliteration}
-            style={{border:"1px solid lightGray", backgroundColor: "inherit", width: "90%", resize: "none",
+            style={{border:"1px solid lightGray", backgroundColor: "inherit", width: "100%", resize: "none",
             fontSize: "18px",
             lineHeight: "32px",
             color: "black",
@@ -637,21 +637,21 @@ useEffect(() => {
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
-      <Box style={{ width: '50%', padding: '0px', textAlign: 'start', marginBottom: '20px' }}>
-        <Typography variant="h4">App Integration Details</Typography>
+      <Box style={{ width: '100%', padding: '20px 0px', textAlign: 'start', marginBottom: '30px' }}>
+        <Typography variant="h4" style={{padding:"10px 0px"}}>App Integration Details</Typography>
         <Box style={{display:"flex", flexDirection: isMobile ? "column" : 'row', justifyContent:isMobile ? "" :"space-between", alignItems:isMobile ? '' :"center", marginTop:"10px"}}>
           <Box>
             <Typography variant="body1">{appName}</Typography>
             <Typography variant="body2">App Name</Typography>
           </Box>
           <Box>
-            <Typography variant="body1">{UserDetails.userID}</Typography>
+            <Typography variant="body1">{UlcaApiKey}</Typography>
             <Typography variant="body2">ULCA API Key</Typography>
           </Box>
-          {/* <Box>
-            <Typography variant="body2">h1</Typography>
-            <Typography variant="body1">jjj</Typography>
-          </Box> */}
+          <Box>
+            <Typography variant="body1">{UserDetails.userID}</Typography>
+            <Typography variant="body2">User ID</Typography>
+          </Box>
         </Box>
       </Box>
       <Box style={{ width: '100%', padding: '0px', textAlign: 'center', marginBottom: '20px' }}>
@@ -689,7 +689,7 @@ useEffect(() => {
       fullWidth
     >
       <DialogTitle id="dialog-title">
-        <div style={{fontFamily: "Noto-Bold", fontWeight:"600"}}>
+        <div style={{fontFamily: "Noto-Bold", fontWeight:"600", paddingLeft:"20px", fontSize:"28px"}}>
         Create a New Glossary
         </div>
         </DialogTitle>
@@ -701,7 +701,7 @@ useEffect(() => {
             
               <Grid item xs={12} sm={12} md={6}>
               <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Source Language</Typography>
-                <FormControl fullWidth variant="outlined" style={{width:"90%"}}>
+                <FormControl fullWidth variant="outlined" style={{width:"100%"}}>
                   <InputLabel id="select-source-label">Select Source Language</InputLabel>
                   <Select
                     labelId="select-source-label"
@@ -725,7 +725,7 @@ useEffect(() => {
               <Grid item xs={12} sm={12} md={6}>
                 
                 <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Target Language</Typography>
-                <FormControl fullWidth variant="outlined" style={{width:"90%"}}>
+                <FormControl fullWidth variant="outlined" style={{width:"100%"}}>
                   <InputLabel id="select-target-label">Select Target Language</InputLabel>
                   <Select
                     labelId="select-target-label"
@@ -746,7 +746,7 @@ useEffect(() => {
 
               {/* First Text Field */}
             
-              <Grid item xs={12} sm={12} md={6}>
+              <Grid item xs={12} sm={12} md={6} >
               {/* <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
                 <TextField
                   variant="outlined"
@@ -777,6 +777,8 @@ useEffect(() => {
         }}
         renderComponent={(props) => renderTextarea(props,"Source Text")}
         showCurrentWordAsLastSuggestion={true}
+        style={{width:"100%"}}
+        className="glossary_dropdownValue"
       />
               </Grid>
 
@@ -818,8 +820,7 @@ useEffect(() => {
             </Grid>
           </form>
         </Container>
-      </DialogContent>
-      <DialogActions style={{ display: "flex", justifyContent: "space-between", gap: "20px", marginTop: "10px", marginRight:"40px", marginLeft:"40px",marginBottom:"10px",fontFamily: "Noto-Regular", fontWeight:"400" }}>
+        <Box style={{ display: "flex", justifyContent: "space-between", gap: "20px", marginTop: "20px", marginRight:"25px", marginLeft:"25px",marginBottom:"20px",fontFamily: "Noto-Regular", fontWeight:"400" }}>
         <Button
           variant="contained"
           color="primary"
@@ -831,7 +832,7 @@ useEffect(() => {
             sourceText: '',
             targetText: '',
           })}}
-          style={{ padding: "12px 24px" }}
+          style={{ padding: "12px 24px", backgroundColor:"#E7F0FA", color:"#2947A3" }}
         >
           Cancel
         </Button>
@@ -845,7 +846,9 @@ useEffect(() => {
         >
           Submit
         </Button>
-      </DialogActions>
+      </Box>
+      </DialogContent>
+      
     </Dialog>
 
    

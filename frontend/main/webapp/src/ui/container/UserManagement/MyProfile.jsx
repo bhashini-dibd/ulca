@@ -15,6 +15,7 @@ import {
   IconButton,
   useMediaQuery,
   Avatar,
+  makeStyles,
 } from "@material-ui/core";
 import InfoIcon from '@material-ui/icons/Info';
 import { Link } from 'react-router-dom'
@@ -48,6 +49,15 @@ import GenerateServiceProviderKeyAPI from "../../../redux/actions/api/UserManage
 import DataTrackingToggleAPI from "../../../redux/actions/api/UserManagement/DataTrackingToggle";
 import { useHistory } from 'react-router-dom';
 import aunthenticate from "../../../configs/authenticate";
+
+const useStyles = makeStyles((theme) => ({
+  tooltip: {
+    padding: '10px',
+    fontSize: '18px',
+    backgroundColor: 'rgba(0, 0, 0, 0.87)', // Default background color for MUI tooltip
+    color: '#fff', // Default text color for MUI tooltip
+  },
+}));
 const SwitchCases = ({
   dataTrackingValue,
   setSnackbarInfo,
@@ -109,6 +119,7 @@ const SwitchCases = ({
 
 const MyProfile = (props) => {
   const { classes } = props;
+  const tooltipclass = useStyles();
   const dispatch = useDispatch();
 const isMobile = useMediaQuery("(max-width:600px)")
   const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
@@ -134,6 +145,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
   const [serviceProviderName, setServiceProviderName] = useState("");
   const [expandableRow, setExpandableRow] = useState([]);
   const [fetchAppName, setFetchAppName] = useState('');
+  const [fetchUlcaApi, setFetchUlcaApi] = useState('');
   const history = useHistory();
 
   useEffect(() => {
@@ -642,13 +654,16 @@ const isMobile = useMediaQuery("(max-width:600px)")
   };
 
   const handleGlossaryData = (row) => {
-    console.log(row)
+    console.log(row,UlcaApiKey,"heee")
     history.push(`${process.env.PUBLIC_URL}/glossary`, {
       serviceProviderName: row?.serviceProviderName,
       inferenceApiKey: row?.inferenceApiKey.value,
       appName: fetchAppName,
+      UlcaApiKey:fetchUlcaApi,
     })
   }
+
+
 
   const options = {
     textLabels: {
@@ -683,6 +698,8 @@ const isMobile = useMediaQuery("(max-width:600px)")
     rowsExpanded: expandableRow,
     renderExpandableRow: (rowData, rowMeta) => {
       setFetchAppName(rowData[0])
+      setFetchUlcaApi(rowData[1])
+      console.log(rowData);
       const data = rowData[2];
       if (data?.length)
         return (
@@ -715,7 +732,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
                         >
                           <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
                             <Box sx={{color:"black"}}> Glossary</Box>
-                            <Box> <Tooltip title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
+                            <Box> <Tooltip style={{padding:"10px", fontSize:"22px"}} placement="top"  classes={{ tooltip: tooltipclass.tooltip }}  title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
       <IconButton>
         <InfoIcon />
       </IconButton>
@@ -878,7 +895,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
          
           <Box style={{paddingLeft:isMobile ? '' :"40px"}}>
             <Typography variant="body1">{UserDetails.userID}</Typography>
-            <Typography variant="body2">ULCA API Key</Typography>
+            <Typography variant="body2">User ID</Typography>
           </Box>
           {/* <Box>
             <Typography variant="body2">h1</Typography>

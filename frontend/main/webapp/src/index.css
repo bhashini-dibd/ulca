@@ -7,3 +7,19 @@
     font-family: "Noto-Regular";
     src: url("./assets/fonts/noto-sans/NotoSans-Regular.ttf");
   }
+
+
+  .glossary_dropdownValue{
+    position: relative;
+    
+  }
+
+ .glossary_dropdownValue textarea + ul{
+    position: absolute;
+    top: auto;
+    bottom: 100%; /* Move the dropdown above the button */
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1000; /* Ensure the dropdown appears above other elements */
+  }
