@@ -152,8 +152,8 @@ const GlossaryProfile = (props) => {
   const suggestionRef = useRef([null]);
   const [prev, setprev] = useState(false);
   const [formState, setFormState] = useState({
-    sourceLanguage: 'en',
-    targetLanguage: 'hi',
+    sourceLanguage: '',
+    targetLanguage: '',
     sourceText: '',
     targetText: '',
   });
@@ -356,13 +356,13 @@ useEffect(() => {
         open: true,
         message: "Glossary Added Successfully",
         variant: "success",
-      }); 
-    },1500)
+        }); 
+      },2000)
     // window.location.reload()
     setModal(false)
     setFormState({
-      sourceLanguage: 'en',
-      targetLanguage: 'hi',
+      sourceLanguage: '',
+      targetLanguage: '',
       sourceText: '',
       targetText: '',
     })
@@ -702,14 +702,14 @@ useEffect(() => {
               <Grid item xs={12} sm={12} md={6}>
               <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Source Language</Typography>
                 <FormControl fullWidth variant="outlined" style={{width:"90%"}}>
-                  {/* <InputLabel id="select-source-label">Select Source Language</InputLabel> */}
+                  <InputLabel id="select-source-label">Select Source Language</InputLabel>
                   <Select
                     labelId="select-source-label"
                     id="select-source"
                     name="sourceLanguage"
                     value={formState.sourceLanguage}
                     onChange={handleChange}
-                    // label="Select Source Language"
+                    label="Select Source Language"
                   >
                      {languages.map((lang) => (
                       <MenuItem key={lang.code} value={lang.code}>
@@ -726,14 +726,14 @@ useEffect(() => {
                 
                 <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Target Language</Typography>
                 <FormControl fullWidth variant="outlined" style={{width:"90%"}}>
-                  {/* <InputLabel id="select-target-label">Select Target Language</InputLabel> */}
+                  <InputLabel id="select-target-label">Select Target Language</InputLabel>
                   <Select
                     labelId="select-target-label"
                     id="select-target"
                     name="targetLanguage"
                     value={formState.targetLanguage}
                     onChange={handleChange}
-                    // label="Select Target Language"
+                    label="Select Target Language"
                   >
                     {languages.map((lang) => (
                       <MenuItem key={lang.code} value={lang.code} disabled={lang.code === formState.sourceLanguage}>
@@ -826,8 +826,8 @@ useEffect(() => {
           onClick={() => {
             setModal(false); 
             setFormState({
-            sourceLanguage: 'en',
-            targetLanguage: 'hi',
+            sourceLanguage: '',
+            targetLanguage: '',
             sourceText: '',
             targetText: '',
           })}}
