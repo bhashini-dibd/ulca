@@ -61,7 +61,7 @@ const FooterNewDesign = () => {
                   <a href="https://bhashini.gov.in/about-bhashini">About</a>
                 </li>
                 <li>
-                  <a href="https://bhashini.gov.in/arpan">Arpan</a>
+                  <a href="https://bhashini.gov.in/services">Arpan</a>
                 </li>
                 <li>
                   <a href="https://bhashini.gov.in/sahyogi">Sahyogi</a>
@@ -121,8 +121,12 @@ const FooterNewDesign = () => {
             <div className="bhashini__app">
               <div className="company_name">Get the Bhashini app</div>
               <div className="d-flex justify-content-start align-items-center">
-                <img src={playStore} className="bhashiniapp__footer" />
-                <img src={appStore} className="bhashiniapp__footer" />
+               
+                 <a href="https://play.google.com/store/apps/details?id=com.dibd.bhashini&pcampaignid=web_share">
+                 <img src={playStore} className="bhashiniapp__footer" />
+                 </a>
+               <a href="https://apps.apple.com/in/app/bhashini/id1570975989"> 
+               <img src={appStore} className="bhashiniapp__footer" /> </a>
               </div>
               <div>
                 <div
