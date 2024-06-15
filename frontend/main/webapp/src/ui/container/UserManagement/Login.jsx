@@ -164,7 +164,7 @@ const Login = (props) => {
   return (
     <>
       <Grid container className={classes.loginGrid}>
-        <Typography variant="h4">Sign in to ULCA</Typography>
+        <Typography variant="h4">Sign in</Typography>
         <form className={classes.root} autoComplete="off">
           <TextField
             className={classes.textField}
@@ -236,6 +236,7 @@ const Login = (props) => {
             variant="contained" aria-label="edit" className={classes.fullWidth} onClick={() => {
               HandleSubmitCheck();
             }}
+            style={{backgroundColor:"#13296C"}}
             disabled={loading}>
             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
             Sign In

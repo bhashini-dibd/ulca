@@ -146,7 +146,7 @@ const SignUp = (props) => {
 
   return (
     <Grid container className={classes.loginGrid}>
-      <Typography className={classes.body2} variant={"h6"}>Sign up to ULCA</Typography>
+      <Typography className={classes.body2} variant={"h6"} style={{marginBottom:"10px"}}>Sign up to ULCA</Typography>
       <Typography variant={"body2"} className={classes.subText}>
         Please enter the details to create an account with ULCA
       </Typography>
@@ -246,6 +246,7 @@ Minimum length is 8 characters with combination of uppercase, lowercase, number 
                     variant="contained" aria-label="edit"  className={classes.fullWidth} onClick={() => {
                       HandleSubmitValidate();
                     }}
+                    style={{backgroundColor:"#13296C"}}
                     disabled={loading}>
                     {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                     Sign Up

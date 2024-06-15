@@ -300,6 +300,7 @@ useEffect(() => {
               fontFamily: "Noto-Regular",
                fontWeight:"400",
                fontSize:"15px",
+               padding:"14px 36px"
             }}
           >
             {" "}

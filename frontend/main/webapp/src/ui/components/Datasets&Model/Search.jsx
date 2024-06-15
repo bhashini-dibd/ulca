@@ -13,7 +13,7 @@ const Search = (props) => {
   }, [ref]);
 
   return (
-    <div className={classes.search}>
+    <div className={classes.search} style={{borderRadius:"3px"}}>
       <div className={classes.searchIcon}>
         <SearchIcon fontSize="small" />
       </div>

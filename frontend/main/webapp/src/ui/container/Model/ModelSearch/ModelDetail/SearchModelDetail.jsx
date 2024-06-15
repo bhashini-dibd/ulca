@@ -35,6 +35,9 @@ import HostedInferTransliteration from "./HostedInferTransliteration";
 import LanugageDetection from "../LanugageDetection";
 import metricInfo from "../../../../../utils/getMetricInfo.";
 import HostedinferenceNER from "./HostedinferenceNER";
+import Contactus from "../../../../components/common/Contactus";
+import Clients from "../../../../components/common/Clients";
+import { FooterNewDesign } from "../../../../components/common/FooterNewDesign";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -402,7 +405,10 @@ const SearchModelDetail = (props) => {
           )}
         </div>
       )}
-      <Footer />
+      {/* <Footer /> */}
+      <Contactus />
+          <Clients />
+          <FooterNewDesign />
     </MuiThemeProvider>
   );
 };

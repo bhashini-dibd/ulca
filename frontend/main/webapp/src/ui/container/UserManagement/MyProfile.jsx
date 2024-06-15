@@ -13,6 +13,8 @@ import {
   Switch,
   Tooltip,
   IconButton,
+  useMediaQuery,
+  Avatar,
 } from "@material-ui/core";
 import InfoIcon from '@material-ui/icons/Info';
 import { Link } from 'react-router-dom'
@@ -45,6 +47,7 @@ import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManageme
 import GenerateServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/GenerateServiceProviderKey";
 import DataTrackingToggleAPI from "../../../redux/actions/api/UserManagement/DataTrackingToggle";
 import { useHistory } from 'react-router-dom';
+import aunthenticate from "../../../configs/authenticate";
 const SwitchCases = ({
   dataTrackingValue,
   setSnackbarInfo,
@@ -107,9 +110,11 @@ const SwitchCases = ({
 const MyProfile = (props) => {
   const { classes } = props;
   const dispatch = useDispatch();
-
+const isMobile = useMediaQuery("(max-width:600px)")
   const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
-
+  const { firstName, email } = aunthenticate()
+  ? JSON.parse(localStorage.getItem("userDetails"))
+  : { firstName: "", lastName: "" };
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [snackbar, setSnackbarInfo] = useState({
@@ -304,7 +309,8 @@ const MyProfile = (props) => {
             App Integration Details
           </Typography>
         </Grid> */}
-        <Box style={{display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
+      
+        {/* <Box style={{display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
           <Box>
           <Typography variant="h6" component="h2" align="center">
             App Integration Details
@@ -324,24 +330,38 @@ const MyProfile = (props) => {
               height: "36px",
               textTransform: "capitalize",
               fontSize: "1rem",
+              borderRadius:"3px"
             }}
           >
             {" "}
             {translate("button.generate")}
           </Button></Box>
           </Box>
-        </Box>
-        {/* <Grid
+        </Box> */}
+         <Grid
           item
           xs={9}
           sm={8}
-          md={8}
-          lg={9}
-          xl={9}
+          md={7}
+          lg={7}
+          xl={7}
+          style={{ display: "flex", justifyContent: "start", alignItems:"center"}}
+        >
+          <Typography variant="h6" component="h2" align={isMobile ? 'center' : 'left'} style={{paddingBottom: isMobile ? "20px" : '',width:isMobile? '100%' : ''}}>
+            App Integration Details
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={9}
+          sm={8}
+          md={3}
+          lg={3}
+          xl={3}
           style={{ display: "flex", justifyContent: "flex-start" }}
         >
           <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
-        </Grid> */}
+        </Grid>
         {/* <Grid
           item
           xs={2}
@@ -384,7 +404,7 @@ const MyProfile = (props) => {
           </Button>
         </Grid> */}
 
-        {/* <Grid
+        <Grid
           item
           xs={2}
           sm={2}
@@ -392,7 +412,7 @@ const MyProfile = (props) => {
           lg={2}
           xl={2}
           className={classes.filterGrid}
-          style={{ marginLeft: "100px" }}
+          style={{ marginLeft: "0px" }}
         >
           <Button
             color="primary"
@@ -406,20 +426,21 @@ const MyProfile = (props) => {
               height: "36px",
               textTransform: "capitalize",
               fontSize: "1rem",
+              borderRadius:"3px"
             }}
           >
             {" "}
             {translate("button.generate")}
           </Button>
-        </Grid> */}
+        </Grid>
 
         <Grid
           item
           xs={2}
           sm={2}
-          md={2}
-          lg={2}
-          xl={2}
+          md={1}
+          lg={1}
+          xl={1}
           className={classes.filterGridMobile}
         >
           <Button
@@ -693,7 +714,7 @@ const MyProfile = (props) => {
                           // style={{ paddingLeft: "50px", width: "15%", }}
                         >
                           <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
-                            <Box sx={{color:"black"}}>Create Glossary</Box>
+                            <Box sx={{color:"black"}}> Glossary</Box>
                             <Box> <Tooltip title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
       <IconButton>
         <InfoIcon />
@@ -825,12 +846,8 @@ const MyProfile = (props) => {
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
-      <Grid container direction="row" spacing={2}>
-        {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h3" component="h2" align="center">
-            App Integration Details
-          </Typography>
-        </Grid> */}
+      {/* <Grid container direction="row" spacing={2}>
+      
         <Typography
           variant="body"
           style={{
@@ -841,7 +858,34 @@ const MyProfile = (props) => {
         >
           User ID : {UserDetails.userID}
         </Typography>
-      </Grid>
+      </Grid> */}
+      <Box style={{ width: '100%', padding: '30px',marginTop:"-35px", textAlign: 'start', marginBottom: '30px', backgroundColor:"#F0F9FF" }}>
+        {/* <Typography variant="h4" className="mb-4">App Integration Details</Typography> */}
+        <Box style={{display:"flex",width:"50%", flexDirection: isMobile ? "column" : 'row', justifyContent:isMobile ? "" :"space-between", alignItems:isMobile ? '' :"center", marginTop:"10px"}}>
+          <Box style={{display:"flex", gap:"10px", justifyContent:"center", alignItems:"center", paddingRight:isMobile ? '' :"40px", borderRight:"2px solid #C9C9C9", paddingLeft:isMobile ? '50px' : '', paddingBottom: isMobile? '30px' : ''}}>
+            <Typography variant="body1"> <Avatar
+                    className={classes.avatar}
+                    style={{height:isMobile ?'' :"100px", width:isMobile ? '' :"100px", color:"white", backgroundColor:"#2947A3"}}
+                    variant="contained"
+                  >{`${firstName[0].toUpperCase()}`}</Avatar></Typography>
+                  <Box>
+
+            <Typography variant="h4" fontFamily='Noto-Regular' fontWeight="400" fontSize="24px" >{firstName}</Typography>
+            <Typography variant="body2" fontFamily='Noto-Regular'>{email}</Typography>
+                  </Box>
+
+          </Box>
+         
+          <Box style={{paddingLeft:isMobile ? '' :"40px"}}>
+            <Typography variant="body1">{UserDetails.userID}</Typography>
+            <Typography variant="body2">ULCA API Key</Typography>
+          </Box>
+          {/* <Box>
+            <Typography variant="body2">h1</Typography>
+            <Typography variant="body1">jjj</Typography>
+          </Box> */}
+        </Box>
+      </Box>
 
       <MuiThemeProvider theme={getMuiTheme}>
         <MUIDataTable data={data} columns={columns} options={options} />
@@ -859,6 +903,7 @@ const MyProfile = (props) => {
           style={{ textAlign: "end", marginTop: "25px" }}
         >
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            {/* <Typography variant="body1"> Enter the App name</Typography>
             <TextField
               fullWidth
               id="outlined-basic"
@@ -866,16 +911,29 @@ const MyProfile = (props) => {
               variant="outlined"
               value={appName}
               onChange={handlecChangeAddName}
-            />
+            /> */}
+            <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px", textAlign:"left"}}>Generate API Key</Typography>
+            <Typography variant="body1" style={{fontFamily: "Noto-Regular", fontWeight:"400",marginBottom:"15px", textAlign:"left"}}> Enter the App name</Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  // label="Enter App Name"
+                  // name='Organisation Website'
+                  value={appName}
+                  onChange={handlecChangeAddName}
+                />
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{display:"flex", justifyContent:"space-between",marginBottom:"10px"}}>
             <Button
-              variant="text"
+              variant="contained"
               color="primary"
               style={{
                 borderRadius: "20px",
                 marginTop: "20px",
                 marginRight: "10px",
+                backgroundColor:"#E7F0FA",
+                color:"#2947A3",
+                borderRadius:"3px"
               }}
               onClick={handleClose}
             >
@@ -884,11 +942,11 @@ const MyProfile = (props) => {
             <Button
               variant="contained"
               color="primary"
-              style={{ borderRadius: "20px", marginTop: "20px" }}
+              style={{ borderRadius: "20px", marginTop: "20px", backgroundColor:"#2947A3",color:"white", borderRadius:"3px", padding:"15px 30px" }}
               onClick={handleSubmitGenerateApiKey}
               disabled={appName ? false : true}
             >
-              Submit
+              Generate
             </Button>
           </Grid>
         </Grid>

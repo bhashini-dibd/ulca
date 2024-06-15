@@ -31,7 +31,8 @@ import SubHeader from "./SubHeader";
 import getMenuType from "../../../redux/actions/api/Common/getMenuType";
 import getMenuOption from "../../../redux/actions/api/Common/getMenuOption";
 import { translate } from "../../../assets/localisation";
-
+import person from '../../../assets/person.svg'
+import logoutIcon from '../../../assets/logout.svg'
 const StyledMenu = withStyles({
   paper: {
     "@media (max-width:650px)": {
@@ -314,7 +315,7 @@ const Header = (props) => {
                       handleRedirection("/profile");
                     }}
                   >
-                    {translate("label.myProfile")}
+                   <img src={person} className="me-2"/> {translate("label.myProfile")}
                   </MenuItem>
                   <MenuItem
                     className={classes.styledMenu}
@@ -324,7 +325,7 @@ const Header = (props) => {
                       handleLogOut("/user/login");
                     }}
                   >
-                    {translate("label.logOut")}
+                   <img src={logoutIcon} className="me-2"/> {translate("label.logOut")}
                   </MenuItem>
                 </StyledMenu>
               </div>
