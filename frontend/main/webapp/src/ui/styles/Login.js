@@ -21,7 +21,7 @@ const LoginStyle = (theme) => ({
     textAlign: "left",
     color: theme.palette.primary.contrastText,
     "@media (max-width:650px)": {
-      margin: "5% 10% 5% 40%",
+      // margin: "5% 10% 5% 40%",
       color: "black",
      
     },
@@ -82,6 +82,7 @@ const LoginStyle = (theme) => ({
     "@media (max-width:850px)": {
       minWidth: "270px",
       width: "85%",
+      margin:"30px 0px"
     },
   },
   body2: {

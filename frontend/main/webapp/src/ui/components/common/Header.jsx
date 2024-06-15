@@ -157,12 +157,13 @@ const Header = (props) => {
                 window.location = `${process.env.REACT_APP_INTRO_URL}/ulca/intro`;
               }}
             >
-              {/* {translate("label.ulca")} */}
-              <Box>
+              { authenticate() ? 
+               <Box>
                 <Box>Bhashini Udyat</Box>
                 <Box><Typography variant="body2">API Consumption Portal</Typography></Box>
               </Box>
-
+              :  translate("label.ulca")
+              }
             </Typography>
 
             {
