@@ -32,6 +32,9 @@ import TitleBar from "./TitleBar";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Language, FilterBy } from "../../../configs/DatasetItems";
 import Footer from "../../components/common/Footer";
+import Contactus from "../../components/common/Contactus";
+import Clients from "../../components/common/Clients";
+import { FooterNewDesign } from "../../components/common/FooterNewDesign";
 var colors = [
   "188efc",
   "7a47a4",
@@ -1101,7 +1104,10 @@ const ChartRender = (props) => {
           </div>
         </Paper>
       </div>
-      <Footer />
+      {/* <Footer /> */}
+      <Contactus />
+          <Clients />
+          <FooterNewDesign />
     </MuiThemeProvider>
   );
 };

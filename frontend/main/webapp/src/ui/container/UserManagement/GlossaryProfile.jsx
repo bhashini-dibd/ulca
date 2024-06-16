@@ -20,6 +20,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  useMediaQuery,
+  Divider,
 } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Search from "../../components/Datasets&Model/Search";
@@ -38,7 +40,7 @@ import CustomizedSnackbars from "../../components/common/Snackbar";
 import Spinner from "../../components/common/Spinner";
 import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiKeys";
 import Delete from '../../../assets/deleteIcon.svg'
-import GlossaryBanner from '../../../assets/GlossaryBanner.png'
+import GlossaryBanner from '../../../assets/GlossaryNewBanner.png'
 import { useLocation } from 'react-router-dom';
 import FetchGlossaryDetails from "../../../redux/actions/api/UserManagement/FetchGlossaryDetails";
 import AddGlossaryDataApi from "../../../redux/actions/api/UserManagement/AddGlossaryData";
@@ -105,10 +107,10 @@ const styles = {
 
   const languages = [
     { "code": "as", "label": "Assamese" },
-    { "code": "en", "label": "English" },
     { "code": "bn", "label": "Bengali" },
     { "code": "brx", "label": "Bodo" },
     { "code": "doi", "label": "Dogri" },
+    { "code": "en", "label": "English" },
     { "code": "gom", "label": "Goan Konkani" },
     { "code": "gu", "label": "Gujarati" },
     { "code": "hi", "label": "Hindi" },
@@ -132,6 +134,7 @@ const styles = {
 
 const GlossaryProfile = (props) => {
   const { classes } = props;
+  const isMobile = useMediaQuery("(max-width:600px)")
   const dispatch = useDispatch();
   const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
   const [searchKey, setSearchKey] = useState("");
@@ -140,7 +143,6 @@ const GlossaryProfile = (props) => {
   const [tableData, setTableData] = useState(AppGlossaryData || []);
   // const [filteredData, setFilteredData] = useState(initialData); // State for filtered data
   const [searchText, setSearchText] = useState('');
-
   const [modal, setModal] = useState(false);
   const [text, setText] = useState("");
   const [debouncedText, setDebouncedText] = useState("");
@@ -150,8 +152,8 @@ const GlossaryProfile = (props) => {
   const suggestionRef = useRef([null]);
   const [prev, setprev] = useState(false);
   const [formState, setFormState] = useState({
-    sourceLanguage: 'en',
-    targetLanguage: 'hi',
+    sourceLanguage: '',
+    targetLanguage: '',
     sourceText: '',
     targetText: '',
   });
@@ -163,8 +165,8 @@ const GlossaryProfile = (props) => {
   });
 
   const location = useLocation();
-  const { serviceProviderName, inferenceApiKey, appName} = location.state || {};
-  console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,"neeww");
+  const { serviceProviderName, inferenceApiKey, appName,UlcaApiKey} = location.state || {};
+  console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,UlcaApiKey,"neeww");
 //   useEffect(() => {
 //     if (apiKeys) {
 //       setTableData(apiKeys);
@@ -279,7 +281,7 @@ useEffect(() => {
           lg={5}
           xl={5}
           className={classes.filterGrid}
-          style={{ marginLeft: "100px", gap:"20px", display:"flex" }}
+          style={{ marginLeft: "100px", gap:"20px", display:isMobile ? 'none' : "flex" }}
         >
          <Search value='' handleSearch={(e) => handleSearch(e.target.value)}/>
           <Button
@@ -298,6 +300,7 @@ useEffect(() => {
               fontFamily: "Noto-Regular",
                fontWeight:"400",
                fontSize:"15px",
+               padding:"14px 36px"
             }}
           >
             {" "}
@@ -340,22 +343,53 @@ useEffect(() => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     console.log('Form Data:', formState);
+    setLoading(true);
     const apiObj = new AddGlossaryDataApi(appName,serviceProviderName,formState);
-    dispatch(APITransport(apiObj));
-    // getApiGlossaryData()
-    setTimeout(() => {
+    // dispatch(APITransport(apiObj));
+    // // getApiGlossaryData()
+    // setTimeout(() => {
+
+    //   getApiGlossaryData() 
+    //   setSnackbarInfo({
+    //     open: true,
+    //     message: "Glossary Added Successfully",
+    //     variant: "success",
+    //     }); 
+    //   window.location.reload()
+    //   },2500)
+    // setModal(false)
+    // setFormState({
+    //   sourceLanguage: '',
+    //   targetLanguage: '',
+    //   sourceText: '',
+    //   targetText: '',
+    // })
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+
+    const resp = await res.json();
+    if (res.ok) {
+      // setSnackbarInfo({
+      //   open: true,
+      //   message: resp?.message,
+      //   variant: "success",
+      // });
+      setTimeout(() => {
 
       getApiGlossaryData() 
       setSnackbarInfo({
         open: true,
-        message: "Glossary Added Successfully",
+        message: resp?.message,
         variant: "success",
-      }); 
-    },1500)
-    // window.location.reload()
+        }); 
+      // window.location.reload()
+      },1500)
     setModal(false)
     setFormState({
       sourceLanguage: '',
@@ -363,6 +397,16 @@ useEffect(() => {
       sourceText: '',
       targetText: '',
     })
+      setLoading(false);
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+
+      setLoading(false);
+    }
   };
 
   const isFormValid = () => {
@@ -478,7 +522,7 @@ useEffect(() => {
         download: false,
         search: false,
         customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-            <Tooltip title="Show Selected Data">
+            <Tooltip title="">
               <IconButton
                 onClick={() => {
                   const selectedData = selectedRows.data.map(row => tableData[row.dataIndex]);
@@ -598,8 +642,8 @@ useEffect(() => {
             placeholder={"Enter text here..."}
             rows={2}
             // className={classes.textAreaTransliteration}
-            style={{border:"1px solid lightGray", backgroundColor: "inherit", width: "90%", resize: "none",
-            fontSize: "18px",
+            style={{border:"1px solid lightGray", backgroundColor: "inherit", width: "100%", resize: "none",
+            fontSize: "23px",
             lineHeight: "32px",
             color: "black",
             fontFamily: "Roboto",
@@ -634,13 +678,32 @@ useEffect(() => {
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
+      <Box style={{ width: '100%', padding: isMobile ? "20px 25px" :  '20px 0px', textAlign: 'start', marginBottom: '30px' }}>
+        <Typography variant="h4" style={{padding:"10px 0px"}}>App Integration Details</Typography>
+        <Box style={{display:"flex", flexDirection: isMobile ? "column" : 'row', justifyContent:isMobile ? "" :"space-between", alignItems:isMobile ? '' :"center", marginTop:"10px"}}>
+          <Box>
+            <Typography variant="body1">{appName}</Typography>
+            <Typography variant="body2" fontWeight="400">App Name</Typography>
+          </Box>
+          {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
+          <Box>
+            <Typography variant="body1">{UlcaApiKey}</Typography>
+            <Typography variant="body2" fontWeight="400">ULCA API Key</Typography>
+          </Box>
+          {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
+          <Box>
+            <Typography variant="body1">{UserDetails.userID}</Typography>
+            <Typography variant="body2" fontWeight="400">User ID</Typography>
+          </Box>
+        </Box>
+      </Box>
       <Box style={{ width: '100%', padding: '0px', textAlign: 'center', marginBottom: '20px' }}>
       <div style={styles.bannerContainer}>
         <img src={GlossaryBanner} alt="banner" style={styles.bannerImage} />
-        <div style={styles.textContainer}>
+        {/* <div style={styles.textContainer}>
           <h1 style={styles.heading}>Glossary</h1>
           <p style={styles.paragraph}>Glossary is a custom dictionary defined by the user that is utilized in Bhashini Translations to translate the customer's domain-specific terminology. For example, when translating from English to Hindi, Bhashini Division maybe translated to भाषिनी प्रभाग by default but given it's an organization name, we need the translation as भाषिणी डिवीज़न. Such word and phrase level translations can be performed using glossaries for your custom domain specific needs.</p>
-        </div>
+        </div> */}
       </div>
       </Box>
 
@@ -664,13 +727,13 @@ useEffect(() => {
       onClose={() => setModal(false)}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
-      maxWidth="xs"
+      maxWidth="md"
     //   style={{fontFamily: "Noto Sans"}}
       fullWidth
     >
       <DialogTitle id="dialog-title">
-        <div style={{fontFamily: "Noto-Bold", fontWeight:"600"}}>
-        Create Glossary
+        <div style={{fontFamily: "Noto-Bold", fontWeight:"600", paddingLeft:"20px", fontSize:"28px"}}>
+        Create a New Glossary
         </div>
         </DialogTitle>
       <DialogContent>
@@ -679,34 +742,41 @@ useEffect(() => {
             <Grid container spacing={2} alignItems="center">
               {/* First Select Box */}
             
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12} md={6}>
               <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Source Language</Typography>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel id="select-source-label">Select Source Language</InputLabel>
-                  <Select
-                    labelId="select-source-label"
-                    id="select-source"
-                    name="sourceLanguage"
-                    value={formState.sourceLanguage}
-                    onChange={handleChange}
-                    label="Select Source Language"
-                  >
-                     {languages.map((lang) => (
-                      <MenuItem key={lang.code} value={lang.code}>
-                        {lang.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+              <FormControl fullWidth variant="outlined" style={{ width: "100%" }}>
+      {/* <InputLabel id="select-source-label">Select Source Language</InputLabel> */}
+      <Select
+        labelId="select-source-label"
+        id="select-source"
+        name="sourceLanguage"
+        value={formState.sourceLanguage}
+        onChange={handleChange}
+        label="Select Source Language"
+        displayEmpty
+      >
+        <MenuItem value="" disabled>
+          <span  style={{ fontSize: "18px",
+                    lineHeight: "32px",
+                    color: "black",
+                    fontFamily: "Roboto"}}>Select Source Language</span >
+        </MenuItem>
+        {languages.map((lang) => (
+          <MenuItem key={lang.code} value={lang.code}>
+            {lang.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
               </Grid>
 
               {/* Second Select Box */}
              
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12} md={6}>
                 
                 <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Target Language</Typography>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel id="select-target-label">Select Target Language</InputLabel>
+                <FormControl fullWidth variant="outlined" style={{width:"100%"}}>
+                  {/* <InputLabel id="select-target-label">Select Target Language</InputLabel> */}
                   <Select
                     labelId="select-target-label"
                     id="select-target"
@@ -714,7 +784,14 @@ useEffect(() => {
                     value={formState.targetLanguage}
                     onChange={handleChange}
                     label="Select Target Language"
+                    displayEmpty
                   >
+                    <MenuItem value="" disabled>
+          <span   style={{ fontSize: "18px",
+                    lineHeight: "32px",
+                    color: "black",
+                    fontFamily: "Roboto"}}>Select Target Language</span>
+        </MenuItem>
                     {languages.map((lang) => (
                       <MenuItem key={lang.code} value={lang.code} disabled={lang.code === formState.sourceLanguage}>
                         {lang.label}
@@ -726,7 +803,7 @@ useEffect(() => {
 
               {/* First Text Field */}
             
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12} md={6} >
               {/* <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
                 <TextField
                   variant="outlined"
@@ -736,6 +813,8 @@ useEffect(() => {
                   value={formState.sourceText}
                   onChange={handleChange}
                 /> */}
+
+{formState.sourceLanguage !== 'en' ? 
                  <IndicTransliterate
         lang={formState.sourceLanguage}
         value={formState.sourceText}
@@ -757,12 +836,35 @@ useEffect(() => {
         }}
         renderComponent={(props) => renderTextarea(props,"Source Text")}
         showCurrentWordAsLastSuggestion={true}
-      />
+        style={{width:"100%"}}
+        className="glossary_dropdownValue"
+      /> : (
+        <>
+         <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  // label={focused ? '' : 'Enter Source Text'}
+                  placeholder="Enter Source Text..."
+                  name="sourceText"
+                  multiline
+                  rows={2.5}
+                  value={formState.sourceText}
+                  onChange={handleChange}
+                  style={{ fontSize: "14px",
+                    lineHeight: "32px",
+                    color: "black",
+                    fontFamily: "Roboto"}}
+                   
+                /> 
+       </>
+    
+        )}
               </Grid>
 
               {/* Second Text Field */}
             
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12} md={6}>
               {/* <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Target Text</Typography>
                 <TextField
                   variant="outlined"
@@ -798,8 +900,7 @@ useEffect(() => {
             </Grid>
           </form>
         </Container>
-      </DialogContent>
-      <DialogActions style={{ display: "flex", justifyContent: "end", gap: "20px", marginTop: "10px", marginRight:"40px", marginBottom:"10px",fontFamily: "Noto-Regular", fontWeight:"400" }}>
+        <Box style={{ display: "flex", justifyContent: "space-between", gap: "20px", marginTop: "20px", marginRight:"25px", marginLeft:"25px",marginBottom:"20px",fontFamily: "Noto-Regular", fontWeight:"400" }}>
         <Button
           variant="contained"
           color="primary"
@@ -811,7 +912,7 @@ useEffect(() => {
             sourceText: '',
             targetText: '',
           })}}
-          style={{ padding: "12px 24px" }}
+          style={{ padding: "12px 24px", backgroundColor:"#E7F0FA", color:"#2947A3" }}
         >
           Cancel
         </Button>
@@ -825,7 +926,9 @@ useEffect(() => {
         >
           Submit
         </Button>
-      </DialogActions>
+      </Box>
+      </DialogContent>
+      
     </Dialog>
 
    
