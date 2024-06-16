@@ -148,7 +148,7 @@ const SignUp = (props) => {
     <Grid container className={classes.loginGrid}>
       <Typography className={classes.body2} variant={"h6"} style={{marginBottom:"10px"}}>Sign up to Bhashini Udyat</Typography>
       <Typography variant={"body2"} className={classes.subText}>
-        Please enter the details to create an account with ULCA
+        Please enter the details to create an account
       </Typography>
       <TextField
         className={classes.textField}

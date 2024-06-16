@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogActions,
   useMediaQuery,
+  Divider,
 } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Search from "../../components/Datasets&Model/Search";
@@ -142,7 +143,6 @@ const GlossaryProfile = (props) => {
   const [tableData, setTableData] = useState(AppGlossaryData || []);
   // const [filteredData, setFilteredData] = useState(initialData); // State for filtered data
   const [searchText, setSearchText] = useState('');
-
   const [modal, setModal] = useState(false);
   const [text, setText] = useState("");
   const [debouncedText, setDebouncedText] = useState("");
@@ -343,22 +343,53 @@ useEffect(() => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     console.log('Form Data:', formState);
+    setLoading(true);
     const apiObj = new AddGlossaryDataApi(appName,serviceProviderName,formState);
-    dispatch(APITransport(apiObj));
-    // getApiGlossaryData()
-    setTimeout(() => {
+    // dispatch(APITransport(apiObj));
+    // // getApiGlossaryData()
+    // setTimeout(() => {
+
+    //   getApiGlossaryData() 
+    //   setSnackbarInfo({
+    //     open: true,
+    //     message: "Glossary Added Successfully",
+    //     variant: "success",
+    //     }); 
+    //   window.location.reload()
+    //   },2500)
+    // setModal(false)
+    // setFormState({
+    //   sourceLanguage: '',
+    //   targetLanguage: '',
+    //   sourceText: '',
+    //   targetText: '',
+    // })
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+
+    const resp = await res.json();
+    if (res.ok) {
+      // setSnackbarInfo({
+      //   open: true,
+      //   message: resp?.message,
+      //   variant: "success",
+      // });
+      setTimeout(() => {
 
       getApiGlossaryData() 
       setSnackbarInfo({
         open: true,
-        message: "Glossary Added Successfully",
+        message: resp?.message,
         variant: "success",
         }); 
-      window.location.reload()
-      },2500)
+      // window.location.reload()
+      },1500)
     setModal(false)
     setFormState({
       sourceLanguage: '',
@@ -366,6 +397,16 @@ useEffect(() => {
       sourceText: '',
       targetText: '',
     })
+      setLoading(false);
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+
+      setLoading(false);
+    }
   };
 
   const isFormValid = () => {
@@ -602,7 +643,7 @@ useEffect(() => {
             rows={2}
             // className={classes.textAreaTransliteration}
             style={{border:"1px solid lightGray", backgroundColor: "inherit", width: "100%", resize: "none",
-            fontSize: "18px",
+            fontSize: "23px",
             lineHeight: "32px",
             color: "black",
             fontFamily: "Roboto",
@@ -644,10 +685,12 @@ useEffect(() => {
             <Typography variant="body1">{appName}</Typography>
             <Typography variant="body2" fontWeight="400">App Name</Typography>
           </Box>
+          {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
           <Box>
             <Typography variant="body1">{UlcaApiKey}</Typography>
             <Typography variant="body2" fontWeight="400">ULCA API Key</Typography>
           </Box>
+          {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
           <Box>
             <Typography variant="body1">{UserDetails.userID}</Typography>
             <Typography variant="body2" fontWeight="400">User ID</Typography>
@@ -701,23 +744,30 @@ useEffect(() => {
             
               <Grid item xs={12} sm={12} md={6}>
               <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Source Language</Typography>
-                <FormControl fullWidth variant="outlined" style={{width:"100%"}}>
-                  <InputLabel id="select-source-label">Select Source Language</InputLabel>
-                  <Select
-                    labelId="select-source-label"
-                    id="select-source"
-                    name="sourceLanguage"
-                    value={formState.sourceLanguage}
-                    onChange={handleChange}
-                    label="Select Source Language"
-                  >
-                     {languages.map((lang) => (
-                      <MenuItem key={lang.code} value={lang.code}>
-                        {lang.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+              <FormControl fullWidth variant="outlined" style={{ width: "100%" }}>
+      {/* <InputLabel id="select-source-label">Select Source Language</InputLabel> */}
+      <Select
+        labelId="select-source-label"
+        id="select-source"
+        name="sourceLanguage"
+        value={formState.sourceLanguage}
+        onChange={handleChange}
+        label="Select Source Language"
+        displayEmpty
+      >
+        <MenuItem value="" disabled>
+          <span  style={{ fontSize: "18px",
+                    lineHeight: "32px",
+                    color: "black",
+                    fontFamily: "Roboto"}}>Select Source Language</span >
+        </MenuItem>
+        {languages.map((lang) => (
+          <MenuItem key={lang.code} value={lang.code}>
+            {lang.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
               </Grid>
 
               {/* Second Select Box */}
@@ -726,7 +776,7 @@ useEffect(() => {
                 
                 <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Target Language</Typography>
                 <FormControl fullWidth variant="outlined" style={{width:"100%"}}>
-                  <InputLabel id="select-target-label">Select Target Language</InputLabel>
+                  {/* <InputLabel id="select-target-label">Select Target Language</InputLabel> */}
                   <Select
                     labelId="select-target-label"
                     id="select-target"
@@ -734,7 +784,14 @@ useEffect(() => {
                     value={formState.targetLanguage}
                     onChange={handleChange}
                     label="Select Target Language"
+                    displayEmpty
                   >
+                    <MenuItem value="" disabled>
+          <span   style={{ fontSize: "18px",
+                    lineHeight: "32px",
+                    color: "black",
+                    fontFamily: "Roboto"}}>Select Target Language</span>
+        </MenuItem>
                     {languages.map((lang) => (
                       <MenuItem key={lang.code} value={lang.code} disabled={lang.code === formState.sourceLanguage}>
                         {lang.label}
@@ -756,6 +813,8 @@ useEffect(() => {
                   value={formState.sourceText}
                   onChange={handleChange}
                 /> */}
+
+{formState.sourceLanguage !== 'en' ? 
                  <IndicTransliterate
         lang={formState.sourceLanguage}
         value={formState.sourceText}
@@ -779,7 +838,28 @@ useEffect(() => {
         showCurrentWordAsLastSuggestion={true}
         style={{width:"100%"}}
         className="glossary_dropdownValue"
-      />
+      /> : (
+        <>
+         <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  // label={focused ? '' : 'Enter Source Text'}
+                  placeholder="Enter Source Text..."
+                  name="sourceText"
+                  multiline
+                  rows={2.5}
+                  value={formState.sourceText}
+                  onChange={handleChange}
+                  style={{ fontSize: "14px",
+                    lineHeight: "32px",
+                    color: "black",
+                    fontFamily: "Roboto"}}
+                   
+                /> 
+       </>
+    
+        )}
               </Grid>
 
               {/* Second Text Field */}
