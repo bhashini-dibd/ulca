@@ -6,7 +6,7 @@ from flask import request, jsonify
 import config
 import logging
 import requests
-from config import MAX_API_KEY, SECRET_KEY, PATCH_URL, temp_api_key
+from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
