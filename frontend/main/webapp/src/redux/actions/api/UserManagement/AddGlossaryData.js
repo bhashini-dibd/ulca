@@ -31,8 +31,12 @@ export default class AddGlossaryDataApi extends API {
         // userID: JSON.parse(localStorage.getItem("userDetails")).userID,
         appName:this.appName,
         serviceProviderName: this.serviceProviderName,
-        glossary:[
-          this.formState
+        glossary:[{
+          sourceLanguage:this.formState.sourceLanguage,
+          targetLanguage:this.formState.targetLanguage,
+          sourceText : this.formState.sourceText.trimEnd(),
+          targetText : this.formState.targetText.trimEnd(),
+        }
         ]
     };
   }

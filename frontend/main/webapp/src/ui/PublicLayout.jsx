@@ -3,6 +3,9 @@ import React, { Suspense } from "react";
 import Theme from "./theme/theme-default";
 import { withStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import GlobalStyles from "./styles/Styles";
+import Contactus from "./components/common/Contactus";
+import Clients from "./components/common/Clients";
+import { FooterNewDesign } from "./components/common/FooterNewDesign";
 
 const Header = React.lazy(() => import("./components/common/Header"));
 const Footer = React.lazy(() => import("./components/common/Footer"));
@@ -20,7 +23,10 @@ function App(props) {
       </Suspense>
       <Component />
       <Suspense fallback={fallback}>
-        <Footer />
+        {/* <Footer /> */}
+        <Contactus />
+          <Clients />
+          <FooterNewDesign />
       </Suspense>
     </MuiThemeProvider>
   );
