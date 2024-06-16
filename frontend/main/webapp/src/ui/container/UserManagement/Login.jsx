@@ -164,7 +164,7 @@ const Login = (props) => {
   return (
     <>
       <Grid container className={classes.loginGrid}>
-        <Typography variant="h4">Sign in to ULCA</Typography>
+        <Typography variant="h4">Sign in</Typography>
         <form className={classes.root} autoComplete="off">
           <TextField
             className={classes.textField}
@@ -236,6 +236,7 @@ const Login = (props) => {
             variant="contained" aria-label="edit" className={classes.fullWidth} onClick={() => {
               HandleSubmitCheck();
             }}
+            style={{backgroundColor:"#13296C"}}
             disabled={loading}>
             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
             Sign In
@@ -359,7 +360,7 @@ const Login = (props) => {
         </Button>
       </LoginSocialGithub> */}
         <div className={classes.createLogin}>
-          <Typography variant={"body2"} className={classes.width}>New to ULCA ?</Typography>
+          <Typography variant={"body2"} className={classes.width}>New to Bhashini Udyat ?</Typography>
           <Typography variant={"body2"} >
             <Link id="newaccount" className={classes.link} href="#"
               onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/register`) }}>

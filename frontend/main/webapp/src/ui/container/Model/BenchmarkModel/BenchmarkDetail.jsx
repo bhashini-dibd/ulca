@@ -29,6 +29,9 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { translate } from "../../../../assets/localisation";
 import metricInfo from "../../../../utils/getMetricInfo.";
+import { FooterNewDesign } from "../../../components/common/FooterNewDesign";
+import Clients from "../../../components/common/Clients";
+import Contactus from "../../../components/common/Contactus";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -384,7 +387,10 @@ const SearchModelDetail = (props) => {
           )}
         </div>
       )}
-      <Footer />
+      {/* <Footer /> */}
+      <Contactus />
+          <Clients />
+          <FooterNewDesign />
     </MuiThemeProvider>
   );
 };

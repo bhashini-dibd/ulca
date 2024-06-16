@@ -38,6 +38,9 @@ import NewSearchModel from "./NewSearchModel";
 import Theme from "../../../theme/theme-default";
 import Footer from "../../../components/common/Footer";
 import { translate } from "../../../../assets/localisation";
+import Contactus from "../../../components/common/Contactus";
+import Clients from "../../../components/common/Clients";
+import { FooterNewDesign } from "../../../components/common/FooterNewDesign";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -520,7 +523,10 @@ const Benchmark = (props) => {
           </Paper>
         )}
       </div>
-      <Footer />
+      {/* <Footer /> */}
+      <Contactus />
+          <Clients />
+          <FooterNewDesign />
     </MuiThemeProvider>
   );
 };
