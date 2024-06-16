@@ -486,7 +486,7 @@ class CreateGlossary(Resource):
 
         dhruva_result_json, dhruva_result_status_code = UserUtils.send_create_req_for_dhruva(decrypt_headers,body['glossary'])
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
-        return res.getdhruvaresults()
+        return res.getdhruvaresults(), dhruva_result_status_code
         
 
 class DeleteGlossary(Resource):
@@ -536,7 +536,7 @@ class DeleteGlossary(Resource):
             log.info(f"decrypt_headers {decrypt_headers}")
         dhruva_result_json, dhruva_result_status_code = UserUtils.send_delete_req_for_dhruva(decrypt_headers,body['glossary'])
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
-        return res.getdhruvaresults()        
+        return res.getdhruvaresults(), dhruva_result_status_code        
         
 
 class FetchGlossary(Resource):
@@ -569,7 +569,7 @@ class FetchGlossary(Resource):
 
         dhruva_result_json, dhruva_result_status_code = UserUtils.send_fetch_req_for_dhruva(decrypt_headers)
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
-        return res.getdhruvaresults()   
+        return res.getdhruvaresults(), dhruva_result_status_code   
 
 
 
