@@ -526,7 +526,8 @@ public class ModelService {
 		}
 
 		ModelTask taskType = modelObj.getTask();
-		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)||taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)) {
+		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)||taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)||
+				taskType.getType().equals(SupportedTasks.AUDIO_LANG_DETECTION)) {
 			LanguagePair lp = new LanguagePair();
 			lp.setSourceLanguage(SupportedLanguages.MIXED);
 			LanguagePairs lps = new LanguagePairs();
@@ -792,7 +793,8 @@ public class ModelService {
 
 		if (model.getLanguages() == null) {
 			ModelTask taskType = model.getTask();
-			if (!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION) && !taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)) {
+			if (!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION) && !taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)
+					&& !taskType.getType().equals(SupportedTasks.AUDIO_LANG_DETECTION)) {
 				throw new ModelValidationException("languages is required field");
 			}
 		}

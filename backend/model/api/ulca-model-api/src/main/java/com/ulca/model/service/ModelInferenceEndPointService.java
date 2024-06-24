@@ -54,6 +54,8 @@ import io.swagger.model.AudioFile;
 import io.swagger.model.AudioFiles;
 import io.swagger.model.AudioGenderDetectionRequest;
 import io.swagger.model.AudioGenderDetectionResponse;
+import io.swagger.model.AudioLangDetectionRequest;
+import io.swagger.model.AudioLangDetectionResponse;
 import io.swagger.model.ImageFile;
 import io.swagger.model.ImageFiles;
 import io.swagger.model.InferenceAPIEndPoint;
@@ -373,6 +375,58 @@ public class ModelInferenceEndPointService {
 					+ objectMapper.writeValueAsString(response));
 			audioGenderDetectionInference.setResponse(response);
 			schema = audioGenderDetectionInference;
+
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.AudioLangDetectionInference")) {
+
+			io.swagger.model.AudioLangDetectionInference audioLangDetectionInference = (io.swagger.model.AudioLangDetectionInference) schema;
+			AudioLangDetectionRequest request = audioLangDetectionInference.getRequest();
+
+			AudioLangDetectionResponse response = null;
+			SslContext sslContext;
+			try {
+				sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+
+				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+
+				/*
+				 * response = builder.clientConnector(new
+				 * ReactorClientHttpConnector(httpClient)).build().post()
+				 * .uri(callBackUrl).body(Mono.just(request), ASRRequest.class).retrieve()
+				 * .bodyToMono(ASRResponse.class).block();
+				 */
+				if (inferenceAPIEndPoint.getInferenceApiKey() != null) {
+					InferenceAPIEndPointInferenceApiKey inferenceAPIEndPointInferenceApiKey = inferenceAPIEndPoint
+							.getInferenceApiKey();
+
+					if (inferenceAPIEndPointInferenceApiKey.getValue() != null) {
+
+						String inferenceApiKeyName = inferenceAPIEndPointInferenceApiKey.getName();
+						String inferenceApiKeyValue = inferenceAPIEndPointInferenceApiKey.getValue();
+						log.info("inferenceApiKeyName : " + inferenceApiKeyName);
+						log.info("inferenceApiKeyValue : " + inferenceApiKeyValue);
+						response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
+								.uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue)
+								.body(Mono.just(request), AudioLangDetectionRequest.class).retrieve()
+								.bodyToMono(AudioLangDetectionResponse.class).block();
+						log.info("response : " + response);
+					}
+				} else {
+					response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
+							.uri(callBackUrl).body(Mono.just(request), AudioLangDetectionRequest.class).retrieve()
+							.bodyToMono(AudioLangDetectionResponse.class).block();
+					log.info("response : " + response);
+
+				}
+
+			} catch (SSLException e) {
+				e.printStackTrace();
+			}
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			log.info("logging audio-lang-detection inference point response"
+					+ objectMapper.writeValueAsString(response));
+			audioLangDetectionInference.setResponse(response);
+			schema = audioLangDetectionInference;
 
 		}
 
