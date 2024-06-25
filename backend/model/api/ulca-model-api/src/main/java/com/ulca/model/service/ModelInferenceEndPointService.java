@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelComputeResponseAudioGenderDetection;
+import com.ulca.model.response.ModelComputeResponseAudioLangDetection;
 import com.ulca.model.response.ModelComputeResponseNer;
 import com.ulca.model.response.ModelComputeResponseOCR;
 import com.ulca.model.response.ModelComputeResponseTTS;
@@ -353,14 +356,14 @@ public class ModelInferenceEndPointService {
 						log.info("inferenceApiKeyName : " + inferenceApiKeyName);
 						log.info("inferenceApiKeyValue : " + inferenceApiKeyValue);
 						response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
-								.uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue)
+								.uri(URLDecoder.decode(callBackUrl, StandardCharsets.UTF_8.name())).header(inferenceApiKeyName, inferenceApiKeyValue)
 								.body(Mono.just(request), AudioGenderDetectionRequest.class).retrieve()
 								.bodyToMono(AudioGenderDetectionResponse.class).block();
 						log.info("response : " + response);
 					}
 				} else {
 					response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
-							.uri(callBackUrl).body(Mono.just(request), AudioGenderDetectionRequest.class).retrieve()
+							.uri(URLDecoder.decode(callBackUrl, StandardCharsets.UTF_8.name())).body(Mono.just(request), AudioGenderDetectionRequest.class).retrieve()
 							.bodyToMono(AudioGenderDetectionResponse.class).block();
 					log.info("response : " + response);
 
@@ -377,9 +380,9 @@ public class ModelInferenceEndPointService {
 			schema = audioGenderDetectionInference;
 
 		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.AudioLangDetectionInference")) {
-
 			io.swagger.model.AudioLangDetectionInference audioLangDetectionInference = (io.swagger.model.AudioLangDetectionInference) schema;
 			AudioLangDetectionRequest request = audioLangDetectionInference.getRequest();
+			log.info("request :: "+request);
 
 			AudioLangDetectionResponse response = null;
 			SslContext sslContext;
@@ -405,14 +408,14 @@ public class ModelInferenceEndPointService {
 						log.info("inferenceApiKeyName : " + inferenceApiKeyName);
 						log.info("inferenceApiKeyValue : " + inferenceApiKeyValue);
 						response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
-								.uri(callBackUrl).header(inferenceApiKeyName, inferenceApiKeyValue)
+								.uri(URLDecoder.decode(callBackUrl, StandardCharsets.UTF_8.name())).header(inferenceApiKeyName, inferenceApiKeyValue)
 								.body(Mono.just(request), AudioLangDetectionRequest.class).retrieve()
 								.bodyToMono(AudioLangDetectionResponse.class).block();
 						log.info("response : " + response);
 					}
 				} else {
 					response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post()
-							.uri(callBackUrl).body(Mono.just(request), AudioLangDetectionRequest.class).retrieve()
+							.uri(URLDecoder.decode(callBackUrl, StandardCharsets.UTF_8.name())).body(Mono.just(request), AudioLangDetectionRequest.class).retrieve()
 							.bodyToMono(AudioLangDetectionResponse.class).block();
 					log.info("response : " + response);
 
@@ -1181,6 +1184,89 @@ public class ModelInferenceEndPointService {
 			}
 
 		}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.AudioLangDetectionInference")) {
+			io.swagger.model.AudioLangDetectionInference audioLangDetectionInference = (io.swagger.model.AudioLangDetectionInference) schema;
+
+			String audioBase64 = compute.getAudioBase64();
+			String audioUri = compute.getAudioUri();
+
+			AudioFiles audioFiles = new AudioFiles();
+			AudioFile audioFile = new AudioFile();
+
+			if (audioBase64 != null && !audioBase64.isBlank()) {
+				// convert base64Audio to byte array
+				byte[] audioContent = Base64.getDecoder().decode(audioBase64);
+				audioFile.setAudioContent(audioContent);
+
+			} else if (audioUri != null && !audioUri.isBlank()) {
+
+				audioFile.setAudioUri(audioUri);
+			} else {
+				throw new ModelComputeException("Invalid input!",
+						"audioContent or audioUri both cannot be null or empty!", HttpStatus.BAD_REQUEST);
+			}
+
+			audioFiles.add(audioFile);
+			AudioLangDetectionRequest request = audioLangDetectionInference.getRequest();
+
+			request.setAudio(audioFiles);
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
+					.writeTimeout(120, TimeUnit.SECONDS).readTimeout(120, TimeUnit.SECONDS).build();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			// Request httpRequest = new
+			// Request.Builder().url(callBackUrl).post(body).build();
+
+			Request httpRequest = checkInferenceApiKeyValueAtCompute(inferenceAPIEndPoint, body);
+
+			Response httpResponse = null;
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			} catch (SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout",
+						"Unable to fetch model response (timeout). Please try again later !", HttpStatus.BAD_REQUEST);
+			}
+
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "AudioLangDetection Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+
+			String responseJsonStr = httpResponse.body().string();
+			try {
+				AudioLangDetectionResponse audioLangDetectionResponse = objectMapper.readValue(responseJsonStr,
+						AudioLangDetectionResponse.class);
+
+				if (audioLangDetectionResponse.getOutput() == null
+						|| audioLangDetectionResponse.getOutput().size() <= 0) {
+					throw new ModelComputeException(httpResponse.message(),
+							"AudioLangDetection Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
+
+				}
+
+				ModelComputeResponseAudioLangDetection resp = new ModelComputeResponseAudioLangDetection();
+				BeanUtils.copyProperties(audioLangDetectionResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from AudioLangDetection model inference end not proper : callback url :  "
+						+ callBackUrl + " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(),
+						"AudioLangDetection Model Compute Response is not proper", HttpStatus.BAD_REQUEST);
+
+			}
+
+		}
 
 		return response;
 	}
@@ -1369,13 +1455,13 @@ public class ModelInferenceEndPointService {
 				log.info("originalInferenceApiKeyName : " + originalInferenceApiKeyName);
 				log.info("originalInferenceApiKeyValue : " + originalInferenceApiKeyValue);
 
-				httpRequest = new Request.Builder().url(callBackUrl)
+				httpRequest = new Request.Builder().url(URLDecoder.decode(callBackUrl, StandardCharsets.UTF_8.name()))
 						.addHeader(originalInferenceApiKeyName, originalInferenceApiKeyValue).post(body).build();
 				log.info("httpRequest with headers : " + httpRequest.toString());
 
 			}
 		} else {
-			httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			httpRequest = new Request.Builder().url(URLDecoder.decode(callBackUrl, StandardCharsets.UTF_8.name())).post(body).build();
 			log.info("httpRequest : " + httpRequest.toString());
 
 		}

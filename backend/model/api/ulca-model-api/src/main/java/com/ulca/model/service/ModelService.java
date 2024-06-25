@@ -543,7 +543,7 @@ public class ModelService {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
-
+           log.info("schema name : "+schema.getClass().getName());
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
 				|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {

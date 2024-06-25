@@ -18,146 +18,144 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-13T12:41:05.989770988Z[GMT]")
 
+public class AudioGenderDetectionInference implements OneOfInferenceAPIEndPointSchema {
+	// @JsonProperty("taskType")
+	// private SupportedTasks taskType = null;
 
-public class AudioGenderDetectionInference  implements OneOfInferenceAPIEndPointSchema {
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+	@JsonProperty("modelProcessingType")
+	private ModelProcessingType modelProcessingType = null;
 
-  @JsonProperty("modelProcessingType")
-  private ModelProcessingType modelProcessingType = null;
+	@JsonProperty("request")
+	private AudioGenderDetectionRequest request = null;
 
-  @JsonProperty("request")
-  private AudioGenderDetectionRequest request = null;
+	@JsonProperty("response")
+	private AudioGenderDetectionResponse response = null;
 
-  @JsonProperty("response")
-  private AudioGenderDetectionResponse response = null;
+	/*
+	 * public AudioGenderDetectionInference taskType(SupportedTasks taskType) {
+	 * this.taskType = taskType; return this; }
+	 * 
+	 *//**
+		 * Get taskType
+		 * 
+		 * @return taskType
+		 **//*
+			 * @Schema(required = true, description = "")
+			 * 
+			 * @NotNull
+			 * 
+			 * @Valid public SupportedTasks getTaskType() { return taskType; }
+			 * 
+			 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+			 * }
+			 */
+	public AudioGenderDetectionInference modelProcessingType(ModelProcessingType modelProcessingType) {
+		this.modelProcessingType = modelProcessingType;
+		return this;
+	}
 
-  public AudioGenderDetectionInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	/**
+	 * Get modelProcessingType
+	 * 
+	 * @return modelProcessingType
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-  /**
-   * Get taskType
-   * @return taskType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public ModelProcessingType getModelProcessingType() {
+		return modelProcessingType;
+	}
 
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
+	public void setModelProcessingType(ModelProcessingType modelProcessingType) {
+		this.modelProcessingType = modelProcessingType;
+	}
 
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
+	public AudioGenderDetectionInference request(AudioGenderDetectionRequest request) {
+		this.request = request;
+		return this;
+	}
 
-  public AudioGenderDetectionInference modelProcessingType(ModelProcessingType modelProcessingType) {
-    this.modelProcessingType = modelProcessingType;
-    return this;
-  }
+	/**
+	 * Get request
+	 * 
+	 * @return request
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-  /**
-   * Get modelProcessingType
-   * @return modelProcessingType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public AudioGenderDetectionRequest getRequest() {
+		return request;
+	}
 
-    @Valid
-    public ModelProcessingType getModelProcessingType() {
-    return modelProcessingType;
-  }
+	public void setRequest(AudioGenderDetectionRequest request) {
+		this.request = request;
+	}
 
-  public void setModelProcessingType(ModelProcessingType modelProcessingType) {
-    this.modelProcessingType = modelProcessingType;
-  }
+	public AudioGenderDetectionInference response(AudioGenderDetectionResponse response) {
+		this.response = response;
+		return this;
+	}
 
-  public AudioGenderDetectionInference request(AudioGenderDetectionRequest request) {
-    this.request = request;
-    return this;
-  }
+	/**
+	 * Get response
+	 * 
+	 * @return response
+	 **/
+	@Schema(description = "")
+	@NotNull
 
-  /**
-   * Get request
-   * @return request
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public AudioGenderDetectionResponse getResponse() {
+		return response;
+	}
 
-    @Valid
-    public AudioGenderDetectionRequest getRequest() {
-    return request;
-  }
+	public void setResponse(AudioGenderDetectionResponse response) {
+		this.response = response;
+	}
 
-  public void setRequest(AudioGenderDetectionRequest request) {
-    this.request = request;
-  }
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		AudioGenderDetectionInference audioGenderDetectionInference = (AudioGenderDetectionInference) o;
+		return //Objects.equals(this.taskType, audioGenderDetectionInference.taskType)
+			 Objects.equals(this.modelProcessingType, audioGenderDetectionInference.modelProcessingType)
+				&& Objects.equals(this.request, audioGenderDetectionInference.request)
+				&& Objects.equals(this.response, audioGenderDetectionInference.response);
+	}
 
-  public AudioGenderDetectionInference response(AudioGenderDetectionResponse response) {
-    this.response = response;
-    return this;
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash( modelProcessingType, request, response);
+	}
 
-  /**
-   * Get response
-   * @return response
-   **/
-  @Schema(description = "")
-      @NotNull
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class AudioGenderDetectionInference {\n");
 
-    @Valid
-    public AudioGenderDetectionResponse getResponse() {
-    return response;
-  }
+		//sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+		sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
+		sb.append("    request: ").append(toIndentedString(request)).append("\n");
+		sb.append("    response: ").append(toIndentedString(response)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 
-  public void setResponse(AudioGenderDetectionResponse response) {
-    this.response = response;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    AudioGenderDetectionInference audioGenderDetectionInference = (AudioGenderDetectionInference) o;
-    return Objects.equals(this.taskType, audioGenderDetectionInference.taskType) &&
-        Objects.equals(this.modelProcessingType, audioGenderDetectionInference.modelProcessingType) &&
-        Objects.equals(this.request, audioGenderDetectionInference.request) &&
-        Objects.equals(this.response, audioGenderDetectionInference.response);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(taskType, modelProcessingType, request, response);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class AudioGenderDetectionInference {\n");
-    
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
-    sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
-    sb.append("    request: ").append(toIndentedString(request)).append("\n");
-    sb.append("    response: ").append(toIndentedString(response)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 }

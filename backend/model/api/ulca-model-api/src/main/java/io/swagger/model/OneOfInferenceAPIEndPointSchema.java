@@ -3,6 +3,7 @@ package io.swagger.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 /**
 * OneOfInferenceAPIEndPointSchema
 */
@@ -19,7 +20,8 @@ property = "taskType"
 	  @JsonSubTypes.Type(value = OCRInference.class, name = "ocr"),
 	  @JsonSubTypes.Type(value = TxtLangDetectionInference.class, name = "txt-lang-detection"),
 	  @JsonSubTypes.Type(value = NerInference.class, name = "ner"),
-	  @JsonSubTypes.Type(value = AudioGenderDetectionInference.class, name = "audio-gender-detection")
+	  @JsonSubTypes.Type(value = AudioGenderDetectionInference.class, name = "audio-gender-detection"),
+	  @JsonSubTypes.Type(value = AudioLangDetectionInference.class, name = "audio-lang-detection")
 	})
 public interface OneOfInferenceAPIEndPointSchema {
 
