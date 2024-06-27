@@ -20,7 +20,7 @@ public class LangDetectionPrediction   {
   @JsonProperty("langCode")
   private String langCode = null;
 
-  @JsonProperty("ScriptCode")
+  @JsonProperty("scriptCode")
   private String scriptCode = null;
 
   @JsonProperty("langScore")
