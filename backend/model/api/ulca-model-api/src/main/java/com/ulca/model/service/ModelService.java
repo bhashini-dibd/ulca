@@ -2561,9 +2561,14 @@ public class ModelService {
 							if (configSchema.isDefaultModel()) {
 								appModelService.setDefaultModel(true);
 							}
-
 						} else {
-							appModelService.setDefaultModel(false);
+							if (modelsMap.containsKey(configSchema.getModelId())) {
+								AppModelService alreadyExistAppModelService = modelsMap.get(configSchema.getModelId());
+								appModelService.setDefaultModel(alreadyExistAppModelService.getDefaultModel());
+							} else {
+
+								appModelService.setDefaultModel(false);
+							}
 						}
 
 						modelsMap.put(configSchema.getModelId(), appModelService);
