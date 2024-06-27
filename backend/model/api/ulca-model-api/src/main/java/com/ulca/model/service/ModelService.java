@@ -2570,8 +2570,13 @@ public class ModelService {
 								appModelService.setDefaultModel(false);
 							}
 						}
-
-						modelsMap.put(configSchema.getModelId(), appModelService);
+						if (!taskSpecification.getTaskType().name().toLowerCase().equals("ocr")) {
+							modelsMap.put(configSchema.getModelId(), appModelService);
+						} else {
+							if (configSchema.getServiceId().contains("sceneText")) {
+								modelsMap.put(configSchema.getModelId(), appModelService);
+							}
+						}
 					}
 				}
 			}
