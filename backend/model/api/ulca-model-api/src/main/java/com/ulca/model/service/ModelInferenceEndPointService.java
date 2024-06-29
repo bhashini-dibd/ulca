@@ -820,7 +820,7 @@ public class ModelInferenceEndPointService {
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 				log.info("body :::::::::::::: "+body.toString());
 				
-				throw new ModelComputeException(httpResponse.message(), body.toString(),
+				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Failed",
 						HttpStatus.valueOf(httpResponse.code()));
 			}
 
