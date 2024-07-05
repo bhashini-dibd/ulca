@@ -49,6 +49,12 @@ import MultiDeleteGlossaryApi from "../../../redux/actions/api/UserManagement/Mu
 import { IndicTransliterate, getTransliterationLanguages, getTransliterateSuggestions } from "@ai4bharat/indic-transliterate";
 // import "@ai4bharat/indic-transliterate/dist/index.css";
 import { useRef } from "react";
+import deleteImg from '../../../assets/glossary/delete.svg';
+import exportImg from '../../../assets/glossary/export.svg';
+import bulkUploadImg from '../../../assets/glossary/bulk_upload.svg';
+import addImg from '../../../assets/glossary/add.svg';
+
+import FileUpload from "./FileUpload";
 
 const styles = {
   bannerContainer: {
@@ -166,12 +172,43 @@ const GlossaryProfile = (props) => {
 
   const location = useLocation();
   const { serviceProviderName, inferenceApiKey, appName,UlcaApiKey} = location.state || {};
-  console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,UlcaApiKey,"neeww");
+  // console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,UlcaApiKey,"neeww");
 //   useEffect(() => {
 //     if (apiKeys) {
 //       setTableData(apiKeys);
 //     }
 //   }, [apiKeys]);
+
+const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+const [exportDialogOpen, setExportDialogOpen] = useState(false);
+
+const handleUploadDialogOpen = () => {
+  setUploadDialogOpen(true);
+};
+
+const handleUploadDialogClose = () => {
+  setUploadDialogOpen(false);
+};
+
+const handleExportDialogOpen = () => {
+  setExportDialogOpen(true);
+};
+
+const handleExportDialogClose = () => {
+  setExportDialogOpen(false);
+};
+
+const handleUpload = (file) => {
+  // Handle file upload logic here
+  console.log('Uploading file:', file);
+  handleUploadDialogClose();
+};
+
+const handleExport = (file) => {
+  // Handle file export logic here
+  console.log('Exporting file:', file);
+  handleExportDialogClose();
+};
 
 
 useEffect(() => { 
@@ -268,8 +305,8 @@ useEffect(() => {
           xl={3}
           style={{ display: "flex", justifyContent: "space-between" }}
         >
-          {/* <Search value="" handleSearch={(e) => handleSearch(e.target.value)} /> */}
-          <Typography variant="h5" style={{fontFamily:"Noto-Regular"}}>Glossary List</Typography>
+          <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+          {/* <Typography variant="h5" style={{fontFamily:"Noto-Regular"}}>Glossary List</Typography> */}
         </Grid>
       
 
@@ -283,7 +320,61 @@ useEffect(() => {
           className={classes.filterGrid}
           style={{ marginLeft: "100px", gap:"20px", display:isMobile ? 'none' : "flex" }}
         >
-         <Search value='' handleSearch={(e) => handleSearch(e.target.value)}/>
+         
+          <Button
+            color="primary"
+            size="medium"
+            variant="contained"
+            className={classes.ButtonRefresh}
+            onClick={handleExportDialogOpen}
+            style={{
+              height: "36px",
+              textTransform: "capitalize",
+              fontSize: "1rem",
+              borderRadius:"4px",
+              fontFamily: "Noto-Regular",
+               fontWeight:"400",
+               fontSize:"12px",
+              //  padding:"14px 36px",
+              borderRadius:"4px",
+              border: "1px solid #D0D5DD",
+              backgroundColor:"white",
+               width:"100%",
+               boxShadow: "none",
+            }}
+          >
+             <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={exportImg} />
+                  <span style={{fontSize:"16px", color:"#344054"}}>Export</span>
+                </Box>
+          </Button>
+          <Button
+            color="primary"
+            size="medium"
+            variant="contained"
+            className={classes.ButtonRefresh}
+            onClick={handleUploadDialogOpen}
+            style={{
+              height: "36px",
+              textTransform: "capitalize",
+              fontSize: "1rem",
+              borderRadius:"4px",
+              fontFamily: "Noto-Regular",
+               fontWeight:"400",
+               fontSize:"12px",
+               borderRadius:"4px",
+               border: "1px solid #D0D5DD",
+               backgroundColor:"white",
+              //  padding:"14px 36px",
+               width:"100%",
+               boxShadow: "none",
+            }}
+          >
+             <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={bulkUploadImg} />
+                  <span style={{fontSize:"16px", color:"#344054"}}>Bulk Upload</span>
+                </Box>
+          </Button>
           <Button
             color="primary"
             size="medium"
@@ -299,12 +390,16 @@ useEffect(() => {
               borderRadius:"4px",
               fontFamily: "Noto-Regular",
                fontWeight:"400",
-               fontSize:"15px",
-               padding:"14px 36px"
+               fontSize:"12px",
+              //  padding:"14px 28px",
+               marginLeft:"0px",
+               width:"100%",
             }}
           >
-            {" "}
-            Create Glossary
+            <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={addImg} />
+                  <span style={{fontSize:"16px"}} >Add New</span>
+                </Box>
           </Button>
         </Grid>
 
@@ -522,8 +617,10 @@ useEffect(() => {
         download: false,
         search: false,
         customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-            <Tooltip title="">
+          <div style={{display:"flex", gap:"20px", marginRight:"20px"}}>
+          <Tooltip title="">
               <IconButton
+                  style={{borderRadius:"4px", backgroundColor:"white", padding:"5px 12px"}}
                 onClick={() => {
                   const selectedData = selectedRows.data.map(row => tableData[row.dataIndex]);
                   console.log("Selected Rows' Data:", selectedData);
@@ -541,9 +638,36 @@ useEffect(() => {
                   // alert(JSON.stringify(selectedData, null, 2)); // Display selected data in an alert
                 }}
               >
-                <DeleteIcon />
+                <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={deleteImg} />
+                 {!isMobile && <span style={{fontSize:"16px", color:"#D40808"}}>Delete</span>}
+                </Box>
+                {/* <DeleteIcon />  */}
               </IconButton>
             </Tooltip>
+            <Tooltip title="">
+              <IconButton
+                 style={{borderRadius:"4px",border: "1px solid #D0D5DD", padding:"5px 12px",  boxShadow: "none",}}
+                 onClick={handleExportDialogOpen}
+              >
+                  <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={exportImg} />
+                  {!isMobile && <span style={{fontSize:"16px", color:"#344054"}}>Export</span>}
+                </Box>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="">
+              <IconButton
+               style={{borderRadius:"4px",border: "1px solid #D0D5DD", padding:"5px 12px",  boxShadow: "none",}}
+               onClick={handleUploadDialogOpen}
+              >
+                  <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={bulkUploadImg} />
+                  {!isMobile && <span style={{fontSize:"16px", color:"#344054"}}>Bulk Upload</span>}
+                </Box>
+              </IconButton>
+            </Tooltip>
+            </div>
           ),
         filter: false,
         onRowSelectionChange: (currentRowsSelected, allRowsSelected) => {
@@ -633,7 +757,7 @@ useEffect(() => {
         }
       ];
 
-      const renderTextarea = (props, heading) => {
+      const renderTextarea = (props, heading,isDisabled) => {
         return (
           <>
           <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>{heading}</Typography>
@@ -642,7 +766,7 @@ useEffect(() => {
             placeholder={"Enter text here..."}
             rows={2}
             // className={classes.textAreaTransliteration}
-            style={{border:"1px solid lightGray", backgroundColor: "inherit", width: "100%", resize: "none",
+            style={{border:"1px solid lightGray", backgroundColor: isDisabled ? "#f0f0f0" : "inherit", width: "100%", resize: "none",
             fontSize: "23px",
             lineHeight: "32px",
             color: "black",
@@ -834,10 +958,11 @@ useEffect(() => {
           }
           console.log("nnn",text,debouncedText,debouncedTextRef.current);
         }}
-        renderComponent={(props) => renderTextarea(props,"Source Text")}
+        renderComponent={(props) => renderTextarea(props,"Source Text",!formState.sourceLanguage)}
         showCurrentWordAsLastSuggestion={true}
         style={{width:"100%"}}
         className="glossary_dropdownValue"
+        disabled={!formState.sourceLanguage}
       /> : (
         <>
          <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
@@ -851,6 +976,7 @@ useEffect(() => {
                   rows={2.5}
                   value={formState.sourceText}
                   onChange={handleChange}
+                  disabled={!formState.sourceLanguage}
                   style={{ fontSize: "14px",
                     lineHeight: "32px",
                     color: "black",
@@ -877,6 +1003,7 @@ useEffect(() => {
                  <IndicTransliterate
         lang={formState.targetLanguage}
         value={formState.targetText}
+        disabled={!formState.targetLanguage}
         onChangeText={(val) => {
           setText(val)
           setDebouncedText(val);
@@ -893,7 +1020,7 @@ useEffect(() => {
           }
           console.log("nnn",text,debouncedText,debouncedTextRef.current);
         }}
-        renderComponent={(props) => renderTextarea(props,"Target Text")}
+        renderComponent={(props) => renderTextarea(props,"Target Text",!formState.targetLanguage)}
         showCurrentWordAsLastSuggestion={true}
       />
               </Grid>
@@ -930,7 +1057,22 @@ useEffect(() => {
       </DialogContent>
       
     </Dialog>
-
+    <FileUpload
+        open={uploadDialogOpen}
+        handleClose={handleUploadDialogClose}
+        title="Bulk Upload"
+        description="Upload your glossary & download the sample file for guidance."
+        buttonText="Upload"
+        handleAction={handleUpload}
+      />
+      <FileUpload
+        open={exportDialogOpen}
+        handleClose={handleExportDialogClose}
+        title="Export Data"
+        description="Export your data & download the sample file for guidance."
+        buttonText="Export"
+        handleAction={handleExport}
+      />
    
 
      

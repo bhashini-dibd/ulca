@@ -201,6 +201,7 @@ const Header = (props) => {
                         variant="text"
                       >
                         {translate("label.dataset")}
+                        {/* Dataset Vatica */}
                         {/* {authenticate() && <DownIcon color="action" />} */}
                       </Button>
                       {/* {authenticate() &&
@@ -230,6 +231,7 @@ const Header = (props) => {
                       onClick={(e) => handleMenuTypeClick("models")}
                     >
                       {translate("label.model")}
+                      {/* Model Valtica */}
                       {/* {authenticate() && <DownIcon color="action" />} */}
                     </Button>
                   </div>
