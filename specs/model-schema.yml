@@ -114,6 +114,8 @@ components:
             - $ref: '#/components/schemas/OCRInference'
             - $ref: '#/components/schemas/TxtLangDetectionInference'
             - $ref: '#/components/schemas/NerInference'
+            - $ref: '#/components/schemas/AudioGenderDetectionInference'
+            - $ref: '#/components/schemas/AudioLangDetectionInference'
           discriminator:
             propertyName: taskType
             mapping:
@@ -124,6 +126,8 @@ components:
               ocr: '#/components/schemas/OCRInference'
               txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
               ner: '#/components/schemas/NerInference'
+              audio-gender-detection: '#/components/schemas/AudioGenderDetectionInference'
+              audio-lang-detection: '#/components/schemas/AudioLangDetectionInference'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
@@ -477,6 +481,21 @@ components:
           $ref: '#/components/schemas/ASRRequest'
         response:
           $ref: '#/components/schemas/ASRResponse'
+    AudioGenderDetectionInference:
+      required:
+        - taskType
+        - modelProcessingType
+        - request
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        modelProcessingType:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/ModelProcessingType
+        request:
+          $ref: '#/components/schemas/AudioGenderDetectionRequest'
+        response:
+          $ref: '#/components/schemas/AudioGenderDetectionResponse'      
     ASRAsyncInference:
       required:
         - taskType
@@ -529,6 +548,57 @@ components:
           $ref: '#/components/schemas/TranslationConfig'
         taskType:
           $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+    AudioGenderDetectionRequest:
+      required:
+        - audio
+        - config
+      type: object
+      properties:
+        audio:
+          $ref: '#/components/schemas/AudioFiles'
+        config:
+          $ref: '#/components/schemas/AudioGenderDetectionConfig'
+    AudioGenderDetectionResponse:
+      description: the response for translation.  Standard http status codes to be used.
+      required:
+        - output
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/AudioGenderDetectionOutput'
+        taskType:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks 
+    AudioGenderDetectionOutput:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/AudioGenderPrediction'
+    AudioGenderPrediction:
+      required:
+        - audio
+        - genderPrediction
+      type: object
+      properties:
+        audio:
+          $ref: '#/components/schemas/AudioFile'
+        genderPrediction:
+          $ref: '#/components/schemas/AudioGenderPredictions'
+    AudioGenderPredictions:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/GenderPrediction'
+    GenderPrediction:
+      required:
+        - gender
+        - genderScore
+      type: object
+      properties:
+        gender:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+        genderScore:
+          type: number
+          description: Score of gender specific.
     TTSInference:
       required:
         - taskType
@@ -672,7 +742,7 @@ components:
     AudioOutput:
       type: array
       description: list of
-      items: 
+      items:
         $ref: '#/components/schemas/AudioTranscription'
     AudioTranscription:
       required:
@@ -688,7 +758,6 @@ components:
           description: list of
           items:
             $ref: '#/components/schemas/TokenProbability'
-    
     TokenProbability:
       type: object
       properties:
@@ -698,8 +767,7 @@ components:
           type: array
           description: list of
           items:
-                $ref: '#/components/schemas/SubtokenProbability'
-    
+            $ref: '#/components/schemas/SubtokenProbability'
     SubtokenProbability:
       type: object
       additionalProperties:
@@ -707,9 +775,8 @@ components:
         maximum: 1
         minimum: 0
       example:
-        T : .8
-        D : .1
-    
+        T: 0.8
+        D: 0.1
     Sentences:
       type: array
       description: list of
@@ -774,9 +841,12 @@ components:
         $ref: '#/components/schemas/AudioLangDetectionList'
     AudioLangDetectionList:
       required:
+        - audio
         - langPrediction
       type: object
       properties:
+        audio:
+          $ref: '#/components/schemas/AudioFile'
         langPrediction:
           type: array
           description: list of
@@ -790,7 +860,7 @@ components:
         langCode:
           type: string
           description: Indic language code, iso-639-1, iso 639-2
-        ScriptCode:
+        scriptCode:
           type: string
           description: Script code, iso-15924
         langScore:
@@ -1020,7 +1090,7 @@ components:
         detailed:
           type: boolean
           description: to specify whether details are required in output like SNR, sampling rate
-        bestTokenCount : 
+        bestTokenCount:
           type: integer
           description: Displays the token level probabilities of the final prediction. 5 would be the suggested optimal value. Each successive token will have exponentially lower probability
         punctuation:
@@ -1035,6 +1105,27 @@ components:
             - default
         encoding:
           $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+    AudioGenderDetectionConfig:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        audioFormat:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        encoding:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding  
+        preProcessors:
+          type: string
+          example: 
+        postProcessors:
+          type: string
+          example:  
     ImageFiles:
       type: array
       description: list of
