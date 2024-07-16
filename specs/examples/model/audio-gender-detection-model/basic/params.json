@@ -1,10 +1,10 @@
 {
-    "name": "Ai4Bharat audio language detection",
+    "name": "Ai4Bharat audio gender detection",
     "version": "v1.0",
-    "description": "Ai4Bharat model to detect language from provided audio",
-    "refUrl": "https://github.com/AI4Bharat/indicTrans",
+    "description": "Ai4Bharat model to detect gender from provided audio",
+    "refUrl": "https://github.com/AI4Bharat/IndicWav2Vec",
     "task": {
-        "type": "audio-lang-detection"
+        "type": "audio-gender-detection"
     },
     "languages": null,
     "license": "mit",
@@ -30,20 +30,24 @@
         ]
     },
     "inferenceEndPoint": {
-        "callbackUrl": "https://developers.ulca.org/aai4b-nmt-inference/v0/audio-detection-dummy",
+        "callbackUrl": "https://dhruva-api.bhashini.gov.in/services/inference/genderdetection?serviceId=bhashini/gender-classification",
+        
         "schema": {
-            "taskType": "audio-lang-detection",
+            "taskType": "audio-gender-detection",
             "request": {
                 "audio": [
                     {
-                        "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_english.wav"
+                        "audioUri": "https://dhruvacentrali0960249713.blob.core.windows.net/haridas/ta2.wav"
                     }
-                ]
+                ],
+                "config":{
+                "audioFormat":"wav"
+                }
+               
             }
         }
     },
     "trainingDataset": {
-        "datasetId": "2398749282",
-        "description": "trained on the general datasets from ULCA"
+        "description": "Trained on benchmark datasets"
     }
 }
