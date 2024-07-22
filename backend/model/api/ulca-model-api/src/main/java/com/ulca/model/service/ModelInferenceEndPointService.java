@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -103,6 +104,9 @@ public class ModelInferenceEndPointService {
 
 	@Autowired
 	FileUtility fileUtility;
+	
+	//@Autowired
+	//OkHttpClientConfig okHttpClientConfig;
 
 	public InferenceAPIEndPoint validateSyncCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
 			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
@@ -606,8 +610,13 @@ public class ModelInferenceEndPointService {
 			 * TimeUnit.SECONDS) .writeTimeout(120, TimeUnit.SECONDS) .readTimeout(120,
 			 * TimeUnit.SECONDS) .build();
 			 */
+			//OkHttpClientConfig okHttpClientConfig = new OkHttpClientConfig();
 			
-			OkHttpClient client = getTrustAllCertsClient();
+			//log.info("okHttpClientConfig : "+okHttpClientConfig.toString());
+			
+			OkHttpClient client = avoidTrustAllCertsClient();
+			
+			log.info("client :: "+client);
 			
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -1190,6 +1199,39 @@ public class ModelInferenceEndPointService {
 		newBuilder.hostnameVerifier((hostname, session) -> true);
 		return newBuilder.readTimeout(120, TimeUnit.SECONDS).build();
 	}
+	
+	public static OkHttpClient avoidTrustAllCertsClient() throws NoSuchAlgorithmException, KeyManagementException {
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[] {
+            new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new java.security.cert.X509Certificate[]{};
+                }
+            }
+        };
+
+        // Install the all-trusting trust manager
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+
+        // Create an ssl socket factory with our all-trusting manager
+        SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
+        builder.hostnameVerifier((hostname, session) -> true);
+        return builder.readTimeout(120, TimeUnit.SECONDS).build();
+    }
+
 	
 	   public static Request   checkInferenceApiKeyValueAtUpload(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
 		   Request httpRequest =null;
