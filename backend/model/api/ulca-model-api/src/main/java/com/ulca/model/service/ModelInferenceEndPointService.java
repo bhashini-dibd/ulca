@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.ulca.OkHttpClientConfig;
 import com.ulca.benchmark.util.FileUtility;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.ModelComputeException;
@@ -105,9 +104,6 @@ public class ModelInferenceEndPointService {
 
 	@Autowired
 	FileUtility fileUtility;
-	
-	@Autowired
-	OkHttpClientConfig okHttpClientConfig;
 
 	public InferenceAPIEndPoint validateSyncCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
 			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
@@ -1216,38 +1212,7 @@ public class ModelInferenceEndPointService {
 		return newBuilder.readTimeout(120, TimeUnit.SECONDS).build();
 	}
 	
-	public static OkHttpClient avoidTrustAllCertsClient() throws NoSuchAlgorithmException, KeyManagementException {
-        // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[] {
-            new X509TrustManager() {
-                @Override
-                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
-                }
-
-                @Override
-                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
-                }
-
-                @Override
-                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                    return new java.security.cert.X509Certificate[]{};
-                }
-            }
-        };
-
-        // Install the all-trusting trust manager
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-
-        // Create an ssl socket factory with our all-trusting manager
-        SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
-        builder.hostnameVerifier((hostname, session) -> true);
-        return builder.readTimeout(120, TimeUnit.SECONDS).build();
-    }
-
+	
 	
 	   public static Request   checkInferenceApiKeyValueAtUpload(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
 		   Request httpRequest =null;
