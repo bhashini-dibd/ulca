@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ulca.OkHttpClientConfig;
 import com.ulca.benchmark.util.FileUtility;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.ModelComputeException;
@@ -105,8 +106,8 @@ public class ModelInferenceEndPointService {
 	@Autowired
 	FileUtility fileUtility;
 	
-	//@Autowired
-	//OkHttpClientConfig okHttpClientConfig;
+	@Autowired
+	OkHttpClientConfig okHttpClientConfig;
 
 	public InferenceAPIEndPoint validateSyncCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
 			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
@@ -614,7 +615,7 @@ public class ModelInferenceEndPointService {
 			
 			//log.info("okHttpClientConfig : "+okHttpClientConfig.toString());
 			
-			OkHttpClient client = getTrustAllCertsClient();
+			OkHttpClient client = okHttpClientConfig.getSslOkHttpClient();
 			
 			log.info("client :: "+client);
 			
