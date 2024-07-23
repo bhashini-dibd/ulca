@@ -618,7 +618,7 @@ public class ModelInferenceEndPointService {
 			//log.info("okHttpClientConfig : "+okHttpClientConfig.toString());
 			
 			log.info("before ssl client");
-			OkHttpClient client = okHttpClientConfig.getSslOkHttpClient();
+			OkHttpClient client = getTrustAllCertsClient();
 			
 			log.info("client :: "+client);
 			
