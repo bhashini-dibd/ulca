@@ -589,6 +589,8 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
 			TranslationRequest request = translationInference.getRequest();
+			
+			log.info("Translation Compute Start");
 
 			List<Input> input = compute.getInput();
 			Sentences sentences = new Sentences();
@@ -615,6 +617,7 @@ public class ModelInferenceEndPointService {
 			
 			//log.info("okHttpClientConfig : "+okHttpClientConfig.toString());
 			
+			log.info("before ssl client");
 			OkHttpClient client = okHttpClientConfig.getSslOkHttpClient();
 			
 			log.info("client :: "+client);
