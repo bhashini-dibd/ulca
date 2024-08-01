@@ -119,7 +119,8 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			//OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = getTrustAllCertsClient();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -206,7 +207,8 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			//OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = getTrustAllCertsClient();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -325,7 +327,8 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			//OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = getTrustAllCertsClient();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
