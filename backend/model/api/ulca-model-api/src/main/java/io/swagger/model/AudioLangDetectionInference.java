@@ -17,119 +17,116 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-02-06T13:44:25.814973054Z[GMT]")
 
+public class AudioLangDetectionInference implements OneOfInferenceAPIEndPointSchema {
+	// @JsonProperty("taskType")
+	// private SupportedTasks taskType = null;
 
-public class AudioLangDetectionInference  implements OneOfInferenceAPIEndPointSchema {
-  @JsonProperty("taskType")
-  private SupportedTasks taskType = null;
+	@JsonProperty("request")
+	private AudioLangDetectionRequest request = null;
 
-  @JsonProperty("request")
-  private AudioLangDetectionRequest request = null;
+	@JsonProperty("response")
+	private AudioLangDetectionResponse response = null;
 
-  @JsonProperty("response")
-  private AudioLangDetectionResponse response = null;
+	/*
+	 * public AudioLangDetectionInference taskType(SupportedTasks taskType) {
+	 * this.taskType = taskType; return this; }
+	 * 
+	 *//**
+		 * Get taskType
+		 * 
+		 * @return taskType
+		 **//*
+			 * @Schema(required = true, description = "")
+			 * 
+			 * @NotNull
+			 * 
+			 * @Valid public SupportedTasks getTaskType() { return taskType; }
+			 * 
+			 * public void setTaskType(SupportedTasks taskType) { this.taskType = taskType;
+			 * }
+			 */
+	public AudioLangDetectionInference request(AudioLangDetectionRequest request) {
+		this.request = request;
+		return this;
+	}
 
-  public AudioLangDetectionInference taskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-    return this;
-  }
+	/**
+	 * Get request
+	 * 
+	 * @return request
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-  /**
-   * Get taskType
-   * @return taskType
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public AudioLangDetectionRequest getRequest() {
+		return request;
+	}
 
-    @Valid
-    public SupportedTasks getTaskType() {
-    return taskType;
-  }
+	public void setRequest(AudioLangDetectionRequest request) {
+		this.request = request;
+	}
 
-  public void setTaskType(SupportedTasks taskType) {
-    this.taskType = taskType;
-  }
+	public AudioLangDetectionInference response(AudioLangDetectionResponse response) {
+		this.response = response;
+		return this;
+	}
 
-  public AudioLangDetectionInference request(AudioLangDetectionRequest request) {
-    this.request = request;
-    return this;
-  }
+	/**
+	 * Get response
+	 * 
+	 * @return response
+	 **/
+	@Schema(description = "")
 
-  /**
-   * Get request
-   * @return request
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	@Valid
+	public AudioLangDetectionResponse getResponse() {
+		return response;
+	}
 
-    @Valid
-    public AudioLangDetectionRequest getRequest() {
-    return request;
-  }
+	public void setResponse(AudioLangDetectionResponse response) {
+		this.response = response;
+	}
 
-  public void setRequest(AudioLangDetectionRequest request) {
-    this.request = request;
-  }
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		AudioLangDetectionInference audioLangDetectionInference = (AudioLangDetectionInference) o;
+		return //Objects.equals(this.taskType, audioLangDetectionInference.taskType)
+				 Objects.equals(this.request, audioLangDetectionInference.request)
+				&& Objects.equals(this.response, audioLangDetectionInference.response);
+	}
 
-  public AudioLangDetectionInference response(AudioLangDetectionResponse response) {
-    this.response = response;
-    return this;
-  }
+	@Override
+	public int hashCode() {
+		return Objects.hash( request, response);
+	}
 
-  /**
-   * Get response
-   * @return response
-   **/
-  @Schema(description = "")
-  
-    @Valid
-    public AudioLangDetectionResponse getResponse() {
-    return response;
-  }
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class AudioLangDetectionInference {\n");
 
-  public void setResponse(AudioLangDetectionResponse response) {
-    this.response = response;
-  }
+		//sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+		sb.append("    request: ").append(toIndentedString(request)).append("\n");
+		sb.append("    response: ").append(toIndentedString(response)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
 
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    AudioLangDetectionInference audioLangDetectionInference = (AudioLangDetectionInference) o;
-    return Objects.equals(this.taskType, audioLangDetectionInference.taskType) &&
-        Objects.equals(this.request, audioLangDetectionInference.request) &&
-        Objects.equals(this.response, audioLangDetectionInference.response);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(taskType, request, response);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class AudioLangDetectionInference {\n");
-    
-    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
-    sb.append("    request: ").append(toIndentedString(request)).append("\n");
-    sb.append("    response: ").append(toIndentedString(response)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 }
