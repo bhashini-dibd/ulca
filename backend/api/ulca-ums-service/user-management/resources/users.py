@@ -598,7 +598,7 @@ class OnboardingAppProfile(Resource):
                     userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":userServiceProvider})
         
         if isinstance(userAPIKeys, list):
-            data = [{"userID":userID,"email":email,"data":userAPIKeys}]
+            data = [{"userID":userID,"email":email,"apiKeys":userAPIKeys}]
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
             return res.getresjson(), 200
         else:
