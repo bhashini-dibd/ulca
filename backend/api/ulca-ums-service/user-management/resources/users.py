@@ -596,9 +596,10 @@ class OnboardingAppProfile(Resource):
                     existing_names.append(existing_keys["serviceProviderName"])
                 if not existing_names:
                     userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":userServiceProvider})
-        data = [{"userID":userID,"email":email,"data":userAPIKeys}]
+        
         if isinstance(userAPIKeys, list):
-            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
+            data = [{"userID":userID,"email":email,"data":userAPIKeys}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
             return res.getresjson(), 200
         else:
             return post_error("400", "userID cannot be empty, please provide one.")
