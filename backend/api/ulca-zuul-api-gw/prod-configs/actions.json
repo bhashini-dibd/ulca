@@ -463,6 +463,14 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch all tasks pipeline"
+    },
+    {
+      "id": "a035e3ec-996c-45a9-bbd1-0951356afc20",
+      "uri": "/ulca/user-mgmt/v1/users/onboardingAppProfile",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to get api keys of users with non existing service provider names"
     }
   ]
 }
