@@ -572,5 +572,29 @@ class FetchGlossary(Resource):
         return res.getdhruvaresults(), dhruva_result_status_code   
 
 
+class OnboardingAppProfile(Resource):
+    def post(self):
+        body = request.get_json()
+        if "email" not in body.keys():
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+        user = body['email']
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        userServiceProvider = UserUtils.listOfServiceProviders()
+        if not userServiceProvider:
+            return post_error("400", "User Service Provider is None")
+        for i in range(0,len(userAPIKeys)):
+            if "serviceProviderKeys" in userAPIKeys[i].keys():
+                existing_names = []                    
+                for existing_keys in userAPIKeys[i]["serviceProviderKeys"]: 
+                    existing_names.append(existing_keys["serviceProviderName"])
+                if not existing_names:
+                    userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":userServiceProvider})
+        if isinstance(userAPIKeys, list):
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "userID cannot be empty, please provide one.")
+
 
 
