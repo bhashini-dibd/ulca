@@ -455,6 +455,14 @@
       "active": true,
       "whiteList": false,
       "description": "API to get delete entries within glossary of Bhashini"
+    },
+    {
+      "id": "f68fe57a-19dd-49fc-bdd5-62728d7f7dc7",
+      "uri": "/ulca/apis/v0/model/getModelsAllPipeline",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch all tasks pipeline"
     }
   ]
 }
