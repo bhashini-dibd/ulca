@@ -580,6 +580,8 @@ class OnboardingAppProfile(Resource):
         user = email
         appName = None
         userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")            
         userServiceProvider = UserUtils.listOfServiceProviders()
         if not userServiceProvider:
             return post_error("400", "User Service Provider is None")
