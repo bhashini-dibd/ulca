@@ -583,6 +583,8 @@ class OnboardingAppProfile(Resource):
         userServiceProvider = UserUtils.listOfServiceProviders()
         if not userServiceProvider:
             return post_error("400", "User Service Provider is None")
+        print(f"userAPIKeys :: {userAPIKeys}")
+        print(f"userServiceProvider :: {userServiceProvider}")
         for i in range(0,len(userAPIKeys)):
             if "serviceProviderKeys" in userAPIKeys[i].keys():
                 existing_names = []                    
