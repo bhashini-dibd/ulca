@@ -587,6 +587,8 @@ class OnboardingAppProfile(Resource):
             return post_error("400", "User Service Provider is None")
         print(f"userAPIKeys :: {userAPIKeys}")
         print(f"userServiceProvider :: {userServiceProvider}")
+        userID = userAPIKeys['userID']
+        userAPIKeys = userAPIKeys['apiKeyDetails']
         for i in range(0,len(userAPIKeys)):
             if "serviceProviderKeys" in userAPIKeys[i].keys():
                 existing_names = []                    
@@ -594,6 +596,7 @@ class OnboardingAppProfile(Resource):
                     existing_names.append(existing_keys["serviceProviderName"])
                 if not existing_names:
                     userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":userServiceProvider})
+        data = [{"userID":userID,"email":email,"data":userAPIKeys}]
         if isinstance(userAPIKeys, list):
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, userAPIKeys)
             return res.getresjson(), 200
