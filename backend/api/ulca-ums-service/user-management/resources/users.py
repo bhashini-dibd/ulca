@@ -573,11 +573,11 @@ class FetchGlossary(Resource):
 
 
 class OnboardingAppProfile(Resource):
-    def post(self):
-        body = request.get_json()
-        if "email" not in body.keys():
+    def get(self):
+        email = request.args.get("email")
+        if "email" is None:
             return post_error("Data Missing", "Email ID is not entered", None), 400
-        user = body['email']
+        user = email
         appName = None
         userAPIKeys = UserUtils.get_email_api_keys(user,appName)
         userServiceProvider = UserUtils.listOfServiceProviders()
