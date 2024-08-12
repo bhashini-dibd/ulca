@@ -51,6 +51,7 @@ import com.ulca.model.response.ModelComputeResponseTxtLangDetection;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
 import io.swagger.model.AsyncApiDetails;
@@ -341,7 +342,13 @@ public class ModelInferenceEndPointService {
 			try {
 				sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
 
-				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+				//HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+				
+				HttpClient httpClient = HttpClient.create()
+				        .secure(t -> t.sslContext(sslContext))
+				        .doOnConnected(conn -> 
+				            conn.addHandlerLast(new ReadTimeoutHandler(120)) // Read timeout of 10 seconds
+				        );
 
 				/*
 				 * response = builder.clientConnector(new
@@ -393,7 +400,12 @@ public class ModelInferenceEndPointService {
 			try {
 				sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
 
-				HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+				//HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+				HttpClient httpClient = HttpClient.create()
+				        .secure(t -> t.sslContext(sslContext))
+				        .doOnConnected(conn -> 
+				            conn.addHandlerLast(new ReadTimeoutHandler(120)) // Read timeout of 10 seconds
+				        );
 
 				/*
 				 * response = builder.clientConnector(new
