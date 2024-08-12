@@ -98,6 +98,8 @@ const HostedInference = (props) => {
     });
     const [transliterationModelId, setTransliterationModelId] = useState("");
     const [showTransliteration, setShowTransliteration] = useState(true);
+    const [nerSource,setNerSource] = useState(null)
+    const [nerPrediction,setNerPrediction] = useState(null)
 
     const [lang, setLang] = useState("")
     useEffect(() => {
@@ -184,7 +186,9 @@ const HostedInference = (props) => {
                 let nerOutput = response?.output
                 if (nerOutput && nerOutput.length > 0) {
                     let nerSource = nerOutput[0]?.source;
+                    setNerSource(nerSource)
                     let predictions = nerOutput[0]?.nerPrediction;
+                    setNerPrediction(predictions)
 
                     let newText;
                     if (predictions && predictions.length > 0) {
@@ -257,6 +261,99 @@ const HostedInference = (props) => {
     const handleChange = (val) => {
         setGender(val);
     };
+
+      const tagColorMap = {
+        'B-PER': {
+          token: { background: 'pink', color: 'black' },
+          tag: { background: '#e57373', color: 'white' }
+        },
+        'B-LOC': {
+          token: { background: 'lightgreen', color: 'black' },
+          tag: { background: '#81c784', color: 'white' }
+        },
+        'B-ORG': {
+          token: { background: '#a2d2ff', color: 'black' },
+          tag: { background: '#64b5f6', color: 'white' }
+        },
+        'B-ETI': {
+          token: { background: '#e76f51', color: 'black' },
+          tag: { background: '#f06292', color: 'white' }
+        },
+        'B-EN': {
+          token: { background: '#90e0ef', color: 'black' },
+          tag: { background: '#4fc3f7', color: 'white' }
+        },
+        'I-LOC': {
+          token: { background: '#f4acb7', color: 'black' },
+          tag: { background: '#f48fb1', color: 'white' }
+        },
+        'I-PER': {
+          token: { background: '#ffc300', color: 'black' },
+          tag: { background: '#ffb74d', color: 'white' }
+        },
+        'I-ORG': {
+          token: { background: '#f4acb7', color: 'black' },
+          tag: { background: '#ba68c8', color: 'white' }
+        },
+        'I-ETI': {
+          token: { background: '#778da9', color: 'black' },
+          tag: { background: '#7986cb', color: 'white' }
+        },
+        'I-EN': {
+          token: { background: '#ff006e', color: 'black' },
+          tag: { background: '#f06292', color: 'white' }
+        },
+        'O': {
+          token: { background: 'orange', color: 'black' },
+          tag: { background: '#ff8a65', color: 'white' }
+        }
+      };
+
+      const generateHighlightedText = () => {
+        // Create a map of token indices to tags
+        const tagMap = new Map();
+        nerPrediction?.forEach(({ token, tag }) => {
+          tagMap.set(token, tag);
+        });
+      
+        console.log('NER Source:', tagMap);
+        console.log('NER Predictions:', nerPrediction);
+        console.log('Tag Map:', Array.from(tagMap.entries()));
+      
+        // Split the source text into words, ignoring punctuation
+        const words = nerSource?.split(' ') || [];
+        
+        // Array to hold JSX elements for each word
+        const elements = words?.map((word, index) => {
+          const tag = tagMap.get(word) || 'O';
+          const { token: tokenStyle, tag: tagStyle } = tagColorMap[tag];
+      
+          return (
+            <span
+              key={index}
+              style={{
+                backgroundColor: tokenStyle.background,
+                color: tokenStyle.color,
+                borderRadius: '20px',
+                padding: '2px',
+                marginRight: '4px',
+                display: 'inline-block', // Ensures spacing is consistent
+                marginBottom:"15px",
+              }}
+            >
+              {word} <span style={{
+                backgroundColor: tagStyle.background,
+                color: tagStyle.color,
+                borderRadius: '20px',
+                padding: '2px 4px',
+                marginLeft: '2px'
+              }}>{tag}</span>
+            </span>
+          );
+        });
+      
+        return elements;
+      };   
 
     const renderGenderDropDown = () => {
         return (
@@ -444,11 +541,17 @@ const HostedInference = (props) => {
                         style={{
                             display: "flex",
                             // justifyContent: "center",
-                            height: "15vh",
-                            overflowY: "auto"
+                            // height: "15vh",
+                            overflowY: "auto",
+                            flexDirection:"column"
                         }}
                     >
-                        {outputText}
+                       {/* {renderPills()} */}
+                       <div style={{display:"flex", gap:"6px", marginBottom: '20px'}}>
+
+                       <p style={{ margin: '0 0 20px 0', lineHeight: '1.6' }}>{generateHighlightedText()}</p> 
+                       </div>
+                        {/* {outputText} */}
 
                     </CardContent>
                     {outputText && <div >
