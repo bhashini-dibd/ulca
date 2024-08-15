@@ -576,6 +576,7 @@ class OnboardingAppProfile(Resource):
     def get(self):
         email = request.args.get("email")
         authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
         if authorization_header != ONBOARDING_AUTH_HEADER:
             return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
         if "email" is None:
