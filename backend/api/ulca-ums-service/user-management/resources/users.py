@@ -575,6 +575,9 @@ class FetchGlossary(Resource):
 class OnboardingAppProfile(Resource):
     def get(self):
         email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
         if "email" is None:
             return post_error("Data Missing", "Email ID is not entered", None), 400
         user = email
