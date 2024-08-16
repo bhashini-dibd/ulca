@@ -24,7 +24,7 @@ from app import mail
 from flask import render_template
 from bson import json_util
 from bson.objectid import ObjectId
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION,SPECIAL_CHARS
+from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION,SPECIAL_CHARS,BHAHSINI_GLOSSARY_CREATE_URL,BHAHSINI_GLOSSARY_DELETE_URL,BHAHSINI_GLOSSARY_FETCH_URL
 from config import SENDER_EMAIL, SENDER_PASSWORD, SENDER_USERNAME
 from Crypto.Cipher import AES
 import base64
@@ -723,8 +723,12 @@ class UserUtils:
         #log.info(f"userdoc  231231 {userdoc}")
         if userdoc:
             if "apiKeyDetails" in userdoc.keys():
-                apiKeyDeets = userdoc["apiKeyDetails"]
-            return apiKeyDeets , userdoc["email"]
+                if len(userdoc["apiKeyDetails"]) >= 1:
+
+                    apiKeyDeets = userdoc["apiKeyDetails"]
+                    return apiKeyDeets , userdoc["email"]
+                return None, None
+            return None, None
         elif not userdoc:
             return None, None
 
@@ -851,3 +855,42 @@ class UserUtils:
         if isinstance(pipelinie_Docs, list):
             return pipelinie_Docs[0]['serviceProvider']['name']
 
+    @staticmethod
+    def getUserInfKey(appName, userID, serviceProvider):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        userinfkey = collections.find_one({"userID":userID})
+        if not userinfkey:
+            return None
+        
+        if "apiKeyDetails" in userinfkey.keys():
+            for apiK in userinfkey['apiKeyDetails']:
+                if apiK['appName'] == appName and 'serviceProviderKeys' in apiK.keys():
+                    for service in apiK['serviceProviderKeys']:
+                        if service['serviceProviderName'] == serviceProvider:
+                            return service['inferenceApiKey']['value']
+        else:
+            return None
+        
+    @staticmethod
+    def send_create_req_for_dhruva(auth_headers,glossary):
+        body = {"glossary":glossary}
+        result = requests.post(url=BHAHSINI_GLOSSARY_CREATE_URL, json=body, headers=auth_headers)
+        log.info(f"result from dhruva {result.json}")
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def send_delete_req_for_dhruva(auth_headers,glossary):
+        body = {"glossary":glossary}
+        result = requests.post(url=BHAHSINI_GLOSSARY_DELETE_URL, json=body, headers=auth_headers)
+        # if result.status_code == 200:
+        #     return result.json()
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def send_fetch_req_for_dhruva(auth_headers):
+        #body = {"apiKey":infKey}
+        result = requests.get(url=BHAHSINI_GLOSSARY_FETCH_URL,  headers=auth_headers)
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+        return result.json(), result.status_code

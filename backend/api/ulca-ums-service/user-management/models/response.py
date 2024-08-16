@@ -25,6 +25,14 @@ class CustomResponse:
     def getresjson(self):
         return self.statuscode
 
+class CustomResponseDhruva:
+    def __init__(self, message:dict, code):
+        self.message = message
+        self.message['code'] = code
+
+    def getdhruvaresults(self):
+        return self.message
+
 class SearchCustomResponse:
 
     def __init__(self, statuscode, data,count):
