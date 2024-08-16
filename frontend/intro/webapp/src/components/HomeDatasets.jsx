@@ -120,6 +120,8 @@ const HomeDatasets = () => {
       throw error;
     }
   };
+
+  console.log("checking");
   return (
     <>
     
@@ -590,7 +592,8 @@ const HomeDatasets = () => {
                       {isLoading ? <Loader /> : totalValue2 ? totalValue2 : 0}
                     </h6>
                     <hr style={{overflow:"hidden", width:"90%"}} />
-                    <a href="#dataset-dashboard" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px"}} className="ULCA__disabled">Go to dashboard <img src={DatasetArrowDisabled} style={{color:"white"}} className="ml-2"/></a>
+                    {/* <a href="#dataset-dashboard" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px"}} className="ULCA__disabled">Go to dashboard <img src={DatasetArrowDisabled} style={{color:"white"}} className="ml-2"/></a> */}
+                    <a href=" https://bhashini.gov.in/ulca/model/explore-models" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px", color:"#2947A3", fontSize:"16px", fontWeight:600, fontFamily:"Noto-Bold"}}>Go to dashboard <img src={DatasetArrow} className="ml-2"/></a>
                     
                   </Card.Text>
                 </Card.Body>
@@ -641,8 +644,9 @@ const HomeDatasets = () => {
                       {isLoading ? <Loader /> : (totalValue3 ? totalValue3 : 0)}
                       
                     </h6>
+
                     <hr style={{overflow:"hidden", width:"90%"}} />
-                    <a href="#dataset-dashboard" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px"}} className="ULCA__disabled">Go to dashboard <img src={DatasetArrowDisabled} style={{color:"white"}} className="ml-2"/></a>
+                    <a href="https://bhashini.gov.in/ulca/model/benchmark-datasets" style={{color:"black", display:"flex", justifyContent:"flex-end", marginRight:"40px", marginBottom:"20px", color:"#2947A3", fontSize:"16px", fontWeight:600, fontFamily:"Noto-Bold"}}>Go to dashboard <img src={DatasetArrow} className="ml-2"/></a>
                   </Card.Text>
                 </Card.Body>
               </Card>

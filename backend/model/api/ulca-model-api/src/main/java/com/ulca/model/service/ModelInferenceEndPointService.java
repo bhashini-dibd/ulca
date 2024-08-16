@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -118,7 +119,8 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			//OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = getTrustAllCertsClient();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -205,7 +207,8 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			//OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = getTrustAllCertsClient();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -324,7 +327,8 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			// OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			//OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = getTrustAllCertsClient();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
@@ -584,6 +588,8 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
 			TranslationRequest request = translationInference.getRequest();
+			
+			log.info("Translation Compute Start");
 
 			List<Input> input = compute.getInput();
 			Sentences sentences = new Sentences();
@@ -601,10 +607,20 @@ public class ModelInferenceEndPointService {
 			
 			
 			//OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
-                    .writeTimeout(120, TimeUnit.SECONDS)
-                    .readTimeout(120, TimeUnit.SECONDS)
-                    .build();
+			/*
+			 * OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120,
+			 * TimeUnit.SECONDS) .writeTimeout(120, TimeUnit.SECONDS) .readTimeout(120,
+			 * TimeUnit.SECONDS) .build();
+			 */
+			//OkHttpClientConfig okHttpClientConfig = new OkHttpClientConfig();
+			
+			//log.info("okHttpClientConfig : "+okHttpClientConfig.toString());
+			
+			log.info("before ssl client");
+			OkHttpClient client = getTrustAllCertsClient();
+			
+			log.info("client :: "+client);
+			
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
             Request httpRequest =checkInferenceApiKeyValueAtCompute(inferenceAPIEndPoint,body);
@@ -701,10 +717,13 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			//OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
-                    .writeTimeout(120, TimeUnit.SECONDS)
-                    .readTimeout(120, TimeUnit.SECONDS)
-                    .build();
+			/*
+			 * OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120,
+			 * TimeUnit.SECONDS) .writeTimeout(120, TimeUnit.SECONDS) .readTimeout(120,
+			 * TimeUnit.SECONDS) .build();
+			 */
+			OkHttpClient client = getTrustAllCertsClient();
+			
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 
@@ -820,7 +839,7 @@ public class ModelInferenceEndPointService {
 			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
 				log.info("body :::::::::::::: "+body.toString());
 				
-				throw new ModelComputeException(httpResponse.message(), body.toString(),
+				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Failed",
 						HttpStatus.valueOf(httpResponse.code()));
 			}
 
@@ -868,10 +887,13 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
              log.info("request :: "+requestJson.toString());
 			//OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
-                    .writeTimeout(120, TimeUnit.SECONDS)
-                    .readTimeout(120, TimeUnit.SECONDS)
-                    .build();
+			/*
+			 * OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120,
+			 * TimeUnit.SECONDS) .writeTimeout(120, TimeUnit.SECONDS) .readTimeout(120,
+			 * TimeUnit.SECONDS) .build();
+			 */
+             
+             OkHttpClient client = getTrustAllCertsClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
              
@@ -1002,10 +1024,13 @@ public class ModelInferenceEndPointService {
 
 			//OkHttpClient client = new OkHttpClient();
 			
-			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
-                    .writeTimeout(120, TimeUnit.SECONDS)
-                    .readTimeout(120, TimeUnit.SECONDS)
-                    .build();
+			/*
+			 * OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120,
+			 * TimeUnit.SECONDS) .writeTimeout(120, TimeUnit.SECONDS) .readTimeout(120,
+			 * TimeUnit.SECONDS) .build();
+			 */
+			
+			OkHttpClient client = getTrustAllCertsClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
               
@@ -1114,10 +1139,13 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			//OkHttpClient client = new OkHttpClient();
-			OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
-                    .writeTimeout(60, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .build();
+			/*
+			 * OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60,
+			 * TimeUnit.SECONDS) .writeTimeout(60, TimeUnit.SECONDS) .readTimeout(60,
+			 * TimeUnit.SECONDS) .build();
+			 */
+			
+			OkHttpClient client =getTrustAllCertsClient();
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			//Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 			
@@ -1186,6 +1214,8 @@ public class ModelInferenceEndPointService {
 		newBuilder.hostnameVerifier((hostname, session) -> true);
 		return newBuilder.readTimeout(120, TimeUnit.SECONDS).build();
 	}
+	
+	
 	
 	   public static Request   checkInferenceApiKeyValueAtUpload(InferenceAPIEndPoint inferenceAPIEndPoint , RequestBody body ) {
 		   Request httpRequest =null;

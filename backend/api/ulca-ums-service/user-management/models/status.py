@@ -21,7 +21,9 @@ class Status(enum.Enum):
     REMOVE_SERVICE_PROVIDER =   {"message" : "Service provider Details successfully removed."}
     TOGGLED_DATA_SUCCESS    =   {"message" : "DataTracking toggled successfully."}
     TOGGLED_DATA_EXISTS_SUCCESS = {"message" : "DataTracking is updated accordingly."}
-
+    GLOSSARY_CREATION_SUCCESS = {"message" : "Glossary creation is successfull"}
+    GLOSSARY_DELETION_SUCCESS = {"message" : "Glossary deletion is successfull"}
+    GLOSSARY_FETCH_SUCCESS    =  {"message" : "Glossary fetch is successfull"}
 
 
 
