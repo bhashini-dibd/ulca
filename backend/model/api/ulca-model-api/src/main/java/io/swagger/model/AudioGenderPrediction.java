@@ -4,30 +4,27 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.AudioFile;
-import io.swagger.model.LangDetectionPrediction;
+import io.swagger.model.AudioGenderPredictions;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * AudioLangDetectionList
+ * AudioGenderPrediction
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-25T06:10:19.027377971Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-13T12:41:05.989770988Z[GMT]")
 
 
-public class AudioLangDetectionList   {
+public class AudioGenderPrediction   {
   @JsonProperty("audio")
   private AudioFile audio = null;
 
-  @JsonProperty("langPrediction")
-  @Valid
-  private List<LangDetectionPrediction> langPrediction = new ArrayList<LangDetectionPrediction>();
+  @JsonProperty("genderPrediction")
+  private AudioGenderPredictions genderPrediction = null;
 
-  public AudioLangDetectionList audio(AudioFile audio) {
+  public AudioGenderPrediction audio(AudioFile audio) {
     this.audio = audio;
     return this;
   }
@@ -48,29 +45,25 @@ public class AudioLangDetectionList   {
     this.audio = audio;
   }
 
-  public AudioLangDetectionList langPrediction(List<LangDetectionPrediction> langPrediction) {
-    this.langPrediction = langPrediction;
-    return this;
-  }
-
-  public AudioLangDetectionList addLangPredictionItem(LangDetectionPrediction langPredictionItem) {
-    this.langPrediction.add(langPredictionItem);
+  public AudioGenderPrediction genderPrediction(AudioGenderPredictions genderPrediction) {
+    this.genderPrediction = genderPrediction;
     return this;
   }
 
   /**
-   * list of
-   * @return langPrediction
+   * Get genderPrediction
+   * @return genderPrediction
    **/
-  @Schema(required = true, description = "list of")
+  @Schema(required = true, description = "")
       @NotNull
+
     @Valid
-    public List<LangDetectionPrediction> getLangPrediction() {
-    return langPrediction;
+    public AudioGenderPredictions getGenderPrediction() {
+    return genderPrediction;
   }
 
-  public void setLangPrediction(List<LangDetectionPrediction> langPrediction) {
-    this.langPrediction = langPrediction;
+  public void setGenderPrediction(AudioGenderPredictions genderPrediction) {
+    this.genderPrediction = genderPrediction;
   }
 
 
@@ -82,23 +75,23 @@ public class AudioLangDetectionList   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AudioLangDetectionList audioLangDetectionList = (AudioLangDetectionList) o;
-    return Objects.equals(this.audio, audioLangDetectionList.audio) &&
-        Objects.equals(this.langPrediction, audioLangDetectionList.langPrediction);
+    AudioGenderPrediction audioGenderPrediction = (AudioGenderPrediction) o;
+    return Objects.equals(this.audio, audioGenderPrediction.audio) &&
+        Objects.equals(this.genderPrediction, audioGenderPrediction.genderPrediction);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(audio, langPrediction);
+    return Objects.hash(audio, genderPrediction);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AudioLangDetectionList {\n");
+    sb.append("class AudioGenderPrediction {\n");
     
     sb.append("    audio: ").append(toIndentedString(audio)).append("\n");
-    sb.append("    langPrediction: ").append(toIndentedString(langPrediction)).append("\n");
+    sb.append("    genderPrediction: ").append(toIndentedString(genderPrediction)).append("\n");
     sb.append("}");
     return sb.toString();
   }

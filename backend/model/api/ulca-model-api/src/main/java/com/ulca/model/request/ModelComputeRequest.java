@@ -32,5 +32,6 @@ public class ModelComputeRequest {
     public String imageUri;
     private BigDecimal speed;
     private BigDecimal duration;
+    private String audioBase64;
 	  
 }
