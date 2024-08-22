@@ -1157,7 +1157,7 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.AudioGenderDetectionInference")) {
 			io.swagger.model.AudioGenderDetectionInference audioGenderDetectionInference = (io.swagger.model.AudioGenderDetectionInference) schema;
 
-			String audioBase64 = compute.getAudioBase64();
+			String audioBase64 = compute.getAudioContent();
 			String audioUri = compute.getAudioUri();
 
 			AudioFiles audioFiles = new AudioFiles();
@@ -1244,7 +1244,7 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.AudioLangDetectionInference")) {
 			io.swagger.model.AudioLangDetectionInference audioLangDetectionInference = (io.swagger.model.AudioLangDetectionInference) schema;
 
-			String audioBase64 = compute.getAudioBase64();
+			String audioBase64 = compute.getAudioContent();
 			String audioUri = compute.getAudioUri();
 
 			AudioFiles audioFiles = new AudioFiles();
