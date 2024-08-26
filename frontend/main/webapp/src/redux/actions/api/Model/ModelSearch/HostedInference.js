@@ -77,6 +77,14 @@ export default class HostedInference extends API {
       bodyData.input = [{ source: this.input }];
     } else if (this.task === "txt-lang-detection") {
       bodyData.input = [{ source: this.input }];
+    }else if (this.task === "audio-lang-detection") {
+      if (this.record) {
+        bodyData.audioContent = this.input.split("base64,")[1];
+      } else {
+        bodyData.audioUri = this.input;
+      }
+      bodyData.source = this.source;
+      // bodyData.inferenceEndPoint = this.inferenceEndPoint;
     }
     bodyData.userId =
       localStorage.getItem("userDetails") &&
