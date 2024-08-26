@@ -24,6 +24,7 @@ import { translate } from "../../../../../assets/localisation";
 import Snackbar from "../../../../components/common/Snackbar";
 import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 import ALDVoiceRecorder from "./ALDVoiceRecorder";
+import { useSelector } from "react-redux";
 
 const HostedInferALD = (props) => {
   console.log(props,"--------------->>>>jhg");
@@ -56,8 +57,10 @@ const HostedInferALD = (props) => {
   const [suggestEditValues, setSuggestEditValues] = useState("")
   const [feedbackAudioInput, setFeedbackAudioInput] = useState("");
   const [isUrl, setIsUrl] = useState(false);
-
+  const { languages } = useSelector((state) => state.getMasterData);
   const [modal, setModal] = useState(false);
+  const [targetLang, setTargetLang] = useState("");
+  const [targetAudioLang, setTargetAudioLang] = useState("");
   // const url = UrlConfig.dataset
   const handleClose = () => {
     // setAnchorEl(null);
@@ -79,7 +82,7 @@ const HostedInferALD = (props) => {
     if (!validURL(url)) {
       setError({ ...error, url: "‘Invalid URL" });
     } else {
-      handleApicall(modelId, url, task);
+      handleApicall(modelId, url, task,true);
       setSnackbarInfo({
         ...snackbar,
         open: true,
@@ -88,7 +91,7 @@ const HostedInferALD = (props) => {
       });
     }
   };
-  const handleApicall = async (modelId, url, task, status = false) => {
+  const handleApicall = async (modelId, url, task,activeset, status = false) => {
     let apiObj = new HostedInferenceAPI(
       modelId,
       url,
@@ -116,18 +119,37 @@ const HostedInferALD = (props) => {
             variant: "error",
           });
         } else {
-          if (status) {
-            setTargetAudio(rsp_data.data.source);
-          } else {
             setSnackbarInfo({
               ...snackbar,
               open: false,
               message: "",
-              timeOut: 0,
-              variant: "",
+              timeOut: 40000,
+              variant: "success",
             });
-            setTarget(rsp_data.data.source);
-          }
+            const language = rsp_data.output[0].langPrediction.map((lang) => {
+              return getLabel(lang.langCode);
+            });
+            console.log(activeset);
+            
+           
+            if (activeset) {
+              setTargetLang(language.toString());
+            } else {
+              setTargetAudioLang(language.toString());
+            }
+            
+          // if (status) {
+          //   setTargetAudio(rsp_data.data.source);
+          // } else {
+          //   setSnackbarInfo({
+          //     ...snackbar,
+          //     open: false,
+          //     message: "",
+          //     timeOut: 0,
+          //     variant: "",
+          //   });
+          //   setTarget(rsp_data.data.source);
+          // }
           setTranslationState(true);
         }
       })
@@ -146,6 +168,11 @@ const HostedInferALD = (props) => {
 
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
+  };
+
+  const getLabel = (code) => {
+    const detectedLanguage = languages.filter((lang) => lang.code === code);
+    return detectedLanguage[0]?.label;
   };
 
 
@@ -242,8 +269,8 @@ const HostedInferALD = (props) => {
             </Grid>
 
 
-            <CardContent id="aldCardOutput" className={classes.Asrcard}>{targetAudio}</CardContent>
-            {targetAudio.length > 0 && (<>
+            <CardContent id="aldCardOutput" className={classes.Asrcard}>{targetAudioLang}</CardContent>
+            {/* {targetAudio.length > 0 && (<>
               <div    >
                 <Button variant="contained" size="small"  className={classes.Asrfeedback}  onClick={() => { setModal(true); setSuggestEditValues(targetAudio); setIsUrl(false); }}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
@@ -253,9 +280,9 @@ const HostedInferALD = (props) => {
               </div>
 
 
-            </>)}
+            </>)} */}
 
-            {data && (
+            {/* {data && (
 
 
               <div    >
@@ -265,7 +292,7 @@ const HostedInferALD = (props) => {
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
                 </Button>
 
-              </div>)}
+              </div>)} */}
           </Card>
         </Grid>
 
@@ -341,13 +368,16 @@ const HostedInferALD = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-            {target.length > 0 && (<><CardContent><textarea
+            <CardContent><textarea
               rows={5}
               className={classes.textareas}
-              value={target}
+              value={targetLang}
               /></CardContent>
-
-              {/* <SimpleDialogDemo/> */}
+            {/* {targetLang.length > 0 && (<><CardContent><textarea
+              rows={5}
+              className={classes.textareas}
+              value={targetLang}
+              /></CardContent>
               <div >
                 <Button variant="contained" size="small" style={{ float: "right", marginTop: "-5px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => { setModal(true); setSuggestEditValues(target); setIsUrl(true); }}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
@@ -355,7 +385,7 @@ const HostedInferALD = (props) => {
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
                 </Button>
 
-              </div></>)}
+              </div></>)} */}
 
           </Card>
         </Grid>

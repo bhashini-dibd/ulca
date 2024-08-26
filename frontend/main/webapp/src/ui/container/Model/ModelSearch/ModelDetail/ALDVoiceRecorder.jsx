@@ -153,9 +153,9 @@ const AudioRecord = (props) => {
   const onStop = (data) => {
     setData(data.url);
   };
-  
+
   const handleCompute = () => {
-    props.handleApicall(modelId, base, task , true);
+    props.handleApicall(modelId, base, task ,false, true);
   };
 
   const handleStartRecording = (data) => {

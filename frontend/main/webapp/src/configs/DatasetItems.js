@@ -9,7 +9,7 @@ export const ModelTask = [
   { value: "transliteration", label: "Transliteration" },
   { value: "txt-lang-detection", label: "Language Detection" },
   { value: "audio-lang-detection", label: "Audio Language Detection" },
-  { value: "agd", label: "Audio Gender Detection" },
+  // { value: "audio-gender-detection", label: "Audio Gender Detection" },
 ];
 
 export const BenchmarkModelTask = [
