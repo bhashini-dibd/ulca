@@ -71,7 +71,7 @@ const LanguageDetection = (props) => {
 
   const getLabel = (code) => {
     const detectedLanguage = languages.filter((lang) => lang.code === code);
-    return detectedLanguage[0].label;
+    return detectedLanguage[0]?.label;
   };
 
   const handleCompute = () => {
