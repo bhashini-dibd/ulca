@@ -39,6 +39,7 @@ import Contactus from "../../../../components/common/Contactus";
 import Clients from "../../../../components/common/Clients";
 import { FooterNewDesign } from "../../../../components/common/FooterNewDesign";
 import HostedInferALD from "./HostedInferALD";
+import HostedInferAGD from "./HostedInferAGD";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -205,6 +206,18 @@ const SearchModelDetail = (props) => {
               streaming={streaming}
             />
           );
+        case "audio-gender-detection":
+            return (
+            <HostedInferAGD
+                task={task}
+                source={source}
+                language={language}
+                inferenceEndPoint={inferenceEndPoint}
+                submitter={submitter}
+                modelId={params.srno}
+                streaming={streaming}
+              />
+            );
         default:
           return (
             <HostedInference
