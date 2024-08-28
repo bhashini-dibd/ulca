@@ -28,9 +28,10 @@ public class ModelComputeRequest {
 	public Gender gender;
     public List<Input> input;
     public String audioUri;
-    public byte[] audioContent;
+    //public byte[] audioContent;
     public String imageUri;
     private BigDecimal speed;
     private BigDecimal duration;
+    private String audioContent;
 	  
 }

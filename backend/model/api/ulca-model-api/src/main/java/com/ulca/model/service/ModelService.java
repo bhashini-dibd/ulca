@@ -526,7 +526,8 @@ public class ModelService {
 		}
 
 		ModelTask taskType = modelObj.getTask();
-		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
+		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)||taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)||
+				taskType.getType().equals(SupportedTasks.AUDIO_LANG_DETECTION)) {
 			LanguagePair lp = new LanguagePair();
 			lp.setSourceLanguage(SupportedLanguages.MIXED);
 			LanguagePairs lps = new LanguagePairs();
@@ -542,7 +543,7 @@ public class ModelService {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
-
+           log.info("schema name : "+schema.getClass().getName());
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
 				|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
@@ -792,7 +793,8 @@ public class ModelService {
 
 		if (model.getLanguages() == null) {
 			ModelTask taskType = model.getTask();
-			if (!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
+			if (!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION) && !taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)
+					&& !taskType.getType().equals(SupportedTasks.AUDIO_LANG_DETECTION)) {
 				throw new ModelValidationException("languages is required field");
 			}
 		}
@@ -2606,4 +2608,165 @@ public class ModelService {
 
 	}
 
+	public ObjectNode getModelsAllPipeline(String jsonRequest) throws Exception {
+
+		// Check if task types are accepted and in proper order
+		PipelineRequest pipelineRequestCheckedTaskType = checkTaskType(jsonRequest);
+
+		// Check if language sequence is accepted and in proper order
+		PipelineRequest pipelineRequest = checkLanguageSequence(pipelineRequestCheckedTaskType);
+		log.info("pipelineRequest :: " + pipelineRequest);
+		/*
+		 * if (pipelineRequest != null) { validatePipelineRequest(pipelineRequest); }
+		 * else { throw new
+		 * PipelineValidationException("Pipeline validation failed. Check uploaded file syntax"
+		 * , HttpStatus.BAD_REQUEST); }
+		 */
+
+		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
+
+		PipelineResponse pipelineResponse = new PipelineResponse();
+		log.info("Get all pipeline before :: ");
+		List<PipelineModel> pipelineModels = pipelineModelDao.findAll();
+		
+		log.info("Get all pipeline after :: ");
+		PipelineModel allPipelineTasks = new PipelineModel();
+
+		for (PipelineModel pipelineModel2 : pipelineModels) {
+			for (TaskSpecification taskSpecification : pipelineModel2.getTaskSpecifications()) {
+				boolean modelAdded = false;
+				if (allPipelineTasks.getTaskSpecifications() != null) {
+					for (int i = 0; i < allPipelineTasks.getTaskSpecifications().size(); i++) {
+						if (allPipelineTasks.getTaskSpecifications().get(i).getTaskType()
+								.equals(taskSpecification.getTaskType())) {
+							ConfigList configList = taskSpecification.getTaskConfig();
+							for (ConfigSchema configSchema : configList) {
+								allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().add(configSchema);
+							}
+							modelAdded = true;
+						}
+					}
+				}
+
+				log.info("after");
+
+				if (allPipelineTasks.getTaskSpecifications() != null) {
+					if (!modelAdded) {
+						
+						log.info("!modelAdded");
+						allPipelineTasks.getTaskSpecifications().add(taskSpecification);
+
+					}
+
+				} else {
+                    log.info("else");
+					TaskSpecifications taskSpecifications = new TaskSpecifications();
+					taskSpecifications.add(taskSpecification);
+					allPipelineTasks.setTaskSpecifications(taskSpecifications);
+				}
+
+			}
+
+		}
+
+		log.info("pipeline-model :: " + allPipelineTasks);
+		// Generate Individual Language List
+		PipelineUtilities pipelineUtilities = new PipelineUtilities();
+		TaskSpecifications individualTaskSpecifications = pipelineUtilities
+				.getIndividualTaskSpecifications(pipelineRequest.getPipelineTasks(), allPipelineTasks);
+		log.info("INDIVIDUAL TASK SPECIFICATIONS :: " + individualTaskSpecifications.toString());
+
+		// TODO : individualTaskSpecifications is empty, return No supported tasks
+		// found.
+		for (TaskSpecification taskSpecification : individualTaskSpecifications) {
+			if (taskSpecification.getTaskConfig().isEmpty()) {
+				throw new PipelineValidationException("No supported tasks found for this request!!",
+						HttpStatus.BAD_REQUEST);
+
+			}
+
+		}
+
+		// Generate Response Language List
+		PipelineResponseLanguagesList pipelineResponseLanguagesList = pipelineUtilities
+				.getPipelineResponseLanguagesList(individualTaskSpecifications);
+		log.info("PIPELINE RESPONSE LANGUAGE LIST :: " + pipelineResponseLanguagesList.toString());
+		pipelineResponse.setLanguages(pipelineResponseLanguagesList);
+
+		// TODO : pipelineResponseLanguagesList is empty, return No supported tasks
+		// found.
+		if (pipelineResponseLanguagesList.isEmpty()) {
+			throw new PipelineValidationException("No supported tasks found for this request!!",
+					HttpStatus.BAD_REQUEST);
+		}
+
+		// Generate Response Config
+		TaskSchemaList pipelineResponseSchemaList = getPipelineResponseSchemaList(individualTaskSpecifications);
+		pipelineResponse.setPipelineResponseConfig(pipelineResponseSchemaList);
+
+		for (int i = 0; i < pipelineResponseSchemaList.size(); i++) {
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "asr") {
+				ASRTaskInference aSRTaskInference = (ASRTaskInference) pipelineResponseSchemaList.get(i);
+				if (aSRTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "translation") {
+				TranslationTaskInference translationTaskInference = (TranslationTaskInference) pipelineResponseSchemaList
+						.get(i);
+				if (translationTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "tts") {
+				TTSTaskInference tTSTaskInference = (TTSTaskInference) pipelineResponseSchemaList.get(i);
+				if (tTSTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "transliteration") {
+				TransliterationTaskInference transliterationTaskInference = (TransliterationTaskInference) pipelineResponseSchemaList
+						.get(i);
+				if (transliterationTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "ocr") {
+				OCRTaskInference ocrTaskInference = (OCRTaskInference) pipelineResponseSchemaList.get(i);
+				if (ocrTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		// String json = mapper.writeValueAsString(pipelineResponse);
+		// json = json.replaceAll("\"","");
+		// PipelineResponse responsePipeline =
+		// mapper.readValue(json,PipelineResponse.class);
+		// log.info("String JSON :: "+json);
+
+		ObjectNode node = mapper.valueToTree(pipelineResponse);
+		return node;
+	}
 }
