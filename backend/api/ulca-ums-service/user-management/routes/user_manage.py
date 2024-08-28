@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api
-from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey, GetApiKeysForProfile, ToggleDataTracking,CreateGlossary,DeleteGlossary,FetchGlossary
+from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey, GetApiKeysForProfile, ToggleDataTracking,CreateGlossary,DeleteGlossary,FetchGlossary, OnboardingAppProfile
 
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
@@ -39,6 +39,10 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     GetApiKeysForProfile, "/v1/users/getApiKeysForProfile"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    OnboardingAppProfile, "/v1/users/onboardingAppProfile"
 )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(

@@ -708,6 +708,7 @@ public class ModelInferenceEndPointService {
 			//OkHttpClientConfig okHttpClientConfig = new OkHttpClientConfig();
 			
 			//log.info("okHttpClientConfig : "+okHttpClientConfig.toString());
+
 			
 			log.info("before ssl client");
 			OkHttpClient client = getTrustAllCertsClient();
@@ -809,7 +810,6 @@ public class ModelInferenceEndPointService {
 			 * TimeUnit.SECONDS) .build();
 			 */
 			OkHttpClient client = getTrustAllCertsClient();
-			
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
 			// Request httpRequest = new
@@ -975,6 +975,7 @@ public class ModelInferenceEndPointService {
 			 * TimeUnit.SECONDS) .writeTimeout(120, TimeUnit.SECONDS) .readTimeout(120,
 			 * TimeUnit.SECONDS) .build();
 			 */
+
              
              OkHttpClient client = getTrustAllCertsClient();
 
@@ -1110,6 +1111,7 @@ public class ModelInferenceEndPointService {
 			 * TimeUnit.SECONDS) .writeTimeout(120, TimeUnit.SECONDS) .readTimeout(120,
 			 * TimeUnit.SECONDS) .build();
 			 */
+
 			
 			OkHttpClient client = getTrustAllCertsClient();
 
@@ -1383,6 +1385,7 @@ public class ModelInferenceEndPointService {
 			 * TimeUnit.SECONDS) .writeTimeout(60, TimeUnit.SECONDS) .readTimeout(60,
 			 * TimeUnit.SECONDS) .build();
 			 */
+
 			
 			OkHttpClient client =getTrustAllCertsClient();
 
@@ -1454,6 +1457,7 @@ public class ModelInferenceEndPointService {
 		newBuilder.hostnameVerifier((hostname, session) -> true);
 		return newBuilder.readTimeout(120, TimeUnit.SECONDS).build();
 	}
+
 
 	public static Request checkInferenceApiKeyValueAtUpload(InferenceAPIEndPoint inferenceAPIEndPoint,
 			RequestBody body) {

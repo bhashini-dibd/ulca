@@ -22,7 +22,7 @@ USR_TEMP_TOKEN_MONGO_COLLECTION =   os.environ.get('UMS_USR_TEMP_TOKEN_COLLECTIO
 USR_ORG_MONGO_COLLECTION        =   os.environ.get('UMS_ORG_COLLECTION', 'organization')
 USR_MONGO_PROCESS_COLLECTION    =   os.environ.get('ULCA_PROCESS_COLLECTION', 'pipeline-model')
 AES_SECRET_KEY                  =   os.environ.get('AES_SECRET_KEY_FOR_UMS', 'secretKey')
-
+ONBOARDING_AUTH_HEADER          =   os.environ.get('ONBOARDING_AUTH_HEADER',None)
  
 #common-variables
 PWD_MIN_LENGTH          =   os.environ.get('UMS_PASSWORD_MIN_LENGTH', 8)

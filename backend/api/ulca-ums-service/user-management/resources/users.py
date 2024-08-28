@@ -6,7 +6,7 @@ from flask import request, jsonify
 import config
 import logging
 import requests
-from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
+from config import MAX_API_KEY, SECRET_KEY, PATCH_URL, ONBOARDING_AUTH_HEADER
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -571,6 +571,42 @@ class FetchGlossary(Resource):
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
         return res.getdhruvaresults(), dhruva_result_status_code   
 
+
+class OnboardingAppProfile(Resource):
+    def get(self):
+        email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        if "email" is None:
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+        user = email
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")            
+        userServiceProvider = UserUtils.listOfServiceProviders()
+        if not userServiceProvider:
+            return post_error("400", "User Service Provider is None")
+        print(f"userAPIKeys :: {userAPIKeys}")
+        print(f"userServiceProvider :: {userServiceProvider}")
+        userID = userAPIKeys['userID']
+        userAPIKeys = userAPIKeys['apiKeyDetails']
+        for i in range(0,len(userAPIKeys)):
+            if "serviceProviderKeys" in userAPIKeys[i].keys():
+                existing_names = []                    
+                for existing_keys in userAPIKeys[i]["serviceProviderKeys"]: 
+                    existing_names.append(existing_keys["serviceProviderName"])
+                if not existing_names:
+                    userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":userServiceProvider})
+        
+        if isinstance(userAPIKeys, list):
+            data = [{"userID":userID,"email":email,"apiKeys":userAPIKeys}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "userID cannot be empty, please provide one.")
 
 
 
