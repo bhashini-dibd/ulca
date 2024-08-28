@@ -187,4 +187,11 @@ public class ModelController {
 		log.info("******** Entry ModelController:: getAppModels *******");
 		return modelService.getAppModels(taskType);
 	}
+	
+	@PostMapping("/getModelsAllPipeline")
+	public ObjectNode getModelsAllPipeline(@RequestBody String pipelineRequest) throws Exception {
+		log.info("******** Entry ModelController:: getModelsAllPipeline *******");
+	
+		return modelService.getModelsAllPipeline(pipelineRequest);
+	}
 }

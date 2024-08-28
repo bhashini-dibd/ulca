@@ -38,6 +38,8 @@ import HostedinferenceNER from "./HostedinferenceNER";
 import Contactus from "../../../../components/common/Contactus";
 import Clients from "../../../../components/common/Clients";
 import { FooterNewDesign } from "../../../../components/common/FooterNewDesign";
+import HostedInferALD from "./HostedInferALD";
+import HostedInferAGD from "./HostedInferAGD";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -130,7 +132,7 @@ const SearchModelDetail = (props) => {
     setMetric(metric);
   };
 
-  const renderHostedInfer = (task) => {
+  const renderHostedInfer = (task) => { 
     if (data) {
       switch (task) {
         case "asr":
@@ -192,6 +194,30 @@ const SearchModelDetail = (props) => {
               target={target}
             />
           );
+        case "audio-lang-detection":
+          return (
+          <HostedInferALD
+              task={task}
+              source={source}
+              language={language}
+              inferenceEndPoint={inferenceEndPoint}
+              submitter={submitter}
+              modelId={params.srno}
+              streaming={streaming}
+            />
+          );
+        case "audio-gender-detection":
+            return (
+            <HostedInferAGD
+                task={task}
+                source={source}
+                language={language}
+                inferenceEndPoint={inferenceEndPoint}
+                submitter={submitter}
+                modelId={params.srno}
+                streaming={streaming}
+              />
+            );
         default:
           return (
             <HostedInference
