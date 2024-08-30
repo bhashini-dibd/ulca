@@ -8,7 +8,13 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 
+import com.ulca.benchmark.service.BenchmarkService;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
@@ -25,22 +31,26 @@ public class RedisConfig {
     @Bean
     public JedisConnectionFactory connectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+        log.info("Intializing redis connection...");
         configuration.setHostName(redisHost);
         configuration.setPort(new Integer(redisPort));
         configuration.setPassword(redisPass);
-        configuration.setDatabase(0);
+        log.info("redisHost :: "+redisHost);
+        log.info("redisPort :: "+redisPort);
+        log.info("redisPass :: "+redisPass);
+        configuration.setDatabase(1);
         return new JedisConnectionFactory(configuration);
     }
 
     @Bean
-    public RedisTemplate<String, byte[]> redisTemplate() {
+    public RedisTemplate<String, Object> redisTemplate() {
         
-    	final RedisTemplate<String, byte[]> redisTemplate = new RedisTemplate<String, byte[]>();
+    	final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
         redisTemplate.setConnectionFactory(connectionFactory());
     	redisTemplate.setKeySerializer( new StringRedisSerializer() );
-        redisTemplate.setValueSerializer(new StringRedisSerializer() );
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer() );
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer( new StringRedisSerializer() );
+        redisTemplate.setHashValueSerializer( new GenericJackson2JsonRedisSerializer() );
         
         return redisTemplate;
     }

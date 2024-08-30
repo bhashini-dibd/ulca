@@ -1397,9 +1397,7 @@ public class ModelService {
 	}
 
 	public ObjectNode getModelsPipeline(String jsonRequest, String userID, String ulcaApiKey) throws Exception {
-		 if (cacheService.isCached(jsonRequest)) {
-	            return cacheService.getResponse(jsonRequest);
-	        }
+	
 		// Check if task types are accepted and in proper order
 		PipelineRequest pipelineRequestCheckedTaskType = checkTaskType(jsonRequest);
 
@@ -1429,14 +1427,43 @@ public class ModelService {
 		// Set response data (endpoint url, feedback url, api key, socket url)
 
 		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
-		// TranslationTaskInferenceInferenceApiKey
-		// translationTaskInferenceInferenceApiKey = new
-		// TranslationTaskInferenceInferenceApiKey();
-		// translationTaskInferenceInferenceApiKey.setName("name");
-		// translationTaskInferenceInferenceApiKey.setValue("value");
+		TranslationTaskInferenceInferenceApiKey
+		 translationTaskInferenceInferenceApiKey = new
+		 TranslationTaskInferenceInferenceApiKey();
+		 translationTaskInferenceInferenceApiKey.setName("name");
+		 translationTaskInferenceInferenceApiKey.setValue("value");
 
-		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
-				ulcaApiKey, pipelineModel.getPipelineModelId());
+		//TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
+			//	ulcaApiKey, pipelineModel.getPipelineModelId());
+		 
+		 ObjectMapper objectMapper = new ObjectMapper()
+		            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+	        Object jsonObject = objectMapper.readValue(jsonRequest, Object.class);
+	      String uniqueJsonString = objectMapper.writeValueAsString(jsonObject);
+		
+		 if (cacheService.isCached(uniqueJsonString)) {
+			 log.info("Request found in Cache");
+				Object object= cacheService.getResponse(uniqueJsonString);
+				
+				log.info("Response Object from redis :: ");
+				PipelineResponse pipelineResponse2 = null;
+				ObjectMapper mapper = new ObjectMapper();
+				if (object instanceof String) {
+				    String jsonString = (String) object;
+				     pipelineResponse2 = objectMapper.readValue(jsonString, PipelineResponse.class);
+				    // Now you can use the PipelineResponse object
+				}
+				mapper.setSerializationInclusion(Include.NON_NULL);
+				mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			
+
+				ObjectNode node = mapper.valueToTree(pipelineResponse2);
+				 return node;
+		            
+		 
+		        }
+		
+		 log.info("Request does not found in Cache");
 
 		if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
 
@@ -1561,7 +1588,8 @@ public class ModelService {
 			}
 
 		}
-
+        
+        log.info("after saving to redis ");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -1572,6 +1600,8 @@ public class ModelService {
 		// log.info("String JSON :: "+json);
 
 		ObjectNode node = mapper.valueToTree(pipelineResponse);
+        cacheService.saveResponse(uniqueJsonString, node);
+
 		return node;
 	}
 

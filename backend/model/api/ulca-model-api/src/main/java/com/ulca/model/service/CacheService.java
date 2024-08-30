@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 
@@ -12,25 +14,34 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.GZIPInputStream;
 
-
+@Slf4j
 @Service
 public class CacheService {
-
+	
     @Autowired
-    private RedisTemplate<String, byte[]> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     public void saveResponse(String requestBody, Object response) throws IOException {
+        log.info("saving response to cache");
         String hashKey = hashRequestBody(requestBody);
+        log.info("hashkey :: "+hashKey);
         byte[] compressedResponse = compressResponse(response);
-        redisTemplate.opsForValue().set(hashKey, compressedResponse);
+        log.info("after compressedResponse ");
+        redisTemplate.opsForValue().set(hashKey, compressedResponse, 60, TimeUnit.MINUTES);
     }
 
     public Object getResponse(String requestBody) throws IOException {
+    	log.info("Start get response ");
         String hashKey = hashRequestBody(requestBody);
-        byte[] compressedResponse = redisTemplate.opsForValue().get(hashKey);
+        log.info("hashKey :: "+hashKey);
+        log.info("after get hash");
+        String base64EncodedResponse = (String)redisTemplate.opsForValue().get(hashKey);
+        byte[] compressedResponse = Base64.getDecoder().decode(base64EncodedResponse);
+        log.info("after get Compressed response");
         return decompressResponse(compressedResponse);
     }
 
@@ -58,6 +69,8 @@ public class CacheService {
     }
 
     private Object decompressResponse(byte[] compressedResponse) throws IOException {
+    	log.info("Start decompression");
+    	log.info("compressedResponse :: "+compressedResponse);
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(compressedResponse);
              GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
              ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
