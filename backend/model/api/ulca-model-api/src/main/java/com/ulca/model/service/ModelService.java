@@ -221,6 +221,9 @@ public class ModelService {
 
 	@Autowired
 	ModelHealthStatusDao modelHealthStatusDao;
+	
+	@Autowired
+	RedisHealthCheckService redisHealthCheckService;
 
 	@Value("${aes.secret.key1}")
 	private String aessecretkey1;
@@ -1440,7 +1443,7 @@ public class ModelService {
 		            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
 	        Object jsonObject = objectMapper.readValue(jsonRequest, Object.class);
 	      String uniqueJsonString = objectMapper.writeValueAsString(jsonObject);
-		
+		 if(redisHealthCheckService.isRedisUp()) {
 		 if (cacheService.isCached(uniqueJsonString)) {
 			 log.info("Request found in Cache");
 				Object object= cacheService.getResponse(uniqueJsonString);
@@ -1464,6 +1467,7 @@ public class ModelService {
 		        }
 		
 		 log.info("Request does not found in Cache");
+		 }
 
 		if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
 
@@ -1589,7 +1593,6 @@ public class ModelService {
 
 		}
         
-        log.info("after saving to redis ");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -1600,7 +1603,9 @@ public class ModelService {
 		// log.info("String JSON :: "+json);
 
 		ObjectNode node = mapper.valueToTree(pipelineResponse);
+		if(redisHealthCheckService.isRedisUp()) {
         cacheService.saveResponse(uniqueJsonString, node);
+		}
 
 		return node;
 	}
