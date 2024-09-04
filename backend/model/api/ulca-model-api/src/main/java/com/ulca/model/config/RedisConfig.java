@@ -12,6 +12,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 
 import com.ulca.benchmark.service.BenchmarkService;
 
+import io.swagger.pipelinerequest.PipelineResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -48,7 +49,20 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
+    public RedisTemplate<String, PipelineResponse> redisTemplate() {
+        
+    	final RedisTemplate<String, PipelineResponse> redisTemplate = new RedisTemplate<String, PipelineResponse>();
+        redisTemplate.setConnectionFactory(connectionFactory());
+    	redisTemplate.setKeySerializer( new StringRedisSerializer() );
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer() );
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer( new GenericJackson2JsonRedisSerializer() );
+        
+        return redisTemplate;
+    }
+    
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate2() {
         
     	final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
         redisTemplate.setConnectionFactory(connectionFactory());
@@ -59,7 +73,6 @@ public class RedisConfig {
         
         return redisTemplate;
     }
-    
     
 
 }

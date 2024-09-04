@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import io.swagger.pipelinerequest.PipelineResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;
@@ -23,26 +24,28 @@ import java.util.zip.GZIPInputStream;
 public class CacheService {
 	
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, PipelineResponse> redisTemplate;
 
-    public void saveResponse(String requestBody, Object response) throws IOException {
+    public void saveResponse(String requestBody, PipelineResponse response) throws IOException {
         log.info("saving response to cache");
         String hashKey = hashRequestBody(requestBody);
         log.info("hashkey :: "+hashKey);
-        byte[] compressedResponse = compressResponse(response);
-        log.info("after compressedResponse ");
-        redisTemplate.opsForValue().set(hashKey, compressedResponse, 60, TimeUnit.MINUTES);
+        //byte[] compressedResponse = compressResponse(response);
+        //log.info("after compressedResponse ");
+        //redisTemplate.opsForValue().set(hashKey, compressedResponse, 60, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(hashKey, response, 60, TimeUnit.MINUTES);
+
     }
 
-    public Object getResponse(String requestBody) throws IOException {
+    public PipelineResponse getResponse(String requestBody) throws IOException {
     	log.info("Start get response ");
         String hashKey = hashRequestBody(requestBody);
         log.info("hashKey :: "+hashKey);
         log.info("after get hash");
-        String base64EncodedResponse = (String)redisTemplate.opsForValue().get(hashKey);
-        byte[] compressedResponse = Base64.getDecoder().decode(base64EncodedResponse);
-        log.info("after get Compressed response");
-        return decompressResponse(compressedResponse);
+        return  (PipelineResponse)redisTemplate.opsForValue().get(hashKey);
+      //  byte[] compressedResponse = Base64.getDecoder().decode(base64EncodedResponse);
+      //  log.info("after get Compressed response");
+      //  return decompressResponse(compressedResponse);
     }
 
     public boolean isCached(String requestBody) {

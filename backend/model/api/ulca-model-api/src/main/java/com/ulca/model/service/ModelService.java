@@ -1433,8 +1433,8 @@ public class ModelService {
 		//TranslationTaskInferenceInferenceApiKey
 		// translationTaskInferenceInferenceApiKey = new
 		// TranslationTaskInferenceInferenceApiKey();
-		// translationTaskInferenceInferenceApiKey.setName("name");
-		// translationTaskInferenceInferenceApiKey.setValue("value");
+		 //translationTaskInferenceInferenceApiKey.setName("name");
+		//translationTaskInferenceInferenceApiKey.setValue("value");
 
 		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
 				ulcaApiKey, pipelineModel.getPipelineModelId());
@@ -1446,16 +1446,57 @@ public class ModelService {
 		 if(redisHealthCheckService.isRedisUp()) {
 		 if (cacheService.isCached(uniqueJsonString)) {
 			 log.info("Request found in Cache");
-				Object object= cacheService.getResponse(uniqueJsonString);
+			 PipelineResponse pipelineResponse2= cacheService.getResponse(uniqueJsonString);
 				
 				log.info("Response Object from redis :: ");
-				PipelineResponse pipelineResponse2 = null;
-				ObjectMapper mapper = new ObjectMapper();
-				if (object instanceof String) {
-				    String jsonString = (String) object;
-				     pipelineResponse2 = objectMapper.readValue(jsonString, PipelineResponse.class);
-				    // Now you can use the PipelineResponse object
+				ObjectMapper mapper = new
+						 ObjectMapper();
+				/*
+				 * PipelineResponse pipelineResponse2 = null; ObjectMapper mapper = new
+				 * ObjectMapper(); if (object instanceof String) { String jsonString = (String)
+				 * object; pipelineResponse2 = objectMapper.readValue(jsonString,
+				 * PipelineResponse.class); // Now you can use the PipelineResponse object }
+				 */
+				
+				
+				
+				if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
+
+					if (pipelineModel.getInferenceEndPoint() != null) {
+
+						PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
+						pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
+						pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
+						pipelineInferenceAPIEndPoint
+								.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
+						pipelineInferenceAPIEndPoint
+								.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
+						pipelineInferenceAPIEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
+
+						pipelineResponse2.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
+					}
+
+					if (pipelineModel.getInferenceSocketEndPoint() != null) {
+
+						PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint = new PipelineInferenceAPIEndPoint();
+						pipelineInferenceSocketEndPoint
+								.setCallbackUrl(pipelineModel.getInferenceSocketEndPoint().getCallbackUrl());
+						pipelineInferenceSocketEndPoint.setIsSyncApi(pipelineModel.getInferenceSocketEndPoint().isIsSyncApi());
+						pipelineInferenceSocketEndPoint
+								.setIsMultilingualEnabled(pipelineModel.getInferenceSocketEndPoint().isIsMultilingualEnabled());
+						pipelineInferenceSocketEndPoint
+								.setAsyncApiDetails(pipelineModel.getInferenceSocketEndPoint().getAsyncApiDetails());
+						pipelineInferenceSocketEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
+
+						pipelineResponse2.setPipelineInferenceSocketEndPoint(pipelineInferenceSocketEndPoint);
+					}
+				} else {
+
+					throw new PipelineValidationException(
+							"InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
+							HttpStatus.BAD_REQUEST);
 				}
+				
 				mapper.setSerializationInclusion(Include.NON_NULL);
 				mapper.enable(SerializationFeature.INDENT_OUTPUT);
 			
@@ -1604,7 +1645,7 @@ public class ModelService {
 
 		ObjectNode node = mapper.valueToTree(pipelineResponse);
 		if(redisHealthCheckService.isRedisUp()) {
-        cacheService.saveResponse(uniqueJsonString, node);
+        cacheService.saveResponse(uniqueJsonString, pipelineResponse);
 		}
 
 		return node;
