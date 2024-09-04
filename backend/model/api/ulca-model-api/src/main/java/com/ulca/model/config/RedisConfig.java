@@ -27,18 +27,23 @@ public class RedisConfig {
 	
 	@Value(value = "${redis.pass}")
     private String redisPass;
+	
+	@Value(value = "${redis.db}")
+    private Integer redisDb;
 
     @Bean
     public JedisConnectionFactory connectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
         log.info("Intializing redis connection...");
-        configuration.setHostName(redisHost);
-        configuration.setPort(new Integer(redisPort));
-        configuration.setPassword(redisPass);
         log.info("redisHost :: "+redisHost);
         log.info("redisPort :: "+redisPort);
         log.info("redisPass :: "+redisPass);
-        configuration.setDatabase(1);
+        log.info("redisDb :: "+redisDb);
+        configuration.setHostName(redisHost);
+        configuration.setPort(new Integer(redisPort));
+        configuration.setPassword(redisPass);
+        configuration.setDatabase(redisDb);
+
         return new JedisConnectionFactory(configuration);
     }
 

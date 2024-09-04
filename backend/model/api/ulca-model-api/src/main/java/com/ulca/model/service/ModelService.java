@@ -1430,14 +1430,14 @@ public class ModelService {
 		// Set response data (endpoint url, feedback url, api key, socket url)
 
 		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
-		TranslationTaskInferenceInferenceApiKey
-		 translationTaskInferenceInferenceApiKey = new
-		 TranslationTaskInferenceInferenceApiKey();
-		 translationTaskInferenceInferenceApiKey.setName("name");
-		 translationTaskInferenceInferenceApiKey.setValue("value");
+		//TranslationTaskInferenceInferenceApiKey
+		// translationTaskInferenceInferenceApiKey = new
+		// TranslationTaskInferenceInferenceApiKey();
+		// translationTaskInferenceInferenceApiKey.setName("name");
+		// translationTaskInferenceInferenceApiKey.setValue("value");
 
-		//TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
-			//	ulcaApiKey, pipelineModel.getPipelineModelId());
+		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
+				ulcaApiKey, pipelineModel.getPipelineModelId());
 		 
 		 ObjectMapper objectMapper = new ObjectMapper()
 		            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
