@@ -221,6 +221,9 @@ public class ModelService {
 
 	@Autowired
 	ModelHealthStatusDao modelHealthStatusDao;
+	
+	@Autowired
+	RedisHealthCheckService redisHealthCheckService;
 
 	@Value("${aes.secret.key1}")
 	private String aessecretkey1;
@@ -254,6 +257,9 @@ public class ModelService {
 
 	@Autowired
 	MongoTemplate mongoTemplate;
+
+	@Autowired
+	private CacheService cacheService;
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -526,8 +532,9 @@ public class ModelService {
 		}
 
 		ModelTask taskType = modelObj.getTask();
-		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)||taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)||
-				taskType.getType().equals(SupportedTasks.AUDIO_LANG_DETECTION)) {
+		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)
+				|| taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)
+				|| taskType.getType().equals(SupportedTasks.AUDIO_LANG_DETECTION)) {
 			LanguagePair lp = new LanguagePair();
 			lp.setSourceLanguage(SupportedLanguages.MIXED);
 			LanguagePairs lps = new LanguagePairs();
@@ -543,7 +550,7 @@ public class ModelService {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
-           log.info("schema name : "+schema.getClass().getName());
+		log.info("schema name : " + schema.getClass().getName());
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
 				|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
@@ -793,7 +800,8 @@ public class ModelService {
 
 		if (model.getLanguages() == null) {
 			ModelTask taskType = model.getTask();
-			if (!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION) && !taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)
+			if (!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)
+					&& !taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)
 					&& !taskType.getType().equals(SupportedTasks.AUDIO_LANG_DETECTION)) {
 				throw new ModelValidationException("languages is required field");
 			}
@@ -1392,7 +1400,7 @@ public class ModelService {
 	}
 
 	public ObjectNode getModelsPipeline(String jsonRequest, String userID, String ulcaApiKey) throws Exception {
-
+	
 		// Check if task types are accepted and in proper order
 		PipelineRequest pipelineRequestCheckedTaskType = checkTaskType(jsonRequest);
 
@@ -1422,14 +1430,85 @@ public class ModelService {
 		// Set response data (endpoint url, feedback url, api key, socket url)
 
 		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
-		// TranslationTaskInferenceInferenceApiKey
+		//TranslationTaskInferenceInferenceApiKey
 		// translationTaskInferenceInferenceApiKey = new
 		// TranslationTaskInferenceInferenceApiKey();
-		// translationTaskInferenceInferenceApiKey.setName("name");
-		// translationTaskInferenceInferenceApiKey.setValue("value");
+		 //translationTaskInferenceInferenceApiKey.setName("name");
+		//translationTaskInferenceInferenceApiKey.setValue("value");
 
 		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
 				ulcaApiKey, pipelineModel.getPipelineModelId());
+		 
+		 ObjectMapper objectMapper = new ObjectMapper()
+		            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+	        Object jsonObject = objectMapper.readValue(jsonRequest, Object.class);
+	      String uniqueJsonString = objectMapper.writeValueAsString(jsonObject);
+		 if(redisHealthCheckService.isRedisUp()) {
+		 if (cacheService.isCached(uniqueJsonString)) {
+			 log.info("Request found in Cache");
+			 PipelineResponse pipelineResponse2= cacheService.getResponse(uniqueJsonString);
+				
+				log.info("Response Object from redis :: ");
+				ObjectMapper mapper = new
+						 ObjectMapper();
+				/*
+				 * PipelineResponse pipelineResponse2 = null; ObjectMapper mapper = new
+				 * ObjectMapper(); if (object instanceof String) { String jsonString = (String)
+				 * object; pipelineResponse2 = objectMapper.readValue(jsonString,
+				 * PipelineResponse.class); // Now you can use the PipelineResponse object }
+				 */
+				
+				
+				
+				if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
+
+					if (pipelineModel.getInferenceEndPoint() != null) {
+
+						PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
+						pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
+						pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
+						pipelineInferenceAPIEndPoint
+								.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
+						pipelineInferenceAPIEndPoint
+								.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
+						pipelineInferenceAPIEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
+
+						pipelineResponse2.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
+					}
+
+					if (pipelineModel.getInferenceSocketEndPoint() != null) {
+
+						PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint = new PipelineInferenceAPIEndPoint();
+						pipelineInferenceSocketEndPoint
+								.setCallbackUrl(pipelineModel.getInferenceSocketEndPoint().getCallbackUrl());
+						pipelineInferenceSocketEndPoint.setIsSyncApi(pipelineModel.getInferenceSocketEndPoint().isIsSyncApi());
+						pipelineInferenceSocketEndPoint
+								.setIsMultilingualEnabled(pipelineModel.getInferenceSocketEndPoint().isIsMultilingualEnabled());
+						pipelineInferenceSocketEndPoint
+								.setAsyncApiDetails(pipelineModel.getInferenceSocketEndPoint().getAsyncApiDetails());
+						pipelineInferenceSocketEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
+
+						pipelineResponse2.setPipelineInferenceSocketEndPoint(pipelineInferenceSocketEndPoint);
+					}
+				} else {
+
+					throw new PipelineValidationException(
+							"InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
+							HttpStatus.BAD_REQUEST);
+				}
+				
+				mapper.setSerializationInclusion(Include.NON_NULL);
+				mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			
+
+				ObjectNode node = mapper.valueToTree(pipelineResponse2);
+				 return node;
+		            
+		 
+		        }
+		
+		 log.info("Request does not found in Cache");
+		 }
 
 		if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
 
@@ -1554,7 +1633,7 @@ public class ModelService {
 			}
 
 		}
-
+        
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -1565,6 +1644,10 @@ public class ModelService {
 		// log.info("String JSON :: "+json);
 
 		ObjectNode node = mapper.valueToTree(pipelineResponse);
+		if(redisHealthCheckService.isRedisUp()) {
+        cacheService.saveResponse(uniqueJsonString, pipelineResponse);
+		}
+
 		return node;
 	}
 
@@ -2628,7 +2711,7 @@ public class ModelService {
 		PipelineResponse pipelineResponse = new PipelineResponse();
 		log.info("Get all pipeline before :: ");
 		List<PipelineModel> pipelineModels = pipelineModelDao.findAll();
-		
+
 		log.info("Get all pipeline after :: ");
 		PipelineModel allPipelineTasks = new PipelineModel();
 
@@ -2652,14 +2735,14 @@ public class ModelService {
 
 				if (allPipelineTasks.getTaskSpecifications() != null) {
 					if (!modelAdded) {
-						
+
 						log.info("!modelAdded");
 						allPipelineTasks.getTaskSpecifications().add(taskSpecification);
 
 					}
 
 				} else {
-                    log.info("else");
+					log.info("else");
 					TaskSpecifications taskSpecifications = new TaskSpecifications();
 					taskSpecifications.add(taskSpecification);
 					allPipelineTasks.setTaskSpecifications(taskSpecifications);

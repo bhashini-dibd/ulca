@@ -1,5 +1,6 @@
 package io.swagger.pipelinerequest;
 
+import java.io.Serializable;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -16,7 +17,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-06-02T05:23:09.392636488Z[GMT]")
 
 
-public class PipelineResponse   {
+public class PipelineResponse implements Serializable  {
   @JsonProperty("languages")
   private PipelineResponseLanguagesList languages = null;
 
