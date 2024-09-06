@@ -591,6 +591,8 @@ class OnboardingAppProfile(Resource):
             return post_error("400", "User Service Provider is None")
         print(f"userAPIKeys :: {userAPIKeys}")
         print(f"userServiceProvider :: {userServiceProvider}")
+        if isinstance(userAPIKeys,list) and len(userAPIKeys) == 0:
+            return post_error("400", "User does not have any API Keys registered within Udyat")
         userID = userAPIKeys['userID']
         userAPIKeys = userAPIKeys['apiKeyDetails']
         for i in range(0,len(userAPIKeys)):
