@@ -1407,16 +1407,24 @@ public class ModelService {
 		// Check if language sequence is accepted and in proper order
 		PipelineRequest pipelineRequest = checkLanguageSequence(pipelineRequestCheckedTaskType);
 		log.info("pipelineRequest :: " + pipelineRequest);
+		PipelineModel pipelineModel = null;
 		if (pipelineRequest != null) {
-			validatePipelineRequest(pipelineRequest);
+			long startTime = System.currentTimeMillis();
+			pipelineModel = pipelineModelDao
+					.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
+			log.info("Time taken for pipeline model call: " + duration + " ms");
+			
+			validatePipelineRequest(pipelineRequest,pipelineModel);
 		} else {
 			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax",
 					HttpStatus.BAD_REQUEST);
 		}
 
 		// Check if task types and config is accepted and in proper order
-		PipelineModel pipelineModel = pipelineModelDao
-				.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
+		//PipelineModel pipelineModel = pipelineModelDao
+				//.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
 
 		if (pipelineModel.getStatus().equalsIgnoreCase("unpublished")) {
 
@@ -1432,8 +1440,8 @@ public class ModelService {
 		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
 		//TranslationTaskInferenceInferenceApiKey
 		// translationTaskInferenceInferenceApiKey = new
-		// TranslationTaskInferenceInferenceApiKey();
-		 //translationTaskInferenceInferenceApiKey.setName("name");
+		//TranslationTaskInferenceInferenceApiKey();
+		// translationTaskInferenceInferenceApiKey.setName("name");
 		//translationTaskInferenceInferenceApiKey.setValue("value");
 
 		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
@@ -1551,7 +1559,7 @@ public class ModelService {
 		PipelineUtilities pipelineUtilities = new PipelineUtilities();
 		TaskSpecifications individualTaskSpecifications = pipelineUtilities
 				.getIndividualTaskSpecifications(pipelineRequest.getPipelineTasks(), pipelineModel);
-		log.info("INDIVIDUAL TASK SPECIFICATIONS :: " + individualTaskSpecifications.toString());
+		//log.info("INDIVIDUAL TASK SPECIFICATIONS :: " + individualTaskSpecifications.toString());
 
 		// TODO : individualTaskSpecifications is empty, return No supported tasks
 		// found.
@@ -1567,7 +1575,7 @@ public class ModelService {
 		// Generate Response Language List
 		PipelineResponseLanguagesList pipelineResponseLanguagesList = pipelineUtilities
 				.getPipelineResponseLanguagesList(individualTaskSpecifications);
-		log.info("PIPELINE RESPONSE LANGUAGE LIST :: " + pipelineResponseLanguagesList.toString());
+		//log.info("PIPELINE RESPONSE LANGUAGE LIST :: " + pipelineResponseLanguagesList.toString());
 		pipelineResponse.setLanguages(pipelineResponseLanguagesList);
 
 		// TODO : pipelineResponseLanguagesList is empty, return No supported tasks
@@ -1691,7 +1699,7 @@ public class ModelService {
 
 	}
 
-	public Boolean validatePipelineRequest(PipelineRequest pipelineRequest) {
+	public Boolean validatePipelineRequest(PipelineRequest pipelineRequest,PipelineModel pipelineModel) {
 		log.info("Enter to validate pipelineRequest");
 		if (pipelineRequest.getPipelineTasks() == null || pipelineRequest.getPipelineTasks().isEmpty())
 			throw new PipelineValidationException("PipelineTasks is required field", HttpStatus.BAD_REQUEST);
@@ -1736,8 +1744,7 @@ public class ModelService {
 		 * mongoTemplate.findOne(dynamicQuery, PipelineModel.class);
 		 */
 
-		PipelineModel pipelineModel = pipelineModelDao
-				.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
+	
 
 		if (pipelineModel == null)
 			throw new PipelineValidationException("Pipeline model with the request PipelineId does not exist",
@@ -1831,9 +1838,13 @@ public class ModelService {
 			log.info("body :: " + body.toString());
 			Request httpRequest = new Request.Builder().url(requestUrl).post(body).build();
 			log.info("httpRequest : " + httpRequest.toString());
-
+			long startTime = System.currentTimeMillis();
 			Response httpResponse = client.newCall(httpRequest).execute();
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
 
+			System.out.println("Time taken for validate user details : " + duration + " ms");
+			
 			if (httpResponse.code() == 200) {
 				responseJsonStr = httpResponse.body().string();
 
@@ -2493,7 +2504,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						asrResponseConfig.setLanguage(lp);
@@ -2510,7 +2525,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						translationResponseConfig.setLanguage(lp);
@@ -2526,7 +2545,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						ttsResponseConfig.setLanguage(lp);
@@ -2544,7 +2567,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					TransliterationResponseConfig transliterationResponseConfig = new TransliterationResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						transliterationResponseConfig.setLanguage(lp);
@@ -2561,7 +2588,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					OCRResponseConfig ocrResponseConfig = new OCRResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						ocrResponseConfig.setLanguage(lp);
