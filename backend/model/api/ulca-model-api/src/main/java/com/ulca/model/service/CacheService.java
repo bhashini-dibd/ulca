@@ -33,7 +33,7 @@ public class CacheService {
         //byte[] compressedResponse = compressResponse(response);
         //log.info("after compressedResponse ");
         //redisTemplate.opsForValue().set(hashKey, compressedResponse, 60, TimeUnit.MINUTES);
-        redisTemplate.opsForValue().set(hashKey, response, 60, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(hashKey, response, 24, TimeUnit.HOURS);
 
     }
 
