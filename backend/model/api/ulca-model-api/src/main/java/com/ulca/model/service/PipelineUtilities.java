@@ -338,7 +338,13 @@ public class PipelineUtilities {
                 {
                     ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
                     log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
                     ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
+                    
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                         asrResponseConfig.setLanguage(lp);
@@ -357,7 +363,13 @@ public class PipelineUtilities {
                 {
                     TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
                     log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
+
                     ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                         translationResponseConfig.setLanguage(lp);
@@ -375,7 +387,13 @@ public class PipelineUtilities {
                 {
                     TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
                     log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
+
                     ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                         ttsResponseConfig.setLanguage(lp);
@@ -395,7 +413,13 @@ public class PipelineUtilities {
                 {
                     TransliterationResponseConfig transliterationResponseConfig = new TransliterationResponseConfig();
                     log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
+
                     ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                     	transliterationResponseConfig.setLanguage(lp);
@@ -414,7 +438,13 @@ public class PipelineUtilities {
                 {
                     OCRResponseConfig ocrResponseConfig = new OCRResponseConfig();
                     log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
+
                     ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                     	ocrResponseConfig.setLanguage(lp);
