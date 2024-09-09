@@ -27,7 +27,7 @@ from flask import render_template
 from bson import json_util
 from bson.objectid import ObjectId
 from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION,SPECIAL_CHARS, MEITY_SERVICE_PROVIDER_NAME,BHAHSINI_GLOSSARY_CREATE_URL,BHAHSINI_GLOSSARY_DELETE_URL,BHAHSINI_GLOSSARY_FETCH_URL
-from config import SENDER_EMAIL, SENDER_PASSWORD, SENDER_USERNAME
+from config import SENDER_EMAIL, SENDER_PASSWORD, SENDER_USERNAME, SECRET_KEY
 from Crypto.Cipher import AES
 import base64
 import sys
@@ -37,7 +37,7 @@ import logging
 
 log = logging.getLogger('file')
 
-SECRET_KEY          =   secrets.token_bytes()
+# SECRET_KEY          =   secrets.token_bytes()
 
 role_codes_filepath =   config.ROLE_CODES_URL
 json_file_dir       =   config.ROLE_CODES_DIR_PATH
