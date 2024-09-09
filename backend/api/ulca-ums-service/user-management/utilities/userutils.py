@@ -10,7 +10,8 @@ import re
 import bcrypt
 import db
 from models.response import post_error
-from models import CustomResponse,Status
+from models.response import CustomResponse
+from models import Status
 import jwt
 import secrets
 from .orgUtils import OrgUtils
