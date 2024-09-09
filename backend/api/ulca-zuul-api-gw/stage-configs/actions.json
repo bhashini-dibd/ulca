@@ -472,6 +472,22 @@
       "active": true,
       "whiteList": true,
       "description": "API to get api keys of users with non existing service provider names"
+    },
+    {
+      "id": "771f58f0-e1eb-4d52-a8e0-e1762a300dea",
+      "uri": "/ulca/user-mgmt/v2/users/removeServiceProviderKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to remove service provider api keys"
+    },
+    {
+      "id": "23aff137-7c3d-424f-93d1-289d6193a60d",
+      "uri": "/ulca/user-mgmt/v2/users/generateServiceProviderKey",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": false,
+      "description": "API to generate service provider api keys"
     }
   ]
 }
