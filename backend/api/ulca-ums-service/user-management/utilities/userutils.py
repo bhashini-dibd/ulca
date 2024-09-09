@@ -11,7 +11,7 @@ import bcrypt
 import db
 from models.response import post_error
 from models.response import CustomResponse
-from models import Status
+from models.status import Status
 import jwt
 import secrets
 from .orgUtils import OrgUtils
