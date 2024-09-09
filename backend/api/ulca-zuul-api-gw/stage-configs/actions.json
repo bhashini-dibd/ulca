@@ -478,7 +478,7 @@
       "uri": "/ulca/user-mgmt/v2/users/removeServiceProviderKey",
       "module": "ULCA-UMS",
       "active": true,
-      "whiteList": false,
+      "whiteList": true,
       "description": "API to remove service provider api keys"
     },
     {
@@ -486,7 +486,7 @@
       "uri": "/ulca/user-mgmt/v2/users/generateServiceProviderKey",
       "module": "ULCA-UMS",
       "active": true,
-      "whiteList": false,
+      "whiteList": true,
       "description": "API to generate service provider api keys"
     }
   ]
