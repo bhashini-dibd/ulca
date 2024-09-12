@@ -1,6 +1,29 @@
 from flask import Blueprint
 from flask_restful import Api
-from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey, GetApiKeysForProfile, ToggleDataTracking,CreateGlossary,DeleteGlossary,FetchGlossary, OnboardingAppProfile
+from resources import (
+    CreateUsers, 
+    UpdateUsers, 
+    SearchUsers, 
+    OnboardUsers, 
+    ActivateDeactivateUser, 
+    VerifyUser, 
+    Health, 
+    GetApiKey, 
+    RevokeApiKey, 
+    GenerateApiKey, 
+    GenerateServiceProviderKey, 
+    RemoveServiceProviderKey, 
+    GetApiKeysForProfile, 
+    ToggleDataTracking, 
+    CreateGlossary, 
+    DeleteGlossary, 
+    FetchGlossary, 
+    OnboardingAppProfile, 
+    EnrollSpeaker, 
+    VerifySpeaker, 
+    FetchSpeaker, 
+    DeleteSpeaker
+    )
 
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
@@ -76,3 +99,21 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     FetchGlossary, "/v1/users/glossary/fetch-all"
 )
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    EnrollSpeaker, "/v1/users/speakers/enroll"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    VerifySpeaker, "/v1/users/speakers/verify"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    FetchSpeaker, "/v1/users/speakers/list"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    DeleteSpeaker, "/v1/users/speakers/delete"
+)
+
+

@@ -435,7 +435,24 @@ class ToggleDataTracking(Resource):
         elif 'success' not in patch_req.json().keys():
             return post_error("400", "Unable to toggle Data Tracking at the moment, please try again", None), 400
 
-        
+
+class EnrollSpeaker(Resource):
+    def post(self):
+        user_id=request.headers["x-user-id"]
+        body = request.get_json() 
+
+        return post_error("404", "Counldn't find the API")
+class VerifySpeaker(Resource):
+    def post(self):
+        return post_error("404", "Couldn't find the API")
+
+class DeleteSpeaker(Resource):
+    def delete(self):
+        return post_error("404", "Counldn't find the API")
+
+class FetchSpeaker(Resource):
+    def get(self):
+        return post_error("404", "Counldn't find the API")
 
 class CreateGlossary(Resource):
     def post(self):
