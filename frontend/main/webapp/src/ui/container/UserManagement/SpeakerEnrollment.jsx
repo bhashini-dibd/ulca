@@ -22,6 +22,7 @@ import {
   DialogActions,
   useMediaQuery,
   Divider,
+  DialogContentText,
 } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Search from "../../components/Datasets&Model/Search";
@@ -40,7 +41,7 @@ import CustomizedSnackbars from "../../components/common/Snackbar";
 import Spinner from "../../components/common/Spinner";
 import FetchApiKeysAPI from "../../../redux/actions/api/UserManagement/FetchApiKeys";
 import Delete from '../../../assets/deleteIcon.svg'
-import GlossaryBanner from '../../../assets/GlossaryNewBanner.png'
+import Spe from '../../../assets/speakerbanner.jpg'
 import { useLocation } from 'react-router-dom';
 import FetchGlossaryDetails from "../../../redux/actions/api/UserManagement/FetchGlossaryDetails";
 import AddGlossaryDataApi from "../../../redux/actions/api/UserManagement/AddGlossaryData";
@@ -49,6 +50,12 @@ import MultiDeleteGlossaryApi from "../../../redux/actions/api/UserManagement/Mu
 import { IndicTransliterate, getTransliterationLanguages, getTransliterateSuggestions } from "@ai4bharat/indic-transliterate";
 // import "@ai4bharat/indic-transliterate/dist/index.css";
 import { useRef } from "react";
+import deleteImg from '../../../assets/glossary/delete.svg';
+import exportImg from '../../../assets/glossary/export.svg';
+import bulkUploadImg from '../../../assets/glossary/bulk_upload.svg';
+import addImg from '../../../assets/glossary/add.svg';
+
+import FileUpload from "./FileUpload";
 
 const styles = {
   bannerContainer: {
@@ -132,7 +139,7 @@ const styles = {
   ];
   
 
-const GlossaryProfile = (props) => {
+const SpeakerEnrollment = (props) => {
   const { classes } = props;
   const isMobile = useMediaQuery("(max-width:600px)")
   const dispatch = useDispatch();
@@ -158,20 +165,62 @@ const GlossaryProfile = (props) => {
     targetText: '',
   });
   const UserDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [inputValue, setInputValue] = useState('');
+  const [audioURL, setAudioURL] = useState('');
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: "",
     variant: "success",
   });
+    const [open, setOpen] = useState(false);
 
   const location = useLocation();
   const { serviceProviderName, inferenceApiKey, appName,UlcaApiKey} = location.state || {};
-  console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,UlcaApiKey,"neeww");
+  // console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,UlcaApiKey,"neeww");
 //   useEffect(() => {
 //     if (apiKeys) {
 //       setTableData(apiKeys);
 //     }
 //   }, [apiKeys]);
+
+const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+const [exportDialogOpen, setExportDialogOpen] = useState(false);
+const [openDeleteBox, setOpenDeleteBox] = useState(false);
+
+const handleUploadDialogOpen = () => {
+  setUploadDialogOpen(true);
+};
+
+const handleSpeakerEnrollmentClose = () => {
+  setUploadDialogOpen(false);
+  setSelectedFile(null)
+  setAudioURL('')
+  setInputValue('')
+};
+
+const handleExportDialogOpen = () => {
+  setExportDialogOpen(true);
+};
+
+const handleSpeakerVerificationClose = () => {
+  setExportDialogOpen(false);
+  setSelectedFile(null)
+  setAudioURL('')
+};
+
+const handleUpload = (file) => {
+  // Handle file upload logic here
+  console.log('Uploading file:', file);
+  handleSpeakerEnrollmentClose();
+};
+
+const handleExport = (file) => {
+  // Handle file export logic here
+  console.log('Exporting file:', file);
+  handleSpeakerVerificationClose();
+};
+
 
 
 useEffect(() => { 
@@ -258,7 +307,7 @@ useEffect(() => {
 
   const fetchHeaderButton = () => {
     return (
-      <Grid container style={{justifyContent:"space-between", fontFamily:"Noto-Regular"}}>
+      <Grid container style={{justifyContent:"space-between", fontFamily:"Noto-Regular", width: isMobile ? '88%' : '100%'}} >
         <Grid
           item
           xs={8}
@@ -268,8 +317,8 @@ useEffect(() => {
           xl={3}
           style={{ display: "flex", justifyContent: "space-between" }}
         >
-          {/* <Search value="" handleSearch={(e) => handleSearch(e.target.value)} /> */}
-          <Typography variant="h5" style={{fontFamily:"Noto-Regular"}}>Glossary List</Typography>
+          <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+          {/* <Typography variant="h5" style={{fontFamily:"Noto-Regular"}}>Glossary List</Typography> */}
         </Grid>
       
 
@@ -278,20 +327,19 @@ useEffect(() => {
           xs={3}
           sm={3}
           md={5}
-          lg={5}
-          xl={5}
+          lg={3}
+          xl={4}
           className={classes.filterGrid}
           style={{ marginLeft: "100px", gap:"20px", display:isMobile ? 'none' : "flex" }}
         >
-         <Search value='' handleSearch={(e) => handleSearch(e.target.value)}/>
+         
+        
           <Button
             color="primary"
             size="medium"
             variant="contained"
             className={classes.ButtonRefresh}
-            onClick={() => {
-              setModal(true);
-            }}
+            onClick={handleUploadDialogOpen}
             style={{
               height: "36px",
               textTransform: "capitalize",
@@ -299,12 +347,40 @@ useEffect(() => {
               borderRadius:"4px",
               fontFamily: "Noto-Regular",
                fontWeight:"400",
-               fontSize:"15px",
-               padding:"14px 36px"
+               fontSize:"12px",
+              //  padding:"14px 28px",
+               marginLeft:"0px",
+               width:"100%",
             }}
           >
-            {" "}
-            Create Glossary
+             <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={addImg} />
+                  <span style={{fontSize:"16px"}}>Enroll New</span>
+                </Box>
+          </Button>
+          <Button
+            color="primary"
+            size="medium"
+            variant="contained"
+            className={classes.ButtonRefresh}
+            onClick={handleExportDialogOpen}
+            style={{
+              height: "36px",
+              textTransform: "capitalize",
+              fontSize: "1rem",
+              borderRadius:"4px",
+              fontFamily: "Noto-Regular",
+               fontWeight:"400",
+               fontSize:"12px",
+              //  padding:"14px 28px",
+               marginLeft:"0px",
+               width:"100%",
+            }}
+          >
+            <Box sx={{display:"flex", gap:"6px"}}>
+                  {/* <img src={addImg} /> */}
+                  <span style={{fontSize:"16px"}} >Verify Speaker</span>
+                </Box>
           </Button>
         </Grid>
 
@@ -315,16 +391,29 @@ useEffect(() => {
           md={2}
           lg={2}
           xl={2}
-          className={classes.filterGridMobile}
+          className={classes.filterGridMobile1}
         >
           <Button
             color={"default"}
             size="small"
             variant="outlined"
             className={classes.ButtonRefreshMobile}
-            onClick={() => {
-              setModal(true);
-            }}
+            // onClick={() => {
+            //   setModal(true);
+            // }}
+            style={{ height: "37px" }}
+          >
+            {" "}
+            <AddBoxIcon color="primary" className={classes.iconStyle} />
+          </Button>
+          <Button
+            color={"default"}
+            size="small"
+            variant="outlined"
+            // className={classes.ButtonRefreshMobile}
+            // onClick={() => {
+            //   setModal(true);
+            // }}
             style={{ height: "37px" }}
           >
             {" "}
@@ -417,6 +506,18 @@ useEffect(() => {
       formState.targetLanguage !== ''
     );
   };
+
+    
+    const handleDeleteClose = () => {
+      setOpenDeleteBox(false);
+    };
+  
+    // Function to handle confirm deletion
+    const handleDeleteConfirm = () => {
+      // Handle delete logic here
+      console.log(`Deleting Speaker ID: $1111`);
+      setOpenDeleteBox(false);
+    };
 
   const getMuiTheme = () =>
     createMuiTheme({
@@ -516,14 +617,16 @@ useEffect(() => {
         print: false,
         viewColumns: false,
         rowsPerPageOptions: false,
-        selectableRows: "multiple",
+        selectableRows: 'multiple',
         selectableRowsOnClick: false,
         fixedHeader: false,
         download: false,
         search: false,
         customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-            <Tooltip title="">
+          <div style={{display:"flex", gap:"20px", marginRight:"20px"}}>
+          <Tooltip title="">
               <IconButton
+                  style={{borderRadius:"4px", backgroundColor:"white", padding:"5px 12px"}}
                 onClick={() => {
                   const selectedData = selectedRows.data.map(row => tableData[row.dataIndex]);
                   console.log("Selected Rows' Data:", selectedData);
@@ -541,15 +644,41 @@ useEffect(() => {
                   // alert(JSON.stringify(selectedData, null, 2)); // Display selected data in an alert
                 }}
               >
-                <DeleteIcon />
+                <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={deleteImg} />
+                 {!isMobile && <span style={{fontSize:"16px", color:"#D40808"}}>Delete</span>}
+                </Box>
+                {/* <DeleteIcon />  */}
               </IconButton>
             </Tooltip>
+            <Tooltip title="">
+              <IconButton
+                 style={{borderRadius:"4px",border: "1px solid #D0D5DD", padding:"5px 12px",  boxShadow: "none",}}
+                 onClick={handleExportDialogOpen}
+              >
+                  <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={exportImg} />
+                  {!isMobile && <span style={{fontSize:"16px", color:"#344054"}}>Export</span>}
+                </Box>
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="">
+              <IconButton
+               style={{borderRadius:"4px",border: "1px solid #D0D5DD", padding:"5px 12px",  boxShadow: "none",}}
+               onClick={handleUploadDialogOpen}
+              >
+                  <Box sx={{display:"flex", gap:"6px"}}>
+                  <img src={bulkUploadImg} />
+                  {!isMobile && <span style={{fontSize:"16px", color:"#344054"}}>Bulk Upload</span>}
+                </Box>
+              </IconButton>
+            </Tooltip>
+            </div>
           ),
         filter: false,
         onRowSelectionChange: (currentRowsSelected, allRowsSelected) => {
           const selectedData = allRowsSelected.map(row => tableData[row.dataIndex]);
           console.log("Selected Rows' Datahhh:", selectedData);
-        //   setSelectedRowsData(selectedData);
         }
       };
     
@@ -558,76 +687,64 @@ useEffect(() => {
       const columns = [
         
         {
-          name: "source",
-          label: "Source",
+          name: "speaker_id",
+          label: "Speaker ID",
           options: {
             filter: true,
             sort: true,
           }
         },
         {
-          name: "target",
-          label: "Target",
+          name: "speaker_name",
+          label: "Speaker Name",
           options: {
             filter: true,
             sort: true,
           }
         },
         {
-          name: "sourceLanguage",
-          label: "Source Language",
+          name: "audio_file",
+          label: "Audio File",
           options: {
             filter: true,
             sort: true,
           }
         },
-        {
-          name: "targetLanguage",
-          label: "Target Language",
-          options: {
-            filter: true,
-            sort: true,
-          }
-        },
-        // {
-        //   name: "glossary",
-        //   label: "Glossary",
-        //   options: {
-        //     customBodyRender: (value) => (
-        //       <Box display='flex' alignItems="center">
-        //         <Box>{value}</Box>
-               
-        //       </Box>
-        //     )
-        //   }
-        // },
+        
+        
         {
           name: "action",
           label: "Action",
           options: {
             customBodyRender: (value, tableMeta) => (
-              <Button
-                // variant="contained"
-                onClick={() => {
-                  console.log('Action clicked for row:', tableMeta.rowData)
-                  const resultString = tableMeta.rowData.filter(item => item !== undefined);
-                  const [sourceLanguage, targetLanguage, sourceText, targetText] = resultString;
-                  const apiObj = new DeleteGlossaryApi(appName,serviceProviderName,sourceLanguage, targetLanguage, sourceText, targetText);
-                  dispatch(APITransport(apiObj));
-                  setTimeout(() => {
+              // <Button
+              //   // variant="contained"
+              // //   onClick={() => {
+              // //     console.log('Action clicked for row:', tableMeta.rowData)
+              // //     const resultString = tableMeta.rowData.filter(item => item !== undefined);
+              // //     const [sourceLanguage, targetLanguage, sourceText, targetText] = resultString;
+              // //     const apiObj = new DeleteGlossaryApi(appName,serviceProviderName,sourceLanguage, targetLanguage, sourceText, targetText);
+              // //     dispatch(APITransport(apiObj));
+              // //     setTimeout(() => {
 
-                    getApiGlossaryData() 
-                    setSnackbarInfo({
-                      open: true,
-                      message: "Glossary Deleted Successfully",
-                      variant: "success",
-                    });  
-                  },1500)
-                }
-              }
-              >
-                <img src={Delete} alt="delete img"/>
-              </Button>
+              // //       getApiGlossaryData() 
+              // //       setSnackbarInfo({
+              // //         open: true,
+              // //         message: "Glossary Deleted Successfully",
+              // //         variant: "success",
+              // //       });  
+              // //     },1500)
+              // //   }
+              // // }
+             
+              // >
+                <Box style={{display:"flex", gap:"10px"}}>
+
+                <Button variant="outlined" style={{border:"1px solid #2947A3", color:"#2947A3"}}>Verify</Button>
+                <Button variant="outlined" style={{border:"1px solid #626262", color:"#626262"}}  onClick={() => setOpenDeleteBox(true)}>Delete</Button>
+                {/* <img src={Delete} alt="delete img"/> */}
+                </Box>
+              // </Button>
             )
           }
         }
@@ -699,11 +816,7 @@ useEffect(() => {
       </Box>
       <Box style={{ width: '100%', padding: '0px', textAlign: 'center', marginBottom: '20px' }}>
       <div style={styles.bannerContainer}>
-        <img src={GlossaryBanner} alt="banner" style={styles.bannerImage} />
-        {/* <div style={styles.textContainer}>
-          <h1 style={styles.heading}>Glossary</h1>
-          <p style={styles.paragraph}>Glossary is a custom dictionary defined by the user that is utilized in Bhashini Translations to translate the customer's domain-specific terminology. For example, when translating from English to Hindi, Bhashini Division maybe translated to भाषिनी प्रभाग by default but given it's an organization name, we need the translation as भाषिणी डिवीज़न. Such word and phrase level translations can be performed using glossaries for your custom domain specific needs.</p>
-        </div> */}
+        <img src={Spe} alt="banner" style={styles.bannerImage} />
       </div>
       </Box>
 
@@ -852,11 +965,11 @@ useEffect(() => {
                   rows={2.5}
                   value={formState.sourceText}
                   onChange={handleChange}
+                  disabled={!formState.sourceLanguage}
                   style={{ fontSize: "14px",
                     lineHeight: "32px",
                     color: "black",
                     fontFamily: "Roboto"}}
-                  disabled={!formState.sourceLanguage}
                    
                 /> 
        </>
@@ -933,12 +1046,79 @@ useEffect(() => {
       </DialogContent>
       
     </Dialog>
+    <FileUpload
+        open={uploadDialogOpen}
+        handleClose={handleSpeakerEnrollmentClose}
+        title="Speaker Enrolllment"
+        description="Upload Audio"
+        buttonText=" Enroll Speaker"
+        handleAction={handleUpload}
+        status={true}
+        selectedFile={selectedFile}
+        setSelectedFile={setSelectedFile}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        audioURL={audioURL}
+        setAudioURL={setAudioURL}
+      />
+      <FileUpload
+        open={exportDialogOpen}
+        handleClose={handleSpeakerVerificationClose}
+        title="Speaker Verification"
+        description="Upload Audio"
+        buttonText="Verify Speaker"
+        handleAction={handleExport}
+        status={false}
+        selectedFile={selectedFile}
+        setSelectedFile={setSelectedFile}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        audioURL={audioURL}
+        setAudioURL={setAudioURL}
+      />
 
+<Dialog
+      open={openDeleteBox}
+      onClose={handleDeleteClose}
+      aria-labelledby="delete-dialog-title"
+      aria-describedby="delete-dialog-description"
+      fullWidth
+      maxWidth="sm"
+    >
+      {/* Dialog title */}
+      <DialogTitle id="delete-dialog-title" >
+        <Box style={{ display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
+      <Typography variant="h6" fontweight={600} style={{color:"black"}}> Delete</Typography>
+      <Typography variant="h6" fontweight={600} style={{color:"black"}}> X</Typography>
+          </Box>
+      </DialogTitle>
+      
+      {/* Dialog content */}
+      <DialogContent>
+        <DialogContentText id="delete-dialog-description">
+          <Typography variant="h6" fontweight={600} style={{color:"black"}}> Are you sure you want to delete?</Typography>
+          <Typography variant="body2" marginTop={1}>You are deleting the Speaker Id #1111 entry, and this action cannot be undone.</Typography>
+          
+        </DialogContentText>
+      </DialogContent>
+
+      {/* Dialog actions */}
+      <DialogActions style={{marginBottom:"25px", display:"flex", justifyContent:"space-between", padding:"0px 25px"}}>
+        {/* Cancel button */}
+        <Button onClick={handleDeleteClose} color="primary" variant="outlined">
+          Cancel
+        </Button>
+        {/* Delete button */}
+        <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+          Delete
+        </Button>
+      </DialogActions>
+    </Dialog>
    
-
+   
      
     </>
   );
 };
 
-export default withStyles(DataSet)(GlossaryProfile);
+export default withStyles(DataSet)(SpeakerEnrollment);
