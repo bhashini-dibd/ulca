@@ -6,7 +6,7 @@ from flask import request, jsonify
 import config
 import logging
 import requests
-from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
+from config import MAX_API_KEY, SECRET_KEY, PATCH_URL, ONBOARDING_AUTH_HEADER
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -261,12 +261,29 @@ class GenerateApiKey(Resource):
             return post_error("400", user_api_keys['message'], None), 400
 
 
+class GenerateServiceProviderKeyWithoutLogin(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "udyatApiKey" not in body.keys():
+            return post_error("400", "Please provide udyatApiKey", None), 400
+        if "appName" not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.generateServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
 
 
 class GenerateServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
-       
+        
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.generateServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
+            
         if "pipelineId" not in body.keys() and "serviceProviderName" not in body.keys():
             return post_error("400", "Please provide pipelineId or serviceProviderName", None), 400
         if "userID" not in body.keys():
@@ -342,11 +359,30 @@ class GenerateServiceProviderKey(Resource):
         
             
 
+class RemoveServiceProviderKeyWithoutLogin(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "udyatApiKey" not in body.keys():
+            return post_error("400", "Please provide udyatApiKey", None), 400
+        if "appName" not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        
+
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.removeServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
 
         
 class RemoveServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
+        
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.removeServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
+
         if "serviceProviderName" not in body.keys():
             return post_error("400", "Please provide serviceProviderName", None), 400
         if "userID" not in body.keys():
@@ -571,6 +607,44 @@ class FetchGlossary(Resource):
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
         return res.getdhruvaresults(), dhruva_result_status_code   
 
+
+class OnboardingAppProfile(Resource):
+    def get(self):
+        email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        if "email" is None:
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+        user = email
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")            
+        userServiceProvider = UserUtils.listOfServiceProviders()
+        if not userServiceProvider:
+            return post_error("400", "User Service Provider is None")
+        print(f"userAPIKeys :: {userAPIKeys}")
+        print(f"userServiceProvider :: {userServiceProvider}")
+        if isinstance(userAPIKeys,list) and len(userAPIKeys) == 0:
+            return post_error("400", "User does not have any API Keys registered within Udyat")
+        userID = userAPIKeys['userID']
+        userAPIKeys = userAPIKeys['apiKeyDetails']
+        for i in range(0,len(userAPIKeys)):
+            if "serviceProviderKeys" in userAPIKeys[i].keys():
+                existing_names = []                    
+                for existing_keys in userAPIKeys[i]["serviceProviderKeys"]: 
+                    existing_names.append(existing_keys["serviceProviderName"])
+                if not existing_names:
+                    userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":userServiceProvider})
+        
+        if isinstance(userAPIKeys, list):
+            data = [{"userID":userID,"email":email,"apiKeys":userAPIKeys}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "userID cannot be empty, please provide one.")
 
 
 

@@ -22,7 +22,7 @@ USR_TEMP_TOKEN_MONGO_COLLECTION =   os.environ.get('UMS_USR_TEMP_TOKEN_COLLECTIO
 USR_ORG_MONGO_COLLECTION        =   os.environ.get('UMS_ORG_COLLECTION', 'organization')
 USR_MONGO_PROCESS_COLLECTION    =   os.environ.get('ULCA_PROCESS_COLLECTION', 'pipeline-model')
 AES_SECRET_KEY                  =   os.environ.get('AES_SECRET_KEY_FOR_UMS', 'secretKey')
-
+ONBOARDING_AUTH_HEADER          =   os.environ.get('ONBOARDING_AUTH_HEADER',None)
  
 #common-variables
 PWD_MIN_LENGTH          =   os.environ.get('UMS_PASSWORD_MIN_LENGTH', 8)
@@ -70,3 +70,4 @@ PATCH_URL               =   "https://api.dhruva.ai4bharat.org/auth/api-key/ulca"
 BHAHSINI_GLOSSARY_CREATE_URL = os.environ.get('DHRUVA_GLOSSARY_CREATE_ENDPOINT',"https://dhruva-api.bhashini.gov.in/services/glossary/v1/create")
 BHAHSINI_GLOSSARY_FETCH_URL = os.environ.get('DHRUVA_GLOSSARY_FETCH_ENDPOINT',"https://dhruva-api.bhashini.gov.in/services/glossary/v1/fetch-all")
 BHAHSINI_GLOSSARY_DELETE_URL = os.environ.get('DHRUVA_GLOSSARY_DELETE_ENDPOINT',"https://dhruva-api.bhashini.gov.in/services/glossary/v1/delete")
+MEITY_SERVICE_PROVIDER_NAME = "MeitY"

@@ -221,6 +221,9 @@ public class ModelService {
 
 	@Autowired
 	ModelHealthStatusDao modelHealthStatusDao;
+	
+	@Autowired
+	RedisHealthCheckService redisHealthCheckService;
 
 	@Value("${aes.secret.key1}")
 	private String aessecretkey1;
@@ -254,6 +257,9 @@ public class ModelService {
 
 	@Autowired
 	MongoTemplate mongoTemplate;
+
+	@Autowired
+	private CacheService cacheService;
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -526,7 +532,9 @@ public class ModelService {
 		}
 
 		ModelTask taskType = modelObj.getTask();
-		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
+		if (taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)
+				|| taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)
+				|| taskType.getType().equals(SupportedTasks.AUDIO_LANG_DETECTION)) {
 			LanguagePair lp = new LanguagePair();
 			lp.setSourceLanguage(SupportedLanguages.MIXED);
 			LanguagePairs lps = new LanguagePairs();
@@ -542,7 +550,7 @@ public class ModelService {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
-
+		log.info("schema name : " + schema.getClass().getName());
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
 				|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
@@ -792,7 +800,9 @@ public class ModelService {
 
 		if (model.getLanguages() == null) {
 			ModelTask taskType = model.getTask();
-			if (!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)) {
+			if (!taskType.getType().equals(SupportedTasks.TXT_LANG_DETECTION)
+					&& !taskType.getType().equals(SupportedTasks.AUDIO_GENDER_DETECTION)
+					&& !taskType.getType().equals(SupportedTasks.AUDIO_LANG_DETECTION)) {
 				throw new ModelValidationException("languages is required field");
 			}
 		}
@@ -1390,23 +1400,31 @@ public class ModelService {
 	}
 
 	public ObjectNode getModelsPipeline(String jsonRequest, String userID, String ulcaApiKey) throws Exception {
-
+	
 		// Check if task types are accepted and in proper order
 		PipelineRequest pipelineRequestCheckedTaskType = checkTaskType(jsonRequest);
 
 		// Check if language sequence is accepted and in proper order
 		PipelineRequest pipelineRequest = checkLanguageSequence(pipelineRequestCheckedTaskType);
 		log.info("pipelineRequest :: " + pipelineRequest);
+		PipelineModel pipelineModel = null;
 		if (pipelineRequest != null) {
-			validatePipelineRequest(pipelineRequest);
+			long startTime = System.currentTimeMillis();
+			pipelineModel = pipelineModelDao
+					.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
+			log.info("Time taken for pipeline model call: " + duration + " ms");
+			
+			validatePipelineRequest(pipelineRequest,pipelineModel);
 		} else {
 			throw new PipelineValidationException("Pipeline validation failed. Check uploaded file syntax",
 					HttpStatus.BAD_REQUEST);
 		}
 
 		// Check if task types and config is accepted and in proper order
-		PipelineModel pipelineModel = pipelineModelDao
-				.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
+		//PipelineModel pipelineModel = pipelineModelDao
+				//.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
 
 		if (pipelineModel.getStatus().equalsIgnoreCase("unpublished")) {
 
@@ -1420,14 +1438,85 @@ public class ModelService {
 		// Set response data (endpoint url, feedback url, api key, socket url)
 
 		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
-		// TranslationTaskInferenceInferenceApiKey
+		//TranslationTaskInferenceInferenceApiKey
 		// translationTaskInferenceInferenceApiKey = new
-		// TranslationTaskInferenceInferenceApiKey();
+		//TranslationTaskInferenceInferenceApiKey();
 		// translationTaskInferenceInferenceApiKey.setName("name");
-		// translationTaskInferenceInferenceApiKey.setValue("value");
+		//translationTaskInferenceInferenceApiKey.setValue("value");
 
 		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
 				ulcaApiKey, pipelineModel.getPipelineModelId());
+		 
+		 ObjectMapper objectMapper = new ObjectMapper()
+		            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+	        Object jsonObject = objectMapper.readValue(jsonRequest, Object.class);
+	      String uniqueJsonString = objectMapper.writeValueAsString(jsonObject);
+		 if(redisHealthCheckService.isRedisUp()) {
+		 if (cacheService.isCached(uniqueJsonString)) {
+			 log.info("Request found in Cache");
+			 PipelineResponse pipelineResponse2= cacheService.getResponse(uniqueJsonString);
+				
+				log.info("Response Object from redis :: ");
+				ObjectMapper mapper = new
+						 ObjectMapper();
+				/*
+				 * PipelineResponse pipelineResponse2 = null; ObjectMapper mapper = new
+				 * ObjectMapper(); if (object instanceof String) { String jsonString = (String)
+				 * object; pipelineResponse2 = objectMapper.readValue(jsonString,
+				 * PipelineResponse.class); // Now you can use the PipelineResponse object }
+				 */
+				
+				
+				
+				if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
+
+					if (pipelineModel.getInferenceEndPoint() != null) {
+
+						PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
+						pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
+						pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
+						pipelineInferenceAPIEndPoint
+								.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
+						pipelineInferenceAPIEndPoint
+								.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
+						pipelineInferenceAPIEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
+
+						pipelineResponse2.setPipelineInferenceAPIEndPoint(pipelineInferenceAPIEndPoint);
+					}
+
+					if (pipelineModel.getInferenceSocketEndPoint() != null) {
+
+						PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint = new PipelineInferenceAPIEndPoint();
+						pipelineInferenceSocketEndPoint
+								.setCallbackUrl(pipelineModel.getInferenceSocketEndPoint().getCallbackUrl());
+						pipelineInferenceSocketEndPoint.setIsSyncApi(pipelineModel.getInferenceSocketEndPoint().isIsSyncApi());
+						pipelineInferenceSocketEndPoint
+								.setIsMultilingualEnabled(pipelineModel.getInferenceSocketEndPoint().isIsMultilingualEnabled());
+						pipelineInferenceSocketEndPoint
+								.setAsyncApiDetails(pipelineModel.getInferenceSocketEndPoint().getAsyncApiDetails());
+						pipelineInferenceSocketEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
+
+						pipelineResponse2.setPipelineInferenceSocketEndPoint(pipelineInferenceSocketEndPoint);
+					}
+				} else {
+
+					throw new PipelineValidationException(
+							"InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
+							HttpStatus.BAD_REQUEST);
+				}
+				
+				mapper.setSerializationInclusion(Include.NON_NULL);
+				mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			
+
+				ObjectNode node = mapper.valueToTree(pipelineResponse2);
+				 return node;
+		            
+		 
+		        }
+		
+		 log.info("Request does not found in Cache");
+		 }
 
 		if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
 
@@ -1470,7 +1559,7 @@ public class ModelService {
 		PipelineUtilities pipelineUtilities = new PipelineUtilities();
 		TaskSpecifications individualTaskSpecifications = pipelineUtilities
 				.getIndividualTaskSpecifications(pipelineRequest.getPipelineTasks(), pipelineModel);
-		log.info("INDIVIDUAL TASK SPECIFICATIONS :: " + individualTaskSpecifications.toString());
+		//log.info("INDIVIDUAL TASK SPECIFICATIONS :: " + individualTaskSpecifications.toString());
 
 		// TODO : individualTaskSpecifications is empty, return No supported tasks
 		// found.
@@ -1486,7 +1575,7 @@ public class ModelService {
 		// Generate Response Language List
 		PipelineResponseLanguagesList pipelineResponseLanguagesList = pipelineUtilities
 				.getPipelineResponseLanguagesList(individualTaskSpecifications);
-		log.info("PIPELINE RESPONSE LANGUAGE LIST :: " + pipelineResponseLanguagesList.toString());
+		//log.info("PIPELINE RESPONSE LANGUAGE LIST :: " + pipelineResponseLanguagesList.toString());
 		pipelineResponse.setLanguages(pipelineResponseLanguagesList);
 
 		// TODO : pipelineResponseLanguagesList is empty, return No supported tasks
@@ -1552,7 +1641,7 @@ public class ModelService {
 			}
 
 		}
-
+        
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -1563,6 +1652,10 @@ public class ModelService {
 		// log.info("String JSON :: "+json);
 
 		ObjectNode node = mapper.valueToTree(pipelineResponse);
+		if(redisHealthCheckService.isRedisUp()) {
+        cacheService.saveResponse(uniqueJsonString, pipelineResponse);
+		}
+
 		return node;
 	}
 
@@ -1606,7 +1699,7 @@ public class ModelService {
 
 	}
 
-	public Boolean validatePipelineRequest(PipelineRequest pipelineRequest) {
+	public Boolean validatePipelineRequest(PipelineRequest pipelineRequest,PipelineModel pipelineModel) {
 		log.info("Enter to validate pipelineRequest");
 		if (pipelineRequest.getPipelineTasks() == null || pipelineRequest.getPipelineTasks().isEmpty())
 			throw new PipelineValidationException("PipelineTasks is required field", HttpStatus.BAD_REQUEST);
@@ -1651,8 +1744,7 @@ public class ModelService {
 		 * mongoTemplate.findOne(dynamicQuery, PipelineModel.class);
 		 */
 
-		PipelineModel pipelineModel = pipelineModelDao
-				.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
+	
 
 		if (pipelineModel == null)
 			throw new PipelineValidationException("Pipeline model with the request PipelineId does not exist",
@@ -1746,9 +1838,13 @@ public class ModelService {
 			log.info("body :: " + body.toString());
 			Request httpRequest = new Request.Builder().url(requestUrl).post(body).build();
 			log.info("httpRequest : " + httpRequest.toString());
-
+			long startTime = System.currentTimeMillis();
 			Response httpResponse = client.newCall(httpRequest).execute();
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
 
+			System.out.println("Time taken for validate user details : " + duration + " ms");
+			
 			if (httpResponse.code() == 200) {
 				responseJsonStr = httpResponse.body().string();
 
@@ -2408,7 +2504,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						asrResponseConfig.setLanguage(lp);
@@ -2425,7 +2525,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						translationResponseConfig.setLanguage(lp);
@@ -2441,7 +2545,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						ttsResponseConfig.setLanguage(lp);
@@ -2459,7 +2567,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					TransliterationResponseConfig transliterationResponseConfig = new TransliterationResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						transliterationResponseConfig.setLanguage(lp);
@@ -2476,7 +2588,11 @@ public class ModelService {
 				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
 					OCRResponseConfig ocrResponseConfig = new OCRResponseConfig();
 					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
 					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						ocrResponseConfig.setLanguage(lp);
@@ -2606,4 +2722,165 @@ public class ModelService {
 
 	}
 
+	public ObjectNode getModelsAllPipeline(String jsonRequest) throws Exception {
+
+		// Check if task types are accepted and in proper order
+		PipelineRequest pipelineRequestCheckedTaskType = checkTaskType(jsonRequest);
+
+		// Check if language sequence is accepted and in proper order
+		PipelineRequest pipelineRequest = checkLanguageSequence(pipelineRequestCheckedTaskType);
+		log.info("pipelineRequest :: " + pipelineRequest);
+		/*
+		 * if (pipelineRequest != null) { validatePipelineRequest(pipelineRequest); }
+		 * else { throw new
+		 * PipelineValidationException("Pipeline validation failed. Check uploaded file syntax"
+		 * , HttpStatus.BAD_REQUEST); }
+		 */
+
+		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
+
+		PipelineResponse pipelineResponse = new PipelineResponse();
+		log.info("Get all pipeline before :: ");
+		List<PipelineModel> pipelineModels = pipelineModelDao.findAll();
+
+		log.info("Get all pipeline after :: ");
+		PipelineModel allPipelineTasks = new PipelineModel();
+
+		for (PipelineModel pipelineModel2 : pipelineModels) {
+			for (TaskSpecification taskSpecification : pipelineModel2.getTaskSpecifications()) {
+				boolean modelAdded = false;
+				if (allPipelineTasks.getTaskSpecifications() != null) {
+					for (int i = 0; i < allPipelineTasks.getTaskSpecifications().size(); i++) {
+						if (allPipelineTasks.getTaskSpecifications().get(i).getTaskType()
+								.equals(taskSpecification.getTaskType())) {
+							ConfigList configList = taskSpecification.getTaskConfig();
+							for (ConfigSchema configSchema : configList) {
+								allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().add(configSchema);
+							}
+							modelAdded = true;
+						}
+					}
+				}
+
+				log.info("after");
+
+				if (allPipelineTasks.getTaskSpecifications() != null) {
+					if (!modelAdded) {
+
+						log.info("!modelAdded");
+						allPipelineTasks.getTaskSpecifications().add(taskSpecification);
+
+					}
+
+				} else {
+					log.info("else");
+					TaskSpecifications taskSpecifications = new TaskSpecifications();
+					taskSpecifications.add(taskSpecification);
+					allPipelineTasks.setTaskSpecifications(taskSpecifications);
+				}
+
+			}
+
+		}
+
+		log.info("pipeline-model :: " + allPipelineTasks);
+		// Generate Individual Language List
+		PipelineUtilities pipelineUtilities = new PipelineUtilities();
+		TaskSpecifications individualTaskSpecifications = pipelineUtilities
+				.getIndividualTaskSpecifications(pipelineRequest.getPipelineTasks(), allPipelineTasks);
+		log.info("INDIVIDUAL TASK SPECIFICATIONS :: " + individualTaskSpecifications.toString());
+
+		// TODO : individualTaskSpecifications is empty, return No supported tasks
+		// found.
+		for (TaskSpecification taskSpecification : individualTaskSpecifications) {
+			if (taskSpecification.getTaskConfig().isEmpty()) {
+				throw new PipelineValidationException("No supported tasks found for this request!!",
+						HttpStatus.BAD_REQUEST);
+
+			}
+
+		}
+
+		// Generate Response Language List
+		PipelineResponseLanguagesList pipelineResponseLanguagesList = pipelineUtilities
+				.getPipelineResponseLanguagesList(individualTaskSpecifications);
+		log.info("PIPELINE RESPONSE LANGUAGE LIST :: " + pipelineResponseLanguagesList.toString());
+		pipelineResponse.setLanguages(pipelineResponseLanguagesList);
+
+		// TODO : pipelineResponseLanguagesList is empty, return No supported tasks
+		// found.
+		if (pipelineResponseLanguagesList.isEmpty()) {
+			throw new PipelineValidationException("No supported tasks found for this request!!",
+					HttpStatus.BAD_REQUEST);
+		}
+
+		// Generate Response Config
+		TaskSchemaList pipelineResponseSchemaList = getPipelineResponseSchemaList(individualTaskSpecifications);
+		pipelineResponse.setPipelineResponseConfig(pipelineResponseSchemaList);
+
+		for (int i = 0; i < pipelineResponseSchemaList.size(); i++) {
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "asr") {
+				ASRTaskInference aSRTaskInference = (ASRTaskInference) pipelineResponseSchemaList.get(i);
+				if (aSRTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "translation") {
+				TranslationTaskInference translationTaskInference = (TranslationTaskInference) pipelineResponseSchemaList
+						.get(i);
+				if (translationTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "tts") {
+				TTSTaskInference tTSTaskInference = (TTSTaskInference) pipelineResponseSchemaList.get(i);
+				if (tTSTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "transliteration") {
+				TransliterationTaskInference transliterationTaskInference = (TransliterationTaskInference) pipelineResponseSchemaList
+						.get(i);
+				if (transliterationTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "ocr") {
+				OCRTaskInference ocrTaskInference = (OCRTaskInference) pipelineResponseSchemaList.get(i);
+				if (ocrTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		// String json = mapper.writeValueAsString(pipelineResponse);
+		// json = json.replaceAll("\"","");
+		// PipelineResponse responsePipeline =
+		// mapper.readValue(json,PipelineResponse.class);
+		// log.info("String JSON :: "+json);
+
+		ObjectNode node = mapper.valueToTree(pipelineResponse);
+		return node;
+	}
 }
