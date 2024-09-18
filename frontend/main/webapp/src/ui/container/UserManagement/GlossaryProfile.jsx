@@ -688,7 +688,7 @@ useEffect(() => {
           {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
           <Box>
             <Typography variant="body1">{UlcaApiKey}</Typography>
-            <Typography variant="body2" fontWeight="400">ULCA API Key</Typography>
+            <Typography variant="body2" fontWeight="400">Udyat API Key</Typography>
           </Box>
           {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
           <Box>
