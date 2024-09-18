@@ -565,7 +565,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
     },
     {
       name: "ulcaApiKey",
-      label: "ULCA API Key",
+      label: "Udyat API Key",
       options: {
         filter: false,
         sort: false,
