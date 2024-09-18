@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 
 
 
-const FileUpload = ({ open, handleClose, title, description, buttonText, handleAction, status,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL }) => {
+const FileUpload = ({ open, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL }) => {
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState('');
   const [isRecording, setIsRecording] = useState(false);
@@ -79,6 +79,8 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
 
   const handleButtonClick = () => {
     handleAction(selectedFile);
+    console.log(selectedFile, audioURL, url, inputValue,"hello");
+    
   };
 
   const handleFileRemove = () => {
@@ -183,6 +185,18 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
       <DialogContent className='mb-3'>
        
         <Grid container className='SpeakerEnrollmentStyle' spacing={2} direction="column" alignItems="start" >
+        {value === 'local' && <Grid item>
+          <Typography variant="body2" fontWeight={600}  style={{ marginTop: '10px' }}>
+               Speaker ID
+              </Typography>
+          <input
+                type="text"
+               style={{width:"100%",height:"40px", marginTop:"5px", marginBottom:"15px"}}
+                id="file-upload"
+                value='1111'
+                disabled
+              />
+          </Grid>}
           <Grid item>
             {/* <span style={{color:"#555353", fontSize:"14px"}}>
 
@@ -197,7 +211,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
                 <span style={{fontSize:"14px", color:"#483EA8"}}>Download</span>
               </Button>
             </a> */}
-            <Typography variant='h6' fontWeight={600} color="#6D6D6D">
+            <Typography variant="body2" fontWeight={600} color="#6D6D6D">
             {description}
             </Typography>
           </Grid>

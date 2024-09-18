@@ -45,6 +45,7 @@ const endpoints = {
   getGlossaryData:"/ulca/user-mgmt/v1/users/glossary/fetch-all",
   addGlossaryData:"/ulca/user-mgmt/v1/users/glossary/create",
   deleteGlossaryData:"/ulca/user-mgmt/v1/users/glossary/delete",
+  deleteSpeakerData:"/ulca/user-mgmt/v1/users/speaker/delete",
   
 };
 

@@ -45,17 +45,13 @@ import Spe from '../../../assets/speakerbanner.jpg'
 import { useLocation } from 'react-router-dom';
 import FetchGlossaryDetails from "../../../redux/actions/api/UserManagement/FetchGlossaryDetails";
 import AddGlossaryDataApi from "../../../redux/actions/api/UserManagement/AddGlossaryData";
-import DeleteGlossaryApi from "../../../redux/actions/api/UserManagement/DeleteGlossary";
-import MultiDeleteGlossaryApi from "../../../redux/actions/api/UserManagement/MultiDeleteGlossary";
-import { IndicTransliterate, getTransliterationLanguages, getTransliterateSuggestions } from "@ai4bharat/indic-transliterate";
-// import "@ai4bharat/indic-transliterate/dist/index.css";
 import { useRef } from "react";
 import deleteImg from '../../../assets/glossary/delete.svg';
-import exportImg from '../../../assets/glossary/export.svg';
-import bulkUploadImg from '../../../assets/glossary/bulk_upload.svg';
+
 import addImg from '../../../assets/glossary/add.svg';
 
 import FileUpload from "./FileUpload";
+import DeleteSpeakerApi from "../../../redux/actions/api/UserManagement/DeleteSpeaker";
 
 const styles = {
   bannerContainer: {
@@ -186,7 +182,9 @@ const SpeakerEnrollment = (props) => {
 
 const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
 const [exportDialogOpen, setExportDialogOpen] = useState(false);
+const [LocalVerifyOpenDialog, setLocalVerifyOpenDialog] = useState(false);
 const [openDeleteBox, setOpenDeleteBox] = useState(false);
+const [deletePopupdata, setDeletePopupData] = useState(null)
 
 const handleUploadDialogOpen = () => {
   setUploadDialogOpen(true);
@@ -199,13 +197,23 @@ const handleSpeakerEnrollmentClose = () => {
   setInputValue('')
 };
 
-const handleExportDialogOpen = () => {
+const handleVerifyGlobalDialogOpen = () => {
   setExportDialogOpen(true);
+};
+
+const handleVerifyLocalDialogOpen = () => {
+  setLocalVerifyOpenDialog(true);
+};
+
+const handleDeletePopupModal = (data) => {
+  setOpenDeleteBox(true)
+  setDeletePopupData(data)
 };
 
 const handleSpeakerVerificationClose = () => {
   setExportDialogOpen(false);
   setSelectedFile(null)
+  setLocalVerifyOpenDialog(false)
   setAudioURL('')
 };
 
@@ -220,54 +228,6 @@ const handleExport = (file) => {
   console.log('Exporting file:', file);
   handleSpeakerVerificationClose();
 };
-
-
-
-useEffect(() => { 
-  if (debouncedTextRef.current.trim()!="" && suggestionRef.current.length>1) {
-    console.log("nnn",suggestionRef.current);
-    console.log("nnn",debouncedTextRef.current,text);
-    const words = debouncedTextRef.current.split(/\s+/).filter(word => word.trim() !== "");
-
-      const optedWord = suggestionRef.current.find((item) => item === words[words.length-1]) || "";
-
-      const newKeystroke = {
-        keystrokes: debouncedTextRef.current,
-        results: suggestionRef.current,
-        opted:optedWord,
-        created_at: new Date().toISOString(),
-      };
-      newKeystrokesRef.current = newKeystroke
-      if (
-        keystrokesRef.current.length > 0 &&
-        keystrokesRef.current[keystrokesRef.current.length - 1].keystrokes === newKeystroke.keystrokes
-      ) {
-        keystrokesRef.current[keystrokesRef.current.length - 1] = newKeystroke;
-      } else {
-        keystrokesRef.current = [...keystrokesRef.current, newKeystroke];
-      }
-      console.log("nnn", keystrokesRef.current,newKeystrokesRef.current);
-      // const finalJson = {
-      //   word: debouncedTextRef.current,
-      //   steps: keystrokesRef.current,
-      //   language: selectedLang.LangCode!=undefined?selectedLang.LangCode:"hi",
-      // };
-      // localStorage.setItem('TransliterateLogging', JSON.stringify(finalJson));
-  }
-}, [suggestionRef.current,prev,formState.sourceLanguage]);
-
-  const onKeyDown = (event) => {
-    if (event.keyCode == 27) {
-      setModal(false);
-    }
-  };
-
-
-  useEffect(() => {
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [onKeyDown]);
-
 
 
   const getApiKeysCall = async () => {
@@ -363,7 +323,7 @@ useEffect(() => {
             size="medium"
             variant="contained"
             className={classes.ButtonRefresh}
-            onClick={handleExportDialogOpen}
+            onClick={handleVerifyGlobalDialogOpen}
             style={{
               height: "36px",
               textTransform: "capitalize",
@@ -424,13 +384,7 @@ useEffect(() => {
     );
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+
 
   const handleSubmit = async(event) => {
     event.preventDefault();
@@ -498,14 +452,7 @@ useEffect(() => {
     }
   };
 
-  const isFormValid = () => {
-    return (
-      formState.sourceText !== '' &&
-      formState.targetText !== '' &&
-      formState.sourceLanguage !== '' &&
-      formState.targetLanguage !== ''
-    );
-  };
+ 
 
     
     const handleDeleteClose = () => {
@@ -515,8 +462,18 @@ useEffect(() => {
     // Function to handle confirm deletion
     const handleDeleteConfirm = () => {
       // Handle delete logic here
-      console.log(`Deleting Speaker ID: $1111`);
-      setOpenDeleteBox(false);
+      console.log(`Deleting Speaker ID: $1111`, deletePopupdata);
+      const apiObj = new DeleteSpeakerApi(appName,serviceProviderName);
+      dispatch(APITransport(apiObj));
+      setTimeout(() => {
+        getApiGlossaryData() 
+        // setSnackbarInfo({
+        //   open: true,
+        //   message: "Speaker Deleted Successfully",
+        //   variant: "success",
+        // });  
+        setOpenDeleteBox(false);
+      },1500)
     };
 
   const getMuiTheme = () =>
@@ -630,7 +587,7 @@ useEffect(() => {
                 onClick={() => {
                   const selectedData = selectedRows.data.map(row => tableData[row.dataIndex]);
                   console.log("Selected Rows' Data:", selectedData);
-                  const apiObj = new MultiDeleteGlossaryApi(appName,serviceProviderName,selectedData);
+                  const apiObj = new DeleteSpeakerApi(appName,serviceProviderName,selectedData);
                   dispatch(APITransport(apiObj));
                   setTimeout(() => {
 
@@ -651,28 +608,7 @@ useEffect(() => {
                 {/* <DeleteIcon />  */}
               </IconButton>
             </Tooltip>
-            <Tooltip title="">
-              <IconButton
-                 style={{borderRadius:"4px",border: "1px solid #D0D5DD", padding:"5px 12px",  boxShadow: "none",}}
-                 onClick={handleExportDialogOpen}
-              >
-                  <Box sx={{display:"flex", gap:"6px"}}>
-                  <img src={exportImg} />
-                  {!isMobile && <span style={{fontSize:"16px", color:"#344054"}}>Export</span>}
-                </Box>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="">
-              <IconButton
-               style={{borderRadius:"4px",border: "1px solid #D0D5DD", padding:"5px 12px",  boxShadow: "none",}}
-               onClick={handleUploadDialogOpen}
-              >
-                  <Box sx={{display:"flex", gap:"6px"}}>
-                  <img src={bulkUploadImg} />
-                  {!isMobile && <span style={{fontSize:"16px", color:"#344054"}}>Bulk Upload</span>}
-                </Box>
-              </IconButton>
-            </Tooltip>
+         
             </div>
           ),
         filter: false,
@@ -740,8 +676,9 @@ useEffect(() => {
               // >
                 <Box style={{display:"flex", gap:"10px"}}>
 
-                <Button variant="outlined" style={{border:"1px solid #2947A3", color:"#2947A3"}}>Verify</Button>
-                <Button variant="outlined" style={{border:"1px solid #626262", color:"#626262"}}  onClick={() => setOpenDeleteBox(true)}>Delete</Button>
+                <Button variant="outlined" style={{border:"1px solid #2947A3", color:"#2947A3"}} onClick={handleVerifyLocalDialogOpen}>Verify</Button>
+                <Button variant="outlined" style={{border:"1px solid #626262", color:"#626262"}}  
+                onClick={() => handleDeletePopupModal(tableMeta.rowData)}>Delete</Button>
                 {/* <img src={Delete} alt="delete img"/> */}
                 </Box>
               // </Button>
@@ -750,28 +687,6 @@ useEffect(() => {
         }
       ];
 
-      const renderTextarea = (props, heading,isDisabled) => {
-        return (
-          <>
-          <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>{heading}</Typography>
-          <textarea
-            {...props}
-            placeholder={"Enter text here..."}
-            rows={2}
-            // className={classes.textAreaTransliteration}
-            style={{border:"1px solid lightGray", backgroundColor: isDisabled ? "#f0f0f0" : "inherit", width: "100%", resize: "none",
-            fontSize: "23px",
-            lineHeight: "32px",
-            color: "black",
-            fontFamily: "Roboto",
-            // height : "14rem",
-            padding : "1rem", borderRadius:"8px"}}
-
-          />
-          
-          </>
-        );
-      };
     
 
   const renderSnackBar = () => {
@@ -795,7 +710,7 @@ useEffect(() => {
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
-      <Box style={{ width: '100%', padding: isMobile ? "20px 25px" :  '20px 0px', textAlign: 'start', marginBottom: '30px' }}>
+      <Box style={{ width: '100%', padding: isMobile ? "20px 25px" :  '20px 0px', textAlign: 'start', marginBottom: '10px' }}>
         <Typography variant="h4" style={{padding:"10px 0px"}}>App Integration Details</Typography>
         <Box style={{display:"flex", flexDirection: isMobile ? "column" : 'row', justifyContent:isMobile ? "" :"space-between", alignItems:isMobile ? '' :"center", marginTop:"10px"}}>
           <Box>
@@ -805,7 +720,7 @@ useEffect(() => {
           {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
           <Box>
             <Typography variant="body1">{UlcaApiKey}</Typography>
-            <Typography variant="body2" fontWeight="400">ULCA API Key</Typography>
+            <Typography variant="body2" fontWeight="400">Udyat API Key</Typography>
           </Box>
           {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
           <Box>
@@ -813,6 +728,10 @@ useEffect(() => {
             <Typography variant="body2" fontWeight="400">User ID</Typography>
           </Box>
         </Box>
+      </Box>
+      <Box style={{marginBottom: '30px'}}>
+      <Typography variant="body1" style={{padding:"5px 0px 0px 0px"}}>Disclaimer:</Typography>
+      <Typography variant="body2" >The APIs provided here are intended for use exclusively within the Udyat platform. For any external or standalone usage of these APIs, please contact the DIBD Onboarding Manager for further assistance and access permissions.</Typography>
       </Box>
       <Box style={{ width: '100%', padding: '0px', textAlign: 'center', marginBottom: '20px' }}>
       <div style={styles.bannerContainer}>
@@ -835,217 +754,7 @@ useEffect(() => {
           options={options}
         />
       </MuiThemeProvider>
-      <Dialog
-      open={modal}
-      onClose={() => setModal(false)}
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-      maxWidth="md"
-    //   style={{fontFamily: "Noto Sans"}}
-      fullWidth
-    >
-      <DialogTitle id="dialog-title">
-        <div style={{fontFamily: "Noto-Bold", fontWeight:"600", paddingLeft:"20px", fontSize:"28px"}}>
-        Create a New Glossary
-        </div>
-        </DialogTitle>
-      <DialogContent>
-        <Container>
-          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-            <Grid container spacing={2} alignItems="center">
-              {/* First Select Box */}
-            
-              <Grid item xs={12} sm={12} md={6}>
-              <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Source Language</Typography>
-              <FormControl fullWidth variant="outlined" style={{ width: "100%" }}>
-      {/* <InputLabel id="select-source-label">Select Source Language</InputLabel> */}
-      <Select
-        labelId="select-source-label"
-        id="select-source"
-        name="sourceLanguage"
-        value={formState.sourceLanguage}
-        onChange={handleChange}
-        label="Select Source Language"
-        displayEmpty
-      >
-        <MenuItem value="" disabled>
-          <span  style={{ fontSize: "18px",
-                    lineHeight: "32px",
-                    color: "black",
-                    fontFamily: "Roboto"}}>Select Source Language</span >
-        </MenuItem>
-        {languages.map((lang) => (
-          <MenuItem key={lang.code} value={lang.code}>
-            {lang.label}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-              </Grid>
-
-              {/* Second Select Box */}
-             
-              <Grid item xs={12} sm={12} md={6}>
-                
-                <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Select Target Language</Typography>
-                <FormControl fullWidth variant="outlined" style={{width:"100%"}}>
-                  {/* <InputLabel id="select-target-label">Select Target Language</InputLabel> */}
-                  <Select
-                    labelId="select-target-label"
-                    id="select-target"
-                    name="targetLanguage"
-                    value={formState.targetLanguage}
-                    onChange={handleChange}
-                    label="Select Target Language"
-                    displayEmpty
-                  >
-                    <MenuItem value="" disabled>
-          <span   style={{ fontSize: "18px",
-                    lineHeight: "32px",
-                    color: "black",
-                    fontFamily: "Roboto"}}>Select Target Language</span>
-        </MenuItem>
-                    {languages.map((lang) => (
-                      <MenuItem key={lang.code} value={lang.code} disabled={lang.code === formState.sourceLanguage}>
-                        {lang.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              {/* First Text Field */}
-            
-              <Grid item xs={12} sm={12} md={6} >
-              {/* <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  label="Enter Source Text"
-                  name="sourceText"
-                  value={formState.sourceText}
-                  onChange={handleChange}
-                /> */}
-
-{formState.sourceLanguage !== 'en' ? 
-                 <IndicTransliterate
-        lang={formState.sourceLanguage}
-        value={formState.sourceText}
-        onChangeText={(val) => {
-          setText(val)
-          setDebouncedText(val);
-          setFormState((prevState) => ({
-            ...prevState,
-            sourceText: val,
-          }));
-          debouncedTextRef.current=val
-          if(!debouncedTextRef.current.toString().includes(debouncedText)){
-            setprev(true)
-          }
-          else{
-            setprev(false)
-          }
-          console.log("nnn",text,debouncedText,debouncedTextRef.current);
-        }}
-        renderComponent={(props) => renderTextarea(props,"Source Text",!formState.sourceLanguage)}
-        showCurrentWordAsLastSuggestion={true}
-        style={{width:"100%"}}
-        className="glossary_dropdownValue"
-        disabled={!formState.sourceLanguage}
-      /> : (
-        <>
-         <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  // label={focused ? '' : 'Enter Source Text'}
-                  placeholder="Enter Source Text..."
-                  name="sourceText"
-                  multiline
-                  rows={2.5}
-                  value={formState.sourceText}
-                  onChange={handleChange}
-                  disabled={!formState.sourceLanguage}
-                  style={{ fontSize: "14px",
-                    lineHeight: "32px",
-                    color: "black",
-                    fontFamily: "Roboto"}}
-                   
-                /> 
-       </>
-    
-        )}
-              </Grid>
-
-              {/* Second Text Field */}
-            
-              <Grid item xs={12} sm={12} md={6}>
-              {/* <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Target Text</Typography>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  label="Enter Target Text"
-                  name="targetText"
-                  value={formState.targetText}
-                  onChange={handleChange}
-                /> */}
-                 <IndicTransliterate
-        lang={formState.targetLanguage}
-        value={formState.targetText}
-        disabled={!formState.targetLanguage}
-        onChangeText={(val) => {
-          setText(val)
-          setDebouncedText(val);
-          setFormState((prevState) => ({
-            ...prevState,
-            targetText: val,
-          }));
-          debouncedTextRef.current=val
-          if(!debouncedTextRef.current.toString().includes(debouncedText)){
-            setprev(true)
-          }
-          else{
-            setprev(false)
-          }
-          console.log("nnn",text,debouncedText,debouncedTextRef.current);
-        }}
-        renderComponent={(props) => renderTextarea(props,"Target Text",!formState.targetLanguage)}
-        showCurrentWordAsLastSuggestion={true}
-      />
-              </Grid>
-            </Grid>
-          </form>
-        </Container>
-        <Box style={{ display: "flex", justifyContent: "space-between", gap: "20px", marginTop: "20px", marginRight:"25px", marginLeft:"25px",marginBottom:"20px",fontFamily: "Noto-Regular", fontWeight:"400" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            setModal(false); 
-            setFormState({
-            sourceLanguage: '',
-            targetLanguage: '',
-            sourceText: '',
-            targetText: '',
-          })}}
-          style={{ padding: "12px 24px", backgroundColor:"#E7F0FA", color:"#2947A3" }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          style={{ padding: "12px 24px" }}
-          onClick={handleSubmit}
-          disabled={!isFormValid()}
-        >
-          Submit
-        </Button>
-      </Box>
-      </DialogContent>
-      
-    </Dialog>
+   
     <FileUpload
         open={uploadDialogOpen}
         handleClose={handleSpeakerEnrollmentClose}
@@ -1054,6 +763,7 @@ useEffect(() => {
         buttonText=" Enroll Speaker"
         handleAction={handleUpload}
         status={true}
+        value="none"
         selectedFile={selectedFile}
         setSelectedFile={setSelectedFile}
         inputValue={inputValue}
@@ -1069,6 +779,23 @@ useEffect(() => {
         buttonText="Verify Speaker"
         handleAction={handleExport}
         status={false}
+        value='global'
+        selectedFile={selectedFile}
+        setSelectedFile={setSelectedFile}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        audioURL={audioURL}
+        setAudioURL={setAudioURL}
+      />
+       <FileUpload
+        open={LocalVerifyOpenDialog}
+        handleClose={handleSpeakerVerificationClose}
+        title="Speaker Verification"
+        description="Upload Audio"
+        buttonText="Verify Speaker"
+        handleAction={handleExport}
+        status={false}
+        value='local'
         selectedFile={selectedFile}
         setSelectedFile={setSelectedFile}
         inputValue={inputValue}
