@@ -438,7 +438,7 @@
       "uri": "/ulca/user-mgmt/v1/users/speakers/enroll", 
       "module": "ULCA-UMS", 
       "active": true, 
-      "whiteList": true, 
+      "whiteList": false, 
       "description": "API to enroll new speaker."
     }, 
     {
@@ -446,7 +446,7 @@
       "uri": "/ulca/user-mgmt/v1/users/speakers/verify", 
       "module": "ULCA-UMS", 
       "active": true, 
-      "whiteList": true, 
+      "whiteList": false, 
       "description": "API to verify any speaker by passing Audio input."
     }, 
     {
@@ -454,7 +454,7 @@
       "uri": "/ulca/user-mgmt/v1/users/speakers/list", 
       "module": "ULCA-UMS", 
       "active": true, 
-      "whiteList": true, 
+      "whiteList": false, 
       "description": "API to fetch all enrolled speakers for api key."
     }, 
     {
@@ -462,7 +462,7 @@
       "uri": "/ulca/user-mgmt/v1/users/speakers/delete", 
       "module": "ULCA-UMS", 
       "active": true, 
-      "whiteList": true, 
+      "whiteList": false, 
       "description": "API to delete speaker based on speaker ID value."
     }            
   ]
