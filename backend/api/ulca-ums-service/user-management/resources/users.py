@@ -439,20 +439,159 @@ class ToggleDataTracking(Resource):
 class EnrollSpeaker(Resource):
     def post(self):
         user_id=request.headers["x-user-id"]
-        body = request.get_json() 
+        body = request.get_json()
 
-        return post_error("404", "Counldn't find the API")
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400 
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        else:
+            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
+        log.info(f"master api keys {masterList}")
+    
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_enroll_for_dhruva(decrypt_headers, body)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
 class VerifySpeaker(Resource):
     def post(self):
-        return post_error("404", "Couldn't find the API")
+        user_id=request.headers["x-user-id"]
+        body = request.get_json()
+
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400 
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        else:
+            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
+        log.info(f"master api keys {masterList}")
+    
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_verify_for_dhruva(decrypt_headers, body)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
 
 class DeleteSpeaker(Resource):
     def delete(self):
-        return post_error("404", "Counldn't find the API")
+        user_id=request.headers["x-user-id"]
+        body = request.get_json()
+
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400 
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        else:
+            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
+        log.info(f"master api keys {masterList}")
+    
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_delete_for_dhruva(decrypt_headers, body)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
 
 class FetchSpeaker(Resource):
-    def get(self):
-        return post_error("404", "Counldn't find the API")
+    def get(self): 
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+        user_id=request.headers["x-user-id"]
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys() and "serviceProvider" not in pipelineID.keys():
+            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
+        masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+        masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+        masterList.append(masterkeyname)
+        masterList.append(masterkeyvalue)
+        log.info(f"master api keys {masterList}")
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_fetchall_for_dhruva(decrypt_headers)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
 
 class CreateGlossary(Resource):
     def post(self):

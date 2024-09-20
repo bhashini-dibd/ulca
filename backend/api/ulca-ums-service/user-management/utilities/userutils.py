@@ -945,3 +945,53 @@ class UserUtils:
         result = requests.get(url=BHAHSINI_GLOSSARY_FETCH_URL,  headers=auth_headers)
         print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
         return result.json(), result.status_code
+    
+    @staticmethod
+    def send_speaker_enroll_for_dhruva(auth_headers, request_body):
+        headers = {
+        'Authorization': 'm09Is-zIxHhNy_5dL9-v5_5tl725NCEO4cUIPlTsMws9_4suHNKioK4rMs17Riir',
+        'Content-Type': 'application/json'
+        }
+
+        result = requests.post(url=BHAHSINI_SPEAKER_ENROLL_CREATE_URL, json=request_body, headers=headers)
+
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+
+        return result.json(), 200
+        
+
+    @staticmethod
+    def send_speaker_verify_for_dhruva(auth_headers, request_body):
+        headers = {
+        'Authorization': 'm09Is-zIxHhNy_5dL9-v5_5tl725NCEO4cUIPlTsMws9_4suHNKioK4rMs17Riir',
+        'Content-Type': 'application/json'
+        }
+
+        result = requests.post(url=BHAHSINI_SPEAKER_VERIFICATION_URL, json=request_body, headers=headers)
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+        return result.json(), result.status_code
+
+    @staticmethod
+    def send_speaker_fetchall_for_dhruva(auth_headers):
+
+        headers = {
+        'Authorization': 'm09Is-zIxHhNy_5dL9-v5_5tl725NCEO4cUIPlTsMws9_4suHNKioK4rMs17Riir',
+        'Content-Type': 'application/json'
+        }
+
+        result = requests.get(url=BHAHSINI_SPEAKER_FETCH_URL, headers=headers)
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def send_speaker_delete_for_dhruva(auth_headers, request_body):
+
+        headers = {
+        'Authorization': 'm09Is-zIxHhNy_5dL9-v5_5tl725NCEO4cUIPlTsMws9_4suHNKioK4rMs17Riir',
+        'Content-Type': 'application/json'
+        }
+
+        result = requests.post(url=BHAHSINI_SPEAKER_DELETE_URL, json=request_body, headers=headers)
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+        return result.json(), result.status_code
+        
