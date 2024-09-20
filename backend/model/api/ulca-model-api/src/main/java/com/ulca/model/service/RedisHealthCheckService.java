@@ -1,5 +1,7 @@
 package com.ulca.model.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -8,12 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class RedisHealthCheckService {
-
-    private final RedisTemplate<String, Object> redisTemplate;
-
-    public RedisHealthCheckService(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
+	
+    @Autowired
+    @Qualifier("redisTemplate3")
+    private  RedisTemplate<String, Object> redisTemplate;
 
     public boolean isRedisUp() {
         try {

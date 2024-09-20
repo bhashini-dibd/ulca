@@ -2852,6 +2852,49 @@ public class ModelService {
 		 * , HttpStatus.BAD_REQUEST); }
 		 */
 
+	//===============================================================================================
+		 ObjectMapper objectMapper = new ObjectMapper()
+		            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+	        Object jsonObject = objectMapper.readValue(jsonRequest, Object.class);
+	      String uniqueJsonString = objectMapper.writeValueAsString(jsonObject);
+		 if(redisHealthCheckService.isRedisUp()) {
+		 if (cacheService.isCached2(uniqueJsonString)) {
+			 log.info("Request found in Cache");
+			 PipelineResponse pipelineResponse2= cacheService.getResponse2(uniqueJsonString);
+				
+				log.info("Response Object from redis :: ");
+				ObjectMapper mapper = new
+						 ObjectMapper();
+				/*
+				 * PipelineResponse pipelineResponse2 = null; ObjectMapper mapper = new
+				 * ObjectMapper(); if (object instanceof String) { String jsonString = (String)
+				 * object; pipelineResponse2 = objectMapper.readValue(jsonString,
+				 * PipelineResponse.class); // Now you can use the PipelineResponse object }
+				 */
+				
+				
+				
+					
+				mapper.setSerializationInclusion(Include.NON_NULL);
+				mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			
+
+				ObjectNode node = mapper.valueToTree(pipelineResponse2);
+				 return node;
+		            
+		 
+		        }
+		
+		 log.info("Request does not found in Cache");
+		 }
+
+		
+ //=================================================================================================
+		
+		
+		
+		
+		
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
 		PipelineResponse pipelineResponse = new PipelineResponse();
@@ -3099,6 +3142,9 @@ public class ModelService {
 		// log.info("String JSON :: "+json);
 
 		ObjectNode node = mapper.valueToTree(pipelineResponse);
+		if(redisHealthCheckService.isRedisUp()) {
+	        cacheService.saveResponse2(uniqueJsonString, pipelineResponse);
+			}
 		return node;
 	}
 }
