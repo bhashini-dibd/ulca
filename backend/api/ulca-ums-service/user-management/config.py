@@ -7,7 +7,7 @@ MONGO_SERVER_HOST   =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb://localhos
 #MODULE-SPECIFIC-CONFIGS
 
 #module configs
-DEBUG   =   True
+DEBUG   =   False
 CONTEXT_PATH    =   "/ulca/user-mgmt"
 HOST    =   '0.0.0.0'
 PORT    =   5001
