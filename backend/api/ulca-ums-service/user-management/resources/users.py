@@ -590,6 +590,9 @@ class FetchSpeaker(Resource):
             log.info(f"decrypt_headers {decrypt_headers}")
 
         dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_fetchall_for_dhruva(decrypt_headers)
+        print("*****************************")
+        print(decrypt_headers)
+        print("*****************************")
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
         return res.getdhruvaresults(), dhruva_result_status_code
 
