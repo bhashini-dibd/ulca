@@ -185,6 +185,8 @@ const [exportDialogOpen, setExportDialogOpen] = useState(false);
 const [LocalVerifyOpenDialog, setLocalVerifyOpenDialog] = useState(false);
 const [openDeleteBox, setOpenDeleteBox] = useState(false);
 const [deletePopupdata, setDeletePopupData] = useState(null)
+const [base64Audio, setBase64Audio] = useState('');
+const [base64Recording, setBase64Recording] = useState('');
 
 const handleUploadDialogOpen = () => {
   setUploadDialogOpen(true);
@@ -194,6 +196,7 @@ const handleSpeakerEnrollmentClose = () => {
   setUploadDialogOpen(false);
   setSelectedFile(null)
   setAudioURL('')
+  setBase64Audio('')
   setInputValue('')
 };
 
@@ -257,6 +260,7 @@ const handleExport = (file) => {
  
   const getApiGlossaryData = async () => {
     const apiObj = new FetchGlossaryDetails(appName,serviceProviderName);
+    // const apiObj = new FetchSpeakerDetailsApi(appName,serviceProviderName);
     dispatch(APITransport(apiObj));
   };
 
@@ -703,7 +707,6 @@ const handleExport = (file) => {
     );
   };
 
- 
 
 
   return (
@@ -770,6 +773,10 @@ const handleExport = (file) => {
         setInputValue={setInputValue}
         audioURL={audioURL}
         setAudioURL={setAudioURL}
+        base64Audio={base64Audio}
+        setBase64Audio={setBase64Audio}
+        base64Recording={base64Recording}
+        setBase64Recording={setBase64Recording}
       />
       <FileUpload
         open={exportDialogOpen}
@@ -786,6 +793,10 @@ const handleExport = (file) => {
         setInputValue={setInputValue}
         audioURL={audioURL}
         setAudioURL={setAudioURL}
+        base64Audio={base64Audio}
+        setBase64Audio={setBase64Audio}
+        base64Recording={base64Recording}
+        setBase64Recording={setBase64Recording}
       />
        <FileUpload
         open={LocalVerifyOpenDialog}
@@ -802,6 +813,10 @@ const handleExport = (file) => {
         setInputValue={setInputValue}
         audioURL={audioURL}
         setAudioURL={setAudioURL}
+        base64Audio={base64Audio}
+        setBase64Audio={setBase64Audio}
+        base64Recording={base64Recording}
+        setBase64Recording={setBase64Recording}
       />
 
 <Dialog

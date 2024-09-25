@@ -33,6 +33,7 @@ import getTransliterationText from '../reducers/Model/ModelSearch/GetTranslitera
 import getModelHealthCheckStatus from './Model/ModelView/ModalStatusCheck';
 import getApiKeys from './UserManagement/getApiKeys';
 import getGlossaryData from "./UserManagement/getGlossaryData";
+import getSpeakerData from "./UserManagement/getSpeakerData";
 
 const index = {
   apiStatus,
@@ -70,6 +71,7 @@ const index = {
   getModelHealthCheckStatus,
   getApiKeys,
   getGlossaryData,
+  getSpeakerData,
 };
 
 export default index;

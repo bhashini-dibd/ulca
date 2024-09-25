@@ -10,7 +10,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
-
+import AddSpeakerEnrollmentDataApi from '../../../redux/actions/api/UserManagement/AddSpeakerEnrollmentData';
+import APITransport from "../../../redux/actions/apitransport/apitransport";
+import { useDispatch } from 'react-redux';
+import AddSpeakerVerificationDataApi from '../../../redux/actions/api/UserManagement/AddSpeakerVerificationData';
 const useStyles = makeStyles({
   dividerLine: {
     display: 'flex',
@@ -30,7 +33,7 @@ const useStyles = makeStyles({
 
 
 
-const FileUpload = ({ open, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL }) => {
+const FileUpload = ({ open, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL,base64Audio,setBase64Audio, base64Recording,setBase64Recording }) => {
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState('');
   const [isRecording, setIsRecording] = useState(false);
@@ -38,15 +41,36 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
   const [url, setUrl] = useState('');
   const [successState,setSuccessState] = useState(false)
   const mediaRecorderRef = useRef(null);
+  
   const classes = useStyles();
- 
+  const dispatch = useDispatch()
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    console.log("hello");
+    
     const allowedTypes = ['audio/wav', 'audio/mpeg', 'audio/flac', 'audio/ogg']; // MIME types for WAV, MP3, FLAC, and OGG
 
     if (file && allowedTypes.includes(file.type)) {
+      const reader = new FileReader();
+
+      // When the file reading is finished, set the base64 value
+      reader.onloadend = () => {
+        const base64String = reader.result.split(',')[1]; // Extract base64 without metadata
+        setBase64Audio(base64String);
+        console.log(base64String, "base64String");
+        
+      };
+
+      reader.onerror = () => {
+        console.error('Error reading the file.');
+      };
+
+      // Convert the file to a Data URL (base64 format)
+      reader.readAsDataURL(file);
+  
       setSelectedFile(file);
+      // console.log(file.split("base64,")[1], "base64data");
       setError('');
     } else {
       setSelectedFile(null);
@@ -62,6 +86,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
 
     if (file && allowedTypes.includes(file.type)) {
       setSelectedFile(file);
+      // console.log(file.split("base64,")[1], "base64data");
       setError('');
     } else {
       setSelectedFile(null);
@@ -77,9 +102,29 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
     setDragging(false);
   };
 
-  const handleButtonClick = () => {
+  const handleSpeakerEnrollmentButtonClick = () => {
     handleAction(selectedFile);
-    console.log(selectedFile, audioURL, url, inputValue,"hello");
+    const apiObj = new AddSpeakerEnrollmentDataApi("hr","jj",base64Audio, base64Recording, url, inputValue,);
+    dispatch(APITransport(apiObj));
+
+    setTimeout(() => {
+      setSelectedFile(null);
+    setBase64Audio('');
+    setBase64Recording('')
+    }, 3000)
+    
+  };
+
+  const handleSpeakerVerificationButtonClick = () => {
+    handleAction(selectedFile);
+    const apiObj = new AddSpeakerVerificationDataApi("hr","jj",base64Audio, base64Recording, url, "11111",);
+    dispatch(APITransport(apiObj));
+
+    setTimeout(() => {
+      setSelectedFile(null);
+    setBase64Audio('');
+    setBase64Recording('')
+    }, 3000)
     
   };
 
@@ -88,6 +133,18 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
     setAudioURL('');
     setError('');
   };
+  
+
+    // Function to convert Blob to Base64
+    const convertBlobToBase64 = (blob) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob); // Read Blob data as a Base64 URL string
+      reader.onloadend = () => {
+        const base64data = reader.result;
+        setBase64Recording(base64data); // Store base64 encoded audio in
+        // console.log(base64data.split("base64,")[1], "base64data");
+      };
+    };
 
   const handleStartRecording = async () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -99,6 +156,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
           const audioUrl = URL.createObjectURL(audioBlob);
           setAudioURL(audioUrl);
           setSelectedFile(null);
+          convertBlobToBase64(audioBlob);
         };
         mediaRecorderRef.current.start();
         setIsRecording(true);
@@ -141,7 +199,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
     setUrl(event.target.value);
   };
 
-  const isSubmitDisabled = !((selectedFile || audioURL || url) && inputValue);
+  const isSubmitDisabled = (value === 'local' || !status) ? !(selectedFile || audioURL || url) : !((selectedFile || audioURL || url) && inputValue);
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -192,7 +250,6 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
           <input
                 type="text"
                style={{width:"100%",height:"40px", marginTop:"5px", marginBottom:"15px"}}
-                id="file-upload"
                 value='1111'
                 disabled
               />
@@ -353,7 +410,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
             <Button
               variant="contained"
               color="primary"
-              onClick={handleButtonClick}
+              onClick={status ? handleSpeakerEnrollmentButtonClick :  handleSpeakerVerificationButtonClick}
               disabled={isSubmitDisabled}
               style={{padding:"12px 20px", borderRadius:"5px"}}
             >
