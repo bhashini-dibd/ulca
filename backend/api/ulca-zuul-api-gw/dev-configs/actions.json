@@ -527,7 +527,15 @@
       "active": true, 
       "whiteList": false, 
       "description": "API to delete speaker based on speaker ID value."
-    }        
+    } ,
+    {
+      "id": "31fa6e02-0f83-42e9-8777-ae515499419f",
+      "uri": "/ulca/apis/v0/model/getModelTest",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "Open API to try models"
+    }            
   ]
 }
 
