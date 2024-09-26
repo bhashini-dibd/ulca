@@ -487,6 +487,14 @@
       "active": true,
       "whiteList": true,
       "description": "API to generate service provider api keys"
+    },
+    {
+      "id": "1c6533c2-814a-4fb1-88e6-f91c74e7496a", 
+      "uri": "/ulca/user-mgmt/v1/users/speakers/list", 
+      "module": "ULCA-UMS", 
+      "active": true, 
+      "whiteList": false, 
+      "description": "API to fetch all enrolled speakers for api key."
     }
   ]
 }
