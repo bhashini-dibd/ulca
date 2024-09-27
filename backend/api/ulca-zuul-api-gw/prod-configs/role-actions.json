@@ -572,6 +572,46 @@
     },
     {
       "role": "ADMIN",
+      "actionID": "d9df89a0-2fc5-44a9-88a7-bc2b48f009fc",
+      "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "d9df89a0-2fc5-44a9-88a7-bc2b48f009fc",
+      "active": true
+    },
+    {
+      "role": "MODEL-ONLY-USER",
+      "actionID": "d9df89a0-2fc5-44a9-88a7-bc2b48f009fc",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "d9df89a0-2fc5-44a9-88a7-bc2b48f009fc",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "0768919c-cc93-4790-88d6-eabeb77917f8",
+      "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "0768919c-cc93-4790-88d6-eabeb77917f8",
+      "active": true
+    },
+    {
+      "role": "MODEL-ONLY-USER",
+      "actionID": "0768919c-cc93-4790-88d6-eabeb77917f8",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "0768919c-cc93-4790-88d6-eabeb77917f8",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
       "actionID": "1c6533c2-814a-4fb1-88e6-f91c74e7496a",
       "active": true
     },
@@ -589,6 +629,26 @@
       "role": "BENCHMARK-DATASET-CONTRIBUTOR",
       "actionID": "1c6533c2-814a-4fb1-88e6-f91c74e7496a",
       "active": true
-    }
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "ff8bee14-698c-4508-896a-c02333ba154a",
+      "active": true
+    },
+    {
+      "role": "CONTRIBUTOR-USER",
+      "actionID": "ff8bee14-698c-4508-896a-c02333ba154a",
+      "active": true
+    },
+    {
+      "role": "MODEL-ONLY-USER",
+      "actionID": "ff8bee14-698c-4508-896a-c02333ba154a",
+      "active": true
+    },
+    {
+      "role": "BENCHMARK-DATASET-CONTRIBUTOR",
+      "actionID": "ff8bee14-698c-4508-896a-c02333ba154a",
+      "active": true
+    }    
   ]
 }
