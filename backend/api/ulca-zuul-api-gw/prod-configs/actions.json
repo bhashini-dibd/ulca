@@ -493,7 +493,7 @@
       "uri": "/ulca/user-mgmt/v1/users/speakers/list", 
       "module": "ULCA-UMS", 
       "active": true, 
-      "whiteList": false, 
+      "whiteList": true, 
       "description": "API to fetch all enrolled speakers for api key."
     }
   ]
