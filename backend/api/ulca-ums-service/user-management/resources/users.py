@@ -438,6 +438,8 @@ class ToggleDataTracking(Resource):
 
 class EnrollSpeaker(Resource):
     def post(self):
+        body = request.get_json()
+        print("Request Body: ", body)
         appName = request.args.get("appName")
         serviceProviderName = request.args.get("serviceProviderName")
 
@@ -464,6 +466,7 @@ class EnrollSpeaker(Resource):
         return res.getdhruvaresults(), dhruva_result_status_code
 class VerifySpeaker(Resource):
     def post(self):
+        body = request.get_json()
         appName = request.args.get("appName")
         serviceProviderName = request.args.get("serviceProviderName")
 
@@ -491,6 +494,7 @@ class VerifySpeaker(Resource):
 
 class DeleteSpeaker(Resource):
     def delete(self):
+        body = request.get_json()
         appName = request.args.get("appName")
         serviceProviderName = request.args.get("serviceProviderName")
 
