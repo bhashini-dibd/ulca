@@ -567,9 +567,9 @@ class FetchSpeaker(Resource):
         serviceProviderName = request.args.get("serviceProviderName")
         user_id=request.headers["x-user-id"]
         userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
-        print(" userinferenceApiKey ",userinferenceApiKey)
+        print("useringerenceKey: ", userinferenceApiKey)
+
         dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_fetchall_for_dhruva("decrypt_headers")
-        
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
         return res.getdhruvaresults(), dhruva_result_status_code
 
@@ -681,6 +681,7 @@ class FetchGlossary(Resource):
         serviceProviderName = request.args.get("serviceProviderName")
         user_id=request.headers["x-user-id"]
         userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
         if not userinferenceApiKey:
             return post_error("400", "Couldn't find the user inference api Key", None), 400
         api_dict = {"api-key":userinferenceApiKey}
