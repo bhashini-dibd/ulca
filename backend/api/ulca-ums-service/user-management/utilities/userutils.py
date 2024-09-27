@@ -942,6 +942,9 @@ class UserUtils:
     @staticmethod
     def send_fetch_req_for_dhruva(auth_headers):
         #body = {"apiKey":infKey}
+        print("*********************************************")
+        print("Headers: ", auth_headers)
+        print("*********************************************")         
         result = requests.get(url=BHAHSINI_GLOSSARY_FETCH_URL,  headers=auth_headers)
         print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
         return result.json(), result.status_code
