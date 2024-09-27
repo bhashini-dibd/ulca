@@ -567,7 +567,6 @@ class FetchSpeaker(Resource):
         serviceProviderName = request.args.get("serviceProviderName")
         user_id=request.headers["x-user-id"]
         userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
-
         print("useringerenceKey: ", userinferenceApiKey)
 
         dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_fetchall_for_dhruva("decrypt_headers")
