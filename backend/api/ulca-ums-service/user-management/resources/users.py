@@ -459,22 +459,8 @@ class EnrollSpeaker(Resource):
             return post_error("400", "Couldn't find the user inference api Key", None), 400
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
-        if pipelineID and isinstance(pipelineID,dict):
-            masterList = []
-        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
-            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
-            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
-            masterList.append(masterkeyname)
-            masterList.append(masterkeyvalue)
-        else:
-            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
-        log.info(f"master api keys {masterList}")
     
-        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        if decrypt_headers:
-            decrypt_headers.update(api_dict)
-            log.info(f"decrypt_headers {decrypt_headers}")
-        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_enroll_for_dhruva(decrypt_headers, body)
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_enroll_for_dhruva(userinferenceApiKey, body)
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
         return res.getdhruvaresults(), dhruva_result_status_code
 class VerifySpeaker(Resource):
@@ -500,22 +486,8 @@ class VerifySpeaker(Resource):
             return post_error("400", "Couldn't find the user inference api Key", None), 400
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
-        if pipelineID and isinstance(pipelineID,dict):
-            masterList = []
-        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
-            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
-            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
-            masterList.append(masterkeyname)
-            masterList.append(masterkeyvalue)
-        else:
-            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
-        log.info(f"master api keys {masterList}")
-    
-        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        if decrypt_headers:
-            decrypt_headers.update(api_dict)
-            log.info(f"decrypt_headers {decrypt_headers}")
-        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_verify_for_dhruva(decrypt_headers, body)
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_verify_for_dhruva(userinferenceApiKey, body)
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
         return res.getdhruvaresults(), dhruva_result_status_code
 
@@ -542,35 +514,36 @@ class DeleteSpeaker(Resource):
             return post_error("400", "Couldn't find the user inference api Key", None), 400
         log.info(f"pipelineID {pipelineID}")
         log.info(f"userinferenceApiKey {userinferenceApiKey}")
-        if pipelineID and isinstance(pipelineID,dict):
-            masterList = []
-        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
-            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
-            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
-            masterList.append(masterkeyname)
-            masterList.append(masterkeyvalue)
-        else:
-            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
-        log.info(f"master api keys {masterList}")
-    
-        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
-        if decrypt_headers:
-            decrypt_headers.update(api_dict)
-            log.info(f"decrypt_headers {decrypt_headers}")
-        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_delete_for_dhruva(decrypt_headers, body)
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_delete_for_dhruva(userinferenceApiKey, body)
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
         return res.getdhruvaresults(), dhruva_result_status_code
 
 class FetchSpeaker(Resource):
     def get(self): 
+        user_id=request.headers["x-user-id"]
+        body = request.get_json()
+
         appName = request.args.get("appName")
         serviceProviderName = request.args.get("serviceProviderName")
-        user_id=request.headers["x-user-id"]
-        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
 
-        print("useringerenceKey: ", userinferenceApiKey)
 
-        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_fetchall_for_dhruva("decrypt_headers")
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400 
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_fetchall_for_dhruva(userinferenceApiKey)
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
         return res.getdhruvaresults(), dhruva_result_status_code
 
