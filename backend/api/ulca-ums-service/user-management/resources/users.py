@@ -563,7 +563,11 @@ class DeleteSpeaker(Resource):
 
 class FetchSpeaker(Resource):
     def get(self): 
- 
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+        user_id=request.headers["x-user-id"]
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print(" userinferenceApiKey ",userinferenceApiKey)
         dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_fetchall_for_dhruva("decrypt_headers")
         
         res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
