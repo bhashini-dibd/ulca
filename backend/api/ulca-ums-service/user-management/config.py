@@ -71,7 +71,7 @@ BHAHSINI_GLOSSARY_CREATE_URL = os.environ.get('DHRUVA_GLOSSARY_CREATE_ENDPOINT',
 BHAHSINI_GLOSSARY_FETCH_URL = os.environ.get('DHRUVA_GLOSSARY_FETCH_ENDPOINT',"https://dhruva-api.bhashini.gov.in/services/glossary/v1/fetch-all")
 BHAHSINI_GLOSSARY_DELETE_URL = os.environ.get('DHRUVA_GLOSSARY_DELETE_ENDPOINT',"https://dhruva-api.bhashini.gov.in/services/glossary/v1/delete")
 
-BHAHSINI_SPEAKER_ENROLL_CREATE_URL = os.environ.get('DHRUVA_SPEAKER_ENROLL_ENDPOINT',"https://app-svc-dhruva-dev-cin-001-evf4h9adfdb9eyd2.centralindia-01.azurewebsites.net/services/inference/pipeline")
-BHAHSINI_SPEAKER_VERIFICATION_URL = os.environ.get('DHRUVA_SPEAKER_VERIFICATION_ENDPOINT',"https://app-svc-dhruva-dev-cin-001-evf4h9adfdb9eyd2.centralindia-01.azurewebsites.net/services/inference/pipeline")
-BHAHSINI_SPEAKER_DELETE_URL = os.environ.get('DHRUVA_SPEAKER_DELETE_ENDPOINT',"https://app-svc-dhruva-dev-cin-001-evf4h9adfdb9eyd2.centralindia-01.azurewebsites.net/services/inference/speakers/delete")
-BHAHSINI_SPEAKER_FETCH_URL = os.environ.get('DHRUVA_SPEAKER_FETCH_ENDPOINT',"https://app-svc-dhruva-dev-cin-001-evf4h9adfdb9eyd2.centralindia-01.azurewebsites.net/services/inference/speakers/list")
+BHAHSINI_SPEAKER_ENROLL_CREATE_URL = os.environ.get('DHRUVA_SPEAKER_ENROLL_ENDPOINT',"https://dhruva-api.bhashini.gov.in/services/inference/pipeline")
+BHAHSINI_SPEAKER_VERIFICATION_URL = os.environ.get('DHRUVA_SPEAKER_VERIFICATION_ENDPOINT',"https://dhruva-api.bhashini.gov.in/services/inference/pipeline")
+BHAHSINI_SPEAKER_DELETE_URL = os.environ.get('DHRUVA_SPEAKER_DELETE_ENDPOINT',"https://dhruva-api.bhashini.gov.in/services/inference/speakers/delete")
+BHAHSINI_SPEAKER_FETCH_URL = os.environ.get('DHRUVA_SPEAKER_FETCH_ENDPOINT',"https://dhruva-api.bhashini.gov.in/services/inference/speakers/list")
