@@ -70,13 +70,6 @@ public class ModelController {
 		return modelService.getModelByModelId(modelId);
 	}
 	
-	@GetMapping("/getModelTest")
-	public ModelListResponseDto getModelTest(@RequestParam(required = true) String modelId) {
-
-		log.info("******** Entry ModelController:: getModelTest *******");
-		return modelService.getModelByModelId(modelId);
-	}
-
 	@PostMapping("/upload")
 	public UploadModelResponse uploadModel(@RequestParam("file") MultipartFile file,
 			@RequestParam(required = true) String userId) throws Exception {
