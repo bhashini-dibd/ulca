@@ -13,7 +13,7 @@ export default class DeleteSpeakerApi extends API {
     this.serviceProviderName = serviceProviderName;
     this.selectedData = selectedData;
    
-    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.deleteSpeakerData}`;
+    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.deleteSpeakerData}?appName=${appName}&serviceProviderName=${serviceProviderName}`;
   } 
 
   processResponse(res) {
@@ -28,12 +28,13 @@ export default class DeleteSpeakerApi extends API {
   }
 
   getBody() {
-    return {
-        // userID: JSON.parse(localStorage.getItem("userDetails")).userID,
-        appName:this.appName,
-        serviceProviderName: this.serviceProviderName,
-        glossary: this.selectedData
-    };
+
+    const payload = {
+      config : {
+        speakerId : this.selectedData,
+      }
+    }
+    return payload;
   }
 
   getHeaders() {

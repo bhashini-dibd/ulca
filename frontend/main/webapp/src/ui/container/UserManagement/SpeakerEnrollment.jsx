@@ -52,6 +52,7 @@ import addImg from '../../../assets/glossary/add.svg';
 
 import FileUpload from "./FileUpload";
 import DeleteSpeakerApi from "../../../redux/actions/api/UserManagement/DeleteSpeaker";
+import FetchSpeakerDetailsApi from "../../../redux/actions/api/UserManagement/FetchSpeakerDetails";
 
 const styles = {
   bannerContainer: {
@@ -108,31 +109,6 @@ const styles = {
 
 
 
-  const languages = [
-    { "code": "as", "label": "Assamese" },
-    { "code": "bn", "label": "Bengali" },
-    { "code": "brx", "label": "Bodo" },
-    { "code": "doi", "label": "Dogri" },
-    { "code": "en", "label": "English" },
-    { "code": "gom", "label": "Goan Konkani" },
-    { "code": "gu", "label": "Gujarati" },
-    { "code": "hi", "label": "Hindi" },
-    { "code": "kn", "label": "Kannada" },
-    { "code": "ks", "label": "Kashmiri" },
-    { "code": "mai", "label": "Maithili" },
-    { "code": "ml", "label": "Malayalam" },
-    { "code": "mni", "label": "Manipuri" },
-    { "code": "mr", "label": "Marathi" },
-    { "code": "ne", "label": "Nepali" },
-    { "code": "or", "label": "Odia" },
-    { "code": "pa", "label": "Punjabi" },
-    { "code": "sa", "label": "Sanskrit" },
-    { "code": "sat", "label": "Santali" },
-    { "code": "sd", "label": "Sindhi" },
-    { "code": "ta", "label": "Tamil" },
-    { "code": "te", "label": "Telugu" },
-    { "code": "ur", "label": "Urdu" }
-  ];
   
 
 const SpeakerEnrollment = (props) => {
@@ -142,24 +118,26 @@ const SpeakerEnrollment = (props) => {
   const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
   const [searchKey, setSearchKey] = useState("");
   const [loading, setLoading] = useState(false);
-  const AppGlossaryData = useSelector((state)=>state?.getGlossaryData?.glossaryData);
-  const [tableData, setTableData] = useState(AppGlossaryData || []);
+  const AppSpeakerData = useSelector((state)=>state?.getSpeakerData?.speakerData?.speakers);
+  const apiStatus = useSelector((state) => state.apiStatus);
+  
+  const [tableData, setTableData] = useState(AppSpeakerData || []);
   // const [filteredData, setFilteredData] = useState(initialData); // State for filtered data
   const [searchText, setSearchText] = useState('');
-  const [modal, setModal] = useState(false);
-  const [text, setText] = useState("");
-  const [debouncedText, setDebouncedText] = useState("");
-  const debouncedTextRef = useRef("");
-  const newKeystrokesRef = useRef(null)
-  const keystrokesRef = useRef(null)
-  const suggestionRef = useRef([null]);
-  const [prev, setprev] = useState(false);
-  const [formState, setFormState] = useState({
-    sourceLanguage: '',
-    targetLanguage: '',
-    sourceText: '',
-    targetText: '',
-  });
+  // const [modal, setModal] = useState(false);
+  // const [text, setText] = useState("");
+  // const [debouncedText, setDebouncedText] = useState("");
+  // const debouncedTextRef = useRef("");
+  // const newKeystrokesRef = useRef(null)
+  // const keystrokesRef = useRef(null)
+  // const suggestionRef = useRef([null]);
+  // const [prev, setprev] = useState(false);
+  // const [formState, setFormState] = useState({
+  //   sourceLanguage: '',
+  //   targetLanguage: '',
+  //   sourceText: '',
+  //   targetText: '',
+  // });
   const UserDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [selectedFile, setSelectedFile] = useState(null);
   const [inputValue, setInputValue] = useState('');
@@ -172,8 +150,8 @@ const SpeakerEnrollment = (props) => {
     const [open, setOpen] = useState(false);
 
   const location = useLocation();
-  const { serviceProviderName, inferenceApiKey, appName,UlcaApiKey} = location.state || {};
-  // console.log(UserDetails?.userID,serviceProviderName, inferenceApiKey, appName,UlcaApiKey,"neeww");
+  const { serviceProviderName, appName,UlcaApiKey} = location.state || {};
+  console.log(appName,serviceProviderName,"neeww");
 //   useEffect(() => {
 //     if (apiKeys) {
 //       setTableData(apiKeys);
@@ -187,6 +165,10 @@ const [openDeleteBox, setOpenDeleteBox] = useState(false);
 const [deletePopupdata, setDeletePopupData] = useState(null)
 const [base64Audio, setBase64Audio] = useState('');
 const [base64Recording, setBase64Recording] = useState('');
+const [fetchUserId, setFetchUserId] = useState('');
+const [enrollmentSuccess, setEnrollmentSuccess] = useState(false)
+const [deletePopupLoading, setDeletePopupLoading] = useState(false)
+
 
 const handleUploadDialogOpen = () => {
   setUploadDialogOpen(true);
@@ -198,13 +180,15 @@ const handleSpeakerEnrollmentClose = () => {
   setAudioURL('')
   setBase64Audio('')
   setInputValue('')
+  setEnrollmentSuccess(false)
 };
 
 const handleVerifyGlobalDialogOpen = () => {
   setExportDialogOpen(true);
 };
 
-const handleVerifyLocalDialogOpen = () => {
+const handleVerifyLocalDialogOpen = (value) => {
+  setFetchUserId(value?.[0])
   setLocalVerifyOpenDialog(true);
 };
 
@@ -223,7 +207,7 @@ const handleSpeakerVerificationClose = () => {
 const handleUpload = (file) => {
   // Handle file upload logic here
   console.log('Uploading file:', file);
-  handleSpeakerEnrollmentClose();
+  // handleSpeakerEnrollmentClose();
 };
 
 const handleExport = (file) => {
@@ -243,11 +227,11 @@ const handleExport = (file) => {
   }, []);
 
   useEffect(() => {
-    setTableData(AppGlossaryData);
-  }, [AppGlossaryData]);
+    setTableData(AppSpeakerData);
+  }, [AppSpeakerData]);
 
   useEffect(() => {
-    const filtered = AppGlossaryData.filter((row) => row.sourceText.toLowerCase().includes(searchText.toLowerCase()));
+    const filtered = AppSpeakerData?.filter((row) => row?.speakerName.toLowerCase().includes(searchText.toLowerCase()));
     setTableData(filtered);
   }, [searchText]);
 
@@ -258,14 +242,14 @@ const handleExport = (file) => {
   };
 
  
-  const getApiGlossaryData = async () => {
-    const apiObj = new FetchGlossaryDetails(appName,serviceProviderName);
-    // const apiObj = new FetchSpeakerDetailsApi(appName,serviceProviderName);
+  const getApiSpeakerData = async () => {
+    // const apiObj = new FetchGlossaryDetails(appName,serviceProviderName);
+    const apiObj = new FetchSpeakerDetailsApi(appName,serviceProviderName);
     dispatch(APITransport(apiObj));
   };
 
   useEffect(() => {
-    getApiGlossaryData();
+    getApiSpeakerData();
   }, []);
 
 
@@ -362,9 +346,7 @@ const handleExport = (file) => {
             size="small"
             variant="outlined"
             className={classes.ButtonRefreshMobile}
-            // onClick={() => {
-            //   setModal(true);
-            // }}
+            onClick={handleUploadDialogOpen}
             style={{ height: "37px" }}
           >
             {" "}
@@ -375,9 +357,7 @@ const handleExport = (file) => {
             size="small"
             variant="outlined"
             // className={classes.ButtonRefreshMobile}
-            // onClick={() => {
-            //   setModal(true);
-            // }}
+            onClick={handleVerifyGlobalDialogOpen}
             style={{ height: "37px" }}
           >
             {" "}
@@ -390,71 +370,71 @@ const handleExport = (file) => {
 
 
 
-  const handleSubmit = async(event) => {
-    event.preventDefault();
-    console.log('Form Data:', formState);
-    setLoading(true);
-    const apiObj = new AddGlossaryDataApi(appName,serviceProviderName,formState);
-    // dispatch(APITransport(apiObj));
-    // // getApiGlossaryData()
-    // setTimeout(() => {
+  // const handleSubmit = async(event) => {
+  //   event.preventDefault();
+  //   console.log('Form Data:', formState);
+  //   setLoading(true);
+  //   const apiObj = new AddGlossaryDataApi(appName,serviceProviderName,formState);
+  //   // dispatch(APITransport(apiObj));
+  //   // // getApiGlossaryData()
+  //   // setTimeout(() => {
 
-    //   getApiGlossaryData() 
-    //   setSnackbarInfo({
-    //     open: true,
-    //     message: "Glossary Added Successfully",
-    //     variant: "success",
-    //     }); 
-    //   window.location.reload()
-    //   },2500)
-    // setModal(false)
-    // setFormState({
-    //   sourceLanguage: '',
-    //   targetLanguage: '',
-    //   sourceText: '',
-    //   targetText: '',
-    // })
-    const res = await fetch(apiObj.apiEndPoint(), {
-      method: "POST",
-      headers: apiObj.getHeaders().headers,
-      body: JSON.stringify(apiObj.getBody()),
-    });
+  //   //   getApiGlossaryData() 
+  //   //   setSnackbarInfo({
+  //   //     open: true,
+  //   //     message: "Glossary Added Successfully",
+  //   //     variant: "success",
+  //   //     }); 
+  //   //   window.location.reload()
+  //   //   },2500)
+  //   // setModal(false)
+  //   // setFormState({
+  //   //   sourceLanguage: '',
+  //   //   targetLanguage: '',
+  //   //   sourceText: '',
+  //   //   targetText: '',
+  //   // })
+  //   const res = await fetch(apiObj.apiEndPoint(), {
+  //     method: "POST",
+  //     headers: apiObj.getHeaders().headers,
+  //     body: JSON.stringify(apiObj.getBody()),
+  //   });
 
-    const resp = await res.json();
-    if (res.ok) {
-      // setSnackbarInfo({
-      //   open: true,
-      //   message: resp?.message,
-      //   variant: "success",
-      // });
-      setTimeout(() => {
+  //   const resp = await res.json();
+  //   if (res.ok) {
+  //     // setSnackbarInfo({
+  //     //   open: true,
+  //     //   message: resp?.message,
+  //     //   variant: "success",
+  //     // });
+  //     setTimeout(() => {
 
-      getApiGlossaryData() 
-      setSnackbarInfo({
-        open: true,
-        message: resp?.message,
-        variant: "success",
-        }); 
-      // window.location.reload()
-      },1500)
-    setModal(false)
-    setFormState({
-      sourceLanguage: '',
-      targetLanguage: '',
-      sourceText: '',
-      targetText: '',
-    })
-      setLoading(false);
-    } else {
-      setSnackbarInfo({
-        open: true,
-        message: resp?.message,
-        variant: "error",
-      });
+  //     getApiGlossaryData() 
+  //     setSnackbarInfo({
+  //       open: true,
+  //       message: resp?.message,
+  //       variant: "success",
+  //       }); 
+  //     // window.location.reload()
+  //     },1500)
+  //   setModal(false)
+  //   setFormState({
+  //     sourceLanguage: '',
+  //     targetLanguage: '',
+  //     sourceText: '',
+  //     targetText: '',
+  //   })
+  //     setLoading(false);
+  //   } else {
+  //     setSnackbarInfo({
+  //       open: true,
+  //       message: resp?.message,
+  //       variant: "error",
+  //     });
 
-      setLoading(false);
-    }
-  };
+  //     setLoading(false);
+  //   }
+  // };
 
  
 
@@ -464,20 +444,45 @@ const handleExport = (file) => {
     };
   
     // Function to handle confirm deletion
-    const handleDeleteConfirm = () => {
+    const handleDeleteConfirm = async() => {
       // Handle delete logic here
-      console.log(`Deleting Speaker ID: $1111`, deletePopupdata);
-      const apiObj = new DeleteSpeakerApi(appName,serviceProviderName);
-      dispatch(APITransport(apiObj));
-      setTimeout(() => {
-        getApiGlossaryData() 
-        // setSnackbarInfo({
-        //   open: true,
-        //   message: "Speaker Deleted Successfully",
-        //   variant: "success",
-        // });  
+      console.log(`Deleting Speaker ID: $1111`, deletePopupdata[0]);
+      setDeletePopupLoading(false)
+      const apiObj = new DeleteSpeakerApi(appName,serviceProviderName,deletePopupdata[0]);
+      // dispatch(APITransport(apiObj));
+      const res = await fetch(apiObj.apiEndPoint(), {
+        method: "DELETE",
+        headers: apiObj.getHeaders().headers,
+        body: JSON.stringify(apiObj.getBody()),
+      });
+      // dispatch(APITransport(apiObj));
+      const resp = await res.json();
+      if (res.ok) {
+        dispatch({
+          type: "DELETE_SPEAKER_DATA",
+          payload: resp, // assuming the response has the enrollment data
+        });
+  
+        setDeletePopupLoading(false)
         setOpenDeleteBox(false);
-      },1500)
+        // setInputValue('')
+        // setTimeout(() => {
+        //   setEnrollmentSuccess(false)
+        //   setInputValue('')
+        // }, 3000)
+      } else {
+        setSnackbarInfo({
+          open: true,
+          message: resp?.message,
+          variant: "error",
+        });
+  
+  
+        setDeletePopupLoading(false)
+  
+    
+    }
+      
     };
 
   const getMuiTheme = () =>
@@ -578,7 +583,7 @@ const handleExport = (file) => {
         print: false,
         viewColumns: false,
         rowsPerPageOptions: false,
-        selectableRows: 'multiple',
+        selectableRows: false,
         selectableRowsOnClick: false,
         fixedHeader: false,
         download: false,
@@ -642,14 +647,14 @@ const handleExport = (file) => {
             sort: true,
           }
         },
-        {
-          name: "audio_file",
-          label: "Audio File",
-          options: {
-            filter: true,
-            sort: true,
-          }
-        },
+        // {
+        //   name: "audio_file",
+        //   label: "Audio File",
+        //   options: {
+        //     filter: true,
+        //     sort: true,
+        //   }
+        // },
         
         
         {
@@ -680,7 +685,7 @@ const handleExport = (file) => {
               // >
                 <Box style={{display:"flex", gap:"10px"}}>
 
-                <Button variant="outlined" style={{border:"1px solid #2947A3", color:"#2947A3"}} onClick={handleVerifyLocalDialogOpen}>Verify</Button>
+                <Button variant="outlined" style={{border:"1px solid #2947A3", color:"#2947A3"}} onClick={() => handleVerifyLocalDialogOpen(tableMeta.rowData)}>Verify</Button>
                 <Button variant="outlined" style={{border:"1px solid #626262", color:"#626262"}}  
                 onClick={() => handleDeletePopupModal(tableMeta.rowData)}>Delete</Button>
                 {/* <img src={Delete} alt="delete img"/> */}
@@ -747,10 +752,8 @@ const handleExport = (file) => {
         //   title={"Glossary List"}
           data={ tableData?.map(row => [
             // row.checkbox,
-            row?.sourceText,
-            row?.targetText,
-            row?.sourceLanguage,
-            row?.targetLanguage,
+            row?.speakerId,
+            row?.speakerName,
             row?.action
           ])}
           columns={columns}
@@ -777,6 +780,14 @@ const handleExport = (file) => {
         setBase64Audio={setBase64Audio}
         base64Recording={base64Recording}
         setBase64Recording={setBase64Recording}
+        serviceProviderName={serviceProviderName}
+        appName={appName}
+        fetchUserId={fetchUserId}
+        setSnackbarInfo={setSnackbarInfo}
+        getApiSpeakerData={getApiSpeakerData}
+        handleVerifyGlobalDialogOpen={handleVerifyGlobalDialogOpen}
+        setEnrollmentSuccess={setEnrollmentSuccess}
+        enrollmentSuccess={enrollmentSuccess}
       />
       <FileUpload
         open={exportDialogOpen}
@@ -797,6 +808,14 @@ const handleExport = (file) => {
         setBase64Audio={setBase64Audio}
         base64Recording={base64Recording}
         setBase64Recording={setBase64Recording}
+        serviceProviderName={serviceProviderName}
+        appName={appName}
+        fetchUserId={fetchUserId}
+        setSnackbarInfo={setSnackbarInfo}
+        getApiSpeakerData={getApiSpeakerData}
+        handleVerifyGlobalDialogOpen={handleVerifyGlobalDialogOpen}
+        setEnrollmentSuccess={setEnrollmentSuccess}
+        enrollmentSuccess={enrollmentSuccess}
       />
        <FileUpload
         open={LocalVerifyOpenDialog}
@@ -817,6 +836,14 @@ const handleExport = (file) => {
         setBase64Audio={setBase64Audio}
         base64Recording={base64Recording}
         setBase64Recording={setBase64Recording}
+        serviceProviderName={serviceProviderName}
+        appName={appName}
+        fetchUserId={fetchUserId}
+        setSnackbarInfo={setSnackbarInfo}
+        getApiSpeakerData={getApiSpeakerData}
+        handleVerifyGlobalDialogOpen={handleVerifyGlobalDialogOpen}
+        setEnrollmentSuccess={setEnrollmentSuccess}
+        enrollmentSuccess={enrollmentSuccess}
       />
 
 <Dialog
@@ -830,16 +857,16 @@ const handleExport = (file) => {
       {/* Dialog title */}
       <DialogTitle id="delete-dialog-title" >
         <Box style={{ display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
-      <Typography variant="h6" fontweight={600} style={{color:"black"}}> Delete</Typography>
-      <Typography variant="h6" fontweight={600} style={{color:"black"}}> X</Typography>
+      <Typography variant="h5" fontweight={600}  fontFamily="Noto-Regular" style={{color:"black"}}> Delete</Typography>
+      {/* <Typography variant="h6" fontweight={600} style={{color:"black"}}> X</Typography> */}
           </Box>
       </DialogTitle>
       
       {/* Dialog content */}
       <DialogContent>
         <DialogContentText id="delete-dialog-description">
-          <Typography variant="h6" fontweight={600} style={{color:"black"}}> Are you sure you want to delete?</Typography>
-          <Typography variant="body2" marginTop={1}>You are deleting the Speaker Id #1111 entry, and this action cannot be undone.</Typography>
+          <Typography variant="h6" fontweight={600}  fontFamily="Noto-Regular" style={{color:"black"}}> Are you sure you want to delete?</Typography>
+          <Typography variant="body2"  fontFamily="Noto-Regular" style={{marginTop:"10px"}}>You are deleting the Speaker Id <span style={{fontWeight:"bold", padding:"0px 3px"}}> {deletePopupdata?.[0]} </span> entry, and this action cannot be undone</Typography>
           
         </DialogContentText>
       </DialogContent>
@@ -852,7 +879,7 @@ const handleExport = (file) => {
         </Button>
         {/* Delete button */}
         <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-          Delete
+        {deletePopupLoading && <CircularProgress color="secondary" size={24} style={{ marginRight: "10px" }} />} Delete
         </Button>
       </DialogActions>
     </Dialog>

@@ -34,6 +34,8 @@ import getModelHealthCheckStatus from './Model/ModelView/ModalStatusCheck';
 import getApiKeys from './UserManagement/getApiKeys';
 import getGlossaryData from "./UserManagement/getGlossaryData";
 import getSpeakerData from "./UserManagement/getSpeakerData";
+import enrolledSpeakerData from "./UserManagement/EnrollSpeakerData";
+import verifySpeakerData from "./UserManagement/VerifySpeakerData";
 
 const index = {
   apiStatus,
@@ -72,6 +74,8 @@ const index = {
   getApiKeys,
   getGlossaryData,
   getSpeakerData,
+  enrolledSpeakerData,
+  verifySpeakerData,
 };
 
 export default index;

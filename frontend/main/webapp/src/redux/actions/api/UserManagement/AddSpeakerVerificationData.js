@@ -5,7 +5,6 @@ import C from "../../constants";
 
 export default class AddSpeakerVerificationDataApi extends API {
   constructor(appName,serviceProviderName,base64Audio, base64Recording, url, inputValue,timeout = 2000) {
-    console.log(base64Audio,"hell");
     
     super("POST", timeout, false);
     this.type = C.VERIFY_SPEAKER_DATA;
@@ -18,13 +17,13 @@ export default class AddSpeakerVerificationDataApi extends API {
     this.url = url;
     this.inputValue = inputValue;
 
-    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.verifySpeakerData}`;
+    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.verifySpeakerData}?appName=${appName}&serviceProviderName=${serviceProviderName}`;
   } 
 
   processResponse(res) {
     super.processResponse(res);
     if (res) {
-      this.report = res.data;
+      this.report = res;
     }
   }
 
@@ -33,28 +32,43 @@ export default class AddSpeakerVerificationDataApi extends API {
   }
 
   getBody() {
+    // const payload = {
+    //   config: {
+    //     serviceId: "bhashini/iitdharwad/speaker-enrollment",
+    //     speakerId: this.inputValue,
+    //     preProcessors: ["vad", "denoiser"],
+    //   },
+    //   audio: [],
+    // };
     const payload = {
-      config: {
-        serviceId: "bhashini/iitdharwad/speaker-enrollment",
-        speakerId: this.inputValue,
-        preProcessors: ["vad", "denoiser"],
+      pipelineTasks: [
+        {
+          taskType: "speaker-verification",
+          config: {
+            serviceId: "bhashini/iitdharwad/speaker-verification",
+            speakerName: this.inputValue || '', // The name captured from the input
+            preProcessors: ["vad", "denoiser"],
+          },
+        },
+      ],
+      inputData: {
+        audio: [],
       },
-      audio: [],
     };
   
     if (this.base64Audio) {
       // If base64Recording exists, use it
-      payload.audio.push({
+      payload.inputData.audio.push({
         audioContent: this.base64Audio,
       });
     } else if (this.base64Recording) {
       // If base64Recording exists and base64Recording does not, use it
-      payload.audio.push({
+      payload.inputData.audio.push({
         audioContent: this.base64Recording.split("base64,")[1],
       });
     } else if (this.url.startsWith("http") || this.url.startsWith("https")) {
       // If the input is a URL, set the key to audioUri
-      payload.audio.push({
+      payload.inputData.audio.push({
         audioUri: this.url,
       });
     }

@@ -14,7 +14,7 @@ export default class FetchSpeakerDetailsApi extends API {
   processResponse(res) {
     super.processResponse(res);
     if (res) {
-      this.report = res.glossary;
+      this.report = res;
     }
   }
 

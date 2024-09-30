@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, Button, Grid, Typography, Box, IconButton } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, Button, Grid, Typography, Box, IconButton, CircularProgress } from '@material-ui/core';
 import { CloudUpload as CloudUploadIcon } from '@material-ui/icons';
 import uploadImg from '../../../assets/glossary/upload.svg';
 import recording from '../../../assets/recording.svg';
@@ -12,7 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import AddSpeakerEnrollmentDataApi from '../../../redux/actions/api/UserManagement/AddSpeakerEnrollmentData';
 import APITransport from "../../../redux/actions/apitransport/apitransport";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AddSpeakerVerificationDataApi from '../../../redux/actions/api/UserManagement/AddSpeakerVerificationData';
 const useStyles = makeStyles({
   dividerLine: {
@@ -33,13 +33,19 @@ const useStyles = makeStyles({
 
 
 
-const FileUpload = ({ open, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL,base64Audio,setBase64Audio, base64Recording,setBase64Recording }) => {
+const FileUpload = ({ open, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL,base64Audio,setBase64Audio, base64Recording,setBase64Recording,serviceProviderName,appName,fetchUserId,setSnackbarInfo,getApiSpeakerData,handleVerifyGlobalDialogOpen,enrollmentSuccess, setEnrollmentSuccess}) => {
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [hover, setHover] = useState(false);
   const [url, setUrl] = useState('');
   const [successState,setSuccessState] = useState(false)
+  const [enrollmentLoading,setEnrollmentLoading] = useState(false)
+  const [verifyLoading,setVerifyLoading] = useState(false)
+  const EnrolledSpeakerData = useSelector((state)=>state?.enrolledSpeakerData?.enrolledData?.pipelineResponse?.[0]?.output?.[0]?.speakerId);
+  const VerifiedSpeakerData = useSelector((state)=>state?.verifySpeakerData?.verifyData);
+  console.log(VerifiedSpeakerData,"EnrolledSpeakerData");
+  
   const mediaRecorderRef = useRef(null);
   
   const classes = useStyles();
@@ -102,29 +108,92 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
     setDragging(false);
   };
 
-  const handleSpeakerEnrollmentButtonClick = () => {
-    handleAction(selectedFile);
-    const apiObj = new AddSpeakerEnrollmentDataApi("hr","jj",base64Audio, base64Recording, url, inputValue,);
-    dispatch(APITransport(apiObj));
 
-    setTimeout(() => {
-      setSelectedFile(null);
-    setBase64Audio('');
-    setBase64Recording('')
-    }, 3000)
-    
+  const handleSpeakerEnrollmentButtonClick = async() => {
+    // handleAction(selectedFile);
+    setEnrollmentLoading(true)
+    const apiObj = new AddSpeakerEnrollmentDataApi(appName,serviceProviderName,base64Audio, base64Recording, url, inputValue);
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+    // dispatch(APITransport(apiObj));
+    const resp = await res.json();
+    if (res.ok) {
+      dispatch({
+        type: "ENROLL_SPEAKER_DATA",
+        payload: resp, // assuming the response has the enrollment data
+      });
+      getApiSpeakerData()
+      setEnrollmentSuccess(true)
+      setEnrollmentLoading(false);
+      setSelectedFile(null)
+      setAudioURL('')
+      setBase64Audio('')
+      // setInputValue('')
+      // setTimeout(() => {
+      //   setEnrollmentSuccess(false)
+      //   setInputValue('')
+      // }, 3000)
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+
+
+      setEnrollmentLoading(false);
+
+  
+  }
   };
 
-  const handleSpeakerVerificationButtonClick = () => {
-    handleAction(selectedFile);
-    const apiObj = new AddSpeakerVerificationDataApi("hr","jj",base64Audio, base64Recording, url, "11111",);
-    dispatch(APITransport(apiObj));
+  const handleSpeakerVerificationButtonClick = async() => {
+    // handleAction(selectedFile);
+    setVerifyLoading(true)
+    const apiObj = new AddSpeakerVerificationDataApi(appName,serviceProviderName,base64Audio, base64Recording, url, fetchUserId);
+    // dispatch(APITransport(apiObj));
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    });
+    // dispatch(APITransport(apiObj));
+    const resp = await res.json();
+    if (res.ok) {
+      dispatch({
+        type: "VERIFY_SPEAKER_DATA",
+        payload: resp, // assuming the response has the enrollment data
+      });
 
-    setTimeout(() => {
-      setSelectedFile(null);
-    setBase64Audio('');
-    setBase64Recording('')
-    }, 3000)
+      setVerifyLoading(false)
+      setSelectedFile(null)
+      setAudioURL('')
+      setBase64Audio('')
+      // setInputValue('')
+      // setTimeout(() => {
+      //   setEnrollmentSuccess(false)
+      //   setInputValue('')
+      // }, 3000)
+    } else {
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+
+
+      setVerifyLoading(false)
+
+  
+  }
+    // setTimeout(() => {
+    //   setSelectedFile(null);
+    // setBase64Audio('');
+    // setBase64Recording('')
+    // }, 3000)
     
   };
 
@@ -203,7 +272,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-       {successState ? <Grid>
+       {enrollmentSuccess ? <Grid>
          {/* Close button in the top-right corner */}
       <IconButton
         style={{
@@ -220,7 +289,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
       <DialogContent style={{ textAlign: 'center', padding: '24px' }}>
         <CheckCircleIcon style={{ fontSize: '50px', color: '#4caf50', marginBottom: '10px' }} />
         <Typography style={{ color: 'green', fontWeight: 'bold', marginBottom: '8px' }}>
-          Speaker ID: #1111 | Speaker Name: Aamir
+          Speaker ID: {EnrolledSpeakerData} | Speaker Name: {inputValue}
         </Typography>
 
         <Typography variant="h6" gutterBottom>
@@ -229,7 +298,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
 
         <Typography variant="body2">
           You can verify speaker using{' '}
-          <Button color="primary" /* onClick={onVerify} */ style={{ textTransform: 'none' }}>
+          <Button color="primary"  onClick={handleVerifyGlobalDialogOpen}  style={{ textTransform: 'none' }}>
             "Verify Speaker"
           </Button>
           .
@@ -250,7 +319,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
           <input
                 type="text"
                style={{width:"100%",height:"40px", marginTop:"5px", marginBottom:"15px"}}
-                value='1111'
+                value={fetchUserId}
                 disabled
               />
           </Grid>}
@@ -397,7 +466,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
                 onChange={handleInputChange}
               />
           </Grid>}
-          <Grid item style={{display:"flex", justifyContent:"space-between"}}>
+         {(VerifiedSpeakerData?.length === 0 || value === 'none' || title === "Speaker Enrolllment")? <Grid item style={{display:"flex", justifyContent:"space-between"}}>
             <Button
               variant="contained"
               color="secondary"
@@ -414,9 +483,26 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
               disabled={isSubmitDisabled}
               style={{padding:"12px 20px", borderRadius:"5px"}}
             >
-              {buttonText}
+              {(enrollmentLoading || verifyLoading) && <CircularProgress color="secondary" size={24} style={{ marginRight: "10px" }} />}{buttonText}
             </Button>
-          </Grid>
+          </Grid> :
+           <Grid item style={{marginTop:"20px"}}>
+            <Typography fontWeight={600} fontFamily="Noto-Bold" style={{color:"#11AF22"}}>{VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.message}</Typography>
+            <Typography fontWeight={500}  fontFamily="Noto-Regular" style={{marginTop:"10px",fontSize:"16px"}}>ID: {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerId} | ajay | Confidence : {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.confidence}%</Typography>
+            <Grid item style={{display:"flex", justifyContent:"end", marginTop:"35px"}}>
+
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleClose}
+              // style={{backgroundColor:"lightGray"}}
+             
+            >
+              Cancel
+            </Button>
+            </Grid>
+           
+          </Grid>}
         </Grid>
       </DialogContent>
       </>
