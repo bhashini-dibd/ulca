@@ -982,6 +982,6 @@ class UserUtils:
         'Authorization': userinferenceApiKey,
         'Content-Type': 'application/json'
         }
-        result = requests.post(url=BHAHSINI_SPEAKER_DELETE_URL, json=request_body, headers=headers)
+        result = requests.delete(url=BHAHSINI_SPEAKER_DELETE_URL, json=request_body, headers=headers)
         return result.json(), result.status_code
         
