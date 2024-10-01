@@ -31,7 +31,7 @@ export default class DeleteSpeakerApi extends API {
 
     const payload = {
       config : {
-        speakerId : this.selectedData,
+        speakerId : [this.selectedData],
       }
     }
     return payload;

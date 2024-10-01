@@ -4,7 +4,7 @@ import md5 from "md5";
 import C from "../../constants";
 
 export default class AddSpeakerVerificationDataApi extends API {
-  constructor(appName,serviceProviderName,base64Audio, base64Recording, url, inputValue,timeout = 2000) {
+  constructor(appName,serviceProviderName,base64Audio, base64Recording, url, inputValue,fetchUserId,timeout = 2000) {
     
     super("POST", timeout, false);
     this.type = C.VERIFY_SPEAKER_DATA;
@@ -16,6 +16,7 @@ export default class AddSpeakerVerificationDataApi extends API {
     this.base64Recording = base64Recording;
     this.url = url;
     this.inputValue = inputValue;
+    this.fetchUserId = fetchUserId;
 
     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.verifySpeakerData}?appName=${appName}&serviceProviderName=${serviceProviderName}`;
   } 
@@ -46,7 +47,8 @@ export default class AddSpeakerVerificationDataApi extends API {
           taskType: "speaker-verification",
           config: {
             serviceId: "bhashini/iitdharwad/speaker-verification",
-            speakerName: this.inputValue || '', // The name captured from the input
+            // speakerId: this.fetchUserId, // The name captured from the input
+            ...(this.fetchUserId ? { speakerId: this.fetchUserId } : {}),
             preProcessors: ["vad", "denoiser"],
           },
         },

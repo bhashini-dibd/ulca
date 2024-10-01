@@ -168,8 +168,8 @@ const [base64Recording, setBase64Recording] = useState('');
 const [fetchUserId, setFetchUserId] = useState('');
 const [enrollmentSuccess, setEnrollmentSuccess] = useState(false)
 const [deletePopupLoading, setDeletePopupLoading] = useState(false)
-
-
+const [verificationData,setVerificationData] = useState(false)
+const [url, setUrl] = useState('');
 const handleUploadDialogOpen = () => {
   setUploadDialogOpen(true);
 };
@@ -180,6 +180,8 @@ const handleSpeakerEnrollmentClose = () => {
   setAudioURL('')
   setBase64Audio('')
   setInputValue('')
+  setBase64Recording('')
+  setUrl('')
   setEnrollmentSuccess(false)
 };
 
@@ -201,7 +203,11 @@ const handleSpeakerVerificationClose = () => {
   setExportDialogOpen(false);
   setSelectedFile(null)
   setLocalVerifyOpenDialog(false)
+  setBase64Recording('')
   setAudioURL('')
+  setVerificationData(true)
+  setUrl('')
+  setFetchUserId('')
 };
 
 const handleUpload = (file) => {
@@ -448,8 +454,8 @@ const handleExport = (file) => {
       // Handle delete logic here
       console.log(`Deleting Speaker ID: $1111`, deletePopupdata[0]);
       setDeletePopupLoading(false)
-      const apiObj = new DeleteSpeakerApi(appName,serviceProviderName,deletePopupdata[0]);
-      // dispatch(APITransport(apiObj));
+      const apiObj = new DeleteSpeakerApi(appName,serviceProviderName,deletePopupdata?.[0]);
+
       const res = await fetch(apiObj.apiEndPoint(), {
         method: "DELETE",
         headers: apiObj.getHeaders().headers,
@@ -763,6 +769,7 @@ const handleExport = (file) => {
    
     <FileUpload
         open={uploadDialogOpen}
+        setOpen={setUploadDialogOpen}
         handleClose={handleSpeakerEnrollmentClose}
         title="Speaker Enrolllment"
         description="Upload Audio"
@@ -788,9 +795,14 @@ const handleExport = (file) => {
         handleVerifyGlobalDialogOpen={handleVerifyGlobalDialogOpen}
         setEnrollmentSuccess={setEnrollmentSuccess}
         enrollmentSuccess={enrollmentSuccess}
+        verificationData={verificationData}
+        setVerificationData={setVerificationData}
+        url={url}
+        setUrl={setUrl}
       />
       <FileUpload
         open={exportDialogOpen}
+        setOpen = {setExportDialogOpen}
         handleClose={handleSpeakerVerificationClose}
         title="Speaker Verification"
         description="Upload Audio"
@@ -816,9 +828,14 @@ const handleExport = (file) => {
         handleVerifyGlobalDialogOpen={handleVerifyGlobalDialogOpen}
         setEnrollmentSuccess={setEnrollmentSuccess}
         enrollmentSuccess={enrollmentSuccess}
+        verificationData={verificationData}
+        setVerificationData={setVerificationData}
+        url={url}
+        setUrl={setUrl}
       />
        <FileUpload
         open={LocalVerifyOpenDialog}
+        setOpen = {setLocalVerifyOpenDialog}
         handleClose={handleSpeakerVerificationClose}
         title="Speaker Verification"
         description="Upload Audio"
@@ -844,6 +861,10 @@ const handleExport = (file) => {
         handleVerifyGlobalDialogOpen={handleVerifyGlobalDialogOpen}
         setEnrollmentSuccess={setEnrollmentSuccess}
         enrollmentSuccess={enrollmentSuccess}
+        verificationData={verificationData}
+        setVerificationData={setVerificationData}
+        url={url}
+        setUrl={setUrl}
       />
 
 <Dialog

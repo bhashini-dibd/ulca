@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, Button, Grid, Typography, Box, IconButton, CircularProgress } from '@material-ui/core';
 import { CloudUpload as CloudUploadIcon } from '@material-ui/icons';
 import uploadImg from '../../../assets/glossary/upload.svg';
@@ -14,6 +14,7 @@ import AddSpeakerEnrollmentDataApi from '../../../redux/actions/api/UserManageme
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import { useDispatch, useSelector } from 'react-redux';
 import AddSpeakerVerificationDataApi from '../../../redux/actions/api/UserManagement/AddSpeakerVerificationData';
+import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 const useStyles = makeStyles({
   dividerLine: {
     display: 'flex',
@@ -33,20 +34,19 @@ const useStyles = makeStyles({
 
 
 
-const FileUpload = ({ open, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL,base64Audio,setBase64Audio, base64Recording,setBase64Recording,serviceProviderName,appName,fetchUserId,setSnackbarInfo,getApiSpeakerData,handleVerifyGlobalDialogOpen,enrollmentSuccess, setEnrollmentSuccess}) => {
+const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL,base64Audio,setBase64Audio, base64Recording,setBase64Recording,serviceProviderName,appName,fetchUserId,setSnackbarInfo,getApiSpeakerData,handleVerifyGlobalDialogOpen,enrollmentSuccess, setEnrollmentSuccess,verificationData,setVerificationData, url, setUrl}) => {
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
   const [hover, setHover] = useState(false);
-  const [url, setUrl] = useState('');
-  const [successState,setSuccessState] = useState(false)
   const [enrollmentLoading,setEnrollmentLoading] = useState(false)
   const [verifyLoading,setVerifyLoading] = useState(false)
   const EnrolledSpeakerData = useSelector((state)=>state?.enrolledSpeakerData?.enrolledData?.pipelineResponse?.[0]?.output?.[0]?.speakerId);
   const VerifiedSpeakerData = useSelector((state)=>state?.verifySpeakerData?.verifyData);
   console.log(VerifiedSpeakerData,"EnrolledSpeakerData");
+  const [recordState, setRecordState] = useState(null); // For controlling recording
+  const audioRef = useRef(null);
+  const durationRef = useRef(null); 
   
-  const mediaRecorderRef = useRef(null);
   
   const classes = useStyles();
   const dispatch = useDispatch()
@@ -91,6 +91,22 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
     const allowedTypes = ['audio/wav', 'audio/mpeg', 'audio/flac', 'audio/ogg']; // MIME types for WAV, MP3, FLAC, and OGG
 
     if (file && allowedTypes.includes(file.type)) {
+      const reader = new FileReader();
+
+      // When the file reading is finished, set the base64 value
+      reader.onloadend = () => {
+        const base64String = reader.result.split(',')[1]; // Extract base64 without metadata
+        setBase64Audio(base64String);
+        console.log(base64String, "base64String");
+        
+      };
+
+      reader.onerror = () => {
+        console.error('Error reading the file.');
+      };
+
+      // Convert the file to a Data URL (base64 format)
+      reader.readAsDataURL(file);
       setSelectedFile(file);
       // console.log(file.split("base64,")[1], "base64data");
       setError('');
@@ -130,7 +146,17 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
       setEnrollmentLoading(false);
       setSelectedFile(null)
       setAudioURL('')
+      setBase64Recording('')
+      setUrl('')
+      setInputValue('')
       setBase64Audio('')
+      setSnackbarInfo({
+        open: true,
+        message: resp?.detail?.message,
+        variant: "success",
+      });
+      console.log(resp,"res");
+      
       // setInputValue('')
       // setTimeout(() => {
       //   setEnrollmentSuccess(false)
@@ -139,21 +165,29 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
     } else {
       setSnackbarInfo({
         open: true,
-        message: resp?.message,
+        message: resp?.detail?.message,
         variant: "error",
       });
-
-
+      setBase64Recording('')
+      setBase64Audio('')
+      setSelectedFile(null)
+      setUrl('')
+      setInputValue('')
+      setOpen(false)
       setEnrollmentLoading(false);
 
   
   }
   };
 
+  useEffect(() => {
+    setVerificationData(false);  // Reset cancel state when new data comes in or actions change
+  }, [VerifiedSpeakerData, value, title]);
+
   const handleSpeakerVerificationButtonClick = async() => {
     // handleAction(selectedFile);
     setVerifyLoading(true)
-    const apiObj = new AddSpeakerVerificationDataApi(appName,serviceProviderName,base64Audio, base64Recording, url, fetchUserId);
+    const apiObj = new AddSpeakerVerificationDataApi(appName,serviceProviderName,base64Audio, base64Recording, url,inputValue, fetchUserId);
     // dispatch(APITransport(apiObj));
     const res = await fetch(apiObj.apiEndPoint(), {
       method: "POST",
@@ -172,6 +206,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
       setSelectedFile(null)
       setAudioURL('')
       setBase64Audio('')
+      setBase64Recording('')
       // setInputValue('')
       // setTimeout(() => {
       //   setEnrollmentSuccess(false)
@@ -180,20 +215,18 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
     } else {
       setSnackbarInfo({
         open: true,
-        message: resp?.message,
+        message: resp?.detail?.message,
         variant: "error",
       });
-
-
+      setBase64Recording('')
+      setSelectedFile(null)
+      setBase64Audio('')
+      setUrl('')
+      setOpen(false)
       setVerifyLoading(false)
 
   
   }
-    // setTimeout(() => {
-    //   setSelectedFile(null);
-    // setBase64Audio('');
-    // setBase64Recording('')
-    // }, 3000)
     
   };
 
@@ -201,57 +234,33 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
     setSelectedFile(null);
     setAudioURL('');
     setError('');
+    setBase64Recording("");
   };
   
-
-    // Function to convert Blob to Base64
-    const convertBlobToBase64 = (blob) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob); // Read Blob data as a Base64 URL string
-      reader.onloadend = () => {
-        const base64data = reader.result;
-        setBase64Recording(base64data); // Store base64 encoded audio in
-        // console.log(base64data.split("base64,")[1], "base64data");
-      };
+  const blobToBase64 = (blob) => {
+    var reader = new FileReader();
+    reader.readAsDataURL(blob.blob);
+    reader.onloadend = function () {
+      let base64data = reader.result;
+      setBase64Recording(base64data);
+      console.log(base64data,"aaa");
+    
     };
-
-  const handleStartRecording = async () => {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorderRef.current = new MediaRecorder(stream);
-        mediaRecorderRef.current.ondataavailable = (event) => {
-          const audioBlob = event.data;
-          const audioUrl = URL.createObjectURL(audioBlob);
-          setAudioURL(audioUrl);
-          setSelectedFile(null);
-          convertBlobToBase64(audioBlob);
-        };
-        mediaRecorderRef.current.start();
-        setIsRecording(true);
-      } catch (err) {
-        setError('Unable to access the microphone.');
-      }
-    } else {
-      setError('Your browser does not support audio recording.');
-    }
   };
+  
+  
 
-  const handleStopRecording = () => {
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop(); // Stop the media recorder
-  
-      // Stop all tracks to ensure the microphone is disabled
-      if (mediaRecorderRef.current.stream) {
-        mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
-      }
-  
-      setIsRecording(false); // Update the state
+  const toggleRecording = () => {
+    if (recordState === RecordState.START) {
+      setRecordState(RecordState.STOP);
+    } else {
+      setRecordState(RecordState.START);
     }
+    // setShowRecorder(!showRecorder); // Toggle visibility of recorder
   };
 
   const getRecordingIcon = () => {
-    if (isRecording) {
+    if (recordState === RecordState.START) {
       return recordLive; // Icon while recording
     } else if (hover) {
       return recordHover; // Hover icon
@@ -268,7 +277,35 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
     setUrl(event.target.value);
   };
 
-  const isSubmitDisabled = (value === 'local' || !status) ? !(selectedFile || audioURL || url) : !((selectedFile || audioURL || url) && inputValue);
+  const isSubmitDisabled = (value === 'local' || !status) ? !(selectedFile || base64Recording || url) : !((selectedFile || base64Recording || url) && inputValue);
+
+
+  // Handle the audio data after recording is stopped
+  const onStop = (audioData) => {
+    const url = audioData.url;
+    console.log(url,"uuu");
+    blobToBase64(audioData)
+    setBase64Recording(url); // Set the audio URL to play it back
+  };
+
+  // Format time in mm:ss
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
+
+  // Handle loaded metadata to get the duration
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      const audioDuration = audioRef.current.duration;
+      if (durationRef.current) {
+        durationRef.current.textContent = formatTime(audioDuration);
+      }
+    }
+  };
+
+
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -324,19 +361,6 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
               />
           </Grid>}
           <Grid item>
-            {/* <span style={{color:"#555353", fontSize:"14px"}}>
-
-            Sample File : 
-            </span> */}
-            {/* <a href="/path/to/sample-file.csv" download style={{ textDecoration: 'none' }}>
-              <Button
-                variant="outline"
-                color="primary"
-                startIcon={<CloudUploadIcon />}
-              >
-                <span style={{fontSize:"14px", color:"#483EA8"}}>Download</span>
-              </Button>
-            </a> */}
             <Typography variant="body2" fontWeight={600} color="#6D6D6D">
             {description}
             </Typography>
@@ -360,7 +384,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
                 onChange={handleFileChange}
                 style={{ display: 'none' }}
                 id="file-upload"
-                disabled={audioURL || url}
+                disabled={base64Recording || url}
               />
               <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
                 {/* <CloudUploadIcon fontSize="large" /> */}
@@ -374,34 +398,29 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
                 <Typography variant='body2' sx={{color:"#E7E7E7"}}>Only support WAV,MP3,FLAC, & OGG</Typography>
               </label>
               <Typography variant='body2'  className={classes.dividerLine} >OR</Typography>
-              {/* {!isRecording ? (
-                <>
-        <img src={recording}  onClick={handleStartRecording} style={{marginTop:"10px"}} />  
-        <Typography variant='body2' sx={{color:"#E7E7E7"}} className='mt-1'>Record Audio</Typography>  
-        </> 
-      ) : (
-        <Button variant="contained" color="primary" onClick={handleStopRecording}>
-          Stop Recording
-        </Button>
-      )} */}
+             
       <>
       <IconButton
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        onClick={isRecording ? handleStopRecording : handleStartRecording}
-        color={isRecording ? 'secondary' : 'primary'}
+        onClick={toggleRecording}
+        color={recordState === RecordState.START ? 'secondary' : 'primary'}
         disabled={!!(selectedFile || url)}
       >
           <img src={getRecordingIcon()} alt="Recording Status" style={{ width: '30px', height: '30px' }} />
+      {/* Recorder Component */}
+      <div style={{display:"none"}}>
+
+      <AudioReactRecorder
+        state={recordState}
+        onStop={onStop}
+        backgroundColor="rgb(255,255,255)" // Set a background color for visualization
+      />
+      </div>
       </IconButton>
         <Typography variant='body2' sx={{color:"#E7E7E7"}} className='mt-1'>Record Audio</Typography> 
       </>
               <Grid item>
-            {/* {selectedFile && (
-              <Typography variant="body2" style={{ marginTop: '10px', color:"red" }}>
-                Selected file: {selectedFile.name}
-              </Typography>
-            )} */}
             {error && (
               <Typography variant="body2" color="error" style={{ marginTop: '10px', color:"red" }}>
                 {error}
@@ -416,28 +435,17 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
                 onChange={handleURLChange}
                 style={{width:"100%",height:"40px",border:"1px solid #787878", marginTop:"5px", marginBottom:"10px",padding:"2px 10px", borderRadius:"4px"}}
                 placeholder='Paste URL here...'
-                disabled={!!(selectedFile || audioURL)}
+                disabled={!!(selectedFile || base64Recording)}
               />
 
           </Grid>
             </div>
-            {/* {(selectedFile) && (
-        <div style={{ marginTop: '20px',paddingLeft:"10px", display: 'flex', alignItems: 'center', justifyContent: "space-between",
-          border: "1px solid #11AF22", height:"32px" }}>
-          <Box>{selectedFile?.name || 'Recorded Audio'}</Box>
-          <IconButton onClick={handleFileRemove} color="error" aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </div>
-      )}
-      {(audioURL && toggling && selectedFile === null) && (
-        <audio controls src={audioURL} style={{ marginTop: '10px', width:"100%" }}>
-          Your browser does not support the audio element.
-        </audio>
-      )} */}
-      {audioURL ? (
+           
+      {base64Recording ? (
         <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center',justifyContent: "space-between" }}>
-          <audio controls src={audioURL} style={{ marginRight: '10px', borderRadius:"3px", width:"100%" }}>
+          <audio ref={audioRef}
+            controls src={base64Recording}
+            onLoadedMetadata={handleLoadedMetadata} style={{ marginRight: '10px', borderRadius:"3px", width:"100%" }}>
             Your browser does not support the audio element.
           </audio>
           <IconButton onClick={handleFileRemove} color="error" aria-label="delete">
@@ -466,7 +474,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
                 onChange={handleInputChange}
               />
           </Grid>}
-         {(VerifiedSpeakerData?.length === 0 || value === 'none' || title === "Speaker Enrolllment")? <Grid item style={{display:"flex", justifyContent:"space-between"}}>
+         {((VerifiedSpeakerData?.length === 0 || value === 'none' || title === "Speaker Enrolllment") || verificationData)? <Grid item style={{display:"flex", justifyContent:"space-between"}}>
             <Button
               variant="contained"
               color="secondary"
@@ -488,7 +496,7 @@ const FileUpload = ({ open, handleClose, title, description, buttonText, handleA
           </Grid> :
            <Grid item style={{marginTop:"20px"}}>
             <Typography fontWeight={600} fontFamily="Noto-Bold" style={{color:"#11AF22"}}>{VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.message}</Typography>
-            <Typography fontWeight={500}  fontFamily="Noto-Regular" style={{marginTop:"10px",fontSize:"16px"}}>ID: {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerId} | ajay | Confidence : {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.confidence}%</Typography>
+            <Typography fontWeight={500}  fontFamily="Noto-Regular" style={{marginTop:"10px",fontSize:"16px"}}>ID: {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerId} | ajay | Confidence : {(VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.confidence * 100).toFixed(0)}%</Typography>
             <Grid item style={{display:"flex", justifyContent:"end", marginTop:"35px"}}>
 
             <Button
