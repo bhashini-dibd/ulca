@@ -977,7 +977,7 @@ class UserUtils:
     
     @staticmethod
     def send_speaker_delete_for_dhruva(userinferenceApiKey, request_body):
-
+        print("Delete Speaker Body: ", request_body)
         headers = {
         'Authorization': userinferenceApiKey,
         'Content-Type': 'application/json'
