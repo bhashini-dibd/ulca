@@ -493,9 +493,9 @@ class VerifySpeaker(Resource):
         return res.getdhruvaresults(), dhruva_result_status_code
 
 class DeleteSpeaker(Resource):
-    def post(self):
+    def delete(self):
+        print("Test Data DeleteSpeaker: ", request.get_json())
         body = request.get_json()
-        print("JSON Body: ", body)
         appName = request.args.get("appName")
         serviceProviderName = request.args.get("serviceProviderName")
 
