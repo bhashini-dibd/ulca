@@ -3,24 +3,26 @@ package io.swagger.pipelinerequest;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.LanguagePair;
+
 import io.swagger.model.VoiceTypes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.validation.annotation.Validated;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import io.swagger.model.LanguagePair;
 
 /**
  * TTSResponseConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-09-10T06:09:20.888267836Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-10-03T07:35:25.801140023Z[GMT]")
 
 
 public class TTSResponseConfig   {
@@ -62,6 +64,18 @@ public class TTSResponseConfig   {
   @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
   private Boolean defaultModel = null;
+
+  @JsonProperty("name")
+
+  @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
+  @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
+  private String name = null;
+
+  @JsonProperty("description")
+
+  @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
+  @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
+  private String description = null;
 
 
   public TTSResponseConfig serviceId(String serviceId) { 
@@ -266,6 +280,52 @@ public class TTSResponseConfig   {
     this.defaultModel = defaultModel;
   }
 
+  public TTSResponseConfig name(String name) { 
+
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * Get name
+   * @return name
+   **/
+  
+  @Schema(description = "")
+  
+  public String getName() {  
+    return name;
+  }
+
+
+
+  public void setName(String name) { 
+    this.name = name;
+  }
+
+  public TTSResponseConfig description(String description) { 
+
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   * @return description
+   **/
+  
+  @Schema(description = "")
+  
+  public String getDescription() {  
+    return description;
+  }
+
+
+
+  public void setDescription(String description) { 
+    this.description = description;
+  }
+
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -282,12 +342,14 @@ public class TTSResponseConfig   {
         Objects.equals(this.samplingRate, ttSResponseConfig.samplingRate) &&
         Objects.equals(this.inputFormat, ttSResponseConfig.inputFormat) &&
         Objects.equals(this.outputFormat, ttSResponseConfig.outputFormat) &&
-        Objects.equals(this.defaultModel, ttSResponseConfig.defaultModel);
+        Objects.equals(this.defaultModel, ttSResponseConfig.defaultModel) &&
+        Objects.equals(this.name, ttSResponseConfig.name) &&
+        Objects.equals(this.description, ttSResponseConfig.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, modelId, language, supportedVoices, samplingRate, inputFormat, outputFormat, defaultModel);
+    return Objects.hash(serviceId, modelId, language, supportedVoices, samplingRate, inputFormat, outputFormat, defaultModel, name, description);
   }
 
   @Override
@@ -303,6 +365,8 @@ public class TTSResponseConfig   {
     sb.append("    inputFormat: ").append(toIndentedString(inputFormat)).append("\n");
     sb.append("    outputFormat: ").append(toIndentedString(outputFormat)).append("\n");
     sb.append("    defaultModel: ").append(toIndentedString(defaultModel)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }

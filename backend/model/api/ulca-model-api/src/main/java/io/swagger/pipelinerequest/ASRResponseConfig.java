@@ -9,22 +9,22 @@ import io.swagger.model.AudioChannel;
 import io.swagger.model.AudioPostProcessors;
 import io.swagger.model.Domain;
 import io.swagger.model.Encoding;
+import io.swagger.model.LanguagePair;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import io.swagger.model.LanguagePair;
-
 
 /**
  * ASRResponseConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-09-10T06:09:20.888267836Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-10-03T07:35:25.801140023Z[GMT]")
 
 
 public class ASRResponseConfig   {
@@ -157,6 +157,18 @@ public class ASRResponseConfig   {
   @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
   private Boolean defaultModel = null;
+
+  @JsonProperty("name")
+
+  @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
+  @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
+  private String name = null;
+
+  @JsonProperty("description")
+
+  @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
+  @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
+  private String description = null;
 
 
   public ASRResponseConfig serviceId(String serviceId) { 
@@ -567,6 +579,52 @@ public class ASRResponseConfig   {
     this.defaultModel = defaultModel;
   }
 
+  public ASRResponseConfig name(String name) { 
+
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * Get name
+   * @return name
+   **/
+  
+  @Schema(description = "")
+  
+  public String getName() {  
+    return name;
+  }
+
+
+
+  public void setName(String name) { 
+    this.name = name;
+  }
+
+  public ASRResponseConfig description(String description) { 
+
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   * @return description
+   **/
+  
+  @Schema(description = "")
+  
+  public String getDescription() {  
+    return description;
+  }
+
+
+
+  public void setDescription(String description) { 
+    this.description = description;
+  }
+
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -592,12 +650,14 @@ public class ASRResponseConfig   {
         Objects.equals(this.punctuation, asRResponseConfig.punctuation) &&
         Objects.equals(this.model, asRResponseConfig.model) &&
         Objects.equals(this.encoding, asRResponseConfig.encoding) &&
-        Objects.equals(this.defaultModel, asRResponseConfig.defaultModel);
+        Objects.equals(this.defaultModel, asRResponseConfig.defaultModel) &&
+        Objects.equals(this.name, asRResponseConfig.name) &&
+        Objects.equals(this.description, asRResponseConfig.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, inputFormat, outputFormat, postProcessors, domain, detailed, punctuation, model, encoding, defaultModel);
+    return Objects.hash(serviceId, modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, inputFormat, outputFormat, postProcessors, domain, detailed, punctuation, model, encoding, defaultModel, name, description);
   }
 
   @Override
@@ -622,6 +682,8 @@ public class ASRResponseConfig   {
     sb.append("    model: ").append(toIndentedString(model)).append("\n");
     sb.append("    encoding: ").append(toIndentedString(encoding)).append("\n");
     sb.append("    defaultModel: ").append(toIndentedString(defaultModel)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }
