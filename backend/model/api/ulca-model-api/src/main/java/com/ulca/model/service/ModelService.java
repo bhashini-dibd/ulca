@@ -2622,6 +2622,8 @@ public class ModelService {
 					long endTime = System.currentTimeMillis();
 					long duration = endTime - startTime;
 					System.out.println("Time taken to get model : " + duration + " ms");
+					asrResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					asrResponseConfig.setDescription(model.getDescription());
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						asrResponseConfig.setLanguage(lp);
@@ -2644,6 +2646,8 @@ public class ModelService {
 					long endTime = System.currentTimeMillis();
 					long duration = endTime - startTime;
 					System.out.println("Time taken to get model : " + duration + " ms");
+					translationResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					translationResponseConfig.setDescription(model.getDescription());
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						translationResponseConfig.setLanguage(lp);
@@ -2665,6 +2669,8 @@ public class ModelService {
 					long endTime = System.currentTimeMillis();
 					long duration = endTime - startTime;
 					System.out.println("Time taken to get model : " + duration + " ms");
+					ttsResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					ttsResponseConfig.setDescription(model.getDescription());
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						ttsResponseConfig.setLanguage(lp);
@@ -2688,6 +2694,8 @@ public class ModelService {
 					long endTime = System.currentTimeMillis();
 					long duration = endTime - startTime;
 					System.out.println("Time taken to get model : " + duration + " ms");
+					transliterationResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					transliterationResponseConfig.setDescription(model.getDescription());
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						transliterationResponseConfig.setLanguage(lp);
@@ -2709,6 +2717,8 @@ public class ModelService {
 					long endTime = System.currentTimeMillis();
 					long duration = endTime - startTime;
 					System.out.println("Time taken to get model : " + duration + " ms");
+					ocrResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					ocrResponseConfig.setDescription(model.getDescription());
 					LanguagePairs langPair = model.getLanguages();
 					for (LanguagePair lp : langPair) {
 						ocrResponseConfig.setLanguage(lp);

@@ -3,21 +3,22 @@ package io.swagger.pipelinerequest;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.LanguagePair;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import io.swagger.model.LanguagePair;
-
 
 /**
  * TranslationResponseConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-09-10T06:09:20.888267836Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-10-03T07:35:25.801140023Z[GMT]")
 
 
 public class TranslationResponseConfig   {
@@ -50,6 +51,18 @@ public class TranslationResponseConfig   {
   @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
   @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
   private Boolean defaultModel = null;
+
+  @JsonProperty("name")
+
+  @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
+  @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
+  private String name = null;
+
+  @JsonProperty("description")
+
+  @JsonInclude(JsonInclude.Include.NON_ABSENT)  // Exclude from JSON if absent
+  @JsonSetter(nulls = Nulls.FAIL)    // FAIL setting if the value is null
+  private String description = null;
 
 
   public TranslationResponseConfig serviceId(String serviceId) { 
@@ -199,6 +212,52 @@ public class TranslationResponseConfig   {
     this.defaultModel = defaultModel;
   }
 
+  public TranslationResponseConfig name(String name) { 
+
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * Get name
+   * @return name
+   **/
+  
+  @Schema(description = "")
+  
+  public String getName() {  
+    return name;
+  }
+
+
+
+  public void setName(String name) { 
+    this.name = name;
+  }
+
+  public TranslationResponseConfig description(String description) { 
+
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   * @return description
+   **/
+  
+  @Schema(description = "")
+  
+  public String getDescription() {  
+    return description;
+  }
+
+
+
+  public void setDescription(String description) { 
+    this.description = description;
+  }
+
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -213,12 +272,14 @@ public class TranslationResponseConfig   {
         Objects.equals(this.language, translationResponseConfig.language) &&
         Objects.equals(this.inputFormat, translationResponseConfig.inputFormat) &&
         Objects.equals(this.outputFormat, translationResponseConfig.outputFormat) &&
-        Objects.equals(this.defaultModel, translationResponseConfig.defaultModel);
+        Objects.equals(this.defaultModel, translationResponseConfig.defaultModel) &&
+        Objects.equals(this.name, translationResponseConfig.name) &&
+        Objects.equals(this.description, translationResponseConfig.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, modelId, language, inputFormat, outputFormat, defaultModel);
+    return Objects.hash(serviceId, modelId, language, inputFormat, outputFormat, defaultModel, name, description);
   }
 
   @Override
@@ -232,6 +293,8 @@ public class TranslationResponseConfig   {
     sb.append("    inputFormat: ").append(toIndentedString(inputFormat)).append("\n");
     sb.append("    outputFormat: ").append(toIndentedString(outputFormat)).append("\n");
     sb.append("    defaultModel: ").append(toIndentedString(defaultModel)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("}");
     return sb.toString();
   }
