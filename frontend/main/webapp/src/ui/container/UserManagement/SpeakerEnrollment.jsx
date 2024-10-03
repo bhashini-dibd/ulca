@@ -251,7 +251,27 @@ const handleExport = (file) => {
   const getApiSpeakerData = async () => {
     // const apiObj = new FetchGlossaryDetails(appName,serviceProviderName);
     const apiObj = new FetchSpeakerDetailsApi(appName,serviceProviderName);
-    dispatch(APITransport(apiObj));
+    // dispatch(APITransport(apiObj));
+    const res = await fetch(apiObj.apiEndPoint(), {
+      method: "GET",
+      headers: apiObj.getHeaders().headers,
+    });
+    // dispatch(APITransport(apiObj));
+    const resp = await res.json();
+    if (res.ok) {
+      dispatch({
+        type: "FETCH_SPEAKER_DATA",
+        payload: resp, // assuming the response has the enrollment data
+      });
+    } else {
+      setTableData([])
+      setSnackbarInfo({
+        open: true,
+        message: resp?.message,
+        variant: "error",
+      });
+
+    }
   };
 
   useEffect(() => {
@@ -453,11 +473,11 @@ const handleExport = (file) => {
     const handleDeleteConfirm = async() => {
       // Handle delete logic here
       console.log(`Deleting Speaker ID: $1111`, deletePopupdata[0]);
-      setDeletePopupLoading(false)
+      setDeletePopupLoading(true)
       const apiObj = new DeleteSpeakerApi(appName,serviceProviderName,deletePopupdata?.[0]);
 
       const res = await fetch(apiObj.apiEndPoint(), {
-        method: "DELETE",
+        method: "POST",
         headers: apiObj.getHeaders().headers,
         body: JSON.stringify(apiObj.getBody()),
       });
@@ -471,11 +491,15 @@ const handleExport = (file) => {
   
         setDeletePopupLoading(false)
         setOpenDeleteBox(false);
+        setSnackbarInfo({
+          open: true,
+          message: resp?.message,
+          variant: "success",
+        });
         // setInputValue('')
-        // setTimeout(() => {
-        //   setEnrollmentSuccess(false)
-        //   setInputValue('')
-        // }, 3000)
+        setTimeout(() => {
+          getApiSpeakerData();
+        }, 1500)
       } else {
         setSnackbarInfo({
           open: true,
@@ -756,7 +780,7 @@ const handleExport = (file) => {
       <MuiThemeProvider theme={getMuiTheme}>
       <MUIDataTable
         //   title={"Glossary List"}
-          data={ tableData?.map(row => [
+          data={tableData && tableData?.map(row => [
             // row.checkbox,
             row?.speakerId,
             row?.speakerName,
@@ -900,7 +924,7 @@ const handleExport = (file) => {
         </Button>
         {/* Delete button */}
         <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-        {deletePopupLoading && <CircularProgress color="secondary" size={24} style={{ marginRight: "10px" }} />} Delete
+        {deletePopupLoading && <CircularProgress color="primary" size={24} style={{ marginRight: "10px" }} />} Delete
         </Button>
       </DialogActions>
     </Dialog>

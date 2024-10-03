@@ -40,7 +40,7 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
   const [hover, setHover] = useState(false);
   const [enrollmentLoading,setEnrollmentLoading] = useState(false)
   const [verifyLoading,setVerifyLoading] = useState(false)
-  const EnrolledSpeakerData = useSelector((state)=>state?.enrolledSpeakerData?.enrolledData?.pipelineResponse?.[0]?.output?.[0]?.speakerId);
+  const EnrolledSpeakerData = useSelector((state)=>state?.enrolledSpeakerData?.enrolledData?.pipelineResponse?.[0]?.output?.[0]);
   const VerifiedSpeakerData = useSelector((state)=>state?.verifySpeakerData?.verifyData);
   console.log(VerifiedSpeakerData,"EnrolledSpeakerData");
   const [recordState, setRecordState] = useState(null); // For controlling recording
@@ -152,7 +152,7 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
       setBase64Audio('')
       setSnackbarInfo({
         open: true,
-        message: resp?.detail?.message,
+        message: 'Speaker enrolled successfully',
         variant: "success",
       });
       console.log(resp,"res");
@@ -326,7 +326,7 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
       <DialogContent style={{ textAlign: 'center', padding: '24px' }}>
         <CheckCircleIcon style={{ fontSize: '50px', color: '#4caf50', marginBottom: '10px' }} />
         <Typography style={{ color: 'green', fontWeight: 'bold', marginBottom: '8px' }}>
-          Speaker ID: {EnrolledSpeakerData} | Speaker Name: {inputValue}
+          Speaker ID: {EnrolledSpeakerData?.speakerId} | Speaker Name: {EnrolledSpeakerData?.speakerName}
         </Typography>
 
         <Typography variant="h6" gutterBottom>
@@ -496,7 +496,7 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
           </Grid> :
            <Grid item style={{marginTop:"20px"}}>
             <Typography fontWeight={600} fontFamily="Noto-Bold" style={{color:"#11AF22"}}>{VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.message}</Typography>
-            <Typography fontWeight={500}  fontFamily="Noto-Regular" style={{marginTop:"10px",fontSize:"16px"}}>ID: {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerId} | ajay | Confidence : {(VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.confidence * 100).toFixed(0)}%</Typography>
+            <Typography fontWeight={500}  fontFamily="Noto-Regular" style={{marginTop:"10px",fontSize:"16px"}}>ID: {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerId} | {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerName} | Confidence : {(VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.confidence * 100).toFixed(0)}%</Typography>
             <Grid item style={{display:"flex", justifyContent:"end", marginTop:"35px"}}>
 
             <Button
