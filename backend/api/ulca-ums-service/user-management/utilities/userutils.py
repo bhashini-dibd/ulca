@@ -953,7 +953,7 @@ class UserUtils:
         'Content-Type': 'application/json'
         }
         result = requests.post(url=BHAHSINI_SPEAKER_ENROLL_CREATE_URL, json=request_body, headers=headers)
-        return result.json(), 200
+        return result.json(), result.status_code
         
 
     @staticmethod
