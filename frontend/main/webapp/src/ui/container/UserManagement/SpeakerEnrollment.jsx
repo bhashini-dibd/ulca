@@ -186,7 +186,11 @@ const handleSpeakerEnrollmentClose = () => {
 };
 
 const handleVerifyGlobalDialogOpen = () => {
-  setExportDialogOpen(true);
+  setUploadDialogOpen(false);
+  setEnrollmentSuccess(false)
+  setTimeout(() => {
+    setExportDialogOpen(true);
+  },1000)
 };
 
 const handleVerifyLocalDialogOpen = (value) => {
