@@ -630,7 +630,7 @@ const handleExport = (file) => {
                   dispatch(APITransport(apiObj));
                   setTimeout(() => {
 
-                    getApiGlossaryData() 
+                    // getApiGlossaryData() 
                     setSnackbarInfo({
                       open: true,
                       message: "Multiple Glossaries Deleted Successfully",
