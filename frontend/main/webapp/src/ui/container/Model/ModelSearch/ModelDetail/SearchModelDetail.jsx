@@ -40,6 +40,7 @@ import Clients from "../../../../components/common/Clients";
 import { FooterNewDesign } from "../../../../components/common/FooterNewDesign";
 import HostedInferALD from "./HostedInferALD";
 import HostedInferAGD from "./HostedInferAGD";
+import HostedInferenceITN from "./HostedInferenceITN";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -218,6 +219,15 @@ const SearchModelDetail = (props) => {
                 streaming={streaming}
               />
             );
+           case "itn":
+              return (
+                <HostedInferenceITN
+                task={task}
+                modelId={params.srno}
+                source={source}
+                target={target}
+              />
+              );
         default:
           return (
             <HostedInference
