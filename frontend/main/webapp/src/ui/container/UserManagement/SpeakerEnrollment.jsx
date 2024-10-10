@@ -169,6 +169,7 @@ const [fetchUserId, setFetchUserId] = useState('');
 const [enrollmentSuccess, setEnrollmentSuccess] = useState(false)
 const [deletePopupLoading, setDeletePopupLoading] = useState(false)
 const [verificationData,setVerificationData] = useState(false)
+const [captureErrorMessage, setCaptureErrorMessage] = useState('')
 const [url, setUrl] = useState('');
 const handleUploadDialogOpen = () => {
   setUploadDialogOpen(true);
@@ -183,6 +184,7 @@ const handleSpeakerEnrollmentClose = () => {
   setBase64Recording('')
   setUrl('')
   setEnrollmentSuccess(false)
+  setCaptureErrorMessage('')
 };
 
 const handleVerifyGlobalDialogOpen = () => {
@@ -827,6 +829,8 @@ const handleExport = (file) => {
         setVerificationData={setVerificationData}
         url={url}
         setUrl={setUrl}
+        captureErrorMessage={captureErrorMessage}
+        setCaptureErrorMessage={setCaptureErrorMessage}
       />
       <FileUpload
         open={exportDialogOpen}
@@ -860,6 +864,8 @@ const handleExport = (file) => {
         setVerificationData={setVerificationData}
         url={url}
         setUrl={setUrl}
+        captureErrorMessage={captureErrorMessage}
+        setCaptureErrorMessage={setCaptureErrorMessage}
       />
        <FileUpload
         open={LocalVerifyOpenDialog}
@@ -893,6 +899,8 @@ const handleExport = (file) => {
         setVerificationData={setVerificationData}
         url={url}
         setUrl={setUrl}
+        captureErrorMessage={captureErrorMessage}
+        setCaptureErrorMessage={setCaptureErrorMessage}
       />
 
 <Dialog

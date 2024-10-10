@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 
 
 
-const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL,base64Audio,setBase64Audio, base64Recording,setBase64Recording,serviceProviderName,appName,fetchUserId,setSnackbarInfo,getApiSpeakerData,handleVerifyGlobalDialogOpen,enrollmentSuccess, setEnrollmentSuccess,verificationData,setVerificationData, url, setUrl}) => {
+const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL,base64Audio,setBase64Audio, base64Recording,setBase64Recording,serviceProviderName,appName,fetchUserId,setSnackbarInfo,getApiSpeakerData,handleVerifyGlobalDialogOpen,enrollmentSuccess, setEnrollmentSuccess,verificationData,setVerificationData, url, setUrl,captureErrorMessage, setCaptureErrorMessage}) => {
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState('');
   const [hover, setHover] = useState(false);
@@ -163,17 +163,18 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
       //   setInputValue('')
       // }, 3000)
     } else {
-      setSnackbarInfo({
-        open: true,
-        message: resp?.detail?.message,
-        variant: "error",
-      });
+      // setSnackbarInfo({
+      //   open: true,
+      //   message: resp?.detail?.message,
+      //   variant: "error",
+      // });
+      setCaptureErrorMessage(resp?.detail?.message)
       setBase64Recording('')
       setBase64Audio('')
       setSelectedFile(null)
       setUrl('')
       setInputValue('')
-      setOpen(false)
+      setOpen(true)
       setEnrollmentLoading(false);
 
   
@@ -433,6 +434,7 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
           <input
                 type="text"
                 onChange={handleURLChange}
+                value={url}
                 style={{width:"100%",height:"40px",border:"1px solid #787878", marginTop:"5px", marginBottom:"10px",padding:"2px 10px", borderRadius:"4px"}}
                 placeholder='Paste URL here...'
                 disabled={!!(selectedFile || base64Recording)}
@@ -474,13 +476,14 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
                 onChange={handleInputChange}
               />
           </Grid>}
+          {captureErrorMessage !== '' && <span style={{color:"red", marginBottom:"10px"}}>{captureErrorMessage || 'Something went wrong, Please try again'}</span> }
          {((VerifiedSpeakerData?.length === 0 || value === 'none' || title === "Speaker Enrolllment") || verificationData)? <Grid item style={{display:"flex", justifyContent:"space-between"}}>
             <Button
               variant="contained"
               color="secondary"
               onClick={handleClose}
               style={{backgroundColor:"lightGray"}}
-             
+             disabled={enrollmentLoading || verifyLoading}
             >
               Cancel
             </Button>
@@ -506,7 +509,7 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
               // style={{backgroundColor:"lightGray"}}
              
             >
-              Cancel
+              Okay
             </Button>
             </Grid>
            
