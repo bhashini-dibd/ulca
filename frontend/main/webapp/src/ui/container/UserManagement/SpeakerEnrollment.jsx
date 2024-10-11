@@ -931,7 +931,7 @@ const handleExport = (file) => {
       {/* Dialog actions */}
       <DialogActions style={{marginBottom:"25px", display:"flex", justifyContent:"space-between", padding:"0px 25px"}}>
         {/* Cancel button */}
-        <Button onClick={handleDeleteClose} color="primary" variant="outlined">
+        <Button onClick={handleDeleteClose} color="primary" variant="outlined" disabled={deletePopupLoading}>
           Cancel
         </Button>
         {/* Delete button */}
