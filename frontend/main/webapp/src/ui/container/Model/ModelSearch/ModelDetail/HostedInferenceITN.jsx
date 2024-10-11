@@ -289,7 +289,7 @@ const HostedInferenceITN = (props) => {
                 onClick={handleCompute}
                 disabled={sourceText ? false : true}
               >
-                {translate("button.translate")}
+                Convert
               </Button>
             </Grid>
           </Grid>
@@ -314,7 +314,7 @@ const HostedInferenceITN = (props) => {
                                 renderInput={(params) => <TextField {...params} variant="standard" />}
                             /> */}
               <Typography variant="h6" className={classes.hosted}>
-                {tgtLang}hello1
+              {srcLang}
               </Typography>
             </Grid>
           </Grid>
@@ -329,13 +329,13 @@ const HostedInferenceITN = (props) => {
               className={classes.textArea}
             />
 
-              <div   >
+              {/* <div   >
                 <Button variant="contained" size="small" className={classes.translatfeedbackbutton} onClick={() => { setModal(true); setSuggestEditValues(target) }}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
                 </Button>
-              </div>
+              </div> */}
 
 
             </>)}
@@ -365,7 +365,7 @@ const HostedInferenceITN = (props) => {
 
 
       )}
-      <Modal
+      {/* <Modal
         open={modal}
         onClose={() => setModal(false)}
         aria-labelledby="simple-modal-title"
@@ -383,7 +383,7 @@ const HostedInferenceITN = (props) => {
           handleSubmit={handleFeedbackSubmit}
 
         />
-      </Modal>
+      </Modal> */}
 
 
     </Grid>
