@@ -665,7 +665,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
 
   const handleSpeakerVerificationData = (row) => {
     console.log(row,UlcaApiKey,"heee")
-    history.push(`${process.env.PUBLIC_URL}/speaker-enrollment`, {
+    history.push(`${process.env.PUBLIC_URL}/speaker-recognition`, {
       serviceProviderName: row?.serviceProviderName,
       inferenceApiKey: row?.inferenceApiKey.value,
       appName: fetchAppName,

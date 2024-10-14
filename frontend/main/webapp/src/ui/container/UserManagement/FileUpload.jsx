@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 
 
 
-const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL,base64Audio,setBase64Audio, base64Recording,setBase64Recording,serviceProviderName,appName,fetchUserId,setSnackbarInfo,getApiSpeakerData,handleVerifyGlobalDialogOpen,enrollmentSuccess, setEnrollmentSuccess,verificationData,setVerificationData, url, setUrl}) => {
+const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText, handleAction, status,value,selectedFile,setSelectedFile,inputValue,setInputValue,audioURL,setAudioURL,base64Audio,setBase64Audio, base64Recording,setBase64Recording,serviceProviderName,appName,fetchUserId,setSnackbarInfo,getApiSpeakerData,handleVerifyGlobalDialogOpen,enrollmentSuccess, setEnrollmentSuccess,verificationData,setVerificationData, url, setUrl,captureErrorMessage, setCaptureErrorMessage,captureVerifyErrorMessage,setCaptureVerifyErrorMessage,setIsValidURL,isValidURL}) => {
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState('');
   const [hover, setHover] = useState(false);
@@ -46,8 +46,8 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
   const [recordState, setRecordState] = useState(null); // For controlling recording
   const audioRef = useRef(null);
   const durationRef = useRef(null); 
-  
-  
+
+
   const classes = useStyles();
   const dispatch = useDispatch()
 
@@ -74,10 +74,12 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
 
       // Convert the file to a Data URL (base64 format)
       reader.readAsDataURL(file);
-  
+      setVerificationData(true)
       setSelectedFile(file);
       // console.log(file.split("base64,")[1], "base64data");
       setError('');
+      event.target.value = null;
+      setCaptureVerifyErrorMessage('')
     } else {
       setSelectedFile(null);
       setError('Error:  Failed to Upload Mp3 File;  Format is not supported.');
@@ -107,9 +109,12 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
 
       // Convert the file to a Data URL (base64 format)
       reader.readAsDataURL(file);
+      setVerificationData(true)
       setSelectedFile(file);
       // console.log(file.split("base64,")[1], "base64data");
       setError('');
+      event.target.value = null;
+      setCaptureVerifyErrorMessage('')
     } else {
       setSelectedFile(null);
       setError('Error:  Failed to Upload Mp3 File;  Format is not supported.');
@@ -163,17 +168,18 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
       //   setInputValue('')
       // }, 3000)
     } else {
-      setSnackbarInfo({
-        open: true,
-        message: resp?.detail?.message,
-        variant: "error",
-      });
+      // setSnackbarInfo({
+      //   open: true,
+      //   message: resp?.detail?.message,
+      //   variant: "error",
+      // });
+      setCaptureErrorMessage(resp?.detail?.message)
       setBase64Recording('')
       setBase64Audio('')
       setSelectedFile(null)
       setUrl('')
       setInputValue('')
-      setOpen(false)
+      setOpen(true)
       setEnrollmentLoading(false);
 
   
@@ -207,22 +213,25 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
       setAudioURL('')
       setBase64Audio('')
       setBase64Recording('')
+      setCaptureVerifyErrorMessage('')
+      setUrl('')
       // setInputValue('')
       // setTimeout(() => {
       //   setEnrollmentSuccess(false)
       //   setInputValue('')
       // }, 3000)
     } else {
-      setSnackbarInfo({
-        open: true,
-        message: resp?.detail?.message,
-        variant: "error",
-      });
+      // setSnackbarInfo({
+      //   open: true,
+      //   message: resp?.detail?.message,
+      //   variant: "error",
+      // });
       setBase64Recording('')
       setSelectedFile(null)
+      setCaptureVerifyErrorMessage(resp?.detail?.message)
       setBase64Audio('')
       setUrl('')
-      setOpen(false)
+      setOpen(true)
       setVerifyLoading(false)
 
   
@@ -275,9 +284,30 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
 
   const handleURLChange = (event) => {
     setUrl(event.target.value);
+    if(event.target.value.length >= 1){
+      setVerificationData(true)
+    }else{
+      setVerificationData(false)
+    }
   };
 
-  const isSubmitDisabled = (value === 'local' || !status) ? !(selectedFile || base64Recording || url) : !((selectedFile || base64Recording || url) && inputValue);
+  useEffect(() => {
+    // Validate the URL whenever it changes
+    if (url === '') {
+      setIsValidURL(null); // Reset to null if input is empty
+    }
+    // If input is still building the prefix (like "h", "ht", "http")
+    else if ('https://'.startsWith(url) || 'http://'.startsWith(url)) {
+      setIsValidURL(null); // No error while typing a valid prefix
+    } 
+    else if ( (url.startsWith('http://') || url.startsWith('https://'))) {
+      setIsValidURL(true); // Set valid if starts with http/https
+    } else if(url.length >= 1) {
+      setIsValidURL(false); // Set invalid for other cases
+    }
+  }, [url]);
+
+  const isSubmitDisabled = (value === 'local' || !status) ? !(selectedFile || base64Recording ||  isValidURL) : !((selectedFile || base64Recording || isValidURL) && inputValue);
 
 
   // Handle the audio data after recording is stopped
@@ -286,6 +316,8 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
     console.log(url,"uuu");
     blobToBase64(audioData)
     setBase64Recording(url); // Set the audio URL to play it back
+    setVerificationData(true)
+    setCaptureVerifyErrorMessage('')
   };
 
   // Format time in mm:ss
@@ -433,11 +465,14 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
           <input
                 type="text"
                 onChange={handleURLChange}
+                value={url}
                 style={{width:"100%",height:"40px",border:"1px solid #787878", marginTop:"5px", marginBottom:"10px",padding:"2px 10px", borderRadius:"4px"}}
                 placeholder='Paste URL here...'
                 disabled={!!(selectedFile || base64Recording)}
               />
-
+      {isValidURL ===  null ? null : isValidURL ? null : (
+        <span style={{color:"red", marginBottom:"10px", textAlign:"left",display:"block", width:"100%"}}>Please enter valid url Link</span>
+      )}
           </Grid>
             </div>
            
@@ -474,13 +509,15 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
                 onChange={handleInputChange}
               />
           </Grid>}
+          {captureErrorMessage !== '' && <span style={{color:"red", marginBottom:"10px"}}>{captureErrorMessage || 'Something went wrong, Please try again'}</span> }
+          {captureVerifyErrorMessage !== '' && <span style={{color:"red", marginBottom:"10px"}}>{captureVerifyErrorMessage || 'Something went wrong, Please try again'}</span> }
          {((VerifiedSpeakerData?.length === 0 || value === 'none' || title === "Speaker Enrolllment") || verificationData)? <Grid item style={{display:"flex", justifyContent:"space-between"}}>
             <Button
               variant="contained"
               color="secondary"
               onClick={handleClose}
               style={{backgroundColor:"lightGray"}}
-             
+             disabled={enrollmentLoading || verifyLoading}
             >
               Cancel
             </Button>
@@ -496,7 +533,7 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
           </Grid> :
            <Grid item style={{marginTop:"20px"}}>
             <Typography fontWeight={600} fontFamily="Noto-Bold" style={{color:"#11AF22"}}>{VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.message}</Typography>
-            <Typography fontWeight={500}  fontFamily="Noto-Regular" style={{marginTop:"10px",fontSize:"16px"}}>ID: {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerId} | {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerName} | Confidence : {(VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.confidence * 100).toFixed(0)}%</Typography>
+            <Typography fontWeight={500}  fontFamily="Noto-Regular" style={{marginTop:"10px",fontSize:"14px"}}>ID: {VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerId} | Name:{VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.speakerName} | Confidence : {(VerifiedSpeakerData?.pipelineResponse?.[0]?.output?.[0]?.confidence * 100).toFixed(0)}%</Typography>
             <Grid item style={{display:"flex", justifyContent:"end", marginTop:"35px"}}>
 
             <Button
@@ -506,7 +543,7 @@ const FileUpload = ({ open,setOpen, handleClose, title, description, buttonText,
               // style={{backgroundColor:"lightGray"}}
              
             >
-              Cancel
+              Okay
             </Button>
             </Grid>
            

@@ -323,8 +323,8 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/speaker-enrollment`}
-            title={"Speaker Enrollment"}
+            path={`${process.env.PUBLIC_URL}/speaker-recognition`}
+            title={"Speaker Recognition"}
             component={SpeakerEnrollment}
             authenticate={authenticateUser}
             currentMenu="user-my-profile"
