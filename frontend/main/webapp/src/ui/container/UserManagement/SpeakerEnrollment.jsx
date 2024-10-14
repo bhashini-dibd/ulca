@@ -170,6 +170,8 @@ const [enrollmentSuccess, setEnrollmentSuccess] = useState(false)
 const [deletePopupLoading, setDeletePopupLoading] = useState(false)
 const [verificationData,setVerificationData] = useState(false)
 const [captureErrorMessage, setCaptureErrorMessage] = useState('')
+const [captureVerifyErrorMessage, setCaptureVerifyErrorMessage] = useState('')
+const [isValidURL, setIsValidURL] = useState(null);
 const [url, setUrl] = useState('');
 const handleUploadDialogOpen = () => {
   setUploadDialogOpen(true);
@@ -185,6 +187,7 @@ const handleSpeakerEnrollmentClose = () => {
   setUrl('')
   setEnrollmentSuccess(false)
   setCaptureErrorMessage('')
+  setIsValidURL(null)
 };
 
 const handleVerifyGlobalDialogOpen = () => {
@@ -214,6 +217,8 @@ const handleSpeakerVerificationClose = () => {
   setVerificationData(true)
   setUrl('')
   setFetchUserId('')
+  setCaptureVerifyErrorMessage('')
+  setIsValidURL(null)
 };
 
 const handleUpload = (file) => {
@@ -697,6 +702,7 @@ const handleExport = (file) => {
           name: "action",
           label: "Action",
           options: {
+            sort: false,
             customBodyRender: (value, tableMeta) => (
               // <Button
               //   // variant="contained"
@@ -722,7 +728,7 @@ const handleExport = (file) => {
                 <Box style={{display:"flex", gap:"10px"}}>
 
                 <Button variant="outlined" style={{border:"1px solid #2947A3", color:"#2947A3"}} onClick={() => handleVerifyLocalDialogOpen(tableMeta.rowData)}>Verify</Button>
-                <Button variant="outlined" style={{border:"1px solid #626262", color:"#626262"}}  
+                <Button variant="contained" style={{color:"#ffffff", backgroundColor:"#D91135"}}  
                 onClick={() => handleDeletePopupModal(tableMeta.rowData)}>Delete</Button>
                 {/* <img src={Delete} alt="delete img"/> */}
                 </Box>
@@ -831,6 +837,10 @@ const handleExport = (file) => {
         setUrl={setUrl}
         captureErrorMessage={captureErrorMessage}
         setCaptureErrorMessage={setCaptureErrorMessage}
+        captureVerifyErrorMessage={captureVerifyErrorMessage}
+        setCaptureVerifyErrorMessage={setCaptureVerifyErrorMessage}
+        setIsValidURL= {setIsValidURL}
+        isValidURL={isValidURL}
       />
       <FileUpload
         open={exportDialogOpen}
@@ -866,6 +876,10 @@ const handleExport = (file) => {
         setUrl={setUrl}
         captureErrorMessage={captureErrorMessage}
         setCaptureErrorMessage={setCaptureErrorMessage}
+        captureVerifyErrorMessage={captureVerifyErrorMessage}
+        setCaptureVerifyErrorMessage={setCaptureVerifyErrorMessage}
+        setIsValidURL= {setIsValidURL}
+        isValidURL={isValidURL}
       />
        <FileUpload
         open={LocalVerifyOpenDialog}
@@ -901,6 +915,10 @@ const handleExport = (file) => {
         setUrl={setUrl}
         captureErrorMessage={captureErrorMessage}
         setCaptureErrorMessage={setCaptureErrorMessage}
+        captureVerifyErrorMessage={captureVerifyErrorMessage}
+        setCaptureVerifyErrorMessage={setCaptureVerifyErrorMessage}
+        setIsValidURL= {setIsValidURL}
+        isValidURL={isValidURL}
       />
 
 <Dialog
