@@ -26,7 +26,21 @@ from app import mail
 from flask import render_template
 from bson import json_util
 from bson.objectid import ObjectId
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION,SPECIAL_CHARS, MEITY_SERVICE_PROVIDER_NAME,BHAHSINI_GLOSSARY_CREATE_URL,BHAHSINI_GLOSSARY_DELETE_URL,BHAHSINI_GLOSSARY_FETCH_URL
+from config import (
+    USR_MONGO_COLLECTION, 
+    USR_TEMP_TOKEN_MONGO_COLLECTION, 
+    USR_KEY_MONGO_COLLECTION, 
+    MAX_API_KEY, 
+    USR_MONGO_PROCESS_COLLECTION, 
+    SPECIAL_CHARS, 
+    BHAHSINI_GLOSSARY_CREATE_URL, 
+    BHAHSINI_GLOSSARY_DELETE_URL, 
+    BHAHSINI_GLOSSARY_FETCH_URL, 
+    BHAHSINI_SPEAKER_ENROLL_CREATE_URL, 
+    BHAHSINI_SPEAKER_VERIFICATION_URL, 
+    BHAHSINI_SPEAKER_FETCH_URL, 
+    BHAHSINI_SPEAKER_DELETE_URL
+    )
 from config import SENDER_EMAIL, SENDER_PASSWORD, SENDER_USERNAME, SECRET_KEY
 from Crypto.Cipher import AES
 import base64
@@ -929,10 +943,48 @@ class UserUtils:
     
     @staticmethod
     def send_fetch_req_for_dhruva(auth_headers):
-        #body = {"apiKey":infKey}
+        #body = {"apiKey":infKey}      
         result = requests.get(url=BHAHSINI_GLOSSARY_FETCH_URL,  headers=auth_headers)
         print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
-        return result.json(), result.status_code    
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def send_speaker_enroll_for_dhruva(userinferenceApiKey, request_body):
+        headers = {
+        'Authorization': userinferenceApiKey,
+        'Content-Type': 'application/json'
+        }
+        result = requests.post(url=BHAHSINI_SPEAKER_ENROLL_CREATE_URL, json=request_body, headers=headers)
+        return result.json(), result.status_code
+        
+
+    @staticmethod
+    def send_speaker_verify_for_dhruva(userinferenceApiKey, request_body):
+        headers = {
+        'Authorization': userinferenceApiKey,
+        'Content-Type': 'application/json'
+        }
+        result = requests.post(url=BHAHSINI_SPEAKER_VERIFICATION_URL, json=request_body, headers=headers)
+        return result.json(), result.status_code
+
+    @staticmethod
+    def send_speaker_fetchall_for_dhruva(userinferenceApiKey):
+
+        headers = {
+        'Authorization': userinferenceApiKey,
+        'Content-Type': 'application/json'
+        }
+        result = requests.get(url=BHAHSINI_SPEAKER_FETCH_URL, headers=headers)
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def send_speaker_delete_for_dhruva(userinferenceApiKey, request_body):
+        headers = {
+        'Authorization': userinferenceApiKey,
+        'Content-Type': 'application/json'
+        }
+        result = requests.delete(url=BHAHSINI_SPEAKER_DELETE_URL, json=request_body, headers=headers)
+        return result.json(), result.status_code
     
     @staticmethod
     def generateServiceProviderKey(userID, appName, udyatApiKey):
@@ -1021,4 +1073,3 @@ class UserUtils:
             return res.getresjson(), 200
         else:
             return post_error("400", "Unable to revoke service provider details, please check credentials", None), 400
-                    

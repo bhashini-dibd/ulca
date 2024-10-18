@@ -471,7 +471,118 @@ class ToggleDataTracking(Resource):
         elif 'success' not in patch_req.json().keys():
             return post_error("400", "Unable to toggle Data Tracking at the moment, please try again", None), 400
 
+
+class EnrollSpeaker(Resource):
+    def post(self):
+        body = request.get_json()
+        print("Request Body: ", body)
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400
         
+        user_id=request.headers["x-user-id"]
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+    
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_enroll_for_dhruva(userinferenceApiKey, body)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
+class VerifySpeaker(Resource):
+    def post(self):
+        body = request.get_json()
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        
+        user_id=request.headers["x-user-id"]
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_verify_for_dhruva(userinferenceApiKey, body)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
+
+class DeleteSpeaker(Resource):
+    def post(self):
+        print("Test Data DeleteSpeaker: ", request.get_json())
+        body = request.get_json()
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        
+        user_id=request.headers["x-user-id"]
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_delete_for_dhruva(userinferenceApiKey, body)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
+
+class FetchSpeaker(Resource):
+    def get(self): 
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        
+        user_id=request.headers["x-user-id"]
+
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}") 
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_fetchall_for_dhruva(userinferenceApiKey)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
 
 class CreateGlossary(Resource):
     def post(self):
@@ -581,6 +692,7 @@ class FetchGlossary(Resource):
         serviceProviderName = request.args.get("serviceProviderName")
         user_id=request.headers["x-user-id"]
         userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
         if not userinferenceApiKey:
             return post_error("400", "Couldn't find the user inference api Key", None), 400
         api_dict = {"api-key":userinferenceApiKey}

@@ -10,7 +10,7 @@ export const ModelTask = [
   { value: "txt-lang-detection", label: "Language Detection" },
   { value: "audio-lang-detection", label: "Audio Language Detection" },
   { value: "audio-gender-detection", label: "Audio Gender Detection" },
-  // { value: "itn", label: "ITN" },
+  { value: "itn", label: "ITN" },
 ];
 
 export const BenchmarkModelTask = [
