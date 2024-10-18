@@ -93,6 +93,8 @@ export default class HostedInference extends API {
       }
       bodyData.source = this.source;
       // bodyData.inferenceEndPoint = this.inferenceEndPoint;
+    }else if (this.task === "itn") {
+      bodyData.input = [{ source: this.input }];
     }
     bodyData.userId =
       localStorage.getItem("userDetails") &&
