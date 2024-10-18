@@ -1,7 +1,31 @@
 from flask import Blueprint
 from flask_restful import Api
-from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey, GetApiKeysForProfile, ToggleDataTracking,CreateGlossary,DeleteGlossary,FetchGlossary, OnboardingAppProfile, GenerateServiceProviderKeyWithoutLogin, RemoveServiceProviderKeyWithoutLogin
-
+from resources import (
+    CreateUsers, 
+    UpdateUsers, 
+    SearchUsers, 
+    OnboardUsers, 
+    ActivateDeactivateUser, 
+    VerifyUser, 
+    Health, 
+    GetApiKey, 
+    RevokeApiKey, 
+    GenerateApiKey, 
+    GenerateServiceProviderKey, 
+    RemoveServiceProviderKey, 
+    GetApiKeysForProfile, 
+    ToggleDataTracking, 
+    CreateGlossary, 
+    DeleteGlossary, 
+    FetchGlossary, 
+    OnboardingAppProfile, 
+    EnrollSpeaker, 
+    VerifySpeaker, 
+    FetchSpeaker, 
+    DeleteSpeaker, 
+    GenerateServiceProviderKeyWithoutLogin, 
+    RemoveServiceProviderKeyWithoutLogin  
+    )
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
 
@@ -77,7 +101,22 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     FetchGlossary, "/v1/users/glossary/fetch-all"
 )
 
-# APIs to generate keys without authentication
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    EnrollSpeaker, "/v1/users/speakers/enroll"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    VerifySpeaker, "/v1/users/speakers/verify"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    FetchSpeaker, "/v1/users/speakers/list"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    DeleteSpeaker, "/v1/users/speakers/delete"
+)
+
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     GenerateServiceProviderKeyWithoutLogin, "/v2/users/generateServiceProviderKey"
 )
