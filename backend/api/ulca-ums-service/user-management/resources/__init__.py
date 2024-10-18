@@ -1,2 +1,26 @@
-from .users import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, SearchRoles, Health, GetApiKey, GetApiKeysForProfile, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey,ToggleDataTracking,CreateGlossary,DeleteGlossary,FetchGlossary, OnboardingAppProfile, GenerateServiceProviderKeyWithoutLogin, RemoveServiceProviderKeyWithoutLogin
+from .users import (
+    CreateUsers, 
+    UpdateUsers, 
+    SearchUsers, 
+    OnboardUsers, 
+    SearchRoles, 
+    Health, 
+    GetApiKey, 
+    GetApiKeysForProfile, 
+    RevokeApiKey, 
+    GenerateApiKey, 
+    GenerateServiceProviderKey, 
+    RemoveServiceProviderKey, 
+    ToggleDataTracking, 
+    CreateGlossary, 
+    DeleteGlossary,
+    FetchGlossary, 
+    OnboardingAppProfile, 
+    EnrollSpeaker, 
+    VerifySpeaker, 
+    DeleteSpeaker, 
+    FetchSpeaker, 
+    GenerateServiceProviderKeyWithoutLogin, 
+    RemoveServiceProviderKeyWithoutLogin
+    )
 from .user_auth import UserLogin, UserLogout, ApiKeySearch, ForgotPassword, ResetPassword, VerifyUser, ActivateDeactivateUser, VerifyToken
