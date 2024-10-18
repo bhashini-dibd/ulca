@@ -2609,6 +2609,131 @@ public class ModelService {
 		return schemaList;
 	}
 
+	TaskSchemaList getPipelineResponseSchemaList1(TaskSpecifications individualTaskSpecifications) {
+		TaskSchemaList schemaList = new TaskSchemaList();
+		for (TaskSpecification individualSpec : individualTaskSpecifications) {
+			if (individualSpec.getTaskType() == SupportedTasks.ASR) {
+				ASRTaskInference asrTaskInference = new ASRTaskInference();
+				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
+					ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
+					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
+					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
+					asrResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					asrResponseConfig.setDescription(model.getDescription());
+					LanguagePairs langPair = model.getLanguages();
+					for (LanguagePair lp : langPair) {
+						asrResponseConfig.setLanguage(lp);
+					}
+					asrResponseConfig.setServiceId(curConfigSchema.getServiceId());
+					asrResponseConfig.setModelId(curConfigSchema.getModelId());
+					asrResponseConfig.setDomain(model.getDomain());
+					asrResponseConfig.setDefaultModel(curConfigSchema.isDefaultModel());
+					asrTaskInference.addConfigItem(asrResponseConfig);
+				}
+				schemaList.add(asrTaskInference);
+			}
+			if (individualSpec.getTaskType() == SupportedTasks.TRANSLATION) {
+				TranslationTaskInference translationTaskInference = new TranslationTaskInference();
+				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
+					TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
+					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
+					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
+					translationResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					translationResponseConfig.setDescription(model.getDescription());
+					LanguagePairs langPair = model.getLanguages();
+					for (LanguagePair lp : langPair) {
+						translationResponseConfig.setLanguage(lp);
+					}
+					translationResponseConfig.setServiceId(curConfigSchema.getServiceId());
+					translationResponseConfig.setModelId(curConfigSchema.getModelId());
+					translationResponseConfig.setDefaultModel(curConfigSchema.isDefaultModel());
+					translationTaskInference.addConfigItem(translationResponseConfig);
+				}
+				schemaList.add(translationTaskInference);
+			}
+			if (individualSpec.getTaskType() == SupportedTasks.TTS) {
+				TTSTaskInference ttsTaskInference = new TTSTaskInference();
+				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
+					TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
+					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
+					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
+					ttsResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					ttsResponseConfig.setDescription(model.getDescription());
+					LanguagePairs langPair = model.getLanguages();
+					for (LanguagePair lp : langPair) {
+						ttsResponseConfig.setLanguage(lp);
+					}
+					ttsResponseConfig.setServiceId(curConfigSchema.getServiceId());
+					ttsResponseConfig.setModelId(curConfigSchema.getModelId());
+					TTSInference tTSInference = (TTSInference) model.getInferenceEndPoint().getSchema();
+					ttsResponseConfig.setSupportedVoices(tTSInference.getSupportedVoices());
+					ttsResponseConfig.setDefaultModel(curConfigSchema.isDefaultModel());
+					ttsTaskInference.addConfigItem(ttsResponseConfig);
+				}
+				schemaList.add(ttsTaskInference);
+			}
+			if (individualSpec.getTaskType() == SupportedTasks.TRANSLITERATION) {
+				TransliterationTaskInference transliterationTaskInference = new TransliterationTaskInference();
+				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
+					TransliterationResponseConfig transliterationResponseConfig = new TransliterationResponseConfig();
+					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
+					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
+					transliterationResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					transliterationResponseConfig.setDescription(model.getDescription());
+					LanguagePairs langPair = model.getLanguages();
+					for (LanguagePair lp : langPair) {
+						transliterationResponseConfig.setLanguage(lp);
+					}
+					transliterationResponseConfig.setServiceId(curConfigSchema.getServiceId());
+					transliterationResponseConfig.setModelId(curConfigSchema.getModelId());
+					transliterationResponseConfig.setDefaultModel(curConfigSchema.isDefaultModel());
+					transliterationTaskInference.addConfigItem(transliterationResponseConfig);
+				}
+				schemaList.add(transliterationTaskInference);
+			}
+			if (individualSpec.getTaskType() == SupportedTasks.OCR) {
+				OCRTaskInference ocrTaskInference = new OCRTaskInference();
+				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
+					OCRResponseConfig ocrResponseConfig = new OCRResponseConfig();
+					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
+					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
+					ocrResponseConfig.setName(model.getSubmitter().getName() + "-" + model.getVersion());
+					ocrResponseConfig.setDescription(model.getDescription());
+					LanguagePairs langPair = model.getLanguages();
+					for (LanguagePair lp : langPair) {
+						ocrResponseConfig.setLanguage(lp);
+					}
+					ocrResponseConfig.setServiceId(curConfigSchema.getServiceId());
+					ocrResponseConfig.setModelId(curConfigSchema.getModelId());
+					ocrResponseConfig.setDefaultModel(curConfigSchema.isDefaultModel());
+					ocrTaskInference.addConfigItem(ocrResponseConfig);
+				}
+				schemaList.add(ocrTaskInference);
+			}
+		}
+
+		return schemaList;
+	}
 	public AppModelsResponse getAppModels(String taskType) {
 		AppModelsResponse appModelsResponse = new AppModelsResponse();
 		String[] defaultTasks = { "translation", "asr", "transliteration", "tts", "ocr" };
@@ -2737,6 +2862,49 @@ public class ModelService {
 		 * , HttpStatus.BAD_REQUEST); }
 		 */
 
+	//===============================================================================================
+		 ObjectMapper objectMapper = new ObjectMapper()
+		            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+	        Object jsonObject = objectMapper.readValue(jsonRequest, Object.class);
+	      String uniqueJsonString = objectMapper.writeValueAsString(jsonObject);
+		 if(redisHealthCheckService.isRedisUp()) {
+		 if (cacheService.isCached2(uniqueJsonString)) {
+			 log.info("Request found in Cache");
+			 PipelineResponse pipelineResponse2= cacheService.getResponse2(uniqueJsonString);
+				
+				log.info("Response Object from redis :: ");
+				ObjectMapper mapper = new
+						 ObjectMapper();
+				/*
+				 * PipelineResponse pipelineResponse2 = null; ObjectMapper mapper = new
+				 * ObjectMapper(); if (object instanceof String) { String jsonString = (String)
+				 * object; pipelineResponse2 = objectMapper.readValue(jsonString,
+				 * PipelineResponse.class); // Now you can use the PipelineResponse object }
+				 */
+				
+				
+				
+					
+				mapper.setSerializationInclusion(Include.NON_NULL);
+				mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			
+
+				ObjectNode node = mapper.valueToTree(pipelineResponse2);
+				 return node;
+		            
+		 
+		        }
+		
+		 log.info("Request does not found in Cache");
+		 }
+
+		
+ //=================================================================================================
+		
+		
+		
+		
+		
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
 		PipelineResponse pipelineResponse = new PipelineResponse();
@@ -2745,44 +2913,147 @@ public class ModelService {
 
 		log.info("Get all pipeline after :: ");
 		PipelineModel allPipelineTasks = new PipelineModel();
-
-		for (PipelineModel pipelineModel2 : pipelineModels) {
-			for (TaskSpecification taskSpecification : pipelineModel2.getTaskSpecifications()) {
-				boolean modelAdded = false;
-				if (allPipelineTasks.getTaskSpecifications() != null) {
-					for (int i = 0; i < allPipelineTasks.getTaskSpecifications().size(); i++) {
-						if (allPipelineTasks.getTaskSpecifications().get(i).getTaskType()
-								.equals(taskSpecification.getTaskType())) {
-							ConfigList configList = taskSpecification.getTaskConfig();
-							for (ConfigSchema configSchema : configList) {
-								allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().add(configSchema);
+		
+		
+		
+		
+		for(PipelineModel pipeDb:pipelineModels) {
+			
+			for(TaskSpecification ts:pipeDb.getTaskSpecifications()) {
+				
+				if(allPipelineTasks.getTaskSpecifications()!=null) {
+					boolean taskAdded = false;
+					
+					for(int i=0; i<allPipelineTasks.getTaskSpecifications().size();i++) {
+						if(allPipelineTasks.getTaskSpecifications().get(i).getTaskType().equals(ts.getTaskType())) {
+						ConfigList cl=	ts.getTaskConfig();
+						ConfigList cl1= new ConfigList();
+						for(int j=0;j<cl.size();j++) {
+							boolean modelAdded = false;
+							for(int k=0;k<allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().size();k++) {
+								if(allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().get(k).getModelId()
+										.equals(cl.get(j).getModelId())) {
+								if(cl.get(j).isDefaultModel()!=null) {
+									if(cl.get(j).isDefaultModel()) {
+									ConfigSchema cs=cl.get(j);	
+									allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().set(k, cs);
+									modelAdded=true;
+									}
+									
+								}	
+									
+								}
 							}
-							modelAdded = true;
+							if(!modelAdded) {
+								ConfigSchema cs = cl.get(j);
+								if(cs.isDefaultModel()==null) {
+									cs.setDefaultModel(false);
+								}
+								allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().add(cs);
+								
+							}
+							
 						}
+	                    taskAdded=true;
+						}
+						
 					}
-				}
-
-				log.info("after");
-
-				if (allPipelineTasks.getTaskSpecifications() != null) {
-					if (!modelAdded) {
-
-						log.info("!modelAdded");
-						allPipelineTasks.getTaskSpecifications().add(taskSpecification);
-
+					if(!taskAdded) {
+						TaskSpecification ts1 = new TaskSpecification();
+						   ConfigList cl1= new ConfigList();
+							ConfigList cl = ts.getTaskConfig();
+							for(ConfigSchema cs : cl) {
+								if(cs.isDefaultModel()==null) {
+									
+									cs.setDefaultModel(false);
+								}
+								cl1.add(cs);
+							}
+							ts1.setTaskType(ts.getTaskType());
+							ts1.setTaskConfig(cl1);
+							allPipelineTasks.getTaskSpecifications().add(ts1);
+						
 					}
-
-				} else {
-					log.info("else");
-					TaskSpecifications taskSpecifications = new TaskSpecifications();
-					taskSpecifications.add(taskSpecification);
-					allPipelineTasks.setTaskSpecifications(taskSpecifications);
+					
+				}else {
+				   TaskSpecifications tasks = new TaskSpecifications();
+				   TaskSpecification ts1 = new TaskSpecification();
+				   ConfigList cl1= new ConfigList();
+					ConfigList cl = ts.getTaskConfig();
+					for(ConfigSchema cs : cl) {
+						if(cs.isDefaultModel()==null) {
+							
+							cs.setDefaultModel(false);
+						}
+						cl1.add(cs);
+					}
+					ts1.setTaskType(ts.getTaskType());
+					ts1.setTaskConfig(cl1);
+					tasks.add(ts1);
+					allPipelineTasks.setTaskSpecifications(tasks);
 				}
-
+				
 			}
-
+			
 		}
-
+		
+		
+		/*
+		 * 
+		 * 
+		 * for (PipelineModel pipelineModel2 : pipelineModels) { for (TaskSpecification
+		 * taskSpecification : pipelineModel2.getTaskSpecifications()) { boolean
+		 * modelAdded = false; if (allPipelineTasks.getTaskSpecifications() != null) {
+		 * for (int i = 0; i < allPipelineTasks.getTaskSpecifications().size(); i++) {
+		 * if (allPipelineTasks.getTaskSpecifications().get(i).getTaskType()
+		 * .equals(taskSpecification.getTaskType())) { ConfigList configList =
+		 * taskSpecification.getTaskConfig(); for (ConfigSchema configSchema :
+		 * configList) {
+		 * allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().add(
+		 * configSchema); for(int j=0;j<
+		 * allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().size();j++) {
+		 * if(allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().get(j).
+		 * getModelId().equals(configSchema.getModelId())) {
+		 * if(configSchema.isDefaultModel()!=null) { if(configSchema.isDefaultModel()) {
+		 * ConfigSchema
+		 * cs1=allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().get(j);
+		 * cs1.setDefaultModel(true);
+		 * allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().set(j, cs1);
+		 * 
+		 * } }
+		 * 
+		 * }else { if(configSchema.isDefaultModel()==null) {
+		 * configSchema.setDefaultModel(false);
+		 * allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().add(
+		 * configSchema); } } }
+		 * 
+		 * 
+		 * } modelAdded = true; } } }
+		 * 
+		 * log.info("after");
+		 * 
+		 * if (allPipelineTasks.getTaskSpecifications() != null) { if (!modelAdded) {
+		 * 
+		 * log.info("!modelAdded"); TaskSpecification temp = new TaskSpecification();
+		 * ConfigList cl = taskSpecification.getTaskConfig(); for(ConfigSchema cs:cl) {
+		 * if(cs.isDefaultModel()==null) { cs.setDefaultModel(false); } }
+		 * temp.setTaskConfig(cl);
+		 * 
+		 * allPipelineTasks.getTaskSpecifications().add(temp);
+		 * 
+		 * }
+		 * 
+		 * } else { log.info("else"); TaskSpecifications taskSpecifications = new
+		 * TaskSpecifications(); TaskSpecification temp = new TaskSpecification();
+		 * ConfigList cl = taskSpecification.getTaskConfig(); for(ConfigSchema cs:cl) {
+		 * if(cs.isDefaultModel()==null) { cs.setDefaultModel(false); } }
+		 * temp.setTaskConfig(cl); taskSpecifications.add(temp);
+		 * allPipelineTasks.setTaskSpecifications(taskSpecifications); }
+		 * 
+		 * }
+		 * 
+		 * }
+		 */
 		log.info("pipeline-model :: " + allPipelineTasks);
 		// Generate Individual Language List
 		PipelineUtilities pipelineUtilities = new PipelineUtilities();
@@ -2815,7 +3086,7 @@ public class ModelService {
 		}
 
 		// Generate Response Config
-		TaskSchemaList pipelineResponseSchemaList = getPipelineResponseSchemaList(individualTaskSpecifications);
+		TaskSchemaList pipelineResponseSchemaList = getPipelineResponseSchemaList1(individualTaskSpecifications);
 		pipelineResponse.setPipelineResponseConfig(pipelineResponseSchemaList);
 
 		for (int i = 0; i < pipelineResponseSchemaList.size(); i++) {
@@ -2881,6 +3152,9 @@ public class ModelService {
 		// log.info("String JSON :: "+json);
 
 		ObjectNode node = mapper.valueToTree(pipelineResponse);
+		if(redisHealthCheckService.isRedisUp()) {
+	        cacheService.saveResponse2(uniqueJsonString, pipelineResponse);
+			}
 		return node;
 	}
 }
