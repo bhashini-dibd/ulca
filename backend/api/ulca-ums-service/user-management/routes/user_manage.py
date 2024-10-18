@@ -22,9 +22,10 @@ from resources import (
     EnrollSpeaker, 
     VerifySpeaker, 
     FetchSpeaker, 
-    DeleteSpeaker
+    DeleteSpeaker, 
+    GenerateServiceProviderKeyWithoutLogin, 
+    RemoveServiceProviderKeyWithoutLogin  
     )
-
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
 
@@ -116,4 +117,10 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     DeleteSpeaker, "/v1/users/speakers/delete"
 )
 
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    GenerateServiceProviderKeyWithoutLogin, "/v2/users/generateServiceProviderKey"
+)
 
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    RemoveServiceProviderKeyWithoutLogin, "/v2/users/removeServiceProviderKey"
+)

@@ -250,6 +250,12 @@ const DataSet = (theme) => ({
       display: "block",
     },
   },
+  filterGridMobile1: {
+    display: "none",
+    "@media (max-width:870px)": {
+      display: "flex",
+    },
+  },
   searchDivStyle: {
     //padding: '0% 4%',
     margin: "1% 2.5% 0 2.5%",
