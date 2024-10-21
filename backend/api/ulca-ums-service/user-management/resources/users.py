@@ -778,7 +778,7 @@ class OnboardingAppUserDetails(Resource):
                 return post_error("Data not valid","Error on fetching user details")
 
             user_details = {"userKeys":user_keys,"userDetails": normalize_bson_to_json(user_details)}
-            printf("user_details :: ", user_details)
+            print(f"user_details :: {user_details}")
             data = [{"userDetails":user_details,"email":email}]
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
             return res.getresjson(), 200            
