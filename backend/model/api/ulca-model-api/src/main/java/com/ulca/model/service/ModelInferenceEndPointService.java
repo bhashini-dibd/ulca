@@ -473,6 +473,32 @@ public class ModelInferenceEndPointService {
 			itnInference.setResponse(response);
 			schema = itnInference;
 
+		}else 	if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TNInference")) {
+			io.swagger.model.TNInference tnInference = (io.swagger.model.TNInference) schema;
+			TranslationRequest request = tnInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = getTrustAllCertsClient();
+
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			// Request httpRequest = new
+			// Request.Builder().url(callBackUrl).post(body).build();
+
+			Request httpRequest = checkInferenceApiKeyValueAtUpload(inferenceAPIEndPoint, body);
+
+			Response httpResponse = client.newCall(httpRequest).execute();
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+
+			TranslationResponse response = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
+			tnInference.setResponse(response);
+			schema = tnInference;
+
 		}
 
 		inferenceAPIEndPoint.setSchema(schema);
@@ -1405,7 +1431,7 @@ public class ModelInferenceEndPointService {
 
 				log.info(httpResponse.toString());
 
-				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Failed",
+				throw new ModelComputeException(httpResponse.message(), "ITN Model Compute Failed",
 						HttpStatus.valueOf(httpResponse.code()));
 			}
 
@@ -1437,6 +1463,94 @@ public class ModelInferenceEndPointService {
 
 				throw new ModelComputeException(httpResponse.message(),
 						"ITN Model Compute Response is not proper", HttpStatus.BAD_REQUEST);
+
+			}
+
+		}
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TNInference")) {
+			io.swagger.model.TNInference tnInference = (io.swagger.model.TNInference) schema;
+			TranslationRequest request = tnInference.getRequest();
+			
+			log.info("TN Compute Start");
+
+			List<Input> input = compute.getInput();
+			Sentences sentences = new Sentences();
+			for (Input ip : input) {
+				Sentence sentense = new Sentence();
+				sentense.setSource(ip.getSource());
+				sentences.add(sentense);
+			}
+			request.setInput(sentences);
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+           
+			log.info("requestJson  :::   "+requestJson.toString());
+			
+			
+			//OkHttpClient client = new OkHttpClient();
+			/*
+			 * OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120,
+			 * TimeUnit.SECONDS) .writeTimeout(120, TimeUnit.SECONDS) .readTimeout(120,
+			 * TimeUnit.SECONDS) .build();
+			 */
+			//OkHttpClientConfig okHttpClientConfig = new OkHttpClientConfig();
+			
+			//log.info("okHttpClientConfig : "+okHttpClientConfig.toString());
+			
+			log.info("before ssl client");
+			OkHttpClient client = getTrustAllCertsClient();
+			
+			log.info("client :: "+client);
+			
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			// Request httpRequest = new
+			// Request.Builder().url(callBackUrl).post(body).build();
+			Request httpRequest = checkInferenceApiKeyValueAtCompute(inferenceAPIEndPoint, body);
+
+			Response httpResponse = null;
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			} catch (SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout",
+						"Unable to fetch model response (timeout). Please try again later !", HttpStatus.BAD_REQUEST);
+			}
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "TN Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+
+			String responseJsonStr = httpResponse.body().string();
+
+			try {
+				TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
+
+				if (translation.getOutput() == null || translation.getOutput().size() <= 0) {
+					throw new ModelComputeException(httpResponse.message(),
+							"TN Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
+
+				}
+				List<String> outputTextList = new ArrayList<>();
+				for (Sentence sentence : translation.getOutput()) {
+					outputTextList.add(sentence.getTarget());
+				}
+
+				ModelComputeResponseTranslation resp = new ModelComputeResponseTranslation();
+				BeanUtils.copyProperties(translation, resp);
+
+				response = resp;
+				return response;
+
+			} catch (Exception e) {
+
+				log.info("response from TN model inference point not proper : callback url :  " + callBackUrl
+						+ " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(),
+						"TN Model Compute Response is not proper", HttpStatus.BAD_REQUEST);
 
 			}
 
