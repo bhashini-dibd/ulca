@@ -565,7 +565,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
     },
     {
       name: "ulcaApiKey",
-      label: "ULCA API Key",
+      label: "Udyat API Key",
       options: {
         filter: false,
         sort: false,
@@ -663,7 +663,15 @@ const isMobile = useMediaQuery("(max-width:600px)")
     })
   }
 
-
+  const handleSpeakerVerificationData = (row) => {
+    console.log(row,UlcaApiKey,"heee")
+    history.push(`${process.env.PUBLIC_URL}/speaker-recognition`, {
+      serviceProviderName: row?.serviceProviderName,
+      inferenceApiKey: row?.inferenceApiKey.value,
+      appName: fetchAppName,
+      UlcaApiKey:fetchUlcaApi,
+    })
+  }
 
   const options = {
     textLabels: {
@@ -707,7 +715,7 @@ const isMobile = useMediaQuery("(max-width:600px)")
             <TableRow>
               <TableCell colSpan={5}>
                 <>
-                  <Box  style={{margin: "0 80px", width:"86%"}}>
+                  <Box  /* style={{margin: "0 80px", width:"86%"}} */>
                     <Table size="small" aria-label="purchases">
                       <TableHead style={{ height: "60px" }}>
                         <TableCell style={{ whiteSpace: "nowrap" }}>
@@ -730,15 +738,16 @@ const isMobile = useMediaQuery("(max-width:600px)")
                         <TableCell
                           // style={{ paddingLeft: "50px", width: "15%", }}
                         >
-                          <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
+                          {/* <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
                             <Box sx={{color:"black"}}> Glossary</Box>
                             <Box> <Tooltip style={{padding:"10px", fontSize:"22px"}} placement="top"  classes={{ tooltip: tooltipclass.tooltip }}  title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
       <IconButton>
         <InfoIcon />
       </IconButton>
     </Tooltip></Box>
-                          </Box>
+                          </Box> */}
                         </TableCell>
+                        <TableCell></TableCell>
                       </TableHead>
                       <TableBody>
                         {data.map((row, i) => {
@@ -824,12 +833,26 @@ const isMobile = useMediaQuery("(max-width:600px)")
                                     className={classes.myProfileGenerateButton}
                                     onClick={() => handleGlossaryData(row)}
                                   >
-                                    View
+                                    Glossary
                                   </Button>
                                 
                                
                                 )}                            
                               </TableCell>
+                              <TableCell style={{ width: "25%" }}> {row?.inferenceApiKey?.value && (
+                                 
+                                 <Button
+                               color="primary"
+                               variant="contained"
+                               className={classes.myProfileGenerateButton}
+                               onClick={() => handleSpeakerVerificationData(row)}
+                               style={{height:"60px"}}
+                             >
+                               Speaker Verification
+                             </Button>
+                           
+                          
+                           )}   </TableCell>
                             </TableRow>
                           );
                         })}

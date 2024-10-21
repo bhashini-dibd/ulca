@@ -261,12 +261,29 @@ class GenerateApiKey(Resource):
             return post_error("400", user_api_keys['message'], None), 400
 
 
+class GenerateServiceProviderKeyWithoutLogin(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "udyatApiKey" not in body.keys():
+            return post_error("400", "Please provide udyatApiKey", None), 400
+        if "appName" not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.generateServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
 
 
 class GenerateServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
-       
+        
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.generateServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
+            
         if "pipelineId" not in body.keys() and "serviceProviderName" not in body.keys():
             return post_error("400", "Please provide pipelineId or serviceProviderName", None), 400
         if "userID" not in body.keys():
@@ -342,11 +359,30 @@ class GenerateServiceProviderKey(Resource):
         
             
 
+class RemoveServiceProviderKeyWithoutLogin(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "udyatApiKey" not in body.keys():
+            return post_error("400", "Please provide udyatApiKey", None), 400
+        if "appName" not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        
+
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.removeServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
 
         
 class RemoveServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
+        
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.removeServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
+
         if "serviceProviderName" not in body.keys():
             return post_error("400", "Please provide serviceProviderName", None), 400
         if "userID" not in body.keys():
@@ -493,7 +529,7 @@ class VerifySpeaker(Resource):
         return res.getdhruvaresults(), dhruva_result_status_code
 
 class DeleteSpeaker(Resource):
-    def delete(self):
+    def post(self):
         body = request.get_json()
         appName = request.args.get("appName")
         serviceProviderName = request.args.get("serviceProviderName")

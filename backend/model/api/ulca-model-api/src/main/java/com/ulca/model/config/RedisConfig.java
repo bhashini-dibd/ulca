@@ -1,5 +1,6 @@
 package com.ulca.model.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,28 +32,56 @@ public class RedisConfig {
 	
 	@Value(value = "${redis.db}")
     private Integer redisDb;
+	
+	@Value(value = "${redis.db2}")
+    private Integer redisDb2;
+	
+	
+	
+	   @Bean(name = "jedisConnectionFactoryDb1")
+	    public JedisConnectionFactory jedisConnectionFactoryDb1() {
+	        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+	        log.info("Initializing redis connection for db1...");
+	        configuration.setHostName(redisHost);
+	        configuration.setPort(Integer.parseInt(redisPort));
+	        configuration.setPassword(redisPass);
+	        configuration.setDatabase(redisDb);
 
-    @Bean
-    public JedisConnectionFactory connectionFactory() {
-        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        log.info("Intializing redis connection...");
-        log.info("redisHost :: "+redisHost);
-        log.info("redisPort :: "+redisPort);
-        log.info("redisPass :: "+redisPass);
-        log.info("redisDb :: "+redisDb);
-        configuration.setHostName(redisHost);
-        configuration.setPort(new Integer(redisPort));
-        configuration.setPassword(redisPass);
-        configuration.setDatabase(redisDb);
+	        return new JedisConnectionFactory(configuration);
+	    }
 
-        return new JedisConnectionFactory(configuration);
-    }
+	    @Bean(name = "jedisConnectionFactoryDb2")
+	    public JedisConnectionFactory jedisConnectionFactoryDb2() {
+	        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+	        log.info("Initializing redis connection for db2...");
+	        configuration.setHostName(redisHost);
+	        configuration.setPort(Integer.parseInt(redisPort));
+	        configuration.setPassword(redisPass);
+	        configuration.setDatabase(redisDb2);
 
-    @Bean
-    public RedisTemplate<String, PipelineResponse> redisTemplate() {
-        
+	        return new JedisConnectionFactory(configuration);
+	    }
+	
+
+		/*
+		 * @Bean public JedisConnectionFactory connectionFactory(Integer database) {
+		 * RedisStandaloneConfiguration configuration = new
+		 * RedisStandaloneConfiguration(); log.info("Intializing redis connection...");
+		 * log.info("redisHost :: "+redisHost); log.info("redisPort :: "+redisPort);
+		 * log.info("redisPass :: "+redisPass); log.info("redisDb :: "+database);
+		 * configuration.setHostName(redisHost); configuration.setPort(new
+		 * Integer(redisPort)); configuration.setPassword(redisPass);
+		 * configuration.setDatabase(database);
+		 * 
+		 * return new JedisConnectionFactory(configuration); }
+		 */
+	    
+	    
+    @Bean(name = "redisDb1")
+    public RedisTemplate<String, PipelineResponse> redisTemplate(@Qualifier("jedisConnectionFactoryDb1") JedisConnectionFactory jedisConnectionFactoryDb1) {
+        log.info("db1");
     	final RedisTemplate<String, PipelineResponse> redisTemplate = new RedisTemplate<String, PipelineResponse>();
-        redisTemplate.setConnectionFactory(connectionFactory());
+        redisTemplate.setConnectionFactory(jedisConnectionFactoryDb1);
     	redisTemplate.setKeySerializer( new StringRedisSerializer() );
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer() );
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
@@ -61,11 +90,24 @@ public class RedisConfig {
         return redisTemplate;
     }
     
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate2() {
+    @Bean(name = "redisDb2")
+    public RedisTemplate<String, PipelineResponse> redisTemplate2(@Qualifier("jedisConnectionFactoryDb2") JedisConnectionFactory jedisConnectionFactoryDb2) {
+        log.info("db2");
+    	final RedisTemplate<String, PipelineResponse> redisTemplate = new RedisTemplate<String, PipelineResponse>();
+        redisTemplate.setConnectionFactory(jedisConnectionFactoryDb2);
+    	redisTemplate.setKeySerializer( new StringRedisSerializer() );
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer() );
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer( new GenericJackson2JsonRedisSerializer() );
+        
+        return redisTemplate;
+    }
+    
+    @Bean(name = "redisTemplate3")
+    public RedisTemplate<String, Object> redisTemplate3(@Qualifier("jedisConnectionFactoryDb1") JedisConnectionFactory jedisConnectionFactoryDb1) {
         
     	final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
-        redisTemplate.setConnectionFactory(connectionFactory());
+        redisTemplate.setConnectionFactory(jedisConnectionFactoryDb1);
     	redisTemplate.setKeySerializer( new StringRedisSerializer() );
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer() );
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
@@ -73,6 +115,16 @@ public class RedisConfig {
         
         return redisTemplate;
     }
-    
+    @Bean(name = "redisTemplate")
+    public RedisTemplate<String, PipelineResponse> defaultRedisTemplate(@Qualifier("jedisConnectionFactoryDb1") JedisConnectionFactory jedisConnectionFactoryDb1) {
+        final RedisTemplate<String, PipelineResponse> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(jedisConnectionFactoryDb1);
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        return redisTemplate;
+    }
 
 }

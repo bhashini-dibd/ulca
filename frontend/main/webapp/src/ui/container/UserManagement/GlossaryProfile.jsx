@@ -633,7 +633,7 @@ useEffect(() => {
         }
       ];
 
-      const renderTextarea = (props, heading) => {
+      const renderTextarea = (props, heading,isDisabled) => {
         return (
           <>
           <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>{heading}</Typography>
@@ -642,7 +642,7 @@ useEffect(() => {
             placeholder={"Enter text here..."}
             rows={2}
             // className={classes.textAreaTransliteration}
-            style={{border:"1px solid lightGray", backgroundColor: "inherit", width: "100%", resize: "none",
+            style={{border:"1px solid lightGray", backgroundColor: isDisabled ? "#f0f0f0" : "inherit", width: "100%", resize: "none",
             fontSize: "23px",
             lineHeight: "32px",
             color: "black",
@@ -688,7 +688,7 @@ useEffect(() => {
           {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
           <Box>
             <Typography variant="body1">{UlcaApiKey}</Typography>
-            <Typography variant="body2" fontWeight="400">ULCA API Key</Typography>
+            <Typography variant="body2" fontWeight="400">Udyat API Key</Typography>
           </Box>
           {!isMobile && <Divider orientation="vertical" flexItem style={{ marginLeft: '10px', marginRight: '10px', borderRight: "3px solid #C9C9C9", height: "auto", backgroundColor:"transparent" }} />}
           <Box>
@@ -834,10 +834,11 @@ useEffect(() => {
           }
           console.log("nnn",text,debouncedText,debouncedTextRef.current);
         }}
-        renderComponent={(props) => renderTextarea(props,"Source Text")}
+        renderComponent={(props) => renderTextarea(props,"Source Text",!formState.sourceLanguage)}
         showCurrentWordAsLastSuggestion={true}
         style={{width:"100%"}}
         className="glossary_dropdownValue"
+        disabled={!formState.sourceLanguage}
       /> : (
         <>
          <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px"}}>Enter Source Text</Typography>
@@ -855,6 +856,7 @@ useEffect(() => {
                     lineHeight: "32px",
                     color: "black",
                     fontFamily: "Roboto"}}
+                  disabled={!formState.sourceLanguage}
                    
                 /> 
        </>
@@ -877,6 +879,7 @@ useEffect(() => {
                  <IndicTransliterate
         lang={formState.targetLanguage}
         value={formState.targetText}
+        disabled={!formState.targetLanguage}
         onChangeText={(val) => {
           setText(val)
           setDebouncedText(val);
@@ -893,7 +896,7 @@ useEffect(() => {
           }
           console.log("nnn",text,debouncedText,debouncedTextRef.current);
         }}
-        renderComponent={(props) => renderTextarea(props,"Target Text")}
+        renderComponent={(props) => renderTextarea(props,"Target Text",!formState.targetLanguage)}
         showCurrentWordAsLastSuggestion={true}
       />
               </Grid>

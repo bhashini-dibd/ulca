@@ -69,7 +69,7 @@ public class ModelController {
 		log.info("******** Entry ModelController:: getModel *******");
 		return modelService.getModelByModelId(modelId);
 	}
-
+	
 	@PostMapping("/upload")
 	public UploadModelResponse uploadModel(@RequestParam("file") MultipartFile file,
 			@RequestParam(required = true) String userId) throws Exception {
