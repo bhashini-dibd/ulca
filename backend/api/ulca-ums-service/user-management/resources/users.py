@@ -494,7 +494,6 @@ class VerifySpeaker(Resource):
 
 class DeleteSpeaker(Resource):
     def delete(self):
-        print("Test Data DeleteSpeaker: ", request.get_json())
         body = request.get_json()
         appName = request.args.get("appName")
         serviceProviderName = request.args.get("serviceProviderName")
