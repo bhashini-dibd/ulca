@@ -769,8 +769,12 @@ class OnboardingAppUserDetails(Resource):
 
         try:
             user_keys = UserUtils.get_data_from_keybase(email,keys=True)
+            print(f"user_keys already :: {user_keys}")
+
             if not user_keys:
                 user_keys   =   UserUtils.generate_api_keys(email)
+                print(f"user_keys new :: {user_keys}")
+
             if "errorID" in user_keys:
                 return user_keys
             user_details = UserUtils.retrieve_user_data_by_key(user_email=email)
