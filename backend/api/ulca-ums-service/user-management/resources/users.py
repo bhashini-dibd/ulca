@@ -780,8 +780,8 @@ class OnboardingAppUserDetails(Resource):
             # user_details = UserUtils.retrieve_user_data_by_key(user_email=email)
             # print(f"user_details :: {user_details}")
 
-            if user_details.count() == 0:
-                return post_error("Data not valid","Error on fetching user details")
+           # if user_details.count() == 0:
+              #  return post_error("Data not valid","Error on fetching user details")
             # user_details = {"userKeys":user_keys,"userDetails": normalize_bson_to_json(user_details)}
 
             user_details = {"userKeys":user_keys}
