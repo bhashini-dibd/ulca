@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from repositories import UserManagementRepositories
 from models import CustomResponse,SearchCustomResponse, CustomResponseDhruva,Status, post_error
-from utilities import UserUtils
+from utilities import UserUtils, normalize_bson_to_json
 from flask import request, jsonify
 import config
 import logging
@@ -757,5 +757,33 @@ class OnboardingAppProfile(Resource):
         else:
             return post_error("400", "userID cannot be empty, please provide one.")
 
+class OnboardingAppUserDetails(Resource):
+    def get(self):
+        email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        if "email" is None:
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+
+        try:
+            user_keys = UserUtils.get_data_from_keybase(email,keys=True)
+            if not user_keys:
+                user_keys   =   UserUtils.generate_api_keys(email)
+            if "errorID" in user_keys:
+                return user_keys
+            user_details = UserUtils.retrieve_user_data_by_key(user_email=email)
+            if user_details.count() == 0:
+                return post_error("Data not valid","Error on fetching user details")
+
+            user_details = {"userKeys":user_keys,"userDetails": normalize_bson_to_json(user_details)}
+            data = [{"userDetails":user_details,"email":email}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            return res.getresjson(), 200            
+
+        except Exception as e:
+            log.exception("Database connection exception | {} ".format(str(e)))
+            return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)
 
 

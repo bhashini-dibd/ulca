@@ -24,7 +24,8 @@ from resources import (
     FetchSpeaker, 
     DeleteSpeaker, 
     GenerateServiceProviderKeyWithoutLogin, 
-    RemoveServiceProviderKeyWithoutLogin  
+    RemoveServiceProviderKeyWithoutLogin, 
+    OnboardingAppUserDetails  
     )
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
@@ -123,4 +124,8 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     RemoveServiceProviderKeyWithoutLogin, "/v2/users/removeServiceProviderKey"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    OnboardingAppUserDetails, "/v1/users/onboardingApp/userDetails"
 )
