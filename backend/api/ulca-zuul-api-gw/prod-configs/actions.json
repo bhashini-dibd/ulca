@@ -519,6 +519,14 @@
       "active": true, 
       "whiteList": false, 
       "description": "API to delete speaker based on speaker ID value."
-    }
+    }, 
+    {
+      "id": "8b377d80-2849-46c9-99e9-801c98312908",
+      "uri": "/ulca/user-mgmt/v1/users/onboardingApp/userDetails",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to retrieve user details"
+    }    
   ]
 }
