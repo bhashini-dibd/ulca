@@ -355,7 +355,7 @@ const SearchModelDetail = (props) => {
                           title={
                             <a
                               style={{ textDecoration: "none" }}
-                              href="https://github.com/ULCA-IN/ulca/wiki/Model-Evaluation-Metrics-Definitions"
+                              href="https://github.com/bhashini-dibd/ulca/wiki/Model-Evaluation-Metrics-Definitions"
                               target="_blank"
                             >{`${metricInfo[metric]}. For further information click here.`}</a>
                           }
