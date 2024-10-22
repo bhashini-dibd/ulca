@@ -768,7 +768,12 @@ class OnboardingAppUserKeyDetails(Resource):
             return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
         if "email" is None:
             return post_error("Data Missing", "Email ID is not entered", None), 400
-
+        user = email
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")
+        
         try:
             user_keys = UserUtils.get_data_from_keybase(email,keys=True)
             print(f"user_keys already :: {user_keys}")
@@ -800,6 +805,11 @@ class OnboardingAppUserDetails(Resource):
             return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
         if "email" is None:
             return post_error("Data Missing", "Email ID is not entered", None), 400
+        user = email
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")
         
         try:
             #fetching the user details from db
