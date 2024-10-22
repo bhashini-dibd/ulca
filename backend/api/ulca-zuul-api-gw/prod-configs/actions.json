@@ -521,12 +521,20 @@
       "description": "API to delete speaker based on speaker ID value."
     }, 
     {
-      "id": "8b377d80-2849-46c9-99e9-801c98312908",
-      "uri": "/ulca/user-mgmt/v1/users/onboardingApp/userDetails",
+      "id": "36a4ee3d-133a-445e-9eec-9bb4bdf78216",
+      "uri": "/v1/users/onboardingApp/userDetails",
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": true,
-      "description": "API to retrieve user details"
+      "description": "API to fetch user details"
+    },
+    {
+      "id": "2ca7dbbb-cbd7-4dc3-83ae-f2490153ae09",
+      "uri": "/v1/users/onboardingApp/userKeyDetails",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch user key details"
     }    
   ]
 }
