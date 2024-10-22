@@ -757,7 +757,9 @@ class OnboardingAppProfile(Resource):
         else:
             return post_error("400", "userID cannot be empty, please provide one.")
 
-class OnboardingAppUserDetails(Resource):
+# to retrieve user key details only
+
+class OnboardingAppUserKeyDetails(Resource):
     def get(self):
         email = request.args.get("email")
         authorization_header = request.headers.get("Authorization")
@@ -777,15 +779,9 @@ class OnboardingAppUserDetails(Resource):
 
             if "errorID" in user_keys:
                 return user_keys
-            # user_details = UserUtils.retrieve_user_data_by_key(user_email=email)
-            # print(f"user_details :: {user_details}")
-
-           # if user_details.count() == 0:
-              #  return post_error("Data not valid","Error on fetching user details")
-            # user_details = {"userKeys":user_keys,"userDetails": normalize_bson_to_json(user_details)}
-
+           
             user_details = {"userKeys":user_keys}
-            data = [{"userDetails":user_details,"email":email}]
+            data = [{"userDetails":user_details}]
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
             return res.getresjson(), 200            
 
@@ -793,4 +789,32 @@ class OnboardingAppUserDetails(Resource):
             log.exception("Database connection exception | {} ".format(str(e)))
             return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)
 
+# to retrieve user details only
 
+class OnboardingAppUserDetails(Resource):
+    def get(self):
+        email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        if "email" is None:
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+        
+        try:
+            #fetching the user details from db
+            user_details = UserUtils.retrieve_user_data_by_key(user_email=email)          
+            print(f"user_details :: {user_details}")
+
+            if user_details.count() == 0:
+                return post_error("Data not valid","Error on fetching user details")
+            for user in user_details:
+                return {"userDetails": normalize_bson_to_json(user)}
+            
+            data = [{"userDetails":user_details,"email":email}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            return res.getresjson(), 200            
+
+        except Exception as e:
+            log.exception("Database connection exception | {} ".format(str(e)))
+            return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)
