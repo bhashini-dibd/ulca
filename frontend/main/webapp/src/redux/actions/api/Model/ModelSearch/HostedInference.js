@@ -102,8 +102,8 @@ export default class HostedInference extends API {
     bodyData.userId =
       localStorage.getItem("userDetails") &&
       JSON.parse(localStorage.getItem("userDetails")).userID;
-    return bodyData; 
-  } 
+    return bodyData;
+  }
 
   getHeaders() {
     this.headers = {
