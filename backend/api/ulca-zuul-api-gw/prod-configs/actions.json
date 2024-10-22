@@ -522,7 +522,7 @@
     }, 
     {
       "id": "36a4ee3d-133a-445e-9eec-9bb4bdf78216",
-      "uri": "/v1/users/onboardingApp/userDetails",
+      "uri": "/ulca/user-mgmt/v1/users/onboardingApp/userDetails",
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": true,
@@ -530,7 +530,7 @@
     },
     {
       "id": "2ca7dbbb-cbd7-4dc3-83ae-f2490153ae09",
-      "uri": "/v1/users/onboardingApp/userKeyDetails",
+      "uri": "/ulca/user-mgmt/v1/users/onboardingApp/userKeyDetails",
       "module": "ULCA-UMS",
       "active": true,
       "whiteList": true,
