@@ -41,6 +41,7 @@ import { FooterNewDesign } from "../../../../components/common/FooterNewDesign";
 import HostedInferALD from "./HostedInferALD";
 import HostedInferAGD from "./HostedInferAGD";
 import HostedInferenceITN from "./HostedInferenceITN";
+import HostedInferenceTN from "./HostedInferenceTN";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -222,6 +223,15 @@ const SearchModelDetail = (props) => {
            case "itn":
               return (
                 <HostedInferenceITN
+                task={task}
+                modelId={params.srno}
+                source={source}
+                target={target}
+              />
+              );
+              case "text-normalization":
+              return (
+                <HostedInferenceTN
                 task={task}
                 modelId={params.srno}
                 source={source}
