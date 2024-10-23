@@ -739,7 +739,9 @@ class OnboardingAppProfile(Resource):
         print(f"userAPIKeys :: {userAPIKeys}")
         print(f"userServiceProvider :: {userServiceProvider}")
         
-        print(f"userID :: {userID}")
+        print(f"userID :: {userAPIKeys['userID']}")
+        
+        
         userID = userAPIKeys['userID']     
 
         if isinstance(userAPIKeys,list) and len(userAPIKeys) == 0:
