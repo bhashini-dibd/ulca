@@ -21,6 +21,8 @@ from .users import (
     DeleteSpeaker, 
     FetchSpeaker, 
     GenerateServiceProviderKeyWithoutLogin, 
-    RemoveServiceProviderKeyWithoutLogin
+    RemoveServiceProviderKeyWithoutLogin, 
+    OnboardingAppUserDetails,
+    OnboardingAppUserKeyDetails
     )
 from .user_auth import UserLogin, UserLogout, ApiKeySearch, ForgotPassword, ResetPassword, VerifyUser, ActivateDeactivateUser, VerifyToken
