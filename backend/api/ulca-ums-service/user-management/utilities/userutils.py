@@ -518,7 +518,7 @@ class UserUtils:
     @staticmethod
     def retrieve_user_data_by_key(user_email):
         collections = db.get_db()[USR_MONGO_COLLECTION]
-        return collections.find({"email": user_email},{"_id":0,"password":0,'isActive':1,'isVerified':1})
+        return collections.find({"email": user_email},{"_id":0,"password":0})
 
 
     @staticmethod
