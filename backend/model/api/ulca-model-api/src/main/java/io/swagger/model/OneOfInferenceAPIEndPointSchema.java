@@ -22,7 +22,8 @@ property = "taskType"
 	  @JsonSubTypes.Type(value = NerInference.class, name = "ner"),
 	  @JsonSubTypes.Type(value = AudioGenderDetectionInference.class, name = "audio-gender-detection"),
 	  @JsonSubTypes.Type(value = AudioLangDetectionInference.class, name = "audio-lang-detection"),
-	  @JsonSubTypes.Type(value = ITNInference.class, name = "itn")
+	  @JsonSubTypes.Type(value = ITNInference.class, name = "itn"),
+	  @JsonSubTypes.Type(value = TNInference.class, name = "text-normalization")
 	})
 public interface OneOfInferenceAPIEndPointSchema {
 
