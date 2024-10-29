@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from repositories import UserManagementRepositories
 from models import CustomResponse,SearchCustomResponse, CustomResponseDhruva,Status, post_error
-from utilities import UserUtils
+from utilities import UserUtils, normalize_bson_to_json
 from flask import request, jsonify
 import config
 import logging
@@ -530,7 +530,6 @@ class VerifySpeaker(Resource):
 
 class DeleteSpeaker(Resource):
     def post(self):
-        print("Test Data DeleteSpeaker: ", request.get_json())
         body = request.get_json()
         appName = request.args.get("appName")
         serviceProviderName = request.args.get("serviceProviderName")
@@ -739,9 +738,16 @@ class OnboardingAppProfile(Resource):
             return post_error("400", "User Service Provider is None")
         print(f"userAPIKeys :: {userAPIKeys}")
         print(f"userServiceProvider :: {userServiceProvider}")
+        
+        print(f"userID :: {userAPIKeys['userID']}")
+        
+        
+        userID = userAPIKeys['userID']     
+
         if isinstance(userAPIKeys,list) and len(userAPIKeys) == 0:
-            return post_error("400", "User does not have any API Keys registered within Udyat")
-        userID = userAPIKeys['userID']
+            return post_error("400", f"User {userID}, does not have any API Keys registered within Udyat")
+        
+        #userID = userAPIKeys['userID']
         userAPIKeys = userAPIKeys['apiKeyDetails']
         for i in range(0,len(userAPIKeys)):
             if "serviceProviderKeys" in userAPIKeys[i].keys():
@@ -758,5 +764,74 @@ class OnboardingAppProfile(Resource):
         else:
             return post_error("400", "userID cannot be empty, please provide one.")
 
+# to retrieve user key details only
 
+class OnboardingAppUserKeyDetails(Resource):
+    def get(self):
+        email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        if "email" is None:
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+        user = email
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")
+        
+        try:
+            user_keys = UserUtils.get_data_from_keybase(email,keys=True)
+            print(f"user_keys already :: {user_keys}")
 
+            if not user_keys:
+                user_keys   =   UserUtils.generate_api_keys(email)
+                print(f"user_keys new :: {user_keys}")
+
+            if "errorID" in user_keys:
+                return user_keys
+           
+            user_details = {"userKeys":user_keys}
+            data = [{"userDetails":user_details}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            return res.getresjson(), 200            
+
+        except Exception as e:
+            log.exception("Database connection exception | {} ".format(str(e)))
+            return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)
+
+# to retrieve user details only
+
+class OnboardingAppUserDetails(Resource):
+    def get(self):
+        email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        if "email" is None:
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+        user = email
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")
+        
+        try:
+            #fetching the user details from db
+            user_details = UserUtils.retrieve_user_data_by_key(user_email=email)          
+            print(f"user_details :: {user_details}")
+
+            if user_details.count() == 0:
+                return post_error("Data not valid","Error on fetching user details")
+            for user in user_details:
+                return {"userDetails": normalize_bson_to_json(user)}
+            
+            data = [{"userDetails":user_details,"email":email}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            return res.getresjson(), 200            
+
+        except Exception as e:
+            log.exception("Database connection exception | {} ".format(str(e)))
+            return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)
