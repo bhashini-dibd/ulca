@@ -1426,10 +1426,10 @@ public class ModelService {
 		//PipelineModel pipelineModel = pipelineModelDao
 				//.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
 
-		if (pipelineModel.getStatus().equalsIgnoreCase("unpublished")) {
+		//if (pipelineModel.getStatus().equalsIgnoreCase("unpublished")) {
 
-			throw new PipelineValidationException("Requested pipeline is not available !", HttpStatus.BAD_REQUEST);
-		}
+			//throw new PipelineValidationException("Requested pipeline is not available !", HttpStatus.BAD_REQUEST);
+		//}
 
 		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
 
@@ -1439,7 +1439,7 @@ public class ModelService {
 
 		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
 		//TranslationTaskInferenceInferenceApiKey
-		// translationTaskInferenceInferenceApiKey = new
+		 //translationTaskInferenceInferenceApiKey = new
 		//TranslationTaskInferenceInferenceApiKey();
 		// translationTaskInferenceInferenceApiKey.setName("name");
 		//translationTaskInferenceInferenceApiKey.setValue("value");
