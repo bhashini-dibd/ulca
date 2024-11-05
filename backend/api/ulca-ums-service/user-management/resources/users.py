@@ -311,7 +311,7 @@ class GenerateServiceProviderKey(Resource):
             if "serviceProvider" not in pipelineID.keys() and "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys():
                 return post_error("400", "serviceProvider or apiEndPoints or inferenceEndPoint does not exists.   Please provide a valid details", None), 400
 
-            serviceProviderName = pipelineID["serviceProvider"]["name"]
+            serviceProviderName = "MeitY" # pipelineID["serviceProvider"]["name"]
             serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
             masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
             masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
