@@ -29,6 +29,9 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { translate } from "../../../../assets/localisation";
 import metricInfo from "../../../../utils/getMetricInfo.";
+import { FooterNewDesign } from "../../../components/common/FooterNewDesign";
+import Clients from "../../../components/common/Clients";
+import Contactus from "../../../components/common/Contactus";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -352,7 +355,7 @@ const SearchModelDetail = (props) => {
                           title={
                             <a
                               style={{ textDecoration: "none" }}
-                              href="https://github.com/ULCA-IN/ulca/wiki/Model-Evaluation-Metrics-Definitions"
+                              href="https://github.com/bhashini-dibd/ulca/wiki/Model-Evaluation-Metrics-Definitions"
                               target="_blank"
                             >{`${metricInfo[metric]}. For further information click here.`}</a>
                           }
@@ -384,7 +387,10 @@ const SearchModelDetail = (props) => {
           )}
         </div>
       )}
-      <Footer />
+      {/* <Footer /> */}
+      <Contactus />
+          <Clients />
+          <FooterNewDesign />
     </MuiThemeProvider>
   );
 };

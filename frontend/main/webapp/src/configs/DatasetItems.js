@@ -8,6 +8,10 @@ export const ModelTask = [
   { value: "ner", label: "NER" },
   { value: "transliteration", label: "Transliteration" },
   { value: "txt-lang-detection", label: "Language Detection" },
+  { value: "audio-lang-detection", label: "Audio Language Detection" },
+  { value: "audio-gender-detection", label: "Audio Gender Detection" },
+  { value: "itn", label: "ITN" },
+  { value: "text-normalization", label: "Text Normalization" },
 ];
 
 export const BenchmarkModelTask = [
@@ -29,6 +33,8 @@ export const DatasetItems = [
   { value: "tts-corpus", label: "TTS Dataset" },
   { value: "transliteration-corpus", label: "Transliteration Dataset" },
   { value: "glossary-corpus", label: "Glossary Dataset" },
+  { value: "pos-corpus", label: "POS Dataset" },
+  { value: "ner-corpus", label: "NER Dataset" },
 ];
 
 export const DatasetReadymade = [
@@ -38,6 +44,8 @@ export const DatasetReadymade = [
   { value: "ocr-corpus", label: "OCR" },
   { value: "asr-unlabeled-corpus", label: "ASR Unlabeled" },
   { value: "transliteration", label: "Transliteration" },
+  { value: "glossary-corpus", label: "Glossary" },
+  { value: "ner-corpus", label: "NER" },
 ];
 export const Language = [
   { value: "as", label: "Assamese" },

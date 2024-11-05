@@ -3,7 +3,8 @@
     "languages": {
         "sourceLanguage": "hi"
     },
-    "tagsFormat" : "conll2003",
+    "tagsFormat" : "IOB2",
+    "formatDescription" : "In compliance with conll-2003 dataset",
     "collectionSource": [
         "https: //wikipedia.org"
     ],

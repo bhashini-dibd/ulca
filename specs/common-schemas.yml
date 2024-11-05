@@ -246,6 +246,7 @@ components:
         - sph
         - webm
         - m4a
+        - webm
     AudioChannel:
       type: string
       description: number of channel in the audio
@@ -428,6 +429,7 @@ components:
       description: This attribute defines the  Script codes(ISO 15924) supported under ULCA, code reference available at - `https://unicode.org/iso15924/iso15924-codes.html' 
       enum:
         - Beng
+        - Dogr
         - Deva
         - Thaa
         - Gujr

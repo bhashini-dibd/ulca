@@ -10,6 +10,9 @@ import { withStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import GlobalStyles from "./styles/Styles";
 import Spinner from "./components/common/Spinner";
 import Snackbar from "./components/common/Snackbar";
+import { FooterNewDesign } from "./components/common/FooterNewDesign";
+import Clients from "./components/common/Clients";
+import Contactus from "./components/common/Contactus";
 
 const Header = React.lazy(() => import("./components/common/Header"));
 const Footer = React.lazy(() => import("./components/common/Footer"));
@@ -59,7 +62,7 @@ function App(props) {
 
   window.addEventListener('scroll', e => {
     if (window.pageYOffset > 100 && !show) {
-        setShow(true);
+      setShow(true);
     }
   })
 
@@ -80,9 +83,14 @@ function App(props) {
             <Component />
           </Suspense>
         </div>
-        {show ? <Suspense fallback={<div>Loading....</div>}>
+        {/* {show ? <Suspense fallback={<div>Loading....</div>}>
           <Footer />
-        </Suspense> : <></>}
+        </Suspense: <></>} */}
+        <Suspense fallback={<div>Loading....</div>}>
+        <Contactus />
+          <Clients />
+          <FooterNewDesign />
+        </Suspense>
       </div>
     </MuiThemeProvider>
   );

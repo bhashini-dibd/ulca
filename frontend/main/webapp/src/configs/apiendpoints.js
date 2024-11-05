@@ -41,7 +41,14 @@ const endpoints = {
   revokeApiKey: "/ulca/user-mgmt/v1/users/revokeApiKey",
   removeServiceProviderKey:"/ulca/user-mgmt/v1/users/removeServiceProviderKey",
   generateServiceProviderKey:"/ulca/user-mgmt/v1/users/generateServiceProviderKey",
-  dataTrackingToggle:"/ulca/user-mgmt/v1/users/dataTrackingToggle"
+  dataTrackingToggle:"/ulca/user-mgmt/v1/users/dataTrackingToggle",
+  getGlossaryData:"/ulca/user-mgmt/v1/users/glossary/fetch-all",
+  addGlossaryData:"/ulca/user-mgmt/v1/users/glossary/create",
+  deleteGlossaryData:"/ulca/user-mgmt/v1/users/glossary/delete",
+  fetchSpeakerData:"/ulca/user-mgmt/v1/users/speakers/list",
+  enrollSpeakerData:"/ulca/user-mgmt/v1/users/speakers/enroll",
+  verifySpeakerData:"/ulca/user-mgmt/v1/users/speakers/verify",
+  deleteSpeakerData:"/ulca/user-mgmt/v1/users/speakers/delete",
   
 };
 

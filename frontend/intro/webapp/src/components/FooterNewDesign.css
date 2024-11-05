@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+.FooterNewDesignContainer {
+  background: #0B1941;
+  color: white;
+  padding-top: 20px;
+  font-family: "Roboto-Regular";
+}
+.FooterNewDesignContainer .FooterNewDesign_logo {
+  display: flex;
+  align-items: center;
+  padding: 0px;
+  gap: 5px;
+  align-items: center;
+}
+
+.FooterNewDesignContainer .bhashiniapp__footer{
+  width: 120px;
+  height: 40px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.FooterNewDesignContainer .bhashiniapp__footerIcons{
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.FooterNewDesignContainer .about_company{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.FooterNewDesignContainer .company_name{
+font-family: "Noto-Bold";
+font-size: 18px;
+font-weight: 600;
+line-height: 27px;
+text-align: left;
+}
+
+.FooterNewDesignContainer .company_address{
+font-family: "Noto-Regular";
+font-size: 12px;
+font-weight: 400;
+line-height: 16.34px;
+text-align: left;
+}
+
+.FooterNewDesignContainer .footerlinks__header{
+font-family: "Noto-Bold";
+font-size: 16px;
+font-weight: 700;
+line-height: 21.79px;
+text-align: left;
+}
+
+.FooterNewDesignContainer .footerlinks__links{
+  font-family: "Noto-Regular";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 21.79px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  }
+
+  .FooterNewDesignContainer .bhashini__app{
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+
+hr{
+flex-shrink: 0;
+width: 100%;
+max-width: 100%;
+padding-right: 12px;
+padding-left: 12px;
+border-top: 1px solid;
+color:rgb(171, 190, 209, 0.4);
+}
+
+.FooterNewDesignContainer .Footer__documents{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+ 
+}
+
+
+@media screen and (max-width:600px) {
+  .FooterNewDesignContainer .footerlinks__links{
+    gap: 7px;
+  }
+
+  .FooterNewDesignContainer .bhashini__app{
+    gap: 5px;
+  }
+
+  .FooterNewDesignContainer .Footer__documents{
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 10px;
+  }
+}

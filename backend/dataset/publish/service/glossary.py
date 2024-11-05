@@ -347,7 +347,7 @@ class GlossaryService:
         except Exception as e:
             log.exception(e)
             log.error(f'There was an error while deleting records')
-            error = {"code": "DELETE_FAILED", "datasetType": dataset_type_transliteration,
+            error = {"code": "DELETE_FAILED", "datasetType": dataset_type_glossary,
                      "serviceRequestNumber": delete_req["serviceRequestNumber"],
                      "message": "There was an error while deleting records"}
             op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}

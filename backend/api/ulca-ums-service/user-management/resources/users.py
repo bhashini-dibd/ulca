@@ -1,12 +1,12 @@
 from flask_restful import Resource
 from repositories import UserManagementRepositories
-from models import CustomResponse,SearchCustomResponse, Status, post_error
-from utilities import UserUtils
+from models import CustomResponse,SearchCustomResponse, CustomResponseDhruva,Status, post_error
+from utilities import UserUtils, normalize_bson_to_json
 from flask import request, jsonify
 import config
 import logging
 import requests
-from config import MAX_API_KEY, SECRET_KEY, PATCH_URL
+from config import MAX_API_KEY, SECRET_KEY, PATCH_URL, ONBOARDING_AUTH_HEADER
 
 log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
@@ -261,12 +261,29 @@ class GenerateApiKey(Resource):
             return post_error("400", user_api_keys['message'], None), 400
 
 
+class GenerateServiceProviderKeyWithoutLogin(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "udyatApiKey" not in body.keys():
+            return post_error("400", "Please provide udyatApiKey", None), 400
+        if "appName" not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.generateServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
 
 
 class GenerateServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
-       
+        
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.generateServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
+            
         if "pipelineId" not in body.keys() and "serviceProviderName" not in body.keys():
             return post_error("400", "Please provide pipelineId or serviceProviderName", None), 400
         if "userID" not in body.keys():
@@ -287,21 +304,23 @@ class GenerateServiceProviderKey(Resource):
         else:
             pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
         #log.info(f"user_document details {user_document}")
+        if not pipelineID:
+            return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
         if isinstance(pipelineID,dict) and pipelineID:
             masterList = []
-            if "serviceProvider" in pipelineID.keys():
-                serviceProviderName = "MeitY" #pipelineID["serviceProvider"]["name"]
-            if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys():
-                serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
-                masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
-                masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
-                masterList.append(masterkeyname)
-                masterList.append(masterkeyvalue)
-        elif pipelineID == None:
-            return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
+            if "serviceProvider" not in pipelineID.keys() and "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys():
+                return post_error("400", "serviceProvider or apiEndPoints or inferenceEndPoint does not exists.   Please provide a valid details", None), 400
+
+            serviceProviderName = "MeitY" #pipelineID["serviceProvider"]["name"]
+            serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
         user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
+        if not user_document and not email:
+            return post_error("400", "Error in fetching ulcaApiKey. Please check if it exists.", None), 400
         if isinstance(user_document, list) and user_document:
-            #log.info("DETAILS:",user_document,body)
             if not any(usr['ulcaApiKey'] == body['ulcaApiKey'] for usr in user_document):
                 return post_error("400", "ulcaApiKey does not exist. Please provide a valid one.", None), 400
             for usr in user_document:
@@ -310,6 +329,8 @@ class GenerateServiceProviderKey(Resource):
                     #Check if ServiceProviderName Exists?
                     if "serviceProviderKeys" in usr.keys() and len(usr['serviceProviderKeys'])!=0: 
                         for each_provider in usr['serviceProviderKeys']:
+                            if "serviceProviderName" not in each_provider.keys():
+                                return post_error("400", "serviceProviderName is empty for the user.", None), 400
                             if each_provider['serviceProviderName'] == serviceProviderName:
                                 serviceProviderNameExists = True
                                 break
@@ -321,25 +342,46 @@ class GenerateServiceProviderKey(Resource):
                         return servProvKeyExists
                     else:
                         decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
+                        log.info(f"decrepted keys for generate service provider keys {decryptedKeys}")
                         generatedSecretKeys = UserUtils.get_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys, dataTracking)
                         addServiceKeys, servProvAdded = UserUtils.pushServiceProvider(generatedSecretKeys, body["ulcaApiKey"],serviceProviderName, dataTracking)
                         returnServiceProviderKey = {"serviceProviderKeys":servProvAdded["serviceProviderKeys"][0]}
                         if addServiceKeys["nModified"] == 1 and addServiceKeys["updatedExisting"] == True:
                             returnServiceProviderKey["message"] = "Service Provider Key created"
+                        elif not addServiceKeys["nModified"] == 1 :
+                            return post_error("400", "Service Provider Key not created", None), 400
                         log.info(addServiceKeys)
             if "ulcaApiKey" in body.keys():
                 returnServiceProviderKey['ulcaApiKey'] = body["ulcaApiKey"]
             return returnServiceProviderKey
-        elif user_document == None:
-            return post_error("400", "userID does not exist, please provide a valid one.", None), 400
+
         
             
 
+class RemoveServiceProviderKeyWithoutLogin(Resource):
+    def post(self):
+        body = request.get_json()
+        if "userID" not in body.keys():
+            return post_error("400", "Please provide userID", None), 400
+        if "udyatApiKey" not in body.keys():
+            return post_error("400", "Please provide udyatApiKey", None), 400
+        if "appName" not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        
+
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.removeServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
 
         
 class RemoveServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
+        
+        # Below 2 lines are for key generation within Authenticator Application
+        if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
+            return UserUtils.removeServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
+
         if "serviceProviderName" not in body.keys():
             return post_error("400", "Please provide serviceProviderName", None), 400
         if "userID" not in body.keys():
@@ -347,6 +389,34 @@ class RemoveServiceProviderKey(Resource):
         if "ulcaApiKey" not in body.keys():
             return post_error("400", "Please provide ulcaApiKey", None), 400
 
+        # Get service pipeline
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if isinstance(pipelineID,dict) and pipelineID:
+            masterList = []
+            if "serviceProvider" not in pipelineID.keys() and "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys():
+                return post_error("400", "serviceProvider or apiEndPoints or inferenceEndPoint does not exists.   Please provide a valid details", None), 400
+
+            serviceProviderName = pipelineID["serviceProvider"]["name"]
+            serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        elif pipelineID == None:
+            return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
+
+        # Retrieve user details 
+        user_document,email  = UserUtils.get_userDoc(body["userID"]) #UMS
+        if not user_document and not email:
+            return post_error("400", "userID does not exists.   Please provide a valid userID", None), 400
+        if isinstance(user_document, list) and user_document:
+            if not any(usr['ulcaApiKey'] == body['ulcaApiKey'] for usr in user_document):
+                return post_error("400", "ulcaApiKey does not exist. Please provide a valid one.", None), 400
+            for usr in user_document:
+                if body["ulcaApiKey"] in usr.values():
+                    if "appName" in usr.keys():
+                        decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
+                        generatedSecretKeys = UserUtils.revoke_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys)
         pullRecord = UserUtils.removeServiceProviders(body['userID'],body['ulcaApiKey'],body["serviceProviderName"])
         if pullRecord['nModified'] == 1:
             res = CustomResponse(Status.REMOVE_SERVICE_PROVIDER.value, "SUCCESS")
@@ -400,10 +470,367 @@ class ToggleDataTracking(Resource):
         elif 'success' not in patch_req.json().keys():
             return post_error("400", "Unable to toggle Data Tracking at the moment, please try again", None), 400
 
+
+class EnrollSpeaker(Resource):
+    def post(self):
+        body = request.get_json()
+        print("Request Body: ", body)
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        
+        user_id=request.headers["x-user-id"]
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+    
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_enroll_for_dhruva(userinferenceApiKey, body)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
+class VerifySpeaker(Resource):
+    def post(self):
+        body = request.get_json()
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        
+        user_id=request.headers["x-user-id"]
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_verify_for_dhruva(userinferenceApiKey, body)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
+
+class DeleteSpeaker(Resource):
+    def post(self):
+        body = request.get_json()
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        
+        user_id=request.headers["x-user-id"]
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_delete_for_dhruva(userinferenceApiKey, body)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
+
+class FetchSpeaker(Resource):
+    def get(self): 
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+
+        if appName is None:
+            return post_error("400", "Please provide appName", None), 400
+        if serviceProviderName is None:
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        
+        user_id=request.headers["x-user-id"]
+
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}") 
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_speaker_fetchall_for_dhruva(userinferenceApiKey)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
+
+class CreateGlossary(Resource):
+    def post(self):
+        user_id=request.headers["x-user-id"]
+        body = request.get_json()
+        if 'appName' not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        if 'serviceProviderName' not in body.keys():
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        if 'glossary' not in body.keys():
+            return post_error("400", "Please provide Glossary", None), 400
+        if not isinstance(body['glossary'],list):
+            return post_error("400", "Glossary should be list of dictionaries", None), 400     
+        if isinstance(body['glossary'], list):
+            if "sourceLanguage" not in body['glossary'][0]:
+                return post_error("400", "sourceLanguage is missing in glossary", None), 400 
+            if "targetLanguage" not in body['glossary'][0]:
+                return post_error("400", "sourceLanguage is missing in glossary", None), 400 
+            if "sourceText" not in body['glossary'][0]:
+                return post_error("400", "sourceText is missing in glossary", None), 400 
+            if "targetText" not in body['glossary'][0]:
+                return post_error("400", "targetText is missing in glossary", None), 400 
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            #urlEndPoint    =  pipelineID["apiEndPoints"]["apiKeyUrl"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        else:
+            return post_error("400", "Couldn't find the endpoints, please check the service provider name", None), 400
+        log.info(f"master api keys {masterList}")
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_create_req_for_dhruva(decrypt_headers,body['glossary'])
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code
         
 
+class DeleteGlossary(Resource):
+    def post(self):
+        user_id=request.headers["x-user-id"]
+        body = request.get_json()
+        if 'appName' not in body.keys():
+            return post_error("400", "Please provide appName", None), 400
+        if 'serviceProviderName' not in body.keys():
+            return post_error("400", "Please provide serviceProviderName", None), 400
+        if 'glossary' not in body.keys():
+            return post_error("400", "Please provide Glossary", None), 400
+        if not isinstance(body['glossary'],list):
+            return post_error("400", "Glossary should be list of dictionaries", None), 400     
+        if isinstance(body['glossary'], list):
+            if "sourceLanguage" not in body['glossary'][0]:
+                return post_error("400", "sourceLanguage is missing in glossary", None), 400 
+            if "targetLanguage" not in body['glossary'][0]:
+                return post_error("400", "sourceLanguage is missing in glossary", None), 400 
+            if "sourceText" not in body['glossary'][0]:
+                return post_error("400", "sourceText is missing in glossary", None), 400 
+            if "targetText" not in body['glossary'][0]:
+                return post_error("400", "targetText is missing in glossary", None), 400 
+        
+        userinferenceApiKey = UserUtils.getUserInfKey(body['appName'],user_id, body['serviceProviderName'])
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"])
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys() and "serviceProvider" in pipelineID.keys():
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        else:
+            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
+        log.info(f"master api keys {masterList}")
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_delete_req_for_dhruva(decrypt_headers,body['glossary'])
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code        
+        
+
+class FetchGlossary(Resource):
+    def get(self):    
+        appName = request.args.get("appName")
+        serviceProviderName = request.args.get("serviceProviderName")
+        user_id=request.headers["x-user-id"]
+        userinferenceApiKey = UserUtils.getUserInfKey(appName,user_id, serviceProviderName)
+        print("useringerenceKey: ", userinferenceApiKey)
+        if not userinferenceApiKey:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        api_dict = {"api-key":userinferenceApiKey}
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(serviceProviderName)
+        if not pipelineID:
+            return post_error("400", "Couldn't find the user inference api Key", None), 400
+        log.info(f"pipelineID {pipelineID}")
+        log.info(f"userinferenceApiKey {userinferenceApiKey}")
+        if pipelineID and isinstance(pipelineID,dict):
+            masterList = []
+        if "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys() and "serviceProvider" not in pipelineID.keys():
+            return post_error("404", "Couldn't find the endpoints, please check the service provider name", None), 404
+        masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+        masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+        masterList.append(masterkeyname)
+        masterList.append(masterkeyvalue)
+        log.info(f"master api keys {masterList}")
+        decrypt_headers = UserUtils.decryptAes(SECRET_KEY,masterList)
+        if decrypt_headers:
+            decrypt_headers.update(api_dict)
+            log.info(f"decrypt_headers {decrypt_headers}")
+
+        dhruva_result_json, dhruva_result_status_code = UserUtils.send_fetch_req_for_dhruva(decrypt_headers)
+        res = CustomResponseDhruva(dhruva_result_json, dhruva_result_status_code)
+        return res.getdhruvaresults(), dhruva_result_status_code   
 
 
+class OnboardingAppProfile(Resource):
+    def get(self):
+        email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        if "email" is None:
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+        user = email
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")            
+        userServiceProvider = UserUtils.listOfServiceProviders()
+        if not userServiceProvider:
+            return post_error("400", "User Service Provider is None")
+        print(f"userAPIKeys :: {userAPIKeys}")
+        print(f"userServiceProvider :: {userServiceProvider}")
+        
+        print(f"userID :: {userAPIKeys['userID']}")
+        
+        
+        userID = userAPIKeys['userID']     
 
+        if isinstance(userAPIKeys,list) and len(userAPIKeys) == 0:
+            return post_error("400", f"User {userID}, does not have any API Keys registered within Udyat")
+        
+        #userID = userAPIKeys['userID']
+        userAPIKeys = userAPIKeys['apiKeyDetails']
+        for i in range(0,len(userAPIKeys)):
+            if "serviceProviderKeys" in userAPIKeys[i].keys():
+                existing_names = []                    
+                for existing_keys in userAPIKeys[i]["serviceProviderKeys"]: 
+                    existing_names.append(existing_keys["serviceProviderName"])
+                if not existing_names:
+                    userAPIKeys[i]["serviceProviderKeys"].append({"serviceProviderName":userServiceProvider})
+        
+        if isinstance(userAPIKeys, list):
+            data = [{"userID":userID,"email":email,"apiKeys":userAPIKeys}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "userID cannot be empty, please provide one.")
 
+# to retrieve user key details only
 
+class OnboardingAppUserKeyDetails(Resource):
+    def get(self):
+        email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        if "email" is None:
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+        user = email
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")
+        
+        try:
+            user_keys = UserUtils.get_data_from_keybase(email,keys=True)
+            print(f"user_keys already :: {user_keys}")
+
+            if not user_keys:
+                user_keys   =   UserUtils.generate_api_keys(email)
+                print(f"user_keys new :: {user_keys}")
+
+            if "errorID" in user_keys:
+                return user_keys
+           
+            user_details = {"userKeys":user_keys}
+            data = [{"userDetails":user_details}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            return res.getresjson(), 200            
+
+        except Exception as e:
+            log.exception("Database connection exception | {} ".format(str(e)))
+            return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)
+
+# to retrieve user details only
+
+class OnboardingAppUserDetails(Resource):
+    def get(self):
+        email = request.args.get("email")
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        if "email" is None:
+            return post_error("Data Missing", "Email ID is not entered", None), 400
+        user = email
+        appName = None
+        userAPIKeys = UserUtils.get_email_api_keys(user,appName)
+        if isinstance(userAPIKeys,dict) and userAPIKeys.get('message') == "This userId address is not registered with ULCA":
+            return post_error("400", "This userId address is not registered with ULCA")
+        
+        try:
+            #fetching the user details from db
+            user_details = UserUtils.retrieve_user_data_by_key(user_email=email)          
+            print(f"user_details :: {user_details}")
+
+            if user_details.count() == 0:
+                return post_error("Data not valid","Error on fetching user details")
+            for user in user_details:
+                return {"userDetails": normalize_bson_to_json(user)}
+            
+            data = [{"userDetails":user_details,"email":email}]
+            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            return res.getresjson(), 200            
+
+        except Exception as e:
+            log.exception("Database connection exception | {} ".format(str(e)))
+            return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)

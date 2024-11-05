@@ -25,6 +25,9 @@ import io.swagger.pipelinemodel.TaskSpecifications;
 import io.swagger.pipelinerequest.ASRResponseConfig;
 import io.swagger.pipelinerequest.ASRTask;
 import io.swagger.pipelinerequest.ASRTaskInference;
+import io.swagger.pipelinerequest.OCRResponseConfig;
+import io.swagger.pipelinerequest.OCRTask;
+import io.swagger.pipelinerequest.OCRTaskInference;
 import io.swagger.pipelinerequest.PipelineResponseLanguageSchema;
 import io.swagger.pipelinerequest.PipelineResponseLanguagesList;
 import io.swagger.pipelinerequest.PipelineTask;
@@ -238,6 +241,17 @@ public class PipelineUtilities {
                         taskSpecifications = getPossibleConfigForCurrentTask(lp, pipelineSpecification, taskSpecifications);
                     }
                 }
+            }else if (pipelineTask instanceof OCRTask) {
+            	OCRTask ocrTask = (OCRTask) pipelineTask;
+                if (ocrTask.getConfig() != null && ocrTask.getConfig().getLanguage() != null) {
+                    lp = ocrTask.getConfig().getLanguage();
+                }
+                // get pipeline model task specifications for this particular task
+                for (TaskSpecification pipelineSpecification : pipelineModel.getTaskSpecifications()) {
+                    if (pipelineSpecification.getTaskType() == SupportedTasks.OCR) {
+                        taskSpecifications = getPossibleConfigForCurrentTask(lp, pipelineSpecification, taskSpecifications);
+                    }
+                }
             }
         }
         return taskSpecifications;
@@ -324,7 +338,13 @@ public class PipelineUtilities {
                 {
                     ASRResponseConfig asrResponseConfig = new ASRResponseConfig();
                     log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
                     ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
+                    
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                         asrResponseConfig.setLanguage(lp);
@@ -343,7 +363,13 @@ public class PipelineUtilities {
                 {
                     TranslationResponseConfig translationResponseConfig = new TranslationResponseConfig();
                     log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
+
                     ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                         translationResponseConfig.setLanguage(lp);
@@ -361,7 +387,13 @@ public class PipelineUtilities {
                 {
                     TTSResponseConfig ttsResponseConfig = new TTSResponseConfig();
                     log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
+
                     ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                         ttsResponseConfig.setLanguage(lp);
@@ -381,7 +413,13 @@ public class PipelineUtilities {
                 {
                     TransliterationResponseConfig transliterationResponseConfig = new TransliterationResponseConfig();
                     log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
+
                     ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                     	transliterationResponseConfig.setLanguage(lp);
@@ -392,6 +430,31 @@ public class PipelineUtilities {
                     transliterationTaskInference.addConfigItem(transliterationResponseConfig);
                 }
                 schemaList.add(transliterationTaskInference);
+            }
+            if(individualSpec.getTaskType() == SupportedTasks.OCR)
+            {
+                OCRTaskInference ocrTaskInference = new OCRTaskInference();
+                for(ConfigSchema curConfigSchema : individualSpec.getTaskConfig())
+                {
+                    OCRResponseConfig ocrResponseConfig = new OCRResponseConfig();
+                    log.info("Checking Model ID :: "+curConfigSchema.getModelId());
+                    long startTime = System.currentTimeMillis();
+
+                    ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+                    long endTime = System.currentTimeMillis();
+                    long duration = endTime - startTime;
+
+                    System.out.println("Time taken for model call: " + duration + " ms");
+                    LanguagePairs langPair = model.getLanguages();
+                    for (LanguagePair lp : langPair) {
+                    	ocrResponseConfig.setLanguage(lp);
+                    }
+                    ocrResponseConfig.setServiceId(curConfigSchema.getServiceId());
+                    ocrResponseConfig.setModelId(curConfigSchema.getModelId());
+					
+                    ocrTaskInference.addConfigItem(ocrResponseConfig);
+                }
+                schemaList.add(ocrTaskInference);
             }
         }
 

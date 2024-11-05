@@ -24,6 +24,7 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
+import com.ulca.model.response.AppModelsResponse;
 import com.ulca.model.response.GetModelFeedbackListResponse;
 import com.ulca.model.response.GetTransliterationModelIdResponse;
 import com.ulca.model.response.ModelComputeResponse;
@@ -68,7 +69,7 @@ public class ModelController {
 		log.info("******** Entry ModelController:: getModel *******");
 		return modelService.getModelByModelId(modelId);
 	}
-
+	
 	@PostMapping("/upload")
 	public UploadModelResponse uploadModel(@RequestParam("file") MultipartFile file,
 			@RequestParam(required = true) String userId) throws Exception {
@@ -178,5 +179,19 @@ public class ModelController {
 
 		log.info("******** Entry ModelController:: explorePipelines *******");
 		return modelService.explorePipelines(serviceProviderName);
+	}
+	
+	@GetMapping("/appModels")
+	public AppModelsResponse getAppModels(@RequestParam(required = false) String taskType) {
+
+		log.info("******** Entry ModelController:: getAppModels *******");
+		return modelService.getAppModels(taskType);
+	}
+	
+	@PostMapping("/getModelsAllPipeline")
+	public ObjectNode getModelsAllPipeline(@RequestBody String pipelineRequest) throws Exception {
+		log.info("******** Entry ModelController:: getModelsAllPipeline *******");
+	
+		return modelService.getModelsAllPipeline(pipelineRequest);
 	}
 }

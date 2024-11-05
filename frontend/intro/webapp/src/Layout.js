@@ -1,42 +1,36 @@
 import React, { useState } from "react";
-import Dataset from "./components/Chart";
-import Model from "./components/ModelChart";
-import Benchmark from "./components/BenchmarkChart";
-import InfiniteScroll from "react-infinite-scroll-component";
 import Footer from "./components/Footer";
-import ProjectVaani from "./components/ProjectVaani";
+import { WhyULCA } from "./components/WhyULCA";
+import FAQ from "./components/FAQ";
+import HomeBanner from "./components/HomeBanner";
+import HomeDatasets from "./components/HomeDatasets";
+import VideoSection from "./components/VideoSection";
+import Header from "./components/Header";
+import DownloadApp from "./components/DownloadApp";
+import { FooterNewDesign } from "./components/FooterNewDesign";
+import TopContent from "./components/TopContent";
+import AppContextProvider from "./context/ContextAPI";
+import Contactus from "./components/Contactus";
+import Clients from "./components/Clients";
 
 function App(props) {
-  const componentObj = [ 
-    // { component: <ProjectVaani />},
-    { component: <Dataset /> },
-    { component: <Model /> },
-    { component: <Benchmark /> },
-    { component: <Footer /> },
-  ];
-  const [data, setData] = useState([]);
-  const [index, setIndex] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-
-  const fetchNextComp = () => {
-    if (index < componentObj.length) {
-      console.log("inside if");
-      setData((prev) => [...prev, componentObj[index].component]);
-      setIndex((prev) => prev + 1);
-    } else if (index === componentObj.length) {
-      setHasMore(false);
-    }
-  };
-
   return (
-    <InfiniteScroll
-      dataLength={data.length}
-      loader={<div>Loading charts....</div>}
-      next={fetchNextComp}
-      hasMore={hasMore}
-    >
-      {data}
-    </InfiniteScroll>
+    <>
+    <AppContextProvider>
+      <TopContent />
+      <Header />
+      <HomeBanner />
+      <HomeDatasets />
+      <VideoSection />
+      {/* <WhyULCA /> */}
+      {/* <FAQ /> */}
+      <DownloadApp />
+      <Contactus />
+      <Clients />
+      <FooterNewDesign />
+    </AppContextProvider>
+      {/* <Footer /> */}
+    </>
   );
 }
 export default App;

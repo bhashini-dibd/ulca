@@ -1,7 +1,33 @@
 from flask import Blueprint
 from flask_restful import Api
-from resources import CreateUsers, UpdateUsers, SearchUsers, OnboardUsers, ActivateDeactivateUser, VerifyUser, Health, GetApiKey, RevokeApiKey, GenerateApiKey, GenerateServiceProviderKey, RemoveServiceProviderKey, GetApiKeysForProfile, ToggleDataTracking
-
+from resources import (
+    CreateUsers, 
+    UpdateUsers, 
+    SearchUsers, 
+    OnboardUsers, 
+    ActivateDeactivateUser, 
+    VerifyUser, 
+    Health, 
+    GetApiKey, 
+    RevokeApiKey, 
+    GenerateApiKey, 
+    GenerateServiceProviderKey, 
+    RemoveServiceProviderKey, 
+    GetApiKeysForProfile, 
+    ToggleDataTracking, 
+    CreateGlossary, 
+    DeleteGlossary, 
+    FetchGlossary, 
+    OnboardingAppProfile, 
+    EnrollSpeaker, 
+    VerifySpeaker, 
+    FetchSpeaker, 
+    DeleteSpeaker, 
+    GenerateServiceProviderKeyWithoutLogin, 
+    RemoveServiceProviderKeyWithoutLogin, 
+    OnboardingAppUserDetails,
+    OnboardingAppUserKeyDetails  
+    )
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
 
@@ -42,6 +68,10 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    OnboardingAppProfile, "/v1/users/onboardingAppProfile"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     RevokeApiKey, "/v1/users/revokeApiKey"
 )
 
@@ -59,4 +89,48 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     RemoveServiceProviderKey, "/v1/users/removeServiceProviderKey"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    CreateGlossary, "/v1/users/glossary/create"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    DeleteGlossary, "/v1/users/glossary/delete"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    FetchGlossary, "/v1/users/glossary/fetch-all"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    EnrollSpeaker, "/v1/users/speakers/enroll"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    VerifySpeaker, "/v1/users/speakers/verify"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    FetchSpeaker, "/v1/users/speakers/list"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    DeleteSpeaker, "/v1/users/speakers/delete"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    GenerateServiceProviderKeyWithoutLogin, "/v2/users/generateServiceProviderKey"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    RemoveServiceProviderKeyWithoutLogin, "/v2/users/removeServiceProviderKey"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    OnboardingAppUserDetails, "/v1/users/onboardingApp/userDetails"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    OnboardingAppUserKeyDetails, "/v1/users/onboardingApp/userKeyDetails"
 )

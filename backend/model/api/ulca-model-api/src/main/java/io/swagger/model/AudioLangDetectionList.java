@@ -3,6 +3,7 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.AudioFile;
 import io.swagger.model.LangDetectionPrediction;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
@@ -15,13 +16,37 @@ import javax.validation.constraints.*;
  * AudioLangDetectionList
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-03-02T03:55:25.562740452Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-06-25T06:10:19.027377971Z[GMT]")
 
 
 public class AudioLangDetectionList   {
+  @JsonProperty("audio")
+  private AudioFile audio = null;
+
   @JsonProperty("langPrediction")
   @Valid
   private List<LangDetectionPrediction> langPrediction = new ArrayList<LangDetectionPrediction>();
+
+  public AudioLangDetectionList audio(AudioFile audio) {
+    this.audio = audio;
+    return this;
+  }
+
+  /**
+   * Get audio
+   * @return audio
+   **/
+  @Schema(required = true, description = "")
+      @NotNull
+
+    @Valid
+    public AudioFile getAudio() {
+    return audio;
+  }
+
+  public void setAudio(AudioFile audio) {
+    this.audio = audio;
+  }
 
   public AudioLangDetectionList langPrediction(List<LangDetectionPrediction> langPrediction) {
     this.langPrediction = langPrediction;
@@ -58,12 +83,13 @@ public class AudioLangDetectionList   {
       return false;
     }
     AudioLangDetectionList audioLangDetectionList = (AudioLangDetectionList) o;
-    return Objects.equals(this.langPrediction, audioLangDetectionList.langPrediction);
+    return Objects.equals(this.audio, audioLangDetectionList.audio) &&
+        Objects.equals(this.langPrediction, audioLangDetectionList.langPrediction);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(langPrediction);
+    return Objects.hash(audio, langPrediction);
   }
 
   @Override
@@ -71,6 +97,7 @@ public class AudioLangDetectionList   {
     StringBuilder sb = new StringBuilder();
     sb.append("class AudioLangDetectionList {\n");
     
+    sb.append("    audio: ").append(toIndentedString(audio)).append("\n");
     sb.append("    langPrediction: ").append(toIndentedString(langPrediction)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -1,10 +1,17 @@
 import uuid
 from uuid import uuid4
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 import time
 import re
 import bcrypt
 import db
 from models.response import post_error
+from models.response import CustomResponse
+from models.status import Status
 import jwt
 import secrets
 from .orgUtils import OrgUtils
@@ -19,7 +26,22 @@ from app import mail
 from flask import render_template
 from bson import json_util
 from bson.objectid import ObjectId
-from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION,MAX_API_KEY,USR_MONGO_PROCESS_COLLECTION,SPECIAL_CHARS
+from config import (
+    USR_MONGO_COLLECTION, 
+    USR_TEMP_TOKEN_MONGO_COLLECTION, 
+    USR_KEY_MONGO_COLLECTION, 
+    MAX_API_KEY, 
+    USR_MONGO_PROCESS_COLLECTION, 
+    SPECIAL_CHARS, 
+    BHAHSINI_GLOSSARY_CREATE_URL, 
+    BHAHSINI_GLOSSARY_DELETE_URL, 
+    BHAHSINI_GLOSSARY_FETCH_URL, 
+    BHAHSINI_SPEAKER_ENROLL_CREATE_URL, 
+    BHAHSINI_SPEAKER_VERIFICATION_URL, 
+    BHAHSINI_SPEAKER_FETCH_URL, 
+    BHAHSINI_SPEAKER_DELETE_URL
+    )
+from config import SENDER_EMAIL, SENDER_PASSWORD, SENDER_USERNAME, SECRET_KEY
 from Crypto.Cipher import AES
 import base64
 import sys
@@ -29,7 +51,7 @@ import logging
 
 log = logging.getLogger('file')
 
-SECRET_KEY          =   secrets.token_bytes()
+# SECRET_KEY          =   secrets.token_bytes()
 
 role_codes_filepath =   config.ROLE_CODES_URL
 json_file_dir       =   config.ROLE_CODES_DIR_PATH
@@ -492,7 +514,11 @@ class UserUtils:
         #         log.info("Org validation failed")
         #         return org_validity
         #     log.info("Org validated")
-        
+
+    @staticmethod
+    def retrieve_user_data_by_key(user_email):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        return collections.find({"email": user_email},{"_id":0,"password":0})
 
 
     @staticmethod
@@ -513,6 +539,7 @@ class UserUtils:
                 log.info("{} is not a verified user".format(user_email))
                 return post_error("Not verified", "This email address is not registered with ULCA. Please sign up.", None)
             for value in result:
+                log.info(f"Result from user search :: {value}")
                 if value["isVerified"]== False:
                     log.info("{} is not a verified user".format(user_email))
                     return post_error("Not active", "User account is not verified. Please click on the verification link sent on your email address to complete the verification process.", None)
@@ -586,14 +613,47 @@ class UserUtils:
                 link            =   mail_ui_link+reset_pwd_link+"{}/{}/{}/{}".format(email,pubKey,pvtKey,timestamp)
                 name            =   user_record["name"]
             try:
-                msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
-                msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
-                with mail.record_messages() as outbox:
-                    mail.send(msg)
-                    log.info("Email outbox size {outboxLength} and subject {emailSubject}".format(outboxLength=len(outbox),emailSubject=outbox[0].subject))
-                    if len(outbox) < 1:
-                        raise OutboxEmptyException
-                    log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
+                
+                msg = MIMEMultipart()
+                msg['From'] = SENDER_EMAIL
+                msg['To'] = email
+                msg['Subject'] = email_subject
+                    
+                message_html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
+
+                # Attach the message to the email
+                msg.attach(MIMEText(message_html, 'html'))
+
+                # # Attach the file if provided
+                # attachment_filename = "feedback.xlsx"
+                # attachment = open(attachment_filename, "rb")
+                # part = MIMEBase('application', 'octet-stream')
+                # part.set_payload(attachment.read())
+                # encoders.encode_base64(part)
+                # part.add_header('Content-Disposition', f"attachment; filename= {attachment_filename}")
+                # msg.attach(part)
+
+                # Connect to the SMTP server
+                with smtplib.SMTP('smtp.azurecomm.net', 587) as server:
+                    server.starttls()
+                    print(f"SENDER USERNAME :: {SENDER_USERNAME}")
+                    print(f"SENDER PASSWORD :: {SENDER_PASSWORD}")
+                    server.login(SENDER_USERNAME, SENDER_PASSWORD)
+                    response = server.sendmail(SENDER_EMAIL, email, msg.as_string())
+                    print("Email sent")
+                            
+                
+                
+                # Older email code                
+                # msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
+                # msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
+                # with mail.record_messages() as outbox:
+                #     mail.send(msg)
+                #     log.info("Email outbox size {outboxLength} and subject {emailSubject}".format(outboxLength=len(outbox),emailSubject=outbox[0].subject))
+                #     if len(outbox) < 1:
+                #         raise OutboxEmptyException
+                #     log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
+
             except Exception as e:
                 log.exception("Exception while generating email notification | {}".format(str(e)))
                 return post_error("Exception while generating email notification","Exception occurred:{}".format(str(e)),None)
@@ -657,6 +717,43 @@ class UserUtils:
             return post_error("error processing ULCA userId:{}".format(str(e)),None)
 
     @staticmethod
+    def get_email_api_keys(email,appName):
+        try:
+            coll = db.get_db()[USR_MONGO_COLLECTION]
+            response = coll.find_one({"email": email})
+            dupStatus = True
+            dupAppName = []
+            if appName == None:
+                if isinstance(response,dict):
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        return response #Return the list of user api keys
+                    else:
+                        return [] #If user doesn't have any api keys
+                else:
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None)
+            if appName != None:
+                if isinstance(response,dict):
+                    if not 'apiKeyDetails' in response.keys():
+                        return [],False
+                    if 'apiKeyDetails' in response.keys() and isinstance(response['apiKeyDetails'],list):
+                        for appN in response["apiKeyDetails"]:
+                            dupAppName.append(appN["appName"])
+                        if appName in dupAppName:
+                            return post_error("Not Valid","This appName is already in use, please try by changing appName",None) , dupStatus
+                        elif appName not in dupAppName:
+                            dupStatus = False
+                            return response, dupStatus#,dupStatus #Return the list of user api keys
+                    else:
+                        return [], dupStatus #If user doesn't have any api keys
+                else:
+                    log.info("Not a valid userId")
+                    return post_error("Not Valid","This userId address is not registered with ULCA",None), dupStatus
+        except Exception as e:
+            log.exception("Not a valid userId")
+            return post_error("error processing ULCA userId:{}".format(str(e)),None)
+
+    @staticmethod
     def insert_generated_user_api_key(user,appName,apikey,serviceProviderKey):
         collection = db.get_db()[USR_MONGO_COLLECTION]
         # if len(serviceProviderKey) == 0:
@@ -683,8 +780,12 @@ class UserUtils:
         #log.info(f"userdoc  231231 {userdoc}")
         if userdoc:
             if "apiKeyDetails" in userdoc.keys():
-                apiKeyDeets = userdoc["apiKeyDetails"]
-            return apiKeyDeets , userdoc["email"]
+                if len(userdoc["apiKeyDetails"]) >= 1:
+
+                    apiKeyDeets = userdoc["apiKeyDetails"]
+                    return apiKeyDeets , userdoc["email"]
+                return None, None
+            return None, None
         elif not userdoc:
             return None, None
 
@@ -737,6 +838,17 @@ class UserUtils:
         log.info("Get Service Provider Key Api Call Request"+str(body))
         result = requests.post(url=EndPointurl, json=body, headers=decryptedValues)
         log.info("Get Service Provider Key Api Call Response"+str(result.json()))
+        #log.info(result.json())
+        return result.json()
+
+    @staticmethod
+    def revoke_service_provider_keys(email, appName,EndPointurl,decryptedValues):
+        body = {"emailId" : email.lower(), "appName" : appName}
+        log.info("Revoke Service Provider Key Api Call URL"+str(EndPointurl))
+        log.info("Revoke Service Provider Key Api Call Request"+str(body))
+        result = requests.delete(url=EndPointurl, json=body, headers=decryptedValues)
+        log.info(f"Revoked Response :: {result.status_code} :: {result.json()}")   
+        log.info("Revoke Service Provider Key Api Call Response"+str(result.json()))
         #log.info(result.json())
         return result.json()
 
@@ -800,3 +912,168 @@ class UserUtils:
         if isinstance(pipelinie_Docs, list):
             return pipelinie_Docs[0]['serviceProvider']['name']
 
+    @staticmethod
+    def getUserInfKey(appName, userID, serviceProvider):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        userinfkey = collections.find_one({"userID":userID})
+        if not userinfkey:
+            return None
+        
+        if "apiKeyDetails" in userinfkey.keys():
+            for apiK in userinfkey['apiKeyDetails']:
+                if apiK['appName'] == appName and 'serviceProviderKeys' in apiK.keys():
+                    for service in apiK['serviceProviderKeys']:
+                        if service['serviceProviderName'] == serviceProvider:
+                            return service['inferenceApiKey']['value']
+        else:
+            return None
+        
+    @staticmethod
+    def send_create_req_for_dhruva(auth_headers,glossary):
+        body = {"glossary":glossary}
+        result = requests.post(url=BHAHSINI_GLOSSARY_CREATE_URL, json=body, headers=auth_headers)
+        log.info(f"result from dhruva {result.json}")
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def send_delete_req_for_dhruva(auth_headers,glossary):
+        body = {"glossary":glossary}
+        result = requests.post(url=BHAHSINI_GLOSSARY_DELETE_URL, json=body, headers=auth_headers)
+        # if result.status_code == 200:
+        #     return result.json()
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def send_fetch_req_for_dhruva(auth_headers):
+        #body = {"apiKey":infKey}      
+        result = requests.get(url=BHAHSINI_GLOSSARY_FETCH_URL,  headers=auth_headers)
+        print(f"RESPONSE :: {result.json()} and STATUS CODE :: {result.status_code}")
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def send_speaker_enroll_for_dhruva(userinferenceApiKey, request_body):
+        headers = {
+        'Authorization': userinferenceApiKey,
+        'Content-Type': 'application/json'
+        }
+        result = requests.post(url=BHAHSINI_SPEAKER_ENROLL_CREATE_URL, json=request_body, headers=headers)
+        return result.json(), result.status_code
+        
+
+    @staticmethod
+    def send_speaker_verify_for_dhruva(userinferenceApiKey, request_body):
+        headers = {
+        'Authorization': userinferenceApiKey,
+        'Content-Type': 'application/json'
+        }
+        result = requests.post(url=BHAHSINI_SPEAKER_VERIFICATION_URL, json=request_body, headers=headers)
+        return result.json(), result.status_code
+
+    @staticmethod
+    def send_speaker_fetchall_for_dhruva(userinferenceApiKey):
+
+        headers = {
+        'Authorization': userinferenceApiKey,
+        'Content-Type': 'application/json'
+        }
+        result = requests.get(url=BHAHSINI_SPEAKER_FETCH_URL, headers=headers)
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def send_speaker_delete_for_dhruva(userinferenceApiKey, request_body):
+        headers = {
+        'Authorization': userinferenceApiKey,
+        'Content-Type': 'application/json'
+        }
+        result = requests.delete(url=BHAHSINI_SPEAKER_DELETE_URL, json=request_body, headers=headers)
+        return result.json(), result.status_code
+    
+    @staticmethod
+    def generateServiceProviderKey(userID, appName, udyatApiKey):
+        # Retrieve pipeline ID for service provider of MeitY
+        dataTracking=True
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(MEITY_SERVICE_PROVIDER_NAME)
+        #log.info(f"user_document details {user_document}")
+        if isinstance(pipelineID,dict) and pipelineID:
+            masterList = []
+            if "serviceProvider" in pipelineID.keys():
+                serviceProviderName = pipelineID["serviceProvider"]["name"]
+            if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys():
+                serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+                masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+                masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+                masterList.append(masterkeyname)
+                masterList.append(masterkeyvalue)
+        elif pipelineID == None:
+            return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
+        user_document,email  = UserUtils.get_userDoc(userID) #UMS
+        if isinstance(user_document, list) and user_document:
+            #log.info("DETAILS:",user_document,body)
+            if not any(usr['ulcaApiKey'] == udyatApiKey for usr in user_document):
+                return post_error("400", "Udyat API Key does not exist. Please provide a valid one.", None), 400
+            for usr in user_document:
+                if udyatApiKey in usr.values():
+                    serviceProviderNameExists = False
+                    #Check if ServiceProviderName Exists?
+                    if "serviceProviderKeys" in usr.keys() and len(usr['serviceProviderKeys'])!=0: 
+                        for each_provider in usr['serviceProviderKeys']:
+                            if each_provider['serviceProviderName'] == serviceProviderName:
+                                serviceProviderNameExists = True
+                                break
+                    if serviceProviderNameExists == True:
+                        servProvKeyExists = {}
+                        for users in usr["serviceProviderKeys"]:
+                            if users["serviceProviderName"] == serviceProviderName:
+                                servProvKeyExists["serviceProviderKeys"] = users
+                        return servProvKeyExists
+                    else:
+                        decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
+                        generatedSecretKeys = UserUtils.get_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys, dataTracking)
+                        addServiceKeys, servProvAdded = UserUtils.pushServiceProvider(generatedSecretKeys, udyatApiKey,serviceProviderName, dataTracking)
+                        returnServiceProviderKey = {"serviceProviderKeys":servProvAdded["serviceProviderKeys"][0]}
+                        if addServiceKeys["nModified"] == 1 and addServiceKeys["updatedExisting"] == True:
+                            returnServiceProviderKey["message"] = "Service Provider Key created"
+                        log.info(addServiceKeys)
+            returnServiceProviderKey['ulcaApiKey'] = udyatApiKey
+            return returnServiceProviderKey
+        elif user_document == None:
+            return post_error("400", "userID does not exist, please provide a valid one.", None), 400
+
+    @staticmethod
+    def removeServiceProviderKey(userID, appName, udyatApiKey):
+        # Get service pipeline
+        pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(MEITY_SERVICE_PROVIDER_NAME)
+        if isinstance(pipelineID,dict) and pipelineID:
+            masterList = []
+            if "serviceProvider" not in pipelineID.keys() and "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys():
+                return post_error("400", "serviceProvider or apiEndPoints or inferenceEndPoint does not exists.   Please provide a valid details", None), 400
+
+            serviceProviderName = pipelineID["serviceProvider"]["name"]
+            serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
+            masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
+            masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]
+            masterList.append(masterkeyname)
+            masterList.append(masterkeyvalue)
+        elif pipelineID == None:
+            return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
+
+        # Retrieve user details 
+        user_document,email  = UserUtils.get_userDoc(userID) #UMS
+        if not user_document and not email:
+            return post_error("400", "userID does not exists.   Please provide a valid userID", None), 400
+        if isinstance(user_document, list) and user_document:
+            if not any(usr['ulcaApiKey'] == udyatApiKey for usr in user_document):
+                return post_error("400", "ulcaApiKey does not exist. Please provide a valid one.", None), 400
+            for usr in user_document:
+                if udyatApiKey in usr.values():
+                    if "appName" in usr.keys():
+                        decryptedKeys = UserUtils.decryptAes(SECRET_KEY,masterList)
+                        generatedSecretKeys = UserUtils.revoke_service_provider_keys(email, usr["appName"],serviceProviderKeyUrl,decryptedKeys)
+        pullRecord = UserUtils.removeServiceProviders(userID,udyatApiKey,serviceProviderName)
+        if pullRecord['nModified'] == 1:
+            res = CustomResponse(Status.REMOVE_SERVICE_PROVIDER.value, "SUCCESS")
+            return res.getresjson(), 200
+        else:
+            return post_error("400", "Unable to revoke service provider details, please check credentials", None), 400

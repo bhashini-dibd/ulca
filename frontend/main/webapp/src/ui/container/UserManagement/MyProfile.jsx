@@ -11,7 +11,14 @@ import {
   TableCell,
   Table,
   Switch,
+  Tooltip,
+  IconButton,
+  useMediaQuery,
+  Avatar,
+  makeStyles,
 } from "@material-ui/core";
+import InfoIcon from '@material-ui/icons/Info';
+import { Link } from 'react-router-dom'
 import Search from "../../components/Datasets&Model/Search";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 // import createMuiTheme from "../../styles/Datatable";
@@ -40,7 +47,17 @@ import ServiceProviderDialog from "../../components/common/ServiceProviderDialog
 import removeServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/RemoveServiceProviderKey";
 import GenerateServiceProviderKeyAPI from "../../../redux/actions/api/UserManagement/GenerateServiceProviderKey";
 import DataTrackingToggleAPI from "../../../redux/actions/api/UserManagement/DataTrackingToggle";
+import { useHistory } from 'react-router-dom';
+import aunthenticate from "../../../configs/authenticate";
 
+const useStyles = makeStyles((theme) => ({
+  tooltip: {
+    padding: '10px',
+    fontSize: '18px',
+    backgroundColor: 'rgba(0, 0, 0, 0.87)', // Default background color for MUI tooltip
+    color: '#fff', // Default text color for MUI tooltip
+  },
+}));
 const SwitchCases = ({
   dataTrackingValue,
   setSnackbarInfo,
@@ -49,6 +66,7 @@ const SwitchCases = ({
   Ulcakey,
 }) => {
   const [checked, setChecked] = useState(dataTrackingValue);
+  const history = useHistory();
   useEffect(() => {
     setChecked(dataTrackingValue);
   }, [dataTrackingValue]);
@@ -101,10 +119,13 @@ const SwitchCases = ({
 
 const MyProfile = (props) => {
   const { classes } = props;
+  const tooltipclass = useStyles();
   const dispatch = useDispatch();
-
+const isMobile = useMediaQuery("(max-width:600px)")
   const apiKeys = useSelector((state) => state.getApiKeys.apiKeys);
-
+  const { firstName, email } = aunthenticate()
+  ? JSON.parse(localStorage.getItem("userDetails"))
+  : { firstName: "", lastName: "" };
   const [loading, setLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [snackbar, setSnackbarInfo] = useState({
@@ -123,7 +144,9 @@ const MyProfile = (props) => {
     useState(false);
   const [serviceProviderName, setServiceProviderName] = useState("");
   const [expandableRow, setExpandableRow] = useState([]);
-
+  const [fetchAppName, setFetchAppName] = useState('');
+  const [fetchUlcaApi, setFetchUlcaApi] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     if (apiKeys) {
@@ -292,14 +315,61 @@ const MyProfile = (props) => {
 
   const fetchHeaderButton = () => {
     return (
-      <Grid container>
+      <Grid container style={{marginBottom: isMobile ? '20px' : ''}}>
+        {/* <Grid >
+        <Typography variant="h6" component="h2" align="center">
+            App Integration Details
+          </Typography>
+        </Grid> */}
+      
+        {/* <Box style={{display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
+          <Box>
+          <Typography variant="h6" component="h2" align="center">
+            App Integration Details
+          </Typography>
+          </Box>
+          <Box style={{display:"flex", justifyContent:"space-between", gap:"15px"}}>
+            <Box> <Search value="" handleSearch={(e) => handleSearch(e.target.value)} /></Box>
+            <Box><Button
+            color="primary"
+            size="medium"
+            variant="contained"
+            className={classes.ButtonRefresh}
+            onClick={() => {
+              setModal(true);
+            }}
+            style={{
+              height: "36px",
+              textTransform: "capitalize",
+              fontSize: "1rem",
+              borderRadius:"3px"
+            }}
+          >
+            {" "}
+            {translate("button.generate")}
+          </Button></Box>
+          </Box>
+        </Box> */}
+         <Grid
+          item
+          xs={9}
+          sm={8}
+          md={7}
+          lg={7}
+          xl={7}
+          style={{ display: "flex", justifyContent: "start", alignItems:"center" }}
+        >
+          <Typography variant="h6" component="h2" align={isMobile ? 'center' : 'left'} style={{paddingBottom: isMobile ? "20px" : '',width:isMobile? '100%' : ''}}>
+            App Integration Details
+          </Typography>
+        </Grid>
         <Grid
           item
           xs={9}
           sm={8}
-          md={8}
-          lg={9}
-          xl={9}
+          md={3}
+          lg={3}
+          xl={3}
           style={{ display: "flex", justifyContent: "flex-start" }}
         >
           <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
@@ -354,7 +424,7 @@ const MyProfile = (props) => {
           lg={2}
           xl={2}
           className={classes.filterGrid}
-          style={{ marginLeft: "100px" }}
+          style={{ marginLeft: "0px" }}
         >
           <Button
             color="primary"
@@ -368,6 +438,7 @@ const MyProfile = (props) => {
               height: "36px",
               textTransform: "capitalize",
               fontSize: "1rem",
+              borderRadius:"3px"
             }}
           >
             {" "}
@@ -379,9 +450,9 @@ const MyProfile = (props) => {
           item
           xs={2}
           sm={2}
-          md={2}
-          lg={2}
-          xl={2}
+          md={1}
+          lg={1}
+          xl={1}
           className={classes.filterGridMobile}
         >
           <Button
@@ -494,7 +565,7 @@ const MyProfile = (props) => {
     },
     {
       name: "ulcaApiKey",
-      label: "ULCA API Key",
+      label: "Udyat API Key",
       options: {
         filter: false,
         sort: false,
@@ -582,6 +653,26 @@ const MyProfile = (props) => {
     setExpandableRow(temp);
   };
 
+  const handleGlossaryData = (row) => {
+    console.log(row,UlcaApiKey,"heee")
+    history.push(`${process.env.PUBLIC_URL}/glossary`, {
+      serviceProviderName: row?.serviceProviderName,
+      inferenceApiKey: row?.inferenceApiKey.value,
+      appName: fetchAppName,
+      UlcaApiKey:fetchUlcaApi,
+    })
+  }
+
+  const handleSpeakerVerificationData = (row) => {
+    console.log(row,UlcaApiKey,"heee")
+    history.push(`${process.env.PUBLIC_URL}/speaker-recognition`, {
+      serviceProviderName: row?.serviceProviderName,
+      inferenceApiKey: row?.inferenceApiKey.value,
+      appName: fetchAppName,
+      UlcaApiKey:fetchUlcaApi,
+    })
+  }
+
   const options = {
     textLabels: {
       body: {
@@ -614,6 +705,9 @@ const MyProfile = (props) => {
     },
     rowsExpanded: expandableRow,
     renderExpandableRow: (rowData, rowMeta) => {
+      setFetchAppName(rowData[0])
+      setFetchUlcaApi(rowData[1])
+      console.log(rowData);
       const data = rowData[2];
       if (data?.length)
         return (
@@ -621,7 +715,7 @@ const MyProfile = (props) => {
             <TableRow>
               <TableCell colSpan={5}>
                 <>
-                  <Box  style={{margin: "0 80px", width:"86%"}}>
+                  <Box  /* style={{margin: "0 80px", width:"86%"}} */>
                     <Table size="small" aria-label="purchases">
                       <TableHead style={{ height: "60px" }}>
                         <TableCell style={{ whiteSpace: "nowrap" }}>
@@ -641,16 +735,29 @@ const MyProfile = (props) => {
                         >
                           Action
                         </TableCell>
+                        <TableCell
+                          // style={{ paddingLeft: "50px", width: "15%", }}
+                        >
+                          {/* <Box display='flex' alignItems="center" style={{cursor:"pointer"}}>
+                            <Box sx={{color:"black"}}> Glossary</Box>
+                            <Box> <Tooltip style={{padding:"10px", fontSize:"22px"}} placement="top"  classes={{ tooltip: tooltipclass.tooltip }}  title="Glossary is a custom dictionary that can consistently translate the customer's domain-specific terminology between languages.">
+      <IconButton>
+        <InfoIcon />
+      </IconButton>
+    </Tooltip></Box>
+                          </Box> */}
+                        </TableCell>
+                        <TableCell></TableCell>
                       </TableHead>
                       <TableBody>
                         {data.map((row, i) => {
-                          return (
+                          return (                        
                             <TableRow
                               style={{
                                 backgroundColor: "rgba(254, 191, 44, 0.1)",
                               }}
                               key={i}
-                            >
+                            >                             
                               <TableCell style={{ width: "18%" }}>
                                 {row?.serviceProviderName}
                               </TableCell>
@@ -716,6 +823,36 @@ const MyProfile = (props) => {
                                   </Button>
                                 )}
                               </TableCell>
+                            
+                              <TableCell style={{ width: "25%" }}>
+                                {row?.inferenceApiKey?.value && (
+                                 
+                                      <Button
+                                    color="primary"
+                                    variant="contained"
+                                    className={classes.myProfileGenerateButton}
+                                    onClick={() => handleGlossaryData(row)}
+                                  >
+                                    Glossary
+                                  </Button>
+                                
+                               
+                                )}                            
+                              </TableCell>
+                              <TableCell style={{ width: "25%" }}> {row?.inferenceApiKey?.value && (
+                                 
+                                 <Button
+                               color="primary"
+                               variant="contained"
+                               className={classes.myProfileGenerateButton}
+                               onClick={() => handleSpeakerVerificationData(row)}
+                               style={{height:"60px"}}
+                             >
+                               Speaker Verification
+                             </Button>
+                           
+                          
+                           )}   </TableCell>
                             </TableRow>
                           );
                         })}
@@ -749,12 +886,8 @@ const MyProfile = (props) => {
     <>
       {renderSnackBar()}
       {loading && <Spinner />}
-      <Grid container direction="row" spacing={2}>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography variant="h3" component="h2" align="center">
-            App Integration Details
-          </Typography>
-        </Grid>
+      {/* <Grid container direction="row" spacing={2}>
+      
         <Typography
           variant="body"
           style={{
@@ -765,7 +898,34 @@ const MyProfile = (props) => {
         >
           User ID : {UserDetails.userID}
         </Typography>
-      </Grid>
+      </Grid> */}
+      <Box style={{ width: '100%', padding: '30px',marginTop:"-35px", textAlign: 'start', marginBottom: '30px', backgroundColor:"#F0F9FF" }}>
+        {/* <Typography variant="h4" className="mb-4">App Integration Details</Typography> */}
+        <Box style={{display:"flex",width:"50%", flexDirection: isMobile ? "column" : 'row', justifyContent:isMobile ? "" :"space-between", alignItems:isMobile ? '' :"center", marginTop:"10px"}}>
+          <Box style={{display:"flex", gap:"10px", justifyContent:"center", alignItems:"center", paddingRight:isMobile ? '' :"40px", borderRight:isMobile ? '' : "2px solid #C9C9C9", paddingLeft:isMobile ? '50px' : '', paddingBottom: isMobile? '30px' : ''}}>
+            <Typography variant="body1"> <Avatar
+                    className={classes.avatar}
+                    style={{height:isMobile ?'' :"100px", width:isMobile ? '' :"100px", color:"white", backgroundColor:"#2947A3"}}
+                    variant="contained"
+                  >{`${firstName[0].toUpperCase()}`}</Avatar></Typography>
+                  <Box>
+
+            <Typography variant="h4" fontFamily='Noto-Regular' fontWeight="400" fontSize="24px" >{firstName}</Typography>
+            <Typography variant="body2" fontFamily='Noto-Regular'>{email}</Typography>
+                  </Box>
+
+          </Box>
+         
+          <Box style={{paddingLeft:isMobile ? '' :"40px"}}>
+            <Typography variant="body1">{UserDetails.userID}</Typography>
+            <Typography variant="body2">User ID</Typography>
+          </Box>
+          {/* <Box>
+            <Typography variant="body2">h1</Typography>
+            <Typography variant="body1">jjj</Typography>
+          </Box> */}
+        </Box>
+      </Box>
 
       <MuiThemeProvider theme={getMuiTheme}>
         <MUIDataTable data={data} columns={columns} options={options} />
@@ -783,6 +943,7 @@ const MyProfile = (props) => {
           style={{ textAlign: "end", marginTop: "25px" }}
         >
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            {/* <Typography variant="body1"> Enter the App name</Typography>
             <TextField
               fullWidth
               id="outlined-basic"
@@ -790,16 +951,29 @@ const MyProfile = (props) => {
               variant="outlined"
               value={appName}
               onChange={handlecChangeAddName}
-            />
+            /> */}
+            <Typography variant="h6" style={{fontFamily: "Noto-Bold", fontWeight:"600",marginBottom:"15px", textAlign:"left"}}>Generate API Key</Typography>
+            <Typography variant="body1" style={{fontFamily: "Noto-Regular", fontWeight:"400",marginBottom:"15px", textAlign:"left"}}> Enter the App name</Typography>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  // label="Enter App Name"
+                  // name='Organisation Website'
+                  value={appName}
+                  onChange={handlecChangeAddName}
+                />
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{display:"flex", justifyContent:"space-between",marginBottom:"10px"}}>
             <Button
-              variant="text"
+              variant="contained"
               color="primary"
               style={{
                 borderRadius: "20px",
                 marginTop: "20px",
                 marginRight: "10px",
+                backgroundColor:"#E7F0FA",
+                color:"#2947A3",
+                borderRadius:"3px"
               }}
               onClick={handleClose}
             >
@@ -808,11 +982,11 @@ const MyProfile = (props) => {
             <Button
               variant="contained"
               color="primary"
-              style={{ borderRadius: "20px", marginTop: "20px" }}
+              style={{ borderRadius: "20px", marginTop: "20px", backgroundColor:"#2947A3",color:"white", borderRadius:"3px", padding:"15px 30px" }}
               onClick={handleSubmitGenerateApiKey}
               disabled={appName ? false : true}
             >
-              Submit
+              Generate
             </Button>
           </Grid>
         </Grid>

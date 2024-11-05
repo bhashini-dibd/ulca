@@ -35,6 +35,13 @@ import HostedInferTransliteration from "./HostedInferTransliteration";
 import LanugageDetection from "../LanugageDetection";
 import metricInfo from "../../../../../utils/getMetricInfo.";
 import HostedinferenceNER from "./HostedinferenceNER";
+import Contactus from "../../../../components/common/Contactus";
+import Clients from "../../../../components/common/Clients";
+import { FooterNewDesign } from "../../../../components/common/FooterNewDesign";
+import HostedInferALD from "./HostedInferALD";
+import HostedInferAGD from "./HostedInferAGD";
+import HostedInferenceITN from "./HostedInferenceITN";
+import HostedInferenceTN from "./HostedInferenceTN";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -127,7 +134,7 @@ const SearchModelDetail = (props) => {
     setMetric(metric);
   };
 
-  const renderHostedInfer = (task) => {
+  const renderHostedInfer = (task) => { 
     if (data) {
       switch (task) {
         case "asr":
@@ -189,6 +196,48 @@ const SearchModelDetail = (props) => {
               target={target}
             />
           );
+        case "audio-lang-detection":
+          return (
+          <HostedInferALD
+              task={task}
+              source={source}
+              language={language}
+              inferenceEndPoint={inferenceEndPoint}
+              submitter={submitter}
+              modelId={params.srno}
+              streaming={streaming}
+            />
+          );
+        case "audio-gender-detection":
+            return (
+            <HostedInferAGD
+                task={task}
+                source={source}
+                language={language}
+                inferenceEndPoint={inferenceEndPoint}
+                submitter={submitter}
+                modelId={params.srno}
+                streaming={streaming}
+              />
+            );
+           case "itn":
+              return (
+                <HostedInferenceITN
+                task={task}
+                modelId={params.srno}
+                source={source}
+                target={target}
+              />
+              );
+              case "text-normalization":
+              return (
+                <HostedInferenceTN
+                task={task}
+                modelId={params.srno}
+                source={source}
+                target={target}
+              />
+              );
         default:
           return (
             <HostedInference
@@ -373,7 +422,7 @@ const SearchModelDetail = (props) => {
                           title={
                             <a
                               style={{ textDecoration: "none" }}
-                              href="https://github.com/ULCA-IN/ulca/wiki/Model-Evaluation-Metrics-Definitions"
+                              href="https://github.com/bhashini-dibd/ulca/wiki/Model-Evaluation-Metrics-Definitions"
                               target="_blank"
                             >{`${metricInfo[metric]}. For further information click here.`}</a>
                           }
@@ -402,7 +451,10 @@ const SearchModelDetail = (props) => {
           )}
         </div>
       )}
-      <Footer />
+      {/* <Footer /> */}
+      <Contactus />
+          <Clients />
+          <FooterNewDesign />
     </MuiThemeProvider>
   );
 };
