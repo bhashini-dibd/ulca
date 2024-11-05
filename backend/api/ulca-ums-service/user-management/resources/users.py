@@ -290,7 +290,7 @@ class GenerateServiceProviderKey(Resource):
         if isinstance(pipelineID,dict) and pipelineID:
             masterList = []
             if "serviceProvider" in pipelineID.keys():
-                serviceProviderName = pipelineID["serviceProvider"]["name"]
+                serviceProviderName = "MeitY" # pipelineID["serviceProvider"]["name"]
             if "apiEndPoints" in pipelineID.keys() and "inferenceEndPoint" in pipelineID.keys():
                 serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
                 masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
