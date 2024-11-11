@@ -519,6 +519,14 @@ class UserUtils:
     def retrieve_user_data_by_key(user_email):
         collections = db.get_db()[USR_MONGO_COLLECTION]
         return collections.find({"email": user_email},{"_id":0,"password":0})
+    
+    # to retrieve user list with pagination
+    
+    @staticmethod
+    def retrieve_user_list(page=1, page_size=10):
+        collections = db.get_db()[USR_MONGO_COLLECTION]
+        skip = (page - 1) * page_size
+        return list(collections.find({}, {"_id": 0, "password": 0}).skip(skip).limit(page_size))
 
 
     @staticmethod
