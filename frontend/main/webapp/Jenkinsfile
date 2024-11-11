@@ -4,11 +4,11 @@ import hudson.model.*
 node('server_build_slave')  {
 
 try {
-      stage('Checkout') {
-         dir('/home/azureuser/ULCA') {
-            checkout scm
-         }
-      }
+
+   stage('Checkout'){
+
+      checkout scm
+   }
 stage('compress build folder')
 withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials', passwordVariable: 'dockerhub_pass', usernameVariable: 'dockerhub_user')])
 {
