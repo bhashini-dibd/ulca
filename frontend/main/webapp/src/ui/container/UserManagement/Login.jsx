@@ -359,16 +359,6 @@ const Login = (props) => {
           <span>Continue with Github</span>
         </Button>
       </LoginSocialGithub> */}
-        <div className={classes.createLogin}>
-          <Typography variant={"body2"} className={classes.width}>New to Bhashini Udyat ?</Typography>
-          <Typography variant={"body2"} >
-            <Link id="newaccount" className={classes.link} href="#"
-              onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/register`) }}>
-              {" "}
-              Create an account
-            </Link>
-          </Typography>
-        </div>
 
       </Grid>
       {snackbar.open &&
