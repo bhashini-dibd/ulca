@@ -536,6 +536,14 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch user key details"
-    }     
+    },
+    {
+      "id": "ef82ada1-efee-472f-bba2-051fc728fad9",
+      "uri": "/ulca/user-mgmt/v1/users/onboardingApp/userLists",
+      "module": "ULCA-UMS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch list of users available"
+    }    
   ]
 }
