@@ -845,15 +845,12 @@ class OnboardingAppUserList(Resource):
         if authorization_header != ONBOARDING_AUTH_HEADER:
             return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
         
-        page = request.args.get("page",type=int)
-        
-        if "page" is None:
-            page=1 
-        
-        page_size = request.args.get("page_size",type=int)
-        
-        if "page_size" is None:
-            page_size=10 
+        page = request.args.get("page", type=int)
+        if page is None:
+            page = 1
+        page_size = request.args.get("page_size", type=int)
+        if page_size is None:
+            page_size = 10
         print(f"page :: {page}")
         print(f"page_size :: {page_size}")
         
