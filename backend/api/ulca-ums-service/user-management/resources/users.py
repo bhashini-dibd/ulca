@@ -844,12 +844,19 @@ class OnboardingAppUserList(Resource):
         print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
         if authorization_header != ONBOARDING_AUTH_HEADER:
             return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
-                
+        
+        page = request.args.get("page")
+        
+        if "page" is None:
+            page=1 
+        
+        page_size = request.args.get("page_size")
+        
+        if "page_size" is None:
+            page_size=10 
+
         try:
             #fetching the user details from db
-            page=1 
-            page_size=10
-
             userList_details = UserUtils.retrieve_user_list(page,page_size)          
             print(f"userList_details :: {userList_details}")
 

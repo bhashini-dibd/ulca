@@ -523,7 +523,7 @@ class UserUtils:
     # to retrieve user list with pagination
     
     @staticmethod
-    def retrieve_user_list(page=1, page_size=10):
+    def retrieve_user_list(page,page_size):
         collections = db.get_db()[USR_MONGO_COLLECTION]
         skip = (page - 1) * page_size
         return list(collections.find({}, {"_id": 0, "password": 0}).skip(skip).limit(page_size))
