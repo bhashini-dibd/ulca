@@ -855,12 +855,24 @@ class OnboardingAppUserList(Resource):
 
             if len(userList_details) == 0:
                 return post_error("Data not valid","Error on fetching user details")
+           
+            #for user in userList_details:
+            #    return {"userDetails": normalize_bson_to_json(user)}
+
+            user_details_list = []
+
             for user in userList_details:
-                return {"userDetails": normalize_bson_to_json(user)}
-            
-            data = [{"userListDetails":userList_details}]
+                user_details_list.append({"userDetails": normalize_bson_to_json(user)})
+
+           # return user_details_list
+        
+            # Create the response data after processing all users
+            data = [{"userListDetails": user_details_list}]
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
-            return res.getresjson(), 200            
+                    
+            # Return the response
+            return res.getresjson(), 200
+                     
 
         except Exception as e:
             log.exception("Database connection exception | {} ".format(str(e)))
