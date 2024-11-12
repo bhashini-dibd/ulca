@@ -853,7 +853,7 @@ class OnboardingAppUserList(Resource):
             userList_details = UserUtils.retrieve_user_list(page,page_size)          
             print(f"userList_details :: {userList_details}")
 
-            if userList_details.count() == 0:
+            if len(userList_details) == 0:
                 return post_error("Data not valid","Error on fetching user details")
             for user in userList_details:
                 return {"userDetails": normalize_bson_to_json(user)}
