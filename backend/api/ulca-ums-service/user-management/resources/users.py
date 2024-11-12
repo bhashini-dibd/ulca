@@ -854,7 +854,9 @@ class OnboardingAppUserList(Resource):
         
         if "page_size" is None:
             page_size=10 
-
+        print(f"page :: {page}")
+        print(f"page_size :: {page_size}")
+        
         try:
             #fetching the user details from db
             userList_details = UserUtils.retrieve_user_list(page,page_size)          

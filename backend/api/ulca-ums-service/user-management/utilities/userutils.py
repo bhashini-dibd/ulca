@@ -525,6 +525,8 @@ class UserUtils:
     @staticmethod
     def retrieve_user_list(page,page_size):
         collections = db.get_db()[USR_MONGO_COLLECTION]
+        print(f"page1 :: {page}")
+        print(f"page_size1 :: {page_size}")
         skip = (page - 1) * page_size
         return list(collections.find({}, {"_id": 0, "password": 0}).skip(skip).limit(page_size))
 
