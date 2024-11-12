@@ -874,7 +874,7 @@ class OnboardingAppUserList(Resource):
         
             # Create the response data after processing all users
             data = [{"userListDetails": user_details_list}]
-            res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
+            res = CustomResponse(Status.SUCCESS_GET_USERLIST.value, data)
                     
             # Return the response
             return res.getresjson(), 200
