@@ -25,6 +25,7 @@ import io.swagger.pipelinemodel.TaskSpecifications;
 import io.swagger.pipelinerequest.ASRResponseConfig;
 import io.swagger.pipelinerequest.ASRTask;
 import io.swagger.pipelinerequest.ASRTaskInference;
+import io.swagger.pipelinerequest.NERTask;
 import io.swagger.pipelinerequest.OCRResponseConfig;
 import io.swagger.pipelinerequest.OCRTask;
 import io.swagger.pipelinerequest.OCRTaskInference;
@@ -249,6 +250,18 @@ public class PipelineUtilities {
                 // get pipeline model task specifications for this particular task
                 for (TaskSpecification pipelineSpecification : pipelineModel.getTaskSpecifications()) {
                     if (pipelineSpecification.getTaskType() == SupportedTasks.OCR) {
+                        taskSpecifications = getPossibleConfigForCurrentTask(lp, pipelineSpecification, taskSpecifications);
+                    }
+                }
+            }
+            else if (pipelineTask instanceof NERTask) {
+            	NERTask nerTask = (NERTask) pipelineTask;
+                if (nerTask.getConfig() != null && nerTask.getConfig().getLanguage() != null) {
+                    lp = nerTask.getConfig().getLanguage();
+                }
+                // get pipeline model task specifications for this particular task
+                for (TaskSpecification pipelineSpecification : pipelineModel.getTaskSpecifications()) {
+                    if (pipelineSpecification.getTaskType() == SupportedTasks.NER) {
                         taskSpecifications = getPossibleConfigForCurrentTask(lp, pipelineSpecification, taskSpecifications);
                     }
                 }

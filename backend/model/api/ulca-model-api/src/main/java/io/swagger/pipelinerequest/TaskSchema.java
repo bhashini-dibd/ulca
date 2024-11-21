@@ -17,7 +17,8 @@ import io.swagger.model.SupportedTasks;
   @JsonSubTypes.Type(value = ASRTaskInference.class, name = "asr"),
   @JsonSubTypes.Type(value = TTSTaskInference.class, name = "tts"),
   @JsonSubTypes.Type(value = TransliterationTaskInference.class, name = "transliteration"),
-  @JsonSubTypes.Type(value = OCRTaskInference.class, name = "ocr")
+  @JsonSubTypes.Type(value = OCRTaskInference.class, name = "ocr"),
+  @JsonSubTypes.Type(value = NERTaskInference.class, name = "ner")
 })
 public interface TaskSchema {
 

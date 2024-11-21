@@ -169,6 +169,8 @@ import io.swagger.pipelinerequest.TransliterationTaskInference;
 //import io.swagger.v3.core.util.Json;
 import io.swagger.pipelinerequest.PipelineResponse;
 import io.swagger.pipelinerequest.LanguagesList;
+import io.swagger.pipelinerequest.NERResponseConfig;
+import io.swagger.pipelinerequest.NERTaskInference;
 import io.swagger.pipelinerequest.OCRRequestConfig;
 import io.swagger.pipelinerequest.OCRResponseConfig;
 import io.swagger.pipelinerequest.OCRTask;
@@ -1946,7 +1948,7 @@ public class ModelService {
 		JSONObject jo = om.convertValue(jsonRequest, JSONObject.class);
 		log.info("jo :: " + jo.toString());
 
-		String[] taskArray = { "translation", "asr", "tts", "transliteration", "ocr" };
+		String[] taskArray = { "translation", "asr", "tts", "transliteration", "ocr","ner"};
 
 		List<String> taskList = Arrays.asList(taskArray);
 		JSONArray ja = (JSONArray) jo.get("pipelineTasks");
@@ -2603,6 +2605,27 @@ public class ModelService {
 					ocrTaskInference.addConfigItem(ocrResponseConfig);
 				}
 				schemaList.add(ocrTaskInference);
+			}
+			if (individualSpec.getTaskType() == SupportedTasks.NER) {
+				NERTaskInference nerTaskInference = new NERTaskInference();
+				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
+					NERResponseConfig nerResponseConfig = new NERResponseConfig();
+					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
+					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
+					LanguagePairs langPair = model.getLanguages();
+					for (LanguagePair lp : langPair) {
+						nerResponseConfig.setLanguage(lp);
+					}
+					nerResponseConfig.setServiceId(curConfigSchema.getServiceId());
+					nerResponseConfig.setModelId(curConfigSchema.getModelId());
+
+					nerTaskInference.addConfigItem(nerResponseConfig);
+				}
+				schemaList.add(nerTaskInference);
 			}
 		}
 
