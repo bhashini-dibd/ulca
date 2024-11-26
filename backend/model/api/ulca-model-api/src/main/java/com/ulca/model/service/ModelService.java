@@ -1641,6 +1641,16 @@ public class ModelService {
 				}
 
 			}
+			
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "ner") {
+				NERTaskInference nerTaskInference = (NERTaskInference) pipelineResponseSchemaList.get(i);
+				if (nerTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
 
 		}
         
