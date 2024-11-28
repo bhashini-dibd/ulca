@@ -26,7 +26,8 @@ from resources import (
     GenerateServiceProviderKeyWithoutLogin, 
     RemoveServiceProviderKeyWithoutLogin, 
     OnboardingAppUserDetails,
-    OnboardingAppUserKeyDetails  
+    OnboardingAppUserKeyDetails,
+    OnboardingAppUserList  
     )
 
 USER_MANAGEMENT_BLUEPRINT = Blueprint("user-management-crud", __name__)
@@ -133,4 +134,8 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
     OnboardingAppUserKeyDetails, "/v1/users/onboardingApp/userKeyDetails"
+)
+
+Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
+    OnboardingAppUserList, "/v1/users/onboardingApp/userLists"
 )
