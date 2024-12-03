@@ -170,6 +170,7 @@ import io.swagger.pipelinerequest.TransliterationTaskInference;
 import io.swagger.pipelinerequest.PipelineResponse;
 import io.swagger.pipelinerequest.LanguagesList;
 import io.swagger.pipelinerequest.NERResponseConfig;
+import io.swagger.pipelinerequest.NERTask;
 import io.swagger.pipelinerequest.NERTaskInference;
 import io.swagger.pipelinerequest.OCRRequestConfig;
 import io.swagger.pipelinerequest.OCRResponseConfig;
@@ -2347,8 +2348,32 @@ public class ModelService {
 
 						}
 
-					} else {
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "ner") {
 
+						NERTask nerTaskNext = (NERTask) pipelineTasks.get(i + 1);
+						if (nerTaskNext.getConfig() != null) {
+							TranslationRequestConfig nerRequestConfigNext = nerTaskNext
+									.getConfig();
+
+							if (translationRequestConfig.getLanguage().getSourceLanguage() != null
+									&& nerRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!translationRequestConfig.getLanguage().getSourceLanguage()
+										.equals(nerRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					}
+					
+					
+					else {
+						
 						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
 					}
 
@@ -2395,6 +2420,48 @@ public class ModelService {
 
 						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
 
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "ner") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					}	
+					else {
+						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
+
+					}
+
+				}
+
+			} else if (pipelineTasks.get(i).getTaskType() == "ner") {
+				NERTask nerTask = (NERTask) pipelineTasks.get(i);
+
+				if (nerTask.getConfig() != null) {
+					if (pipelineTasks.get(i + 1).getTaskType() == "asr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					}  else if (pipelineTasks.get(i + 1).getTaskType() == "ner") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					}
+					
+					else if (pipelineTasks.get(i + 1).getTaskType() == "translation") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "tts") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "transliteration") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "ocr") {
+
+						throw new PipelineValidationException("Invalid Task Type Sequence!", HttpStatus.BAD_REQUEST);
+
 					} else {
 						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
 
@@ -2402,7 +2469,13 @@ public class ModelService {
 
 				}
 
-			} else {
+			}
+			
+			
+			
+			
+			else {
+				
 				throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
 
 			}
