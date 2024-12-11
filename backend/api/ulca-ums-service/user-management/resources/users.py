@@ -832,3 +832,52 @@ class OnboardingAppUserDetails(Resource):
         except Exception as e:
             log.exception("Database connection exception | {} ".format(str(e)))
             return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)
+
+# to retrieve list of users
+
+class OnboardingAppUserList(Resource):
+    def get(self):
+        
+        authorization_header = request.headers.get("Authorization")
+        print(f"ONBOARDING AUTH HEADER :: {ONBOARDING_AUTH_HEADER}")
+        if authorization_header != ONBOARDING_AUTH_HEADER:
+            return post_error("Data Missing", "Unauthorized to perform this operation", None), 401
+        
+        page = request.args.get("page", type=int)
+        if page is None:
+            page = 1
+        page_size = request.args.get("page_size", type=int)
+        if page_size is None:
+            page_size = 10
+        print(f"page :: {page}")
+        print(f"page_size :: {page_size}")
+        
+        try:
+            #fetching the user details from db
+            userList_details = UserUtils.retrieve_user_list(page,page_size)          
+            print(f"userList_details :: {userList_details}")
+
+            if len(userList_details) == 0:
+                return post_error("Data not valid","Error on fetching user details")
+           
+            #for user in userList_details:
+            #    return {"userDetails": normalize_bson_to_json(user)}
+
+            user_details_list = []
+
+            for user in userList_details:
+                user_details_list.append({"userDetails": normalize_bson_to_json(user)})
+
+           # return user_details_list
+        
+            # Create the response data after processing all users
+            data = [{"userListDetails": user_details_list}]
+            res = CustomResponse(Status.SUCCESS_GET_USERLIST.value, data)
+                    
+            # Return the response
+            return res.getresjson(), 200
+                     
+
+        except Exception as e:
+            log.exception("Database connection exception | {} ".format(str(e)))
+            return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)
