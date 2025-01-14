@@ -2139,7 +2139,30 @@ public class ModelService {
 
 						}
 
-					} else {
+					} else if (pipelineTasks.get(i + 1).getTaskType() == "ner") {
+
+						NERTask nerTaskNext = (NERTask) pipelineTasks.get(i + 1);
+						if (nerTaskNext.getConfig() != null) {
+							TranslationRequestConfig nerRequestConfigNext = nerTaskNext
+									.getConfig();
+
+							if (aSRRequestConfig.getLanguage().getSourceLanguage() != null
+									&& nerRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!aSRRequestConfig.getLanguage().getSourceLanguage()
+										.equals(nerRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					}
+					
+					else {
 						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
 
 					}
@@ -2219,7 +2242,30 @@ public class ModelService {
 
 						}
 
-					} else {
+					}else if (pipelineTasks.get(i + 1).getTaskType() == "ner") {
+
+						NERTask nerTaskNext = (NERTask) pipelineTasks.get(i + 1);
+						if (nerTaskNext.getConfig() != null) {
+							TranslationRequestConfig nerRequestConfigNext = nerTaskNext
+									.getConfig();
+
+							if (ocrRequestConfig.getLanguage().getSourceLanguage() != null
+									&& nerRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!ocrRequestConfig.getLanguage().getSourceLanguage()
+										.equals(nerRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					}
+					
+					else {
 						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
 
 					}
@@ -2282,7 +2328,31 @@ public class ModelService {
 
 						}
 
-					} else {
+					}else if (pipelineTasks.get(i + 1).getTaskType() == "ner") {
+
+						NERTask nerTaskNext = (NERTask) pipelineTasks.get(i + 1);
+						if (nerTaskNext.getConfig() != null) {
+							TranslationRequestConfig nerRequestConfigNext = nerTaskNext
+									.getConfig();
+
+							if (transliterationRequestConfig.getLanguage().getSourceLanguage() != null
+									&& nerRequestConfigNext.getLanguage().getSourceLanguage() != null) {
+
+								if (!transliterationRequestConfig.getLanguage().getSourceLanguage()
+										.equals(nerRequestConfigNext.getLanguage().getSourceLanguage())) {
+									throw new PipelineValidationException("Invalid Language Sequence!",
+											HttpStatus.BAD_REQUEST);
+
+								}
+
+							}
+
+						}
+
+					}
+					
+					
+					else {
 						throw new PipelineValidationException("Invalid Task Type!", HttpStatus.BAD_REQUEST);
 
 					}
@@ -2836,13 +2906,34 @@ public class ModelService {
 				}
 				schemaList.add(ocrTaskInference);
 			}
+			if (individualSpec.getTaskType() == SupportedTasks.NER) {
+				NERTaskInference nerTaskInference = new NERTaskInference();
+				for (ConfigSchema curConfigSchema : individualSpec.getTaskConfig()) {
+					NERResponseConfig nerResponseConfig = new NERResponseConfig();
+					log.info("Checking Model ID :: " + curConfigSchema.getModelId());
+					long startTime = System.currentTimeMillis();
+					ModelExtended model = modelDao.findByModelId(curConfigSchema.getModelId());
+					long endTime = System.currentTimeMillis();
+					long duration = endTime - startTime;
+					System.out.println("Time taken to get model : " + duration + " ms");
+					LanguagePairs langPair = model.getLanguages();
+					for (LanguagePair lp : langPair) {
+						nerResponseConfig.setLanguage(lp);
+					}
+					nerResponseConfig.setServiceId(curConfigSchema.getServiceId());
+					nerResponseConfig.setModelId(curConfigSchema.getModelId());
+
+					nerTaskInference.addConfigItem(nerResponseConfig);
+				}
+				schemaList.add(nerTaskInference);
+			}
 		}
 
 		return schemaList;
 	}
 	public AppModelsResponse getAppModels(String taskType) {
 		AppModelsResponse appModelsResponse = new AppModelsResponse();
-		String[] defaultTasks = { "translation", "asr", "transliteration", "tts", "ocr" };
+		String[] defaultTasks = { "translation", "asr", "transliteration", "tts", "ocr","ner" };
 		List<String> defaultTasksList = Arrays.asList(defaultTasks);
 		List<String> tasksRequested = new ArrayList<String>();
 
@@ -3239,6 +3330,15 @@ public class ModelService {
 			if (pipelineResponseSchemaList.get(i).getTaskType() == "ocr") {
 				OCRTaskInference ocrTaskInference = (OCRTaskInference) pipelineResponseSchemaList.get(i);
 				if (ocrTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "ner") {
+				NERTaskInference nerTaskInference = (NERTaskInference) pipelineResponseSchemaList.get(i);
+				if (nerTaskInference.getConfig().isEmpty()) {
 					throw new PipelineValidationException("No supported tasks found for this request!!",
 							HttpStatus.BAD_REQUEST);
 
