@@ -55,6 +55,7 @@ components:
         - $ref: '#/components/schemas/ASRTask'
         - $ref: '#/components/schemas/TTSTask'
         - $ref: '#/components/schemas/OCRTask'
+        - $ref: '#/components/schemas/NERTask'
       discriminator:
         propertyName: taskType
         mapping:
@@ -63,6 +64,7 @@ components:
           asr: '#/components/schemas/ASRTask'
           tts: '#/components/schemas/TTSTask'
           ocr: '#/components/schemas/OCRTask'
+          ner: '#/components/schemas/NERTask'
     PipelineTasks:
       type: array
       items:
@@ -111,7 +113,16 @@ components:
         taskType:
           $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
-          $ref: '#/components/schemas/OCRRequestConfig'      
+          $ref: '#/components/schemas/OCRRequestConfig'
+    NERTask:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/TranslationRequestConfig'      
     TranslationRequestConfig:
       required:
         - language
@@ -148,7 +159,7 @@ components:
       type: object
       properties:
         language:
-          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair 
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
     LanguageSchema:
       type: object
       properties:
@@ -168,6 +179,7 @@ components:
         - $ref: '#/components/schemas/ASRTaskInference'
         - $ref: '#/components/schemas/TTSTaskInference'
         - $ref: '#/components/schemas/OCRTaskInference'
+        - $ref: '#/components/schemas/NERTaskInference'
       discriminator:
         propertyName: taskType
         mapping:
@@ -176,6 +188,7 @@ components:
           asr: '#/components/schemas/ASRTaskInference'
           tts: '#/components/schemas/TTSTaskInference'
           ocr: '#/components/schemas/OCRTaskInference'
+          ner: '#/components/schemas/NERTaskInference'
     TaskSchemaList:
       type: array
       items:
@@ -338,7 +351,38 @@ components:
           type: array
           description: list of
           items:
-            $ref: '#/components/schemas/OCRResponseConfig'        
+            $ref: '#/components/schemas/OCRResponseConfig'
+    NERTaskInference:
+      required:
+        - taskType
+        - config
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        inferenceApiKey:
+          required:
+            - value
+          type: object
+          description: if endpoint needs authorization in headers to fetch output
+          properties:
+            name:
+              type: string
+              description: expected if the callbackurl requires an API key with a particular name. `Authorization` will be considered as default name if value is provided without a name
+              default: Authorization
+              example: apiKey
+            value:
+              type: string
+              description: expected if the callbackurl requires an API key so as to fetch output
+              example: dde19858-b354-4e24-8e92-a7a4b320c066
+        taskType:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          type: array
+          description: list of
+          items:
+            $ref: '#/components/schemas/NERResponseConfig'       
     TranslationResponseConfig:
       required:
         - language
@@ -478,7 +522,7 @@ components:
           description: Unique identifier of model
           example: 63c9586ea0e5e81614ff96a8
         language:
-          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair 
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         detectionLevel:
           type: string
           description: on what level of text does the model works best
@@ -495,11 +539,32 @@ components:
           enum:
             - print
             - handwritten
-            - scenetext 
+            - scenetext
         inputFormat:
           $ref: '#/components/schemas/SupportedFormats'
         outputFormat:
-          $ref: '#/components/schemas/SupportedFormats'    
+          $ref: '#/components/schemas/SupportedFormats'
+    NERResponseConfig:
+      required:
+        - language
+        - serviceId
+        - modelId
+      type: object
+      properties:
+        serviceId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 63c9586ea0e5e81614ff96a8
+        language:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        inputFormat:
+          $ref: '#/components/schemas/SupportedFormats'
+        outputFormat:
+          $ref: '#/components/schemas/SupportedFormats'      
     TranscriptionFormat:
       type: object
       properties:
