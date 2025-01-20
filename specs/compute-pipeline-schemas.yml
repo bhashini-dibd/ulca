@@ -40,6 +40,8 @@ components:
         - $ref: '#/components/schemas/ASRRequestConfig'
         - $ref: '#/components/schemas/TTSRequestConfig'
         - $ref: '#/components/schemas/OCRRequestConfig'
+        - $ref: '#/components/schemas/NERRequestConfig'
+
     PipelineInput:
       oneOf:
         - $ref: '#/components/schemas/TranslationRequestInput'
@@ -47,6 +49,7 @@ components:
         - $ref: '#/components/schemas/ASRRequestInput'
         - $ref: '#/components/schemas/TTSRequestInput'
         - $ref: '#/components/schemas/OCRRequestInput'
+        - $ref: '#/components/schemas/NerRequestInput'
 
     PipelineRequestList:
       type: array
@@ -117,6 +120,16 @@ components:
           $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
         config:
           $ref: '#/components/schemas/AudioConfig'
+    NERRequestConfig:
+      required:
+        - config
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        config:
+          $ref: '#/components/schemas/TranslationConfig'      
     ASRRequestInput:
       required:
         - audio
@@ -438,6 +451,7 @@ components:
         - $ref: '#/components/schemas/ASRResponse'
         - $ref: '#/components/schemas/TTSResponse'
         - $ref: '#/components/schemas/OCRResponse'
+        - $ref: '#/components/schemas/NERResponse'
     ResponseList:
       type: array
       items:
@@ -507,6 +521,19 @@ components:
           $ref: '#/components/schemas/ImageFiles'
         config:
           $ref: '#/components/schemas/TranslationConfig'
+    NERResponse:
+      description: the response for translation.  Standard http status codes to be used.
+      required:
+        - output
+        - taskType
+      type: object
+      properties:
+        taskType:
+          $ref: https://raw.githubusercontent.com/bhashini-dibd/ulca/master/specs/common-schemas.yml#/components/schemas/SupportedTasks
+        output:
+          $ref: '#/components/schemas/Sentences'
+        config:
+          $ref: '#/components/schemas/TranslationConfig'      
     ControlConfig:
       description: generic settings related to pipeline
       type: object
