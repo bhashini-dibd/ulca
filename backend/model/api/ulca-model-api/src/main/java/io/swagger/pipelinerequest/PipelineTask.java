@@ -18,8 +18,8 @@ import io.swagger.model.SupportedTasks;
   @JsonSubTypes.Type(value = ASRTask.class, name = "asr"),
   @JsonSubTypes.Type(value = TTSTask.class, name = "tts"),
   @JsonSubTypes.Type(value = TransliterationTask.class, name = "transliteration"),
-  @JsonSubTypes.Type(value = OCRTask.class, name = "ocr")
-
+  @JsonSubTypes.Type(value = OCRTask.class, name = "ocr"),
+  @JsonSubTypes.Type(value = NERTask.class, name = "ner")
 })
 public interface PipelineTask {
 
