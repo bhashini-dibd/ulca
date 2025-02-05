@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { AppContext } from "../context/ContextAPI";
 import { CoffeeIcon, HomeIcon, LaptopIcon, FontIcon, BookReaderIcon, LanguageIcon } from "./FontAwesomeComponent";
 import useMedia from "../hooks/useMedia";
-export default function TopContent(props) {
+export default function TopContent({skipToContent}) {
   const {
     updateFont,
     // getDefaultFontSize,
@@ -64,7 +64,7 @@ export default function TopContent(props) {
     const strMinutes = minutes < 10 ? '0' + minutes : minutes;
     const strSeconds = seconds < 10 ? '0' + seconds : seconds;
   
-    return `${hours} : ${strMinutes} : ${strSeconds} ${ampm}`;
+    return `${hours} : ${strMinutes} ${ampm}`;
   }
 
 
@@ -112,17 +112,17 @@ export default function TopContent(props) {
           <div className="col-12">
             <div className="top__head-container">
               <div className="top__head-item">
-               {currentDate} <span className="mx-2">|</span>  {currentTime} 
+               {currentDate} <span className="mx-2"></span>  {currentTime} 
               </div>
               <div className="top__head-item">
                 <ul className="top__listing"> 
               {isMobile ? <></> :  <>  <li className="top__listing-item">
-                    <a href="https://bhashini.gov.in/#mainPage" className="top__listing-link" target="_blank">
+                    <div onClick={skipToContent} className="top__listing-link" style={{cursor:"pointer"}} target="_blank">
                       {/* <span className="fa-solid fa-laptop u-icon"> 
                       <LaptopIcon />
                       </span> */}
                       <span className="u-text">{t("skipToMainContent")}</span>
-                    </a>
+                    </div>
                   </li>
                   <li className="top__listing-item">
                     <div className="top__listing-link">
@@ -155,11 +155,11 @@ export default function TopContent(props) {
                       >
                         +A
                       </a>
-                      <div
+                      {/* <div
                         className="sub-link"
                       >
                         |
-                      </div>
+                      </div> */}
                     </div>
                   </li> </>}
                   {/* <li className="top__listing-item">
@@ -173,7 +173,7 @@ export default function TopContent(props) {
                     </a>
                   </li> */}
                   
-                  <li className="top__listing-item">
+                  {/* <li className="top__listing-item">
                     <a href="#" className="top__listing-link">
                       <span className="u-icon"><LanguageIcon /></span>
                       <select
@@ -193,7 +193,7 @@ export default function TopContent(props) {
                         })}
                       </select>
                     </a>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>
