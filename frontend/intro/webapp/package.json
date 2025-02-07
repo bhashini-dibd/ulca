@@ -51,7 +51,7 @@
         "register-service-worker": "^1.7.2",
         "slick-carousel": "^1.8.1",
         "web-vitals": "^1.1.2",
-        "babel-core":"^7.16.0"
+        "@babel/core":"^7.16.0"
     },
     "scripts": {
         "start": "react-scripts start",
