@@ -4,6 +4,7 @@
     "private": true,
     "homepage": "/intro",
     "dependencies": {
+        "@babel/core": "^7.16.0",
         "@fortawesome/fontawesome-svg-core": "^6.5.2",
         "@fortawesome/free-brands-svg-icons": "^6.5.2",
         "@fortawesome/free-solid-svg-icons": "^6.5.2",
@@ -35,7 +36,7 @@
         "react-radio-buttons": "^1.2.2",
         "react-redux": "^7.2.4",
         "react-router-dom": "^5.2.0",
-        "react-scripts": "4.0.3",
+        "react-scripts": "4.0.1",
         "react-select": "^4.3.1",
         "react-slick": "^0.30.1",
         "react-social-login": "^3.4.13",
@@ -50,13 +51,7 @@
         "redux-thunk": "^2.3.0",
         "register-service-worker": "^1.7.2",
         "slick-carousel": "^1.8.1",
-        "web-vitals": "^1.1.2",
-        "@babel/core": "7.19.6",
-"@babel/generator": "7.19.6",
-"@babel/compat-data": "7.19.4",
-"@babel/helper-compilation-targets": "7.19.3",
-"@babel/helper-create-class-features-plugin":"7.19.0",
-"@babel/helper-module-transforms":"7.19.6"
+        "web-vitals": "^1.1.2"
     },
     "scripts": {
         "start": "react-scripts start",
