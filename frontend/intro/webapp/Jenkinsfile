@@ -5,10 +5,16 @@ node('server_build_slave')  {
 
 try {
 
-   stage('Checkout'){
-
-      checkout scm
-   }
+   stage('Checkout') {
+    checkout([
+        $class: 'GitSCM',
+        branches: [[name: '*/develop']],  // Replace 'main' with your branch
+        userRemoteConfigs: [[
+            url: 'https://github.com/bhashini-dibd/ulca.git',
+            credentialsId: 'github-credentials'
+        ]]
+    ])
+}
 stage('compress build folder')
 withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials', passwordVariable: 'dockerhub_pass', usernameVariable: 'dockerhub_user')])
 {
