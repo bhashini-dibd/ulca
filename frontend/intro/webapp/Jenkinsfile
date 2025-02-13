@@ -8,7 +8,7 @@ try {
    stage('Checkout') {
     checkout([
         $class: 'GitSCM',
-        branches: [[name: '*/stage']],  // Replace 'main' with your branch
+        branches: [[name: '*/develop']],  // Replace 'main' with your branch
         userRemoteConfigs: [[
             url: 'https://github.com/bhashini-dibd/ulca.git',
             credentialsId: 'github-credentials'

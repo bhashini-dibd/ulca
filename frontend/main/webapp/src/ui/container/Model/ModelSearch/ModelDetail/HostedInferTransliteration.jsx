@@ -196,8 +196,8 @@ function HostedInferTransliteration(props) {
 
   const [lang, setLang] = useState("")
   useEffect(() => {
-    const temp = Language.filter((element) => element.label === tgtLang);
-    setLang(temp[0].value);
+    const temp = Language.filter((element) => element?.label === tgtLang);
+    setLang(temp[0]?.value);
   }, [tgtLang])
 
   useEffect(() => {
