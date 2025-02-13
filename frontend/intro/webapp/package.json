@@ -18,6 +18,7 @@
         "@testing-library/react": "^11.2.7",
         "@testing-library/user-event": "^12.8.3",
         "axios": "^0.21.1",
+        "caniuse-lite": "^1.0.30001632",
         "clsx": "^1.1.1",
         "i18next": "^23.10.1",
         "i18next-browser-languagedetector": "^7.2.1",
@@ -36,7 +37,7 @@
         "react-radio-buttons": "^1.2.2",
         "react-redux": "^7.2.4",
         "react-router-dom": "^5.2.0",
-        "react-scripts": "4.0.1",
+        "react-scripts": "^5.0.1",
         "react-select": "^4.3.1",
         "react-slick": "^0.30.1",
         "react-social-login": "^3.4.13",
@@ -65,16 +66,17 @@
             "react-app/jest"
         ]
     },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+    "overrides": {
+        "caniuse-lite": "1.0.30001632"
+    },
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not op_mini all"
+    ],
+    "devDependencies": {
+        "@babel/cli": "^7.26.4",
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+        "@babel/preset-env": "^7.26.8"
     }
 }
