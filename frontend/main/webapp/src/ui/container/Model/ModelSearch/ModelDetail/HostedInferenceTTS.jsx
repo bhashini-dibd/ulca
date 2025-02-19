@@ -91,8 +91,8 @@ const HostedInference = (props) => {
 
   const [lang, setLang] = useState("")
   useEffect(() => {
-    const temp = Language.filter((element) => element.label === srcLang);
-    setLang(temp[0].value);
+    const temp = Language.filter((element) => element?.label === srcLang);
+    setLang(temp[0]?.value);
   }, [srcLang])
 
   const handleSnackbarClose = () => {
