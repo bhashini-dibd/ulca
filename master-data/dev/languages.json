@@ -136,6 +136,11 @@
       "active": true
     },
     {
+      "code": "lus",
+      "label": "Mizo",
+      "active": true
+    },
+    {
       "code": "grt",
       "label": "Garo",
       "active": true
@@ -151,6 +156,21 @@
       "active": true
     },
     {
+      "code": "bra",
+      "label": "Braj",
+      "active": true
+    },
+    {
+      "code": "hoc",
+      "label": "Ho",
+      "active": true
+    },
+    {
+      "code": "xnr",
+      "label": "Kangri",
+      "active": true
+    },
+    {
       "code": "raj",
       "label": "Rajasthani",
       "active": true
@@ -158,6 +178,11 @@
     {
       "code": "gom",
       "label": "Goan Konkani",
+      "active": true
+    },
+    {
+      "code": "gon",
+      "label": "Gondi",
       "active": true
     },
     {
