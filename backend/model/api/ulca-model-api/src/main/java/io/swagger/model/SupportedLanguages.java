@@ -4,6 +4,9 @@ import java.util.Objects;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -56,6 +59,10 @@ public enum SupportedLanguages {
     BIH("bih"),
     ANP("anp"),
     BNS("bns"),
+    BRA("bra"),
+    GON("gon"),
+    HOC("hoc"),
+    XNR("xnr"),
     MIXED("mixed"),
     UNKNOWN("unknown");
 
