@@ -4,13 +4,16 @@ import java.util.Objects;
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 /**
- * This attribute defines the  Script codes(ISO 15924) supported under ULCA
+ * This attribute defines the  Script codes(ISO 15924) supported under ULCA, code reference available at - `https://unicode.org/iso15924/iso15924-codes.html'
  */
 public enum SupportedScripts {
   BENG("Beng"),
@@ -28,7 +31,8 @@ public enum SupportedScripts {
     TELU("Telu"),
     MTEI("Mtei"),
     OLCK("Olck"),
-    LATN("Latn");
+    LATN("Latn"),
+    WARA("Wara");
 
   private String value;
 
