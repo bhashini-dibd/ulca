@@ -61,10 +61,8 @@ public enum SupportedLanguages {
     BNS("bns"),
     BRA("bra"),
     GON("gon"),
-    HC("hc"),
-    TC("tc"),
-    XR("xr"),
-    AW("aw"),
+    HOC("hoc"),
+    XNR("xnr"),
     MIXED("mixed"),
     UNKNOWN("unknown");
 
