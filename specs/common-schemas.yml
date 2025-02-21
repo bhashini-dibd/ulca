@@ -424,10 +424,8 @@ components:
         - bns
         - bra
         - gon
-        - hc
-        - tc
-        - xr
-        - aw
+        - hoc
+        - xnr
         - mixed
         - unknown
     SupportedScripts:
