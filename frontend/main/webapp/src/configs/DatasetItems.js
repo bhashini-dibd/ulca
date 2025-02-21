@@ -81,7 +81,7 @@ export const Language = [
   { value: "grt", label: "Garo" },
   { value: "ks", label: "Kashmiri" },
   { value: "sd", label: "Sindhi" },
-  { value: "si", label: "Sinhalese" },
+  { value: "si", label: "Sinhala" },
   { value: "kha", label: "Khasi" },
   { value: "sa", label: "Sanskrit" },
   { value: "bho", label: "Bhojpuri" },
