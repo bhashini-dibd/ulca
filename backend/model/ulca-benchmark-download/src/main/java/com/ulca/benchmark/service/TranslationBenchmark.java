@@ -246,6 +246,7 @@ public class TranslationBenchmark {
 			}
 			if(translation != null) {
 				Sentences sentenses = translation.getOutput();
+				log.info("sentenses :: "+sentenses.size());
 
 				int size = input.size();
 				for(int i = 0; i< size; i++) {
