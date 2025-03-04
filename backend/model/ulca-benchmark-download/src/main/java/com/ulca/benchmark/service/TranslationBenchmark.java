@@ -259,8 +259,10 @@ public class TranslationBenchmark {
 			}
 		}
 		List<String> benchmarkProcessIdsList =  new ArrayList<String>(benchmarkProcessIdsMap.keySet()); 
-		
+		log.info(" before benchmarkingProcessId :: ");
+
         for (String benchmarkingProcessId:benchmarkProcessIdsList) {
+			log.info("benchmarkingProcessId :: "+benchmarkingProcessId);
 
         	String metric = benchmarkProcessIdsMap.get(benchmarkingProcessId);
         	
