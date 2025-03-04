@@ -246,13 +246,18 @@ public class TranslationBenchmark {
 			}
 			if(translation != null) {
 				Sentences sentenses = translation.getOutput();
-				log.info("sentenses :: "+sentenses.size());
-				log.info("input :: "+input.size());
+				log.info("sentenses size:: "+sentenses.size());
+				log.info("input size :: "+input.size());
+				log.info("input :: "+input.toString());
 
 				int size = input.size();
 				for(int i = 0; i< size; i++) {
 					log.info("inside loop i:: "+i);
 					Sentence sentense = sentenses.get(i);
+					log.info("sentence source :: "+sentense.getSource());
+					log.info("sentence target :: "+sentense.getTarget());
+
+
 					JSONObject target =  new JSONObject();
 					target.put("tgt", expectedTgt.get(i));
 					target.put("mtgt", sentense.getTarget());
