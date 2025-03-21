@@ -1437,16 +1437,22 @@ public class ModelService {
 
 		// Set response data (endpoint url, feedback url, api key, socket url)
 
-		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
-		//TranslationTaskInferenceInferenceApiKey
-		 //translationTaskInferenceInferenceApiKey = new
-		//TranslationTaskInferenceInferenceApiKey();
-		// translationTaskInferenceInferenceApiKey.setName("name");
-		//translationTaskInferenceInferenceApiKey.setValue("value");
+		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = null;
+		if(userID!=null && ulcaApiKey!=null ) {
+			pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
+			
+			// translationTaskInferenceInferenceApiKey = new
+			//TranslationTaskInferenceInferenceApiKey();
+			//translationTaskInferenceInferenceApiKey.setName("name");
+			//translationTaskInferenceInferenceApiKey.setValue("value");
 
-		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
-				ulcaApiKey, pipelineModel.getPipelineModelId());
-		 
+            translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
+			ulcaApiKey, pipelineModel.getPipelineModelId());
+			 	
+			
+		}
+		
+		
 		 ObjectMapper objectMapper = new ObjectMapper()
 		            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
 	        Object jsonObject = objectMapper.readValue(jsonRequest, Object.class);
@@ -1467,7 +1473,8 @@ public class ModelService {
 				 */
 				
 				
-				
+				if(userID!=null && ulcaApiKey!=null ) {
+	
 				if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
 
 					if (pipelineModel.getInferenceEndPoint() != null) {
@@ -1504,6 +1511,12 @@ public class ModelService {
 							"InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
 							HttpStatus.BAD_REQUEST);
 				}
+		 }else {
+			 pipelineResponse2.setFeedbackUrl(null);
+			 pipelineResponse2.setPipelineInferenceAPIEndPoint(null);
+			 pipelineResponse2.setPipelineInferenceSocketEndPoint(null);
+		 }
+				
 				
 				mapper.setSerializationInclusion(Include.NON_NULL);
 				mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -1518,6 +1531,9 @@ public class ModelService {
 		 log.info("Request does not found in Cache");
 		 }
 
+			if(userID!=null && ulcaApiKey!=null ) {
+
+		 
 		if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
 
 			if (pipelineModel.getInferenceEndPoint() != null) {
@@ -1554,7 +1570,7 @@ public class ModelService {
 					"InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
 					HttpStatus.BAD_REQUEST);
 		}
-
+			}
 		// Generate Individual Language List
 		PipelineUtilities pipelineUtilities = new PipelineUtilities();
 		TaskSpecifications individualTaskSpecifications = pipelineUtilities

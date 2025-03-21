@@ -165,8 +165,8 @@ public class ModelController {
 	 */
 
 	@PostMapping("/getModelsPipeline")
-	public ObjectNode getModelsPipeline(@RequestHeader("userID") String userID,
-			@RequestHeader("ulcaApiKey") String ulcaApiKey, @RequestBody String pipelineRequest) throws Exception {
+	public ObjectNode getModelsPipeline(@RequestHeader(value = "userID",required = false) String userID,
+			@RequestHeader(value = "ulcaApiKey" ,required = false) String ulcaApiKey, @RequestBody String pipelineRequest) throws Exception {
 		log.info("******** Entry ModelController:: getModelsPipeline *******");
 		log.info("userID :: " + userID);
 		log.info("ulcaApiKey :: " + ulcaApiKey);
