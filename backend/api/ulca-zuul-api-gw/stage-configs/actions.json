@@ -544,6 +544,15 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch list of users available"
-    }    
+    },
+    {
+      "id": "ec3132a7-7432-4be8-91fa-9968e813cc6b",
+      "uri": "/ulca/apis/v0/model/getModelsAllPipelineWithScript",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch all tasks pipeline with script"
+    }
+
   ]
 }
