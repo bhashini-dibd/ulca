@@ -29,6 +29,12 @@ public class CacheService {
     @Qualifier("redisDb2")
     private RedisTemplate<String, PipelineResponse> redisTemplateDb2;
 
+	/*
+	 * @Autowired
+	 * 
+	 * @Qualifier("redisDb3") private RedisTemplate<String, PipelineResponse>
+	 * redisTemplateDb3;
+	 */
     public void saveResponse(String requestBody, PipelineResponse response) throws IOException {
         log.info("saving response to cache");
         String hashKey = hashRequestBody(requestBody);
@@ -50,7 +56,19 @@ public class CacheService {
         redisTemplateDb2.opsForValue().set(hashKey, response, 5, TimeUnit.HOURS);
 
     }
-    
+
+	/*
+	 * public void saveResponse3(String requestBody, PipelineResponse response)
+	 * throws IOException { log.info("saving response to cache"); String hashKey =
+	 * hashRequestBody(requestBody); log.info("hashkey :: "+hashKey); //byte[]
+	 * compressedResponse = compressResponse(response);
+	 * //log.info("after compressedResponse ");
+	 * //redisTemplate.opsForValue().set(hashKey, compressedResponse, 60,
+	 * TimeUnit.MINUTES); redisTemplateDb3.opsForValue().set(hashKey, response, 5,
+	 * TimeUnit.HOURS);
+	 * 
+	 * }
+	 */
     public PipelineResponse getResponse(String requestBody) throws IOException {
     	log.info("Start get response ");
         String hashKey = hashRequestBody(requestBody);
@@ -72,6 +90,17 @@ public class CacheService {
       //  log.info("after get Compressed response");
       //  return decompressResponse(compressedResponse);
     }
+    
+	/*
+	 * public PipelineResponse getResponse3(String requestBody) throws IOException {
+	 * log.info("Start get response "); String hashKey =
+	 * hashRequestBody(requestBody); log.info("hashKey :: "+hashKey);
+	 * log.info("after get hash"); return
+	 * (PipelineResponse)redisTemplateDb3.opsForValue().get(hashKey); // byte[]
+	 * compressedResponse = Base64.getDecoder().decode(base64EncodedResponse); //
+	 * log.info("after get Compressed response"); // return
+	 * decompressResponse(compressedResponse); }
+	 */
     public boolean isCached(String requestBody) {
         String hashKey = hashRequestBody(requestBody);
         return redisTemplate.hasKey(hashKey);
@@ -80,6 +109,10 @@ public class CacheService {
         String hashKey = hashRequestBody(requestBody);
         return redisTemplateDb2.hasKey(hashKey);
     }
+	/*
+	 * public boolean isCached3(String requestBody) { String hashKey =
+	 * hashRequestBody(requestBody); return redisTemplateDb3.hasKey(hashKey); }
+	 */
 
     private String hashRequestBody(String requestBody) {
         try {

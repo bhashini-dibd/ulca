@@ -107,6 +107,8 @@ import com.ulca.model.response.PipelineModelResponse;
 import com.ulca.model.response.PipelinesResponse;
 import com.ulca.model.response.UploadModelResponse;
 import com.ulca.model.response.UploadPipelineResponse;
+import com.ulca.model.response.pipeline.script.PipelineResponseLanguagesListWithScript;
+import com.ulca.model.response.pipeline.script.PipelineResponseWithScript;
 
 import io.netty.handler.codec.http.HttpRequest;
 import io.swagger.model.ASRInference;
@@ -3155,6 +3157,248 @@ public class ModelService {
 		if(redisHealthCheckService.isRedisUp()) {
 	        cacheService.saveResponse2(uniqueJsonString, pipelineResponse);
 			}
+		return node;
+	}
+	
+	public ObjectNode getModelsAllPipelineWithScript(String jsonRequest) throws Exception {
+
+		// Check if task types are accepted and in proper order
+		PipelineRequest pipelineRequestCheckedTaskType = checkTaskType(jsonRequest);
+
+		// Check if language sequence is accepted and in proper order
+		PipelineRequest pipelineRequest = checkLanguageSequence(pipelineRequestCheckedTaskType);		log.info("pipelineRequest :: " + pipelineRequest);
+		/*
+		 * if (pipelineRequest != null) { validatePipelineRequest(pipelineRequest); }
+		 * else { throw new
+		 * PipelineValidationException("Pipeline validation failed. Check uploaded file syntax"
+		 * , HttpStatus.BAD_REQUEST); }
+		 */
+
+	//===============================================================================================
+	/*
+	 * ObjectMapper objectMapper = new ObjectMapper()
+	 * .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true); Object
+	 * jsonObject = objectMapper.readValue(jsonRequest, Object.class); String
+	 * uniqueJsonString = objectMapper.writeValueAsString(jsonObject);
+	 * if(redisHealthCheckService.isRedisUp()) { if
+	 * (cacheService.isCached2(uniqueJsonString)) {
+	 * log.info("Request found in Cache"); PipelineResponse pipelineResponse2=
+	 * cacheService.getResponse2(uniqueJsonString);
+	 * 
+	 * log.info("Response Object from redis :: "); ObjectMapper mapper = new
+	 * ObjectMapper();
+	 * 
+	 * mapper.setSerializationInclusion(Include.NON_NULL);
+	 * mapper.enable(SerializationFeature.INDENT_OUTPUT);
+	 * 
+	 * 
+	 * ObjectNode node = mapper.valueToTree(pipelineResponse2); return node;
+	 * 
+	 * 
+	 * }
+	 * 
+	 * log.info("Request does not found in Cache"); }
+	 */
+
+		
+ //=================================================================================================
+		
+		
+		
+		
+		
+		ArrayList<PipelineTask> pipelineTasks = pipelineRequest.getPipelineTasks();
+
+		PipelineResponseWithScript pipelineResponse = new PipelineResponseWithScript();
+		log.info("Get all pipeline before :: ");
+		List<PipelineModel> pipelineModels = pipelineModelDao.findAll();
+
+		log.info("Get all pipeline after :: ");
+		PipelineModel allPipelineTasks = new PipelineModel();
+		
+		
+		
+		
+		for(PipelineModel pipeDb:pipelineModels) {
+			
+			for(TaskSpecification ts:pipeDb.getTaskSpecifications()) {
+				
+				if(allPipelineTasks.getTaskSpecifications()!=null) {
+					boolean taskAdded = false;
+					
+					for(int i=0; i<allPipelineTasks.getTaskSpecifications().size();i++) {
+						if(allPipelineTasks.getTaskSpecifications().get(i).getTaskType().equals(ts.getTaskType())) {
+						ConfigList cl=	ts.getTaskConfig();
+						ConfigList cl1= new ConfigList();
+						for(int j=0;j<cl.size();j++) {
+							boolean modelAdded = false;
+							for(int k=0;k<allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().size();k++) {
+								if(allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().get(k).getModelId()
+										.equals(cl.get(j).getModelId())) {
+								if(cl.get(j).isDefaultModel()!=null) {
+									if(cl.get(j).isDefaultModel()) {
+									ConfigSchema cs=cl.get(j);	
+									allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().set(k, cs);
+									modelAdded=true;
+									}
+									
+								}	
+									
+								}
+							}
+							if(!modelAdded) {
+								ConfigSchema cs = cl.get(j);
+								if(cs.isDefaultModel()==null) {
+									cs.setDefaultModel(false);
+								}
+								allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().add(cs);
+								
+							}
+							
+						}
+	                    taskAdded=true;
+						}
+						
+					}
+					if(!taskAdded) {
+						TaskSpecification ts1 = new TaskSpecification();
+						   ConfigList cl1= new ConfigList();
+							ConfigList cl = ts.getTaskConfig();
+							for(ConfigSchema cs : cl) {
+								if(cs.isDefaultModel()==null) {
+									
+									cs.setDefaultModel(false);
+								}
+								cl1.add(cs);
+							}
+							ts1.setTaskType(ts.getTaskType());
+							ts1.setTaskConfig(cl1);
+							allPipelineTasks.getTaskSpecifications().add(ts1);
+						
+					}
+					
+				}else {
+				   TaskSpecifications tasks = new TaskSpecifications();
+				   TaskSpecification ts1 = new TaskSpecification();
+				   ConfigList cl1= new ConfigList();
+					ConfigList cl = ts.getTaskConfig();
+					for(ConfigSchema cs : cl) {
+						if(cs.isDefaultModel()==null) {
+							
+							cs.setDefaultModel(false);
+						}
+						cl1.add(cs);
+					}
+					ts1.setTaskType(ts.getTaskType());
+					ts1.setTaskConfig(cl1);
+					tasks.add(ts1);
+					allPipelineTasks.setTaskSpecifications(tasks);
+				}
+				
+			}
+			
+		}
+		
+		
+		
+		log.info("pipeline-model :: " + allPipelineTasks);
+		// Generate Individual Language List
+		PipelineUtilities pipelineUtilities = new PipelineUtilities();
+		TaskSpecifications individualTaskSpecifications = pipelineUtilities
+				.getIndividualTaskSpecifications(pipelineRequest.getPipelineTasks(), allPipelineTasks);
+		log.info("INDIVIDUAL TASK SPECIFICATIONS :: " + individualTaskSpecifications.toString());
+
+		// TODO : individualTaskSpecifications is empty, return No supported tasks
+		// found.
+		for (TaskSpecification taskSpecification : individualTaskSpecifications) {
+			if (taskSpecification.getTaskConfig().isEmpty()) {
+				throw new PipelineValidationException("No supported tasks found for this request!!",
+						HttpStatus.BAD_REQUEST);
+
+			}
+
+		}
+
+		// Generate Response Language List
+		PipelineResponseLanguagesListWithScript pipelineResponseLanguagesList = pipelineUtilities
+				.getPipelineResponseLanguagesListWithScript(individualTaskSpecifications);
+		log.info("PIPELINE RESPONSE LANGUAGE LIST :: " + pipelineResponseLanguagesList.toString());
+		pipelineResponse.setLanguages(pipelineResponseLanguagesList);
+
+		// TODO : pipelineResponseLanguagesList is empty, return No supported tasks
+		// found.
+		if (pipelineResponseLanguagesList.isEmpty()) {
+			throw new PipelineValidationException("No supported tasks found for this request!!",
+					HttpStatus.BAD_REQUEST);
+		}
+
+		// Generate Response Config
+		TaskSchemaList pipelineResponseSchemaList = getPipelineResponseSchemaList1(individualTaskSpecifications);
+		pipelineResponse.setPipelineResponseConfig(pipelineResponseSchemaList);
+
+		for (int i = 0; i < pipelineResponseSchemaList.size(); i++) {
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "asr") {
+				ASRTaskInference aSRTaskInference = (ASRTaskInference) pipelineResponseSchemaList.get(i);
+				if (aSRTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "translation") {
+				TranslationTaskInference translationTaskInference = (TranslationTaskInference) pipelineResponseSchemaList
+						.get(i);
+				if (translationTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "tts") {
+				TTSTaskInference tTSTaskInference = (TTSTaskInference) pipelineResponseSchemaList.get(i);
+				if (tTSTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "transliteration") {
+				TransliterationTaskInference transliterationTaskInference = (TransliterationTaskInference) pipelineResponseSchemaList
+						.get(i);
+				if (transliterationTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+
+			if (pipelineResponseSchemaList.get(i).getTaskType() == "ocr") {
+				OCRTaskInference ocrTaskInference = (OCRTaskInference) pipelineResponseSchemaList.get(i);
+				if (ocrTaskInference.getConfig().isEmpty()) {
+					throw new PipelineValidationException("No supported tasks found for this request!!",
+							HttpStatus.BAD_REQUEST);
+
+				}
+
+			}
+
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(Include.NON_NULL);
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		
+
+		ObjectNode node = mapper.valueToTree(pipelineResponse);
+		/*
+		 * if(redisHealthCheckService.isRedisUp()) {
+		 * cacheService.saveResponse2(uniqueJsonString, pipelineResponse); }
+		 */
 		return node;
 	}
 }

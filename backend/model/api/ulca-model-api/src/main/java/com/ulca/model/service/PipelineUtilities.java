@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.PipelineModel;
+import com.ulca.model.response.pipeline.script.*;
 
 import io.swagger.model.SupportedTasks;
 import io.swagger.model.TTSInference;
@@ -460,4 +461,81 @@ public class PipelineUtilities {
 
         return schemaList;
     }
+    
+    PipelineResponseLanguagesListWithScript getPipelineResponseLanguagesListWithScript(TaskSpecifications individualTaskSpecifications) {
+    	PipelineResponseLanguagesListWithScript pipelineResponseLanguagesList = new PipelineResponseLanguagesListWithScript();
+
+        // Go through each config of the first task
+        for (ConfigSchema firstTaskConfigSchema : individualTaskSpecifications.get(0).getTaskConfig()) {
+            PipelineResponseLanguageSchemaWithScript responseLanguageSchema = new PipelineResponseLanguageSchemaWithScript();
+            // set source language as language of the first task
+            boolean sourceLanguageExists = false;
+            //see if the source language exists already
+            int responseSchemaIndex = -1;
+            for(int i=0;i<pipelineResponseLanguagesList.size();i++)
+            {
+                if(pipelineResponseLanguagesList.get(i).getSourceLanguage().equals(firstTaskConfigSchema.getSourceLanguage())
+                		&&pipelineResponseLanguagesList.get(i).getSourceScriptCode().equals(firstTaskConfigSchema.getSourceScriptCode()))
+                	
+                {
+                    sourceLanguageExists = true;
+                    responseSchemaIndex = i;
+                    break;
+                }
+            }
+            responseLanguageSchema.setSourceLanguage(firstTaskConfigSchema.getSourceLanguage());
+            responseLanguageSchema.setSourceScriptCode(firstTaskConfigSchema.getSourceScriptCode());
+            List<ConfigSchema> targetLanguages = new ArrayList<ConfigSchema>();
+            targetLanguages.add(firstTaskConfigSchema);
+
+            int targetLangSize = targetLanguages.size();
+            int currentTask = 1;
+            // for each element within targetLanguages, find possible combinations in the
+            // next task
+            // DFS Logic for Language Identification
+            while (currentTask < individualTaskSpecifications.size()) {
+                while (targetLangSize > 0) {
+                    // Obtain target language details of previous task
+                    ConfigSchema previousTaskTargetLanguage = targetLanguages.get(0);
+                    targetLanguages.remove(0);
+                    // Get all task config for current task
+                    for (ConfigSchema currentTaskConfigSchema : individualTaskSpecifications.get(currentTask)
+                            .getTaskConfig()) {
+                        if (previousTaskTargetLanguage.getTargetLanguage() == currentTaskConfigSchema
+                                .getSourceLanguage() &&
+                                previousTaskTargetLanguage.getTargetScriptCode() == currentTaskConfigSchema
+                                        .getSourceScriptCode()) {
+                            targetLanguages.add(currentTaskConfigSchema);
+                        }
+                    }
+                    targetLangSize--;
+                }
+                targetLangSize = targetLanguages.size();
+                currentTask++;
+            }
+            for (ConfigSchema finalTaskConfigSchema : targetLanguages) {
+            	LanguagePair finalLanguagePair = new LanguagePair();
+            	finalLanguagePair.setTargetLanguage(finalTaskConfigSchema.getTargetLanguage());
+            	finalLanguagePair.setTargetScriptCode(finalTaskConfigSchema.getTargetScriptCode());
+
+                if(responseLanguageSchema.getTargetLanguageList()==null ||
+                    !responseLanguageSchema.getTargetLanguageList().contains(finalLanguagePair))
+                {
+                    if(sourceLanguageExists == true)
+                    {   
+                        if(!pipelineResponseLanguagesList.get(responseSchemaIndex).getTargetLanguageList().contains(finalLanguagePair))
+                        pipelineResponseLanguagesList.get(responseSchemaIndex).addTargetLanguageListItem(finalLanguagePair);
+                    }
+                    else
+                    {
+                        responseLanguageSchema.addTargetLanguageListItem(finalLanguagePair);                        
+                    } 
+                }
+            }
+            if(sourceLanguageExists == false)
+                pipelineResponseLanguagesList.add(responseLanguageSchema);
+        }
+        return pipelineResponseLanguagesList;
+    }
+
 }

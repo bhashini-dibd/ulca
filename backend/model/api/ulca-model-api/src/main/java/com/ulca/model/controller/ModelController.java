@@ -194,4 +194,11 @@ public class ModelController {
 	
 		return modelService.getModelsAllPipeline(pipelineRequest);
 	}
+	
+	@PostMapping("/getModelsAllPipelineWithScript")
+	public ObjectNode getModelsAllPipelineWithScript(@RequestBody String pipelineRequest) throws Exception {
+		log.info("******** Entry ModelController:: getModelsAllPipelineWithScript *******");
+	
+		return modelService.getModelsAllPipelineWithScript(pipelineRequest);
+	}
 }
