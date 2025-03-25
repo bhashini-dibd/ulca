@@ -1440,44 +1440,54 @@ public class ModelService {
 
 		// Set response data (endpoint url, feedback url, api key, socket url)
 
-		pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
-		// TranslationTaskInferenceInferenceApiKey
-		// translationTaskInferenceInferenceApiKey = new
-		// TranslationTaskInferenceInferenceApiKey();
-		// translationTaskInferenceInferenceApiKey.setName("name");
-		// translationTaskInferenceInferenceApiKey.setValue("value");
 
-		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
-				ulcaApiKey, pipelineModel.getPipelineModelId());
+		TranslationTaskInferenceInferenceApiKey translationTaskInferenceInferenceApiKey = null;
+		if(userID!=null && ulcaApiKey!=null ) {
+			pipelineResponse.setFeedbackUrl(pipelineModel.getApiEndPoints().getFeedbackUrl());
+			
+			// translationTaskInferenceInferenceApiKey = new
+			//TranslationTaskInferenceInferenceApiKey();
+			//translationTaskInferenceInferenceApiKey.setName("name");
+			//translationTaskInferenceInferenceApiKey.setValue("value");
 
-		ObjectMapper objectMapper = new ObjectMapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
-		Object jsonObject = objectMapper.readValue(jsonRequest, Object.class);
-		String uniqueJsonString = objectMapper.writeValueAsString(jsonObject);
-		if (redisHealthCheckService.isRedisUp()) {
-			if (cacheService.isCached(uniqueJsonString)) {
-				log.info("Request found in Cache");
-				PipelineResponse pipelineResponse2 = cacheService.getResponse(uniqueJsonString);
-
+            translationTaskInferenceInferenceApiKey = validateUserDetails(userID,
+			ulcaApiKey, pipelineModel.getPipelineModelId());
+			 	
+			
+		}
+		
+		
+		 ObjectMapper objectMapper = new ObjectMapper()
+		            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+	        Object jsonObject = objectMapper.readValue(jsonRequest, Object.class);
+	      String uniqueJsonString = objectMapper.writeValueAsString(jsonObject);
+		 if(redisHealthCheckService.isRedisUp()) {
+		 if (cacheService.isCached(uniqueJsonString)) {
+			 log.info("Request found in Cache");
+			 PipelineResponse pipelineResponse2= cacheService.getResponse(uniqueJsonString);
+				
 				log.info("Response Object from redis :: ");
-				ObjectMapper mapper = new ObjectMapper();
+				ObjectMapper mapper = new
+						 ObjectMapper();
 				/*
 				 * PipelineResponse pipelineResponse2 = null; ObjectMapper mapper = new
 				 * ObjectMapper(); if (object instanceof String) { String jsonString = (String)
 				 * object; pipelineResponse2 = objectMapper.readValue(jsonString,
 				 * PipelineResponse.class); // Now you can use the PipelineResponse object }
 				 */
-
-				if (pipelineModel.getInferenceEndPoint() != null
-						|| pipelineModel.getInferenceSocketEndPoint() != null) {
+				
+				
+				if(userID!=null && ulcaApiKey!=null ) {
+	
+				if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
 
 					if (pipelineModel.getInferenceEndPoint() != null) {
 
 						PipelineInferenceAPIEndPoint pipelineInferenceAPIEndPoint = new PipelineInferenceAPIEndPoint();
-						pipelineInferenceAPIEndPoint
-								.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
+						pipelineInferenceAPIEndPoint.setCallbackUrl(pipelineModel.getInferenceEndPoint().getCallbackUrl());
 						pipelineInferenceAPIEndPoint.setIsSyncApi(pipelineModel.getInferenceEndPoint().isIsSyncApi());
-						pipelineInferenceAPIEndPoint.setIsMultilingualEnabled(
-								pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
+						pipelineInferenceAPIEndPoint
+								.setIsMultilingualEnabled(pipelineModel.getInferenceEndPoint().isIsMultilingualEnabled());
 						pipelineInferenceAPIEndPoint
 								.setAsyncApiDetails(pipelineModel.getInferenceEndPoint().getAsyncApiDetails());
 						pipelineInferenceAPIEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
@@ -1490,10 +1500,9 @@ public class ModelService {
 						PipelineInferenceAPIEndPoint pipelineInferenceSocketEndPoint = new PipelineInferenceAPIEndPoint();
 						pipelineInferenceSocketEndPoint
 								.setCallbackUrl(pipelineModel.getInferenceSocketEndPoint().getCallbackUrl());
+						pipelineInferenceSocketEndPoint.setIsSyncApi(pipelineModel.getInferenceSocketEndPoint().isIsSyncApi());
 						pipelineInferenceSocketEndPoint
-								.setIsSyncApi(pipelineModel.getInferenceSocketEndPoint().isIsSyncApi());
-						pipelineInferenceSocketEndPoint.setIsMultilingualEnabled(
-								pipelineModel.getInferenceSocketEndPoint().isIsMultilingualEnabled());
+								.setIsMultilingualEnabled(pipelineModel.getInferenceSocketEndPoint().isIsMultilingualEnabled());
 						pipelineInferenceSocketEndPoint
 								.setAsyncApiDetails(pipelineModel.getInferenceSocketEndPoint().getAsyncApiDetails());
 						pipelineInferenceSocketEndPoint.setInferenceApiKey(translationTaskInferenceInferenceApiKey);
@@ -1506,18 +1515,29 @@ public class ModelService {
 							"InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
 							HttpStatus.BAD_REQUEST);
 				}
-
+		 }else {
+			 pipelineResponse2.setFeedbackUrl(null);
+			 pipelineResponse2.setPipelineInferenceAPIEndPoint(null);
+			 pipelineResponse2.setPipelineInferenceSocketEndPoint(null);
+		 }
+				
+				
 				mapper.setSerializationInclusion(Include.NON_NULL);
 				mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			
 
 				ObjectNode node = mapper.valueToTree(pipelineResponse2);
-				return node;
+				 return node;
+		            
+		 
+		        }
+		
+		 log.info("Request does not found in Cache");
+		 }
 
-			}
+			if(userID!=null && ulcaApiKey!=null ) {
 
-			log.info("Request does not found in Cache");
-		}
-
+		 
 		if (pipelineModel.getInferenceEndPoint() != null || pipelineModel.getInferenceSocketEndPoint() != null) {
 
 			if (pipelineModel.getInferenceEndPoint() != null) {
@@ -1554,7 +1574,7 @@ public class ModelService {
 					"InferenceApiEndPoint and InferenceSocketEndPoint , either one of them or both  should be available !!",
 					HttpStatus.BAD_REQUEST);
 		}
-
+			}
 		// Generate Individual Language List
 		PipelineUtilities pipelineUtilities = new PipelineUtilities();
 		TaskSpecifications individualTaskSpecifications = pipelineUtilities
