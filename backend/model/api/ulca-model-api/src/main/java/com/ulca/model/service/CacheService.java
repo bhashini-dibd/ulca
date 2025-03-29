@@ -41,7 +41,7 @@ public class CacheService {
 		// log.info("after compressedResponse ");
 		// redisTemplate.opsForValue().set(hashKey, compressedResponse, 60,
 		// TimeUnit.MINUTES);
-		redisTemplate.opsForValue().set(hashKey, response, 24, TimeUnit.HOURS);
+		redisTemplate.opsForValue().set(hashKey, response, 168, TimeUnit.HOURS);
 
 	}
 
@@ -53,7 +53,7 @@ public class CacheService {
 		// log.info("after compressedResponse ");
 		// redisTemplate.opsForValue().set(hashKey, compressedResponse, 60,
 		// TimeUnit.MINUTES);
-		redisTemplateDb2.opsForValue().set(hashKey, response, 24, TimeUnit.HOURS);
+		redisTemplateDb2.opsForValue().set(hashKey, response, 168, TimeUnit.HOURS);
 
 	}
 	public void saveResponse3(String requestBody, PipelineResponseWithScript response) throws IOException {
@@ -64,7 +64,7 @@ public class CacheService {
 		// log.info("after compressedResponse ");
 		// redisTemplate.opsForValue().set(hashKey, compressedResponse, 60,
 		// TimeUnit.MINUTES);
-		redisTemplateDb3.opsForValue().set(hashKey, response, 24, TimeUnit.HOURS);
+		redisTemplateDb3.opsForValue().set(hashKey, response, 168, TimeUnit.HOURS);
 
 	}
 

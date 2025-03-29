@@ -2945,11 +2945,10 @@ public class ModelService {
 												ConfigSchema cs = cl.get(j);
 												allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().set(k,
 														cs);
-												modelAdded = true;
 											}
 
 										}
-
+										modelAdded = true;
 									}
 								}
 								if (!modelAdded) {
@@ -3237,11 +3236,10 @@ public class ModelService {
 												ConfigSchema cs = cl.get(j);
 												allPipelineTasks.getTaskSpecifications().get(i).getTaskConfig().set(k,
 														cs);
-												modelAdded = true;
 											}
 
 										}
-
+										modelAdded = true;
 									}
 								}
 								if (!modelAdded) {
