@@ -11,7 +11,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 
-import com.ulca.benchmark.service.BenchmarkService;
+import com.ulca.model.response.pipeline.script.PipelineResponseWithScript;
 
 import io.swagger.pipelinerequest.PipelineResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +36,9 @@ public class RedisConfig {
 	@Value(value = "${redis.db2}")
     private Integer redisDb2;
 	
+	@Value(value = "${redis.db3}")
+    private Integer redisDb3;
+	
 	
 	
 	   @Bean(name = "jedisConnectionFactoryDb1")
@@ -58,6 +61,18 @@ public class RedisConfig {
 	        configuration.setPort(Integer.parseInt(redisPort));
 	        configuration.setPassword(redisPass);
 	        configuration.setDatabase(redisDb2);
+
+	        return new JedisConnectionFactory(configuration);
+	    }
+	
+	    @Bean(name = "jedisConnectionFactoryDb3")
+	    public JedisConnectionFactory jedisConnectionFactoryDb3() {
+	        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
+	        log.info("Initializing redis connection for db3...");
+	        configuration.setHostName(redisHost);
+	        configuration.setPort(Integer.parseInt(redisPort));
+	        configuration.setPassword(redisPass);
+	        configuration.setDatabase(redisDb3);
 
 	        return new JedisConnectionFactory(configuration);
 	    }
@@ -103,6 +118,18 @@ public class RedisConfig {
         return redisTemplate;
     }
     
+    @Bean(name = "redisDb3")
+    public RedisTemplate<String, PipelineResponseWithScript> redisTemplate4(@Qualifier("jedisConnectionFactoryDb3") JedisConnectionFactory jedisConnectionFactoryDb3) {
+        log.info("db3");
+    	final RedisTemplate<String, PipelineResponseWithScript> redisTemplate = new RedisTemplate<String, PipelineResponseWithScript>();
+        redisTemplate.setConnectionFactory(jedisConnectionFactoryDb3);
+    	redisTemplate.setKeySerializer( new StringRedisSerializer() );
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer() );
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer( new GenericJackson2JsonRedisSerializer() );
+        
+        return redisTemplate;
+    }
     @Bean(name = "redisTemplate3")
     public RedisTemplate<String, Object> redisTemplate3(@Qualifier("jedisConnectionFactoryDb1") JedisConnectionFactory jedisConnectionFactoryDb1) {
         
