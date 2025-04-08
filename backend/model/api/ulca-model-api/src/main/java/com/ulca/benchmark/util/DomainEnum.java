@@ -30,8 +30,9 @@ public enum DomainEnum {
 	RELIGION("religion"), 
 	NATIONAL_SECURITY_AND_DEFENCE("national-security-and-defence"),
 	LITERATURE("literature"), 
-	GEOGRAPHY("geography");
-	
+	GEOGRAPHY("geography"),
+	GOVERNANCE_AND_POLICY("governance-and-policy"),
+	SCIENCE_AND_TECHNOLOGY("science-and-technology");
 	  private String value;
 
 	  DomainEnum(String value) {
