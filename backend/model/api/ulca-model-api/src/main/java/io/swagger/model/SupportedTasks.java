@@ -29,7 +29,8 @@ public enum SupportedTasks {
     AUDIO_LANG_DETECTION("audio-lang-detection"),
     AUDIO_GENDER_DETECTION("audio-gender-detection"),
     ITN("itn"),
-    TEXT_NORMALIZATION("text-normalization");
+    TEXT_NORMALIZATION("text-normalization"),
+	IMG_LANG_DETECTION("img-lang-detection");
 
   private String value;
 
