@@ -1807,8 +1807,8 @@ public class ModelInferenceEndPointService {
 				ImgLangDetectionResponse imgLangDetectionResponse = objectMapper.readValue(responseJsonStr, ImgLangDetectionResponse.class);
 			
 
-					if (imgLangDetectionResponse.getOutput() == null
-							|| imgLangDetectionResponse.getOutput().size() <= 0) {
+					if (imgLangDetectionResponse!=null && imgLangDetectionResponse.getOutput() != null
+							&& imgLangDetectionResponse.getOutput().size()> 0) {
 					
 					
 					ModelComputeResponseIld resp = new ModelComputeResponseIld();
