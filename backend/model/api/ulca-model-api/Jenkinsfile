@@ -10,7 +10,7 @@ try {
       checkout scm
    }
 stage('compress build folder')
-withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials', passwordVariable: 'dockerhub_pass', usernameVariable: 'dockerhub_user')])
+withCredentials([usernamePassword(credentialsId: 'my-dockerhub-creds', passwordVariable: 'dockerhub_pass', usernameVariable: 'dockerhub_user')])
 {
 sh '''
 cd backend/model/api/ulca-model-api
@@ -27,13 +27,13 @@ docker run -v $(pwd):/opt --name "$JOB_BASE_NAME" maven:3.8.1-jdk-11 /bin/sh -c 
 docker rm "$JOB_BASE_NAME"
 commit_id=${BUILD_ID}-$(git rev-parse --short HEAD)
 echo $commit_id> commit_id.txt
-docker build -t anuvaadio/$image_name:$commit_id .
+docker build -t vivekwalia/$image_name:$commit_id .
 docker login -u $dockerhub_user -p $dockerhub_pass
-docker push anuvaadio/$image_name:$commit_id
+docker push vivekwalia/$image_name:$commit_id
 sudo rm -rf target/
 '''
    
-def matcher = manager.getLogMatcher(".*tagged anuvaadio.(.*).*")
+def matcher = manager.getLogMatcher(".*tagged vivekwalia.(.*).*")
 def buildMsg = matcher.group(1)
 manager.addShortText(buildMsg)
 
