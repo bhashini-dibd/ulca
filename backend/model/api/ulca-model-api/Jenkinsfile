@@ -34,8 +34,8 @@ node('server_build_slave') {
                 echo $commit_id > commit_id.txt
 
                 # Define ACR repo and build image
-                acr_repo="acrulcaprodcin001.azurecr.io/$image_name:$commit_id"
-                docker login acrulcaprodcin001.azurecr.io -u $ACR_USER -p $ACR_PASS
+                acr_repo="acrulcacin001.azurecr.io/$image_name:$commit_id"
+                docker login acrulcacin001.azurecr.io -u $ACR_USER -p $ACR_PASS
                 docker build -t $acr_repo .
 
                 # Push to ACR
@@ -48,7 +48,7 @@ node('server_build_slave') {
         }
 
         // Optional: Display tag in Jenkins UI
-        def matcher = manager.getLogMatcher(".*tagged acrulcaprodcin001.azurecr.io/(.*).*")
+        def matcher = manager.getLogMatcher(".*tagged acrulcacin001.azurecr.io/(.*).*")
         if (matcher?.matches()) {
             def buildMsg = matcher.group(1)
             manager.addShortText(buildMsg)
