@@ -1,48 +1,61 @@
 #!groovy
 import hudson.model.*
-   
+
 node('server_build_slave') {
 
-try {
+    try {
 
-   stage('Checkout'){
-
-      checkout scm
-   }
-stage('compress build folder')
-withCredentials([usernamePassword(credentialsId: 'my-dockerhub-creds', passwordVariable: 'dockerhub_pass', usernameVariable: 'dockerhub_user')])
-{
-sh '''
-cd backend/model/api/ulca-model-api
-ls -al
-if [ -d "$(pwd)/src/test/resources/model" ]
-then
-  sudo rm -rf $(pwd)/src/test/resources/model
-fi
-if [  $( docker ps -q -f status=exited --filter "name=$JOB_BASE_NAME" ) ]
-then
-docker rm "$JOB_BASE_NAME"
-fi
-docker run -v $(pwd):/opt --name "$JOB_BASE_NAME" maven:3.8.1-jdk-11 /bin/sh -c "cd /opt && mvn clean package"
-docker rm "$JOB_BASE_NAME"
-commit_id=${BUILD_ID}-$(git rev-parse --short HEAD)
-echo $commit_id> commit_id.txt
-docker build -t vivekwalia/$image_name:$commit_id .
-docker login -u $dockerhub_user -p $dockerhub_pass
-docker push vivekwalia/$image_name:$commit_id
-sudo rm -rf target/
-'''
-   
-def matcher = manager.getLogMatcher(".*tagged vivekwalia.(.*).*")
-def buildMsg = matcher.group(1)
-manager.addShortText(buildMsg)
-
+        stage('Checkout') {
+            checkout scm
         }
-}
 
-catch (err) {
-    currentBuild.result = "FAILURE"
-    throw err
- }
-}
+        stage('Build, Tag & Push to ACR') {
+            withCredentials([usernamePassword(credentialsId: 'acr-creds', passwordVariable: 'ACR_PASS', usernameVariable: 'ACR_USER')]) {
+                sh '''
+                cd backend/model/api/ulca-model-api
+                ls -al
 
+                # Clean up old test model folder
+                if [ -d "$(pwd)/src/test/resources/model" ]; then
+                    sudo rm -rf $(pwd)/src/test/resources/model
+                fi
+
+                # Remove any old exited container with same name
+                if [ $(docker ps -q -f status=exited --filter "name=$JOB_BASE_NAME") ]; then
+                    docker rm "$JOB_BASE_NAME"
+                fi
+
+                # Run Maven build in container
+                docker run -v $(pwd):/opt --name "$JOB_BASE_NAME" maven:3.8.1-jdk-11 /bin/sh -c "cd /opt && mvn clean package"
+                docker rm "$JOB_BASE_NAME"
+
+                # Tag commit ID
+                commit_id=${BUILD_ID}-$(git rev-parse --short HEAD)
+                echo $commit_id > commit_id.txt
+
+                # Define ACR repo and build image
+                acr_repo="acrulcaprodcin001.azurecr.io/$image_name:$commit_id"
+                docker login acrulcaprodcin001.azurecr.io -u $ACR_USER -p $ACR_PASS
+                docker build -t $acr_repo .
+
+                # Push to ACR
+                docker push $acr_repo
+
+                # Cleanup
+                sudo rm -rf target/
+                '''
+            }
+        }
+
+        // Optional: Display tag in Jenkins UI
+        def matcher = manager.getLogMatcher(".*tagged acrulcaprodcin001.azurecr.io/(.*).*")
+        if (matcher?.matches()) {
+            def buildMsg = matcher.group(1)
+            manager.addShortText(buildMsg)
+        }
+
+    } catch (err) {
+        currentBuild.result = "FAILURE"
+        throw err
+    }
+}
