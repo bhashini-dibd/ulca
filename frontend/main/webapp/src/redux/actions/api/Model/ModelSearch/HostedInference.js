@@ -99,6 +99,11 @@ export default class HostedInference extends API {
     else if (this.task === "text-normalization") {
       bodyData.input = [{ source: this.input }];
     }
+    else if (this.task === "img-lang-detection") {
+      bodyData.imageUri = this.input;
+      // bodyData.source = this.source;
+      bodyData.inferenceEndPoint = this.inferenceEndPoint;
+    }
     bodyData.userId =
       localStorage.getItem("userDetails") &&
       JSON.parse(localStorage.getItem("userDetails")).userID;
