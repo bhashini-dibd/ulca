@@ -42,6 +42,7 @@ import HostedInferALD from "./HostedInferALD";
 import HostedInferAGD from "./HostedInferAGD";
 import HostedInferenceITN from "./HostedInferenceITN";
 import HostedInferenceTN from "./HostedInferenceTN";
+import HostedInferILD from "./HostedInferILD";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -238,6 +239,15 @@ const SearchModelDetail = (props) => {
                 target={target}
               />
               );
+              case "img-lang-detection":
+                return (
+                  <HostedInferILD
+                  task={task}
+                  modelId={params.srno}
+                  source={source}
+                  target={target}
+                />
+                );
         default:
           return (
             <HostedInference
