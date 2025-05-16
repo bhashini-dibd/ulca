@@ -10,7 +10,7 @@ node('server_build_slave') {
         }
 
         stage('Build, Tag & Push to ACR') {
-            withCredentials([usernamePassword(credentialsId: 'acr-ulca-prod-creds', passwordVariable: 'ACR_PASS', usernameVariable: 'ACR_USER')]) {
+            withCredentials([usernamePassword(credentialsId: 'acr-ulca-creds', passwordVariable: 'ACR_PASS', usernameVariable: 'ACR_USER')]) {
                 sh '''
                 cd backend/model/api/ulca-model-api
                 ls -al
