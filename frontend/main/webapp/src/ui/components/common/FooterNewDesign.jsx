@@ -80,16 +80,16 @@ const FooterNewDesign = () => {
               {/* <div className="mb-3 footerlinks__header">Category 1</div> */}
               <div className="footerlinks__links">
                 <li>
-                  <a href="https://bhashini.gov.in/sanchalak">Sanchalak</a>
+                  <a href="https://bhashini.gov.in/sanchalak">Sahyogi</a>
                 </li>
                 <li>
-                  <a href="https://bhashini.gov.in/connect">Contact Us</a>
+                  <a href="https://bhashini.gov.in/rajyam">Rajyam</a>
                 </li>
                 <li>
-                  <a href="#">ULCA</a>
+                  <a href="https://bhashini.gov.in/sanchalan">Sanchalan/SEVA</a>
                 </li>
                 <li>
-                  <a href="https://bhashini.gov.in/bhashini-ecosystem">Ecosystem</a>
+                  <a href="https://bhashini.gov.in/udbhav">Udbhav/Startups</a>
                 </li>
                 <li>
                   <a href="https://bhashini.gov.in/pravakta">Pravakta</a>
@@ -102,17 +102,17 @@ const FooterNewDesign = () => {
               {/* <div className="mb-3 footerlinks__header">Category 2</div> */}
               <div className="footerlinks__links">
                 <li>
-                  <a href="https://bhashini.gov.in/sahyogi/anushandhan-mitra">Mitra</a>
-                </li>
-                <li>
-                  <a href="https://bhashini.gov.in/sahyogi/startup">Startups</a>
-                </li>
-                <li>
                   <a href="https://bhashini.gov.in/parikshan-app">Parikshan App</a>
                 </li>
-                {/* <li>
-                  <a href="https://bhashini.gov.in/prayog">Prayog</a>
-                </li> */}
+                <li>
+                  <a href="https://bhashini.gov.in/sahyogi/vatika">Model And Data Vatica</a>
+                </li>
+                <li>
+                  <a href="https://bhashini.gov.in/abhiyantrikee-Prayogshala">Abhiyantrikee</a>
+                </li>
+                <li>
+                  <a href="https://bhashini.gov.in/avinya-prayogshala">Avinya Prayogshala</a>
+                </li>
               </div>
             </div>
           </Col>
@@ -143,10 +143,10 @@ const FooterNewDesign = () => {
                     height="24px"
                     width="24px"
                   /></a>
-                  <a href="https://www.facebook.com/profile.php?id=100093281985246" target="_blank"><img src={facebook} className="bhashiniapp__footerIcons" /></a>
+                  <a href="https://www.facebook.com/people/Bhashini/100093281985246/?rdid=LLWrUz7yR11swTQT&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1GB5cdxEgw%2F" target="_blank"><img src={facebook} className="bhashiniapp__footerIcons" /></a>
                   <a href="https://www.instagram.com/_officialbhashini/" target="_blank"><img src={instagram} className="bhashiniapp__footerIcons" /></a>
-                  <a href="https://twitter.com/_BHASHINI" target="_blank"><img src={twitter} className="bhashiniapp__footerIcons" /></a>
-                  <a href="https://www.linkedin.com/company/96244597/admin/feed/posts/" target="_blank"><img src={linkedin} className="bhashiniapp__footerIcons" /></a>
+                  <a href="https://x.com/_BHASHINI?t=UE9RHyJRZuZ9rl2_W7B_9g&s=09" target="_blank"><img src={twitter} className="bhashiniapp__footerIcons" /></a>
+                  <a href="https://www.linkedin.com/company/digiital-india-bhashini-division" target="_blank"><img src={linkedin} className="bhashiniapp__footerIcons" /></a>
                 </div>
 
               </div>
