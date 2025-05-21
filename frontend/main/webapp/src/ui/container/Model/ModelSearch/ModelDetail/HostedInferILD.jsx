@@ -29,7 +29,7 @@ import { useState ,useEffect } from "react";
 import OCRModal from "./OCRModal";
 import { translate } from "../../../../../assets/localisation";
 import OCRFileUpload from "../../../../../redux/actions/api/Model/ModelSearch/FileUpload";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import Snackbar from "../../../../components/common/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -63,6 +63,7 @@ const HostedInferILD = (props) => {
   const [open, setOpen] = useState(false);
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
+  const { languages } = useSelector((state) => state.getMasterData);
   // const url = UrlConfig.dataset
   const handleClose = () => {
     setOpen(false);
@@ -94,6 +95,12 @@ const HostedInferILD = (props) => {
      
     }
   };
+
+    const getLabel = (code) => {
+    const detectedLanguage = languages.filter((lang) => lang.code === code);
+    return detectedLanguage[0]?.label;
+  };
+
   const handleApicall = async (modelId, url, task, status = false) => {
     let apiObj = new HostedInferenceAPI(
       modelId,
@@ -129,7 +136,12 @@ const HostedInferILD = (props) => {
           });
         } else {
           if (rsp_data.hasOwnProperty("output") && rsp_data.output) {
-            setTarget(rsp_data.output[0].langPrediction?.[0]?.langCode);
+           
+             const language = rsp_data.output[0].langPrediction.map((lang) => {
+              return getLabel(lang.langCode);
+            });
+
+             setTarget(language.toString());
             setTranslationState(true);
           }
         }
@@ -179,7 +191,11 @@ const HostedInferILD = (props) => {
       let rsp_data = await res.json();
       setApiCall(false);
       if (res.ok) {
-        setFileData(rsp_data.output[0].langPrediction?.[0]?.langCode);
+         const language = rsp_data.output[0].langPrediction.map((lang) => {
+              return getLabel(lang.langCode);
+            });
+
+             setFileData(language.toString());
         // setTarget(rsp_data.output[0].langPrediction?.[0]?.langCode);
       } else {
          setApiCall(false);
