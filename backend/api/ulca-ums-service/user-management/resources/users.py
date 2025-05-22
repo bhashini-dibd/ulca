@@ -199,7 +199,8 @@ class GetApiKeysForProfile(Resource):
         user = body['userID']
         appName = None
         userAPIKeys = UserUtils.get_user_api_keys(user,appName)
-        userServiceProvider = UserUtils.listOfServiceProviders()
+        # userServiceProvider = UserUtils.listOfServiceProviders()
+        userServiceProvider = "MeitY"
         if not userServiceProvider:
             return post_error("400", "User Service Provider is None")
         for i in range(0,len(userAPIKeys)):
