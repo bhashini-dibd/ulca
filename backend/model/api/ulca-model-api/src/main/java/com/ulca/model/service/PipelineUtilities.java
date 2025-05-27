@@ -344,8 +344,8 @@ public class PipelineUtilities {
                     long endTime = System.currentTimeMillis();
                     long duration = endTime - startTime;
 
-                    System.out.println("Time taken for model call: " + duration + " ms");
-                    
+        			log.info("DataBase_Call for model: " + duration + " ms");
+
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                         asrResponseConfig.setLanguage(lp);
@@ -370,7 +370,7 @@ public class PipelineUtilities {
                     long endTime = System.currentTimeMillis();
                     long duration = endTime - startTime;
 
-                    System.out.println("Time taken for model call: " + duration + " ms");
+                    log.info("DataBase_Call for model: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                         translationResponseConfig.setLanguage(lp);
@@ -394,7 +394,7 @@ public class PipelineUtilities {
                     long endTime = System.currentTimeMillis();
                     long duration = endTime - startTime;
 
-                    System.out.println("Time taken for model call: " + duration + " ms");
+                    log.info("DataBase_Call for model: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                         ttsResponseConfig.setLanguage(lp);
@@ -420,7 +420,7 @@ public class PipelineUtilities {
                     long endTime = System.currentTimeMillis();
                     long duration = endTime - startTime;
 
-                    System.out.println("Time taken for model call: " + duration + " ms");
+                    log.info("DataBase_Call for model: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                     	transliterationResponseConfig.setLanguage(lp);
@@ -445,7 +445,7 @@ public class PipelineUtilities {
                     long endTime = System.currentTimeMillis();
                     long duration = endTime - startTime;
 
-                    System.out.println("Time taken for model call: " + duration + " ms");
+                    log.info("DataBase_Call for model: " + duration + " ms");
                     LanguagePairs langPair = model.getLanguages();
                     for (LanguagePair lp : langPair) {
                     	ocrResponseConfig.setLanguage(lp);
