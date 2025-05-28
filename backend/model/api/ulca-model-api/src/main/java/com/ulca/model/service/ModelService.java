@@ -1416,7 +1416,7 @@ public class ModelService {
 					.findByPipelineModelId(pipelineRequest.getPipelineRequestConfig().getPipelineId());
 			long endTime = System.currentTimeMillis();
 			long duration = endTime - startTime;
-			log.info("Time taken for pipeline model call: " + duration + " ms");
+			log.info("DataBase_Call for Piepline: " + duration + " ms");
 
 			validatePipelineRequest(pipelineRequest, pipelineModel);
 		} else {
@@ -1464,7 +1464,13 @@ public class ModelService {
 		 if(redisHealthCheckService.isRedisUp()) {
 		 if (cacheService.isCached(uniqueJsonString)) {
 			 log.info("Request found in Cache");
+			 long startTime = System.currentTimeMillis();
+				
+				
 			 PipelineResponse pipelineResponse2= cacheService.getResponse(uniqueJsonString);
+				long endTime = System.currentTimeMillis();
+				long duration = endTime - startTime;
+				log.info("Redis_Call for get response: " + duration + " ms");
 				
 				log.info("Response Object from redis :: ");
 				ObjectMapper mapper = new
@@ -1675,7 +1681,13 @@ public class ModelService {
 
 		ObjectNode node = mapper.valueToTree(pipelineResponse);
 		if (redisHealthCheckService.isRedisUp()) {
+			long startTime = System.currentTimeMillis();
+			
 			cacheService.saveResponse(uniqueJsonString, pipelineResponse);
+			
+			long endTime = System.currentTimeMillis();
+			long duration = endTime - startTime;
+			log.info("Redis_Call for Save response: " + duration + " ms");
 		}
 
 		return node;
@@ -1988,6 +2000,18 @@ public class ModelService {
 				JSONObject jo2 = (JSONObject) jo1.get("config");
 
 				JSONObject jo3 = (JSONObject) jo2.get("language");
+				if (!jo3.isNull("sourceLanguage")) {
+
+					String sourceLanguage = (String) jo3.getString("sourceLanguage");
+					log.info("sourceLanguage :: " + sourceLanguage);
+					if (SupportedLanguages.fromValue(sourceLanguage) == null) {
+
+						throw new PipelineValidationException(
+								sourceLanguage + " sourceLanguage  is not supported ! ", HttpStatus.BAD_REQUEST);
+
+					}
+
+				}
 				if (!jo3.isNull("sourceScriptCode")) {
 
 					String sourceScriptCode = (String) jo3.getString("sourceScriptCode");
@@ -1996,6 +2020,18 @@ public class ModelService {
 
 						throw new PipelineValidationException(
 								sourceScriptCode + " SourceScriptCode  is not supported ! ", HttpStatus.BAD_REQUEST);
+
+					}
+
+				}
+				if (!jo3.isNull("targetLanguage")) {
+
+					String targetLanguage = (String) jo3.getString("targetLanguage");
+					log.info("targetLanguage :: " + targetLanguage);
+					if (SupportedLanguages.fromValue(targetLanguage) == null) {
+
+						throw new PipelineValidationException(
+								targetLanguage + " targetLanguage  is not supported ! ", HttpStatus.BAD_REQUEST);
 
 					}
 
