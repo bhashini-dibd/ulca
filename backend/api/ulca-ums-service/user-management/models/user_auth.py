@@ -173,27 +173,27 @@ class UserAuthenticationModel(object):
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
             #checking for pre-verified records on the same username 
-            primary_record= collections.find({"email": user_email,"isVerified": True})
-            if primary_record.count()!=0:
+            primary_record= collections.find_one({"email": user_email,"isVerified": True})
+            if primary_record:
                 log.info("{} is already a verified user".format(user_email)) 
                 return post_error("Not allowed","Your email has already been verified",None)
             #fetching user record matching userName and userID
-            record = collections.find({"email": user_email,"userID":user_id})
-            if record.count() ==1:
-                for user in record:
-                    register_time = user["registeredTime"]
-                    name  = user["firstName"]
-                    #checking whether verfication link had expired or not
-                    if (datetime.utcnow() - register_time) > timedelta(hours=verify_mail_expiry):
-                        log.exception("Verification link expired for {}".format(user_email))
-                        #Removing previous record from db
-                        collections.delete_many({"email": user_email,"userID":user_id})
-                        return post_error("Data Not valid","Verification link expired. Please sign up again.",None)
+            record = collections.find_one({"email": user_email,"userID":user_id})
+            if record:
+                user = record
+                register_time = user["registeredTime"]
+                name  = user["firstName"]
+                #checking whether verfication link had expired or not
+                if (datetime.utcnow() - register_time) > timedelta(hours=verify_mail_expiry):
+                    log.exception("Verification link expired for {}".format(user_email))
+                    #Removing previous record from db
+                    collections.delete_many({"email": user_email,"userID":user_id})
+                    return post_error("Data Not valid","Verification link expired. Please sign up again.",None)
 
-                    results = collections.update(user, {"$set": {"isVerified": True,"isActive": True,"activatedTime": datetime.utcnow()}})
-                    if 'writeError' in list(results.keys()):
-                            return post_error("Database error", "writeError whie updating record", None)
-                    log.info("Record updated for {}, activation & verification statuses are set to True".format(user_email))
+                results = collections.update(user, {"$set": {"isVerified": True,"isActive": True,"activatedTime": datetime.utcnow()}})
+                if 'writeError' in list(results.keys()):
+                        return post_error("Database error", "writeError whie updating record", None)
+                log.info("Record updated for {}, activation & verification statuses are set to True".format(user_email))
             else:
                 log.exception("No proper database records found for activation of {}".format(user_email))
                 return post_error("Data Not valid","No records matching the given parameters ",None) 
