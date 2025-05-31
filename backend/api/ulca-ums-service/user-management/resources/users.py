@@ -835,11 +835,11 @@ class OnboardingAppUserDetails(Resource):
             user_details = UserUtils.retrieve_user_data_by_key(user_email=email)          
             print(f"user_details :: {user_details}")
 
-            if user_details.count() == 0:
-                return post_error("Data not valid","Error on fetching user details")
-            for user in user_details:
-                return {"userDetails": normalize_bson_to_json(user)}
-            
+            if user_details is None:
+                return post_error("Data not valid", "Error on fetching user details")
+            else:
+                return {"userDetails": normalize_bson_to_json(user_details)}
+                    
             data = [{"userDetails":user_details,"email":email}]
             res = CustomResponse(Status.SUCCESS_GET_APIKEY.value, data)
             return res.getresjson(), 200            
