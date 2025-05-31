@@ -14,6 +14,13 @@ PORT    =   5001
 ENABLE_CORS =   False
 
 #mongodb-configs
+SERVICEPROVIDERNAME                 =   os.environ.get('SERVICEPROVIDERNAME', 'MeitY')
+APIKEYURL                           =   os.environ.get('APIKEYURL')
+APIKEYNAME                          =   os.environ.get('APIKEYNAME')
+APIKEYVALUE                         =   os.environ.get('APIKEYVALUE')
+
+
+#mongodb-configs
 MONGO_DB_SCHEMA                 =   os.environ.get('UMS_MONGO_IDENTIFIER', 'ulca-user-management')
 MONGO_PROCESS_DB_SCHEMA         =   os.environ.get('ULCA_PROCESS_IDENTIFIER', 'ulca-process-tracker')
 USR_MONGO_COLLECTION            =   os.environ.get('UMS_USR_COLLECTION', 'ulca-users')

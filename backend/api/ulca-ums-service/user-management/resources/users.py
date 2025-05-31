@@ -300,19 +300,33 @@ class GenerateServiceProviderKey(Resource):
                 dataTracking = False
 
 
-        if "serviceProviderName" in body.keys():
-            pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"]) #ULCA-PROCESS-TRACKER
-        else:
-            pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
-        #log.info(f"user_document details {user_document}")
-        if not pipelineID:
-            return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
+        # if "serviceProviderName" in body.keys():
+        #     pipelineID = UserUtils.get_pipelineIdbyServiceProviderName(body["serviceProviderName"]) #ULCA-PROCESS-TRACKER
+        # else:
+        #     pipelineID = UserUtils.get_pipelineId(body["pipelineId"]) #ULCA-PROCESS-TRACKER
+        # #log.info(f"user_document details {user_document}")
+        # if not pipelineID:
+        #     return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
+        pipelineID = {
+            "serviceProvider": {
+                "name": config.SERVICEPROVIDERNAME,
+            },
+            "apiEndPoints": {
+                "apiKeyUrl": config.APIKEYURL
+            },
+            "inferenceEndPoint": {
+                "masterApiKey": {
+                    "name": config.APIKEYNAME,
+                    "value": config.APIKEYVALUE
+                }
+            }
+        }
         if isinstance(pipelineID,dict) and pipelineID:
             masterList = []
             if "serviceProvider" not in pipelineID.keys() and "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys():
                 return post_error("400", "serviceProvider or apiEndPoints or inferenceEndPoint does not exists.   Please provide a valid details", None), 400
 
-            serviceProviderName = "MeitY" #pipelineID["serviceProvider"]["name"]
+            serviceProviderName = pipelineID["serviceProvider"]["name"]
             serviceProviderKeyUrl = pipelineID["apiEndPoints"]["apiKeyUrl"]
             masterkeyname = pipelineID["inferenceEndPoint"]["masterApiKey"]["name"]
             masterkeyvalue = pipelineID["inferenceEndPoint"]["masterApiKey"]["value"]

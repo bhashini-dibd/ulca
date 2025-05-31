@@ -173,13 +173,13 @@ class UserAuthenticationModel(object):
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
             #checking for pre-verified records on the same username 
-            primary_record= collections.find({"email": user_email,"isVerified": True})
-            if primary_record.count()!=0:
+            primary_record= collections.find_one({"email": user_email,"isVerified": True})
+            if primary_record:
                 log.info("{} is already a verified user".format(user_email)) 
                 return post_error("Not allowed","Your email has already been verified",None)
             #fetching user record matching userName and userID
-            record = collections.find({"email": user_email,"userID":user_id})
-            if record.count() ==1:
+            record = collections.find_one({"email": user_email,"userID":user_id})
+            if record:
                 for user in record:
                     register_time = user["registeredTime"]
                     name  = user["firstName"]
