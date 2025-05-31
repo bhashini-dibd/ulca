@@ -321,6 +321,7 @@ class GenerateServiceProviderKey(Resource):
                 }
             }
         }
+        print(f"Environment Variables: {config.SERVICEPROVIDERNAME}, {config.APIKEYURL}, {config.APIKEYNAME}, {config.APIKEYVALUE}")
         if isinstance(pipelineID,dict) and pipelineID:
             masterList = []
             if "serviceProvider" not in pipelineID.keys() and "apiEndPoints" not in pipelineID.keys() and "inferenceEndPoint" not in pipelineID.keys():
