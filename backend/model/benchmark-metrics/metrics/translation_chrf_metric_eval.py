@@ -3,6 +3,7 @@ from logging.config import dictConfig
 from models.model_metric_eval import ModelMetricEval
 from datasets import load_metric
 import numpy as np
+import os
 
 log = logging.getLogger('file')
 
