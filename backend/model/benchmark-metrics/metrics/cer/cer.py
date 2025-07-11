@@ -5,11 +5,13 @@ class CER(datasets.Metric):
         return datasets.MetricInfo(
             description="Character Error Rate (CER)",
             citation="",
-            inputs_description="Predictions and references for CER.",
+            inputs_description="Compute the character error rate (CER) between predictions and references.",
             features=datasets.Features({
-                'prediction': datasets.Value('string'),
-                'reference': datasets.Value('string'),
+                'predictions': datasets.Value('string'),
+                'references': datasets.Value('string'),
             }),
+            # reference_urls is optional, you can add if needed:
+            # reference_urls=["https://your-docs-or-paper"]
         )
 
     def _compute(self, predictions, references):
