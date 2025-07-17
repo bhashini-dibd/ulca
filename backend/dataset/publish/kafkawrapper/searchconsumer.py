@@ -63,9 +63,9 @@ def search_consume():
                             repo.upsert(data["serviceRequestNumber"], {"query": data}, True)
                         log.info(f'PROCESSING - start - SRN: {data["serviceRequestNumber"]}')
                         coll_source = []
-                        if govt_data_whitelist_enabled:
-                            for cs in govt_cs:
-                                coll_source.append(cs)
+                        #if govt_data_whitelist_enabled:
+                            #for cs in govt_cs:
+                                #coll_source.append(cs)
                         if 'collectionSource' in data.keys():
                             coll_source.append(data["collectionSource"])
                         if coll_source:
