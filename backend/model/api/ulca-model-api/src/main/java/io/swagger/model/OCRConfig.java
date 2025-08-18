@@ -3,6 +3,7 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.LanguagePair;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,7 +19,7 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-04-11T12:21:45.383626560Z[GMT]")
 
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OCRConfig   {
   @JsonProperty("modelId")
   private String modelId = null;
@@ -180,9 +181,22 @@ public class OCRConfig   {
   public void setLanguages(List<LanguagePair> languages) {
     this.languages = languages;
   }
+  
+  @JsonProperty("textDetection")
+  private Boolean textDetection = null;
+  
+  
 
 
-  @Override
+  public Boolean getTextDetection() {
+	return textDetection;
+}
+
+public void setTextDetection(Boolean textDetection) {
+	this.textDetection = textDetection;
+}
+
+@Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
@@ -194,12 +208,13 @@ public class OCRConfig   {
     return Objects.equals(this.modelId, ocRConfig.modelId) &&
         Objects.equals(this.detectionLevel, ocRConfig.detectionLevel) &&
         Objects.equals(this.modality, ocRConfig.modality) &&
+        Objects.equals(this.textDetection, ocRConfig.textDetection)&&
         Objects.equals(this.languages, ocRConfig.languages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, detectionLevel, modality, languages);
+    return Objects.hash(modelId, detectionLevel, modality, languages,textDetection);
   }
 
   @Override
@@ -211,6 +226,7 @@ public class OCRConfig   {
     sb.append("    detectionLevel: ").append(toIndentedString(detectionLevel)).append("\n");
     sb.append("    modality: ").append(toIndentedString(modality)).append("\n");
     sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
+    sb.append("    textDetection: ").append(toIndentedString(textDetection)).append("\n");
     sb.append("}");
     return sb.toString();
   }
