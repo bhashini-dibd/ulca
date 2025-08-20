@@ -12,6 +12,7 @@ export const ModelTask = [
   { value: "audio-gender-detection", label: "Audio Gender Detection" },
   { value: "itn", label: "ITN" },
   { value: "text-normalization", label: "Text Normalization" },
+  { value: "img-lang-detection", label: "Image Language Detection" },
 ];
 
 export const BenchmarkModelTask = [

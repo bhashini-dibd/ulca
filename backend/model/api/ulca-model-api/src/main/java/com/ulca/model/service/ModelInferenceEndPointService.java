@@ -41,6 +41,7 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelComputeResponseAudioGenderDetection;
 import com.ulca.model.response.ModelComputeResponseAudioLangDetection;
+import com.ulca.model.response.ModelComputeResponseIld;
 import com.ulca.model.response.ModelComputeResponseNer;
 import com.ulca.model.response.ModelComputeResponseOCR;
 import com.ulca.model.response.ModelComputeResponseTTS;
@@ -63,6 +64,7 @@ import io.swagger.model.AudioLangDetectionRequest;
 import io.swagger.model.AudioLangDetectionResponse;
 import io.swagger.model.ImageFile;
 import io.swagger.model.ImageFiles;
+import io.swagger.model.ImgLangDetectionResponse;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.InferenceAPIEndPointInferenceApiKey;
 import io.swagger.model.LanguagePair;
@@ -498,6 +500,33 @@ public class ModelInferenceEndPointService {
 			TranslationResponse response = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 			tnInference.setResponse(response);
 			schema = tnInference;
+
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ImgLangDetectionInference")) {
+			io.swagger.model.ImgLangDetectionInference imgLangDetectionInference = (io.swagger.model.ImgLangDetectionInference) schema;
+			OCRRequest request = imgLangDetectionInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
+			OkHttpClient client = getTrustAllCertsClient();
+
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			// Request httpRequest = new
+			// Request.Builder().url(callBackUrl).post(body).build();
+
+			Request httpRequest = checkInferenceApiKeyValueAtUpload(inferenceAPIEndPoint, body);
+
+			Response httpResponse = client.newCall(httpRequest).execute();
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+			ImgLangDetectionResponse response = objectMapper.readValue(responseJsonStr, ImgLangDetectionResponse.class);
+			imgLangDetectionInference.setResponse(response);
+			schema = imgLangDetectionInference;
+
+			log.info("logging ImgLangDetection inference point response" + responseJsonStr);
 
 		}
 
@@ -1557,20 +1586,96 @@ public class ModelInferenceEndPointService {
 			}
 
 		}
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ImgLangDetectionInference")) {
+			io.swagger.model.ImgLangDetectionInference imgLangDetectionInference = (io.swagger.model.ImgLangDetectionInference) schema;
+
+			ImageFiles imageFiles = new ImageFiles();
+			ImageFile imageFile = new ImageFile();
+			imageFile.setImageUri(compute.getImageUri());
+			imageFiles.add(imageFile);
+			OCRRequest request = imgLangDetectionInference.getRequest();
+	
+
+			request.setImage(imageFiles);
+
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+
+			//OkHttpClient client = new OkHttpClient();
+			/*
+			 * OkHttpClient client = new OkHttpClient.Builder().connectTimeout(120,
+			 * TimeUnit.SECONDS) .writeTimeout(120, TimeUnit.SECONDS) .readTimeout(120,
+			 * TimeUnit.SECONDS) .build();
+			 */
+			OkHttpClient client = getTrustAllCertsClient();
+			
+
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			// Request httpRequest = new
+			// Request.Builder().url(callBackUrl).post(body).build();
+
+			Request httpRequest = checkInferenceApiKeyValueAtCompute(inferenceAPIEndPoint, body);
+
+			Response httpResponse = null;
+			try {
+				httpResponse = client.newCall(httpRequest).execute();
+			} catch (SocketTimeoutException ste) {
+				throw new ModelComputeException("timeout",
+						"Unable to fetch model response (timeout). Please try again later !", HttpStatus.BAD_REQUEST);
+			}
+
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "ImgLangDetection Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+
+			String responseJsonStr = httpResponse.body().string();
+			try {
+				ImgLangDetectionResponse imgLangDetectionResponse = objectMapper.readValue(responseJsonStr, ImgLangDetectionResponse.class);
+
+				if (imgLangDetectionResponse.getOutput() == null
+						|| imgLangDetectionResponse.getOutput().size() <= 0) {
+					throw new ModelComputeException(httpResponse.message(),
+							"ImgLangDetection Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
+
+				}
+
+				ModelComputeResponseIld resp = new ModelComputeResponseIld();
+				BeanUtils.copyProperties(imgLangDetectionResponse, resp);
+
+				response = resp;
+				return response;
+			} catch (Exception e) {
+
+				log.info("response from ImgLangDetection model inference end not proper : callback url :  " + callBackUrl
+						+ " response :: " + responseJsonStr);
+
+				throw new ModelComputeException(httpResponse.message(), "ImgLangDetection Model Compute Response is not proper",
+						HttpStatus.BAD_REQUEST);
+
+			}
+
+		}
 
 		return response;
 	}
 
 	/*
-	 * compute for OCR model
+	 * compute for OCR and Image Lang Detection model
 	 */
 	public ModelComputeResponse compute(ModelExtended model, OneOfInferenceAPIEndPointSchema schema, String imagePath) {
+		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		ModelComputeResponse response = null;
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 		try {
-			InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
-
-			String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-			ModelComputeResponse response = new ModelComputeResponseOCR();
+			response =new ModelComputeResponseOCR();
 
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 
@@ -1660,6 +1765,86 @@ public class ModelInferenceEndPointService {
 				e.printStackTrace();
 			}
 		}
+	}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ImgLangDetectionInference")) {
+			try {
+				response =new ModelComputeResponseIld();
+
+				io.swagger.model.ImgLangDetectionInference imgLangDetectionInference = (io.swagger.model.ImgLangDetectionInference) schema;
+
+				byte[] bytes = FileUtils.readFileToByteArray(new File(imagePath));
+
+				ImageFile imageFile = new ImageFile();
+				imageFile.setImageContent(bytes);
+
+				ImageFiles imageFiles = new ImageFiles();
+				imageFiles.add(imageFile);
+
+				OCRRequest request = imgLangDetectionInference.getRequest();
+
+
+				request.setImage(imageFiles);
+
+				ObjectMapper objectMapper = new ObjectMapper();
+				String requestJson = objectMapper.writeValueAsString(request);
+
+				//OkHttpClient client = new OkHttpClient();
+				/*
+				 * OkHttpClient client = new OkHttpClient.Builder().connectTimeout(60,
+				 * TimeUnit.SECONDS) .writeTimeout(60, TimeUnit.SECONDS) .readTimeout(60,
+				 * TimeUnit.SECONDS) .build();
+				 */
+				
+				OkHttpClient client =getTrustAllCertsClient();
+
+				RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+				// Request httpRequest = new
+				// Request.Builder().url(callBackUrl).post(body).build();
+
+				Request httpRequest = checkInferenceApiKeyValueAtCompute(inferenceAPIEndPoint, body);
+
+				Response httpResponse = client.newCall(httpRequest).execute();
+				String responseJsonStr = httpResponse.body().string();
+
+				ImgLangDetectionResponse imgLangDetectionResponse = objectMapper.readValue(responseJsonStr, ImgLangDetectionResponse.class);
+			
+
+					if (imgLangDetectionResponse!=null && imgLangDetectionResponse.getOutput() != null
+							&& imgLangDetectionResponse.getOutput().size()> 0) {
+					
+					
+					ModelComputeResponseIld resp = new ModelComputeResponseIld();
+					BeanUtils.copyProperties(imgLangDetectionResponse, resp);
+					response = resp;
+
+				} else {
+					log.info("ImgLangDetection try me response is null or not proper");
+					log.info("callBackUrl :: " + callBackUrl);
+					log.info("Request Json :: " + requestJson);
+					log.info("ResponseJson :: " + responseJsonStr);
+					FileUtils.delete(new File(imagePath));
+					throw new ModelComputeException("Model unable to infer the image", "Model unable to infer the image",
+							HttpStatus.INTERNAL_SERVER_ERROR);
+
+				}
+				return response;
+
+			} catch (Exception ex) {
+
+				throw new ModelComputeException(ex.getMessage(), "Model unable to infer the image",
+						HttpStatus.INTERNAL_SERVER_ERROR);
+
+			} finally {
+				try {
+					FileUtils.delete(new File(imagePath));
+				} catch (IOException e) {
+					log.info("Unable to delete the file : " + imagePath);
+					e.printStackTrace();
+				}
+			}
+		}
+		return response;
 	}
 
 	public static OkHttpClient getTrustAllCertsClient() throws NoSuchAlgorithmException, KeyManagementException {

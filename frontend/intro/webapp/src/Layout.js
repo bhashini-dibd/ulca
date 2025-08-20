@@ -12,14 +12,22 @@ import TopContent from "./components/TopContent";
 import AppContextProvider from "./context/ContextAPI";
 import Contactus from "./components/Contactus";
 import Clients from "./components/Clients";
+import { useRef } from "react";
 
 function App(props) {
+  const mainContentRef = useRef(null);
+
+  const skipToContent = () => {
+    mainContentRef.current.focus();
+    mainContentRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
     <AppContextProvider>
-      <TopContent />
-      <Header />
-      <HomeBanner />
+      <TopContent skipToContent={skipToContent}/>
+      <Header/>
+      <HomeBanner mainContentRef={mainContentRef}/>
       <HomeDatasets />
       <VideoSection />
       {/* <WhyULCA /> */}

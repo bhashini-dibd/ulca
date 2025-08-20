@@ -9,10 +9,10 @@ import bannerImg from "../assets/bannerImg1.png";
 // import thumbsUp from '../../assets/icons/thumbsUp.png'
 
 
-const HomeBanner = () => {
+const HomeBanner = ({mainContentRef}) => {
  
   return (
-    <Container fluid className="p-0">
+    <Container fluid className="p-0" ref={mainContentRef}>
       <Row className="SliderSection">
         <Col md={12}>
        
