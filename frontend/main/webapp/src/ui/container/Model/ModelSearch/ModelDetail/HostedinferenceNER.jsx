@@ -279,9 +279,21 @@ const HostedInference = (props) => {
           token: { background: '#e76f51', color: 'black' },
           tag: { background: '#f06292', color: 'white' }
         },
+        'B-EAR': {
+          token: { background: '#04471D', color: 'black' },
+          tag: { background: '#055d25ff', color: 'white' }
+        },
         'B-EN': {
           token: { background: '#90e0ef', color: 'black' },
           tag: { background: '#4fc3f7', color: 'white' }
+        },
+        'B-ENTERTAINMENT': {
+          token: { background: '#DD3841', color: 'black' },
+          tag: { background: '#f1444dff', color: 'white' }
+        },
+        'B-LIVTHINGS': {
+          token: { background: '#823063', color: 'black' },
+          tag: { background: '#a94482ff', color: 'white' }
         },
         'I-LOC': {
           token: { background: '#f4acb7', color: 'black' },
@@ -299,9 +311,21 @@ const HostedInference = (props) => {
           token: { background: '#778da9', color: 'black' },
           tag: { background: '#7986cb', color: 'white' }
         },
+        'I-EAR': {
+          token: { background: '#9de96eff', color: 'black' },
+          tag: { background: '#b4f38eff', color: 'white' }
+        },
         'I-EN': {
           token: { background: '#ff006e', color: 'black' },
           tag: { background: '#f06292', color: 'white' }
+        },
+        'I-ENTERTAINMENT': {
+          token: { background: '#7d87daff', color: 'black' },
+          tag: { background: '#969CC4', color: 'white' }
+        },
+        'I-LIVTHINGS': {
+          token: { background: '#3D4433', color: 'black' },
+          tag: { background: '#6b745dff', color: 'white' }
         },
         'O': {
           token: { background: 'orange', color: 'black' },
