@@ -6,6 +6,7 @@ PORT    =   '5001'
 ENABLE_CORS =   False
 UMS_MONGO_IDENTIFIER = 'ulca-user-management'
 UMS_USR_COLLECTION = 'ulca-users'
+MAX_ULCA_API_KEYS = '200'
 UMS_USR_KEY_COLLECTION = 'ulca-user-keys'
 UMS_USR_TEMP_TOKEN_COLLECTION = 'ulca-user-tokens'
 UMS_ORG_COLLECTION = 'organization'
