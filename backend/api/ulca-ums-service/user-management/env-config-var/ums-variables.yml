@@ -1,5 +1,6 @@
 ULCA_MONGO_CLUSTER = 'mongodb://localhost:27017'
 DEBUG   =   False
+MAX_ULCA_API_KEYS = '200'
 CONTEXT_PATH    =   "/ulca/user-mgmt"
 HOST    =   '0.0.0.0'
 PORT    =   '5001'
