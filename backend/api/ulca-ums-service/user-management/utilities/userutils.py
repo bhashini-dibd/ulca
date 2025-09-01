@@ -851,15 +851,14 @@ class UserUtils:
         try:
             log.info(f"Revoked Response :: {result.status_code} :: {result.json()}")   
             log.info("Revoke Service Provider Key Api Call Response"+str(result.json()))
-        except json.JSONDecodeError as e:
+        except Exception as e:
             log.info(f"Revoked Response :: {result.status_code} :: No JSON response")
             log.info(f"Exception while decoding revoke response :: {e}")
             log.info(f"Response Text :: {result.text}")
             return {
                     "isRevoked": False,
                     "message": "API Key deletion failed, please try again"
-                }.json()
-        #log.info(result.json())
+                }
         return result.json()
 
     @staticmethod
