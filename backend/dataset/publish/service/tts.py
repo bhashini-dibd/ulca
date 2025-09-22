@@ -211,6 +211,9 @@ class TTSService:
             exclude = {"_id": False}
             for key in tts_search_ignore_keys:
                 exclude[key] = False
+
+            log.info(f'tts search query for SRN : {query["serviceRequestNumber"]} is :: {db_query}') 
+               
             result, hours = repo.search(db_query, exclude, off, lim)
             count = len(result)
             log.info(f'Result --- Count: {count}, Query: {query}')

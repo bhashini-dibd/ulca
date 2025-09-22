@@ -77,22 +77,37 @@ class TTSRepo:
             if offset is None and res_limit is None:
                 if exclude:
                     res = col.find(query, exclude).sort([('_id', 1)])
+                    log.info(f'with exclude and without offset')
+                    res_list = list(res)
+                    log.info(f'query result:: {res_list}')  
                 else:
                     res = col.find(query).sort([('_id', 1)])
+                    log.info(f'without exclude and without offset')
+                    res_list = list(res)
+                    log.info(f'query result:: {res_list}')
             else:
                 if exclude:
                     res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                    log.info(f'with exclude and with offset')
+                    res_list = list(res)
+                    log.info(f'query result:: {res_list}')
                 else:
                     res = col.find(query).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                    log.info(f'without exclude and with offset')
+                    res_list = list(res)
+                    log.info(f'query result:: {res_list}')
             result = []
             for record in res:
                 if "_id" in record.keys():
                     record["_id"] = str(record["_id"])
                 if 'durationInSeconds' in record.keys():
+                    log.info(f'seconds :: {record["durationInSeconds"]}')
                     seconds += record["durationInSeconds"]
                 result.append(record)
             if seconds != 0:
                 hours = seconds/3600
+
+            log.info(f'final result:: {result}')    
             return result, round(hours, 3)
         except Exception as e:
             log.exception(e)
