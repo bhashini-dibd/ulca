@@ -82,15 +82,13 @@ class TTSRepo:
                     log.info(f'query result count:: {len(res_list)}')
                     log.info(f'Query: {query}')
                     log.info(f'Projection:{exclude}')
-                    log.info(f'Sort : {[('_id', 1)]}')  
                 else:
                     res = col.find(query).sort([('_id', 1)])
                     log.info(f'without exclude and without offset')
                     res_list = list(res)
                     log.info(f'query result count:: {len(res_list)}')
                     log.info(f'Query: {query}')
-                    log.info(f'Projection:{exclude}')
-                    log.info(f'Sort : {[('_id', 1)]}')  
+                    log.info(f'Projection:{exclude}') 
             else:
                 if exclude:
                     res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
@@ -98,8 +96,7 @@ class TTSRepo:
                     res_list = list(res)
                     log.info(f'query result count:: {len(res_list)}')
                     log.info(f'Query: {query}')
-                    log.info(f'Projection:{exclude}')
-                    log.info(f'Sort : {[('_id', 1)]}')  
+                    log.info(f'Projection:{exclude}') 
                 else:
                     res = col.find(query).sort([('_id', -1)]).skip(offset).limit(res_limit)
                     log.info(f'without exclude and with offset')
@@ -107,7 +104,6 @@ class TTSRepo:
                     log.info(f'query result count:: {len(res_list)}')
                     log.info(f'Query: {query}')
                     log.info(f'Projection:{exclude}')
-                    log.info(f'Sort : {[('_id', 1)]}')  
                     
             result = []
             for record in res:
