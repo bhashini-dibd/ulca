@@ -106,7 +106,7 @@ class TTSRepo:
                     log.info(f'Projection:{exclude}')
                     
             result = []
-            for record in res:
+            for record in res_list:
                 if "_id" in record.keys():
                     record["_id"] = str(record["_id"])
                 if 'durationInSeconds' in record.keys():
