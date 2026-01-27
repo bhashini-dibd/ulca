@@ -265,6 +265,8 @@ class GenerateApiKey(Resource):
 class GenerateServiceProviderKeyWithoutLogin(Resource):
     def post(self):
         body = request.get_json()
+        log.info("[Generate-v2] GenerateServiceProviderKeyWithoutLogin API called")
+        log.info(f"[Generate-v2] GenerateServiceProviderKeyWithoutLogin email/userID: {body.get('userID', 'N/A')}")
         if "userID" not in body.keys():
             return post_error("400", "Please provide userID", None), 400
         if "udyatApiKey" not in body.keys():
@@ -280,7 +282,9 @@ class GenerateServiceProviderKeyWithoutLogin(Resource):
 class GenerateServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
-        
+        log.info("[Generate-v1] GenerateServiceProviderKey API called")
+        log.info(f"[Generate-v1] GenerateServiceProviderKey email/userID: {body.get('userID', 'N/A')}")
+
         # Below 2 lines are for key generation within Authenticator Application
         if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
             return UserUtils.generateServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])
@@ -377,6 +381,8 @@ class GenerateServiceProviderKey(Resource):
 class RemoveServiceProviderKeyWithoutLogin(Resource):
     def post(self):
         body = request.get_json()
+        log.info("[Remove-v2] RemoveServiceProviderKeyWithoutLogin API called")
+        log.info(f"[Remove-v2] RemoveServiceProviderKeyWithoutLogin email/userID: {body.get('userID', 'N/A')}")
         if "userID" not in body.keys():
             return post_error("400", "Please provide userID", None), 400
         if "udyatApiKey" not in body.keys():
@@ -393,7 +399,9 @@ class RemoveServiceProviderKeyWithoutLogin(Resource):
 class RemoveServiceProviderKey(Resource):
     def post(self):
         body = request.get_json()
-        
+        log.info("[Remove-v1] RemoveServiceProviderKey API called")
+        log.info(f"[Remove-v1] RemoveServiceProviderKey email/userID: {body.get('userID', 'N/A')}")
+
         # Below 2 lines are for key generation within Authenticator Application
         if "udyatApiKey" in body.keys() and "userID" in body.keys() and "appName" in body.keys():
             return UserUtils.removeServiceProviderKey(body["userID"],body["appName"],body["udyatApiKey"])

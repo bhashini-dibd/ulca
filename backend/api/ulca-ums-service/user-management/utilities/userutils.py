@@ -1011,6 +1011,7 @@ class UserUtils:
         elif pipelineID == None:
             return post_error("400", "pipelineID does not exists.   Please provide a valid pipelineId", None), 400
         user_document,email  = UserUtils.get_userDoc(userID) #UMS
+        log.info(f"[generate-service-key] email_id :: {email}")
         if isinstance(user_document, list) and user_document:
             #log.info("DETAILS:",user_document,body)
             if not any(usr['ulcaApiKey'] == udyatApiKey for usr in user_document):
